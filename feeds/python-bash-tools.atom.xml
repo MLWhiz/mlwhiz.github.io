@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>mlwhiz</title><link href="http://mlwhiz.github.io/" rel="alternate"></link><link href="http://mlwhiz.github.io/feeds/python-bash-tools.atom.xml" rel="self"></link><id>http://mlwhiz.github.io/</id><updated>2015-10-11T04:43:00-03:00</updated><entry><title>Shell Basics every Data Scientist Should know - Part II(AWK)</title><link href="http://mlwhiz.github.io/blog/2015/10/11/shell_basics_for_data_science_2/" rel="alternate"></link><updated>2015-10-11T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2015-10-11:blog/2015/10/11/shell_basics_for_data_science_2/</id><summary type="html">&lt;p&gt;&lt;div class="entry-content"&gt;&lt;p&gt;Yesterday I got introduced to awk programming on the shell and is it cool. 
+<feed xmlns="http://www.w3.org/2005/Atom"><title>mlwhiz</title><link href="http://mlwhiz.github.io/" rel="alternate"></link><link href="http://mlwhiz.github.io/feeds/python-bash-tools.atom.xml" rel="self"></link><id>http://mlwhiz.github.io/</id><updated>2015-10-11T04:43:00-03:00</updated><entry><title>Shell Basics every Data Scientist Should know - Part II(AWK)</title><link href="http://mlwhiz.github.io/blog/2015/10/11/shell_basics_for_data_science_2/" rel="alternate"></link><updated>2015-10-11T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2015-10-11:blog/2015/10/11/shell_basics_for_data_science_2/</id><summary type="html">&lt;div class="entry-content"&gt;&lt;p&gt;Yesterday I got introduced to awk programming on the shell and is it cool.
 It lets you do stuff on the command line which you never imagined. As a matter of fact, it's a whole data analytics software in itself when you think about it. You can do selections, groupby, mean, median, sum, duplication, append. You just ask. There is no limit actually.&lt;/p&gt;
 &lt;p&gt;And it is easy to learn.&lt;/p&gt;
 &lt;p&gt;In this post, I will try to give you a brief intro about how you could add awk to your daily work-flow.&lt;/p&gt;
@@ -13,11 +13,10 @@ It lets you do stuff on the command line which you never imagined. As a matter o
 &lt;/code&gt;&lt;/pre&gt;
 &lt;pre style="font-size:50%; padding:7px; margin:0em;  background-color:#F5F5F5"&gt;
 44662539172
-&lt;/pre&gt;&lt;/p&gt;
+&lt;/pre&gt;
+
 &lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
 &lt;p&gt;See the command one more time. There is a basic structure to the awk command&lt;/p&gt;
-
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;BEGIN&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="n"&gt;action&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
 &lt;span class="n"&gt;pattern&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="n"&gt;action&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
 &lt;span class="n"&gt;pattern&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="n"&gt;action&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
@@ -27,15 +26,15 @@ It lets you do stuff on the command line which you never imagined. As a matter o
 &lt;span class="n"&gt;END&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="n"&gt;action&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;An awk program consists of:&lt;/p&gt;
 
+&lt;p&gt;An awk program consists of:&lt;/p&gt;
 &lt;div class="no-mathjax"  style="margin-left:1em;"&gt;
 &lt;li&gt;An optional BEGIN segment : In the begin part we initialize our variables before we even start reading from the file or the standard input.&lt;/li&gt;
 &lt;li&gt;pattern - action pairs: In the middle part we Process the input data. You put multiple pattern action pairs when you want to do multiple things with the same line.&lt;/li&gt;
 &lt;li&gt;An optional END segment: In the end part we do something we want to do when we have reached the end of file.&lt;/li&gt;
 &lt;/div&gt;
 
-&lt;p&gt;An awk command is called on a file using: 
+&lt;p&gt;An awk command is called on a file using:
 &lt;pre style="font-size:60%; padding:7px; margin:0em;"&gt;
 &lt;code class="bash"&gt;awk 'BEGIN{SOMETHING HERE} {SOMETHING HERE: could put Multiple Blocks Like this} END {SOMETHING HERE}' file.txt
 &lt;/code&gt;&lt;/pre&gt;
@@ -56,7 +55,7 @@ You also need to know about these preinitialized variables that awk keeps track 
 &lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;p&gt;So there is a begin block. Remember before we read any line. We initialize sum to 0 and FS to ",".&lt;/p&gt;
 &lt;div class="no-mathjax"&gt;
-Now as awk reads its input line by line it increments sum by the value in column 5(as specified by $5). 
+Now as awk reads its input line by line it increments sum by the value in column 5(as specified by $5).
 &lt;/div&gt;
 
 &lt;p&gt;Note that there is no pattern specified here so awk will do the action for every line. &lt;/p&gt;
@@ -116,7 +115,7 @@ I want to filter records for players who who earn more than 22 M in 2013 just be
 &lt;/pre&gt;
 &lt;br&gt;
 &lt;div class="no-mathjax"&gt;
-Cool right. Now let me explain it a little bit. The part in the command "$5&amp;gt;=22000000 &amp;amp;&amp;amp; $1==2013" is called a pattern. It says that print this line($0) if and only if the Salary($5) is more than 22M and(&amp;amp;&amp;amp;) year($1) is equal to 2013. If the incoming record(line) does not satisfy this pattern it never reaches the inner block. 
+Cool right. Now let me explain it a little bit. The part in the command "$5&amp;gt;=22000000 &amp;amp;&amp;amp; $1==2013" is called a pattern. It says that print this line($0) if and only if the Salary($5) is more than 22M and(&amp;amp;&amp;amp;) year($1) is equal to 2013. If the incoming record(line) does not satisfy this pattern it never reaches the inner block.
 &lt;/div&gt;
 So Now you could do basic Select SQL at the command line only if you had:&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;The logic Operators:&lt;/strong&gt;
@@ -212,7 +211,7 @@ cat Salaries.csv | cut -d "," -f 5 &gt; A.txt
 FILENAME="A.txt"
 
 # The first awk counts the number of lines which are numeric. We use a regex here to check if the column is numeric or not.
-# ';' stands for Synchronous execution i.e sort only runs after the awk is over. 
+# ';' stands for Synchronous execution i.e sort only runs after the awk is over.
 # The output of both commands are given to awk command which does the whole work.
 # So Now the first line going to the second awk is the number of lines in the file which are numeric.
 # and from the second to the end line the file is sorted.

@@ -1807,12 +1807,29 @@ jQuery(document).ready(function($) {
 
 <div>
   <article class="hentry" role="article">
-<header>
+
+
+<div class="alignleft">
+     <script type="text/javascript">
+        amzn_assoc_ad_type = "banner";
+  amzn_assoc_marketplace = "amazon";
+  amzn_assoc_region = "US";
+  amzn_assoc_placement = "assoc_banner_placement_default";
+  amzn_assoc_campaigns = "electronics";
+  amzn_assoc_banner_type = "rotating";
+  amzn_assoc_p = "26";
+  amzn_assoc_width = "468";
+  amzn_assoc_height = "60";
+  amzn_assoc_tracking_id = "mlwhizcon-20";
+  amzn_assoc_linkid = "703c9014ad1f3817edeeafa906c074a0";
+     </script>
+     <script src="//z-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&Operation=GetScript&ID=OneJS&WS=1"></script>
+    </div><header>
       <h1 class="entry-title">Shell Basics every Data Scientist Should know - Part II(AWK)</h1>
       <p class="meta"><time datetime="2015-10-11T04:43:00" pubdate>Oct 11, 2015</time></p>
 </header>
 
-  <div class="entry-content"><p><div class="entry-content"><p>Yesterday I got introduced to awk programming on the shell and is it cool. 
+  <div class="entry-content"><div class="entry-content"><p>Yesterday I got introduced to awk programming on the shell and is it cool.
 It lets you do stuff on the command line which you never imagined. As a matter of fact, it's a whole data analytics software in itself when you think about it. You can do selections, groupby, mean, median, sum, duplication, append. You just ask. There is no limit actually.</p>
 <p>And it is easy to learn.</p>
 <p>In this post, I will try to give you a brief intro about how you could add awk to your daily work-flow.</p>
@@ -1826,11 +1843,10 @@ It lets you do stuff on the command line which you never imagined. As a matter o
 </code></pre>
 <pre style="font-size:50%; padding:7px; margin:0em;  background-color:#F5F5F5">
 44662539172
-</pre></p>
+</pre>
+
 <p><br></p>
-
 <p>See the command one more time. There is a basic structure to the awk command</p>
-
 <div class="highlight"><pre><span class="n">BEGIN</span> <span class="p">{</span><span class="n">action</span><span class="p">}</span>
 <span class="n">pattern</span> <span class="p">{</span><span class="n">action</span><span class="p">}</span>
 <span class="n">pattern</span> <span class="p">{</span><span class="n">action</span><span class="p">}</span>
@@ -1840,15 +1856,15 @@ It lets you do stuff on the command line which you never imagined. As a matter o
 <span class="n">END</span> <span class="p">{</span><span class="n">action</span><span class="p">}</span>
 </pre></div>
 
-<p>An awk program consists of:</p>
 
+<p>An awk program consists of:</p>
 <div class="no-mathjax"  style="margin-left:1em;">
 <li>An optional BEGIN segment : In the begin part we initialize our variables before we even start reading from the file or the standard input.</li>
 <li>pattern - action pairs: In the middle part we Process the input data. You put multiple pattern action pairs when you want to do multiple things with the same line.</li>
 <li>An optional END segment: In the end part we do something we want to do when we have reached the end of file.</li>
 </div>
 
-<p>An awk command is called on a file using: 
+<p>An awk command is called on a file using:
 <pre style="font-size:60%; padding:7px; margin:0em;">
 <code class="bash">awk 'BEGIN{SOMETHING HERE} {SOMETHING HERE: could put Multiple Blocks Like this} END {SOMETHING HERE}' file.txt
 </code></pre>
@@ -1869,7 +1885,7 @@ You also need to know about these preinitialized variables that awk keeps track 
 <p><br></p>
 <p>So there is a begin block. Remember before we read any line. We initialize sum to 0 and FS to ",".</p>
 <div class="no-mathjax">
-Now as awk reads its input line by line it increments sum by the value in column 5(as specified by $5). 
+Now as awk reads its input line by line it increments sum by the value in column 5(as specified by $5).
 </div>
 
 <p>Note that there is no pattern specified here so awk will do the action for every line. </p>
@@ -1929,7 +1945,7 @@ I want to filter records for players who who earn more than 22 M in 2013 just be
 </pre>
 <br>
 <div class="no-mathjax">
-Cool right. Now let me explain it a little bit. The part in the command "$5&gt;=22000000 &amp;&amp; $1==2013" is called a pattern. It says that print this line($0) if and only if the Salary($5) is more than 22M and(&amp;&amp;) year($1) is equal to 2013. If the incoming record(line) does not satisfy this pattern it never reaches the inner block. 
+Cool right. Now let me explain it a little bit. The part in the command "$5&gt;=22000000 &amp;&amp; $1==2013" is called a pattern. It says that print this line($0) if and only if the Salary($5) is more than 22M and(&amp;&amp;) year($1) is equal to 2013. If the incoming record(line) does not satisfy this pattern it never reaches the inner block.
 </div>
 So Now you could do basic Select SQL at the command line only if you had:</p>
 <p><strong>The logic Operators:</strong>
@@ -2025,7 +2041,7 @@ cat Salaries.csv | cut -d "," -f 5 > A.txt
 FILENAME="A.txt"
 
 # The first awk counts the number of lines which are numeric. We use a regex here to check if the column is numeric or not.
-# ';' stands for Synchronous execution i.e sort only runs after the awk is over. 
+# ';' stands for Synchronous execution i.e sort only runs after the awk is over.
 # The output of both commands are given to awk command which does the whole work.
 # So Now the first line going to the second awk is the number of lines in the file which are numeric.
 # and from the second to the end line the file is sorted.
@@ -2093,7 +2109,7 @@ max:33000000
 
 <p>Do leave comments in case you find more use-cases for awk or if you want me to write on new use-cases. Or just comment weather you liked it or not and how I could improve as I am also new and trying to learn more of this.</p>
 <p>Till then Ciao !!!</p></div></div>
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- bar -->
 <ins class="adsbygoogle"
      style="display:inline-block;width:728px;height:90px"
@@ -2101,7 +2117,23 @@ max:33000000
      data-ad-slot="5364549320"></ins>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
-</script>    <footer>
+</script>-->
+<div class="alignleft">
+     <script type="text/javascript">
+        amzn_assoc_ad_type = "banner";
+  amzn_assoc_marketplace = "amazon";
+  amzn_assoc_region = "US";
+  amzn_assoc_placement = "assoc_banner_placement_default";
+  amzn_assoc_campaigns = "electronics";
+  amzn_assoc_banner_type = "rotating";
+  amzn_assoc_p = "48";
+  amzn_assoc_width = "728";
+  amzn_assoc_height = "90";
+  amzn_assoc_tracking_id = "mlwhizcon-20";
+  amzn_assoc_linkid = "b3d64007a3c86457e42ea658de692f92";
+     </script>
+     <script src="//z-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&Operation=GetScript&ID=OneJS&WS=1"></script>
+    </div>    <footer>
 <p class="meta">
   <span class="byline author vcard">
     Posted by <span class="fn">Rahul Agarwal</span>
@@ -2140,10 +2172,20 @@ max:33000000
       <li class="post">
           <a href="http://mlwhiz.github.io/blog/2016/10/27/baby_panda/">Pandas For All - Some Basic Pandas Functions</a>
       </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2016/01/10/deploying_ML_Apps_using_Python_and_Flask/">Deploying ML Apps using Python and Flask- Learning about Flask - Part 1</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2015/10/11/shell_basics_for_data_science_2/">Shell Basics every Data Scientist Should know - Part II(AWK)</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2015/10/09/shell_basics_for_data_science/">Shell Basics every Data Scientist Should know -Part I</a>
+      </li>
     </ul>
   </section>
+<!--
   <section>
-      
+
     <h1>Categories</h1>
     <ul id="recent_posts">
         <li><a href="http://mlwhiz.github.io/category/big-data.html">Big Data</a></li>
@@ -2158,11 +2200,12 @@ max:33000000
         <li><a href="http://mlwhiz.github.io/category/vw.html">VW</a></li>
     </ul>
   </section>
- 
+
 
   <section>
   <h1>Tags</h1>
     <a href="http://mlwhiz.github.io/tag/.html"></a>,    <a href="http://mlwhiz.github.io/tag/data-munging.html">data munging</a>,    <a href="http://mlwhiz.github.io/tag/data-science.html">data science</a>,    <a href="http://mlwhiz.github.io/tag/pairplot-seaborn.html">pairplot seaborn</a>,    <a href="http://mlwhiz.github.io/tag/big-data.html">Big Data</a>,    <a href="http://mlwhiz.github.io/tag/dataframe.html">dataframe</a>,    <a href="http://mlwhiz.github.io/tag/bash-commands.html">bash commands</a>,    <a href="http://mlwhiz.github.io/tag/ggplot2.html">ggplot2</a>,    <a href="http://mlwhiz.github.io/tag/learning.html">learning</a>,    <a href="http://mlwhiz.github.io/tag/vw.html">vw</a>,    <a href="http://mlwhiz.github.io/tag/stanford-software-seaborn.html">stanford software seaborn</a>,    <a href="http://mlwhiz.github.io/tag/apache-spark.html">Apache Spark</a>,    <a href="http://mlwhiz.github.io/tag/statistics.html">Statistics</a>,    <a href="http://mlwhiz.github.io/tag/seaborn.html">Seaborn</a>,    <a href="http://mlwhiz.github.io/tag/hadoop.html">hadoop</a>,    <a href="http://mlwhiz.github.io/tag/categorical-data.html">categorical data</a>,    <a href="http://mlwhiz.github.io/tag/machine-learning.html">machine learning</a>,    <a href="http://mlwhiz.github.io/tag/openshift.html">Openshift</a>,    <a href="http://mlwhiz.github.io/tag/pyspark.html">pyspark</a>,    <a href="http://mlwhiz.github.io/tag/python.html">python</a>,    <a href="http://mlwhiz.github.io/tag/matplotlib.html">Matplotlib</a>,    <a href="http://mlwhiz.github.io/tag/regplot.html">regplot</a>,    <a href="http://mlwhiz.github.io/tag/python-visualizations.html">Python Visualizations</a>,    <a href="http://mlwhiz.github.io/tag/cs109.html">cs109</a>,    <a href="http://mlwhiz.github.io/tag/bash-for-data-science.html">bash for data science</a>,    <a href="http://mlwhiz.github.io/tag/web-scraping.html">web scraping</a>,    <a href="http://mlwhiz.github.io/tag/ctr.html">ctr</a>,    <a href="http://mlwhiz.github.io/tag/mapreduce.html">mapreduce</a>,    <a href="http://mlwhiz.github.io/tag/pandas.html">pandas</a>,    <a href="http://mlwhiz.github.io/tag/deploy-ml-models.html">Deploy ML Models</a>,    <a href="http://mlwhiz.github.io/tag/lmplot-seaborn.html">lmplot seaborn</a>,    <a href="http://mlwhiz.github.io/tag/flaskapp.html">FlaskApp</a>  </section>
+-->
 
 
     <section>
@@ -2176,7 +2219,39 @@ max:33000000
 <section>
     <a href="http://twitter.com/MLWhiz" class="twitter-follow-button" data-show-count="true">Follow @MLWhiz</a>
 </section>
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<div class="alignleft">
+     <script type="text/javascript">
+        amzn_assoc_ad_type = "banner";
+  amzn_assoc_marketplace = "amazon";
+  amzn_assoc_region = "US";
+  amzn_assoc_placement = "assoc_banner_placement_default";
+  amzn_assoc_campaigns = "electronics";
+  amzn_assoc_banner_type = "rotating";
+  amzn_assoc_p = "14";
+  amzn_assoc_width = "160";
+  amzn_assoc_height = "600";
+  amzn_assoc_tracking_id = "mlwhizcon-20";
+  amzn_assoc_linkid = "9d751e53e9cdcff012d930505a27ac78";
+     </script>
+     <script src="//z-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&Operation=GetScript&ID=OneJS&WS=1"></script>
+    </div>
+
+<div class="alignleft">
+     <script type="text/javascript">
+        amzn_assoc_ad_type = "banner";
+  amzn_assoc_marketplace = "amazon";
+  amzn_assoc_region = "US";
+  amzn_assoc_placement = "assoc_banner_placement_default";
+  amzn_assoc_campaigns = "electronics";
+  amzn_assoc_banner_type = "rotating";
+  amzn_assoc_p = "12";
+  amzn_assoc_width = "300";
+  amzn_assoc_height = "250";
+  amzn_assoc_tracking_id = "mlwhizcon-20";
+  amzn_assoc_linkid = "0b7aee63690c7e7c90c4572d6623fea9";
+     </script>
+     <script src="//z-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&Operation=GetScript&ID=OneJS&WS=1"></script>
+    </div><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- right bar -->
 <ins class="adsbygoogle"
      style="display:block"
@@ -2185,7 +2260,8 @@ max:33000000
      data-ad-format="auto"></ins>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
-</script></aside>    </div>
+</script>
+</aside>    </div>
   </div>
   <footer role="contentinfo"><p>
     Copyright &copy;  2014-2017  - Rahul Agarwal -
