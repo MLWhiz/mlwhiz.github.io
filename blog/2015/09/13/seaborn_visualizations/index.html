@@ -1808,31 +1808,15 @@ jQuery(document).ready(function($) {
 <div>
   <article class="hentry" role="article">
 
-
-<div class="aligncenter">
-     <script type="text/javascript">
-        amzn_assoc_ad_type = "banner";
-  amzn_assoc_marketplace = "amazon";
-  amzn_assoc_region = "US";
-  amzn_assoc_placement = "assoc_banner_placement_default";
-  amzn_assoc_campaigns = "electronics";
-  amzn_assoc_banner_type = "rotating";
-  amzn_assoc_p = "26";
-  amzn_assoc_width = "468";
-  amzn_assoc_height = "60";
-  amzn_assoc_tracking_id = "mlwhizcon-20";
-  amzn_assoc_linkid = "703c9014ad1f3817edeeafa906c074a0";
-     </script>
-     <script src="//z-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&Operation=GetScript&ID=OneJS&WS=1"></script>
-    </div><header>
+<header>
       <h1 class="entry-title">Create basic graph visualizations with SeaBorn- The Most Awesome Python Library For Visualization yet</h1>
       <p class="meta"><time datetime="2015-09-13T04:43:00" pubdate>Sep 13, 2015</time></p>
 </header>
 
-  <div class="entry-content"><p>When it comes to data preparation and getting acquainted with data, the <strong>one step we normally skip is the data visualization</strong>. 
+  <div class="entry-content"><p>When it comes to data preparation and getting acquainted with data, the <strong>one step we normally skip is the data visualization</strong>.
 While a part of it could be attributed to the <strong>lack of good visualization tools</strong> for the platforms we use, most of us also <strong>get lazy</strong> at times.</p>
-<p>Now as we know of it Python never had any good Visualization library. For most of our plotting needs, I would read up blogs, hack up with StackOverflow solutions and haggle with <a href="http://matplotlib.org/">Matplotlib</a> documentation each and every time I needed to make a simple graph. This led me to think that a <strong>Blog post to create common Graph types</strong> in Python is in order. But being the procrastinator that I am it always got pushed to the back of my head. </p>
-<p>But, yesterday I got introduced to <a href="http://stanford.edu/~mwaskom/software/seaborn/"><strong>Seaborn</strong></a> and I must say I am <strong>quite impressed</strong> with it. It makes <strong>beautiful graphs</strong> that are in my opinion <strong>better than R's <a href="http://ggplot2.org/">ggplot2</a></strong>. Gives you enough options to <strong>customize</strong> and the best part is that it is so <strong>easy to learn</strong>. </p>
+<p>Now as we know of it Python never had any good Visualization library. For most of our plotting needs, I would read up blogs, hack up with StackOverflow solutions and haggle with <a href="http://matplotlib.org/">Matplotlib</a> documentation each and every time I needed to make a simple graph. This led me to think that a <strong>Blog post to create common Graph types</strong> in Python is in order. But being the procrastinator that I am it always got pushed to the back of my head.</p>
+<p>But, yesterday I got introduced to <a href="http://stanford.edu/~mwaskom/software/seaborn/"><strong>Seaborn</strong></a> and I must say I am <strong>quite impressed</strong> with it. It makes <strong>beautiful graphs</strong> that are in my opinion <strong>better than R's <a href="http://ggplot2.org/">ggplot2</a></strong>. Gives you enough options to <strong>customize</strong> and the best part is that it is so <strong>easy to learn</strong>.</p>
 <p>So I am finally writing this blog post with a basic <strong>purpose of creating a code base</strong> that provides me with ready to use codes which could be put into analysis in a fairly straight-forward manner.</p>
 <p>Right. So here Goes.</p>
 <p>We Start by importing the libraries that we will need to use.</p>
@@ -1854,18 +1838,18 @@ tips.head()
 
 <h2>Scatterplot With Regression Line</h2>
 <p>Now let us work on visualizing this data.
-We will use the <a href="http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.regplot.html#seaborn.regplot"><strong>regplot</strong></a> option in seaborn. </p>
+We will use the <a href="http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.regplot.html#seaborn.regplot"><strong>regplot</strong></a> option in seaborn.</p>
 <pre style="font-size:80%; padding:7px; margin:0em;">
 <code class="python"># We dont Probably need the Gridlines. Do we? If yes comment this line
 sns.set(style="ticks")
 
-# Here we create a matplotlib axes object. The extra parameters we use 
+# Here we create a matplotlib axes object. The extra parameters we use
 # "ci" to remove confidence interval
-# "marker" to have a x as marker. 
+# "marker" to have a x as marker.
 # "scatter_kws" to provide style info for the points.[s for size]
 # "line_kws" to provide style info for the line.[lw for line width]
 
-g = sns.regplot(x="tip", y="total_bill", data=tips, ci = False, 
+g = sns.regplot(x="tip", y="total_bill", data=tips, ci = False,
     scatter_kws={"color":"darkred","alpha":0.3,"s":90},
     line_kws={"color":"g","alpha":0.5,"lw":4},marker="x")
 
@@ -1929,9 +1913,9 @@ for ax,title in zip(g.axes.flat,titles):
 </div>
 
 <div style="color:black; background-color: #E9DAEE;">
-<a href="http://stanford.edu/~mwaskom/software/seaborn/tutorial/color_palettes.html#building-color-palettes-with-color-palette"><strong>A side Note on Palettes</strong></a>:<br> 
+<a href="http://stanford.edu/~mwaskom/software/seaborn/tutorial/color_palettes.html#building-color-palettes-with-color-palette"><strong>A side Note on Palettes</strong></a>:<br>
 You can build your own color palettes using <strong>color_palette()</strong> function.
-color_palette() will accept the name of any <strong>seaborn palette</strong> or <a href="http://matplotlib.org/users/colormaps.html"><strong>matplotlib colormap</strong></a>(except jet, which you should never use). It can also take a <strong>list of colors</strong> specified in any valid matplotlib format (RGB tuples, <strong>hex color codes</strong>, or HTML color names). 
+color_palette() will accept the name of any <strong>seaborn palette</strong> or <a href="http://matplotlib.org/users/colormaps.html"><strong>matplotlib colormap</strong></a>(except jet, which you should never use). It can also take a <strong>list of colors</strong> specified in any valid matplotlib format (RGB tuples, <strong>hex color codes</strong>, or HTML color names).
 The return value is always a list of RGB tuples. This allows you to use your own color palettes in graph.
 </div>
 
@@ -1941,8 +1925,8 @@ The return value is always a list of RGB tuples. This allows you to use your own
 
 flatui = ["#9b59b6", "#3498db", "#95a5a6", "#e74c3c", "#34495e", "#2ecc71"]
 
-# This Function takes as input a custom palette 
-g = sns.barplot(x="sex", y="tip", hue="day", 
+# This Function takes as input a custom palette
+g = sns.barplot(x="sex", y="tip", hue="day",
     palette=sns.color_palette(flatui),data=tips,ci=None)
 
 # remove the top and right line in graph
@@ -1951,7 +1935,7 @@ sns.despine()
 # Set the size of the graph from here
 g.figure.set_size_inches(12,7)
 # Set the Title of the graph from here
-g.axes.set_title('Do We tend to \nTip high on Weekends?', 
+g.axes.set_title('Do We tend to \nTip high on Weekends?',
     fontsize=34,color="b",alpha=0.3)
 # Set the xlabel of the graph from here
 g.set_xlabel("Gender",size = 67,color="g",alpha=0.5)
@@ -1966,8 +1950,8 @@ g.tick_params(labelsize=14,labelcolor="black")
 </div>
 
 <h2>Histograms and Distribution Diagrams</h2>
-<p>They form another part of my workflow. Lets plot the normal Histogram using seaborn. 
-For this we will use the <a href="http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.distplot.html#seaborn.distplot"><strong>distplot</strong></a> function. This function combines the matplotlib hist function (with automatic calculation of a good default bin size) with the seaborn kdeplot() function. 
+<p>They form another part of my workflow. Lets plot the normal Histogram using seaborn.
+For this we will use the <a href="http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.distplot.html#seaborn.distplot"><strong>distplot</strong></a> function. This function combines the matplotlib hist function (with automatic calculation of a good default bin size) with the seaborn kdeplot() function.
 It can also fit <strong>scipy.stats</strong> distributions and plot the estimated PDF over the data.</p>
 <pre style="font-size:80%; padding:7px; margin:0em;">
 <code class="python"># Create a list of 1000 Normal RVs
@@ -1975,8 +1959,8 @@ x = np.random.normal(size=1000)
 
 sns.set_context("poster")
 sns.set_style("ticks")
-# This  Function creates a normed Histogram by default. 
-# If we use the parameter kde=False and norm_hist=False then 
+# This  Function creates a normed Histogram by default.
+# If we use the parameter kde=False and norm_hist=False then
 # we will be using a count histogram
 
 g=sns.distplot(x,
@@ -2050,7 +2034,7 @@ iris.head()
 
 <pre style="font-size:80%; padding:7px; margin:0em;">
 <code class="python"># Create a Pairplot
-g = sns.pairplot(iris,hue="species",palette="muted",size=5, 
+g = sns.pairplot(iris,hue="species",palette="muted",size=5,
     vars=["sepal_width", "sepal_length"],kind='reg',markers=['o','x','+'])
 
 # To change the size of the scatterpoints in graph
@@ -2062,7 +2046,7 @@ sns.despine()
 plt.subplots_adjust(top=0.9)
 
 # Set the Title of the graph from here
-g.fig.suptitle('Relation between Sepal Width and Sepal Length', 
+g.fig.suptitle('Relation between Sepal Width and Sepal Length',
     fontsize=34,color="b",alpha=0.3)
 </code></pre>
 
@@ -2074,24 +2058,30 @@ g.fig.suptitle('Relation between Sepal Width and Sepal Length',
 <p>I tried to make this as simple as possible but You may always <strong>ask me</strong> or see the documentation for doubts.</p>
 <p>If you have <strong>any more ideas</strong> on how to use Seaborn or <strong>which graphs should i add here</strong>, please suggest in the <strong>comments</strong> section.</p>
 <p>I will definitely try to add to this post as I start using more visualizations and encounter other libraries as good as seaborn.</p>
-<p>Till then ciao!!</p></div>
+<p>Also since this is my first visualization post on this blog, I would like to call out some of the most awesome visualization books out there, since I like books:</p>
+<div style="margin-left:1em ; text-align: center;">
+<a target="_blank"  href="https://www.amazon.com/gp/product/1930824130/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1930824130&linkCode=as2&tag=mlwhizcon-20&linkId=32575b0a314fb37f8728123f098d3e47"><img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&MarketPlace=US&ASIN=1930824130&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=_SL250_&tag=mlwhizcon-20" ></a><img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&l=am2&o=1&a=1930824130" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+</t></t>
+<a target="_blank"  href="https://www.amazon.com/gp/product/1119002257/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1119002257&linkCode=as2&tag=mlwhizcon-20&linkId=9e0aa9b9b8fcf4c3d2bec136e3b10175"><img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&MarketPlace=US&ASIN=1119002257&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=_SL250_&tag=mlwhizcon-20" ></a><img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&l=am2&o=1&a=1119002257" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+</div>
 
+<p>Both of these are awesome reads. The first one is a classic on which most of the other visualization work is based. The other one takes a highly practical approach to storytelling with data.</p></div>
 
-<script type="text/javascript">
+<div class="alignleft">
+     <script type="text/javascript">
         amzn_assoc_ad_type = "banner";
   amzn_assoc_marketplace = "amazon";
   amzn_assoc_region = "US";
   amzn_assoc_placement = "assoc_banner_placement_default";
-  amzn_assoc_campaigns = "electronics";
-  amzn_assoc_banner_type = "rotating";
-  amzn_assoc_p = "48";
-  amzn_assoc_width = "728";
-  amzn_assoc_height = "90";
+  amzn_assoc_campaigns = "books";
+  amzn_assoc_banner_type = "category";
+  amzn_assoc_isresponsive = "true";
+  amzn_assoc_banner_id = "1WV938XZP3V21MG4E2R2";
   amzn_assoc_tracking_id = "mlwhizcon-20";
-  amzn_assoc_linkid = "b3d64007a3c86457e42ea658de692f92";
+  amzn_assoc_linkid = "e9d260ab584733b799f819ce72cd43a6";
      </script>
      <script src="//z-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&Operation=GetScript&ID=OneJS&WS=1"></script>
-    <footer>
+    </div>    <footer>
 <p class="meta">
   <span class="byline author vcard">
     Posted by <span class="fn">Rahul Agarwal</span>

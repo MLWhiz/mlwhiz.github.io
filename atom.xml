@@ -1447,10 +1447,10 @@ I would love to include it in the blogpost.&lt;/p&gt;
 
 &lt;p&gt;I wrote a blogpost on awk as a second part of this post. Check it &lt;a href="http://mlwhiz.com/blog/2015/10/11/shell_basics_for_data_science_2/"&gt;Here&lt;/a&gt;&lt;/p&gt;
 
-&lt;/div&gt;</summary><category term="bash commands"></category><category term="bash for data science"></category></entry><entry><title>Create basic graph visualizations with SeaBorn- The Most Awesome Python Library For Visualization yet</title><link href="http://mlwhiz.github.io/blog/2015/09/13/seaborn_visualizations/" rel="alternate"></link><updated>2015-09-13T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2015-09-13:blog/2015/09/13/seaborn_visualizations/</id><summary type="html">&lt;p&gt;When it comes to data preparation and getting acquainted with data, the &lt;strong&gt;one step we normally skip is the data visualization&lt;/strong&gt;. 
+&lt;/div&gt;</summary><category term="bash commands"></category><category term="bash for data science"></category></entry><entry><title>Create basic graph visualizations with SeaBorn- The Most Awesome Python Library For Visualization yet</title><link href="http://mlwhiz.github.io/blog/2015/09/13/seaborn_visualizations/" rel="alternate"></link><updated>2015-09-13T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2015-09-13:blog/2015/09/13/seaborn_visualizations/</id><summary type="html">&lt;p&gt;When it comes to data preparation and getting acquainted with data, the &lt;strong&gt;one step we normally skip is the data visualization&lt;/strong&gt;.
 While a part of it could be attributed to the &lt;strong&gt;lack of good visualization tools&lt;/strong&gt; for the platforms we use, most of us also &lt;strong&gt;get lazy&lt;/strong&gt; at times.&lt;/p&gt;
-&lt;p&gt;Now as we know of it Python never had any good Visualization library. For most of our plotting needs, I would read up blogs, hack up with StackOverflow solutions and haggle with &lt;a href="http://matplotlib.org/"&gt;Matplotlib&lt;/a&gt; documentation each and every time I needed to make a simple graph. This led me to think that a &lt;strong&gt;Blog post to create common Graph types&lt;/strong&gt; in Python is in order. But being the procrastinator that I am it always got pushed to the back of my head. &lt;/p&gt;
-&lt;p&gt;But, yesterday I got introduced to &lt;a href="http://stanford.edu/~mwaskom/software/seaborn/"&gt;&lt;strong&gt;Seaborn&lt;/strong&gt;&lt;/a&gt; and I must say I am &lt;strong&gt;quite impressed&lt;/strong&gt; with it. It makes &lt;strong&gt;beautiful graphs&lt;/strong&gt; that are in my opinion &lt;strong&gt;better than R's &lt;a href="http://ggplot2.org/"&gt;ggplot2&lt;/a&gt;&lt;/strong&gt;. Gives you enough options to &lt;strong&gt;customize&lt;/strong&gt; and the best part is that it is so &lt;strong&gt;easy to learn&lt;/strong&gt;. &lt;/p&gt;
+&lt;p&gt;Now as we know of it Python never had any good Visualization library. For most of our plotting needs, I would read up blogs, hack up with StackOverflow solutions and haggle with &lt;a href="http://matplotlib.org/"&gt;Matplotlib&lt;/a&gt; documentation each and every time I needed to make a simple graph. This led me to think that a &lt;strong&gt;Blog post to create common Graph types&lt;/strong&gt; in Python is in order. But being the procrastinator that I am it always got pushed to the back of my head.&lt;/p&gt;
+&lt;p&gt;But, yesterday I got introduced to &lt;a href="http://stanford.edu/~mwaskom/software/seaborn/"&gt;&lt;strong&gt;Seaborn&lt;/strong&gt;&lt;/a&gt; and I must say I am &lt;strong&gt;quite impressed&lt;/strong&gt; with it. It makes &lt;strong&gt;beautiful graphs&lt;/strong&gt; that are in my opinion &lt;strong&gt;better than R's &lt;a href="http://ggplot2.org/"&gt;ggplot2&lt;/a&gt;&lt;/strong&gt;. Gives you enough options to &lt;strong&gt;customize&lt;/strong&gt; and the best part is that it is so &lt;strong&gt;easy to learn&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;So I am finally writing this blog post with a basic &lt;strong&gt;purpose of creating a code base&lt;/strong&gt; that provides me with ready to use codes which could be put into analysis in a fairly straight-forward manner.&lt;/p&gt;
 &lt;p&gt;Right. So here Goes.&lt;/p&gt;
 &lt;p&gt;We Start by importing the libraries that we will need to use.&lt;/p&gt;
@@ -1472,18 +1472,18 @@ tips.head()
 
 &lt;h2&gt;Scatterplot With Regression Line&lt;/h2&gt;
 &lt;p&gt;Now let us work on visualizing this data.
-We will use the &lt;a href="http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.regplot.html#seaborn.regplot"&gt;&lt;strong&gt;regplot&lt;/strong&gt;&lt;/a&gt; option in seaborn. &lt;/p&gt;
+We will use the &lt;a href="http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.regplot.html#seaborn.regplot"&gt;&lt;strong&gt;regplot&lt;/strong&gt;&lt;/a&gt; option in seaborn.&lt;/p&gt;
 &lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
 &lt;code class="python"&gt;# We dont Probably need the Gridlines. Do we? If yes comment this line
 sns.set(style="ticks")
 
-# Here we create a matplotlib axes object. The extra parameters we use 
+# Here we create a matplotlib axes object. The extra parameters we use
 # "ci" to remove confidence interval
-# "marker" to have a x as marker. 
+# "marker" to have a x as marker.
 # "scatter_kws" to provide style info for the points.[s for size]
 # "line_kws" to provide style info for the line.[lw for line width]
 
-g = sns.regplot(x="tip", y="total_bill", data=tips, ci = False, 
+g = sns.regplot(x="tip", y="total_bill", data=tips, ci = False,
     scatter_kws={"color":"darkred","alpha":0.3,"s":90},
     line_kws={"color":"g","alpha":0.5,"lw":4},marker="x")
 
@@ -1547,9 +1547,9 @@ for ax,title in zip(g.axes.flat,titles):
 &lt;/div&gt;
 
 &lt;div style="color:black; background-color: #E9DAEE;"&gt;
-&lt;a href="http://stanford.edu/~mwaskom/software/seaborn/tutorial/color_palettes.html#building-color-palettes-with-color-palette"&gt;&lt;strong&gt;A side Note on Palettes&lt;/strong&gt;&lt;/a&gt;:&lt;br&gt; 
+&lt;a href="http://stanford.edu/~mwaskom/software/seaborn/tutorial/color_palettes.html#building-color-palettes-with-color-palette"&gt;&lt;strong&gt;A side Note on Palettes&lt;/strong&gt;&lt;/a&gt;:&lt;br&gt;
 You can build your own color palettes using &lt;strong&gt;color_palette()&lt;/strong&gt; function.
-color_palette() will accept the name of any &lt;strong&gt;seaborn palette&lt;/strong&gt; or &lt;a href="http://matplotlib.org/users/colormaps.html"&gt;&lt;strong&gt;matplotlib colormap&lt;/strong&gt;&lt;/a&gt;(except jet, which you should never use). It can also take a &lt;strong&gt;list of colors&lt;/strong&gt; specified in any valid matplotlib format (RGB tuples, &lt;strong&gt;hex color codes&lt;/strong&gt;, or HTML color names). 
+color_palette() will accept the name of any &lt;strong&gt;seaborn palette&lt;/strong&gt; or &lt;a href="http://matplotlib.org/users/colormaps.html"&gt;&lt;strong&gt;matplotlib colormap&lt;/strong&gt;&lt;/a&gt;(except jet, which you should never use). It can also take a &lt;strong&gt;list of colors&lt;/strong&gt; specified in any valid matplotlib format (RGB tuples, &lt;strong&gt;hex color codes&lt;/strong&gt;, or HTML color names).
 The return value is always a list of RGB tuples. This allows you to use your own color palettes in graph.
 &lt;/div&gt;
 
@@ -1559,8 +1559,8 @@ The return value is always a list of RGB tuples. This allows you to use your own
 
 flatui = ["#9b59b6", "#3498db", "#95a5a6", "#e74c3c", "#34495e", "#2ecc71"]
 
-# This Function takes as input a custom palette 
-g = sns.barplot(x="sex", y="tip", hue="day", 
+# This Function takes as input a custom palette
+g = sns.barplot(x="sex", y="tip", hue="day",
     palette=sns.color_palette(flatui),data=tips,ci=None)
 
 # remove the top and right line in graph
@@ -1569,7 +1569,7 @@ sns.despine()
 # Set the size of the graph from here
 g.figure.set_size_inches(12,7)
 # Set the Title of the graph from here
-g.axes.set_title('Do We tend to \nTip high on Weekends?', 
+g.axes.set_title('Do We tend to \nTip high on Weekends?',
     fontsize=34,color="b",alpha=0.3)
 # Set the xlabel of the graph from here
 g.set_xlabel("Gender",size = 67,color="g",alpha=0.5)
@@ -1584,8 +1584,8 @@ g.tick_params(labelsize=14,labelcolor="black")
 &lt;/div&gt;
 
 &lt;h2&gt;Histograms and Distribution Diagrams&lt;/h2&gt;
-&lt;p&gt;They form another part of my workflow. Lets plot the normal Histogram using seaborn. 
-For this we will use the &lt;a href="http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.distplot.html#seaborn.distplot"&gt;&lt;strong&gt;distplot&lt;/strong&gt;&lt;/a&gt; function. This function combines the matplotlib hist function (with automatic calculation of a good default bin size) with the seaborn kdeplot() function. 
+&lt;p&gt;They form another part of my workflow. Lets plot the normal Histogram using seaborn.
+For this we will use the &lt;a href="http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.distplot.html#seaborn.distplot"&gt;&lt;strong&gt;distplot&lt;/strong&gt;&lt;/a&gt; function. This function combines the matplotlib hist function (with automatic calculation of a good default bin size) with the seaborn kdeplot() function.
 It can also fit &lt;strong&gt;scipy.stats&lt;/strong&gt; distributions and plot the estimated PDF over the data.&lt;/p&gt;
 &lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
 &lt;code class="python"&gt;# Create a list of 1000 Normal RVs
@@ -1593,8 +1593,8 @@ x = np.random.normal(size=1000)
 
 sns.set_context("poster")
 sns.set_style("ticks")
-# This  Function creates a normed Histogram by default. 
-# If we use the parameter kde=False and norm_hist=False then 
+# This  Function creates a normed Histogram by default.
+# If we use the parameter kde=False and norm_hist=False then
 # we will be using a count histogram
 
 g=sns.distplot(x,
@@ -1668,7 +1668,7 @@ iris.head()
 
 &lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
 &lt;code class="python"&gt;# Create a Pairplot
-g = sns.pairplot(iris,hue="species",palette="muted",size=5, 
+g = sns.pairplot(iris,hue="species",palette="muted",size=5,
     vars=["sepal_width", "sepal_length"],kind='reg',markers=['o','x','+'])
 
 # To change the size of the scatterpoints in graph
@@ -1680,7 +1680,7 @@ sns.despine()
 plt.subplots_adjust(top=0.9)
 
 # Set the Title of the graph from here
-g.fig.suptitle('Relation between Sepal Width and Sepal Length', 
+g.fig.suptitle('Relation between Sepal Width and Sepal Length',
     fontsize=34,color="b",alpha=0.3)
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -1692,7 +1692,14 @@ g.fig.suptitle('Relation between Sepal Width and Sepal Length',
 &lt;p&gt;I tried to make this as simple as possible but You may always &lt;strong&gt;ask me&lt;/strong&gt; or see the documentation for doubts.&lt;/p&gt;
 &lt;p&gt;If you have &lt;strong&gt;any more ideas&lt;/strong&gt; on how to use Seaborn or &lt;strong&gt;which graphs should i add here&lt;/strong&gt;, please suggest in the &lt;strong&gt;comments&lt;/strong&gt; section.&lt;/p&gt;
 &lt;p&gt;I will definitely try to add to this post as I start using more visualizations and encounter other libraries as good as seaborn.&lt;/p&gt;
-&lt;p&gt;Till then ciao!!&lt;/p&gt;</summary><category term="Python Visualizations"></category><category term="Seaborn"></category><category term="Matplotlib"></category><category term="ggplot2"></category><category term="stanford software seaborn"></category><category term="regplot"></category><category term="lmplot seaborn"></category><category term="pairplot seaborn"></category><category term=""></category></entry><entry><title>Learning Spark using Python: Basics and Applications</title><link href="http://mlwhiz.github.io/blog/2015/09/07/Spark_Basics_Explained/" rel="alternate"></link><updated>2015-09-07T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2015-09-07:blog/2015/09/07/Spark_Basics_Explained/</id><summary type="html">&lt;p&gt;
+&lt;p&gt;Also since this is my first visualization post on this blog, I would like to call out some of the most awesome visualization books out there, since I like books:&lt;/p&gt;
+&lt;div style="margin-left:1em ; text-align: center;"&gt;
+&lt;a target="_blank"  href="https://www.amazon.com/gp/product/1930824130/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1930824130&amp;linkCode=as2&amp;tag=mlwhizcon-20&amp;linkId=32575b0a314fb37f8728123f098d3e47"&gt;&lt;img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=1930824130&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=mlwhizcon-20" &gt;&lt;/a&gt;&lt;img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;l=am2&amp;o=1&amp;a=1930824130" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /&gt;
+&lt;/t&gt;&lt;/t&gt;
+&lt;a target="_blank"  href="https://www.amazon.com/gp/product/1119002257/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1119002257&amp;linkCode=as2&amp;tag=mlwhizcon-20&amp;linkId=9e0aa9b9b8fcf4c3d2bec136e3b10175"&gt;&lt;img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=1119002257&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=mlwhizcon-20" &gt;&lt;/a&gt;&lt;img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;l=am2&amp;o=1&amp;a=1119002257" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Both of these are awesome reads. The first one is a classic on which most of the other visualization work is based. The other one takes a highly practical approach to storytelling with data.&lt;/p&gt;</summary><category term="Python Visualizations"></category><category term="Seaborn"></category><category term="Matplotlib"></category><category term="ggplot2"></category><category term="stanford software seaborn"></category><category term="regplot"></category><category term="lmplot seaborn"></category><category term="pairplot seaborn"></category><category term=""></category></entry><entry><title>Learning Spark using Python: Basics and Applications</title><link href="http://mlwhiz.github.io/blog/2015/09/07/Spark_Basics_Explained/" rel="alternate"></link><updated>2015-09-07T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2015-09-07:blog/2015/09/07/Spark_Basics_Explained/</id><summary type="html">&lt;p&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;I generally have a use case for &lt;a href="https://hadoop.apache.org/"&gt;Hadoop&lt;/a&gt; in my daily job. It has made my life easier in a sense that I am able to get results which I was not able to see with SQL queries. But still I find it painfully slow. I have to write procedural programs while I work. As in merge these two datasets and then filter and then merge another dataset and then filter using some condition and yada-yada. You get the gist. And in hadoop its painstakingly boring to do this. You have to write more than maybe 3 Mapreduce Jobs. One job will read the data line by line and write to the disk.&lt;/p&gt;
 &lt;p&gt;There is a lot of data movement that happens in between that further affects the speed. Another thing I hate is that there is no straight way to pass files to mappers and reducers and that generally adds up another mapreduce job to the whole sequence.&lt;/p&gt;
@@ -2230,7 +2237,18 @@ print "#####################################"
 &lt;p&gt;So Spark has Already provided an interface where we could apply transformations sequentially much easily than Hadoop. And it is fast. While in hadoop things are a pain to do sequentially, the infrastructure that Spark provides seem to fit naturally into the analytics use case.&lt;/p&gt;
 &lt;p&gt;Hopefully I've covered the basics well enough to pique your interest and help you get started with Spark. If I've missed something critical, feel free to let me know on Twitter or in the comments - I'd love constructive feedback.&lt;/p&gt;
 &lt;p&gt;You can find the Jupyter notebook &lt;a href="http://nbviewer.ipython.org/github/MLWhiz/Spark_blog/blob/master/Spark_Part1.ipynb"&gt;HERE&lt;/a&gt;&lt;/p&gt;
-&lt;/div&gt;&lt;/p&gt;</summary><category term="Big Data"></category><category term="Hadoop"></category><category term="Apache Spark"></category></entry><entry><title>Behold the power of MCMC</title><link href="http://mlwhiz.github.io/blog/2015/08/21/MCMC_Algorithms_Cryptography/" rel="alternate"></link><updated>2015-08-21T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2015-08-21:blog/2015/08/21/MCMC_Algorithms_Cryptography/</id><summary type="html">&lt;p&gt;
+&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;Look out for these two books to learn more about Spark.&lt;/p&gt;
+&lt;div style="margin-left:1em ; text-align: center;"&gt;
+
+&lt;a target="_blank"  href="https://www.amazon.com/gp/product/1491912766/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1491912766&amp;linkCode=as2&amp;tag=mlwhizcon-20&amp;linkId=916f1678fb802e13211b4b1c648be75e"&gt;&lt;img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=1491912766&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=mlwhizcon-20" &gt;&lt;/a&gt;&lt;img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;l=am2&amp;o=1&amp;a=1491912766" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /&gt;
+
+&lt;/t&gt;&lt;/t&gt;
+&lt;a target="_blank"  href="https://www.amazon.com/gp/product/1617292605/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1617292605&amp;linkCode=as2&amp;tag=mlwhizcon-20&amp;linkId=89da1866198268847438c42ef14c4380"&gt;&lt;img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=1617292605&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=mlwhizcon-20" &gt;&lt;/a&gt;&lt;img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;l=am2&amp;o=1&amp;a=1617292605" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /&gt;
+
+&lt;/div&gt;
+
+&lt;p&gt;The first one of these is a bestseller. It presents 9 case studies of data analysis applications in various domains. The topics are diverse and the authors always use real world datasets. Beside learning Spark and a data science you will also have the opportunity to gain insight about topics like taxi traffic in NYC, deforestation or neuroscience. The second one is more of a reference that takes the reader on a tour of the Spark fundamentals, explaining the RDD data model in detail, after which it dives into the main functionality of Spark: Spark SQL, Spark Streaming, MLLib, SparkML, and GraphX. Later on, it covers the operational aspects of setting up a standalone Spark cluster, as well as running it on YARN and Mesos.&lt;/p&gt;</summary><category term="Big Data"></category><category term="Hadoop"></category><category term="Apache Spark"></category></entry><entry><title>Behold the power of MCMC</title><link href="http://mlwhiz.github.io/blog/2015/08/21/MCMC_Algorithms_Cryptography/" rel="alternate"></link><updated>2015-08-21T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2015-08-21:blog/2015/08/21/MCMC_Algorithms_Cryptography/</id><summary type="html">&lt;p&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
 &lt;center&gt;
@@ -2559,7 +2577,16 @@ print "MCMC Solution is :" , str(Solution_MCMC) , "with Gold Value:", str(max_st
 &lt;li&gt;&lt;a href="http://statweb.stanford.edu/~cgates/PERSI/papers/MCMCRev.pdf"&gt;The Markov Chain Monte Carlo Revolution, Persi Diaconis&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://www.utstat.toronto.edu/wordpress/WSFiles/technicalreports/1005.pdf"&gt;Decrypting Classical Cipher Text Using Markov Chain Monte Carlo, Jian Chen and Jeffrey S. Rosenthal&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;&lt;/p&gt;</summary><category term="Statistics"></category><category term="python"></category></entry><entry><title>My Tryst With MCMC Algorithms</title><link href="http://mlwhiz.github.io/blog/2015/08/19/MCMC_Algorithms_Beta_Distribution/" rel="alternate"></link><updated>2015-08-19T13:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2015-08-19:blog/2015/08/19/MCMC_Algorithms_Beta_Distribution/</id><summary type="html">&lt;p&gt;
+&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;Look out for these two books to learn more about MCMC. I have not yet read them whole but still I liked whatever I read:&lt;/p&gt;
+&lt;div style="margin-left:1em ; text-align: center;"&gt;
+
+&lt;a target="_blank"  href="https://www.amazon.com/gp/product/1584885874/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1584885874&amp;linkCode=as2&amp;tag=mlwhizcon-20&amp;linkId=913cf05d2a63e0621c63cbdbbffdcb15"&gt;&lt;img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=1584885874&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=mlwhizcon-20" &gt;&lt;/a&gt;&lt;img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;l=am2&amp;o=1&amp;a=1584885874" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /&gt;
+&lt;/t&gt;&lt;/t&gt;
+&lt;a target="_blank"  href="https://www.amazon.com/gp/product/1584885874/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1584885874&amp;linkCode=as2&amp;tag=mlwhizcon-20&amp;linkId=ee3e2a0bc99359d6c5db0463ab1abb13"&gt;&lt;img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=1584885874&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=mlwhizcon-20" &gt;&lt;/a&gt;&lt;img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;l=am2&amp;o=1&amp;a=1584885874" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Both these books are pretty high level and hard on math. But these are the best texts out there too. :)&lt;/p&gt;</summary><category term="Statistics"></category><category term="python"></category></entry><entry><title>My Tryst With MCMC Algorithms</title><link href="http://mlwhiz.github.io/blog/2015/08/19/MCMC_Algorithms_Beta_Distribution/" rel="alternate"></link><updated>2015-08-19T13:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2015-08-19:blog/2015/08/19/MCMC_Algorithms_Beta_Distribution/</id><summary type="html">&lt;p&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 The things that I find hard to understand push me to my limits. One of the things that I have always found hard is &lt;strong&gt;Markov Chain Monte Carlo Methods&lt;/strong&gt;. When I first encountered them, I read a lot about them but mostly it ended like this.
 &lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
@@ -2785,7 +2812,16 @@ plot_beta(2, 3)
 &lt;li&gt;&lt;a href="https://en.wikipedia.org/wiki/"&gt;Wikipedia&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stats.stackexchange.com/a/12657"&gt;StackExchange&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;&lt;/p&gt;</summary><category term="Statistics"></category><category term="python"></category></entry><entry><title>Hadoop Mapreduce Streaming Tricks and Techniques</title><link href="http://mlwhiz.github.io/blog/2015/05/09/Hadoop_Mapreduce_Streaming_Tricks_and_Techniques/" rel="alternate"></link><updated>2015-05-09T13:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2015-05-09:blog/2015/05/09/Hadoop_Mapreduce_Streaming_Tricks_and_Techniques/</id><summary type="html">&lt;p&gt;
+&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;Look out for these two books to learn more about MCMC. I have not yet read them whole but still I liked whatever I read:&lt;/p&gt;
+&lt;div style="margin-left:1em ; text-align: center;"&gt;
+
+&lt;a target="_blank"  href="https://www.amazon.com/gp/product/1584885874/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1584885874&amp;linkCode=as2&amp;tag=mlwhizcon-20&amp;linkId=913cf05d2a63e0621c63cbdbbffdcb15"&gt;&lt;img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=1584885874&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=mlwhizcon-20" &gt;&lt;/a&gt;&lt;img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;l=am2&amp;o=1&amp;a=1584885874" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /&gt;
+&lt;/t&gt;&lt;/t&gt;
+&lt;a target="_blank"  href="https://www.amazon.com/gp/product/1584885874/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1584885874&amp;linkCode=as2&amp;tag=mlwhizcon-20&amp;linkId=ee3e2a0bc99359d6c5db0463ab1abb13"&gt;&lt;img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=1584885874&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=mlwhizcon-20" &gt;&lt;/a&gt;&lt;img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;l=am2&amp;o=1&amp;a=1584885874" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Both these books are pretty high level and hard on math. But these are the best texts out there too. :)&lt;/p&gt;</summary><category term="Statistics"></category><category term="python"></category></entry><entry><title>Hadoop Mapreduce Streaming Tricks and Techniques</title><link href="http://mlwhiz.github.io/blog/2015/05/09/Hadoop_Mapreduce_Streaming_Tricks_and_Techniques/" rel="alternate"></link><updated>2015-05-09T13:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2015-05-09:blog/2015/05/09/Hadoop_Mapreduce_Streaming_Tricks_and_Techniques/</id><summary type="html">&lt;p&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;I have been using Hadoop a lot now a days and thought about writing some of the novel techniques that a user could use to get the most out of the Hadoop Ecosystem.&lt;/p&gt;
 &lt;h3 id="using-shell-scripts-to-run-your-programs"&gt;Using Shell Scripts to run your Programs&lt;/h3&gt;
@@ -3031,7 +3067,15 @@ Other Great Learning Resources For Hadoop:
 &lt;li&gt;
 &lt;a href="http://www.google.co.in/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;uact=8&amp;ved=0CCMQFjAB&amp;url=http%3A%2F%2Fhadoop.apache.org%2Fdocs%2Fr1.2.1%2Fstreaming.html&amp;ei=8RRVVdP2IMe0uQShsYDYBg&amp;usg=AFQjCNEIB4jmqcBs-GepHdn7DRxqTI9zXA&amp;sig2=nYkAnDjjjaum5YVlYuMUJQ&amp;bvm=bv.93112503,d.c2E"&gt;Apache's Hadoop Streaming Documentation&lt;/a&gt;
 &lt;/li&gt;
-&lt;/div&gt;&lt;/p&gt;</summary><category term="hadoop"></category><category term="python"></category></entry><entry><title>Exploring Vowpal Wabbit with the Avazu Clickthrough Prediction Challenge</title><link href="http://mlwhiz.github.io/blog/2014/12/01/Exploring_Vowpal_Wabbit_with_Avazu/" rel="alternate"></link><updated>2014-12-01T13:43:00-02:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2014-12-01:blog/2014/12/01/Exploring_Vowpal_Wabbit_with_Avazu/</id><summary type="html">&lt;p&gt;
+&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;Also I like these books a lot. Must have for a Hadooper....&lt;/p&gt;
+&lt;div style="margin-left:1em ; text-align: center;"&gt;
+&lt;a target="_blank"  href="https://www.amazon.com/gp/product/1785887211/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1785887211&amp;linkCode=as2&amp;tag=mlwhizcon-20&amp;linkId=a0e7b4f0b2ea4a5146042890e1c04f7e"&gt;&lt;img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=1785887211&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=mlwhizcon-20" &gt;&lt;/a&gt;&lt;img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;l=am2&amp;o=1&amp;a=1785887211" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /&gt;
+&lt;/t&gt;&lt;/t&gt;
+&lt;a target="_blank"  href="https://www.amazon.com/gp/product/1491901632/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1491901632&amp;linkCode=as2&amp;tag=mlwhizcon-20&amp;linkId=4122280e94f7bbd0ceebc9d13e60d103"&gt;&lt;img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=1491901632&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=mlwhizcon-20" &gt;&lt;/a&gt;&lt;img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;l=am2&amp;o=1&amp;a=1491901632" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The first book is a guide for using Hadoop as well as spark with Python. While the second one contains a detailed overview of all the things in Hadoop. Its the definitive guide.&lt;/p&gt;</summary><category term="hadoop"></category><category term="python"></category></entry><entry><title>Exploring Vowpal Wabbit with the Avazu Clickthrough Prediction Challenge</title><link href="http://mlwhiz.github.io/blog/2014/12/01/Exploring_Vowpal_Wabbit_with_Avazu/" rel="alternate"></link><updated>2014-12-01T13:43:00-02:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2014-12-01:blog/2014/12/01/Exploring_Vowpal_Wabbit_with_Avazu/</id><summary type="html">&lt;p&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;In online advertising, click-through rate (CTR) is a very important metric for evaluating ad performance. As a result, click prediction systems are essential and widely used for sponsored search and real-time bidding.&lt;/p&gt;
 &lt;p&gt;For this competition, we have provided 11 days worth of Avazu data to build and test prediction models. Can you find a strategy that beats standard classification algorithms? The winning models from this competition will be released under an open-source license.&lt;/p&gt;
@@ -4072,4 +4116,8 @@ In&amp;nbsp;[]:
 &lt;p&gt;The query commands work the same way as in SQL. You can do all the group by and hive will automatically convert it in map-reduce:&lt;/p&gt;
 &lt;p&gt;select * from tablename;&lt;/p&gt;
 &lt;p&gt;Stay Tuned for Part 2 – Where we will talk about another components of Hadoop – PIG&lt;/p&gt;
-&lt;/div&gt;&lt;/p&gt;</summary><category term="hadoop"></category><category term="mapreduce"></category></entry></feed>
+&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;To learn more about hadoop in th meantime these are the books I recommend:&lt;/p&gt;
+&lt;div style="text-align: center;"&gt;
+&lt;a target="_blank"  href="https://www.amazon.com/gp/product/1491901632/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1491901632&amp;linkCode=as2&amp;tag=mlwhizcon-20&amp;linkId=4122280e94f7bbd0ceebc9d13e60d103"&gt;&lt;img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=1491901632&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=mlwhizcon-20" &gt;&lt;/a&gt;&lt;img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;l=am2&amp;o=1&amp;a=1491901632" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /&gt;
+&lt;/div&gt;</summary><category term="hadoop"></category><category term="mapreduce"></category></entry></feed>
