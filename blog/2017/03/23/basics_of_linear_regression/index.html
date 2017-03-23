@@ -4,9 +4,9 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>mlwhiz</title>
+  <title>Basics Of Linear Regression</title>
   <meta name="author" content="Rahul Agarwal">
-  <meta name="description" content="" >
+  <meta name="description" content="This post provides a way to create a Barebones flask app and deploy it using the free service from Openshift" >
   <meta name="keywords" content="" >
   
 
@@ -1804,201 +1804,670 @@ jQuery(document).ready(function($) {
 </ul></nav>
   <div id="main">
     <div id="content">
-<div class="blog-index">
-  		<article>
+
+<div>
+  <article class="hentry" role="article">
+
 <header>
-      <h1 class="entry-title">
-        <a href="http://mlwhiz.github.io/blog/2015/09/07/Spark_Basics_Explained/">Learning Spark using Python: Basics and Applications</a>
-      </h1>
-      <p class="meta"><time datetime="2015-09-07T04:43:00" pubdate>Sep 07, 2015</time></p>
+      <h1 class="entry-title">Basics Of Linear Regression</h1>
+      <p class="meta"><time datetime="2017-03-23T04:43:00" pubdate>Mar 23, 2017</time></p>
 </header>
 
-  <div class="entry-content"><p>
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>I generally have a use case for <a href="https://hadoop.apache.org/">Hadoop</a> in my daily job. It has made my life easier in a sense that I am able to get results which I was not able to see with SQL queries. But still I find it painfully slow. I have to write procedural ...</p></div></p></div>
-  <footer>
-    <a rel="full-article" href="http://mlwhiz.github.io/blog/2015/09/07/Spark_Basics_Explained/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  		<article>
-<header>
-      <h1 class="entry-title">
-        <a href="http://mlwhiz.github.io/blog/2015/08/21/MCMC_Algorithms_Cryptography/">Behold the power of MCMC</a>
-      </h1>
-      <p class="meta"><time datetime="2015-08-21T04:43:00" pubdate>Aug 21, 2015</time></p>
-</header>
+  <div class="entry-content"><p>Keywords: FlaskApp, Flask, Openshift, ML, Python</p>
+<h2>Contents</h2>
+<ol>
+<li>Simple Linear Regression (SLR)</li>
+<li>Multiple Linear Regression (MLR)</li>
+<li>Assumptions</li>
+</ol>
+<h2>1. Simple Linear Regression</h2>
+<p>Regression is the process of building a relationship between a dependent variable and set of independent variables. Linear Regression restricts this relationship to be linear in terms of coefficients. In SLR, we consider only one independent variable.</p>
+<h3>Example: The Waist Circumference – Adipose Tissue data</h3>
+<ul>
+<li>
+<p>Studies have shown that individuals with excess Adipose tissue (AT) in the abdominal region have a higher risk of cardio-vascular diseases</p>
+</li>
+<li>
+<p>Computed Tomography, commonly called the CT Scan is the only technique that allows for the precise and reliable measurement of the AT (at any site in the body)</p>
+</li>
+<li>
+<p>The problems with using the CT scan are:</p>
+<ul>
+<li>Many physicians do not have access to this technology</li>
+<li>Irradiation of the patient (suppresses the immune system)</li>
+<li>Expensive</li>
+</ul>
+</li>
+<li>
+<p>Is there a simpler yet reasonably accurate way to predict the AT area? i.e.</p>
+<ul>
+<li>Easily available</li>
+<li>Risk free</li>
+<li>Inexpensive</li>
+</ul>
+</li>
+<li>
+<p>A group of researchers  conducted a study with the aim of predicting abdominal AT area using simple anthropometric measurements i.e. measurements on the human body</p>
+</li>
+<li>
+<p>The Waist Circumference – Adipose Tissue data is a part of this study wherein the aim is to study how well waist circumference(WC) predicts the AT area</p>
+</li>
+</ul>
+<div class="highlight"><pre><span class="c1"># Setting working directory</span>
+filepath <span class="o">&lt;-</span> c<span class="p">(</span><span class="s">&quot;/Users/nkaveti/Documents/Work_Material/Statistics Learning/&quot;</span><span class="p">)</span>
+setwd<span class="p">(</span>filepath<span class="p">)</span>
 
-  <div class="entry-content"><p>
-<div class="text_cell_render border-box-sizing rendered_html">
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center>
-<img src="/images/mcmc.png">
-</center>
+<span class="c1"># Reading data</span>
+Waist_AT <span class="o">&lt;-</span> read.csv<span class="p">(</span><span class="s">&quot;adipose_tissue.csv&quot;</span><span class="p">)</span>
+cat<span class="p">(</span><span class="s">&quot;Number of rows: &quot;</span><span class="p">,</span> nrow<span class="p">(</span>Waist_AT<span class="p">),</span> <span class="s">&quot;\n&quot;</span><span class="p">)</span>
+head<span class="p">(</span>Waist_AT<span class="p">)</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span class="n">Number</span> <span class="n">of</span> <span class="n">rows</span><span class="o">:</span>  <span class="mi">109</span>
+</pre></div>
+
+
+<table>
+<thead><tr><th scope=col>Waist</th><th scope=col>AT</th></tr></thead>
+<tbody>
+  <tr><td>74.75</td><td>25.72</td></tr>
+  <tr><td>72.60</td><td>25.89</td></tr>
+  <tr><td>81.80</td><td>42.60</td></tr>
+  <tr><td>83.95</td><td>42.80</td></tr>
+  <tr><td>74.65</td><td>29.84</td></tr>
+  <tr><td>71.85</td><td>21.68</td></tr>
+</tbody>
+</table>
+
+<p>Let's start with a scatter plot of <strong>Waist</strong> Vs <strong>AT</strong>, to understand the relationship between these two variables.</p>
+<div class="highlight"><pre><span class="n">plot</span><span class="p">(</span><span class="n">AT</span> <span class="o">~</span> <span class="n">Waist</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">Waist_AT</span><span class="p">)</span>
+</pre></div>
+
+
+<p><img alt="png" src="output_6_0.png" /></p>
+<p>Any observations from above plot?</p>
+<p>Now the objective is to find a linear relation between <code>Waist</code> and <code>AT</code>. In otherwords, finding the amount of change in <code>AT</code> per one unit change (increment/decrement) in <code>Waist</code>.</p>
+<p>In SLR, it is equivalent to finding an optimal straight line equation such that the sum of squares of differences between straight line and the points will be minimum. This method of estimation is called as <a href="https://en.wikipedia.org/wiki/Ordinary_least_squares">Ordiany Least Squares (OLS)</a>.</p>
+<p>
+<div class="math">$$AT  = \beta_0 + \beta_1 \ Waist + \epsilon$$</div>
+</p>
+<p>
+<div class="math">$$Min_{\beta_0 , \beta_1} \ \ \epsilon^\intercal \epsilon \implies Min_{\beta_0 , \beta_1} \ \ (AT  - \beta_0 - \beta_1 \ Waist)^\intercal (AT  - \beta_0 - \beta_1 \ Waist)$$</div>
+</p>
+<p>Where, <span class="math">\(\beta_1\)</span> represents the amount of change in <code>AT</code> per one unit change in <code>Waist</code>.</p>
+<p>Now our problem becomes an unconstrained optimization problem. We can find optimal values for <span class="math">\(\beta_0\)</span> and <span class="math">\(\beta_1\)</span> using basic calculus.</p>
+<p>Lets re-write above regression equation in matrix form</p>
+<p>
+<div class="math">$$ AT = X \beta + \epsilon$$</div>
+</p>
+<p>Where, <span class="math">\( X = [1 \ \ Waist]\)</span> 1 is a vector of ones and <span class="math">\(\beta = (\beta_0, \ \beta_1)\)</span></p>
+<p>
+<div class="math">$$
+\begin{equation}
+\begin{split}
+\epsilon^\intercal \epsilon &amp; = {(AT - X \beta)}^\intercal {(AT - X \beta)} \\
+&amp; = AT^\intercal AT - AT^\intercal X \beta - {(X \beta)}^\intercal AT + {(X \beta)}^\intercal (X \beta)
+\end{split}
+\end{equation}
+$$</div>
+</p>
+<p>Now differentiate this w.r.t to <span class="math">\(\beta\)</span> and equate it to zero. Then we have,
+<div class="math">$$\hat{\beta} = (X^\intercal X)^{-1} X^\intercal AT $$</div>
+</p>
+<p>Now we can find the fitted values of model by substituting <span class="math">\(\hat{\beta}\)</span> in above regression equation
+<div class="math">$$\hat{AT} = X \hat{\beta}=X(X^\intercal X)^{-1} X^\intercal AT$$</div>
+</p>
+<p><strong>Note:</strong> We are arriving to above equation through an assumption<a href="#Assumptions"><span class="math">\(^1\)</span></a> of <span class="math">\(E(\epsilon)=0\)</span>. What happens if this assumption violates?</p>
+<p>Let, <span class="math">\(X(X^\intercal X)^{-1} X^\intercal = H\)</span>
+<div class="math">$$\hat{AT} = H \ AT$$</div>
+</p>
+<p>We call H as an hat matrix, because it transforms <span class="math">\(AT\)</span> into <span class="math">\(\hat{AT}\)</span> :D</p>
+<div class="highlight"><pre><span class="cp"># Lets compute the hat matrix</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">cbind</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Waist_AT</span><span class="err">$</span><span class="n">Waist</span><span class="p">)</span>
+<span class="n">temp</span> <span class="o">=</span> <span class="n">solve</span><span class="p">(</span><span class="n">t</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">%*%</span> <span class="n">X</span><span class="p">)</span> <span class="o">%*%</span> <span class="n">t</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">betahat</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">%*%</span> <span class="n">Waist_AT</span><span class="err">$</span><span class="n">AT</span> <span class="err">#</span> <span class="n">Estimated</span> <span class="n">coefficients</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;Let&#39;s compare the computed values with lm() output: </span><span class="se">\n</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;Computed Coefficients: </span><span class="se">\n</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">frame</span><span class="p">(</span><span class="n">Intercept</span> <span class="o">=</span> <span class="n">betahat</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Waist</span> <span class="o">=</span> <span class="n">betahat</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;======================================================================= </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="cp">#cat(&quot;Optimal value for beta_0 is: &quot;, betahat[1], &quot;and for beta_1 is: &quot;, betahat[2], &quot;\n \n&quot;)</span>
+<span class="n">fit_lm</span> <span class="o">=</span> <span class="n">lm</span><span class="p">(</span><span class="n">AT</span> <span class="o">~</span> <span class="n">Waist</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">Waist_AT</span><span class="p">)</span>
+<span class="cp">#cat(&quot;Compare our computed estimates with lm() estimates&quot;, &quot;\n&quot;)</span>
+<span class="n">print</span><span class="p">(</span><span class="n">fit_lm</span><span class="p">)</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;======================================================================= </span><span class="se">\n</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">X</span> <span class="o">%*%</span> <span class="n">temp</span> <span class="err">#</span> <span class="n">Computing</span> <span class="n">hat</span> <span class="n">matrix</span>
+<span class="n">AThat</span> <span class="o">=</span> <span class="n">H</span> <span class="o">%*%</span> <span class="n">Waist_AT</span><span class="err">$</span><span class="n">AT</span> <span class="err">#</span> <span class="n">Computing</span> <span class="n">predicted</span> <span class="n">values</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;Therefore, there is a&quot;</span><span class="p">,</span> <span class="n">betahat</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s">&quot;increment in AT per one unit change in Waist </span><span class="se">\n</span><span class="s">&quot;</span> <span class="p">)</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span class="n">Let</span><span class="err">&#39;</span><span class="n">s</span> <span class="n">compare</span> <span class="n">the</span> <span class="n">computed</span> <span class="n">values</span> <span class="n">with</span> <span class="n">lm</span><span class="p">()</span> <span class="n">output</span><span class="o">:</span>
+
+<span class="n">Computed</span> <span class="n">Coefficients</span><span class="o">:</span>
+
+  <span class="n">Intercept</span>    <span class="n">Waist</span>
+<span class="mi">1</span> <span class="o">-</span><span class="mf">215.9815</span> <span class="mf">3.458859</span>
+<span class="o">=======================================================================</span>
+
+<span class="nl">Call:</span>
+<span class="n">lm</span><span class="p">(</span><span class="n">formula</span> <span class="o">=</span> <span class="n">AT</span> <span class="o">~</span> <span class="n">Waist</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">Waist_AT</span><span class="p">)</span>
+
+<span class="nl">Coefficients:</span>
+<span class="p">(</span><span class="n">Intercept</span><span class="p">)</span>        <span class="n">Waist</span>
+   <span class="o">-</span><span class="mf">215.981</span>        <span class="mf">3.459</span>
+
+<span class="o">=======================================================================</span>
+
+<span class="n">Therefore</span><span class="p">,</span> <span class="n">there</span> <span class="n">is</span> <span class="n">a</span> <span class="mf">3.458859</span> <span class="n">increment</span> <span class="n">in</span> <span class="n">AT</span> <span class="n">per</span> <span class="n">one</span> <span class="n">unit</span> <span class="n">change</span> <span class="n">in</span> <span class="n">Waist</span>
+</pre></div>
+
+
+<h2>What's next?</h2>
+<p>We succesfully computed estimates for regression coefficients and fitted values.</p>
+<ol>
+<li>
+<p>We are working on only one sample, how can we generalise these results to population?</p>
+</li>
+<li>
+<p>How to measure model's performance quantitatively?</p>
+</li>
+</ol>
+<p><strong>  We are working on only one sample, how can we generalise these results to population? </strong></p>
+<p>Let's focus on question 1. Our regression coefficients are computed using only one sample and these values will change, if we change the sample. But how much they vary? We need to estimate the variation for each beta coefficient to check whether the corresponding regressor is consistently explaining the same behaviour even if we change the sample.</p>
+<p>Now the big problem is collecting multiple samples to check the above hypothesis. Hence, we use distributions to check statistical significance of regressors.</p>
+<p>For our example, we need to test below two hypotheses.</p>
+<p>
+<div class="math">$$ Null \ Hypothesis: \beta_{0} = 0 $$</div>
+</p>
+<p>
+<div class="math">$$ Alternative \ Hypothesis: \beta_{0} \neq 0$$</div>
+</p>
+<p>
+<div class="math">$$ Null \ Hypothesis: \beta_{1} = 0 $$</div>
+</p>
+<p>
+<div class="math">$$ Alternative \ Hypothesis: \beta_{1} \neq 0$$</div>
+</p>
+<p>Test Statistic for these hypotheses is,</p>
+<p>
+<div class="math">$$t = \frac{\hat{\beta_{i}}}{\sqrt{Var(\hat{\beta_{i}})}}$$</div>
+</p>
+<p>Test statistic <code>t</code> follows <code>t-distribution</code>, assuming<a href="#Assumptions"><span class="math">\(^2\)</span></a> dependent variable follows <code>normal distribution</code></p>
+<p><strong>Suggestion:</strong> If your not aware of <a href="https://en.wikipedia.org/wiki/Statistical_hypothesis_testing">testing of hypothesis</a>, <a href="https://en.wikipedia.org/wiki/Probability_distribution">probability distributions</a> and <a href="https://en.wikipedia.org/wiki/P-value">p-values</a> please browse through the Google.</p>
+<p>Let's recall that,  <span class="math">\(\hat{\beta} = (X^\intercal X)^{-1} X^\intercal AT\)</span></p>
+<p>
+<div class="math">$$\begin{equation}
+\begin{split}
+Var(\hat{\beta}) &amp; = Var((X^\intercal X)^{-1} X^\intercal AT) \\
+ &amp; = (X^\intercal X)^{-1} X^\intercal \ Var(AT) \ X(X^\intercal X)^{-1} \\
+ &amp; = (X^\intercal X)^{-1} X^\intercal \ X(X^\intercal X)^{-1} \ \sigma^2 \\
+ &amp; = (X^\intercal X)^{-1} \sigma^2
+\end{split}
+\end{equation}
+$$</div>
+</p>
+<p><strong>Note:</strong> In the above calculations we assumed<a href="#Assumptions"><span class="math">\(^3\)</span></a> <span class="math">\(Var(AT) = \sigma^2\)</span> (Constant). Where, <span class="math">\(\sigma^2\)</span> is variation in population AT.</p>
+<p><strong>Suggestion:</strong> Try solving <span class="math">\((X^\intercal X)^{-1}\)</span> with <span class="math">\(X = [1, \  x]\)</span> where <span class="math">\(x = (x_1, x_2, x_3 ... x_n)\)</span>. You will get the following expression.</p>
+<p>
+<div class="math">$$
+\
+Var(\hat{\beta}) =
+\frac{1}{n \sum x_i^2 - (\sum x_i)^2}
+\begin{bmatrix}
+    \sum_{i=1}^n x_i^2 &amp; -\sum x_i \\
+    -\sum x_i &amp; n
+\end{bmatrix}
+\sigma^2
+\
+$$</div>
+</p>
+<p>Diagonal elements of above matrix are varinaces of <span class="math">\(\beta_0\)</span> and <span class="math">\(\beta_1\)</span> respectively. Off-diagonal element is covariance between <span class="math">\(\beta_0\)</span> and <span class="math">\(\beta_1\)</span>.</p>
+<p>Hence,</p>
+<p>
+<div class="math">$$Var(\hat{\beta_0}) = \frac{\sigma^2 \sum_{i = 1}^n x_i^2}{n \sum_{i = 1}^n (x_i - \bar{x})^2}$$</div>
+</p>
+<p>
+<div class="math">$$Var(\hat{\beta_1}) = \frac{\sigma^2}{\sum_{i = 1}^n (x_i - \bar{x})^2}$$</div>
+</p>
+<p>One important observation from <span class="math">\(Var(\hat{\beta})\)</span> expressions is, <span class="math">\(Var(x)\)</span> is inversely proportional to <span class="math">\(Var(\hat{\beta})\)</span>. That is, we will get more consistent estimators if there is high variation in corresponding predictors.</p>
+<p>Recall that, <span class="math">\(\sigma^2\)</span> in above expression is the population variance, not the sample. Hence, we need to estimate this using the sample that we have.</p>
+<p>
+<div class="math">$$\hat{\sigma^2} = \frac{1}{n-2} \sum_{i = 1}^n e_i^2$$</div>
+</p>
+<p>Where, <span class="math">\(e_i = AT_i - \hat{AT}_i\)</span></p>
+<div class="highlight"><pre><span class="cp"># Let&#39;s compute variances of beta hat and test statistic &#39;t&#39;</span>
+<span class="n">sigmasq</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">length</span><span class="p">(</span><span class="n">AThat</span><span class="p">[</span><span class="o">-</span><span class="n">c</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="mi">2</span><span class="p">)]))</span><span class="o">*</span><span class="n">sum</span><span class="p">((</span><span class="n">AThat</span> <span class="o">-</span> <span class="n">Waist_AT</span><span class="err">$</span><span class="n">AT</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">VarBeta0</span> <span class="o">=</span> <span class="p">(</span><span class="n">sigmasq</span> <span class="o">*</span> <span class="n">sum</span><span class="p">(</span><span class="n">Waist_AT</span><span class="err">$</span><span class="n">Waist</span><span class="o">^</span><span class="mi">2</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">AThat</span><span class="p">)</span> <span class="o">*</span> <span class="n">sum</span><span class="p">((</span><span class="n">Waist_AT</span><span class="err">$</span><span class="n">Waist</span> <span class="o">-</span> <span class="n">mean</span><span class="p">(</span><span class="n">Waist_AT</span><span class="err">$</span><span class="n">Waist</span><span class="p">))</span><span class="o">^</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">VarBeta1</span> <span class="o">=</span> <span class="n">sigmasq</span><span class="o">/</span><span class="n">sum</span><span class="p">((</span><span class="n">Waist_AT</span><span class="err">$</span><span class="n">Waist</span> <span class="o">-</span> <span class="n">mean</span><span class="p">(</span><span class="n">Waist_AT</span><span class="err">$</span><span class="n">Waist</span><span class="p">))</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;Let&#39;s compare the computed values with lm() output: </span><span class="se">\n</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;======================================================================= </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;Computed Coefficients: </span><span class="se">\n</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">frame</span><span class="p">(</span><span class="n">Estimate</span> <span class="o">=</span> <span class="n">betahat</span><span class="p">,</span> <span class="n">Std</span><span class="p">.</span><span class="n">Error</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">VarBeta0</span><span class="p">),</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">VarBeta1</span><span class="p">)),</span> <span class="n">t_value</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="n">betahat</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="n">VarBeta0</span><span class="p">),</span> <span class="n">betahat</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="n">VarBeta1</span><span class="p">)))</span>
+<span class="n">row</span><span class="p">.</span><span class="n">names</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="s">&quot;(Intercept)&quot;</span><span class="p">,</span> <span class="s">&quot;Waist&quot;</span><span class="p">)</span>
+<span class="n">res</span><span class="err">$</span><span class="n">p_value</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">pt</span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">res</span><span class="err">$</span><span class="n">t_value</span><span class="p">),</span> <span class="n">nrow</span><span class="p">(</span><span class="n">Waist_AT</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">lower</span><span class="p">.</span><span class="n">tail</span> <span class="o">=</span> <span class="n">FALSE</span><span class="p">)</span>
+<span class="n">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;=======================================================================&quot;</span><span class="p">)</span>
+<span class="n">summary</span><span class="p">(</span><span class="n">fit_lm</span><span class="p">)</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;=======================================================================&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span class="n">Let</span><span class="err">&#39;</span><span class="n">s</span> <span class="n">compare</span> <span class="n">the</span> <span class="n">computed</span> <span class="n">values</span> <span class="n">with</span> <span class="n">lm</span><span class="p">()</span> <span class="n">output</span><span class="o">:</span>
+
+<span class="o">=======================================================================</span>
+<span class="n">Computed</span> <span class="n">Coefficients</span><span class="o">:</span>
+
+               <span class="n">Estimate</span>  <span class="n">Std</span><span class="p">.</span><span class="n">Error</span>   <span class="n">t_value</span>      <span class="n">p_value</span>
+<span class="p">(</span><span class="n">Intercept</span><span class="p">)</span> <span class="o">-</span><span class="mf">215.981488</span> <span class="mf">21.7962708</span> <span class="o">-</span><span class="mf">9.909103</span> <span class="mf">7.507198e-17</span>
+<span class="n">Waist</span>          <span class="mf">3.458859</span>  <span class="mf">0.2346521</span> <span class="mf">14.740376</span> <span class="mf">1.297124e-27</span>
+<span class="o">=======================================================================</span>
+
+
+
+<span class="nl">Call:</span>
+<span class="n">lm</span><span class="p">(</span><span class="n">formula</span> <span class="o">=</span> <span class="n">AT</span> <span class="o">~</span> <span class="n">Waist</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">Waist_AT</span><span class="p">)</span>
+
+<span class="nl">Residuals:</span>
+     <span class="n">Min</span>       <span class="mi">1</span><span class="n">Q</span>   <span class="n">Median</span>       <span class="mi">3</span><span class="n">Q</span>      <span class="n">Max</span>
+<span class="o">-</span><span class="mf">107.288</span>  <span class="o">-</span><span class="mf">19.143</span>   <span class="o">-</span><span class="mf">2.939</span>   <span class="mf">16.376</span>   <span class="mf">90.342</span>
+
+<span class="nl">Coefficients:</span>
+             <span class="n">Estimate</span> <span class="n">Std</span><span class="p">.</span> <span class="n">Error</span> <span class="n">t</span> <span class="n">value</span> <span class="n">Pr</span><span class="p">(</span><span class="o">&gt;|</span><span class="n">t</span><span class="o">|</span><span class="p">)</span>
+<span class="p">(</span><span class="n">Intercept</span><span class="p">)</span> <span class="o">-</span><span class="mf">215.9815</span>    <span class="mf">21.7963</span>  <span class="o">-</span><span class="mf">9.909</span>   <span class="o">&lt;</span><span class="mf">2e-16</span> <span class="o">***</span>
+<span class="n">Waist</span>          <span class="mf">3.4589</span>     <span class="mf">0.2347</span>  <span class="mf">14.740</span>   <span class="o">&lt;</span><span class="mf">2e-16</span> <span class="o">***</span>
+<span class="o">---</span>
+<span class="n">Signif</span><span class="p">.</span> <span class="n">codes</span><span class="o">:</span>  <span class="mi">0</span> <span class="err">‘</span><span class="o">***</span><span class="err">’</span> <span class="mf">0.001</span> <span class="err">‘</span><span class="o">**</span><span class="err">’</span> <span class="mf">0.01</span> <span class="err">‘</span><span class="o">*</span><span class="err">’</span> <span class="mf">0.05</span> <span class="err">‘</span><span class="p">.</span><span class="err">’</span> <span class="mf">0.1</span> <span class="err">‘</span> <span class="err">’</span> <span class="mi">1</span>
+
+<span class="n">Residual</span> <span class="n">standard</span> <span class="n">error</span><span class="o">:</span> <span class="mf">33.06</span> <span class="n">on</span> <span class="mi">107</span> <span class="n">degrees</span> <span class="n">of</span> <span class="n">freedom</span>
+<span class="n">Multiple</span> <span class="n">R</span><span class="o">-</span><span class="n">squared</span><span class="o">:</span>   <span class="mf">0.67</span><span class="p">,</span> <span class="n">Adjusted</span> <span class="n">R</span><span class="o">-</span><span class="n">squared</span><span class="o">:</span>  <span class="mf">0.667</span>
+<span class="n">F</span><span class="o">-</span><span class="n">statistic</span><span class="o">:</span> <span class="mf">217.3</span> <span class="n">on</span> <span class="mi">1</span> <span class="n">and</span> <span class="mi">107</span> <span class="n">DF</span><span class="p">,</span>  <span class="n">p</span><span class="o">-</span><span class="n">value</span><span class="o">:</span> <span class="o">&lt;</span> <span class="mf">2.2e-16</span>
+
+
+
+<span class="o">=======================================================================</span>
+</pre></div>
+
+
+<p><strong>Note:</strong> Residual standard error = <span class="math">\(\sqrt{sigmasq}\)</span></p>
+<p><strong>How to measure model's performance quantitatively?</strong></p>
+<p>Let's focus on question 2 (How to measure model's performance quantitatively?). Recall that, our objective of building model is to explain the variation in <code>AT</code> using the variation in <code>Waist</code>.</p>
+<p>Total variation in AT is, <span class="math">\(\sum_{i=1}^n (AT - mean(AT))^2\)</span> this can be splitted into two parts as follows:</p>
+<p>
+<div class="math">$$
+\begin{equation}
+\begin{split}
+\sum_{i=1}^n (AT_i - \bar{AT})^2 &amp; = \sum_{i=1}^n (AT  - \hat{AT_i} + \hat{AT_i} - \bar{AT})^2 \\
+&amp; = \sum_{i = 1}^n (\hat{AT_i} - \bar{AT})^2 + \sum_{i=1}^n (AT_i - \hat{AT_i})^2
+\end{split}
+\end{equation}
+$$</div>
+</p>
+<p>Where, <span class="math">\(\sum_{i=1}^n (AT_i - \bar{AT})^2\)</span> is the total variation in AT, <span class="math">\(\sum_{i = 1}^n (\hat{AT_i} - \bar{AT})^2\)</span> is the explained variation in AT, this is also called as <strong>Regression Sum of Squares</strong> and <span class="math">\(\sum_{i=1}^n (AT_i - \hat{AT_i})^2\)</span> is the unexplained variation in AT, this is also called as <strong>Error Sum of Squares</strong></p>
+<p>We can measure our model using the proportion of total variation explained by independent variable(s). That is, <span class="math">\(\frac{Regression \  Sum \ of \ Squares}{Total \ Sum \ of \ Squares}\)</span></p>
+<p>The above measure is called as Multiple R-squared:</p>
+<p>
+<div class="math">$$Multiple \ R-squared = \frac{\sum_{i = 1}^n (\hat{AT_i} - \bar{AT})^2}{\sum_{i=1}^n (AT_i - \bar{AT})^2}$$</div>
+</p>
+<p><strong>Interesting facts:</strong> Multiple R-squared value in SLR is equals to <span class="math">\(r^2\)</span> and (1 - Multiple R-squared) is equals to the variance in residuals.</p>
+<p>Where, r is <a href="https://en.wikipedia.org/wiki/Pearson_correlation_coefficient">pearson's correlation coefficient</a> between dependent and independent variable.</p>
+<div class="highlight"><pre><span class="cp"># Let&#39;s compute Multiple R-squared measure for our example</span>
+<span class="n">SSR</span> <span class="o">=</span> <span class="n">sum</span><span class="p">((</span><span class="n">AThat</span> <span class="o">-</span> <span class="n">mean</span><span class="p">(</span><span class="n">Waist_AT</span><span class="err">$</span><span class="n">AT</span><span class="p">))</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">SST</span> <span class="o">=</span> <span class="n">sum</span><span class="p">((</span><span class="n">Waist_AT</span><span class="err">$</span><span class="n">AT</span> <span class="o">-</span> <span class="n">mean</span><span class="p">(</span><span class="n">Waist_AT</span><span class="err">$</span><span class="n">AT</span><span class="p">))</span><span class="o">^</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">MulRSq</span> <span class="o">=</span> <span class="n">SSR</span><span class="o">/</span><span class="n">SST</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;Compute Multiple R-squared: &quot;</span><span class="p">,</span> <span class="n">MulRSq</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;Note that computed R squared value is matching with lm() Multiple R-squared value in above output </span><span class="se">\n</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;======================================================================= </span><span class="se">\n</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span class="n">Compute</span> <span class="n">Multiple</span> <span class="n">R</span><span class="o">-</span><span class="n">squared</span><span class="o">:</span>  <span class="mf">0.6700369</span>
+
+<span class="n">Note</span> <span class="n">that</span> <span class="n">computed</span> <span class="n">R</span> <span class="n">squared</span> <span class="n">value</span> <span class="n">is</span> <span class="n">matching</span> <span class="n">with</span> <span class="n">lm</span><span class="p">()</span> <span class="n">Multiple</span> <span class="n">R</span><span class="o">-</span><span class="n">squared</span> <span class="n">value</span> <span class="n">in</span> <span class="n">above</span> <span class="n">output</span>
+
+<span class="o">=======================================================================</span>
+</pre></div>
+
+
+<p><strong>What happens to the Multiple R-squared value when you add an irrelevant variable to the model?</strong></p>
+<p>In the below model, I am generating a random sample of uniform numbers between 1 to 100 and considering this as one of indepedent variable.</p>
+<div class="highlight"><pre><span class="n">set</span><span class="p">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>
+<span class="n">fit_lm2</span> <span class="o">=</span> <span class="n">lm</span><span class="p">(</span><span class="n">AT</span> <span class="o">~</span> <span class="n">Waist</span> <span class="o">+</span> <span class="n">runif</span><span class="p">(</span><span class="n">nrow</span><span class="p">(</span><span class="n">Waist_AT</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">data</span> <span class="o">=</span> <span class="n">Waist_AT</span><span class="p">)</span>
+<span class="n">summary</span><span class="p">(</span><span class="n">fit_lm2</span><span class="p">)</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;======================================================================= </span><span class="se">\n</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span class="n">Call</span><span class="o">:</span>
+<span class="n">lm</span><span class="o">(</span><span class="n">formula</span> <span class="o">=</span> <span class="n">AT</span> <span class="o">~</span> <span class="n">Waist</span> <span class="o">+</span> <span class="n">runif</span><span class="o">(</span><span class="n">nrow</span><span class="o">(</span><span class="n">Waist_AT</span><span class="o">),</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">100</span><span class="o">),</span> <span class="n">data</span> <span class="o">=</span> <span class="n">Waist_AT</span><span class="o">)</span>
+
+<span class="n">Residuals</span><span class="o">:</span>
+    <span class="n">Min</span>      <span class="mi">1</span><span class="n">Q</span>  <span class="n">Median</span>      <span class="mi">3</span><span class="n">Q</span>     <span class="n">Max</span>
+<span class="o">-</span><span class="mf">106.06</span>  <span class="o">-</span><span class="mf">17.53</span>   <span class="o">-</span><span class="mf">3.63</span>   <span class="mf">13.70</span>   <span class="mf">91.36</span>
+
+<span class="n">Coefficients</span><span class="o">:</span>
+                               <span class="n">Estimate</span> <span class="n">Std</span><span class="o">.</span> <span class="n">Error</span> <span class="n">t</span> <span class="n">value</span> <span class="n">Pr</span><span class="o">(&gt;|</span><span class="n">t</span><span class="o">|)</span>
+<span class="o">(</span><span class="n">Intercept</span><span class="o">)</span>                   <span class="o">-</span><span class="mf">226.2894</span>    <span class="mf">23.4350</span>  <span class="o">-</span><span class="mf">9.656</span> <span class="mf">3.33</span><span class="n">e</span><span class="o">-</span><span class="mi">16</span> <span class="o">***</span>
+<span class="n">Waist</span>                            <span class="mf">3.5060</span>     <span class="mf">0.2376</span>  <span class="mf">14.757</span>  <span class="o">&lt;</span> <span class="mi">2</span><span class="n">e</span><span class="o">-</span><span class="mi">16</span> <span class="o">***</span>
+<span class="n">runif</span><span class="o">(</span><span class="n">nrow</span><span class="o">(</span><span class="n">Waist_AT</span><span class="o">),</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">100</span><span class="o">)</span>    <span class="mf">0.1397</span>     <span class="mf">0.1181</span>   <span class="mf">1.183</span>    <span class="mf">0.239</span>
+<span class="o">---</span>
+<span class="n">Signif</span><span class="o">.</span> <span class="n">codes</span><span class="o">:</span>  <span class="mi">0</span> <span class="err">‘</span><span class="o">***</span><span class="err">’</span> <span class="mf">0.001</span> <span class="err">‘</span><span class="o">**</span><span class="err">’</span> <span class="mf">0.01</span> <span class="err">‘</span><span class="o">*</span><span class="err">’</span> <span class="mf">0.05</span> <span class="err">‘</span><span class="o">.</span><span class="err">’</span> <span class="mf">0.1</span> <span class="err">‘</span> <span class="err">’</span> <span class="mi">1</span>
+
+<span class="n">Residual</span> <span class="n">standard</span> <span class="n">error</span><span class="o">:</span> <span class="mi">33</span> <span class="n">on</span> <span class="mi">106</span> <span class="n">degrees</span> <span class="n">of</span> <span class="n">freedom</span>
+<span class="n">Multiple</span> <span class="n">R</span><span class="o">-</span><span class="n">squared</span><span class="o">:</span>  <span class="mf">0.6743</span><span class="o">,</span>  <span class="n">Adjusted</span> <span class="n">R</span><span class="o">-</span><span class="n">squared</span><span class="o">:</span>  <span class="mf">0.6682</span>
+<span class="n">F</span><span class="o">-</span><span class="n">statistic</span><span class="o">:</span> <span class="mf">109.7</span> <span class="n">on</span> <span class="mi">2</span> <span class="n">and</span> <span class="mi">106</span> <span class="n">DF</span><span class="o">,</span>  <span class="n">p</span><span class="o">-</span><span class="n">value</span><span class="o">:</span> <span class="o">&lt;</span> <span class="mf">2.2</span><span class="n">e</span><span class="o">-</span><span class="mi">16</span>
+
+
+
+<span class="o">=======================================================================</span>
+</pre></div>
+
+
+<p>Multiple R-squared value increases irrespective of quality of explanation, which is incorrect. We should penalize our model performance if the quality of explanation is poor, that is why we need to adjust our R-squared value.</p>
+<p>To penalize the explained part of AT, we inflate the unexplained part of AT with <span class="math">\(\frac{Total \ degrees \ of \ freedom}{Error \ degrees \ of \ freedom}\)</span>. That is,</p>
+<p>
+<div class="math">$$Adjusted \ R-squared = 1 - (1 - R^2) \frac{n-1}{n-p-1}$$</div>
+</p>
+<p>Where, n = Total number of observations; p = Total number of predictors (excluding intercept)</p>
+<p>Adding a new independent variable will increase <span class="math">\(\frac{n-1}{n-p-1}\)</span> and <span class="math">\(R^2\)</span>. If the amount of increment in <span class="math">\(R^2\)</span> is less than the amount of increment in <span class="math">\(\frac{n-1}{n-p-1}\)</span> than it will decrease the Adjusted R-squared value.</p>
+<p>In <code>fit_lm2</code> model Adjusted R-squared decreases when we add randomly generated variable into the model.</p>
+<div class="highlight"><pre><span class="cp"># Let&#39;s compute adjusted R-squared  for our example</span>
+<span class="n">TDF</span> <span class="o">=</span> <span class="n">nrow</span><span class="p">(</span><span class="n">Waist_AT</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">])</span> <span class="err">#</span> <span class="n">Total</span> <span class="n">degrees</span> <span class="n">of</span> <span class="n">freedom</span>
+<span class="n">EDF</span> <span class="o">=</span> <span class="n">nrow</span><span class="p">(</span><span class="n">Waist_AT</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">])</span> <span class="o">-</span> <span class="mi">1</span> <span class="err">#</span> <span class="n">Error</span> <span class="n">degrees</span> <span class="n">of</span> <span class="n">freedom</span><span class="p">,</span> <span class="n">where</span> <span class="mi">1</span> <span class="n">is</span> <span class="n">the</span> <span class="n">number</span> <span class="n">of</span> <span class="n">predictors</span>
+<span class="n">AdjRSq</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">MulRSq</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">TDF</span><span class="o">/</span><span class="n">EDF</span><span class="p">)</span> <span class="err">#</span> <span class="n">Adjusted</span> <span class="n">R</span> <span class="n">square</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;Compute Multiple R-squared: &quot;</span><span class="p">,</span> <span class="n">AdjRSq</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;Note that computed Adjusted R-squared value is matching with lm() Adjusted R-squared value in the above output </span><span class="se">\n</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;Note: We are comparing with fit_lm model, not fit_lm2 </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;======================================================================= </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span class="n">Compute</span> <span class="n">Multiple</span> <span class="n">R</span><span class="o">-</span><span class="n">squared</span><span class="o">:</span>  <span class="mf">0.6669531</span>
+
+<span class="n">Note</span> <span class="n">that</span> <span class="n">computed</span> <span class="n">Adjusted</span> <span class="n">R</span><span class="o">-</span><span class="n">squared</span> <span class="n">value</span> <span class="n">is</span> <span class="n">matching</span> <span class="n">with</span> <span class="n">lm</span><span class="p">()</span> <span class="n">Adjusted</span> <span class="n">R</span><span class="o">-</span><span class="n">squared</span> <span class="n">value</span> <span class="n">in</span> <span class="n">the</span> <span class="n">above</span> <span class="n">output</span>
+
+<span class="nl">Note:</span> <span class="n">We</span> <span class="n">are</span> <span class="n">comparing</span> <span class="n">with</span> <span class="n">fit_lm</span> <span class="n">model</span><span class="p">,</span> <span class="n">not</span> <span class="n">fit_lm2</span>
+<span class="o">=======================================================================</span>
+</pre></div>
+
+
+<p>Aforementioned measures (Multiple R-squared &amp; Adjusted R-squared) for <strong>Goodness of fit</strong> are functions of sample and these will vary as sample changes. Similar to <code>t-test</code> for regression coefficeints we need some statistical test to test model's performance for population.</p>
+<p>Objective is to compare the Mean sum of squares due to regression and Mean sum of squares due to error. <code>F-test</code> is very helpful to compare the variations.</p>
+<p>
+<div class="math">$$ F-test = \frac{\frac{1}{p-1}\sum_{i=1}^n (\hat{AT_i} - \bar{AT})^2}{\frac{1}{n-p-1} \sum_{i=1}^n (\hat{AT_i} - AT_i)^2}$$</div>
+</p>
+<p><strong>Note:</strong> Above expression follows F distribution only if, AT follows Normal Distribution</p>
+<div class="highlight"><pre><span class="n">RDF</span> <span class="o">=</span> <span class="n">TDF</span> <span class="o">-</span> <span class="n">EDF</span>
+<span class="n">SSE</span> <span class="o">=</span> <span class="n">SST</span> <span class="o">-</span> <span class="n">SSR</span>
+<span class="n">MSR</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">RDF</span><span class="p">)</span><span class="o">*</span><span class="n">SSR</span>
+<span class="n">MSE</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">EDF</span><span class="p">)</span><span class="o">*</span><span class="n">SSE</span>
+<span class="n">F_value</span> <span class="o">=</span> <span class="n">MSR</span><span class="o">/</span><span class="n">MSE</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;Compute F statistic: &quot;</span><span class="p">,</span> <span class="n">F_value</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;Note that computed F-statistic is matching with lm() F-statistic value in the above output </span><span class="se">\n</span><span class="s"> </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;Note: We are comparing with fit_lm model, not fit_lm2 </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;======================================================================= </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span class="n">Compute</span> <span class="n">F</span> <span class="n">statistic</span><span class="o">:</span>  <span class="mf">217.2787</span>
+
+<span class="n">Note</span> <span class="n">that</span> <span class="n">computed</span> <span class="n">F</span><span class="o">-</span><span class="n">statistic</span> <span class="n">is</span> <span class="n">matching</span> <span class="n">with</span> <span class="n">lm</span><span class="p">()</span> <span class="n">F</span><span class="o">-</span><span class="n">statistic</span> <span class="n">value</span> <span class="n">in</span> <span class="n">the</span> <span class="n">above</span> <span class="n">output</span>
+
+<span class="nl">Note:</span> <span class="n">We</span> <span class="n">are</span> <span class="n">comparing</span> <span class="n">with</span> <span class="n">fit_lm</span> <span class="n">model</span><span class="p">,</span> <span class="n">not</span> <span class="n">fit_lm2</span>
+<span class="o">=======================================================================</span>
+</pre></div>
+
+
+<h2>2. Multiple Linear Regression (MLR)</h2>
+<p>In multiple linear regression we consider more than one predictor and one dependent variable. Most of the above explanation is valid for MLR too.</p>
+<h3>Example: Car's MPG (Miles Per Gallon) prediction</h3>
+<p>Our interest is to model the MPG of a car based on the other variables.</p>
+<p>Variable Description:</p>
+<ul>
+<li>VOL = cubic feet of cab space</li>
+<li>HP = engine horsepower</li>
+<li>MPG = average miles per gallon</li>
+<li>SP = top speed, miles per hour</li>
+<li>WT = vehicle weight, hundreds of pounds</li>
+</ul>
+<div class="highlight"><pre><span class="cp"># Reading Boston housing prices data</span>
+<span class="n">car</span> <span class="o">=</span> <span class="n">read</span><span class="p">.</span><span class="n">csv</span><span class="p">(</span><span class="s">&quot;Cars.csv&quot;</span><span class="p">)</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;Number of rows: &quot;</span><span class="p">,</span> <span class="n">nrow</span><span class="p">(</span><span class="n">car</span><span class="p">),</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="s">&quot;Number of variables: &quot;</span><span class="p">,</span> <span class="n">ncol</span><span class="p">(</span><span class="n">car</span><span class="p">),</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">head</span><span class="p">(</span><span class="n">car</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span class="n">Number</span> <span class="n">of</span> <span class="n">rows</span><span class="o">:</span>  <span class="mi">81</span>
+ <span class="n">Number</span> <span class="n">of</span> <span class="n">variables</span><span class="o">:</span>  <span class="mi">5</span>
+</pre></div>
+
+
+<table>
+<thead><tr><th scope=col>HP</th><th scope=col>MPG</th><th scope=col>VOL</th><th scope=col>SP</th><th scope=col>WT</th></tr></thead>
+<tbody>
+  <tr><td>49      </td><td>53.70068</td><td>89      </td><td>104.1854</td><td>28.76206</td></tr>
+  <tr><td>55      </td><td>50.01340</td><td>92      </td><td>105.4613</td><td>30.46683</td></tr>
+  <tr><td>55      </td><td>50.01340</td><td>92      </td><td>105.4613</td><td>30.19360</td></tr>
+  <tr><td>70      </td><td>45.69632</td><td>92      </td><td>113.4613</td><td>30.63211</td></tr>
+  <tr><td>53      </td><td>50.50423</td><td>92      </td><td>104.4613</td><td>29.88915</td></tr>
+  <tr><td>70      </td><td>45.69632</td><td>89      </td><td>113.1854</td><td>29.59177</td></tr>
+</tbody>
+</table>
+
+<p>Our objective is to model the variation in <code>MPG</code> using other independent variables. That is,</p>
+<p>
+<div class="math">$$MPG = \beta_0 + \beta_1 VOL + \beta_2 HP + \beta_3 SP + \beta_4 WT + \epsilon$$</div>
+</p>
+<p>Where, <span class="math">\(\beta_1\)</span> represents the amount of change in <code>MPG</code> per one unit change in <code>VOL</code> provided other variables are fixed. Let's consider below two cases,</p>
+<p><strong>Case1:</strong> HP = 49; VOL = 89; SP = 104.1854; WT = 28.76206 =&gt; MPG = 104.1854</p>
+<p><strong>Case2:</strong> HP = 49; VOL = 90; SP = 104.1854; WT = 28.76206 =&gt; MPG = 105.2453</p>
+<p>then <span class="math">\(\beta_1 = 105.2453 - 104.1854 = 1.0599\)</span>. Similarly, <span class="math">\(\beta_2, \beta_3, \beta_4\)</span></p>
+<p>The above effect is called as <a href="https://en.wikipedia.org/wiki/Ceteris_paribus"><code>Ceteris Paribus Effect</code></a>.</p>
+<p>But in real world it is very difficult to collect records in above manner. That's why we compute (function of) partial correlation coefficients to quantify the effect of one variable, keeping others constant.</p>
+<div class="highlight"><pre><span class="cp"># Let&#39;s build MLR model to predict MPG based using other variables</span>
+<span class="n">fit_mlr_actual</span> <span class="o">=</span> <span class="n">lm</span><span class="p">(</span><span class="n">MPG</span> <span class="o">~</span> <span class="p">.,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">car</span><span class="p">)</span>
+<span class="n">summary</span><span class="p">(</span><span class="n">fit_mlr_actual</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span class="n">Call</span><span class="o">:</span>
+<span class="n">lm</span><span class="o">(</span><span class="n">formula</span> <span class="o">=</span> <span class="n">MPG</span> <span class="o">~</span> <span class="o">.,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">car</span><span class="o">)</span>
+
+<span class="n">Residuals</span><span class="o">:</span>
+     <span class="n">Min</span>       <span class="mi">1</span><span class="n">Q</span>   <span class="n">Median</span>       <span class="mi">3</span><span class="n">Q</span>      <span class="n">Max</span>
+<span class="o">-</span><span class="mf">0.94530</span> <span class="o">-</span><span class="mf">0.32792</span> <span class="o">-</span><span class="mf">0.04058</span>  <span class="mf">0.24256</span>  <span class="mf">1.71034</span>
+
+<span class="n">Coefficients</span><span class="o">:</span>
+              <span class="n">Estimate</span> <span class="n">Std</span><span class="o">.</span> <span class="n">Error</span> <span class="n">t</span> <span class="n">value</span> <span class="n">Pr</span><span class="o">(&gt;|</span><span class="n">t</span><span class="o">|)</span>
+<span class="o">(</span><span class="n">Intercept</span><span class="o">)</span>  <span class="mf">7.100</span><span class="n">e</span><span class="o">-</span><span class="mi">17</span>  <span class="mf">5.461</span><span class="n">e</span><span class="o">-</span><span class="mi">02</span>   <span class="mf">0.000</span>   <span class="mf">1.0000</span>
+<span class="n">HP</span>          <span class="o">-</span><span class="mf">1.285</span><span class="n">e</span><span class="o">+</span><span class="mi">00</span>  <span class="mf">2.453</span><span class="n">e</span><span class="o">-</span><span class="mi">01</span>  <span class="o">-</span><span class="mf">5.239</span>  <span class="mf">1.4</span><span class="n">e</span><span class="o">-</span><span class="mi">06</span> <span class="o">***</span>
+<span class="n">VOL</span>         <span class="o">-</span><span class="mf">8.207</span><span class="n">e</span><span class="o">-</span><span class="mi">01</span>  <span class="mf">1.389</span><span class="n">e</span><span class="o">+</span><span class="mi">00</span>  <span class="o">-</span><span class="mf">0.591</span>   <span class="mf">0.5563</span>
+<span class="n">SP</span>           <span class="mf">6.144</span><span class="n">e</span><span class="o">-</span><span class="mi">01</span>  <span class="mf">2.458</span><span class="n">e</span><span class="o">-</span><span class="mi">01</span>   <span class="mf">2.500</span>   <span class="mf">0.0146</span> <span class="o">*</span>
+<span class="n">WT</span>           <span class="mf">3.287</span><span class="n">e</span><span class="o">-</span><span class="mi">01</span>  <span class="mf">1.390</span><span class="n">e</span><span class="o">+</span><span class="mi">00</span>   <span class="mf">0.237</span>   <span class="mf">0.8136</span>
+<span class="o">---</span>
+<span class="n">Signif</span><span class="o">.</span> <span class="n">codes</span><span class="o">:</span>  <span class="mi">0</span> <span class="err">‘</span><span class="o">***</span><span class="err">’</span> <span class="mf">0.001</span> <span class="err">‘</span><span class="o">**</span><span class="err">’</span> <span class="mf">0.01</span> <span class="err">‘</span><span class="o">*</span><span class="err">’</span> <span class="mf">0.05</span> <span class="err">‘</span><span class="o">.</span><span class="err">’</span> <span class="mf">0.1</span> <span class="err">‘</span> <span class="err">’</span> <span class="mi">1</span>
+
+<span class="n">Residual</span> <span class="n">standard</span> <span class="n">error</span><span class="o">:</span> <span class="mf">0.4915</span> <span class="n">on</span> <span class="mi">76</span> <span class="n">degrees</span> <span class="n">of</span> <span class="n">freedom</span>
+<span class="n">Multiple</span> <span class="n">R</span><span class="o">-</span><span class="n">squared</span><span class="o">:</span>  <span class="mf">0.7705</span><span class="o">,</span>  <span class="n">Adjusted</span> <span class="n">R</span><span class="o">-</span><span class="n">squared</span><span class="o">:</span>  <span class="mf">0.7585</span>
+<span class="n">F</span><span class="o">-</span><span class="n">statistic</span><span class="o">:</span>  <span class="mf">63.8</span> <span class="n">on</span> <span class="mi">4</span> <span class="n">and</span> <span class="mi">76</span> <span class="n">DF</span><span class="o">,</span>  <span class="n">p</span><span class="o">-</span><span class="n">value</span><span class="o">:</span> <span class="o">&lt;</span> <span class="mf">2.2</span><span class="n">e</span><span class="o">-</span><span class="mi">16</span>
+</pre></div>
+
+
+<p>One key observation from above output is, Std. Error for <code>VOL</code> and <code>WT</code> is very huge comparing to others and this inflates <code>t values</code> and <code>p value</code>. Hence, these two variables becomes very insignificant for the model.</p>
+<p>Let's go into deep, what happened to <span class="math">\(Var(\hat{\beta_{VOL}})\)</span> and <span class="math">\(Var(\hat{\beta_{WT}})\)</span>?</p>
+<p>Analogy for <span class="math">\(Var(\hat{\beta})\)</span> in MLR is as follows:</p>
+<p>
+<div class="math">$$Var(\hat{\beta_{VOL}}) = \frac{\sigma^2}{n\sum_{i=1}^n (VOL_i - \bar{VOL})^2 (1 - R_{VOL}^2)}$$</div>
+</p>
+<p>Where, <span class="math">\(R_{VOL}^2\)</span> = Multiple R-squared value obtained by regressing VOL on all other independent variables</p>
+<p><strong>Task:</strong> To understand it more clearly, take few random samples from cars data and run the MLR model and observe the variation in <span class="math">\(\hat{\beta_{VOL}}\)</span> and <span class="math">\(\hat{\beta_{WT}}\)</span>.</p>
+<div class="highlight"><pre><span class="cp"># Let&#39;s regress VOL on all other independent variables&#39;</span>
+<span class="n">fit_mlr</span> <span class="o">=</span> <span class="n">lm</span><span class="p">(</span><span class="n">VOL</span> <span class="o">~</span> <span class="n">HP</span> <span class="o">+</span> <span class="n">SP</span> <span class="o">+</span> <span class="n">WT</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">car</span><span class="p">)</span>
+<span class="n">summary</span><span class="p">(</span><span class="n">fit_mlr</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span class="n">Call</span><span class="o">:</span>
+<span class="n">lm</span><span class="o">(</span><span class="n">formula</span> <span class="o">=</span> <span class="n">VOL</span> <span class="o">~</span> <span class="n">HP</span> <span class="o">+</span> <span class="n">SP</span> <span class="o">+</span> <span class="n">WT</span><span class="o">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">car</span><span class="o">)</span>
+
+<span class="n">Residuals</span><span class="o">:</span>
+      <span class="n">Min</span>        <span class="mi">1</span><span class="n">Q</span>    <span class="n">Median</span>        <span class="mi">3</span><span class="n">Q</span>       <span class="n">Max</span>
+<span class="o">-</span><span class="mf">0.068938</span> <span class="o">-</span><span class="mf">0.031641</span> <span class="o">-</span><span class="mf">0.008794</span>  <span class="mf">0.032018</span>  <span class="mf">0.077931</span>
+
+<span class="n">Coefficients</span><span class="o">:</span>
+              <span class="n">Estimate</span> <span class="n">Std</span><span class="o">.</span> <span class="n">Error</span> <span class="n">t</span> <span class="n">value</span> <span class="n">Pr</span><span class="o">(&gt;|</span><span class="n">t</span><span class="o">|)</span>
+<span class="o">(</span><span class="n">Intercept</span><span class="o">)</span> <span class="o">-</span><span class="mf">6.155</span><span class="n">e</span><span class="o">-</span><span class="mi">18</span>  <span class="mf">4.481</span><span class="n">e</span><span class="o">-</span><span class="mi">03</span>   <span class="mf">0.000</span>    <span class="mf">1.000</span>
+<span class="n">HP</span>           <span class="mf">2.331</span><span class="n">e</span><span class="o">-</span><span class="mi">02</span>  <span class="mf">1.995</span><span class="n">e</span><span class="o">-</span><span class="mi">02</span>   <span class="mf">1.168</span>    <span class="mf">0.246</span>
+<span class="n">SP</span>          <span class="o">-</span><span class="mf">2.294</span><span class="n">e</span><span class="o">-</span><span class="mi">02</span>  <span class="mf">2.000</span><span class="n">e</span><span class="o">-</span><span class="mi">02</span>  <span class="o">-</span><span class="mf">1.147</span>    <span class="mf">0.255</span>
+<span class="n">WT</span>           <span class="mf">9.998</span><span class="n">e</span><span class="o">-</span><span class="mi">01</span>  <span class="mf">4.557</span><span class="n">e</span><span class="o">-</span><span class="mi">03</span> <span class="mf">219.396</span>   <span class="o">&lt;</span><span class="mi">2</span><span class="n">e</span><span class="o">-</span><span class="mi">16</span> <span class="o">***</span>
+<span class="o">---</span>
+<span class="n">Signif</span><span class="o">.</span> <span class="n">codes</span><span class="o">:</span>  <span class="mi">0</span> <span class="err">‘</span><span class="o">***</span><span class="err">’</span> <span class="mf">0.001</span> <span class="err">‘</span><span class="o">**</span><span class="err">’</span> <span class="mf">0.01</span> <span class="err">‘</span><span class="o">*</span><span class="err">’</span> <span class="mf">0.05</span> <span class="err">‘</span><span class="o">.</span><span class="err">’</span> <span class="mf">0.1</span> <span class="err">‘</span> <span class="err">’</span> <span class="mi">1</span>
+
+<span class="n">Residual</span> <span class="n">standard</span> <span class="n">error</span><span class="o">:</span> <span class="mf">0.04033</span> <span class="n">on</span> <span class="mi">77</span> <span class="n">degrees</span> <span class="n">of</span> <span class="n">freedom</span>
+<span class="n">Multiple</span> <span class="n">R</span><span class="o">-</span><span class="n">squared</span><span class="o">:</span>  <span class="mf">0.9984</span><span class="o">,</span>  <span class="n">Adjusted</span> <span class="n">R</span><span class="o">-</span><span class="n">squared</span><span class="o">:</span>  <span class="mf">0.9984</span>
+<span class="n">F</span><span class="o">-</span><span class="n">statistic</span><span class="o">:</span> <span class="mf">1.637</span><span class="n">e</span><span class="o">+</span><span class="mi">04</span> <span class="n">on</span> <span class="mi">3</span> <span class="n">and</span> <span class="mi">77</span> <span class="n">DF</span><span class="o">,</span>  <span class="n">p</span><span class="o">-</span><span class="n">value</span><span class="o">:</span> <span class="o">&lt;</span> <span class="mf">2.2</span><span class="n">e</span><span class="o">-</span><span class="mi">16</span>
+</pre></div>
+
+
+<p>It's surprising that, <span class="math">\(R_{VOL}^2\)</span> is 0.9984 and also only <code>WT</code> is significant. That is, these two predictors (<code>VOL</code> and <code>WT</code>) are highly correlated. This inflates <span class="math">\(Var(\hat{\beta_{VOL}})\)</span> and thus <code>t value</code>. We might be missing some of the important information because of high correlation between predictors. This problem is called as <a href="https://en.wikipedia.org/wiki/Multicollinearity">Multicollinearity</a>.</p>
+<p>One quick solution for this problem is to remove either <code>VOL</code> or <code>WT</code> from the model. Let's compute partial correlation coeficient between <code>MPG</code> and <code>VOL</code> by removing the effect of <code>WT</code> (say, <span class="math">\(r_{MV.W}\)</span>) and partial correlation coeficient between <code>MPG</code> and <code>WT</code> by removing the effect of <code>VOL</code> (say, <span class="math">\(r_{MW.V}\)</span>).</p>
+<p>To compute <span class="math">\(r_{MV.W}\)</span> we need to compute the correlation between (a) part of <code>VOL</code> which cannot be explained by <code>WT</code> (regress <code>VOL</code> on <code>WT</code> and take the residuals) and (b) the part of <code>MPG</code> which cannot be explained by <code>WT</code> (regress <code>MPG</code> on <code>WT</code> and take the residuals)</p>
+<div class="highlight"><pre><span class="n">fit_partial</span> <span class="o">=</span> <span class="n">lm</span><span class="p">(</span><span class="n">VOL</span> <span class="o">~</span> <span class="n">WT</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">car</span><span class="p">)</span>
+<span class="n">fit_partial2</span> <span class="o">=</span> <span class="n">lm</span><span class="p">(</span><span class="n">MPG</span> <span class="o">~</span> <span class="n">WT</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">car</span><span class="p">)</span>
+<span class="n">res1</span> <span class="o">=</span> <span class="n">fit_partial</span><span class="err">$</span><span class="n">residual</span>
+<span class="n">res2</span> <span class="o">=</span> <span class="n">fit_partial2</span><span class="err">$</span><span class="n">residual</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;Partial correlation coefficient between MPG and VOL by removing the effect of WT is: &quot;</span><span class="p">,</span> <span class="n">cor</span><span class="p">(</span><span class="n">res1</span><span class="p">,</span> <span class="n">res2</span><span class="p">))</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span class="n">Partial</span> <span class="n">correlation</span> <span class="n">coefficient</span> <span class="n">between</span> <span class="n">MPG</span> <span class="n">and</span> <span class="n">VOL</span> <span class="n">by</span> <span class="n">removing</span> <span class="n">the</span> <span class="n">effect</span> <span class="n">of</span> <span class="n">WT</span> <span class="n">is</span><span class="o">:</span>  <span class="o">-</span><span class="mf">0.08008873</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span class="n">fit_partial3</span> <span class="o">=</span> <span class="n">lm</span><span class="p">(</span><span class="n">WT</span> <span class="o">~</span> <span class="n">VOL</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">car</span><span class="p">)</span>
+<span class="n">fit_partial4</span> <span class="o">=</span> <span class="n">lm</span><span class="p">(</span><span class="n">MPG</span> <span class="o">~</span> <span class="n">VOL</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">car</span><span class="p">)</span>
+<span class="n">res1</span> <span class="o">=</span> <span class="n">fit_partia3</span><span class="err">$</span><span class="n">residual</span>
+<span class="n">res2</span> <span class="o">=</span> <span class="n">fit_partial4</span><span class="err">$</span><span class="n">residual</span>
+<span class="n">cat</span><span class="p">(</span><span class="s">&quot;Partial correlation coefficient between MPG and WT by removing the effect of VOL is: &quot;</span><span class="p">,</span> <span class="n">cor</span><span class="p">(</span><span class="n">res1</span><span class="p">,</span> <span class="n">res2</span><span class="p">))</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span class="n">Partial</span> <span class="n">correlation</span> <span class="n">coefficient</span> <span class="n">between</span> <span class="n">MPG</span> <span class="n">and</span> <span class="n">WT</span> <span class="n">by</span> <span class="n">removing</span> <span class="n">the</span> <span class="n">effect</span> <span class="n">of</span> <span class="n">VOL</span> <span class="n">is</span><span class="o">:</span>  <span class="mf">0.05538241</span>
+</pre></div>
+
+
+<p>Since, <span class="math">\(abs(r_{MV.W}) &gt;= abs(r_{MW.V})\)</span> we may remove <code>WT</code> from the model.</p>
+<div class="highlight"><pre><span class="cp"># Remove WT and rerun the model</span>
+<span class="n">fit_mlr_actual2</span> <span class="o">=</span> <span class="n">lm</span><span class="p">(</span><span class="n">MPG</span> <span class="o">~</span> <span class="p">.</span><span class="o">-</span><span class="n">WT</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">car</span><span class="p">)</span>
+<span class="n">summary</span><span class="p">(</span><span class="n">fit_mlr_actual2</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="highlight"><pre><span class="n">Call</span><span class="o">:</span>
+<span class="n">lm</span><span class="o">(</span><span class="n">formula</span> <span class="o">=</span> <span class="n">MPG</span> <span class="o">~</span> <span class="o">.</span> <span class="o">-</span> <span class="n">WT</span><span class="o">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">car</span><span class="o">)</span>
+
+<span class="n">Residuals</span><span class="o">:</span>
+     <span class="n">Min</span>       <span class="mi">1</span><span class="n">Q</span>   <span class="n">Median</span>       <span class="mi">3</span><span class="n">Q</span>      <span class="n">Max</span>
+<span class="o">-</span><span class="mf">0.94036</span> <span class="o">-</span><span class="mf">0.31695</span> <span class="o">-</span><span class="mf">0.03457</span>  <span class="mf">0.23316</span>  <span class="mf">1.71570</span>
+
+<span class="n">Coefficients</span><span class="o">:</span>
+              <span class="n">Estimate</span> <span class="n">Std</span><span class="o">.</span> <span class="n">Error</span> <span class="n">t</span> <span class="n">value</span> <span class="n">Pr</span><span class="o">(&gt;|</span><span class="n">t</span><span class="o">|)</span>
+<span class="o">(</span><span class="n">Intercept</span><span class="o">)</span>  <span class="mf">7.910</span><span class="n">e</span><span class="o">-</span><span class="mi">17</span>  <span class="mf">5.427</span><span class="n">e</span><span class="o">-</span><span class="mi">02</span>   <span class="mf">0.000</span>   <span class="mf">1.0000</span>
+<span class="n">HP</span>          <span class="o">-</span><span class="mf">1.293</span><span class="n">e</span><span class="o">+</span><span class="mi">00</span>  <span class="mf">2.415</span><span class="n">e</span><span class="o">-</span><span class="mi">01</span>  <span class="o">-</span><span class="mf">5.353</span> <span class="mf">8.64</span><span class="n">e</span><span class="o">-</span><span class="mi">07</span> <span class="o">***</span>
+<span class="n">VOL</span>         <span class="o">-</span><span class="mf">4.925</span><span class="n">e</span><span class="o">-</span><span class="mi">01</span>  <span class="mf">5.516</span><span class="n">e</span><span class="o">-</span><span class="mi">02</span>  <span class="o">-</span><span class="mf">8.928</span> <span class="mf">1.65</span><span class="n">e</span><span class="o">-</span><span class="mi">13</span> <span class="o">***</span>
+<span class="n">SP</span>           <span class="mf">6.222</span><span class="n">e</span><span class="o">-</span><span class="mi">01</span>  <span class="mf">2.421</span><span class="n">e</span><span class="o">-</span><span class="mi">01</span>   <span class="mf">2.571</span>   <span class="mf">0.0121</span> <span class="o">*</span>
+<span class="o">---</span>
+<span class="n">Signif</span><span class="o">.</span> <span class="n">codes</span><span class="o">:</span>  <span class="mi">0</span> <span class="err">‘</span><span class="o">***</span><span class="err">’</span> <span class="mf">0.001</span> <span class="err">‘</span><span class="o">**</span><span class="err">’</span> <span class="mf">0.01</span> <span class="err">‘</span><span class="o">*</span><span class="err">’</span> <span class="mf">0.05</span> <span class="err">‘</span><span class="o">.</span><span class="err">’</span> <span class="mf">0.1</span> <span class="err">‘</span> <span class="err">’</span> <span class="mi">1</span>
+
+<span class="n">Residual</span> <span class="n">standard</span> <span class="n">error</span><span class="o">:</span> <span class="mf">0.4884</span> <span class="n">on</span> <span class="mi">77</span> <span class="n">degrees</span> <span class="n">of</span> <span class="n">freedom</span>
+<span class="n">Multiple</span> <span class="n">R</span><span class="o">-</span><span class="n">squared</span><span class="o">:</span>  <span class="mf">0.7704</span><span class="o">,</span>  <span class="n">Adjusted</span> <span class="n">R</span><span class="o">-</span><span class="n">squared</span><span class="o">:</span>  <span class="mf">0.7614</span>
+<span class="n">F</span><span class="o">-</span><span class="n">statistic</span><span class="o">:</span> <span class="mf">86.11</span> <span class="n">on</span> <span class="mi">3</span> <span class="n">and</span> <span class="mi">77</span> <span class="n">DF</span><span class="o">,</span>  <span class="n">p</span><span class="o">-</span><span class="n">value</span><span class="o">:</span> <span class="o">&lt;</span> <span class="mf">2.2</span><span class="n">e</span><span class="o">-</span><span class="mi">16</span>
+</pre></div>
+
+
+<p>After eliminating <code>WT</code> from the model there is an increment of ~0.3% in Adjusted R-squared and more importantly, <code>VOL</code> becomes significant at 0 <a href="https://en.wikipedia.org/wiki/Statistical_significance">los</a> (level of significance)</p>
+<p><a id='Assumptions'></a></p>
+<h2>3. Assumptions</h2>
+<p><strong>Linear in Parameters:</strong> We assume that there is a linear relation between dependent and set of independent variables</p>
+<p><strong>Zero conditional mean:</strong> <span class="math">\(E(\epsilon \mid X) = 0\)</span></p>
+<p><strong>Homoskedasticity:</strong> <span class="math">\(Var(\epsilon \mid X) = \sigma^2\)</span> (Constant)</p>
+<p><strong>No perfect Collinearity:</strong> All predecitors must be independent among themselves</p>
+<p><strong>No serial correlation in errors:</strong> Erros must be uncorrelated among themselves. In otherwords, observations or records must be independent of each other.</p>
+<p>We discussed first 4 assumptions in section 1 and 2.</p>
+<p><a target="_blank"  href="https://www.amazon.com/gp/product/1111531048/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1111531048&linkCode=as2&tag=nkaveti-20&linkId=83f6e694209869322f8bfad406883d2f"><img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&MarketPlace=US&ASIN=1111531048&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=_SL250_&tag=nkaveti-20" ></a><img src="//ir-na.amazon-adsystem.com/e/ir?t=nkaveti-20&l=am2&o=1&a=1111531048" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></p>
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processClass: 'mathjax', " +
+        "        ignoreClass: 'no-mathjax', " +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script></div>
+
+<div class="alignleft">
+     <script type="text/javascript">
+        amzn_assoc_ad_type = "banner";
+  amzn_assoc_marketplace = "amazon";
+  amzn_assoc_region = "US";
+  amzn_assoc_placement = "assoc_banner_placement_default";
+  amzn_assoc_campaigns = "books";
+  amzn_assoc_banner_type = "category";
+  amzn_assoc_isresponsive = "true";
+  amzn_assoc_banner_id = "1WV938XZP3V21MG4E2R2";
+  amzn_assoc_tracking_id = "mlwhizcon-20";
+  amzn_assoc_linkid = "e9d260ab584733b799f819ce72cd43a6";
+     </script>
+     <script src="//z-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&Operation=GetScript&ID=OneJS&WS=1"></script>
+    </div>    <footer>
+<p class="meta">
+  <span class="byline author vcard">
+    Posted by <span class="fn">Rahul Agarwal</span>
+  </span>
+<time datetime="2017-03-23T04:43:00" pubdate>Mar 23, 2017</time>  <span class="categories">
+    <a class="category" href="http://mlwhiz.github.io/tag/flaskapp.html">FlaskApp</a>
+    <a class="category" href="http://mlwhiz.github.io/tag/deploy-ml-models.html">Deploy ML Models</a>
+    <a class="category" href="http://mlwhiz.github.io/tag/openshift.html">Openshift</a>
+  </span>
+  <br>
+  <span style="font-size:14px;color:green">
+  Advertiser Disclosure: All Amazon links are affiliate links, which means I receive compensation for any purchases through them. You do not have to purchase via my links, but you support me if you do.
+  </span>
+</p><div class="sharing">
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mlwhiz.com/blog/2017/03/23/basics_of_linear_regression/" data-via="MLWhiz" data-counturl="mlwhiz.com/blog/2017/03/23/basics_of_linear_regression/" >Tweet</a>
+  <div class="g-plusone" data-size="medium"></div>
+</div>    </footer>
+  </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
+  </section>
+  <section>
+
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script>
+  </section>
 </div>
-<p>Last time I wrote an article on MCMC and how they could be useful. We learned how MCMC chains could be used to simulate from a random variable whose distribution is partially known i.e. we don't know the normalizing constant.</p>
-<p>So MCMC Methods may sound interesting to some ...</p></div></p></div>
-  <footer>
-    <a rel="full-article" href="http://mlwhiz.github.io/blog/2015/08/21/MCMC_Algorithms_Cryptography/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  		<article>
-<header>
-      <h1 class="entry-title">
-        <a href="http://mlwhiz.github.io/blog/2015/08/19/MCMC_Algorithms_Beta_Distribution/">My Tryst With MCMC Algorithms</a>
-      </h1>
-      <p class="meta"><time datetime="2015-08-19T13:43:00" pubdate>Aug 19, 2015</time></p>
-</header>
-
-  <div class="entry-content"><p>
-<div class="text_cell_render border-box-sizing rendered_html">
-The things that I find hard to understand push me to my limits. One of the things that I have always found hard is <strong>Markov Chain Monte Carlo Methods</strong>. When I first encountered them, I read a lot about them but mostly it ended like this.
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center>
-<img src="/images/flabbergasted.png">
-</center>
-</div>
-<p>The meaning is normally ...</p></div></p></div>
-  <footer>
-    <a rel="full-article" href="http://mlwhiz.github.io/blog/2015/08/19/MCMC_Algorithms_Beta_Distribution/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  		<article>
-<header>
-      <h1 class="entry-title">
-        <a href="http://mlwhiz.github.io/blog/2015/05/09/Hadoop_Mapreduce_Streaming_Tricks_and_Techniques/">Hadoop Mapreduce Streaming Tricks and Techniques</a>
-      </h1>
-      <p class="meta"><time datetime="2015-05-09T13:43:00" pubdate>May 09, 2015</time></p>
-</header>
-
-  <div class="entry-content"><p>
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>I have been using Hadoop a lot now a days and thought about writing some of the novel techniques that a user could use to get the most out of the Hadoop Ecosystem.</p>
-<h3 id="using-shell-scripts-to-run-your-programs">Using Shell Scripts to run your Programs</h3>
-<div style="margin-top: -9px; margin-bottom: -30px;">
-<p><img src="/images/I-love-bash-1024x220.png" ></p>
-</div>
-<p><br> I am not a fan of large bash commands. The ...</p></div></p></div>
-  <footer>
-    <a rel="full-article" href="http://mlwhiz.github.io/blog/2015/05/09/Hadoop_Mapreduce_Streaming_Tricks_and_Techniques/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  		<article>
-<header>
-      <h1 class="entry-title">
-        <a href="http://mlwhiz.github.io/blog/2014/12/01/Exploring_Vowpal_Wabbit_with_Avazu/">Exploring Vowpal Wabbit with the Avazu Clickthrough Prediction Challenge</a>
-      </h1>
-      <p class="meta"><time datetime="2014-12-01T13:43:00" pubdate>Dec 01, 2014</time></p>
-</header>
-
-  <div class="entry-content"><p>
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>In online advertising, click-through rate (CTR) is a very important metric for evaluating ad performance. As a result, click prediction systems are essential and widely used for sponsored search and real-time bidding.</p>
-<p>For this competition, we have provided 11 days worth of Avazu data to build and test prediction models ...</p></div></p></div>
-  <footer>
-    <a rel="full-article" href="http://mlwhiz.github.io/blog/2014/12/01/Exploring_Vowpal_Wabbit_with_Avazu/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  		<article>
-<header>
-      <h1 class="entry-title">
-        <a href="http://mlwhiz.github.io/blog/2014/10/02/data_science_101_python_pattern/">Data Science 101 : Playing with Scraping in Python</a>
-      </h1>
-      <p class="meta"><time datetime="2014-10-02T13:43:00" pubdate>Oct 02, 2014</time></p>
-</header>
-
-  <div class="entry-content"><p>
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>This is a simple illustration of using Pattern Module to scrape web data using Python. We will be scraping the data from imdb for the top TV Series along with their ratings</p>
-<p>We will be using this link for this:</p>
-<p>http://www.imdb.com/search/title?count=100&amp;num_votes=5000 ...</p></div></p></div>
-  <footer>
-    <a rel="full-article" href="http://mlwhiz.github.io/blog/2014/10/02/data_science_101_python_pattern/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  		<article>
-<header>
-      <h1 class="entry-title">
-        <a href="http://mlwhiz.github.io/blog/2014/10/02/data_science_cs_109_download_rtmdump/">Download CS109 Lectures using RTMPDump</a>
-      </h1>
-      <p class="meta"><time datetime="2014-10-02T13:43:00" pubdate>Oct 02, 2014</time></p>
-</header>
-
-  <div class="entry-content"><p>
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Right Now I am working on CS109 from Harvard. It is a great course but its not easy to download, that is if you dont have this script. :)</p>
-<p>PS: You will have to install rtmpdump in your machine for this to work</p>
-</div>
-<div class="cell border-box-sizing code_cell vbox">
-<div class="input hbox">
-<div class="prompt input_prompt">
-In&nbsp;[34]:
-</div>
-<div class="input_area box-flex1">
-<div class="highlight-ipynb"><pre class="ipynb"><span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">from</span> <span class="nn">pattern</span> <span class="kn">import</span> <span class="n">web ...</span></pre></div></div></div></div></p></div>
-  <footer>
-    <a rel="full-article" href="http://mlwhiz.github.io/blog/2014/10/02/data_science_cs_109_download_rtmdump/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  		<article>
-<header>
-      <h1 class="entry-title">
-        <a href="http://mlwhiz.github.io/blog/2014/09/30/dictvectorizer_one_hot_encoding/">DICTVECTORIZER FOR ONE HOT ENCODING OF CATEGORICAL DATA</a>
-      </h1>
-      <p class="meta"><time datetime="2014-09-30T13:43:00" pubdate>Sep 30, 2014</time></p>
-</header>
-
-  <div class="entry-content"><p>
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="the-problem">THE PROBLEM:</h3>
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Recently I was working on the Criteo Advertising Competition on Kaggle. The competition was a classification problem which basically involved predicting the click through rates based on several features provided in the train data. Seeing the size of the data (11 GB Train), I felt that going with ...</p></div></p></div>
-  <footer>
-    <a rel="full-article" href="http://mlwhiz.github.io/blog/2014/09/30/dictvectorizer_one_hot_encoding/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  		<article>
-<header>
-      <h1 class="entry-title">
-        <a href="http://mlwhiz.github.io/blog/2014/09/28/learning_pyspark/">Learning pyspark – Installation – Part 1</a>
-      </h1>
-      <p class="meta"><time datetime="2014-09-28T13:43:00" pubdate>Sep 28, 2014</time></p>
-</header>
-
-  <div class="entry-content"><p>
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>This is part one of a learning series of pyspark, which is a python binding to the spark program written in Scala.</p>
-<p>The installation is pretty simple. These steps were done on Mac OS Mavericks but should work for Linux too. Here are the steps for the installation:</p>
-<h3 id="download-the-binaries">1. Download ...</h3></div></p></div>
-  <footer>
-    <a rel="full-article" href="http://mlwhiz.github.io/blog/2014/09/28/learning_pyspark/">Read On &crarr;</a>
-  </footer>
-  		</article>
-  		<article>
-<header>
-      <h1 class="entry-title">
-        <a href="http://mlwhiz.github.io/blog/2014/09/27/hadoop_mapreduce/">Hadoop, Mapreduce and More – Part 1</a>
-      </h1>
-      <p class="meta"><time datetime="2014-09-27T13:43:00" pubdate>Sep 27, 2014</time></p>
-</header>
-
-  <div class="entry-content"><p>
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>It has been some time since I was stalling learning Hadoop. Finally got some free time and realized that Hadoop may not be so difficult after all. What I understood finally is that Hadoop is basically comprised of 3 elements:</p>
-<ol style="list-style-type: decimal">
-<li>A File System</li>
-<li>Map – Reduce</li>
-<li>Its many individual Components. Let ...</li></ol></div></p></div>
-  <footer>
-    <a rel="full-article" href="http://mlwhiz.github.io/blog/2014/09/27/hadoop_mapreduce/">Read On &crarr;</a>
-  </footer>
-  		</article>
-<div class="pagination">
-
-    <a class="next" href="http://mlwhiz.github.io/index.html">Newer &rarr;</a>
-  <br />
-</div></div>
 <aside class="sidebar">
   <section>
     <h1>Recent Posts</h1>
@@ -2150,6 +2619,9 @@ In&nbsp;[34]:
 </script>
 	<script type="text/javascript">
 	  var disqus_shortname = 'mlwhiz';
+          var disqus_identifier = '/blog/2017/03/23/basics_of_linear_regression/';
+          var disqus_url = 'http://mlwhiz.com/blog/2017/03/23/basics_of_linear_regression/';
+          var disqus_title = 'Basics Of Linear Regression';
 	  (function() {
 	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
 	    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
