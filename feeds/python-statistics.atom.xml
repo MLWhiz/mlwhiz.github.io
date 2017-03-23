@@ -88,7 +88,7 @@ df.tail(50)
 
 &lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;h2&gt;8. Change type of a column&lt;/h2&gt;
-&lt;p&gt;First thing i try is this. 
+&lt;p&gt;First thing i try is this.
 &lt;pre style="font-size:60%; padding:7px; margin:0em;"&gt;
 &lt;code class="python"&gt;newDf['Price'] = newDf['Price'].astype('int')&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;
 &lt;p&gt;It gives error : ValueError: invalid literal for long() with base 10: '13,000'. That is you cannot cast a string with "," to an int. To do that we first have to get rid of the comma. For that we use a particular lambda-apply functionality which lets us apply functions to each row in the data.&lt;/p&gt;
@@ -96,6 +96,8 @@ df.tail(50)
 &lt;code class="python"&gt;newDf['Price'] = newDf.apply(lambda x: int(x['Price'].replace(',', '')),axis=1)&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"&gt;&lt;/script&gt;
+
 &lt;h2&gt;9. Simple Dataframe Statistics:&lt;/h2&gt;
 &lt;pre style="font-size:60%; padding:7px; margin:0em;"&gt;
 &lt;code class="python"&gt;# To get statistics of numerical columns
@@ -153,7 +155,7 @@ Not_df = newDf[~((newDf['Price']&gt;1500) | (newDf['City']=='London'))]
 newDf.loc[newDf['State']=='TX','State'] = 'Texas'
 
 # When City is Monaco State is not given. You want to impute 'Monaco State' as state also.
-newDf.loc[newDf['City']=='Monaco','State'] = 'Monaco State' 
+newDf.loc[newDf['City']=='Monaco','State'] = 'Monaco State'
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;br&gt;&lt;/p&gt;

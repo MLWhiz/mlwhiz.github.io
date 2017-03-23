@@ -98,6 +98,8 @@ yearID,teamID,lgID,playerID,salary
 1985,BAL,AL,roeniga01,558333
 &lt;/pre&gt;
 
+&lt;script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"&gt;&lt;/script&gt;
+
 &lt;p&gt;&lt;br&gt;
 I want to filter records for players who who earn more than 22 M in 2013 just because I want to. You just do:
 &lt;pre style="font-size:60%; padding:7px; margin:0em;"&gt;
@@ -397,7 +399,7 @@ yearID|teamID|lgID|playerID|salary
 &lt;p&gt;Now we could have also written the same command as:&lt;/p&gt;
 
 &lt;pre style="font-size:60%; padding:7px; margin:0em;"&gt;
-&lt;code class="bash"&gt;cat data.txt | head 
+&lt;code class="bash"&gt;cat data.txt | head
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre style="font-size:50%; padding:7px; margin:0em;  background-color:#F5F5F5"&gt;
@@ -436,8 +438,10 @@ And the concept is actually simple.&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre style="font-size:50%; padding:7px; margin:0em;  background-color:#F5F5F5"&gt;
-23957 data.txt   
+23957 data.txt
 &lt;/pre&gt;
+
+&lt;script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"&gt;&lt;/script&gt;
 
 &lt;p&gt;&lt;br&gt;&lt;/p&gt;
 
@@ -466,7 +470,7 @@ And the concept is actually simple.&lt;/p&gt;
 
 &lt;h2&gt;6. sort&lt;/h2&gt;
 
-&lt;p&gt;You may want to &lt;a href="https://en.wikipedia.org/wiki/Sort_%28Unix%29"&gt;sort&lt;/a&gt; your dataset on a particular column.Sort is your friend. 
+&lt;p&gt;You may want to &lt;a href="https://en.wikipedia.org/wiki/Sort_%28Unix%29"&gt;sort&lt;/a&gt; your dataset on a particular column.Sort is your friend.
 Say you want to find out the top 10 maximum salaries given to any player in your dataset.&lt;/p&gt;
 
 &lt;pre style="font-size:60%; padding:7px; margin:0em;"&gt;
@@ -622,7 +626,7 @@ awk is a powerful command which is sort of a whole language in itself. Do see th
 &lt;p&gt;You can do this by using the find command. Lets say you want to &lt;strong&gt;find all the .txt files&lt;/strong&gt; in the current working dir that &lt;strong&gt;start with lowercase h&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;pre style="font-size:60%; padding:7px; margin:0em;"&gt;
-&lt;code class="bash"&gt;find . -name "h*.txt" 
+&lt;code class="bash"&gt;find . -name "h*.txt"
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre style="font-size:50%; padding:7px; margin:0em;  background-color:#F5F5F5"&gt;
@@ -634,7 +638,7 @@ awk is a powerful command which is sort of a whole language in itself. Do see th
 &lt;p&gt;To find &lt;strong&gt;all .txt files starting with h regarless of case&lt;/strong&gt; we could use regex.&lt;/p&gt;
 
 &lt;pre style="font-size:60%; padding:7px; margin:0em;"&gt;
-&lt;code class="bash"&gt;find . -name "[Hh]*.txt" 
+&lt;code class="bash"&gt;find . -name "[Hh]*.txt"
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre style="font-size:50%; padding:7px; margin:0em;  background-color:#F5F5F5"&gt;
@@ -648,15 +652,15 @@ awk is a powerful command which is sort of a whole language in itself. Do see th
 
 &lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/Xargs"&gt;xargs&lt;/a&gt; was suggested by Gaurav in the comments, so I read about it and it is actually a very nice command which you could use in a variety of use cases.&lt;/p&gt;
 
-&lt;p&gt;So if you just use a pipe, any command/utility receives data on STDIN (the standard input stream) as a raw pile of data that it can sort through one line at a time. However some programs don't accept their commands on standard in. For example the rm command(which is used to remove files), touch command(used to create file with a given name) or a certain python script you wrote(which takes command line arguments). They expect it to be spelled out in the arguments to the command. 
+&lt;p&gt;So if you just use a pipe, any command/utility receives data on STDIN (the standard input stream) as a raw pile of data that it can sort through one line at a time. However some programs don't accept their commands on standard in. For example the rm command(which is used to remove files), touch command(used to create file with a given name) or a certain python script you wrote(which takes command line arguments). They expect it to be spelled out in the arguments to the command.
 &lt;br&gt;&lt;/p&gt;
 
-&lt;p&gt;For example: 
+&lt;p&gt;For example:
 rm takes a file name as a parameter on the command line like so: rm file1.txt.
 If I wanted to &lt;strong&gt;delete all '.txt' files starting with "h/H"&lt;/strong&gt; from my working directory, the below command won't work because rm expects a file as an input.&lt;/p&gt;
 
 &lt;pre style="font-size:60%; padding:7px; margin:0em;"&gt;
-&lt;code class="bash"&gt;find . -name "[hH]*.txt" | rm 
+&lt;code class="bash"&gt;find . -name "[hH]*.txt" | rm
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;pre style="font-size:50%; padding:7px; margin:0em;  background-color:#F5F5F5"&gt;
@@ -725,8 +729,8 @@ Another operation you should know about is the &lt;strong&gt;"&amp;gt;&amp;gt;"&
 
 &lt;p&gt;The first book is more of a fun read at leisure type of book. THe second book is a little more serious. Whatever suits you. &lt;/p&gt;
 
-&lt;p&gt;So, this is just the tip of the iceberg. Although I am not an expert in shell usage, these commands reduced my workload to a large extent. 
-If there are some shell commands you use on a regular basis or some shell command that are cool, do tell in the comments. 
+&lt;p&gt;So, this is just the tip of the iceberg. Although I am not an expert in shell usage, these commands reduced my workload to a large extent.
+If there are some shell commands you use on a regular basis or some shell command that are cool, do tell in the comments.
 I would love to include it in the blogpost.&lt;/p&gt;
 
 &lt;p&gt;I wrote a blogpost on awk as a second part of this post. Check it &lt;a href="http://mlwhiz.com/blog/2015/10/11/shell_basics_for_data_science_2/"&gt;Here&lt;/a&gt;&lt;/p&gt;

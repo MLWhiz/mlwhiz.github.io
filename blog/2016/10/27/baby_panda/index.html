@@ -1902,7 +1902,7 @@ df.tail(50)
 
 <p><br></p>
 <h2>8. Change type of a column</h2>
-<p>First thing i try is this. 
+<p>First thing i try is this.
 <pre style="font-size:60%; padding:7px; margin:0em;">
 <code class="python">newDf['Price'] = newDf['Price'].astype('int')</code></pre></p>
 <p>It gives error : ValueError: invalid literal for long() with base 10: '13,000'. That is you cannot cast a string with "," to an int. To do that we first have to get rid of the comma. For that we use a particular lambda-apply functionality which lets us apply functions to each row in the data.</p>
@@ -1910,6 +1910,8 @@ df.tail(50)
 <code class="python">newDf['Price'] = newDf.apply(lambda x: int(x['Price'].replace(',', '')),axis=1)</code></pre>
 
 <p><br></p>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script>
+
 <h2>9. Simple Dataframe Statistics:</h2>
 <pre style="font-size:60%; padding:7px; margin:0em;">
 <code class="python"># To get statistics of numerical columns
@@ -1967,7 +1969,7 @@ Not_df = newDf[~((newDf['Price']>1500) | (newDf['City']=='London'))]
 newDf.loc[newDf['State']=='TX','State'] = 'Texas'
 
 # When City is Monaco State is not given. You want to impute 'Monaco State' as state also.
-newDf.loc[newDf['City']=='Monaco','State'] = 'Monaco State' 
+newDf.loc[newDf['City']=='Monaco','State'] = 'Monaco State'
 </code></pre>
 
 <p><br></p>
