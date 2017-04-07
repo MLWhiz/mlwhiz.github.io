@@ -4,10 +4,10 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>mlwhiz - pandas</title>
+  <title>Today I Learned This Part I: What are word2vec Embeddings?</title>
   <meta name="author" content="Rahul Agarwal">
-  <meta name="description" content="A Data Science Learning Resource to learn about AI, Deep Learning, NLP" >
-  <meta name="keywords" content="python,data science,machine learning, analytics, big data, bigdata, maths, shell, bash, awk, hadoop, spark, statistics" >
+  <meta name="description" content="Your Daily dose of data science.This is a series of post in which I write about the things I learn almost everyday. This post particularly provides a description,examples,code and practical use cases for word2vec embeddings in real world." >
+  <meta name="keywords" content="understand word2vec embeddings, word2vec layman, word2vec intuition, word2vec , today i learned this, today i learned this series, quora data science challenge, question similarity" >
 
 
   <link href="http://mlwhiz.github.io/atom.xml" type="application/atom+xml" rel="alternate"
@@ -1807,29 +1807,235 @@ jQuery(document).ready(function($) {
 </ul></nav>
   <div id="main">
     <div id="content">
-<div class="blog-index">
-  		<article>
+
+<div>
+  <article class="hentry" role="article">
+
 <header>
-      <h1 class="entry-title">
-        <a href="http://mlwhiz.github.io/blog/2016/10/27/baby_panda/">Pandas For All - Some Basic Pandas Functions</a>
-      </h1>
-      <p class="meta"><time datetime="2016-10-27T04:43:00" pubdate>Oct 27, 2016</time></p>
+      <h1 class="entry-title">Today I Learned This Part I: What are word2vec Embeddings?</h1>
+      <p class="meta"><time datetime="2017-04-09T04:43:00" pubdate>Apr 09, 2017</time></p>
 </header>
 
-  <div class="entry-content"><p>It has been quite a few days I have been working with Pandas and apparently I feel I have gotten quite good at it. (Quite a Braggard I know)
-So thought about adding a post about Pandas usage here. I intend to make this post quite practical and since I ...</p></div>
-  <footer>
-    <a rel="full-article" href="http://mlwhiz.github.io/blog/2016/10/27/baby_panda/">Read On &crarr;</a>
-  </footer>
-  		</article>
-<div class="pagination">
+  <div class="entry-content"><p>Recently Quora put out a <a href="https://www.kaggle.com/c/quora-question-pairs">Question similarity</a> competition on Kaggle. This is the first time I was attempting an NLP problem so a lot to learn. The one thing that blew my mind away was the word2vec embeddings.</p>
+<p>Till now whenever I heard the term word2vec I visualized it as a way to create a bag of words vector for a sentence.</p>
+<p>For those who don't know bag of words:
+If we have a series of sentences(documents)
+1. This is good       - [1,1,1,0,0]
+2. This is bad        - [1,1,0,1,0]
+3. This is awesome    - [1,1,0,0,1]</p>
+<p>Bag of words would encode it using 0:This 1:is 2:good 3:bad 4:awesome</p>
+<p>But it is much more powerful than that.</p>
+<p>What word2vec does is that it creates vectors for words.
+What I mean by that is that we have a 300 dimensional vector for every word(common bigrams too) in a dictionary.</p>
+<h2>How does that help?</h2>
+<p>We can use this for multiple scenarios but the most common are:</p>
+<p>A. Using word2vec embeddings we can find out similarity between words.
+Assume you have to answer if these two statements signify the same thing:</p>
+<ol>
+<li>President greets press in Chicago</li>
+<li>Obama speaks to media in Illinois.</li>
+</ol>
+<p>If we do a sentence similarity metric or a bag of words approach to compare these two sentences we will get a pretty low score.</p>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/word2vecembed.png"  height="400" width="700" ></center>
+</div>
 
-  <br />
-</div></div>
+<p>But with a word encoding we can say that</p>
+<ol>
+<li>President is similar to Obama</li>
+<li>greets is similar to speaks</li>
+<li>press is similar to media</li>
+<li>Chicago is similar to Illinois</li>
+</ol>
+<p>B. I read a <a href="https://www.linkedin.com/pulse/duplicate-quora-question-abhishek-thakur">post</a> from Abhishek Thakur a prominent kaggler.(Must Read). What he did was he used these word embeddings to create a 300 dimensional vector for every sentence.</p>
+<p>His Approach: Lets say the sentence is "What is this"
+And lets say the embedding for every word is given in 4 dimension(normally 300 dimensional encoding is given)</p>
+<ol>
+<li>what : [.25 ,.25 ,.25 ,.25]</li>
+<li>is   : [  1 ,  0 ,  0 ,  0]</li>
+<li>this : [ .5 ,  0 ,  0 , .5]</li>
+</ol>
+<p>Then the vector for the sentence is normalized elementwise addition of the vectors. i.e.</p>
+<p>Elementwise addition :
+[.25+1+0.5, 0.25+0+0 , 0.25+0+0, .25+0+.5] = [1.75, .25, .25, .75]
+divided by
+math.sqrt(1.25^2 + .25^2 + .25^2 + .75^2) = 1.5
+gives:
+[1.16, .17, .17, 0.5]</p>
+<p>Thus I can convert any sentence to a vector  of a fixed dimension(decided by the embedding). To find similarity between two sentences I can use a variety of distance/similarity metrics.</p>
+<p>C. Also It enables us to do algebraic manipulations on words which was not possible before. For example: What is king - man + woman ?
+Guess what it comes out to be : Queen</p>
+<h2>Application/Coding:</h2>
+<p>Now lets get down to the coding part as we know a little bit of fundamentals.</p>
+<p>First of all we download a custom word embedding from Google. There are many other embeddings too.</p>
+<pre style="font-size:60%; padding:7px; margin:0em;">
+<code class="bash">
+wget https://s3.amazonaws.com/dl4j-distribution/GoogleNews-vectors-negative300.bin.gz
+</code></pre>
+
+<p><br></p>
+<p>The above file is pretty big. Might take some time. Then moving on to coding.</p>
+<pre style="font-size:60%; padding:7px; margin:0em;">
+<code class="python">from gensim.models import word2vec
+model = gensim.models.KeyedVectors.load_word2vec_format('data/GoogleNews-vectors-negative300.bin.gz', binary=True)
+</code></pre>
+
+<p><br></p>
+<ol>
+<li>Starting simple, lets find out similar words. Want to find similar words to python?</li>
+</ol>
+<pre style="font-size:60%; padding:7px; margin:0em;">
+<code class="python">model.most_similar('python')
+</code></pre>
+
+<p><br></p>
+<p>[(u'pythons', 0.6688377261161804),
+ (u'Burmese_python', 0.6680364608764648),
+ (u'snake', 0.6606293320655823),
+ (u'crocodile', 0.6591362953186035),
+ (u'boa_constrictor', 0.6443519592285156),
+ (u'alligator', 0.6421656608581543),
+ (u'reptile', 0.6387745141983032),
+ (u'albino_python', 0.6158879995346069),
+ (u'croc', 0.6083582639694214),
+ (u'lizard', 0.601341724395752)]</p>
+<ol>
+<li>Now we can use this model to find the solution to the equation:
+What is king - man + woman?</li>
+</ol>
+<pre style="font-size:60%; padding:7px; margin:0em;">
+<code class="python">model.most_similar(positive = ['king','woman'],negative = ['man'])
+</code></pre>
+
+<p><br></p>
+<p>[(u'queen', 0.7118192315101624),
+ (u'monarch', 0.6189674139022827),
+ (u'princess', 0.5902431011199951),
+ (u'crown_prince', 0.5499460697174072),
+ (u'prince', 0.5377321839332581),
+ (u'kings', 0.5236844420433044),
+ (u'Queen_Consort', 0.5235946178436279),
+ (u'queens', 0.5181134343147278),
+ (u'sultan', 0.5098593235015869),
+ (u'monarchy', 0.5087412595748901)]</p>
+<p>You can do plenty of freaky/cool things using this:</p>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script>
+
+<ol>
+<li>Lets say you wanted a girl and had a girl name like emma in mind but you got a boy. So what is the male version for emma?</li>
+</ol>
+<pre style="font-size:60%; padding:7px; margin:0em;">
+<code class="python">model.most_similar(positive = ['emma','he','male','mr'],negative = ['she','mrs','female'])
+</code></pre>
+
+<p><br></p>
+<p>[(u'sanchez', 0.4920658469200134),
+ (u'kenny', 0.48300960659980774),
+ (u'alves', 0.4684845209121704),
+ (u'gareth', 0.4530612826347351),
+ (u'bellamy', 0.44884198904037476),
+ (u'gibbs', 0.445194810628891),
+ (u'dos_santos', 0.44508373737335205),
+ (u'gasol', 0.44387346506118774),
+ (u'silva', 0.4424275755882263),
+ (u'shaun', 0.44144102931022644)]</p>
+<ol>
+<li>Find which word doesn't belong to a <a href="https://github.com/dhammack/Word2VecExample/blob/master/main.py">list</a>?</li>
+</ol>
+<pre style="font-size:60%; padding:7px; margin:0em;">
+<code class="python">model.doesnt_match("math shopping reading science".split(" "))
+</code></pre>
+
+<p><br></p>
+<p>I think staple doesnt belong in this list!</p>
+<h2>Other Cool Things</h2>
+<ol>
+<li>Recommendations:</li>
+</ol>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/recommendationpaper.png"  height="400" width="700" ></center>
+</div>
+
+<p>In this <a href="https://arxiv.org/abs/1603.04259">paper</a>, the authors have shown that itembased CF can be cast in the same framework of word embedding.</p>
+<ol>
+<li>Some other <a href="http://byterot.blogspot.in/2015/06/five-crazy-abstractions-my-deep-learning-word2doc-model-just-did-NLP-gensim.html">examples</a> that people have seen after using their own embeddings:</li>
+</ol>
+<p>Library - Books = Hall
+Obama + Russia - USA = Putin
+Iraq - Violence = Jordan
+President - Power = Prime Minister (Not in India Though)</p>
+<p>3.Seeing the above I started playing with it a little.</p>
+<p><strong>Is this model sexist?</strong></p>
+<pre style="font-size:60%; padding:7px; margin:0em;">
+<code class="python">model.most_similar(positive = ["donald_trump"],negative = ['brain'])
+</code></pre>
+
+<p><br></p>
+<p>[(u'novak', 0.40405112504959106),
+ (u'ozzie', 0.39440611004829407),
+ (u'democrate', 0.39187556505203247),
+ (u'clinton', 0.390536367893219),
+ (u'hillary_clinton', 0.3862358033657074),
+ (u'bnp', 0.38295692205429077),
+ (u'klaar', 0.38228923082351685),
+ (u'geithner', 0.380607008934021),
+ (u'bafana_bafana', 0.3801495432853699),
+ (u'whitman', 0.3790769875049591)]</p>
+<p>Whatever it is doing it surely feels like magic. Next time I will try to write more on how it works once I understand it fully.</p></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=495576.362&subid=0&type=4"><IMG border="0"   alt="Online data science courses to jumpstart your future." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=495576.362&subid=0&type=4&gridnum=16"></a>    <footer>
+<p class="meta">
+  <span class="byline author vcard">
+    Posted by <span class="fn">Rahul Agarwal</span>
+  </span>
+<time datetime="2017-04-09T04:43:00" pubdate>Apr 09, 2017</time>  <span class="categories">
+    <a class="category" href="http://mlwhiz.github.io/tag/python.html">Python</a>
+    <a class="category" href="http://mlwhiz.github.io/tag/nlp.html">NLP</a>
+    <a class="category" href="http://mlwhiz.github.io/tag/algorithms.html">Algorithms</a>
+    <a class="category" href="http://mlwhiz.github.io/tag/kaggle.html">Kaggle</a>
+  </span>
+  <br>
+  <span style="font-size:14px;color:green">
+  Advertiser Disclosure: All Amazon links are affiliate links, which means I receive compensation for any purchases through them. You do not have to purchase via my links, but you support me if you do.
+  </span>
+</p><div class="sharing">
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mlwhiz.com/blog/2017/04/09/word_vec_embeddings_examples_understanding/" data-via="MLWhiz" data-counturl="mlwhiz.com/blog/2017/04/09/word_vec_embeddings_examples_understanding/" >Tweet</a>
+  <div class="g-plusone" data-size="medium"></div>
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+</div>    </footer>
+  </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
+  </section>
+
+</div>
 <aside class="sidebar">
   <section>
     <h1>Recent Posts</h1>
     <ul id="recent_posts">
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/04/09/word_vec_embeddings_examples_understanding/">Today I Learned This Part I: What are word2vec Embeddings?</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/03/26/top_data_science_resources_on_the_internet_right_now/">Top Data Science Resources on the Internet right now</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/03/23/basics_of_linear_regression/">Basics Of Linear Regression</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/03/05/think_like_a_data_scientist/">Top advice for a Data Scientist</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/02/05/Machine_learning_algorithms_for_data_scientist/">Machine Learning algorithms for Data Scientists</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2016/12/24/mutual_fund_ratios/">Things to see while buying a Mutual Fund</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2016/11/10/trump_really/">Donald Trump : Two new Survey Biases</a>
+      </li>
       <li class="post">
           <a href="http://mlwhiz.github.io/blog/2016/10/27/baby_panda/">Pandas For All - Some Basic Pandas Functions</a>
       </li>
@@ -1951,7 +2157,7 @@ So thought about adding a post about Pandas usage here. I intend to make this po
 </aside>    </div>
   </div>
   <footer role="contentinfo"><p>
-    Copyright &copy;  2016  - Rahul Agarwal -
+    Copyright &copy;  2014-2017  - Rahul Agarwal -
   <span class="credit">Powered by <a href="http://getpelican.com">Pelican</a></span>
 </p></footer>
     <script type="text/javascript">
@@ -1975,6 +2181,9 @@ So thought about adding a post about Pandas usage here. I intend to make this po
 </script>
 	<script type="text/javascript">
 	  var disqus_shortname = 'mlwhiz';
+          var disqus_identifier = '/blog/2017/04/09/word_vec_embeddings_examples_understanding/';
+          var disqus_url = 'http://mlwhiz.com/blog/2017/04/09/word_vec_embeddings_examples_understanding/';
+          var disqus_title = 'Today I Learned This Part I: What are word2vec Embeddings?';
 	  (function() {
 	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
 	    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
