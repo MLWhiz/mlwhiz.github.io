@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>mlwhiz</title><link href="http://mlwhiz.github.io/" rel="alternate"></link><link href="http://mlwhiz.github.io/feeds/python-machine-learning.atom.xml" rel="self"></link><id>http://mlwhiz.github.io/</id><updated>2017-04-17T04:43:00-03:00</updated><entry><title>Today I Learned This PART 2: Pretrained Neural Networks What are they?</title><link href="http://mlwhiz.github.io/blog/2017/04/17/deep_learning_pretrained_models/" rel="alternate"></link><updated>2017-04-17T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2017-04-17:blog/2017/04/17/deep_learning_pretrained_models/</id><summary type="html">&lt;p&gt;Deeplearning is the buzz word right now. And if you have dug a little into them, I am sure you woud have heard the term
+I was working on the &lt;a href="http://www.fast.ai/"&gt;course&lt;/a&gt; for deep learning by Jeremy Howard and one thing I noticed were pretrained deep Neural Networks. In the first lesson he used the pretrained NN to predict on the &lt;a href="https://www.kaggle.com/c/dogs-vs-cats"&gt;Dogs vs Cats&lt;/a&gt; competition on Kaggle to achieve very good results.&lt;/p&gt;
+&lt;h2&gt;What are pretrained Neural Networks?&lt;/h2&gt;
+&lt;p&gt;So let me tell you about the background a little bit. There is a challenge that happens every year in the visual recognition community - The Imagenet Challenge. The task there is to classify the images in 1000 categories using Image training data. People train big convolutional deep learning models for this challenge.&lt;/p&gt;
+&lt;p&gt;Now what does training a neural model actually mean? It just means that they learn the weights for a NN. What if we can get the weights they learn? We can use those weights to load them into our own NN model and predict on the test dataset. Right?&lt;/p&gt;
+&lt;p&gt;But actually we can go further than that. We can add an extra layer on top of the NN they have prepared to classify our own dataset.&lt;/p&gt;
+&lt;p&gt;In a way you can think of the intermediate features created by the Pretrained neural networks to be the features for the next layer.&lt;/p&gt;
+&lt;h2&gt;Why it works?&lt;/h2&gt;
+&lt;p&gt;We are essentially doing the image classification task only. We need to find out edges, shapes, intensities and other features from the images that are given to us. The pretrained model is already pretty good at finding these sort of features. Forget neural nets, if we plug these features into a machine learning algorithm we should be good.&lt;/p&gt;
+&lt;p&gt;What we actually do here is replace the last layer of the neural network with a new prediction/output layer and train while keeping the weights for all the layers before the second last layer constant.&lt;/p&gt;
+&lt;h2&gt;Code:&lt;/h2&gt;
+&lt;p&gt;I assume that you understand Keras a little. If not you can look at the docs.
+Let us get into coding now. First of all we will create the architecture of the neural network the VGG Team created in 2014. Then we will load the weights.&lt;/p&gt;
+&lt;p&gt;Import some stuff&lt;/p&gt;
+&lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;import numpy as np
+from numpy.random import random, permutation
+from scipy import misc, ndimage
+from scipy.ndimage.interpolation import zoom
+import keras
+from keras import backend as K
+from keras.utils.data_utils import get_file
+from keras.models import Sequential, Model
+from keras.layers.core import Flatten, Dense, Dropout, Lambda
+from keras.layers import Input
+from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
+from keras.optimizers import SGD, RMSprop, Adam
+from keras.preprocessing import image
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;VGG has just one type of convolutional block, and one type of fully connected ('dense') block. We start by defining the building blocks of our Deep learning model.&lt;/p&gt;
+&lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;def ConvBlock(layers, model, filters):
+    for i in range(layers):
+        model.add(ZeroPadding2D((1,1)))
+        model.add(Convolution2D(filters, 3, 3, activation='relu'))
+    model.add(MaxPooling2D((2,2), strides=(2,2)))
+
+def FCBlock(model):
+    model.add(Dense(4096, activation='relu'))
+    model.add(Dropout(0.5))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"&gt;&lt;/script&gt;
+
+&lt;p&gt;Now the input of the VGG Model was images. When the VGG model was trained in 2014, the creators subtracted the average of each of the three (R,G,B) channels first, so that the data for each channel had a mean of zero. Furthermore, their software that expected the channels to be in B,G,R order, whereas Python by default uses R,G,B. We need to preprocess our data to make these two changes, so that it is compatible with the VGG model. We also add some helper functions.&lt;/p&gt;
+&lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;#Mean of each channel as provided by VGG researchers
+vgg_mean = np.array([123.68, 116.779, 103.939]).reshape((3,1,1))
+
+def vgg_preprocess(x):
+    x = x - vgg_mean     # subtract mean
+    return x[:, ::-1]    # reverse axis bgr-&gt;rgb
+
+def VGG_16():
+    model = Sequential()
+    model.add(Lambda(vgg_preprocess, input_shape=(3,224,224)))
+    ConvBlock(2, model, 64)
+    ConvBlock(2, model, 128)
+    ConvBlock(3, model, 256)
+    ConvBlock(3, model, 512)
+    ConvBlock(3, model, 512)
+    model.add(Flatten())
+    FCBlock(model)
+    FCBlock(model)
+    model.add(Dense(1000, activation='softmax'))
+    return model
+
+
+def finetune(model, num_classes):
+    # Drop last layer
+    model.pop()
+    # Make all layers untrainable. i.e fix all weights
+    for layer in model.layers: layer.trainable=False
+    # Add a new layer which is the new output layer
+    model.add(Dense(num_classes, activation='softmax'))
+    model.compile(optimizer=Adam(lr=0.001),
+                loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
+
+
+# A way to generate batches of images
+def get_batches(path, dirname, gen=image.ImageDataGenerator(), shuffle=True,
+                batch_size=64, class_mode='categorical'):
+    return gen.flow_from_directory(path+dirname, target_size=(224,224),
+                class_mode=class_mode, shuffle=shuffle, batch_size=batch_size)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The hard part is done now. Just create a VGG object and load the weights.We will need to load pretrained weights into the model too. You can download the "VGG16_weights.h5" file &lt;a href="https://drive.google.com/file/d/0Bz7KyqmuGsilT0J5dmRCM0ROVHc/view"&gt;here&lt;/a&gt;&lt;/p&gt;
+&lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;model = VGG_16()
+model.load_weights('VGG16_weights.h5')
+# Since our dogs vs cat dataset is binary classification model
+ftmodel = finetune(model,2)
+print ftmodel.summary()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
+&lt;center&gt;&lt;img src="/images/keras_net.png"  height="400" width="500" &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Showing a little bit of output here. This is how the last layers of our Neural net look after training. Now we have got a architecture which we got to train. Here we are only training to get the last layer weights. As you can see from the trainable params.&lt;/p&gt;
+&lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;path = "dogscats/"
+batch_size=64
+
+# Iterators to get our images from our datasets. The datasets are folders named train and valid. Both folder contain two directories 'dogs' and 'cats'. In each directory the corresponding images are kept.
+
+batches = get_batches(path,'train', batch_size=batch_size)
+val_batches = get_batches(path,'valid', batch_size=batch_size)
+
+# Now run for some epochs till the validation loss stops decreasing.
+no_of_epochs=1
+
+for epoch in range(no_of_epochs):
+    print "Running epoch: %d" % epoch
+    ftmodel.fit_generator(batches, samples_per_epoch=batches.nb_sample, nb_epoch=1,
+                validation_data=val_batches, nb_val_samples=val_batches.nb_sample)
+    latest_weights_filename = 'ft%d.h5' % epoch
+    ftmodel.save_weights(latest_weights_filename)
+
+#Create Predictions on test set. The test images should be in the folder dogscats/test/test_images/ , which is a single directory containing all images.
+
+test_batches = get_batches(path, 'test', batch_size=2*batch_size, class_mode=None)
+
+preds = ftmodel.predict_generator(test_batches, test_batches.nb_sample)
+
+isdog = preds[:,1]
+image_id = batches.filenames
+final_submission = np.stack([ids,isdog], axis=1)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And we are done!&lt;/p&gt;</summary><category term="deeplearning"></category><category term="pretrained models"></category></entry></feed>

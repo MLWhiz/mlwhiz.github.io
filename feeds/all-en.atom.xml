@@ -1,5 +1,233 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>mlwhiz</title><link href="http://mlwhiz.github.io/" rel="alternate"></link><link href="http://mlwhiz.github.io/feeds/all-en.atom.xml" rel="self"></link><id>http://mlwhiz.github.io/</id><updated>2017-04-09T04:43:00-03:00</updated><entry><title>Today I Learned This Part I: What are word2vec Embeddings?</title><link href="http://mlwhiz.github.io/blog/2017/04/09/word_vec_embeddings_examples_understanding/" rel="alternate"></link><updated>2017-04-09T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2017-04-09:blog/2017/04/09/word_vec_embeddings_examples_understanding/</id><summary type="html">&lt;p&gt;Recently Quora put out a &lt;a href="https://www.kaggle.com/c/quora-question-pairs"&gt;Question similarity&lt;/a&gt; competition on Kaggle. This is the first time I was attempting an NLP problem so a lot to learn. The one thing that blew my mind away was the word2vec embeddings.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>mlwhiz</title><link href="http://mlwhiz.github.io/" rel="alternate"></link><link href="http://mlwhiz.github.io/feeds/all-en.atom.xml" rel="self"></link><id>http://mlwhiz.github.io/</id><updated>2017-04-17T04:43:00-03:00</updated><entry><title>Today I Learned This PART 2: Pretrained Neural Networks What are they?</title><link href="http://mlwhiz.github.io/blog/2017/04/17/deep_learning_pretrained_models/" rel="alternate"></link><updated>2017-04-17T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2017-04-17:blog/2017/04/17/deep_learning_pretrained_models/</id><summary type="html">&lt;p&gt;Deeplearning is the buzz word right now. And if you have dug a little into them, I am sure you woud have heard the term
+I was working on the &lt;a href="http://www.fast.ai/"&gt;course&lt;/a&gt; for deep learning by Jeremy Howard and one thing I noticed were pretrained deep Neural Networks. In the first lesson he used the pretrained NN to predict on the &lt;a href="https://www.kaggle.com/c/dogs-vs-cats"&gt;Dogs vs Cats&lt;/a&gt; competition on Kaggle to achieve very good results.&lt;/p&gt;
+&lt;h2&gt;What are pretrained Neural Networks?&lt;/h2&gt;
+&lt;p&gt;So let me tell you about the background a little bit. There is a challenge that happens every year in the visual recognition community - The Imagenet Challenge. The task there is to classify the images in 1000 categories using Image training data. People train big convolutional deep learning models for this challenge.&lt;/p&gt;
+&lt;p&gt;Now what does training a neural model actually mean? It just means that they learn the weights for a NN. What if we can get the weights they learn? We can use those weights to load them into our own NN model and predict on the test dataset. Right?&lt;/p&gt;
+&lt;p&gt;But actually we can go further than that. We can add an extra layer on top of the NN they have prepared to classify our own dataset.&lt;/p&gt;
+&lt;p&gt;In a way you can think of the intermediate features created by the Pretrained neural networks to be the features for the next layer.&lt;/p&gt;
+&lt;h2&gt;Why it works?&lt;/h2&gt;
+&lt;p&gt;We are essentially doing the image classification task only. We need to find out edges, shapes, intensities and other features from the images that are given to us. The pretrained model is already pretty good at finding these sort of features. Forget neural nets, if we plug these features into a machine learning algorithm we should be good.&lt;/p&gt;
+&lt;p&gt;What we actually do here is replace the last layer of the neural network with a new prediction/output layer and train while keeping the weights for all the layers before the second last layer constant.&lt;/p&gt;
+&lt;h2&gt;Code:&lt;/h2&gt;
+&lt;p&gt;I assume that you understand Keras a little. If not you can look at the docs.
+Let us get into coding now. First of all we will create the architecture of the neural network the VGG Team created in 2014. Then we will load the weights.&lt;/p&gt;
+&lt;p&gt;Import some stuff&lt;/p&gt;
+&lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;import numpy as np
+from numpy.random import random, permutation
+from scipy import misc, ndimage
+from scipy.ndimage.interpolation import zoom
+import keras
+from keras import backend as K
+from keras.utils.data_utils import get_file
+from keras.models import Sequential, Model
+from keras.layers.core import Flatten, Dense, Dropout, Lambda
+from keras.layers import Input
+from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
+from keras.optimizers import SGD, RMSprop, Adam
+from keras.preprocessing import image
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;VGG has just one type of convolutional block, and one type of fully connected ('dense') block. We start by defining the building blocks of our Deep learning model.&lt;/p&gt;
+&lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;def ConvBlock(layers, model, filters):
+    for i in range(layers):
+        model.add(ZeroPadding2D((1,1)))
+        model.add(Convolution2D(filters, 3, 3, activation='relu'))
+    model.add(MaxPooling2D((2,2), strides=(2,2)))
+
+def FCBlock(model):
+    model.add(Dense(4096, activation='relu'))
+    model.add(Dropout(0.5))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"&gt;&lt;/script&gt;
+
+&lt;p&gt;Now the input of the VGG Model was images. When the VGG model was trained in 2014, the creators subtracted the average of each of the three (R,G,B) channels first, so that the data for each channel had a mean of zero. Furthermore, their software that expected the channels to be in B,G,R order, whereas Python by default uses R,G,B. We need to preprocess our data to make these two changes, so that it is compatible with the VGG model. We also add some helper functions.&lt;/p&gt;
+&lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;#Mean of each channel as provided by VGG researchers
+vgg_mean = np.array([123.68, 116.779, 103.939]).reshape((3,1,1))
+
+def vgg_preprocess(x):
+    x = x - vgg_mean     # subtract mean
+    return x[:, ::-1]    # reverse axis bgr-&gt;rgb
+
+def VGG_16():
+    model = Sequential()
+    model.add(Lambda(vgg_preprocess, input_shape=(3,224,224)))
+    ConvBlock(2, model, 64)
+    ConvBlock(2, model, 128)
+    ConvBlock(3, model, 256)
+    ConvBlock(3, model, 512)
+    ConvBlock(3, model, 512)
+    model.add(Flatten())
+    FCBlock(model)
+    FCBlock(model)
+    model.add(Dense(1000, activation='softmax'))
+    return model
+
+
+def finetune(model, num_classes):
+    # Drop last layer
+    model.pop()
+    # Make all layers untrainable. i.e fix all weights
+    for layer in model.layers: layer.trainable=False
+    # Add a new layer which is the new output layer
+    model.add(Dense(num_classes, activation='softmax'))
+    model.compile(optimizer=Adam(lr=0.001),
+                loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
+
+
+# A way to generate batches of images
+def get_batches(path, dirname, gen=image.ImageDataGenerator(), shuffle=True,
+                batch_size=64, class_mode='categorical'):
+    return gen.flow_from_directory(path+dirname, target_size=(224,224),
+                class_mode=class_mode, shuffle=shuffle, batch_size=batch_size)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The hard part is done now. Just create a VGG object and load the weights.We will need to load pretrained weights into the model too. You can download the "VGG16_weights.h5" file &lt;a href="https://drive.google.com/file/d/0Bz7KyqmuGsilT0J5dmRCM0ROVHc/view"&gt;here&lt;/a&gt;&lt;/p&gt;
+&lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;model = VGG_16()
+model.load_weights('VGG16_weights.h5')
+# Since our dogs vs cat dataset is binary classification model
+ftmodel = finetune(model,2)
+print ftmodel.summary()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
+&lt;center&gt;&lt;img src="/images/keras_net.png"  height="400" width="500" &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Showing a little bit of output here. This is how the last layers of our Neural net look after training. Now we have got a architecture which we got to train. Here we are only training to get the last layer weights. As you can see from the trainable params.&lt;/p&gt;
+&lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;path = "dogscats/"
+batch_size=64
+
+# Iterators to get our images from our datasets. The datasets are folders named train and valid. Both folder contain two directories 'dogs' and 'cats'. In each directory the corresponding images are kept.
+
+batches = get_batches(path,'train', batch_size=batch_size)
+val_batches = get_batches(path,'valid', batch_size=batch_size)
+
+# Now run for some epochs till the validation loss stops decreasing.
+no_of_epochs=1
+
+for epoch in range(no_of_epochs):
+    print "Running epoch: %d" % epoch
+    ftmodel.fit_generator(batches, samples_per_epoch=batches.nb_sample, nb_epoch=1,
+                validation_data=val_batches, nb_val_samples=val_batches.nb_sample)
+    latest_weights_filename = 'ft%d.h5' % epoch
+    ftmodel.save_weights(latest_weights_filename)
+
+#Create Predictions on test set. The test images should be in the folder dogscats/test/test_images/ , which is a single directory containing all images.
+
+test_batches = get_batches(path, 'test', batch_size=2*batch_size, class_mode=None)
+
+preds = ftmodel.predict_generator(test_batches, test_batches.nb_sample)
+
+isdog = preds[:,1]
+image_id = batches.filenames
+final_submission = np.stack([ids,isdog], axis=1)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And we are done!&lt;/p&gt;</summary><category term="deeplearning"></category><category term="pretrained models"></category></entry><entry><title>Maths Beats Intuition probably every damn time</title><link href="http://mlwhiz.github.io/blog/2017/04/16/maths_beats_intuition/" rel="alternate"></link><updated>2017-04-16T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2017-04-16:blog/2017/04/16/maths_beats_intuition/</id><summary type="html">&lt;p&gt;Newton once said that &lt;strong&gt;"God does not play dice with the universe"&lt;/strong&gt;. But actually he does. Everything happening around us could be explained in terms of probabilities. We repeatedly watch things around us happen due to chances, yet we never learn. We always get dumbfounded by the playfulness of nature.&lt;/p&gt;
+&lt;p&gt;One of such ways intuition plays with us is with the Birthday problem.&lt;/p&gt;
+&lt;h2&gt;Problem Statement:&lt;/h2&gt;
+&lt;p&gt;&lt;em&gt;In a room full of N people, what is the probability that 2 or more people share the same birthday(Assumption: 365 days in year)?&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;By the &lt;a href="https://en.wikipedia.org/wiki/Pigeonhole_principle"&gt;pigeonhole principle&lt;/a&gt;, the probability reaches 100% when the number of people reaches 366 (since there are only 365 possible birthdays).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;However, the paradox is that 99.9% probability is reached with just 70 people, and 50% probability is reached with just 23 people.&lt;/strong&gt;&lt;/p&gt;
+&lt;h2&gt;Mathematical Proof:&lt;/h2&gt;
+&lt;p&gt;Sometimes a good strategy when trying to find out probability of an event is to look at the probability of the complement event.Here it is easier to find the probability of the complement event.
+We just need to count the number of cases in which no person has the same birthday.(Sampling without replacement)
+Since there are k ways in which birthdays can be chosen with replacement.&lt;/p&gt;
+&lt;p&gt;&lt;span class="math"&gt;\(P(birthday Match) = 1 - \dfrac{(365).364...(365−k+1)}{365^k}\)&lt;/span&gt;&lt;/p&gt;
+&lt;h2&gt;Simulation:&lt;/h2&gt;
+&lt;p&gt;Lets try to build around this result some more by trying to simulate this result:&lt;/p&gt;
+&lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;%matplotlib inline
+import matplotlib
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt  #sets up plotting under plt
+import seaborn as sns           #sets up styles and gives us more plotting options
+import pandas as pd             #lets us handle data as dataframes
+import random
+
+def sim_bithday_problem(num_people_room, trials =1000):
+    '''This function takes as input the number of people in the room.
+    Runs 1000 trials by default and returns
+    (number of times same brthday found)/(no of trials)
+    '''
+    same_birthdays_found = 0
+    for i in range(trials):
+        # randomly sample from the birthday space which could be any of a number from 1 to 365
+        birthdays = [random.randint(1,365) for x in range(num_people_room)]
+        if len(birthdays) - len(set(birthdays))&gt;0:
+            same_birthdays_found+=1
+    return same_birthdays_found/float(trials)
+
+num_people = range(2,100)
+probs = [sim_bithday_problem(i) for i in num_people]
+data = pd.DataFrame()
+data['num_peeps'] = num_people
+data['probs'] = probs
+sns.set(style="ticks")
+
+g = sns.regplot(x="num_peeps", y="probs", data=data, ci = False,
+    scatter_kws={"color":"darkred","alpha":0.3,"s":90},
+    marker="x",fit_reg=False)
+
+sns.despine()
+g.figure.set_size_inches(10,6)
+g.axes.set_title('As the Number of people in room reaches 23 the probability reaches ~0.5\nAt more than 50 people the probability is reaching 1', fontsize=15,color="g",alpha=0.5)
+g.set_xlabel("# of people in room",size = 30,color="r",alpha=0.5)
+g.set_ylabel("Probability",size = 30,color="r",alpha=0.5)
+g.tick_params(labelsize=14,labelcolor="black")
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
+&lt;center&gt;&lt;img src="/images/bithdayproblem.png"  height="400" width="700" &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;We can see from the &lt;a href="http://mlwhiz.com/blog/2015/09/13/seaborn_visualizations/"&gt;graph&lt;/a&gt; that as the Number of people in room reaches 23 the probability reaches ~ 0.5. So we have proved this fact Mathematically as well as with simulation.&lt;/p&gt;
+&lt;h2&gt;Intuition:&lt;/h2&gt;
+&lt;p&gt;To understand it we need to think of this problem in terms of pairs. There are &lt;span class="math"&gt;\({{23}\choose{2}} = 253\)&lt;/span&gt; pairs of people in the room when only 23 people are present. Now with that big number you should not find the probability of 0.5 too much. In the case of 70 people we are looking at &lt;span class="math"&gt;\({{70}\choose{2}} = 2450\)&lt;/span&gt; pairs.&lt;/p&gt;
+&lt;p&gt;So thats it for now. To learn more about this go to &lt;a href="https://en.wikipedia.org/wiki/Birthday_problem"&gt;Wikipedia&lt;/a&gt; which has an awesome page on this topic.&lt;/p&gt;
+&lt;h2&gt;References:&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="http://amzn.to/2nIUkxq"&gt;Introduction to Probability by Joseph K. Blitzstein&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://en.wikipedia.org/wiki/Birthday_problem"&gt;Birthday Problem on Wikipedia&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processClass: 'mathjax', " +
+        "        ignoreClass: 'no-mathjax', " +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</summary><category term="Python"></category><category term="machine learning"></category><category term="probability"></category></entry><entry><title>Today I Learned This Part I: What are word2vec Embeddings?</title><link href="http://mlwhiz.github.io/blog/2017/04/09/word_vec_embeddings_examples_understanding/" rel="alternate"></link><updated>2017-04-09T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2017-04-09:blog/2017/04/09/word_vec_embeddings_examples_understanding/</id><summary type="html">&lt;p&gt;Recently Quora put out a &lt;a href="https://www.kaggle.com/c/quora-question-pairs"&gt;Question similarity&lt;/a&gt; competition on Kaggle. This is the first time I was attempting an NLP problem so a lot to learn. The one thing that blew my mind away was the word2vec embeddings.&lt;/p&gt;
 &lt;p&gt;Till now whenever I heard the term word2vec I visualized it as a way to create a bag of words vector for a sentence.&lt;/p&gt;
 &lt;p&gt;For those who don't know &lt;em&gt;bag of words&lt;/em&gt;:
 If we have a series of sentences(documents)&lt;/p&gt;
