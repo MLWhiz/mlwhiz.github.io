@@ -4,10 +4,10 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>mlwhiz</title>
+  <title>Good Feature Building Techniques - Tricks for Kaggle - My Kaggle Code Repository</title>
   <meta name="author" content="Rahul Agarwal">
-  <meta name="description" content="A Data Science Learning Resource to learn about AI, Deep Learning, NLP" >
-  <meta name="keywords" content="python,data science,machine learning, analytics, big data, bigdata, maths, shell, bash, awk, hadoop, spark, statistics" >
+  <meta name="description" content="here is the list of ideas I gather in day to day life, where people have used creativity to get great results on Kaggle leaderboards." >
+  <meta name="keywords" content="Python, NLP, Algorithms, Kaggle" >
 
 
   <link href="http://mlwhiz.github.io/atom.xml" type="application/atom+xml" rel="alternate"
@@ -1813,30 +1813,177 @@ jQuery(document).ready(function($) {
 </ul></nav>
   <div id="main">
     <div id="content">
-<div class="blog-index">
-  		<article>
+
+<div>
+  <article class="hentry" role="article">
+
 <header>
-      <h1 class="entry-title">
-        <a href="http://mlwhiz.github.io/blog/2017/04/16/maths_beats_intuition/">Maths Beats Intuition probably every damn time</a>
-      </h1>
-      <p class="meta"><time datetime="2017-04-16T04:43:00" pubdate>Apr 16, 2017</time></p>
+      <h1 class="entry-title">Good Feature Building Techniques - Tricks for Kaggle - My Kaggle Code Repository</h1>
+      <p class="meta"><time datetime="2017-09-14T04:43:00" pubdate>Sep 14, 2017</time></p>
 </header>
 
-  <div class="entry-content"><p>Newton once said that <strong>"God does not play dice with the universe"</strong>. But actually he does. Everything happening around us could be explained in terms of probabilities. We repeatedly watch things around us happen due to chances, yet we never learn. We always get dumbfounded by the playfulness of nature ...</p></div>
-  <footer>
-    <a rel="full-article" href="http://mlwhiz.github.io/blog/2017/04/16/maths_beats_intuition/">Read On &crarr;</a>
-  </footer>
-  		</article>
-<div class="pagination">
+  <div class="entry-content"><p>Often times it happens that we fall short of creativity. And creativity is one of the basic ingredients of what we do. Creating features needs creativity. So here is the list of ideas I gather in day to day life, where people have used creativity to get great results on Kaggle leaderboards.</p>
+<p>This post is inspired by a <a href="https://www.kaggle.com/gaborfodor/from-eda-to-the-top-lb-0-368">Kernel</a> on Kaggle written by Beluga, one of the top Kagglers, for a knowledge based <a href="https://www.kaggle.com/c/nyc-taxi-trip-duration">competition</a>.</p>
+<p>Some of the techniques/tricks I am sharing have been taken directly from that kernel so you could take a look yourself.
+Otherwise stay here and read on.</p>
+<h2>1. Don't try predicting the future when you don't have to:</h2>
+<p>If both training/test comes from the same timeline, we can get really crafty with features. Although this is a case with Kaggle only, we can use this to our advantage. For example: In the Taxi Trip duration challenge the test data is randomly sampled from the train data. In this case we can use the target variable averaged over different categorical variable as a feature. Like in this case Beluga actually used the averaged the target variable over different weekdays. He then mapped the same averaged value as a variable by mapping it to test data too.</p>
+<h2>2. logloss clipping Technique:</h2>
+<p>Something that I learned in the Neural Network course by Jeremy Howard. Its based on a very simple Idea. Logloss penalises a lot if we are very confident and wrong. So in case of Classification problems where we have to predict probabilities, it would be much better to clip our probabilities between 0.05-0.95 so that we are never very sure about our prediction.</p>
+<h2>3. kaggle submission in gzip format:</h2>
+<p>A small piece of code that will help you save countless hours of uploading. Enjoy.
+df.to_csv('submission.csv.gz', index=False, compression='gzip')</p>
+<h2>4. How best to use Latitude and Longitude features - Part 1:</h2>
+<p>One of the best things that I liked about the Beluga Kernel is how he used the Lat/Lon Data. So in the example we had pickup Lat/Lon and Dropoff Lat/Lon. We created features like:</p>
+<h4>A. Haversine Distance Between the Two Lat/Lons:</h4>
+<pre style="font-size:60%; padding:7px; margin:0em;">
+<code class="python">def haversine_array(lat1, lng1, lat2, lng2):
+    lat1, lng1, lat2, lng2 = map(np.radians, (lat1, lng1, lat2, lng2))
+    AVG_EARTH_RADIUS = 6371  # in km
+    lat = lat2 - lat1
+    lng = lng2 - lng1
+    d = np.sin(lat * 0.5) ** 2 + np.cos(lat1) * np.cos(lat2) * np.sin(lng * 0.5) ** 2
+    h = 2 * AVG_EARTH_RADIUS * np.arcsin(np.sqrt(d))
+    return h
+</code></pre>
 
-  <br />
-</div></div>
+<h4>B. Manhattan Distance Between the two Lat/Lons:</h4>
+<pre style="font-size:60%; padding:7px; margin:0em;">
+<code class="python">def dummy_manhattan_distance(lat1, lng1, lat2, lng2):
+    a = haversine_array(lat1, lng1, lat1, lng2)
+    b = haversine_array(lat1, lng1, lat2, lng1)
+    return a + b
+</code></pre>
+
+<h4>C. Bearing Between the two Lat/Lons:</h4>
+<pre style="font-size:60%; padding:7px; margin:0em;">
+<code class="python">def bearing_array(lat1, lng1, lat2, lng2):
+    AVG_EARTH_RADIUS = 6371  # in km
+    lng_delta_rad = np.radians(lng2 - lng1)
+    lat1, lng1, lat2, lng2 = map(np.radians, (lat1, lng1, lat2, lng2))
+    y = np.sin(lng_delta_rad) * np.cos(lat2)
+    x = np.cos(lat1) * np.sin(lat2) - np.sin(lat1) * np.cos(lat2) * np.cos(lng_delta_rad)
+    return np.degrees(np.arctan2(y, x))
+</code></pre>
+
+<h4>D. Center Latitude and Longitude between Pickup and Dropoff:</h4>
+<pre style="font-size:60%; padding:7px; margin:0em;">
+<code class="python">train.loc[:, 'center_latitude'] = (train['pickup_latitude'].values + train['dropoff_latitude'].values) / 2
+train.loc[:, 'center_longitude'] = (train['pickup_longitude'].values + train['dropoff_longitude'].values) / 2
+</code></pre>
+
+<h2>5. How best to use Latitude and Longitude features - Part 2:</h2>
+<p>The Second way he used the Lat/Lon Feats was to create clusters for Pickup and Dropoff Lat/Lons. The way it worked was it created sort of Boroughs in the data by design.</p>
+<pre style="font-size:60%; padding:7px; margin:0em;">
+<code class="python">from sklearn.cluster import MiniBatchKMeans
+coords = np.vstack((train[['pickup_latitude', 'pickup_longitude']].values,
+                    train[['dropoff_latitude', 'dropoff_longitude']].values,
+                    test[['pickup_latitude', 'pickup_longitude']].values,
+                    test[['dropoff_latitude', 'dropoff_longitude']].values))
+
+sample_ind = np.random.permutation(len(coords))[:500000]
+kmeans = MiniBatchKMeans(n_clusters=100, batch_size=10000).fit(coords[sample_ind])
+
+train.loc[:, 'pickup_cluster'] = kmeans.predict(train[['pickup_latitude', 'pickup_longitude']])
+train.loc[:, 'dropoff_cluster'] = kmeans.predict(train[['dropoff_latitude', 'dropoff_longitude']])
+test.loc[:, 'pickup_cluster'] = kmeans.predict(test[['pickup_latitude', 'pickup_longitude']])
+test.loc[:, 'dropoff_cluster'] = kmeans.predict(test[['dropoff_latitude', 'dropoff_longitude']])
+</code></pre>
+
+<p>He then used these Clusters to create features like counting no of trips going out and coming in on a particular day.</p>
+<h2>6. How best to use Latitude and Longitude features - Part 3</h2>
+<pre style="font-size:60%; padding:7px; margin:0em;">
+<code class="python">He used PCA to transform longitude and latitude coordinates. In this case it is not about dimension reduction since he transformed 2D-> 2D. The rotation could help for decision tree splits, and it did actually.
+
+pca = PCA().fit(coords)
+train['pickup_pca0'] = pca.transform(train[['pickup_latitude', 'pickup_longitude']])[:, 0]
+train['pickup_pca1'] = pca.transform(train[['pickup_latitude', 'pickup_longitude']])[:, 1]
+train['dropoff_pca0'] = pca.transform(train[['dropoff_latitude', 'dropoff_longitude']])[:, 0]
+train['dropoff_pca1'] = pca.transform(train[['dropoff_latitude', 'dropoff_longitude']])[:, 1]
+test['pickup_pca0'] = pca.transform(test[['pickup_latitude', 'pickup_longitude']])[:, 0]
+test['pickup_pca1'] = pca.transform(test[['pickup_latitude', 'pickup_longitude']])[:, 1]
+test['dropoff_pca0'] = pca.transform(test[['dropoff_latitude', 'dropoff_longitude']])[:, 0]
+test['dropoff_pca1'] = pca.transform(test[['dropoff_latitude', 'dropoff_longitude']])[:, 1]
+</code></pre>
+
+<h2>7. Lets not forget the Normal Things you can do with your features:</h2>
+<p>A) Scaling by Max-Min
+B) Normalization using Standard Deviation
+C) Log based feature/Target: use log based features or log based target function.
+D) One Hot Encoding</p>
+<h2>8. Creating Intuitive Additional Features:</h2>
+<p>A) Date time Features: Time based Features like "Evening", "Noon", "Night", "Purchases_last_month", "Purchases_last_week" etc.</p>
+<p>B) Thought Features: Suppose you have shopping cart data and you want to categorize TripType (See Walmart Recruiting: Trip Type Classification on <a href="https://www.kaggle.com/c/walmart-recruiting-trip-type-classification/">Kaggle</a> for some background). You could think of creating a feature like "Stylish" where you create this variable by adding together number of items that belong to category Men's Fashion, Women's Fashion, Teens Fashion. You could create a feature like "Rare" which is created by tagging some items as rare, based on the data we have and then counting the number of those rare items in the shopping cart. Such features might work or might not work. From what I have observed they normally provide a lot of value. I feel this is the way that Target's "Pregnant Teen model" was made. They would have had a variable in which they kept all the items that a pregnant teen could buy and put it into a classification algorithm.</p>
+<h2>9 . The not so Normal Things which people do:</h2>
+<p>These features are highly unintuitive and should not be created where the machine learning model needs to be interpretable.</p>
+<p>A) Interaction Features: If you have features A and B create features A*B, A+B, A/B, A-B. This explodes the feature space. If you have 10 features and you are creating two variable interactions you will be adding 10C2 * 4  features = 180 features to your model. And most of us have a lot more than 10 features.</p>
+<p>B) Bucket Feature Using Hashing: Suppose you have a lot of features. In the order of Thousands but you don't want to use all the thousand features because of the training times of algorithms involved. People bucket their features using some hashing algorithm to achieve this.Mostly done for text classification tasks.
+For example:
+If we have 6 features A,B,C,D,E,F.
+And the row of data is:
+A:1,B:1,C:1,D:0,E:1,F:0
+I may decide to use a hashing function so that these 6 features correspond to 3 buckets and create the data using this feature hashing vector.
+After processing my data might look like:
+Bucket1:2,Bucket2:2,Bucket3:0
+Which happened because A and B fell in bucket1, C and E fell in bucket2 and D and F fell in bucket 3. I summed up the observations here, but you could substitute addition with any math function you like.
+Now i would use Bucket1,Bucket2,Bucket3 as my variables for machine learning.</p>
+<p>Will try to keep on expanding. Wait for more....</p></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=495576.362&subid=0&type=4"><IMG border="0"   alt="Online data science courses to jumpstart your future." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=495576.362&subid=0&type=4&gridnum=16"></a>    <footer>
+<p class="meta">
+  <span class="byline author vcard">
+    Posted by <span class="fn">Rahul Agarwal</span>
+  </span>
+<time datetime="2017-09-14T04:43:00" pubdate>Sep 14, 2017</time>  <span class="categories">
+    <a class="category" href="http://mlwhiz.github.io/tag/python.html">Python</a>
+    <a class="category" href="http://mlwhiz.github.io/tag/nlp.html">NLP</a>
+    <a class="category" href="http://mlwhiz.github.io/tag/algorithms.html">Algorithms</a>
+    <a class="category" href="http://mlwhiz.github.io/tag/kaggle.html">Kaggle</a>
+  </span>
+  <br>
+  <span style="font-size:14px;color:green">
+  Advertiser Disclosure: All Amazon links are affiliate links, which means I receive compensation for any purchases through them. You do not have to purchase via my links, but you support me if you do.
+  </span>
+</p><div class="sharing">
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mlwhiz.com/blog/2017/09/14/kaggle_tricks/" data-via="MLWhiz" data-counturl="mlwhiz.com/blog/2017/09/14/kaggle_tricks/" >Tweet</a>
+  <div class="g-plusone" data-size="medium"></div>
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+</div>    </footer>
+  </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
+  </section>
+
+</div>
 <aside class="sidebar">
   <section>
     <h1>Recent Posts</h1>
     <ul id="recent_posts">
       <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/09/14/discrete_distributions/">The story of every distribution - Discrete Distributions</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/09/14/kaggle_tricks/">Good Feature Building Techniques - Tricks for Kaggle - My Kaggle Code Repository</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/04/17/deep_learning_pretrained_models/">Today I Learned This Part 2: Pretrained Neural Networks What are they?</a>
+      </li>
+      <li class="post">
           <a href="http://mlwhiz.github.io/blog/2017/04/16/maths_beats_intuition/">Maths Beats Intuition probably every damn time</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/04/09/word_vec_embeddings_examples_understanding/">Today I Learned This Part I: What are word2vec Embeddings?</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/03/26/top_data_science_resources_on_the_internet_right_now/">Top Data Science Resources on the Internet right now</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/03/23/basics_of_linear_regression/">Basics Of Linear Regression</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/03/05/think_like_a_data_scientist/">Top advice for a Data Scientist</a>
       </li>
     </ul>
   </section>
@@ -1990,7 +2137,7 @@ jQuery(document).ready(function($) {
 </aside>    </div>
   </div>
   <footer role="contentinfo"><p>
-    Copyright &copy;  2017  - Rahul Agarwal -
+    Copyright &copy;  2014-2017  - Rahul Agarwal -
   <span class="credit">Powered by <a href="http://getpelican.com">Pelican</a></span>
 </p>  <script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
   </footer>
@@ -2015,6 +2162,9 @@ jQuery(document).ready(function($) {
 </script>
 	<script type="text/javascript">
 	  var disqus_shortname = 'mlwhiz';
+          var disqus_identifier = '/blog/2017/09/14/kaggle_tricks/';
+          var disqus_url = 'http://mlwhiz.com/blog/2017/09/14/kaggle_tricks/';
+          var disqus_title = 'Good Feature Building Techniques - Tricks for Kaggle -  My Kaggle Code Repository';
 	  (function() {
 	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
 	    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
