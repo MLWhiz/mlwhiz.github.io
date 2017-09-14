@@ -1,5 +1,216 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>mlwhiz</title><link href="http://mlwhiz.github.io/" rel="alternate"></link><link href="http://mlwhiz.github.io/atom.xml" rel="self"></link><id>http://mlwhiz.github.io/</id><updated>2017-04-17T04:43:00-03:00</updated><entry><title>Today I Learned This Part 2: Pretrained Neural Networks What are they?</title><link href="http://mlwhiz.github.io/blog/2017/04/17/deep_learning_pretrained_models/" rel="alternate"></link><updated>2017-04-17T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2017-04-17:blog/2017/04/17/deep_learning_pretrained_models/</id><summary type="html">&lt;p&gt;Deeplearning is the buzz word right now. I was working on the &lt;a href="http://www.fast.ai/"&gt;course&lt;/a&gt; for deep learning by Jeremy Howard and one thing I noticed were pretrained deep Neural Networks. In the first lesson he used the pretrained NN to predict on the &lt;a href="https://www.kaggle.com/c/dogs-vs-cats"&gt;Dogs vs Cats&lt;/a&gt; competition on Kaggle to achieve very good results.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>mlwhiz</title><link href="http://mlwhiz.github.io/" rel="alternate"></link><link href="http://mlwhiz.github.io/atom.xml" rel="self"></link><id>http://mlwhiz.github.io/</id><updated>2017-09-14T04:43:00-03:00</updated><entry><title>The story of every distribution - Discrete Distributions</title><link href="http://mlwhiz.github.io/blog/2017/09/14/discrete_distributions/" rel="alternate"></link><updated>2017-09-14T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2017-09-14:blog/2017/09/14/discrete_distributions/</id><summary type="html">&lt;p&gt;Distributions play an important role in the life of every Statistician. I coming from a non-statistic background am not so well versed in these and keep forgetting about the properties of these famous distributions. That is why I chose to write my own understanding in an intuitive way to keep a track.
+One of the most helpful way to learn more about these is the &lt;a href="https://projects.iq.harvard.edu/stat110/home"&gt;STAT110&lt;/a&gt; course by Joe Blitzstein and his &lt;a href="http://amzn.to/2xAsYzE"&gt;book&lt;/a&gt;. Hope it could be useful to someone else too.So here goes:&lt;/p&gt;
+&lt;h3&gt;1. Bernolli Distribution:&lt;/h3&gt;
+&lt;p&gt;Perhaps the most simple discrete distribution of all.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Story:&lt;/strong&gt; A Coin is tossed with probability p of heads.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;PMF of Bernolli Distribution is given by:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$P(X=k) = \begin{cases}1-p &amp;amp; k = 0\\p &amp;amp; k = 1\end{cases}$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;CDF of Bernolli Distribution is given by:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$P(X&amp;lt;=k) = \begin{cases}0 &amp;amp; k &amp;lt; 0\\1-p &amp;amp; 0=&amp;lt;k&amp;lt;1 \\1 &amp;amp; k &amp;gt;= 1\end{cases}$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt; Expected Value:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$E[X] = \sum kP(X=k)$$&lt;/div&gt;
+&lt;div class="math"&gt;$$E[X] = 0*P(X=0)+1*P(X=1) = p$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt; Variance:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$Var[X] = E[X^2] - E[X]^2$$&lt;/div&gt;
+Now we find,
+&lt;div class="math"&gt;$$E[X]^2 = p^2$$&lt;/div&gt;
+and
+&lt;div class="math"&gt;$$E[X^2] = \sum k^2P(X=k)$$&lt;/div&gt;
+&lt;div class="math"&gt;$$E[X^2] =  0^2P(X=0) + 1^2P(X=1) = p $$&lt;/div&gt;
+Thus,
+&lt;div class="math"&gt;$$Var[X] = p(1-p)$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;h3&gt;2. Binomial Distribution:&lt;/h3&gt;
+&lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
+&lt;center&gt;&lt;img src="/images/maxresdefault.jpg"  height="400" width="500" &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;One of the most basic distribution in the Statistician toolkit. The parameters of this distribution is n(number of trials) and p(probability of success).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Story:&lt;/strong&gt;
+Probability of getting exactly k successes in n trials&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;PMF of binomial Distribution is given by:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$P(X=k) = \left(\begin{array}{c}n\\ k\end{array}\right) p^{k}(1-p)^{n-k}$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;CDF of binomial Distribution is given by:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$ P(X\leq k) = \sum_{i=0}^k  \left(\begin{array}{c}n\\ i\end{array}\right)  p^i(1-p)^{n-i} $$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt; Expected Value:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$E[X] = \sum kP(X=k)$$&lt;/div&gt;
+&lt;div class="math"&gt;$$E[X] = \sum_{k=0}^n k \left(\begin{array}{c}n\\ k\end{array}\right) * p^{k}(1-p)^{n-k} = np $$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;A better way to solve this:&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$ X = I_{1} + I_{2} + ....+ I_{n-1}+ I_{n} $$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;X is the sum on n Indicator Bernoulli random variables.&lt;/p&gt;
+&lt;p&gt;Thus,&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$E[X] = E[I_{1} + I_{2} + ....+ I_{n-1}+ I_{n}]$$&lt;/div&gt;
+&lt;div class="math"&gt;$$E[X] = E[I_{1}] + E[I_{2}] + ....+ E[I_{n-1}]+ E[I_{n}]$$&lt;/div&gt;
+&lt;div class="math"&gt;$$E[X] = \underbrace{p + p + ....+ p + p}_{n} = np$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt; Variance:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$ X = I_{1} + I_{2} + ....+ I_{n-1}+ I_{n} $$&lt;/div&gt;
+X is the sum on n Indicator Bernoulli random variables.
+&lt;div class="math"&gt;$$Var[X] = Var[I_{1} + I_{2} + ....+ I_{n-1}+ I_{n}]$$&lt;/div&gt;
+&lt;div class="math"&gt;$$Var[X] = Var[I_{1}] + Var[I_{2}] + ....+ Var[I_{n-1}]+ Var[I_{n}]$$&lt;/div&gt;
+&lt;div class="math"&gt;$$Var[X] = \underbrace{p(1-p) + p(1-p) + ....+ p(1-p) + p(1-p)}_{n} = np(1-p)$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;h3&gt;3. Geometric Distribution:&lt;/h3&gt;
+&lt;p&gt;The parameters of this distribution is p(probability of success).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Story:&lt;/strong&gt;
+The number of failures before the first success(Heads) when a coin with probability p is tossed&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;PMF of Geometric Distribution is given by:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$P(X=k) = (1-p)^kp$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;CDF of Geometric Distribution is given by:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$ P(X\leq k) = \sum_{i=0}^k (1-p)^{i}p$$&lt;/div&gt;
+&lt;div class="math"&gt;$$ P(X\leq k) = p(1+q+q^2...+q^k)= p(1-q^k)/(1-q) = 1-(1-p)^k $$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt; Expected Value:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$E[X] = \sum kP(X=k)$$&lt;/div&gt;
+&lt;div class="math"&gt;$$E[X] = \sum_{k=0}^{inf} k (1-p)^kp$$&lt;/div&gt;
+&lt;div class="math"&gt;$$E[X] = qp +2q^2p +3q^3p +4q^4p .... $$&lt;/div&gt;
+&lt;div class="math"&gt;$$E[X] = qp(1+2q+3q^2+4q^3+....)$$&lt;/div&gt;
+&lt;div class="math"&gt;$$E[X] = qp/(1-q)^2 = q/p $$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt; Variance:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$Var[X] = E[X^2] - E[X]^2$$&lt;/div&gt;
+Now we find,
+&lt;div class="math"&gt;$$E[X]^2 = q^2/p^2$$&lt;/div&gt;
+and
+&lt;div class="math"&gt;$$E[X^2] = \sum_0^k k^2q^kp= qp + 4q^2p + 9q^3p +16q^4p ... = qp(1+4q+9q^2+16q^3....)$$&lt;/div&gt;
+&lt;div class="math"&gt;$$E[X^2] = qp^{-2}(1+q)$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;Thus,
+&lt;div class="math"&gt;$$Var[X] =q/p^2$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;Check Math appendix at bottom of this post for Geometric Series Proofs.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt; Example:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Q. A doctor is seeking an anti-depressant for a newly diagnosed patient. Suppose that, of the available anti-depressant drugs, the probability that any particular drug will be effective for a particular patient is p=0.6. What is the probability that the first drug found to be effective for this patient is the first drug tried, the second drug tried, and so on? What is the expected number of drugs that will be tried to find one that is effective?&lt;/p&gt;
+&lt;p&gt;A. Expected number of drugs that will be tried to find one that is effective = q/p = .4/.6 =.67&lt;/p&gt;
+&lt;h3&gt;4. Negative Binomial Distribution:&lt;/h3&gt;
+&lt;p&gt;The parameters of this distribution is p(probability of success) and r(number of success).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Story:&lt;/strong&gt;
+The &lt;strong&gt;number of failures&lt;/strong&gt; of independent Bernoulli(p) trials before the rth success.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;PMF of Negative Binomial Distribution is given by:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;r successes , k failures , last attempt needs to be a success:
+&lt;div class="math"&gt;$$P(X=k) = \left(\begin{array}{c}k+r-1\\ k\end{array}\right) p^r(1-p)^k$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt; Expected Value:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The negative binomial RV could be stated as the sum of r Geometric RVs
+&lt;div class="math"&gt;$$X = X^1+X^2.... X^{r-1} +X^r$$&lt;/div&gt;
+Thus,
+&lt;div class="math"&gt;$$E[X] = E[X^1]+E[X^2].... E[X^{r-1}] +E[X^r]$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$E[X] = rq/p$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt; Variance:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The negative binomial RV could be stated as the sum of r independent Geometric RVs
+&lt;div class="math"&gt;$$X = X^1+X^2.... X^{r-1} +X^r$$&lt;/div&gt;
+Thus,
+&lt;div class="math"&gt;$$Var[X] = Var[X^1]+Var[X^2].... Var[X^{r-1}] +Var[X^r]$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$E[X] = rq/p^2$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt; Example:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Q. Pat is required to sell candy bars to raise money for the 6th grade field trip. There are thirty houses in the neighborhood, and Pat is not supposed to return home until five candy bars have been sold. So the child goes door to door, selling candy bars. At each house, there is a 0.4 probability of selling one candy bar and a 0.6 probability of selling nothing.
+What's the probability of selling the last candy bar at the nth house?&lt;/p&gt;
+&lt;p&gt;A. r = 5 ; k = n - r&lt;/p&gt;
+&lt;p&gt;Probability of selling the last candy bar at the nth house =
+&lt;div class="math"&gt;$$P(X=k) = \left(\begin{array}{c}k+r-1\\ k\end{array}\right) p^r(1-p)^k$$&lt;/div&gt;
+&lt;div class="math"&gt;$$P(X=k) = \left(\begin{array}{c}n-1\\ n-5\end{array}\right) .4^5(.6)^{n-5}$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;h3&gt;5. Poisson Distribution:&lt;/h3&gt;
+&lt;p&gt;The parameters of this distribution is &lt;span class="math"&gt;\(\lambda\)&lt;/span&gt; the rate parameter.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Motivation:&lt;/strong&gt;
+There is as such no story to this distribution but only motivation for using this distribution. The Poisson distribution is often used for applications where we count the successes of a large number of trials where the per-trial success rate is small. For example, the Poisson distribution is a good starting point for counting the number of people who email you over the course of an hour.The number of chocolate chips in a chocolate chip cookie is another good candidate for a Poisson distribution, or the number of earthquakes in a year in some particular region&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;PMF of Poisson Distribution is given by:&lt;/strong&gt;
+&lt;div class="math"&gt;$$ P(X=k) = \frac{e^{-\lambda}\lambda^k} {k!}$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt; Expected Value:&lt;/strong&gt;
+&lt;div class="math"&gt;$$E[X] = \sum kP(X=k)$$&lt;/div&gt;
+&lt;div class="math"&gt;$$ E[X] = \sum_{k=0}^{inf} k \frac{e^{-\lambda}\lambda^k} {k!}$$&lt;/div&gt;
+&lt;div class="math"&gt;$$ E[X] = \lambda e^{-\lambda}\sum_{k=0}^{inf}  \frac{\lambda^{k-1}} {(k-1)!}$$&lt;/div&gt;
+&lt;div class="math"&gt;$$ E[X] = \lambda e^{-\lambda} e^{\lambda} = \lambda $$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt; Variance:&lt;/strong&gt;
+&lt;div class="math"&gt;$$Var[X] = E[X^2] - E[X]^2$$&lt;/div&gt;
+Now we find,
+&lt;div class="math"&gt;$$E[X]^2 = \lambda + \lambda^2$$&lt;/div&gt;
+Thus,
+&lt;div class="math"&gt;$$Var[X] = \lambda$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt; Example:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Q. If electricity power failures occur according to a Poisson distribution with an average of 3 failures every twenty weeks, calculate the probability that there will not be more than one failure during a particular week?&lt;/p&gt;
+&lt;p&gt;A. Probability = P(X=0)+P(X=1) = $e^{-3/20} + e^{-3/20}3/20 = 23/20*e^{-3/20} $&lt;/p&gt;
+&lt;p&gt;Probability of selling the last candy bar at the nth house =
+&lt;div class="math"&gt;$$P(X=k) = \left(\begin{array}{c}k+r-1\\ k\end{array}\right) p^r(1-p)^k$$&lt;/div&gt;
+&lt;div class="math"&gt;$$P(X=k) = \left(\begin{array}{c}n-1\\ n-5\end{array}\right) .4^5(.6)^{n-5}$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;h2&gt;Math Appendix:&lt;/h2&gt;
+&lt;p&gt;Some Math (For Geometric Distribution) :&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$a+ar+ar^2+ar^3+⋯=a/(1−r)=a(1−r)^{−1}$$&lt;/div&gt;
+Taking the derivatives of both sides, the first derivative with respect to r must be:
+&lt;div class="math"&gt;$$a+2ar+3ar^2+4ar^3⋯=a(1−r)^{−2}$$&lt;/div&gt;
+Multiplying above with r:
+&lt;div class="math"&gt;$$ar+2ar^2+3ar^3+4ar^4⋯=ar(1−r)^{−2}$$&lt;/div&gt;
+Taking the derivatives of both sides, the first derivative with respect to r must be:
+&lt;div class="math"&gt;$$a+4ar+9ar^2+16ar^3⋯=a(1−r)^{-3}(1+r)$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;h2&gt;References:&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="http://amzn.to/2xAsYzE"&gt;Introduction to Probability by Joe Blitzstein&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://en.wikipedia.org/wiki/Negative_binomial_distribution"&gt;Wikipedia&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processClass: 'mathjax', " +
+        "        ignoreClass: 'no-mathjax', " +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</summary><category term="distributions"></category><category term="pdf"></category><category term="cdf"></category><category term="expected value"></category><category term="variance"></category><category term="binomial"></category><category term="poisson"></category><category term="geometric"></category></entry><entry><title>Today I Learned This Part 2: Pretrained Neural Networks What are they?</title><link href="http://mlwhiz.github.io/blog/2017/04/17/deep_learning_pretrained_models/" rel="alternate"></link><updated>2017-04-17T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2017-04-17:blog/2017/04/17/deep_learning_pretrained_models/</id><summary type="html">&lt;p&gt;Deeplearning is the buzz word right now. I was working on the &lt;a href="http://www.fast.ai/"&gt;course&lt;/a&gt; for deep learning by Jeremy Howard and one thing I noticed were pretrained deep Neural Networks. In the first lesson he used the pretrained NN to predict on the &lt;a href="https://www.kaggle.com/c/dogs-vs-cats"&gt;Dogs vs Cats&lt;/a&gt; competition on Kaggle to achieve very good results.&lt;/p&gt;
 &lt;h2&gt;What are pretrained Neural Networks?&lt;/h2&gt;
 &lt;p&gt;So let me tell you about the background a little bit. There is a challenge that happens every year in the visual recognition community - The Imagenet Challenge. The task there is to classify the images in 1000 categories using Image training data. People train big convolutional deep learning models for this challenge.&lt;/p&gt;
 &lt;p&gt;Now what does training a neural model actually mean? It just means that they learn the weights for a NN. What if we can get the weights they learn? We can use those weights to load them into our own NN model and predict on the test dataset. Right?&lt;/p&gt;
