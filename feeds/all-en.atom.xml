@@ -378,10 +378,9 @@ test.loc[:, 'dropoff_cluster'] = kmeans.predict(test[['dropoff_latitude', 'dropo
 
 &lt;p&gt;He then used these Clusters to create features like counting no of trips going out and coming in on a particular day.&lt;/p&gt;
 &lt;h2&gt;6. How best to use Latitude and Longitude features - Part 3&lt;/h2&gt;
+&lt;p&gt;He used PCA to transform longitude and latitude coordinates. In this case it is not about dimension reduction since he transformed 2D-&amp;gt; 2D. The rotation could help for decision tree splits, and it did actually.&lt;/p&gt;
 &lt;pre style="font-size:60%; padding:7px; margin:0em;"&gt;
-&lt;code class="python"&gt;He used PCA to transform longitude and latitude coordinates. In this case it is not about dimension reduction since he transformed 2D-&gt; 2D. The rotation could help for decision tree splits, and it did actually.
-
-pca = PCA().fit(coords)
+&lt;code class="python"&gt;pca = PCA().fit(coords)
 train['pickup_pca0'] = pca.transform(train[['pickup_latitude', 'pickup_longitude']])[:, 0]
 train['pickup_pca1'] = pca.transform(train[['pickup_latitude', 'pickup_longitude']])[:, 1]
 train['dropoff_pca0'] = pca.transform(train[['dropoff_latitude', 'dropoff_longitude']])[:, 0]
@@ -393,13 +392,18 @@ test['dropoff_pca1'] = pca.transform(test[['dropoff_latitude', 'dropoff_longitud
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2&gt;7. Lets not forget the Normal Things you can do with your features:&lt;/h2&gt;
-&lt;p&gt;A) Scaling by Max-Min
-B) Normalization using Standard Deviation
-C) Log based feature/Target: use log based features or log based target function.
-D) One Hot Encoding&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Scaling by Max-Min&lt;/li&gt;
+&lt;li&gt;Normalization using Standard Deviation&lt;/li&gt;
+&lt;li&gt;Log based feature/Target: use log based features or log based target function.&lt;/li&gt;
+&lt;li&gt;One Hot Encoding&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2&gt;8. Creating Intuitive Additional Features:&lt;/h2&gt;
 &lt;p&gt;A) Date time Features: Time based Features like "Evening", "Noon", "Night", "Purchases_last_month", "Purchases_last_week" etc.&lt;/p&gt;
-&lt;p&gt;B) Thought Features: Suppose you have shopping cart data and you want to categorize TripType (See Walmart Recruiting: Trip Type Classification on &lt;a href="https://www.kaggle.com/c/walmart-recruiting-trip-type-classification/"&gt;Kaggle&lt;/a&gt; for some background). You could think of creating a feature like "Stylish" where you create this variable by adding together number of items that belong to category Men's Fashion, Women's Fashion, Teens Fashion. You could create a feature like "Rare" which is created by tagging some items as rare, based on the data we have and then counting the number of those rare items in the shopping cart. Such features might work or might not work. From what I have observed they normally provide a lot of value. I feel this is the way that Target's "Pregnant Teen model" was made. They would have had a variable in which they kept all the items that a pregnant teen could buy and put it into a classification algorithm.&lt;/p&gt;
+&lt;p&gt;B) Thought Features: Suppose you have shopping cart data and you want to categorize TripType (See Walmart Recruiting: Trip Type Classification on &lt;a href="https://www.kaggle.com/c/walmart-recruiting-trip-type-classification/"&gt;Kaggle&lt;/a&gt; for some background).&lt;/p&gt;
+&lt;p&gt;You could think of creating a feature like "Stylish" where you create this variable by adding together number of items that belong to category Men's Fashion, Women's Fashion, Teens Fashion.&lt;/p&gt;
+&lt;p&gt;You could create a feature like "Rare" which is created by tagging some items as rare, based on the data we have and then counting the number of those rare items in the shopping cart. Such features might work or might not work. From what I have observed they normally provide a lot of value.&lt;/p&gt;
+&lt;p&gt;I feel this is the way that Target's "Pregnant Teen model" was made. They would have had a variable in which they kept all the items that a pregnant teen could buy and put it into a classification algorithm.&lt;/p&gt;
 &lt;h2&gt;9 . The not so Normal Things which people do:&lt;/h2&gt;
 &lt;p&gt;These features are highly unintuitive and should not be created where the machine learning model needs to be interpretable.&lt;/p&gt;
 &lt;p&gt;A) Interaction Features: If you have features A and B create features A*B, A+B, A/B, A-B. This explodes the feature space. If you have 10 features and you are creating two variable interactions you will be adding 10C2 * 4  features = 180 features to your model. And most of us have a lot more than 10 features.&lt;/p&gt;
