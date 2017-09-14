@@ -2000,6 +2000,102 @@ Multiplying above with r:
 Taking the derivatives of both sides, the first derivative with respect to r must be:
 <div class="math">$$a+4ar+9ar^2+16ar^3⋯=a(1−r)^{-3}(1+r)$$</div>
 </p>
+<h2>Bonus - Python Graphs and Functions:</h2>
+<pre style="font-size:60%; padding:7px; margin:0em;">
+<code class="python"># Useful Function to create graph
+def chart_creator(x,y,title):
+    import matplotlib.pyplot as plt  #sets up plotting under plt
+    import seaborn as sns           #sets up styles and gives us more plotting options
+    import pandas as pd             #lets us handle data as dataframes
+    %matplotlib inline
+    # Create a list of 100 Normal RVs
+    data = pd.DataFrame(zip(x,y))
+    data.columns = ['x','y']
+    # We dont Probably need the Gridlines. Do we? If yes comment this line
+    sns.set(style="ticks")
+
+    # Here we create a matplotlib axes object. The extra parameters we use
+    # "ci" to remove confidence interval
+    # "marker" to have a x as marker.
+    # "scatter_kws" to provide style info for the points.[s for size]
+    # "line_kws" to provide style info for the line.[lw for line width]
+
+    g = sns.regplot(x='x', y='y', data=data, ci = False,
+        scatter_kws={"color":"darkred","alpha":0.3,"s":90},
+        line_kws={"color":"g","alpha":0.5,"lw":0},marker="x")
+
+    # remove the top and right line in graph
+    sns.despine()
+
+    # Set the size of the graph from here
+    g.figure.set_size_inches(12,8)
+    # Set the Title of the graph from here
+    g.axes.set_title(title, fontsize=34,color="r",alpha=0.5)
+    # Set the xlabel of the graph from here
+    g.set_xlabel("k",size = 67,color="r",alpha=0.5)
+    # Set the ylabel of the graph from here
+    g.set_ylabel("pmf",size = 67,color="r",alpha=0.5)
+    # Set the ticklabel size and color of the graph from here
+    g.tick_params(labelsize=14,labelcolor="black")
+</code></pre>
+
+<pre style="font-size:60%; padding:7px; margin:0em;">
+<code class="python"># Binomial :
+from scipy.stats import binom
+n=30
+p=0.5
+k = range(0,n)
+pmf = binom.pmf(k, n, p)
+chart_creator(k,pmf,"Binomial PMF")
+</code></pre>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/output_12_0.png"  height="400" width="700" ></center>
+</div>
+
+<pre style="font-size:60%; padding:7px; margin:0em;">
+<code class="python"># Geometric :
+from scipy.stats import geom
+n=30
+p=0.5
+k = range(0,n)
+# -1 here is the location parameter for generating the PMF we want.
+pmf = geom.pmf(k, p,-1)
+chart_creator(k,pmf,"Geometric PMF")
+</code></pre>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/output_13_0.png"  height="400" width="700" ></center>
+</div>
+
+<pre style="font-size:60%; padding:7px; margin:0em;">
+<code class="python"># Negative Binomial :
+from scipy.stats import nbinom
+r=5 # number of successes
+p=0.5 # probability of Success
+k = range(0,25) # number of failures
+# -1 here is the location parameter for generating the PMF we want.
+pmf = nbinom.pmf(k, r, p)
+chart_creator(k,pmf,"Nbinom PMF")
+</code></pre>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/output_14_0.png"  height="400" width="700" ></center>
+</div>
+
+<pre style="font-size:60%; padding:7px; margin:0em;">
+<code class="python">#Poisson
+from scipy.stats import poisson
+lamb = .3 # Rate
+k = range(0,5)
+pmf = poisson.pmf(k, lamb)
+chart_creator(k,pmf,"Poisson PMF")
+</code></pre>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/output_15_0.png"  height="400" width="700" ></center>
+</div>
+
 <h2>References:</h2>
 <ol>
 <li><a href="http://amzn.to/2xAsYzE">Introduction to Probability by Joe Blitzstein</a></li>
