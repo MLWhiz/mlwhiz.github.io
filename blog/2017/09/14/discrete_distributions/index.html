@@ -7,7 +7,7 @@
   <title>The story of every distribution - Discrete Distributions</title>
   <meta name="author" content="Rahul Agarwal">
   <meta name="description" content="Distributions play an important role in the life of every Statistician. Properties of famous discrete distributions" >
-  <meta name="keywords" content="distributions, pdf, cdf, expected value, variance, binomial,poisson, geometric" >
+  <meta name="keywords" content="distributions, pdf, cdf, expected value, variance, binomial,poisson, geometric, cdf proof, pdf proof, story, expected value proof" >
 
 
   <link href="http://mlwhiz.github.io/atom.xml" type="application/atom+xml" rel="alternate"
@@ -1824,14 +1824,14 @@ jQuery(document).ready(function($) {
 
   <div class="entry-content"><p>Distributions play an important role in the life of every Statistician. I coming from a non-statistic background am not so well versed in these and keep forgetting about the properties of these famous distributions. That is why I chose to write my own understanding in an intuitive way to keep a track.
 One of the most helpful way to learn more about these is the <a href="https://projects.iq.harvard.edu/stat110/home">STAT110</a> course by Joe Blitzstein and his <a href="http://amzn.to/2xAsYzE">book</a>. Hope it could be useful to someone else too.So here goes:</p>
-<h3>1. Bernolli Distribution:</h3>
+<h2>1. Bernoulli Distribution:</h2>
 <p>Perhaps the most simple discrete distribution of all.</p>
 <p><strong>Story:</strong> A Coin is tossed with probability p of heads.</p>
-<p><strong>PMF of Bernolli Distribution is given by:</strong></p>
+<p><strong>PMF of Bernoulli Distribution is given by:</strong></p>
 <p>
 <div class="math">$$P(X=k) = \begin{cases}1-p &amp; k = 0\\p &amp; k = 1\end{cases}$$</div>
 </p>
-<p><strong>CDF of Bernolli Distribution is given by:</strong></p>
+<p><strong>CDF of Bernoulli Distribution is given by:</strong></p>
 <p>
 <div class="math">$$P(X&lt;=k) = \begin{cases}0 &amp; k &lt; 0\\1-p &amp; 0=&lt;k&lt;1 \\1 &amp; k &gt;= 1\end{cases}$$</div>
 </p>
@@ -1851,7 +1851,7 @@ and
 Thus,
 <div class="math">$$Var[X] = p(1-p)$$</div>
 </p>
-<h3>2. Binomial Distribution:</h3>
+<h2>2. Binomial Distribution:</h2>
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/maxresdefault.jpg"  height="400" width="500" ></center>
 </div>
@@ -1891,7 +1891,7 @@ X is the sum on n Indicator Bernoulli random variables.
 <div class="math">$$Var[X] = Var[I_{1}] + Var[I_{2}] + ....+ Var[I_{n-1}]+ Var[I_{n}]$$</div>
 <div class="math">$$Var[X] = \underbrace{p(1-p) + p(1-p) + ....+ p(1-p) + p(1-p)}_{n} = np(1-p)$$</div>
 </p>
-<h3>3. Geometric Distribution:</h3>
+<h2>3. Geometric Distribution:</h2>
 <p>The parameters of this distribution is p(probability of success).</p>
 <p><strong>Story:</strong>
 The number of failures before the first success(Heads) when a coin with probability p is tossed</p>
@@ -1928,7 +1928,7 @@ and
 <p><strong> Example:</strong></p>
 <p>Q. A doctor is seeking an anti-depressant for a newly diagnosed patient. Suppose that, of the available anti-depressant drugs, the probability that any particular drug will be effective for a particular patient is p=0.6. What is the probability that the first drug found to be effective for this patient is the first drug tried, the second drug tried, and so on? What is the expected number of drugs that will be tried to find one that is effective?</p>
 <p>A. Expected number of drugs that will be tried to find one that is effective = q/p = .4/.6 =.67</p>
-<h3>4. Negative Binomial Distribution:</h3>
+<h2>4. Negative Binomial Distribution:</h2>
 <p>The parameters of this distribution is p(probability of success) and r(number of success).</p>
 <p><strong>Story:</strong>
 The <strong>number of failures</strong> of independent Bernoulli(p) trials before the rth success.</p>
@@ -1962,7 +1962,7 @@ What's the probability of selling the last candy bar at the nth house?</p>
 <div class="math">$$P(X=k) = \left(\begin{array}{c}k+r-1\\ k\end{array}\right) p^r(1-p)^k$$</div>
 <div class="math">$$P(X=k) = \left(\begin{array}{c}n-1\\ n-5\end{array}\right) .4^5(.6)^{n-5}$$</div>
 </p>
-<h3>5. Poisson Distribution:</h3>
+<h2>5. Poisson Distribution:</h2>
 <p>The parameters of this distribution is <span class="math">\(\lambda\)</span> the rate parameter.</p>
 <p><strong>Motivation:</strong>
 There is as such no story to this distribution but only motivation for using this distribution. The Poisson distribution is often used for applications where we count the successes of a large number of trials where the per-trial success rate is small. For example, the Poisson distribution is a good starting point for counting the number of people who email you over the course of an hour.The number of chocolate chips in a chocolate chip cookie is another good candidate for a Poisson distribution, or the number of earthquakes in a year in some particular region</p>

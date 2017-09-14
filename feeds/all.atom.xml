@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>mlwhiz</title><link href="http://mlwhiz.github.io/" rel="alternate"></link><link href="http://mlwhiz.github.io/feeds/all.atom.xml" rel="self"></link><id>http://mlwhiz.github.io/</id><updated>2017-09-14T04:43:00-03:00</updated><entry><title>The story of every distribution - Discrete Distributions</title><link href="http://mlwhiz.github.io/blog/2017/09/14/discrete_distributions/" rel="alternate"></link><updated>2017-09-14T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2017-09-14:blog/2017/09/14/discrete_distributions/</id><summary type="html">&lt;p&gt;Distributions play an important role in the life of every Statistician. I coming from a non-statistic background am not so well versed in these and keep forgetting about the properties of these famous distributions. That is why I chose to write my own understanding in an intuitive way to keep a track.
 One of the most helpful way to learn more about these is the &lt;a href="https://projects.iq.harvard.edu/stat110/home"&gt;STAT110&lt;/a&gt; course by Joe Blitzstein and his &lt;a href="http://amzn.to/2xAsYzE"&gt;book&lt;/a&gt;. Hope it could be useful to someone else too.So here goes:&lt;/p&gt;
-&lt;h3&gt;1. Bernolli Distribution:&lt;/h3&gt;
+&lt;h2&gt;1. Bernoulli Distribution:&lt;/h2&gt;
 &lt;p&gt;Perhaps the most simple discrete distribution of all.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Story:&lt;/strong&gt; A Coin is tossed with probability p of heads.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;PMF of Bernolli Distribution is given by:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;PMF of Bernoulli Distribution is given by:&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;
 &lt;div class="math"&gt;$$P(X=k) = \begin{cases}1-p &amp;amp; k = 0\\p &amp;amp; k = 1\end{cases}$$&lt;/div&gt;
 &lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;CDF of Bernolli Distribution is given by:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;CDF of Bernoulli Distribution is given by:&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;
 &lt;div class="math"&gt;$$P(X&amp;lt;=k) = \begin{cases}0 &amp;amp; k &amp;lt; 0\\1-p &amp;amp; 0=&amp;lt;k&amp;lt;1 \\1 &amp;amp; k &amp;gt;= 1\end{cases}$$&lt;/div&gt;
 &lt;/p&gt;
@@ -28,7 +28,7 @@ and
 Thus,
 &lt;div class="math"&gt;$$Var[X] = p(1-p)$$&lt;/div&gt;
 &lt;/p&gt;
-&lt;h3&gt;2. Binomial Distribution:&lt;/h3&gt;
+&lt;h2&gt;2. Binomial Distribution:&lt;/h2&gt;
 &lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
 &lt;center&gt;&lt;img src="/images/maxresdefault.jpg"  height="400" width="500" &gt;&lt;/center&gt;
 &lt;/div&gt;
@@ -68,7 +68,7 @@ X is the sum on n Indicator Bernoulli random variables.
 &lt;div class="math"&gt;$$Var[X] = Var[I_{1}] + Var[I_{2}] + ....+ Var[I_{n-1}]+ Var[I_{n}]$$&lt;/div&gt;
 &lt;div class="math"&gt;$$Var[X] = \underbrace{p(1-p) + p(1-p) + ....+ p(1-p) + p(1-p)}_{n} = np(1-p)$$&lt;/div&gt;
 &lt;/p&gt;
-&lt;h3&gt;3. Geometric Distribution:&lt;/h3&gt;
+&lt;h2&gt;3. Geometric Distribution:&lt;/h2&gt;
 &lt;p&gt;The parameters of this distribution is p(probability of success).&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Story:&lt;/strong&gt;
 The number of failures before the first success(Heads) when a coin with probability p is tossed&lt;/p&gt;
@@ -105,7 +105,7 @@ and
 &lt;p&gt;&lt;strong&gt; Example:&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Q. A doctor is seeking an anti-depressant for a newly diagnosed patient. Suppose that, of the available anti-depressant drugs, the probability that any particular drug will be effective for a particular patient is p=0.6. What is the probability that the first drug found to be effective for this patient is the first drug tried, the second drug tried, and so on? What is the expected number of drugs that will be tried to find one that is effective?&lt;/p&gt;
 &lt;p&gt;A. Expected number of drugs that will be tried to find one that is effective = q/p = .4/.6 =.67&lt;/p&gt;
-&lt;h3&gt;4. Negative Binomial Distribution:&lt;/h3&gt;
+&lt;h2&gt;4. Negative Binomial Distribution:&lt;/h2&gt;
 &lt;p&gt;The parameters of this distribution is p(probability of success) and r(number of success).&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Story:&lt;/strong&gt;
 The &lt;strong&gt;number of failures&lt;/strong&gt; of independent Bernoulli(p) trials before the rth success.&lt;/p&gt;
@@ -139,7 +139,7 @@ What's the probability of selling the last candy bar at the nth house?&lt;/p&gt;
 &lt;div class="math"&gt;$$P(X=k) = \left(\begin{array}{c}k+r-1\\ k\end{array}\right) p^r(1-p)^k$$&lt;/div&gt;
 &lt;div class="math"&gt;$$P(X=k) = \left(\begin{array}{c}n-1\\ n-5\end{array}\right) .4^5(.6)^{n-5}$$&lt;/div&gt;
 &lt;/p&gt;
-&lt;h3&gt;5. Poisson Distribution:&lt;/h3&gt;
+&lt;h2&gt;5. Poisson Distribution:&lt;/h2&gt;
 &lt;p&gt;The parameters of this distribution is &lt;span class="math"&gt;\(\lambda\)&lt;/span&gt; the rate parameter.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Motivation:&lt;/strong&gt;
 There is as such no story to this distribution but only motivation for using this distribution. The Poisson distribution is often used for applications where we count the successes of a large number of trials where the per-trial success rate is small. For example, the Poisson distribution is a good starting point for counting the number of people who email you over the course of an hour.The number of chocolate chips in a chocolate chip cookie is another good candidate for a Poisson distribution, or the number of earthquakes in a year in some particular region&lt;/p&gt;
