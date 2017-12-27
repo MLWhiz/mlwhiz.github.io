@@ -4,10 +4,10 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Machine Learning algorithms for Data Scientists</title>
+  <title>mlwhiz</title>
   <meta name="author" content="Rahul Agarwal">
-  <meta name="description" content="Machine Learning algorithms for Data Scientists" >
-  <meta name="keywords" content="data scientist, algorithms" >
+  <meta name="description" content="A Data Science Learning Resource to learn about AI, Deep Learning, NLP" >
+  <meta name="keywords" content="python,data science,machine learning, analytics, big data, bigdata, maths, shell, bash, awk, hadoop, spark, statistics" >
 
 
   <link href="http://mlwhiz.github.io/atom.xml" type="application/atom+xml" rel="alternate"
@@ -1819,134 +1819,30 @@ jQuery(document).ready(function($) {
 </ul></nav>
   <div id="main">
     <div id="content">
-
-<div>
-  <article class="hentry" role="article">
-
+<div class="blog-index">
+  		<article>
 <header>
-      <h1 class="entry-title">Machine Learning algorithms for Data Scientists</h1>
-      <p class="meta"><time datetime="2017-02-05T04:43:00" pubdate>Feb 05, 2017</time></p>
+      <h1 class="entry-title">
+        <a href="http://mlwhiz.github.io/blog/2017/12/26/How_to_win_a_data_science_competition/">Using XGBoost for time series prediction tasks:</a>
+      </h1>
+      <p class="meta"><time datetime="2017-12-26T04:43:00" pubdate>Dec 26, 2017</time></p>
 </header>
 
-  <div class="entry-content"><div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/mlago_fords.png"  height="400" width="600" ></center>
-</div>
+  <div class="entry-content"><p>Recently Kaggle master Kazanova along with some of his friends released a <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">"How to win a data science competition"</a> Coursera course. The Course involved a final project which itself was a time series prediction problem. Here I will describe how I got a top 10 position as of writing this ...</p></div>
+  <footer>
+    <a rel="full-article" href="http://mlwhiz.github.io/blog/2017/12/26/How_to_win_a_data_science_competition/">Read On &crarr;</a>
+  </footer>
+  		</article>
+<div class="pagination">
 
-<p>As a data scientist I believe that a lot of work has to be done before Classification/Regression/Clustering methods are applied to the data you get. The data which may be messy, unwieldy and big. So here are the list of algorithms that helps a data scientist to make better models using the data they have:</p>
-<h2>1. Sampling Algorithms. In case you want to work with a sample of data.</h2>
-<ul>
-<li><strong>Simple Random Sampling :</strong><em> Say you want to select a subset of a population in which each member of the subset has an equal probability of being chosen.</em></li>
-<li><strong>Stratified Sampling : </strong>Assume that we need to estimate average number of votes for each candidate in an election. Assume that country has 3 towns : Town A has 1 million factory workers, Town B has 2 million workers and Town C has 3 million retirees. We can choose to get a random sample of size 60 over entire population but there is some chance that the random sample turns out to be not well balanced across these towns and hence is biased causing a significant error in estimation. Instead if we choose to take a random sample of 10, 20 and 30 from Town A, B and C respectively then we can produce a smaller error in estimation for the same total size of sample.</li>
-<li><strong>Reservoir Sampling</strong> :<em> Say you have a stream of items of large and unknown length that we can only iterate over once. Create an algorithm that randomly chooses an item from this stream such that each item is equally likely to be selected.</em></li>
-</ul>
-<h2>2. <strong>Map-Reduce. If you want to work with the whole data</strong>.</h2>
-<p>Can be used for feature creation. For Example: I had a use case where I had a graph of 60 Million customers and 130 Million accounts. Each account was connected to other account if they had the Same SSN or Same Name+DOB+Address. I had to find customer ID’s for each of the accounts. On a single node parsing such a graph took more than 2 days. On a Hadoop cluster of 80 nodes running a<em> Connected Component Algorithm </em>took less than 24 minutes. On Spark it is even faster.</p>
-<h2>3. <strong>Graph Algorithms.</strong></h2>
-<p>Recently I was working on an optimization problem which was focussed on finding shortest distance and routes between two points in a store layout. Routes which don’t pass through different aisles, so we cannot use euclidean distances. We solved this problem by considering turning points in the store layout and the<em> djikstra’s Algorithm.</em></p>
-<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script>
-
-<h2>4. <strong>Feature Selection.</strong></h2>
-<ul>
-<li><strong>Univariate Selection. </strong>Statistical tests can be used to select those features that have the strongest relationship with the output variable.</li>
-<li><strong>VarianceThreshold.</strong> Feature selector that removes all low-variance features.</li>
-<li><strong>Recursive Feature Elimination.</strong> The goal of recursive feature elimination (RFE) is to select features by recursively considering smaller and smaller sets of features. First, the estimator is trained on the initial set of features and weights are assigned to each one of them. Then, features whose absolute weights are the smallest are pruned from the current set features. That procedure is recursively repeated on the pruned set until the desired number of features to select is eventually reached.</li>
-<li><strong>Feature Importance: </strong>Methods that use ensembles of decision trees (like Random Forest or Extra Trees) can also compute the relative importance of each attribute. These importance values can be used to inform a feature selection process.</li>
-</ul>
-<h2>5. <strong>Algorithms to work efficiently.</strong></h2>
-<p>Apart from these above algorithms sometimes you may need to write your own algorithms. Now I think of big algorithms as a combination of small but powerful algorithms. You just need to have idea of these algorithms to make a more better/efficient product. So some of these powerful algorithms which can help you are:
-- <strong>Recursive Algorithms: </strong>Binary search algorithm.
-- <strong>Divide and Conquer Algorithms:</strong> Merge-Sort.
-- <strong>Dynamic Programming: </strong>Solving a complex problem by breaking it down into a collection of simpler subproblems, solving each of those subproblems just once, and storing their solutions.</p>
-<h2>6. <strong>Classification/Regression Algorithms.</strong> The usual suspects. Minimum you must know:</h2>
-<ol>
-<li><strong>Linear Regression -</strong> Ridge Regression, Lasso Regression, ElasticNet</li>
-<li><strong>Logistic Regression</strong></li>
-<li>From there you can build upon:<ol>
-<li><strong>Decision Trees -</strong> ID3, CART, C4.5, C5.0</li>
-<li><strong>KNN</strong></li>
-<li><strong>SVM</strong></li>
-<li><strong>ANN</strong> - Back Propogation, CNN</li>
-</ol>
-</li>
-<li>And then on to Ensemble based algorithms:<ol>
-<li><strong>Boosting</strong>: Gradient Boosted Trees</li>
-<li><strong>Bagging</strong>: Random Forests</li>
-<li><strong>Blending</strong>: Prediction outputs of different learning algorithms are fed into another learning algorithm.</li>
-</ol>
-</li>
-</ol>
-<h2>7. <strong>Clustering Methods. </strong>For unsupervised learning.</h2>
-<ol>
-<li><strong>k-Means</strong></li>
-<li><strong>k-Medians</strong></li>
-<li><strong>Expectation Maximisation (EM)</strong></li>
-<li><strong>Hierarchical Clustering</strong></li>
-</ol>
-<h2>8. <strong>Other algorithms you can learn about:</strong></h2>
-<ol>
-<li><strong>Apriori algorithm </strong>- Association Rule Mining</li>
-<li><strong>Eclat algorithm -</strong> Association Rule Mining</li>
-<li><strong>Item/User Based Similarity -</strong> Recommender Systems</li>
-<li><strong>Reinforcement learning -</strong> Build your own robot.</li>
-<li><strong>Graphical Models</strong></li>
-<li><strong>Bayesian Algorithms</strong></li>
-<li><strong>NLP -</strong> For language based models. Chatbots.</li>
-</ol>
-<p>Hope this has been helpful.....</p></div>
-
-<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=495576.362&subid=0&type=4"><IMG border="0"   alt="Online data science courses to jumpstart your future." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=495576.362&subid=0&type=4&gridnum=16"></a>    <footer>
-<p class="meta">
-  <span class="byline author vcard">
-    Posted by <span class="fn">Rahul Agarwal</span>
-  </span>
-<time datetime="2017-02-05T04:43:00" pubdate>Feb 05, 2017</time>  <span class="categories">
-    <a class="category" href="http://mlwhiz.github.io/tag/statistics.html">statistics</a>
-    <a class="category" href="http://mlwhiz.github.io/tag/data-science.html">data science</a>
-  </span>
-  <br>
-  <span style="font-size:14px;color:green">
-  Advertiser Disclosure: All Amazon links are affiliate links, which means I receive compensation for any purchases through them. You do not have to purchase via my links, but you support me if you do.
-  </span>
-</p><div class="sharing">
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mlwhiz.com/blog/2017/02/05/Machine_learning_algorithms_for_data_scientist/" data-via="MLWhiz" data-counturl="mlwhiz.com/blog/2017/02/05/Machine_learning_algorithms_for_data_scientist/" >Tweet</a>
-  <div class="g-plusone" data-size="medium"></div>
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-</div>    </footer>
-  </article>
-
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
-  </section>
-
-</div>
+  <br />
+</div></div>
 <aside class="sidebar">
   <section>
     <h1>Recent Posts</h1>
     <ul id="recent_posts">
       <li class="post">
           <a href="http://mlwhiz.github.io/blog/2017/12/26/How_to_win_a_data_science_competition/">Using XGBoost for time series prediction tasks:</a>
-      </li>
-      <li class="post">
-          <a href="http://mlwhiz.github.io/blog/2017/09/14/discrete_distributions/">The story of every distribution - Discrete Distributions</a>
-      </li>
-      <li class="post">
-          <a href="http://mlwhiz.github.io/blog/2017/09/14/kaggle_tricks/">Good Feature Building Techniques - Tricks for Kaggle - My Kaggle Code Repository</a>
-      </li>
-      <li class="post">
-          <a href="http://mlwhiz.github.io/blog/2017/04/17/deep_learning_pretrained_models/">Today I Learned This Part 2: Pretrained Neural Networks What are they?</a>
-      </li>
-      <li class="post">
-          <a href="http://mlwhiz.github.io/blog/2017/04/16/maths_beats_intuition/">Maths Beats Intuition probably every damn time</a>
-      </li>
-      <li class="post">
-          <a href="http://mlwhiz.github.io/blog/2017/04/09/word_vec_embeddings_examples_understanding/">Today I Learned This Part I: What are word2vec Embeddings?</a>
-      </li>
-      <li class="post">
-          <a href="http://mlwhiz.github.io/blog/2017/03/26/top_data_science_resources_on_the_internet_right_now/">Top Data Science Resources on the Internet right now</a>
-      </li>
-      <li class="post">
-          <a href="http://mlwhiz.github.io/blog/2017/03/23/basics_of_linear_regression/">Basics Of Linear Regression</a>
       </li>
     </ul>
   </section>
@@ -2102,7 +1998,7 @@ jQuery(document).ready(function($) {
   </div>
   <footer role="contentinfo"><p>
   <script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
-    Copyright &copy;  2014-2017  - Rahul Agarwal -
+    Copyright &copy;  2017  - Rahul Agarwal -
   <span class="credit">Powered by <a href="http://getpelican.com">Pelican</a></span>
 </p>  <script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
   </footer>
@@ -2127,9 +2023,6 @@ jQuery(document).ready(function($) {
 </script>
 	<script type="text/javascript">
 	  var disqus_shortname = 'mlwhiz';
-          var disqus_identifier = '/blog/2017/02/05/Machine_learning_algorithms_for_data_scientist/';
-          var disqus_url = 'http://mlwhiz.com/blog/2017/02/05/Machine_learning_algorithms_for_data_scientist/';
-          var disqus_title = 'Machine Learning algorithms for Data Scientists';
 	  (function() {
 	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
 	    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';

@@ -4,10 +4,10 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Machine Learning algorithms for Data Scientists</title>
+  <title>Using XGBoost for time series prediction tasks:</title>
   <meta name="author" content="Rahul Agarwal">
-  <meta name="description" content="Machine Learning algorithms for Data Scientists" >
-  <meta name="keywords" content="data scientist, algorithms" >
+  <meta name="description" content="Recently Kaggle master Kazanova along with some of his friends released a coursera course. The Course involved a final project which itself was a time series prediction problem. Here I will describe how I got a top 10 position as of writing this article." >
+  <meta name="keywords" content="kaggle, competition, mean encoding, kaggle tricks, modelling" >
 
 
   <link href="http://mlwhiz.github.io/atom.xml" type="application/atom+xml" rel="alternate"
@@ -1824,91 +1824,164 @@ jQuery(document).ready(function($) {
   <article class="hentry" role="article">
 
 <header>
-      <h1 class="entry-title">Machine Learning algorithms for Data Scientists</h1>
-      <p class="meta"><time datetime="2017-02-05T04:43:00" pubdate>Feb 05, 2017</time></p>
+      <h1 class="entry-title">Using XGBoost for time series prediction tasks:</h1>
+      <p class="meta"><time datetime="2017-12-26T04:43:00" pubdate>Dec 26, 2017</time></p>
 </header>
 
-  <div class="entry-content"><div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/mlago_fords.png"  height="400" width="600" ></center>
+  <div class="entry-content"><p>Recently Kaggle master Kazanova along with some of his friends released a <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">"How to win a data science competition"</a> Coursera course. The Course involved a final project which itself was a time series prediction problem. Here I will describe how I got a top 10 position as of writing this article.</p>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/lboard.png"  height="800" width="600" ></center>
 </div>
 
-<p>As a data scientist I believe that a lot of work has to be done before Classification/Regression/Clustering methods are applied to the data you get. The data which may be messy, unwieldy and big. So here are the list of algorithms that helps a data scientist to make better models using the data they have:</p>
-<h2>1. Sampling Algorithms. In case you want to work with a sample of data.</h2>
-<ul>
-<li><strong>Simple Random Sampling :</strong><em> Say you want to select a subset of a population in which each member of the subset has an equal probability of being chosen.</em></li>
-<li><strong>Stratified Sampling : </strong>Assume that we need to estimate average number of votes for each candidate in an election. Assume that country has 3 towns : Town A has 1 million factory workers, Town B has 2 million workers and Town C has 3 million retirees. We can choose to get a random sample of size 60 over entire population but there is some chance that the random sample turns out to be not well balanced across these towns and hence is biased causing a significant error in estimation. Instead if we choose to take a random sample of 10, 20 and 30 from Town A, B and C respectively then we can produce a smaller error in estimation for the same total size of sample.</li>
-<li><strong>Reservoir Sampling</strong> :<em> Say you have a stream of items of large and unknown length that we can only iterate over once. Create an algorithm that randomly chooses an item from this stream such that each item is equally likely to be selected.</em></li>
-</ul>
-<h2>2. <strong>Map-Reduce. If you want to work with the whole data</strong>.</h2>
-<p>Can be used for feature creation. For Example: I had a use case where I had a graph of 60 Million customers and 130 Million accounts. Each account was connected to other account if they had the Same SSN or Same Name+DOB+Address. I had to find customer ID’s for each of the accounts. On a single node parsing such a graph took more than 2 days. On a Hadoop cluster of 80 nodes running a<em> Connected Component Algorithm </em>took less than 24 minutes. On Spark it is even faster.</p>
-<h2>3. <strong>Graph Algorithms.</strong></h2>
-<p>Recently I was working on an optimization problem which was focussed on finding shortest distance and routes between two points in a store layout. Routes which don’t pass through different aisles, so we cannot use euclidean distances. We solved this problem by considering turning points in the store layout and the<em> djikstra’s Algorithm.</em></p>
-<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script>
+<div style="color:black; background-color: #E9DAEE;">
 
-<h2>4. <strong>Feature Selection.</strong></h2>
+## Description of the Problem:
+
+In this competition you will work with a challenging time-series dataset consisting of daily sales data, kindly provided by one of the largest Russian software firms - 1C Company.
+
+We are asking you to predict total sales for every product and store in the next month. By solving this competition you will be able to apply and enhance your data science skills.
+</div>
+
+<p>The evaluation metric was RMSE where True target values are clipped into [0,20] range. This target range will be a lot important in understanding the submissions that I will prepare.</p>
+<p>The main thing that I noticed was that the data preparation aspect of this competition was by far the most important thing. I creted a variety of features. Here are the steps I took and the features I created.</p>
+<h2>1. Created a dataframe of all Date_block_num, Store and  Item combinations:</h2>
+<p>This is important because in the months we don't have a data for an item store combination, the machine learning algorithm needs to be specifically told that the sales is zero.</p>
+<pre style="font-size:80%; padding:7px; margin:0em;">
+<code class="python">from itertools import product
+# Create "grid" with columns
+index_cols = ['shop_id', 'item_id', 'date_block_num']
+
+# For every month we create a grid from all shops/items combinations from that month
+grid = []
+for block_num in sales['date_block_num'].unique():
+    cur_shops = sales.loc[sales['date_block_num'] == block_num, 'shop_id'].unique()
+    cur_items = sales.loc[sales['date_block_num'] == block_num, 'item_id'].unique()
+    grid.append(np.array(list(product(*[cur_shops, cur_items, [block_num]])),dtype='int32'))
+grid = pd.DataFrame(np.vstack(grid), columns = index_cols,dtype=np.int32)
+</code></pre>
+
+<h2>2. Cleaned up a little of sales data after some basic EDA:</h2>
+<pre style="font-size:80%; padding:7px; margin:0em;">
+<code class="python">sales = sales[sales.item_price<100000]
+sales = sales[sales.item_cnt_day<=1000]
+</code></pre>
+
+<h2>3. Created Mean Encodings:</h2>
+<pre style="font-size:80%; padding:7px; margin:0em;">
+<code class="python">sales_m = sales.groupby(['date_block_num','shop_id','item_id']).agg({'item_cnt_day': 'sum','item_price': np.mean}).reset_index()
+sales_m = pd.merge(grid,sales_m,on=['date_block_num','shop_id','item_id'],how='left').fillna(0)
+# adding the category id too
+sales_m = pd.merge(sales_m,items,on=['item_id'],how='left')
+
+for type_id in ['item_id','shop_id','item_category_id']:
+    for column_id,aggregator,aggtype in [('item_price',np.mean,'avg'),('item_cnt_day',np.sum,'sum'),('item_cnt_day',np.mean,'avg')]:
+
+        mean_df = sales.groupby([type_id,'date_block_num']).aggregate(aggregator).reset_index()[[column_id,type_id,'date_block_num']]
+        mean_df.columns = [type_id+'_'+aggtype+'_'+column_id,type_id,'date_block_num']
+
+        sales_m = pd.merge(sales_m,mean_df,on=['date_block_num',type_id],how='left')
+</code></pre>
+
+<p>These above lines add the following 9 features :</p>
+<p>'item_id_avg_item_price'
+'item_id_sum_item_cnt_day'
+'item_id_avg_item_cnt_day'
+'shop_id_avg_item_price',
+'shop_id_sum_item_cnt_day'
+'shop_id_avg_item_cnt_day'
+'item_category_id_avg_item_price'
+'item_category_id_sum_item_cnt_day'
+'item_category_id_avg_item_cnt_day'</p>
+<h2>4. Create Lag Features:</h2>
+<p>Next we create lag features with diferent lag periods on the following features:
+'item_id_avg_item_price',
+'item_id_sum_item_cnt_day'
+'item_id_avg_item_cnt_day'
+'shop_id_avg_item_price'
+'shop_id_sum_item_cnt_day'
+'shop_id_avg_item_cnt_day'
+'item_category_id_avg_item_price'
+'item_category_id_sum_item_cnt_day'
+'item_category_id_avg_item_cnt_day'
+'item_cnt_day'</p>
+<pre style="font-size:80%; padding:7px; margin:0em;">
+<code class="python">lag_variables  = list(sales_m.columns[7:])+['item_cnt_day']
+lags = [1 ,2 ,3 ,4, 5, 12]
+for lag in lags:
+    sales_new_df = sales_m.copy()
+    sales_new_df.date_block_num+=lag
+    sales_new_df = sales_new_df[['date_block_num','shop_id','item_id']+lag_variables]
+    sales_new_df.columns = ['date_block_num','shop_id','item_id']+ [lag_feat+'_lag_'+str(lag) for lag_feat in lag_variables]
+    sales_means = pd.merge(sales_means, sales_new_df,on=['date_block_num','shop_id','item_id'] ,how='left')
+</code></pre>
+
+<h2>5. Fill NA with zeros:</h2>
+<pre style="font-size:80%; padding:7px; margin:0em;">
+<code class="python">for feat in sales_means.columns:
+    if 'item_cnt' in feat:
+        sales_means[feat]=sales_means[feat].fillna(0)
+    elif 'item_price' in feat:
+        sales_means[feat]=sales_means[feat].fillna(sales_means[feat].median())
+</code></pre>
+
+<h2>6. Drop the columns that we are not going to use in training:</h2>
+<pre style="font-size:80%; padding:7px; margin:0em;">
+<code class="python">cols_to_drop = lag_variables[:-1] + ['item_name','item_price']
+</code></pre>
+
+<h2>7. Take a recent bit of data only:</h2>
+<pre style="font-size:80%; padding:7px; margin:0em;">
+<code class="python">sales_means = sales_means[sales_means['date_block_num']>12]
+</code></pre>
+
+<h2>8. Split in train and CV :</h2>
+<pre style="font-size:80%; padding:7px; margin:0em;">
+<code class="python">X_train = sales_means[sales_means['date_block_num']<33].drop(cols_to_drop, axis=1)
+X_cv =  sales_means[sales_means['date_block_num']==33].drop(cols_to_drop, axis=1)
+</code></pre>
+
+<h2>9. THE MAGIC SAUCE:</h2>
+<p>In the start I told that the clipping aspect of [0,20] will be important.
+In the next few lines I clipped the days to range[0,40]. You might ask me why 40. An intuitive answer is if I had clipped to range [0,20] there would be very few tree nodes that could give 20 as an answer. While if I increase it to 40 having a 20 becomes much more easier. Please note that We will clip our predictions in the [0,20] range in the end.</p>
+<pre style="font-size:80%; padding:7px; margin:0em;">
+<code class="python">def clip(x):
+    if x>40:
+        return 40
+    elif x<0:
+        return 0
+    else:
+        return x
+train['item_cnt_day'] = train.apply(lambda x: clip(x['item_cnt_day']),axis=1)
+cv['item_cnt_day'] = cv.apply(lambda x: clip(x['item_cnt_day']),axis=1)
+</code></pre>
+
+<h2>10: Modelling:</h2>
 <ul>
-<li><strong>Univariate Selection. </strong>Statistical tests can be used to select those features that have the strongest relationship with the output variable.</li>
-<li><strong>VarianceThreshold.</strong> Feature selector that removes all low-variance features.</li>
-<li><strong>Recursive Feature Elimination.</strong> The goal of recursive feature elimination (RFE) is to select features by recursively considering smaller and smaller sets of features. First, the estimator is trained on the initial set of features and weights are assigned to each one of them. Then, features whose absolute weights are the smallest are pruned from the current set features. That procedure is recursively repeated on the pruned set until the desired number of features to select is eventually reached.</li>
-<li><strong>Feature Importance: </strong>Methods that use ensembles of decision trees (like Random Forest or Extra Trees) can also compute the relative importance of each attribute. These importance values can be used to inform a feature selection process.</li>
+<li>Created a XGBoost model to get the most important features(Top 42 features)</li>
+<li>Use hyperopt to tune xgboost</li>
+<li>Used top 10 models from tuned XGBoosts to generate predictions.</li>
+<li>clipped the predictions to [0,20] range</li>
+<li>Final solution was the average of these 10 predictions.</li>
 </ul>
-<h2>5. <strong>Algorithms to work efficiently.</strong></h2>
-<p>Apart from these above algorithms sometimes you may need to write your own algorithms. Now I think of big algorithms as a combination of small but powerful algorithms. You just need to have idea of these algorithms to make a more better/efficient product. So some of these powerful algorithms which can help you are:
-- <strong>Recursive Algorithms: </strong>Binary search algorithm.
-- <strong>Divide and Conquer Algorithms:</strong> Merge-Sort.
-- <strong>Dynamic Programming: </strong>Solving a complex problem by breaking it down into a collection of simpler subproblems, solving each of those subproblems just once, and storing their solutions.</p>
-<h2>6. <strong>Classification/Regression Algorithms.</strong> The usual suspects. Minimum you must know:</h2>
-<ol>
-<li><strong>Linear Regression -</strong> Ridge Regression, Lasso Regression, ElasticNet</li>
-<li><strong>Logistic Regression</strong></li>
-<li>From there you can build upon:<ol>
-<li><strong>Decision Trees -</strong> ID3, CART, C4.5, C5.0</li>
-<li><strong>KNN</strong></li>
-<li><strong>SVM</strong></li>
-<li><strong>ANN</strong> - Back Propogation, CNN</li>
-</ol>
-</li>
-<li>And then on to Ensemble based algorithms:<ol>
-<li><strong>Boosting</strong>: Gradient Boosted Trees</li>
-<li><strong>Bagging</strong>: Random Forests</li>
-<li><strong>Blending</strong>: Prediction outputs of different learning algorithms are fed into another learning algorithm.</li>
-</ol>
-</li>
-</ol>
-<h2>7. <strong>Clustering Methods. </strong>For unsupervised learning.</h2>
-<ol>
-<li><strong>k-Means</strong></li>
-<li><strong>k-Medians</strong></li>
-<li><strong>Expectation Maximisation (EM)</strong></li>
-<li><strong>Hierarchical Clustering</strong></li>
-</ol>
-<h2>8. <strong>Other algorithms you can learn about:</strong></h2>
-<ol>
-<li><strong>Apriori algorithm </strong>- Association Rule Mining</li>
-<li><strong>Eclat algorithm -</strong> Association Rule Mining</li>
-<li><strong>Item/User Based Similarity -</strong> Recommender Systems</li>
-<li><strong>Reinforcement learning -</strong> Build your own robot.</li>
-<li><strong>Graphical Models</strong></li>
-<li><strong>Bayesian Algorithms</strong></li>
-<li><strong>NLP -</strong> For language based models. Chatbots.</li>
-</ol>
-<p>Hope this has been helpful.....</p></div>
+<p>Learned a lot of new things from this <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">awesome course</a>. Most recommended.</p></div>
 
 <a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=495576.362&subid=0&type=4"><IMG border="0"   alt="Online data science courses to jumpstart your future." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=495576.362&subid=0&type=4&gridnum=16"></a>    <footer>
 <p class="meta">
   <span class="byline author vcard">
     Posted by <span class="fn">Rahul Agarwal</span>
   </span>
-<time datetime="2017-02-05T04:43:00" pubdate>Feb 05, 2017</time>  <span class="categories">
-    <a class="category" href="http://mlwhiz.github.io/tag/statistics.html">statistics</a>
-    <a class="category" href="http://mlwhiz.github.io/tag/data-science.html">data science</a>
+<time datetime="2017-12-26T04:43:00" pubdate>Dec 26, 2017</time>  <span class="categories">
+    <a class="category" href="http://mlwhiz.github.io/tag/python.html">Python</a>
+    <a class="category" href="http://mlwhiz.github.io/tag/nlp.html">NLP</a>
+    <a class="category" href="http://mlwhiz.github.io/tag/algorithms.html">Algorithms</a>
+    <a class="category" href="http://mlwhiz.github.io/tag/kaggle.html">Kaggle</a>
   </span>
   <br>
   <span style="font-size:14px;color:green">
   Advertiser Disclosure: All Amazon links are affiliate links, which means I receive compensation for any purchases through them. You do not have to purchase via my links, but you support me if you do.
   </span>
 </p><div class="sharing">
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mlwhiz.com/blog/2017/02/05/Machine_learning_algorithms_for_data_scientist/" data-via="MLWhiz" data-counturl="mlwhiz.com/blog/2017/02/05/Machine_learning_algorithms_for_data_scientist/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mlwhiz.com/blog/2017/12/26/How_to_win_a_data_science_competition/" data-via="MLWhiz" data-counturl="mlwhiz.com/blog/2017/12/26/How_to_win_a_data_science_competition/" >Tweet</a>
   <div class="g-plusone" data-size="medium"></div>
     <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
 </div>    </footer>
@@ -2127,9 +2200,9 @@ jQuery(document).ready(function($) {
 </script>
 	<script type="text/javascript">
 	  var disqus_shortname = 'mlwhiz';
-          var disqus_identifier = '/blog/2017/02/05/Machine_learning_algorithms_for_data_scientist/';
-          var disqus_url = 'http://mlwhiz.com/blog/2017/02/05/Machine_learning_algorithms_for_data_scientist/';
-          var disqus_title = 'Machine Learning algorithms for Data Scientists';
+          var disqus_identifier = '/blog/2017/12/26/How_to_win_a_data_science_competition/';
+          var disqus_url = 'http://mlwhiz.com/blog/2017/12/26/How_to_win_a_data_science_competition/';
+          var disqus_title = 'Using XGBoost for time series prediction tasks:';
 	  (function() {
 	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
 	    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
