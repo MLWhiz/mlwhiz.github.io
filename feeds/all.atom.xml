@@ -4,15 +4,9 @@
 &lt;center&gt;&lt;img src="/images/lboard.png"  height="800" width="600" &gt;&lt;/center&gt;
 &lt;/div&gt;
 
-&lt;div style="color:black; background-color: #E9DAEE;"&gt;
-
-## Description of the Problem:
-
-In this competition you will work with a challenging time-series dataset consisting of daily sales data, kindly provided by one of the largest Russian software firms - 1C Company.
-
-We are asking you to predict total sales for every product and store in the next month. By solving this competition you will be able to apply and enhance your data science skills.
-&lt;/div&gt;
-
+&lt;h2&gt;Description of the Problem:&lt;/h2&gt;
+&lt;p&gt;In this competition we were given a challenging time-series dataset consisting of daily sales data, kindly provided by one of the largest Russian software firms - 1C Company.&lt;/p&gt;
+&lt;p&gt;We were asked you to predict total sales for every product and store in the next month.&lt;/p&gt;
 &lt;p&gt;The evaluation metric was RMSE where True target values are clipped into [0,20] range. This target range will be a lot important in understanding the submissions that I will prepare.&lt;/p&gt;
 &lt;p&gt;The main thing that I noticed was that the data preparation aspect of this competition was by far the most important thing. I creted a variety of features. Here are the steps I took and the features I created.&lt;/p&gt;
 &lt;h2&gt;1. Created a dataframe of all Date_block_num, Store and  Item combinations:&lt;/h2&gt;
@@ -31,12 +25,14 @@ for block_num in sales['date_block_num'].unique():
 grid = pd.DataFrame(np.vstack(grid), columns = index_cols,dtype=np.int32)
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;h2&gt;2. Cleaned up a little of sales data after some basic EDA:&lt;/h2&gt;
 &lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
 &lt;code class="python"&gt;sales = sales[sales.item_price&lt;100000]
 sales = sales[sales.item_cnt_day&lt;=1000]
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;h2&gt;3. Created Mean Encodings:&lt;/h2&gt;
 &lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
 &lt;code class="python"&gt;sales_m = sales.groupby(['date_block_num','shop_id','item_id']).agg({'item_cnt_day': 'sum','item_price': np.mean}).reset_index()
@@ -53,28 +49,33 @@ for type_id in ['item_id','shop_id','item_category_id']:
         sales_m = pd.merge(sales_m,mean_df,on=['date_block_num',type_id],how='left')
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;These above lines add the following 9 features :&lt;/p&gt;
-&lt;p&gt;'item_id_avg_item_price'
-'item_id_sum_item_cnt_day'
-'item_id_avg_item_cnt_day'
-'shop_id_avg_item_price',
-'shop_id_sum_item_cnt_day'
-'shop_id_avg_item_cnt_day'
-'item_category_id_avg_item_price'
-'item_category_id_sum_item_cnt_day'
-'item_category_id_avg_item_cnt_day'&lt;/p&gt;
+&lt;p&gt;&lt;br&gt;
+These above lines add the following 9 features :&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;'item_id_avg_item_price'&lt;/li&gt;
+&lt;li&gt;'item_id_sum_item_cnt_day'&lt;/li&gt;
+&lt;li&gt;'item_id_avg_item_cnt_day'&lt;/li&gt;
+&lt;li&gt;'shop_id_avg_item_price',&lt;/li&gt;
+&lt;li&gt;'shop_id_sum_item_cnt_day'&lt;/li&gt;
+&lt;li&gt;'shop_id_avg_item_cnt_day'&lt;/li&gt;
+&lt;li&gt;'item_category_id_avg_item_price'&lt;/li&gt;
+&lt;li&gt;'item_category_id_sum_item_cnt_day'&lt;/li&gt;
+&lt;li&gt;'item_category_id_avg_item_cnt_day'&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2&gt;4. Create Lag Features:&lt;/h2&gt;
-&lt;p&gt;Next we create lag features with diferent lag periods on the following features:
-'item_id_avg_item_price',
-'item_id_sum_item_cnt_day'
-'item_id_avg_item_cnt_day'
-'shop_id_avg_item_price'
-'shop_id_sum_item_cnt_day'
-'shop_id_avg_item_cnt_day'
-'item_category_id_avg_item_price'
-'item_category_id_sum_item_cnt_day'
-'item_category_id_avg_item_cnt_day'
-'item_cnt_day'&lt;/p&gt;
+&lt;p&gt;Next we create lag features with diferent lag periods on the following features:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;'item_id_avg_item_price',&lt;/li&gt;
+&lt;li&gt;'item_id_sum_item_cnt_day'&lt;/li&gt;
+&lt;li&gt;'item_id_avg_item_cnt_day'&lt;/li&gt;
+&lt;li&gt;'shop_id_avg_item_price'&lt;/li&gt;
+&lt;li&gt;'shop_id_sum_item_cnt_day'&lt;/li&gt;
+&lt;li&gt;'shop_id_avg_item_cnt_day'&lt;/li&gt;
+&lt;li&gt;'item_category_id_avg_item_price'&lt;/li&gt;
+&lt;li&gt;'item_category_id_sum_item_cnt_day'&lt;/li&gt;
+&lt;li&gt;'item_category_id_avg_item_cnt_day'&lt;/li&gt;
+&lt;li&gt;'item_cnt_day'&lt;/li&gt;
+&lt;/ul&gt;
 &lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
 &lt;code class="python"&gt;lag_variables  = list(sales_m.columns[7:])+['item_cnt_day']
 lags = [1 ,2 ,3 ,4, 5, 12]
@@ -86,6 +87,7 @@ for lag in lags:
     sales_means = pd.merge(sales_means, sales_new_df,on=['date_block_num','shop_id','item_id'] ,how='left')
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;h2&gt;5. Fill NA with zeros:&lt;/h2&gt;
 &lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
 &lt;code class="python"&gt;for feat in sales_means.columns:
@@ -95,22 +97,26 @@ for lag in lags:
         sales_means[feat]=sales_means[feat].fillna(sales_means[feat].median())
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;h2&gt;6. Drop the columns that we are not going to use in training:&lt;/h2&gt;
 &lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
 &lt;code class="python"&gt;cols_to_drop = lag_variables[:-1] + ['item_name','item_price']
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;h2&gt;7. Take a recent bit of data only:&lt;/h2&gt;
 &lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
 &lt;code class="python"&gt;sales_means = sales_means[sales_means['date_block_num']&gt;12]
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;h2&gt;8. Split in train and CV :&lt;/h2&gt;
 &lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
 &lt;code class="python"&gt;X_train = sales_means[sales_means['date_block_num']&lt;33].drop(cols_to_drop, axis=1)
 X_cv =  sales_means[sales_means['date_block_num']==33].drop(cols_to_drop, axis=1)
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;h2&gt;9. THE MAGIC SAUCE:&lt;/h2&gt;
 &lt;p&gt;In the start I told that the clipping aspect of [0,20] will be important.
 In the next few lines I clipped the days to range[0,40]. You might ask me why 40. An intuitive answer is if I had clipped to range [0,20] there would be very few tree nodes that could give 20 as an answer. While if I increase it to 40 having a 20 becomes much more easier. Please note that We will clip our predictions in the [0,20] range in the end.&lt;/p&gt;
@@ -126,6 +132,7 @@ train['item_cnt_day'] = train.apply(lambda x: clip(x['item_cnt_day']),axis=1)
 cv['item_cnt_day'] = cv.apply(lambda x: clip(x['item_cnt_day']),axis=1)
 &lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
 &lt;h2&gt;10: Modelling:&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;Created a XGBoost model to get the most important features(Top 42 features)&lt;/li&gt;
