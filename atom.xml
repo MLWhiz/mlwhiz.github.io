@@ -1,5 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>mlwhiz</title><link href="http://mlwhiz.github.io/" rel="alternate"></link><link href="http://mlwhiz.github.io/atom.xml" rel="self"></link><id>http://mlwhiz.github.io/</id><updated>2017-12-26T04:43:00-02:00</updated><entry><title>Using XGBoost for time series prediction tasks</title><link href="http://mlwhiz.github.io/blog/2017/12/26/How_to_win_a_data_science_competition/" rel="alternate"></link><updated>2017-12-26T04:43:00-02:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2017-12-26:blog/2017/12/26/How_to_win_a_data_science_competition/</id><summary type="html">&lt;p&gt;Recently Kaggle master Kazanova along with some of his friends released a &lt;a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;"How to win a data science competition"&lt;/a&gt; Coursera course. The Course involved a final project which itself was a time series prediction problem. Here I will describe how I got a top 10 position as of writing this article.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>mlwhiz</title><link href="http://mlwhiz.github.io/" rel="alternate"></link><link href="http://mlwhiz.github.io/atom.xml" rel="self"></link><id>http://mlwhiz.github.io/</id><updated>2017-12-28T04:43:00-02:00</updated><entry><title>Today I Learned This Part 2: Pretrained Neural Networks What are they?</title><link href="http://mlwhiz.github.io/blog/2017/12/28/hyperopt_tuning_ml_model/" rel="alternate"></link><updated>2017-12-28T04:43:00-02:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2017-12-28:blog/2017/12/28/hyperopt_tuning_ml_model/</id><summary type="html">&lt;p&gt;Recently I was working on a in-class competition from the &lt;a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;"How to win a data science competition"&lt;/a&gt; Coursera course. Learned a lot of new things from that about using &lt;a href="http://mlwhiz.com/blog/2017/12/26/How_to_win_a_data_science_competition/"&gt;XGBoost for time series prediction&lt;/a&gt; tasks.&lt;/p&gt;
+&lt;p&gt;The one thing that I tired out in this competition was the Hyperopt package - A bayesian Parameter Tuning Framework. And I was literally amazed. Left the machine with hyperopt in the night. And in the morning I had my results. It was really awesome and I did avoid a lot of hit and trial.&lt;/p&gt;
+&lt;h2&gt;What really is Hyperopt?&lt;/h2&gt;
+&lt;p&gt;From the site:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Hyperopt is a Python library for serial and parallel optimization over awkward search spaces, which may include real-valued, discrete, and conditional dimensions.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;What the above means is that it is a optimizer that could minimize/maximize the loss function/accuracy(or whatever metric) for you.&lt;/p&gt;
+&lt;p&gt;All of us are fairly known to cross-grid search or random-grid search. Hyperopt takes as an input a space of hyperparams in which it will search, and moves according to the result of past trials.&lt;/p&gt;
+&lt;p&gt;To know more about how it does this, take a look at this &lt;a href="https://conference.scipy.org/proceedings/scipy2013/pdfs/bergstra_hyperopt.pdf"&gt;paper&lt;/a&gt; by J Bergstra.
+Here is the &lt;a href="https://github.com/hyperopt/hyperopt/wiki/FMin"&gt;documentation&lt;/a&gt; from github.&lt;/p&gt;
+&lt;h2&gt;How?&lt;/h2&gt;
+&lt;p&gt;Let me just put the code first. This is how I define the objective function. The objective function takes space(the hyperparam space) as the input and returns the loss(The thing you want to minimize.Or negative of the thing you want to maximize)&lt;/p&gt;
+&lt;p&gt;(X,y) and (Xcv,ycv) are the train and cross validation dataframes respectively.&lt;/p&gt;
+&lt;p&gt;We have defined a hyperparam space by using the variable &lt;code&gt;space&lt;/code&gt; which is actually just a dictionary. We could choose different distributions for different parameter values.&lt;/p&gt;
+&lt;p&gt;We use the &lt;code&gt;fmin&lt;/code&gt; function from the hyperopt package to minimize our &lt;code&gt;fn&lt;/code&gt; through the &lt;code&gt;space&lt;/code&gt;.&lt;/p&gt;
+&lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;from sklearn.metrics import mean_squared_error
+import xgboost as xgb
+from hyperopt import hp, fmin, tpe, STATUS_OK, Trials
+import numpy as np
+
+def objective(space):
+    print(space)
+    clf = xgb.XGBRegressor(n_estimators =1000,colsample_bytree=space['colsample_bytree'],
+                           learning_rate = .3,
+                            max_depth = int(space['max_depth']),
+                            min_child_weight = space['min_child_weight'],
+                            subsample = space['subsample'],
+                           gamma = space['gamma'],
+                           reg_lambda = space['reg_lambda'],)
+
+    eval_set  = [( X, y), ( Xcv, ycv)]
+
+    clf.fit(X, y,
+            eval_set=eval_set, eval_metric="rmse",
+            early_stopping_rounds=10,verbose=False)
+
+    pred = clf.predict(Xcv)
+    mse_scr = mean_squared_error(ycv, pred)
+    print "SCORE:", np.sqrt(mse_scr)
+    #change the metric if you like
+    return {'loss':mse_scr, 'status': STATUS_OK }
+
+
+space ={'max_depth': hp.quniform("x_max_depth", 4, 16, 1),
+        'min_child_weight': hp.quniform ('x_min_child', 1, 10, 1),
+        'subsample': hp.uniform ('x_subsample', 0.7, 1),
+        'gamma' : hp.uniform ('x_gamma', 0.1,0.5),
+        'colsample_bytree' : hp.uniform ('x_colsample_bytree', 0.7,1),
+        'reg_lambda' : hp.uniform ('x_reg_lambda', 0,1)
+    }
+
+
+trials = Trials()
+best = fmin(fn=objective,
+            space=space,
+            algo=tpe.suggest,
+            max_evals=100,
+            trials=trials)
+
+print best
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;h2&gt;Finally:&lt;/h2&gt;
+&lt;p&gt;Running the above gives us pretty good hyperparams for our learning algorithm.&lt;/p&gt;
+&lt;p&gt;In fact I bagged up the results from multiple hyperparam settings and it gave me the best score on the LB.&lt;/p&gt;
+&lt;p&gt;If you like this and would like to get more information about such things, subscribe to the mailing list on the right hand side.&lt;/p&gt;
+&lt;p&gt;Also I would definitely recommend this &lt;a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;course&lt;/a&gt; about winning Kaggle competitions by Kazanova, Kaggle rank 3 . Do take a look.&lt;/p&gt;</summary><category term="machine learning"></category><category term="hyperparameter tuning"></category><category term="bayesian optimization"></category></entry><entry><title>Using XGBoost for time series prediction tasks</title><link href="http://mlwhiz.github.io/blog/2017/12/26/How_to_win_a_data_science_competition/" rel="alternate"></link><updated>2017-12-26T04:43:00-02:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2017-12-26:blog/2017/12/26/How_to_win_a_data_science_competition/</id><summary type="html">&lt;p&gt;Recently Kaggle master Kazanova along with some of his friends released a &lt;a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;"How to win a data science competition"&lt;/a&gt; Coursera course. The Course involved a final project which itself was a time series prediction problem. Here I will describe how I got a top 10 position as of writing this article.&lt;/p&gt;
 &lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
 &lt;center&gt;&lt;img src="/images/lboard.png"  height="800" width="600" &gt;&lt;/center&gt;
 &lt;/div&gt;

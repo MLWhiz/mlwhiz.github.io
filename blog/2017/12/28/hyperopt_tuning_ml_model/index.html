@@ -4,10 +4,10 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>mlwhiz - expected value</title>
+  <title>Today I Learned This Part 2: Pretrained Neural Networks What are they?</title>
   <meta name="author" content="Rahul Agarwal">
-  <meta name="description" content="A Data Science Learning Resource to learn about AI, Deep Learning, NLP" >
-  <meta name="keywords" content="python,data science,machine learning, analytics, big data, bigdata, maths, shell, bash, awk, hadoop, spark, statistics" >
+  <meta name="description" content="Learn about Hyperopt, A bayesian Parameter Tuning Framework." >
+  <meta name="keywords" content="kaggle competition, how to win, hyperopt, machine learning, hyperparameter tuning, bayesian optimization, fast" >
 
 
   <link href="http://mlwhiz.github.io/atom.xml" type="application/atom+xml" rel="alternate"
@@ -1819,30 +1819,142 @@ jQuery(document).ready(function($) {
 </ul></nav>
   <div id="main">
     <div id="content">
-<div class="blog-index">
-  		<article>
+
+<div>
+  <article class="hentry" role="article">
+
 <header>
-      <h1 class="entry-title">
-        <a href="http://mlwhiz.github.io/blog/2017/09/14/discrete_distributions/">The story of every distribution - Discrete Distributions</a>
-      </h1>
-      <p class="meta"><time datetime="2017-09-14T04:43:00" pubdate>Sep 14, 2017</time></p>
+      <h1 class="entry-title">Today I Learned This Part 2: Pretrained Neural Networks What are they?</h1>
+      <p class="meta"><time datetime="2017-12-28T04:43:00" pubdate>Dec 28, 2017</time></p>
 </header>
 
-  <div class="entry-content"><p>Distributions play an important role in the life of every Statistician. I coming from a non-statistic background am not so well versed in these and keep forgetting about the properties of these famous distributions. That is why I chose to write my own understanding in an intuitive way to keep ...</p></div>
-  <footer>
-    <a rel="full-article" href="http://mlwhiz.github.io/blog/2017/09/14/discrete_distributions/">Read On &crarr;</a>
-  </footer>
-  		</article>
-<div class="pagination">
+  <div class="entry-content"><p>Recently I was working on a in-class competition from the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">"How to win a data science competition"</a> Coursera course. Learned a lot of new things from that about using <a href="http://mlwhiz.com/blog/2017/12/26/How_to_win_a_data_science_competition/">XGBoost for time series prediction</a> tasks.</p>
+<p>The one thing that I tired out in this competition was the Hyperopt package - A bayesian Parameter Tuning Framework. And I was literally amazed. Left the machine with hyperopt in the night. And in the morning I had my results. It was really awesome and I did avoid a lot of hit and trial.</p>
+<h2>What really is Hyperopt?</h2>
+<p>From the site:</p>
+<blockquote>
+<blockquote>
+<p>Hyperopt is a Python library for serial and parallel optimization over awkward search spaces, which may include real-valued, discrete, and conditional dimensions.</p>
+</blockquote>
+</blockquote>
+<p>What the above means is that it is a optimizer that could minimize/maximize the loss function/accuracy(or whatever metric) for you.</p>
+<p>All of us are fairly known to cross-grid search or random-grid search. Hyperopt takes as an input a space of hyperparams in which it will search, and moves according to the result of past trials.</p>
+<p>To know more about how it does this, take a look at this <a href="https://conference.scipy.org/proceedings/scipy2013/pdfs/bergstra_hyperopt.pdf">paper</a> by J Bergstra.
+Here is the <a href="https://github.com/hyperopt/hyperopt/wiki/FMin">documentation</a> from github.</p>
+<h2>How?</h2>
+<p>Let me just put the code first. This is how I define the objective function. The objective function takes space(the hyperparam space) as the input and returns the loss(The thing you want to minimize.Or negative of the thing you want to maximize)</p>
+<p>(X,y) and (Xcv,ycv) are the train and cross validation dataframes respectively.</p>
+<p>We have defined a hyperparam space by using the variable <code>space</code> which is actually just a dictionary. We could choose different distributions for different parameter values.</p>
+<p>We use the <code>fmin</code> function from the hyperopt package to minimize our <code>fn</code> through the <code>space</code>.</p>
+<pre style="font-size:80%; padding:7px; margin:0em;">
+<code class="python">from sklearn.metrics import mean_squared_error
+import xgboost as xgb
+from hyperopt import hp, fmin, tpe, STATUS_OK, Trials
+import numpy as np
 
-  <br />
-</div></div>
+def objective(space):
+    print(space)
+    clf = xgb.XGBRegressor(n_estimators =1000,colsample_bytree=space['colsample_bytree'],
+                           learning_rate = .3,
+                            max_depth = int(space['max_depth']),
+                            min_child_weight = space['min_child_weight'],
+                            subsample = space['subsample'],
+                           gamma = space['gamma'],
+                           reg_lambda = space['reg_lambda'],)
+
+    eval_set  = [( X, y), ( Xcv, ycv)]
+
+    clf.fit(X, y,
+            eval_set=eval_set, eval_metric="rmse",
+            early_stopping_rounds=10,verbose=False)
+
+    pred = clf.predict(Xcv)
+    mse_scr = mean_squared_error(ycv, pred)
+    print "SCORE:", np.sqrt(mse_scr)
+    #change the metric if you like
+    return {'loss':mse_scr, 'status': STATUS_OK }
+
+
+space ={'max_depth': hp.quniform("x_max_depth", 4, 16, 1),
+        'min_child_weight': hp.quniform ('x_min_child', 1, 10, 1),
+        'subsample': hp.uniform ('x_subsample', 0.7, 1),
+        'gamma' : hp.uniform ('x_gamma', 0.1,0.5),
+        'colsample_bytree' : hp.uniform ('x_colsample_bytree', 0.7,1),
+        'reg_lambda' : hp.uniform ('x_reg_lambda', 0,1)
+    }
+
+
+trials = Trials()
+best = fmin(fn=objective,
+            space=space,
+            algo=tpe.suggest,
+            max_evals=100,
+            trials=trials)
+
+print best
+</code></pre>
+
+<p><br></p>
+<h2>Finally:</h2>
+<p>Running the above gives us pretty good hyperparams for our learning algorithm.</p>
+<p>In fact I bagged up the results from multiple hyperparam settings and it gave me the best score on the LB.</p>
+<p>If you like this and would like to get more information about such things, subscribe to the mailing list on the right hand side.</p>
+<p>Also I would definitely recommend this <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">course</a> about winning Kaggle competitions by Kazanova, Kaggle rank 3 . Do take a look.</p></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=495576.362&subid=0&type=4"><IMG border="0"   alt="Online data science courses to jumpstart your future." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=495576.362&subid=0&type=4&gridnum=16"></a>    <footer>
+<p class="meta">
+  <span class="byline author vcard">
+    Posted by <span class="fn">Rahul Agarwal</span>
+  </span>
+<time datetime="2017-12-28T04:43:00" pubdate>Dec 28, 2017</time>  <span class="categories">
+    <a class="category" href="http://mlwhiz.github.io/tag/machine-learning.html">machine learning</a>
+    <a class="category" href="http://mlwhiz.github.io/tag/hyperparameter-tuning.html">hyperparameter tuning</a>
+    <a class="category" href="http://mlwhiz.github.io/tag/bayesian-optimization.html">bayesian optimization</a>
+  </span>
+  <br>
+  <span style="font-size:14px;color:green">
+  Advertiser Disclosure: All Amazon links are affiliate links, which means I receive compensation for any purchases through them. You do not have to purchase via my links, but you support me if you do.
+  </span>
+</p><div class="sharing">
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mlwhiz.com/blog/2017/12/28/hyperopt_tuning_ml_model/" data-via="MLWhiz" data-counturl="mlwhiz.com/blog/2017/12/28/hyperopt_tuning_ml_model/" >Tweet</a>
+  <div class="g-plusone" data-size="medium"></div>
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+</div>    </footer>
+  </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
+  </section>
+
+</div>
 <aside class="sidebar">
   <section>
     <h1>Recent Posts</h1>
     <ul id="recent_posts">
       <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/12/28/hyperopt_tuning_ml_model/">Today I Learned This Part 2: Pretrained Neural Networks What are they?</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/12/26/How_to_win_a_data_science_competition/">Using XGBoost for time series prediction tasks</a>
+      </li>
+      <li class="post">
           <a href="http://mlwhiz.github.io/blog/2017/09/14/discrete_distributions/">The story of every distribution - Discrete Distributions</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/09/14/kaggle_tricks/">Good Feature Building Techniques - Tricks for Kaggle - My Kaggle Code Repository</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/04/17/deep_learning_pretrained_models/">Today I Learned This Part 2: Pretrained Neural Networks What are they?</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/04/16/maths_beats_intuition/">Maths Beats Intuition probably every damn time</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/04/09/word_vec_embeddings_examples_understanding/">Today I Learned This Part I: What are word2vec Embeddings?</a>
+      </li>
+      <li class="post">
+          <a href="http://mlwhiz.github.io/blog/2017/03/26/top_data_science_resources_on_the_internet_right_now/">Top Data Science Resources on the Internet right now</a>
       </li>
     </ul>
   </section>
@@ -1999,7 +2111,7 @@ jQuery(document).ready(function($) {
   </div>
   <footer role="contentinfo"><p>
   <script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
-    Copyright &copy;  2017  - Rahul Agarwal -
+    Copyright &copy;  2014-2017  - Rahul Agarwal -
   <span class="credit">Powered by <a href="http://getpelican.com">Pelican</a></span>
 </p>  <script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
   </footer>
@@ -2024,6 +2136,9 @@ jQuery(document).ready(function($) {
 </script>
 	<script type="text/javascript">
 	  var disqus_shortname = 'mlwhiz';
+          var disqus_identifier = '/blog/2017/12/28/hyperopt_tuning_ml_model/';
+          var disqus_url = 'http://mlwhiz.com/blog/2017/12/28/hyperopt_tuning_ml_model/';
+          var disqus_title = 'Today I Learned This Part 2: Pretrained Neural Networks What are they?';
 	  (function() {
 	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
 	    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
