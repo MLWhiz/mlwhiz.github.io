@@ -4,10 +4,10 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Hadoop Mapreduce Streaming Tricks and Techniques</title>
+  <title>Multi-input Transfer Learning Model - One model to rule them all</title>
   <meta name="author" content="Rahul Agarwal">
-  <meta name="description" content="Hadoop Description of hidden techniques that can be used to improve the way you use hadoop." >
-  <meta name="keywords" content="Big Data, Hadoop" >
+  <meta name="description" content="This post particularly provides an advanced way to use pretrained neural nets for classifying images." >
+  <meta name="keywords" content="deeplearning, pretrained models, use pretrained neural nets for classifying images, deep learning, kaggle competition dogs vs cats, neural neworks pretrained" >
 
 
   <link href="http://mlwhiz.github.io/atom.xml" type="application/atom+xml" rel="alternate"
@@ -1824,283 +1824,41 @@ jQuery(document).ready(function($) {
   <article class="hentry" role="article">
 
 <header>
-      <h1 class="entry-title">Hadoop Mapreduce Streaming Tricks and Techniques</h1>
-      <p class="meta"><time datetime="2015-05-09T13:43:00" pubdate>May 09, 2015</time></p>
+      <h1 class="entry-title">Multi-input Transfer Learning Model - One model to rule them all</h1>
+      <p class="meta"><time datetime="2018-09-06T04:43:00" pubdate>Sep 06, 2018</time></p>
 </header>
 
-  <div class="entry-content"><p>
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>I have been using Hadoop a lot now a days and thought about writing some of the novel techniques that a user could use to get the most out of the Hadoop Ecosystem.</p>
-<h3 id="using-shell-scripts-to-run-your-programs">Using Shell Scripts to run your Programs</h3>
-<div style="margin-top: -9px; margin-bottom: -30px;">
-<p><img src="/images/I-love-bash-1024x220.png" ></p>
-</div>
-<p><br> I am not a fan of large bash commands. The ones where you have to specify the whole path of the jar files and the such. <em>You can effectively organize your workflow by using shell scripts.</em> Now Shell scripts are not as formidable as they sound. We wont be doing programming perse using these shell scripts(Though they are pretty good at that too), we will just use them to store commands that we need to use sequentially.</p>
-<p>Below is a sample of the shell script I use to run my Mapreduce Codes.</p>
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<link rel="stylesheet" href="/theme/highlight/styles/default.css">
-<script src="/theme/highlight/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-<pre style="font-size:80%; padding:7px; margin:0em; background-color:#000000;">
-<code class="bash" style="background-color:#000000; color:#FFFFFF">#!/bin/bash
-#Defining program variables
-IP="/data/input"
-OP="/data/output"
-HADOOP_JAR_PATH="/opt/cloudera/parcels/CDH/lib/hadoop-0.20-mapreduce/contrib/streaming/hadoop-streaming-2.0.0-mr1-cdh4.5.0.jar"
-MAPPER="test_m.py"
-REDUCER="test_r.py"
-
-hadoop fs -rmr -skipTrash&nbsp;$OP
-hadoop jar&nbsp;$HADOOP_JAR_PATH \
--file&nbsp;$MAPPER -mapper "python test_m.py" \
--file&nbsp;$REDUCER -reducer "python test_r.py" \
--input&nbsp;$IP -output&nbsp;$OP
-</code></pre>
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-I generally save them as test_s.sh and whenever i need to run them i simply type <code>sh test_s.sh</code>. This helps in three ways.
-<ul>
-<li>
-It helps me to store hadoop commands in a manageable way.
-</li>
-<li>
-It is easy to run the mapreduce code using the shell script.
-</li>
-<li>
-<em><strong>If the code fails, I do not have to manually delete the output directory</strong></em>
-</li>
-</ul>
-<blockquote>
-<em> The simplification of anything is always sensational. <br></em> <small>Gilbert K. Chesterton</small>
-</blockquote>
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="using-distributed-cache-to-provide-mapper-with-a-dictionary">Using Distributed Cache to provide mapper with a dictionary</h3>
-<div style="margin-top: -9px; margin-bottom: -30px;">
-<p><img src="/images/Game-Of-Thrones-Wallpaper-House-Sigils-1.png"></p>
-</div>
-<br> Often times it happens that you want that your Hadoop Mapreduce program is able to access some static file. This static file could be a dictionary, could be parameters for the program or could be anything. What distributed cache does is that it provides this file to all the mapper nodes so that you can use that file in any way across all your mappers. Now this concept although simple would help you to think about Mapreduce in a whole new light. Lets start with an example. Supppose you have to create a sample Mapreduce program that reads a big file containing the information about all the characters in <a href="http://www.hbo.com/game-of-thrones">Game of Thrones</a> stored as <strong><code>&quot;/data/characters/&quot;</code></strong>:
-<div style="width: 50%; margin: 0 auto;">
-<table class="table">
-<thead>
-<tr>
-<th>
-Cust_ID
-</th>
-<th>
-User_Name
-</th>
-<th>
-House
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-1
-</td>
-<td>
-Daenerys Targaryen
-</td>
-<td>
-Targaryen
-</td>
-</tr>
-<tr>
-<td>
-2
-</td>
-<td>
-Tyrion Lannister
-</td>
-<td>
-Lannister
-</td>
-</tr>
-<tr>
-<td>
-3
-</td>
-<td>
-Cersei Lannister
-</td>
-<td>
-Lannister
-</td>
-</tr>
-<tr class="warning">
-<td>
-4
-</td>
-<td>
-Robert Baratheon
-</td>
-<td>
-Baratheon
-</td>
-</tr>
-<tr class="warning">
-<td>
-5
-</td>
-<td>
-Robb Stark
-</td>
-<td>
-Stark
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>But you dont want to use the dead characters in the file for the analysis you want to do. <em>You want to count the number of living characters in Game of Thrones grouped by their House</em>. (I know its easy!!!!!) One thing you could do is include an if statement in your Mapper Code which checks if the persons ID is 4 then exclude it from the mapper and such. But the problem is that you would have to do it again and again for the same analysis as characters die like flies when it comes to George RR Martin.(Also where is the fun in that) So you create a file which contains the Ids of all the dead characters at <strong><code>&quot;/data/dead_characters.txt&quot;</code></strong>:</p>
-<div style="width: 50%; margin: 0 auto;">
-<table class="table">
-<thead>
-<tr>
-<th>
-Died
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-4
-</td>
-</tr>
-<tr>
-<td>
-5
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>Whenever you have to run the analysis you can just add to this file and you wont have to change anything in the code. Also sometimes this file would be long and you would not want to clutter your code with IDs and such.</p>
-<p>So How Would we do it. Let's go in a step by step way around this. We will create a shell script, a mapper script and a reducer script for this task.</p>
-<h5 id="shell-script">1) Shell Script</h5>
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<link rel="stylesheet" href="/theme/highlight/styles/default.css">
-<script src="/theme/highlight/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-<pre style="font-size:80%; padding:7px; margin:0em; background-color:#000000;">
-<code class="bash" style="background-color:#000000; color:#FFFFFF">#!/bin/bash
-#Defining program variables
-DC="/data/dead_characters.txt"
-IP="/data/characters"
-OP="/data/output"
-HADOOP_JAR_PATH="/opt/cloudera/parcels/CDH/lib/hadoop-0.20-mapreduce/contrib/streaming/hadoop-streaming-2.0.0-mr1-cdh4.5.0.jar"
-MAPPER="got_living_m.py"
-REDUCER="got_living_r.py"
-
-hadoop jar&nbsp;$HADOOP_JAR_PATH \
--file&nbsp;$MAPPER -mapper "python got_living_m.py" \
--file&nbsp;$REDUCER -reducer "python got_living_r.py" \
--cacheFile&nbsp;$DC#ref \
--input&nbsp;$IP -output&nbsp;$OP
-</code></pre>
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Note how we use the <code>&quot;-cacheFile&quot;</code> option here. We have specified that we will refer to the file that has been provided in the Distributed cache as <code>#ref</code>.</p>
-<p>Next is our Mapper Script.</p>
-<h5 id="mapper-script">2) Mapper Script</h5>
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<link rel="stylesheet" href="/theme/highlight/styles/default.css">
-<script src="/theme/highlight/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-<pre style="font-size:80%; padding:7px; margin:0em; background-color:#000000;">
-<code class="python" style="background-color:#000000; color:#FFFFFF">import sys
-dead_ids = set()
-
-def read_cache():
-    for line in open('ref'):
-        id = line.strip()
-        dead_ids.add(id)
-
-read_cache()
-
-for line in sys.stdin:
-    rec = line.strip().split("|") # Split using Delimiter "|"
-    id = rec[0]
-    house = rec[2]
-    if id not in dead_ids:
-        print "%s\t%s" % (house,1)
-</code></pre>
-<p>And our Reducer Script.</p>
-<h5 id="reducer-script">3) Reducer Script</h5>
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<link rel="stylesheet" href="/theme/highlight/styles/darkula.css">
-<script src="/theme/highlight/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-<pre style="font-size:80%; padding:7px; margin:0em; background-color:#000000;">
-<code class="python" style="background-color:#000000; color:#FFFFFF">import sys
-current_key = None
-key = None
-count = 0
-
-for line in sys.stdin:
-    line = line.strip()
-    rec = line.split('\t')
-    key = rec[0]    
-    value = int(rec[1])
-    
-    if current_key == key:
-        count += value
-    else:
-        if current_key:
-            print "%s:%s" %(key,str(count))     
-        current_key = key
-        count = value
-
-if current_key == key:
-    print "%s:%s" %(key,str(count)) 
-</code>
-</pre>
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>This was a simple program and the output will be just what you expected and not very exciting. <em><strong>But the Technique itself solves a variety of common problems. You can use it to pass any big dictionary to your Mapreduce Program</strong></em>. Atleast thats what I use this feature mostly for. Hope You liked it. Will try to expand this post with more tricks.</p>
-<p>The codes for this post are posted at github <a href="https://github.com/MLWhiz/Hadoop-Mapreduce-Tricks">here</a>.</p>
-Other Great Learning Resources For Hadoop:
-<ul>
-<li>
-<a href="http://www.google.co.in/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0CB0QFjAA&url=http%3A%2F%2Fwww.michael-noll.com%2Ftutorials%2Fwriting-an-hadoop-mapreduce-program-in-python%2F&ei=8RRVVdP2IMe0uQShsYDYBg&usg=AFQjCNH3DqrlSIG8D-K8jgQWTALic1no5A&sig2=BivwTW6mdJs5c9w9VaSK2Q&bvm=bv.93112503,d.c2E">Michael Noll's Hadoop Mapreduce Tutorial</a>
-</li>
-<li>
-<a href="http://www.google.co.in/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=0CCMQFjAB&url=http%3A%2F%2Fhadoop.apache.org%2Fdocs%2Fr1.2.1%2Fstreaming.html&ei=8RRVVdP2IMe0uQShsYDYBg&usg=AFQjCNEIB4jmqcBs-GepHdn7DRxqTI9zXA&sig2=nYkAnDjjjaum5YVlYuMUJQ&bvm=bv.93112503,d.c2E">Apache's Hadoop Streaming Documentation</a>
-</li>
-</div></p>
-<p>Also I like these books a lot. Must have for a Hadooper....</p>
-<div style="margin-left:1em ; text-align: center;">
-<a target="_blank"  href="https://www.amazon.com/gp/product/1785887211/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1785887211&linkCode=as2&tag=mlwhizcon-20&linkId=a0e7b4f0b2ea4a5146042890e1c04f7e"><img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&MarketPlace=US&ASIN=1785887211&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=_SL250_&tag=mlwhizcon-20" ></a><img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&l=am2&o=1&a=1785887211" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
-</t></t>
-<a target="_blank"  href="https://www.amazon.com/gp/product/1491901632/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1491901632&linkCode=as2&tag=mlwhizcon-20&linkId=4122280e94f7bbd0ceebc9d13e60d103"><img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&MarketPlace=US&ASIN=1491901632&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=_SL250_&tag=mlwhizcon-20" ></a><img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&l=am2&o=1&a=1491901632" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+  <div class="entry-content"><p>So in my day to day I am working on a image classification task. Now I wn't go much into explaining transfer learning here. Those of you that want to understand it can read it at my blog <a href="http://mlwhiz.com/blog/2017/04/17/deep_learning_pretrained_models/">here</a>.</p>
+<p>Anyways this post is intended for folks who understand how transfer learning works and are trying to squeeze out extra bits from the same. Till now we normally do something like this:</p>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/before_ensemble.png"  height="800" width="600" ></center>
 </div>
 
-<p>The first book is a guide for using Hadoop as well as spark with Python. While the second one contains a detailed overview of all the things in Hadoop. Its the definitive guide.</p>
+<p>For example: Lets say you are working for a kaggle competition and you create multiple models for the image classification task using precomputed features from all these different pretrained models. You might then stack these different models or create a mean ensemble out of these models. And really that is a pretty good idea. I myself went with this idea for a lot of stuff not long back.</p>
+<p>Than an epiphany stuck me. Why not let the neural network itself learn the weights while training the additional layers itself. That would be pretty cool. So i tried the same. So, why don't we do this:</p>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/now_lotr.png"  height="800" width="600" ></center>
+</div>
 
-<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script></div>
+<p>In my experiments I have noticed that it works great.</p>
+<p>Why it works? From an understanding point of view, I believe that when we give input from different architectures , the network is able to extract value using interactions between different architectures on its own.</p>
+<p>Code to come in a few days...</p></div>
 
 <a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=495576.362&subid=0&type=4"><IMG border="0"   alt="Online data science courses to jumpstart your future." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=495576.362&subid=0&type=4&gridnum=16"></a>    <footer>
 <p class="meta">
   <span class="byline author vcard">
     Posted by <span class="fn">Rahul Agarwal</span>
   </span>
-<time datetime="2015-05-09T13:43:00" pubdate>May 09, 2015</time>  <span class="categories">
-    <a class="category" href="http://mlwhiz.github.io/tag/hadoop.html">hadoop</a>
-    <a class="category" href="http://mlwhiz.github.io/tag/python.html">python</a>
+<time datetime="2018-09-06T04:43:00" pubdate>Sep 06, 2018</time>  <span class="categories">
+    <a class="category" href="http://mlwhiz.github.io/tag/deeplearning.html">deeplearning</a>
+    <a class="category" href="http://mlwhiz.github.io/tag/pretrained-models.html">pretrained models</a>
   </span>
   <br>
   <span style="font-size:14px;color:green">
   Advertiser Disclosure: All Amazon links are affiliate links, which means I receive compensation for any purchases through them. You do not have to purchase via my links, but you support me if you do.
   </span>
 </p><div class="sharing">
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mlwhiz.com/blog/2015/05/09/Hadoop_Mapreduce_Streaming_Tricks_and_Techniques/" data-via="MLWhiz" data-counturl="mlwhiz.com/blog/2015/05/09/Hadoop_Mapreduce_Streaming_Tricks_and_Techniques/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mlwhiz.com/blog/2018/09/06/multi_input_transfer_learning/" data-via="MLWhiz" data-counturl="mlwhiz.com/blog/2018/09/06/multi_input_transfer_learning/" >Tweet</a>
   <div class="g-plusone" data-size="medium"></div>
     <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
 </div>    </footer>
@@ -2320,9 +2078,9 @@ Other Great Learning Resources For Hadoop:
 </script>
 	<script type="text/javascript">
 	  var disqus_shortname = 'mlwhiz';
-          var disqus_identifier = '/blog/2015/05/09/Hadoop_Mapreduce_Streaming_Tricks_and_Techniques/';
-          var disqus_url = 'http://mlwhiz.com/blog/2015/05/09/Hadoop_Mapreduce_Streaming_Tricks_and_Techniques/';
-          var disqus_title = 'Hadoop Mapreduce Streaming Tricks and Techniques';
+          var disqus_identifier = '/blog/2018/09/06/multi_input_transfer_learning/';
+          var disqus_url = 'http://mlwhiz.com/blog/2018/09/06/multi_input_transfer_learning/';
+          var disqus_title = 'Multi-input Transfer Learning Model - One model to rule them all';
 	  (function() {
 	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
 	    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
