@@ -1841,8 +1841,43 @@ jQuery(document).ready(function($) {
 </div>
 
 <p>In my experiments I have noticed that it works great.</p>
+<h2>Why it works?</h2>
 <p>Why it works? From an understanding point of view, I believe that when we give input from different architectures , the network is able to extract value using interactions between different architectures on its own.</p>
-<p>Code to come in a few days...</p></div>
+<h2>Code:</h2>
+<p>Just the snippets of codes that are necessary:</p>
+<pre style="font-size:80%; padding:7px; margin:0em;">
+<code class="python"># create input Layers for precomputed feats from different pretrained models
+Xception_i = Input(shape=train_precomputed_Xception.shape[1:],  name='Xception')
+ResNet50_i = Input(shape=train_precomputed_ResNet50.shape[1:],  name='ResNet50')
+InceptionV3_i = Input(shape=train_precomputed_InceptionV3.shape[1:],name='InceptionV3')
+InceptionResNetV2_i = Input(shape=train_precomputed_InceptionResNetV2.shape[1:],name='InceptionResNetV2')
+DenseNet201_i = Input(shape=train_precomputed_DenseNet201.shape[1:],  name='DenseNet201')
+DenseNet169_i = Input(shape=train_precomputed_DenseNet169.shape[1:],  name='DenseNet169')
+VGG19_i = Input(shape=train_precomputed_VGG19.shape[1:],  name='VGG19')
+
+# Add additional layers on top of each input layer
+last_layers = [Xception_i,ResNet50_i,InceptionV3_i,InceptionResNetV2_i,DenseNet201_i,DenseNet169_i,VGG19_i]
+last_layers_name = ['Xception_3d','ResNet50_3d','InceptionV3_3d','InceptionResNetV2_3d','DenseNet201_3d','DenseNet169_3d','VGG19_3d']
+new_last_layers = {}
+for i, last_layer in enumerate(last_layers):
+    x = GlobalAveragePooling2D()(last_layer)
+    x = Dense(1024, activation='relu')(x)
+    x = BatchNormalization()(x)
+    x = Dropout(0.5)(x)
+    new_last_layers[last_layers_name[i]] = x
+
+# Concatenate the output of the additional layers
+x = concatenate([new_last_layers['Xception_3d'],new_last_layers['ResNet50_3d'],new_last_layers['InceptionV3_3d'],new_last_layers['InceptionResNetV2_3d'],new_last_layers['DenseNet201_3d'],new_last_layers['DenseNet169_3d'],new_last_layers['VGG19_3d']])
+
+# Add a softmax layer
+main_output = Dense(nb_classes, activation='softmax', name='main_output')(x)
+
+# create the model using Keras Functional API
+model = Model(inputs=[Xception_i,ResNet50_i,InceptionV3_i,InceptionResNetV2_i,DenseNet201_i,DenseNet169_i,VGG19_i], outputs=[main_output])
+
+# compile
+model.compile(optimizer="adam",loss="categorical_crossentropy",metrics =["accuracy"])
+</code></pre></div>
 
 <a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=495576.362&subid=0&type=4"><IMG border="0"   alt="Online data science courses to jumpstart your future." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=495576.362&subid=0&type=4&gridnum=16"></a>    <footer>
 <p class="meta">
