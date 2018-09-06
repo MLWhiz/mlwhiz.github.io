@@ -1832,8 +1832,8 @@ jQuery(document).ready(function($) {
 <center><img src="/images/lotr_rules.png"  height="1000" width="700" ></center>
 </div>
 
-<p>So in my day to day I am working on a image classification task. Now I wn't go much into explaining transfer learning here. Those of you that want to understand it can read it at my blog <a href="http://mlwhiz.com/blog/2017/04/17/deep_learning_pretrained_models/">here</a>.</p>
-<p>Anyways this post is intended for folks who understand how transfer learning works and are trying to squeeze out extra bits from the same. Till now we normally do something like this:</p>
+<p>So in my day to day I am working on a image classification task. Now I won't go much into explaining transfer learning here. Those of you that want to understand it can read it at my blog <a href="http://mlwhiz.com/blog/2017/04/17/deep_learning_pretrained_models/">here</a>.</p>
+<p>Anyways this post is intended for folks who understand how transfer learning works and are trying to squeeze out some extra performance from the same. Till now we normally do something like this:</p>
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/before_ensemble.png"  height="800" width="600" ></center>
 </div>
@@ -1846,9 +1846,9 @@ jQuery(document).ready(function($) {
 
 <p>In my experiments I have noticed that it works great.</p>
 <h2>Why it works?</h2>
-<p>Why it works? From an understanding point of view, I believe that when we give input from different architectures , the network is able to extract value using interactions between different architectures on its own.</p>
+<p>Why it works? This approach might look similar to an ensemble approach, but it is not that exactly since the weights are getting trained on all the layers at once. From an understanding point of view, I believe that when we give input from different architectures , the network is able to extract value using interactions between different architectures on its own.</p>
 <h2>Code:</h2>
-<p>Just the snippets of codes that are necessary:</p>
+<p>Some code to do this:</p>
 <pre style="font-size:80%; padding:7px; margin:0em;">
 <code class="python"># create input Layers for precomputed feats from different pretrained models
 Xception_i = Input(shape=train_precomputed_Xception.shape[1:],  name='Xception')
@@ -1881,7 +1881,14 @@ model = Model(inputs=[Xception_i,ResNet50_i,InceptionV3_i,InceptionResNetV2_i,De
 
 # compile
 model.compile(optimizer="adam",loss="categorical_crossentropy",metrics =["accuracy"])
-</code></pre></div>
+
+# train - Use any callbacks you deem necessary
+model.fit([train_precomputed_Xception,train_precomputed_ResNet50,train_precomputed_InceptionV3,train_precomputed_InceptionResNetV2,train_precomputed_DenseNet201,train_precomputed_DenseNet169,train_precomputed_VGG19], onehot_train_y, batch_size=128, nb_epoch=10, validation_data=([valid_precomputed_Xception,valid_precomputed_ResNet50,valid_precomputed_InceptionV3,valid_precomputed_InceptionResNetV2,valid_precomputed_DenseNet201,valid_precomputed_DenseNet169,valid_precomputed_VGG19] ,onehot_valid_y),shuffle=True)
+
+</code></pre>
+
+<p>And we are done!</p>
+<p>Let me know any other ideas regarding the same. Or how you liked the idea.</p></div>
 
 <a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=495576.362&subid=0&type=4"><IMG border="0"   alt="Online data science courses to jumpstart your future." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=495576.362&subid=0&type=4&gridnum=16"></a>    <footer>
 <p class="meta">

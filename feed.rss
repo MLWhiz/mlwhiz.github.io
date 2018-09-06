@@ -3,8 +3,8 @@
 &lt;center&gt;&lt;img src="/images/lotr_rules.png"  height="1000" width="700" &gt;&lt;/center&gt;
 &lt;/div&gt;
 
-&lt;p&gt;So in my day to day I am working on a image classification task. Now I wn't go much into explaining transfer learning here. Those of you that want to understand it can read it at my blog &lt;a href="http://mlwhiz.com/blog/2017/04/17/deep_learning_pretrained_models/"&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Anyways this post is intended for folks who understand how transfer learning works and are trying to squeeze out extra bits from the same. Till now we normally do something like this:&lt;/p&gt;
+&lt;p&gt;So in my day to day I am working on a image classification task. Now I won't go much into explaining transfer learning here. Those of you that want to understand it can read it at my blog &lt;a href="http://mlwhiz.com/blog/2017/04/17/deep_learning_pretrained_models/"&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Anyways this post is intended for folks who understand how transfer learning works and are trying to squeeze out some extra performance from the same. Till now we normally do something like this:&lt;/p&gt;
 &lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
 &lt;center&gt;&lt;img src="/images/before_ensemble.png"  height="800" width="600" &gt;&lt;/center&gt;
 &lt;/div&gt;
@@ -17,9 +17,9 @@
 
 &lt;p&gt;In my experiments I have noticed that it works great.&lt;/p&gt;
 &lt;h2&gt;Why it works?&lt;/h2&gt;
-&lt;p&gt;Why it works? From an understanding point of view, I believe that when we give input from different architectures , the network is able to extract value using interactions between different architectures on its own.&lt;/p&gt;
+&lt;p&gt;Why it works? This approach might look similar to an ensemble approach, but it is not that exactly since the weights are getting trained on all the layers at once. From an understanding point of view, I believe that when we give input from different architectures , the network is able to extract value using interactions between different architectures on its own.&lt;/p&gt;
 &lt;h2&gt;Code:&lt;/h2&gt;
-&lt;p&gt;Just the snippets of codes that are necessary:&lt;/p&gt;
+&lt;p&gt;Some code to do this:&lt;/p&gt;
 &lt;pre style="font-size:80%; padding:7px; margin:0em;"&gt;
 &lt;code class="python"&gt;# create input Layers for precomputed feats from different pretrained models
 Xception_i = Input(shape=train_precomputed_Xception.shape[1:],  name='Xception')
@@ -52,7 +52,14 @@ model = Model(inputs=[Xception_i,ResNet50_i,InceptionV3_i,InceptionResNetV2_i,De
 
 # compile
 model.compile(optimizer="adam",loss="categorical_crossentropy",metrics =["accuracy"])
-&lt;/code&gt;&lt;/pre&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Rahul Agarwal</dc:creator><pubDate>Thu, 06 Sep 2018 04:43:00 -0300</pubDate><guid>tag:mlwhiz.github.io,2018-09-06:blog/2018/09/06/multi_input_transfer_learning/</guid><category>deeplearning</category><category>pretrained models</category></item><item><title>Hyperopt - A bayesian Parameter Tuning Framework</title><link>http://mlwhiz.github.io/blog/2017/12/28/hyperopt_tuning_ml_model/</link><description>&lt;p&gt;Recently I was working on a in-class competition from the &lt;a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;"How to win a data science competition"&lt;/a&gt; Coursera course. Learned a lot of new things from that about using &lt;a href="http://mlwhiz.com/blog/2017/12/26/How_to_win_a_data_science_competition/"&gt;XGBoost for time series prediction&lt;/a&gt; tasks.&lt;/p&gt;
+
+# train - Use any callbacks you deem necessary
+model.fit([train_precomputed_Xception,train_precomputed_ResNet50,train_precomputed_InceptionV3,train_precomputed_InceptionResNetV2,train_precomputed_DenseNet201,train_precomputed_DenseNet169,train_precomputed_VGG19], onehot_train_y, batch_size=128, nb_epoch=10, validation_data=([valid_precomputed_Xception,valid_precomputed_ResNet50,valid_precomputed_InceptionV3,valid_precomputed_InceptionResNetV2,valid_precomputed_DenseNet201,valid_precomputed_DenseNet169,valid_precomputed_VGG19] ,onehot_valid_y),shuffle=True)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And we are done!&lt;/p&gt;
+&lt;p&gt;Let me know any other ideas regarding the same. Or how you liked the idea.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Rahul Agarwal</dc:creator><pubDate>Thu, 06 Sep 2018 04:43:00 -0300</pubDate><guid>tag:mlwhiz.github.io,2018-09-06:blog/2018/09/06/multi_input_transfer_learning/</guid><category>deeplearning</category><category>pretrained models</category></item><item><title>Hyperopt - A bayesian Parameter Tuning Framework</title><link>http://mlwhiz.github.io/blog/2017/12/28/hyperopt_tuning_ml_model/</link><description>&lt;p&gt;Recently I was working on a in-class competition from the &lt;a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;"How to win a data science competition"&lt;/a&gt; Coursera course. Learned a lot of new things from that about using &lt;a href="http://mlwhiz.com/blog/2017/12/26/How_to_win_a_data_science_competition/"&gt;XGBoost for time series prediction&lt;/a&gt; tasks.&lt;/p&gt;
 &lt;p&gt;The one thing that I tired out in this competition was the Hyperopt package - A bayesian Parameter Tuning Framework. And I was literally amazed. Left the machine with hyperopt in the night. And in the morning I had my results. It was really awesome and I did avoid a lot of hit and trial.&lt;/p&gt;
 &lt;h2&gt;What really is Hyperopt?&lt;/h2&gt;
 &lt;p&gt;From the site:&lt;/p&gt;
