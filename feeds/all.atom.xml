@@ -4,8 +4,9 @@
 &lt;div style="color:black; background-color: #E9DAEE;"&gt;
 ConvNet as fixed feature extractor. Take a ConvNet pretrained on ImageNet, remove the last fully-connected layer (this layer's outputs are the 1000 class scores for a different task like ImageNet), then treat the rest of the ConvNet as a fixed feature extractor for the new dataset. In an AlexNet, this would compute a 4096-D vector for every image that contains the activations of the hidden layer immediately before the classifier. We call these features CNN codes. It is important for performance that these codes are ReLUd (i.e. thresholded at zero) if they were also thresholded during the training of the ConvNet on ImageNet (as is usually the case). Once you extract the 4096-D codes for all images, train a linear classifier (e.g. Linear SVM or Softmax classifier) for the new dataset.
 &lt;/div&gt;
-&lt;br&gt;
-But there are a lot many interesting problems in the Image domain. The one which we are going to focus on today is the Segmentation, Localization and Detection problem.
+&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;As a side note: if you want to know more about convnets and Transfer Learning I would like to recommend this awesome course on &lt;a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;Deep Learning in Computer Vision&lt;/a&gt; in the &lt;a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;Advanced machine learning specialization&lt;/a&gt;. This course talks about various CNN architetures and covers a wide variety of problems in the image domain including detection and segmentation.&lt;/p&gt;
+&lt;p&gt;But there are a lot many interesting problems in the Image domain. The one which we are going to focus on today is the Segmentation, Localization and Detection problem.
 So what are these problems?&lt;/p&gt;
 &lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
 &lt;center&gt;&lt;img src="/images/id1.png"  height="400" width="700" &gt;&lt;/center&gt;
