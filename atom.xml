@@ -1,5 +1,421 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>mlwhiz</title><link href="http://mlwhiz.github.io/" rel="alternate"></link><link href="http://mlwhiz.github.io/atom.xml" rel="self"></link><id>http://mlwhiz.github.io/</id><updated>2018-09-22T04:43:00-03:00</updated><entry><title>Object Detection: An End to End Theoretical Perspective</title><link href="http://mlwhiz.github.io/blog/2018/09/22/object_detection/" rel="alternate"></link><updated>2018-09-22T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2018-09-22:blog/2018/09/22/object_detection/</id><summary type="html">&lt;p&gt;We all know about the image classification problem. Given an image can you find out the class the image belongs to? We can solve any new image classification problem with ConvNets and &lt;a href="https://medium.com/@14prakash/transfer-learning-using-keras-d804b2e04ef8"&gt;Transfer Learning&lt;/a&gt; using pre-trained nets.
+<feed xmlns="http://www.w3.org/2005/Atom"><title>mlwhiz</title><link href="http://mlwhiz.github.io/" rel="alternate"></link><link href="http://mlwhiz.github.io/atom.xml" rel="self"></link><id>http://mlwhiz.github.io/</id><updated>2018-12-07T04:43:00-02:00</updated><entry><title>To all Data Scientists - The one Graph Algorithm you need to know</title><link href="http://mlwhiz.github.io/blog/2018/12/07/connected_components/" rel="alternate"></link><updated>2018-12-07T04:43:00-02:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2018-12-07:blog/2018/12/07/connected_components/</id><summary type="html">&lt;p&gt;Graphs provide us with a very useful data structure. They can help us to find structure within our data. With the advent of Machine learning and big data we need to get as much information as possible about our data. Learning a little bit of graph theory can certainly help us with that. &lt;/p&gt;
+&lt;p&gt;Here is a &lt;a href="https://www.coursera.org/learn/big-data-graph-analytics?ranMID=40328&amp;amp;ranEAID=lVarvwc5BD0&amp;amp;ranSiteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;amp;siteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;Graph Analytics for Big Data course on Coursera by UCSanDiego&lt;/a&gt; which I highly recommend to learn the basics of graph theory.&lt;/p&gt;
+&lt;p&gt;One of the algorithms I am going to focus in the current post is called &lt;strong&gt;Connected Components&lt;/strong&gt;. Why it is important. We all know clustering. &lt;/p&gt;
+&lt;p&gt;&lt;em&gt;You can think of Connected Components in very layman's terms as sort of a hard clustering algorithm which finds clusters/islands in related/connected data. As a concrete example: Say you have data about roads joining any two cities in the world. And you need to find out all the continents in the world and which city they contain.&lt;/em&gt; &lt;/p&gt;
+&lt;p&gt;How will you achieve that? Come on give some thought. &lt;/p&gt;
+&lt;p&gt;To put a &lt;strong&gt;retail perspective&lt;/strong&gt;: Lets say, we have a lot of customers using a lot of accounts. One way in which we can use the Connected components algorithm is to find out distinct families in our dataset. We can assume edges(roads) between CustomerIDs based on same credit card usage, or same address or same mobile number etc. Once we have those connections, we can then run the connected component algorithm on the same to create individual clusters to which we can then assign a family ID. We can use these family IDs to provide personalized recommendations based on a family needs. We can also use this family ID to fuel our classification algorithms by creating grouped features based on family.&lt;/p&gt;
+&lt;p&gt;In &lt;strong&gt;Finance Perspective&lt;/strong&gt;: Another use case would be to capture fraud using these family IDs. If an account has done fraud in past, it is highly probable that the connected accounts are also susceptible to fraud.&lt;/p&gt;
+&lt;p&gt;So enough of use cases. Lets start with a simple graph class written in Python to start up our exploits with code. &lt;/p&gt;
+&lt;p&gt;This post will revolve more around code from here onwards. &lt;/p&gt;
+&lt;pre style="font-size:60%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;""" A Python Class
+A simple Python graph class, demonstrating the essential 
+facts and functionalities of graphs.
+Taken from https://www.python-course.eu/graphs_python.php
+Changed the implementation a little bit to include weighted edges
+"""
+
+class Graph(object):
+    def __init__(self, graph_dict=None):
+        """ initializes a graph object 
+            If no dictionary or None is given, 
+            an empty dictionary will be used
+        """
+        if graph_dict == None:
+            graph_dict = {}
+        self.__graph_dict = graph_dict
+
+    def vertices(self):
+        """ returns the vertices of a graph """
+        return list(self.__graph_dict.keys())
+
+    def edges(self):
+        """ returns the edges of a graph """
+        return self.__generate_edges()
+
+    def add_vertex(self, vertex):
+        """ If the vertex "vertex" is not in 
+            self.__graph_dict, a key "vertex" with an empty
+            dict as a value is added to the dictionary. 
+            Otherwise nothing has to be done. 
+        """
+        if vertex not in self.__graph_dict:
+            self.__graph_dict[vertex] = {}
+
+    def add_edge(self, edge,weight=1):
+        """ assumes that edge is of type set, tuple or list
+        """
+        edge = set(edge)
+        (vertex1, vertex2) = tuple(edge)
+        if vertex1 in self.__graph_dict:
+            self.__graph_dict[vertex1][vertex2] = weight
+        else:
+            self.__graph_dict[vertex1] = {vertex2:weight}
+
+        if vertex2 in self.__graph_dict:
+            self.__graph_dict[vertex2][vertex1] = weight
+        else:
+            self.__graph_dict[vertex2] = {vertex1:weight}
+
+
+    def __generate_edges(self):
+        """ A static method generating the edges of the 
+            graph "graph". Edges are represented as sets 
+            with one (a loop back to the vertex) or two 
+            vertices 
+        """
+        edges = []
+        for vertex in self.__graph_dict:
+            for neighbour,weight in self.__graph_dict[vertex].iteritems():
+                if (neighbour, vertex, weight) not in edges:
+                    edges.append([vertex, neighbour, weight])
+        return edges
+
+    def __str__(self):
+        res = "vertices: "
+        for k in self.__graph_dict:
+            res += str(k) + " "
+        res += "\nedges: "
+        for edge in self.__generate_edges():
+            res += str(edge) + " "
+        return res
+
+    def adj_mat(self):
+        return self.__graph_dict
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;You can certainly play with our new graph class.Here we try to build some graphs.&lt;/p&gt;
+&lt;pre style="font-size:60%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;g = { "a" : {"d":2},
+      "b" : {"c":2},
+      "c" : {"b":5,  "d":3, "e":5}
+    }
+graph = Graph(g)
+print("Vertices of graph:")
+print(graph.vertices())
+print("Edges of graph:")
+print(graph.edges())
+print("Add vertex:")
+graph.add_vertex("z")
+print("Vertices of graph:")
+print(graph.vertices()) 
+print("Add an edge:")
+graph.add_edge({"a","z"})    
+print("Vertices of graph:")
+print(graph.vertices())
+print("Edges of graph:")
+print(graph.edges())
+print('Adding an edge {"x","y"} with new vertices:')
+graph.add_edge({"x","y"})
+print("Vertices of graph:")
+print(graph.vertices())
+print("Edges of graph:")
+print(graph.edges())
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre style="font-family:courier new,monospace; background-color:#f6c6529c; color:#000000"&gt;Vertices of graph:
+['a', 'c', 'b']
+Edges of graph:
+[['a', 'd', 2], ['c', 'b', 5], ['c', 'e', 5], ['c', 'd', 3], ['b', 'c', 2]]
+Add vertex:
+Vertices of graph:
+['a', 'c', 'b', 'z']
+Add an edge:
+Vertices of graph:
+['a', 'c', 'b', 'z']
+Edges of graph:
+[['a', 'z', 1], ['a', 'd', 2], ['c', 'b', 5], ['c', 'e', 5], ['c', 'd', 3], ['b', 'c', 2], ['z', 'a', 1]]
+Adding an edge {"x","y"} with new vertices:
+Vertices of graph:
+['a', 'c', 'b', 'y', 'x', 'z']
+Edges of graph:
+[['a', 'z', 1], ['a', 'd', 2], ['c', 'b', 5], ['c', 'e', 5], ['c', 'd', 3], ['b', 'c', 2], ['y', 'x', 1], ['x', 'y', 1], ['z', 'a', 1]]
+&lt;/pre&gt;
+
+&lt;p&gt;Lets do something interesting now.&lt;/p&gt;
+&lt;p&gt;We will use the above graph class for our understanding purpose. There are many Modules in python which we can use to do whatever I am going to do next,but to understand the methods we will write everything from scratch.
+Lets start with an example graph which we can use for our purpose.&lt;/p&gt;
+&lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
+&lt;center&gt;&lt;img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/MapGermanyGraph.svg/1200px-MapGermanyGraph.svg.png"  height="400" width="700" &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;pre style="font-size:60%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;g = {'Frankfurt': {'Mannheim':85, 'Wurzburg':217, 'Kassel':173},
+     'Mannheim': {'Frankfurt':85, 'Karlsruhe':80},
+     'Karlsruhe': {'Augsburg':250, 'Mannheim':80},
+     'Augsburg': {'Karlsruhe':250, 'Munchen':84},
+     'Wurzburg': {'Erfurt':186, 'Numberg':103,'Frankfurt':217},
+     'Erfurt': {'Wurzburg':186},
+     'Numberg': {'Wurzburg':103, 'Stuttgart':183,'Munchen':167},
+     'Munchen': {'Numberg':167, 'Augsburg':84,'Kassel':502},
+     'Kassel': {'Frankfurt':173, 'Munchen':502},
+     'Stuttgart': {'Numberg':183}
+     }
+graph = Graph(g)
+print("Vertices of graph:")
+print(graph.vertices())
+print("Edges of graph:")
+print(graph.edges())
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre style="font-family:courier new,monospace; background-color:#f6c6529c; color:#000000"&gt;
+Vertices of graph:
+['Mannheim', 'Erfurt', 'Munchen', 'Numberg', 'Stuttgart', 'Augsburg', 'Kassel', 'Frankfurt', 'Wurzburg', 'Karlsruhe']
+Edges of graph:
+[['Mannheim', 'Frankfurt', 85], ['Mannheim', 'Karlsruhe', 80], ['Erfurt', 'Wurzburg', 186], ['Munchen', 'Numberg', 167], ['Munchen', 'Augsburg', 84], ['Munchen', 'Kassel', 502], ['Numberg', 'Stuttgart', 183], ['Numberg', 'Wurzburg', 103], ['Numberg', 'Munchen', 167], ['Stuttgart', 'Numberg', 183], ['Augsburg', 'Munchen', 84], ['Augsburg', 'Karlsruhe', 250], ['Kassel', 'Munchen', 502], ['Kassel', 'Frankfurt', 173], ['Frankfurt', 'Mannheim', 85], ['Frankfurt', 'Wurzburg', 217], ['Frankfurt', 'Kassel', 173], ['Wurzburg', 'Numberg', 103], ['Wurzburg', 'Erfurt', 186], ['Wurzburg', 'Frankfurt', 217], ['Karlsruhe', 'Mannheim', 80], ['Karlsruhe', 'Augsburg', 250]]
+&lt;/pre&gt;
+
+&lt;p&gt;Lets say we are given a graph with the cities of Germany and respective distance between them. &lt;strong&gt;You want to find out how to go from Frankfurt (The starting node) to Munchen&lt;/strong&gt;. There might be many ways in which you can traverse the graph but you need to find how many cities you will need to visit on a minimum to go from frankfurt to Munchen)
+This problem is analogous to finding out distance between nodes in an unweighted graph.&lt;/p&gt;
+&lt;p&gt;The algorithm that we use here is called as &lt;strong&gt;Breadth First Search&lt;/strong&gt;.&lt;/p&gt;
+&lt;pre style="font-size:60%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;def min_num_edges_between_nodes(graph,start_node):
+    distance = 0
+    shortest_path = []
+    queue = [start_node] #FIFO
+    levels = {}
+    levels[start_node] = 0 
+    shortest_paths = {}
+    shortest_paths[start_node] = ":"
+    visited = [start_node]
+    while len(queue)!=0:
+        start = queue.pop(0)
+        neighbours = graph[start]
+        for neighbour,_ in neighbours.iteritems():
+            if neighbour not in visited:
+                queue.append(neighbour)
+                visited.append(neighbour)
+                levels[neighbour] = levels[start]+1
+                shortest_paths[neighbour] = shortest_paths[start] +"-&gt;"+ start
+    return levels, shortest_paths
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;What we do in the above piece of code is create a queue and traverse it based on levels. 
+We start with Frankfurt as starting node.
+We loop through its neighbouring cities(Menheim, Wurzburg and Kassel) and push them into the queue. 
+We keep track of what level they are at and also the path through which we reached them. 
+Since we are popping a first element of a queue we are sure we will visit cities in the order of their level. &lt;/p&gt;
+&lt;p&gt;Checkout this good &lt;a href="https://medium.com/basecs/breaking-down-breadth-first-search-cebe696709d9"&gt;post&lt;/a&gt; about BFS to understand more about queues and BFS.&lt;/p&gt;
+&lt;pre style="font-size:60%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;min_num_edges_between_nodes(g,'Frankfurt')
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre style="font-family:courier new,monospace; background-color:#f6c6529c; color:#000000"&gt;
+  ({'Augsburg': 3,
+  'Erfurt': 2,
+  'Frankfurt': 0,
+  'Karlsruhe': 2,
+  'Kassel': 1,
+  'Mannheim': 1,
+  'Munchen': 2,
+  'Numberg': 2,
+  'Stuttgart': 3,
+  'Wurzburg': 1},
+ {'Augsburg': ':-&gt;Frankfurt-&gt;Mannheim-&gt;Karlsruhe',
+  'Erfurt': ':-&gt;Frankfurt-&gt;Wurzburg',
+  'Frankfurt': ':',
+  'Karlsruhe': ':-&gt;Frankfurt-&gt;Mannheim',
+  'Kassel': ':-&gt;Frankfurt',
+  'Mannheim': ':-&gt;Frankfurt',
+  'Munchen': ':-&gt;Frankfurt-&gt;Kassel',
+  'Numberg': ':-&gt;Frankfurt-&gt;Wurzburg',
+  'Stuttgart': ':-&gt;Frankfurt-&gt;Wurzburg-&gt;Numberg',
+  'Wurzburg': ':-&gt;Frankfurt'})
+&lt;/pre&gt;
+
+&lt;p&gt;I did this example to show how  BFS algorithm works.
+We can extend this algorithm to find out connected components in an unconnected graph. 
+Lets say we need to find groups of unconnected vertices in the graph. &lt;/p&gt;
+&lt;p&gt;For example: the below graph has 3 unconnected sub-graphs. Can we find what nodes belong to a particular subgraph?&lt;/p&gt;
+&lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
+&lt;center&gt;&lt;img src="https://upload.wikimedia.org/wikipedia/commons/8/85/Pseudoforest.svg"  height="400" width="700" &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;pre style="font-size:60%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;#We add another countries in the loop 
+graph = Graph(g)
+graph.add_edge(("Mumbai", "Delhi"),400)
+graph.add_edge(("Delhi", "Kolkata"),500)
+graph.add_edge(("Kolkata", "Bangalore"),600)
+graph.add_edge(("TX", "NY"),1200)
+graph.add_edge(("ALB", "NY"),800)
+
+g = graph.adj_mat()
+
+def bfs_connected_components(graph):
+    connected_components = []
+    nodes = graph.keys()
+
+    while len(nodes)!=0:
+        start_node = nodes.pop()
+        queue = [start_node] #FIFO
+        visited = [start_node]
+        while len(queue)!=0:
+            start = queue[0]
+            queue.remove(start)
+            neighbours = graph[start]
+            for neighbour,_ in neighbours.iteritems():
+                if neighbour not in visited:
+                    queue.append(neighbour)
+                    visited.append(neighbour)
+                    nodes.remove(neighbour)
+        connected_components.append(visited)
+
+    return connected_components
+
+print bfs_connected_components(g)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The above code is similar to the previous BFS code. We keep all the vertices of the graph in the nodes list. We take a node from the nodes list and start BFS on it. as we visit a node we remove that node from the nodes list. Whenever the BFS completes we start again with another node in the nodes list until the nodes list is empty.&lt;/p&gt;
+&lt;pre style="font-family:courier new,monospace; background-color:#f6c6529c; color:#000000"&gt;[['Kassel',
+  'Munchen',
+  'Frankfurt',
+  'Numberg',
+  'Augsburg',
+  'Mannheim',
+  'Wurzburg',
+  'Stuttgart',
+  'Karlsruhe',
+  'Erfurt'],
+ ['Bangalore', 'Kolkata', 'Delhi', 'Mumbai'],
+ ['NY', 'ALB', 'TX']]
+&lt;/pre&gt;
+
+&lt;p&gt;As you can see we are able to find distinct components in our data. Just by using Edges and Vertices. This algorithm could be run on different data to satisfy any use case I presented above. &lt;/p&gt;
+&lt;p&gt;But Normally using Connected Components for a retail case will involve a lot of data and you will need to scale this algorithm.&lt;/p&gt;
+&lt;h2&gt;Connected Components in PySpark&lt;/h2&gt;
+&lt;p&gt;Below is an implementation from this paper on &lt;a href="https://ai.google/research/pubs/pub43122"&gt;Connected Components in
+MapReduce and Beyond&lt;/a&gt; from Google Research. Read the PPT to understand the implementation better.
+Some ready to use code for you.&lt;/p&gt;
+&lt;pre style="font-size:60%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;def create_edges(line):
+    a = [int(x) for x in line.split(" ")]
+    edges_list=[]
+
+    for i in range(0, len(a)-1):
+        for j in range(i+1 ,len(a)):
+            edges_list.append((a[i],a[j]))
+            edges_list.append((a[j],a[i]))
+    return edges_list
+
+# adj_list.txt is a txt file containing adjacency list of the graph.
+adjacency_list = sc.textFile("adj_list.txt")
+
+edges_rdd = adjacency_list.flatMap(lambda line : create_edges(line)).distinct()
+
+def largeStarInit(record):
+    a, b = record
+    yield (a,b)
+    yield (b,a)
+
+def largeStar(record):
+    a, b = record
+    t_list = list(b)
+    t_list.append(a)
+    list_min = min(t_list)
+    for x in b:
+        if a &lt; x:
+            yield (x,list_min)
+
+def smallStarInit(record):
+    a, b = record
+    if b&lt;=a:
+        yield (a,b)
+    else:
+        yield (b,a)
+
+def smallStar(record):
+    a, b = record
+    t_list = list(b)
+    t_list.append(a)
+    list_min = min(t_list)
+    for x in t_list:
+        if x!=list_min:
+            yield (x,list_min)
+
+#Handle case for single nodes
+def single_vertex(line):
+    a = [int(x) for x in line.split(" ")]
+    edges_list=[]
+    if len(a)==1:
+        edges_list.append((a[0],a[0]))
+    return edges_list
+
+iteration_num =0 
+while 1==1:
+    if iteration_num==0:
+        print "iter", iteration_num
+        large_star_rdd = edges_rdd.groupByKey().flatMap(lambda x : largeStar(x))
+        small_star_rdd = large_star_rdd.flatMap(lambda x : smallStarInit(x)).groupByKey().flatMap(lambda x : smallStar(x)).distinct()
+        iteration_num += 1
+
+    else:
+        print "iter", iteration_num
+        large_star_rdd = small_star_rdd.flatMap(lambda x: largeStarInit(x)).groupByKey().flatMap(lambda x : largeStar(x)).distinct()
+        small_star_rdd = large_star_rdd.flatMap(lambda x : smallStarInit(x)).groupByKey().flatMap(lambda x : smallStar(x)).distinct()
+        iteration_num += 1
+    #check Convergence
+
+    changes = (large_star_rdd.subtract(small_star_rdd).union(small_star_rdd.subtract(large_star_rdd))).collect()
+    if len(changes) == 0 :
+        break
+
+single_vertex_rdd = adjacency_list.flatMap(lambda line : single_vertex(line)).distinct()
+
+answer = single_vertex_rdd.collect() + large_star_rdd.collect()
+
+print answer[:10]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;h2&gt;Or Use GraphFrames in PySpark&lt;/h2&gt;
+&lt;p&gt;To Install graphframes:&lt;/p&gt;
+&lt;p&gt;I ran on command line: pyspark --packages graphframes:graphframes:0.5.0-spark2.1-s_2.11 which opened up my notebook and installed graphframes after i try to import in my notebook. &lt;/p&gt;
+&lt;p&gt;The string to be formatted as : graphframes:(latest version)-spark(your spark version)-s_(your scala version). &lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Checkout&lt;/em&gt; &lt;a href="http://go.databricks.com/hubfs/notebooks/3-GraphFrames-User-Guide-python.html"&gt;this guide on how to use GraphFrames&lt;/a&gt; for more information. &lt;/p&gt;
+&lt;pre style="font-size:60%; padding:7px; margin:0em;"&gt;
+&lt;code class="python"&gt;from graphframes import *
+def vertices(line):
+    vert = [int(x) for x in line.split(" ")]
+    return vert
+
+vertices = adjacency_list.flatMap(lambda x: vertices(x)).distinct().collect()
+vertices = sqlContext.createDataFrame([[x] for x in vertices], ["id"])
+
+def create_edges(line):
+    a = [int(x) for x in line.split(" ")]
+    edges_list=[]
+    if len(a)==1:
+        edges_list.append((a[0],a[0]))
+    for i in range(0, len(a)-1):
+        for j in range(i+1 ,len(a)):
+            edges_list.append((a[i],a[j]))
+            edges_list.append((a[j],a[i]))
+    return edges_list
+
+edges = adjacency_list.flatMap(lambda x: create_edges(x)).distinct().collect()
+edges = sqlContext.createDataFrame(edges, ["src", "dst"])
+
+g = GraphFrame(vertices, edges)
+sc.setCheckpointDir(".")
+
+# graphframes uses the same paper we referenced apparently
+cc = g.connectedComponents()
+print cc.show()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;The GraphFrames library implements the CC algorithm as well as a variety of other graph algorithms. &lt;/p&gt;
+&lt;p&gt;The above post was a lot of code but hope it was helpful. It took me a lot of time to implement the algorithm so wanted to make it easy for the folks. &lt;/p&gt;
+&lt;p&gt;If you want to read up more on Graph Algorithms here is an &lt;a href="https://www.coursera.org/learn/big-data-graph-analytics?ranMID=40328&amp;amp;ranEAID=lVarvwc5BD0&amp;amp;ranSiteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;amp;siteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;Graph Analytics for Big Data course on Coursera by UCSanDiego&lt;/a&gt; which I highly recommend to learn the basics of graph theory.&lt;/p&gt;
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href="https://www.python-course.eu/graphs_python.php"&gt;Graphs in Python&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://medium.com/basecs/a-gentle-introduction-to-graph-theory-77969829ead8"&gt;A Gentle Intoduction to Graph Theory Blog&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.coursera.org/learn/big-data-graph-analytics?ranMID=40328&amp;amp;ranEAID=lVarvwc5BD0&amp;amp;ranSiteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;amp;siteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;Graph Analytics for Big Data course on Coursera by UCSanDiego&lt;/a&gt; &lt;/li&gt;
+&lt;/ol&gt;</summary><category term="graph algorithms"></category><category term="Python"></category><category term="Pyspark"></category></entry><entry><title>Object Detection: An End to End Theoretical Perspective</title><link href="http://mlwhiz.github.io/blog/2018/09/22/object_detection/" rel="alternate"></link><updated>2018-09-22T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.github.io,2018-09-22:blog/2018/09/22/object_detection/</id><summary type="html">&lt;p&gt;We all know about the image classification problem. Given an image can you find out the class the image belongs to? We can solve any new image classification problem with ConvNets and &lt;a href="https://medium.com/@14prakash/transfer-learning-using-keras-d804b2e04ef8"&gt;Transfer Learning&lt;/a&gt; using pre-trained nets.
 &lt;br&gt;
 &lt;div style="color:black; background-color: #E9DAEE;"&gt;
 ConvNet as fixed feature extractor. Take a ConvNet pretrained on ImageNet, remove the last fully-connected layer (this layer's outputs are the 1000 class scores for a different task like ImageNet), then treat the rest of the ConvNet as a fixed feature extractor for the new dataset. In an AlexNet, this would compute a 4096-D vector for every image that contains the activations of the hidden layer immediately before the classifier. We call these features CNN codes. It is important for performance that these codes are ReLUd (i.e. thresholded at zero) if they were also thresholded during the training of the ConvNet on ImageNet (as is usually the case). Once you extract the 4096-D codes for all images, train a linear classifier (e.g. Linear SVM or Softmax classifier) for the new dataset.
@@ -1386,615 +1802,4 @@ You can learn from this book too:
 &lt;p&gt;&lt;a href="https://lagunita.stanford.edu/courses/Engineering/CVX101/Winter2014/about"&gt;Convex Optimization&lt;/a&gt; - a MOOC on optimization from Stanford, by Steven Boyd, an authority on the subject.&lt;/p&gt;
 &lt;p&gt;The Machine learning field is evolving and new advancements are made every day. That's why I didn't put a third tier. The maximum I can call myself is a "Hacker" and my learning continues. Hope you do the same.&lt;/p&gt;
 &lt;p&gt;Hope you like this list. Please provide your inputs in comments on more learning resources as you see fit.&lt;/p&gt;
-&lt;p&gt;Till then. Ciao!!!&lt;/p&gt;</summary><category term="Data Science"></category><category term="Statistics"></category><category term="Resources"></category><category term="Learning"></category><category term="Books"></category><category term="Python"></category><category term="Distributions"></category><category term="Statistical Inference"></category><category term="hadoop"></category><category term="spark"></category><category term="deep learning"></category></entry><entry><title>Basics Of Linear Regression</title><link href="http://mlwhiz.github.io/blog/2017/03/23/basics_of_linear_regression/" rel="alternate"></link><updated>2017-03-23T04:43:00-03:00</updated><author><name>Naveen Kumar Kaveti</name></author><id>tag:mlwhiz.github.io,2017-03-23:blog/2017/03/23/basics_of_linear_regression/</id><summary type="html">&lt;p&gt;Today we will look into the basics of linear regression. Here we go :&lt;/p&gt;
-&lt;h2&gt;Contents&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;Simple Linear Regression (SLR)&lt;/li&gt;
-&lt;li&gt;Multiple Linear Regression (MLR)&lt;/li&gt;
-&lt;li&gt;Assumptions&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2&gt;1. Simple Linear Regression&lt;/h2&gt;
-&lt;p&gt;Regression is the process of building a relationship between a dependent variable and set of independent variables. Linear Regression restricts this relationship to be linear in terms of coefficients. In SLR, we consider only one independent variable.&lt;/p&gt;
-&lt;h3&gt;Example: The Waist Circumference – Adipose Tissue data&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Studies have shown that individuals with excess Adipose tissue (AT) in the abdominal region have a higher risk of cardio-vascular diseases&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Computed Tomography, commonly called the CT Scan is the only technique that allows for the precise and reliable measurement of the AT (at any site in the body)&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;The problems with using the CT scan are:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Many physicians do not have access to this technology&lt;/li&gt;
-&lt;li&gt;Irradiation of the patient (suppresses the immune system)&lt;/li&gt;
-&lt;li&gt;Expensive&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Is there a simpler yet reasonably accurate way to predict the AT area? i.e.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Easily available&lt;/li&gt;
-&lt;li&gt;Risk free&lt;/li&gt;
-&lt;li&gt;Inexpensive&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;A group of researchers  conducted a study with the aim of predicting abdominal AT area using simple anthropometric measurements i.e. measurements on the human body&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;The Waist Circumference – Adipose Tissue data is a part of this study wherein the aim is to study how well waist circumference(WC) predicts the AT area&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;# Setting working directory&lt;/span&gt;
-filepath &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; c&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;/Users/nkaveti/Documents/Work_Material/Statistics Learning/&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-setwd&lt;span class="p"&gt;(&lt;/span&gt;filepath&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="c1"&gt;# Reading data&lt;/span&gt;
-Waist_AT &lt;span class="o"&gt;&amp;lt;-&lt;/span&gt; read.csv&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;adipose_tissue.csv&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-cat&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Number of rows: &amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; nrow&lt;span class="p"&gt;(&lt;/span&gt;Waist_AT&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;\n&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-head&lt;span class="p"&gt;(&lt;/span&gt;Waist_AT&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Number&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;rows&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mi"&gt;109&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;table&gt;
-&lt;thead&gt;&lt;tr&gt;&lt;th scope=col&gt;Waist&lt;/th&gt;&lt;th scope=col&gt;AT&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;&lt;td&gt;74.75&lt;/td&gt;&lt;td&gt;25.72&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;td&gt;72.60&lt;/td&gt;&lt;td&gt;25.89&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;td&gt;81.80&lt;/td&gt;&lt;td&gt;42.60&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;td&gt;83.95&lt;/td&gt;&lt;td&gt;42.80&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;td&gt;74.65&lt;/td&gt;&lt;td&gt;29.84&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;td&gt;71.85&lt;/td&gt;&lt;td&gt;21.68&lt;/td&gt;&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;Let's start with a scatter plot of &lt;strong&gt;Waist&lt;/strong&gt; Vs &lt;strong&gt;AT&lt;/strong&gt;, to understand the relationship between these two variables.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;plot&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;AT&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt; &lt;span class="n"&gt;Waist&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;&lt;img alt="png" src="output_6_0.png" /&gt;&lt;/p&gt;
-&lt;p&gt;Any observations from above plot?&lt;/p&gt;
-&lt;p&gt;Now the objective is to find a linear relation between &lt;code&gt;Waist&lt;/code&gt; and &lt;code&gt;AT&lt;/code&gt;. In otherwords, finding the amount of change in &lt;code&gt;AT&lt;/code&gt; per one unit change (increment/decrement) in &lt;code&gt;Waist&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;In SLR, it is equivalent to finding an optimal straight line equation such that the sum of squares of differences between straight line and the points will be minimum. This method of estimation is called as &lt;a href="https://en.wikipedia.org/wiki/Ordinary_least_squares"&gt;Ordiany Least Squares (OLS)&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$AT  = \beta_0 + \beta_1 \ Waist + \epsilon$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$Min_{\beta_0 , \beta_1} \ \ \epsilon^\intercal \epsilon \implies Min_{\beta_0 , \beta_1} \ \ (AT  - \beta_0 - \beta_1 \ Waist)^\intercal (AT  - \beta_0 - \beta_1 \ Waist)$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;Where, &lt;span class="math"&gt;\(\beta_1\)&lt;/span&gt; represents the amount of change in &lt;code&gt;AT&lt;/code&gt; per one unit change in &lt;code&gt;Waist&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Now our problem becomes an unconstrained optimization problem. We can find optimal values for &lt;span class="math"&gt;\(\beta_0\)&lt;/span&gt; and &lt;span class="math"&gt;\(\beta_1\)&lt;/span&gt; using basic calculus.&lt;/p&gt;
-&lt;p&gt;Lets re-write above regression equation in matrix form&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$ AT = X \beta + \epsilon$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;Where, &lt;span class="math"&gt;\( X = [1 \ \ Waist]\)&lt;/span&gt; 1 is a vector of ones and &lt;span class="math"&gt;\(\beta = (\beta_0, \ \beta_1)\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$
-\begin{equation}
-\begin{split}
-\epsilon^\intercal \epsilon &amp;amp; = {(AT - X \beta)}^\intercal {(AT - X \beta)} \\
-&amp;amp; = AT^\intercal AT - AT^\intercal X \beta - {(X \beta)}^\intercal AT + {(X \beta)}^\intercal (X \beta)
-\end{split}
-\end{equation}
-$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;Now differentiate this w.r.t to &lt;span class="math"&gt;\(\beta\)&lt;/span&gt; and equate it to zero. Then we have,
-&lt;div class="math"&gt;$$\hat{\beta} = (X^\intercal X)^{-1} X^\intercal AT $$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;Now we can find the fitted values of model by substituting &lt;span class="math"&gt;\(\hat{\beta}\)&lt;/span&gt; in above regression equation
-&lt;div class="math"&gt;$$\hat{AT} = X \hat{\beta}=X(X^\intercal X)^{-1} X^\intercal AT$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; We are arriving to above equation through an assumption&lt;a href="#Assumptions"&gt;&lt;span class="math"&gt;\(^1\)&lt;/span&gt;&lt;/a&gt; of &lt;span class="math"&gt;\(E(\epsilon)=0\)&lt;/span&gt;. What happens if this assumption violates?&lt;/p&gt;
-&lt;p&gt;Let, &lt;span class="math"&gt;\(X(X^\intercal X)^{-1} X^\intercal = H\)&lt;/span&gt;
-&lt;div class="math"&gt;$$\hat{AT} = H \ AT$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;We call H as an hat matrix, because it transforms &lt;span class="math"&gt;\(AT\)&lt;/span&gt; into &lt;span class="math"&gt;\(\hat{AT}\)&lt;/span&gt; :D&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="cp"&gt;# Lets compute the hat matrix&lt;/span&gt;
-&lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;cbind&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Waist&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;temp&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;solve&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;%*%&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;%*%&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;betahat&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;temp&lt;/span&gt; &lt;span class="o"&gt;%*%&lt;/span&gt; &lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;AT&lt;/span&gt; &lt;span class="err"&gt;#&lt;/span&gt; &lt;span class="n"&gt;Estimated&lt;/span&gt; &lt;span class="n"&gt;coefficients&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Let&amp;#39;s compare the computed values with lm() output: &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt; &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Computed Coefficients: &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt; &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;frame&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Intercept&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;betahat&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;Waist&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;betahat&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]))&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;======================================================================= &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="cp"&gt;#cat(&amp;quot;Optimal value for beta_0 is: &amp;quot;, betahat[1], &amp;quot;and for beta_1 is: &amp;quot;, betahat[2], &amp;quot;\n \n&amp;quot;)&lt;/span&gt;
-&lt;span class="n"&gt;fit_lm&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;AT&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt; &lt;span class="n"&gt;Waist&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="cp"&gt;#cat(&amp;quot;Compare our computed estimates with lm() estimates&amp;quot;, &amp;quot;\n&amp;quot;)&lt;/span&gt;
-&lt;span class="n"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fit_lm&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;======================================================================= &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt; &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;H&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;%*%&lt;/span&gt; &lt;span class="n"&gt;temp&lt;/span&gt; &lt;span class="err"&gt;#&lt;/span&gt; &lt;span class="n"&gt;Computing&lt;/span&gt; &lt;span class="n"&gt;hat&lt;/span&gt; &lt;span class="n"&gt;matrix&lt;/span&gt;
-&lt;span class="n"&gt;AThat&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;H&lt;/span&gt; &lt;span class="o"&gt;%*%&lt;/span&gt; &lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;AT&lt;/span&gt; &lt;span class="err"&gt;#&lt;/span&gt; &lt;span class="n"&gt;Computing&lt;/span&gt; &lt;span class="n"&gt;predicted&lt;/span&gt; &lt;span class="n"&gt;values&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Therefore, there is a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;betahat&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;increment in AT per one unit change in Waist &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt; &lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Let&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="n"&gt;compare&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;computed&lt;/span&gt; &lt;span class="n"&gt;values&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="n"&gt;output&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-
-&lt;span class="n"&gt;Computed&lt;/span&gt; &lt;span class="n"&gt;Coefficients&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-
-  &lt;span class="n"&gt;Intercept&lt;/span&gt;    &lt;span class="n"&gt;Waist&lt;/span&gt;
-&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;215.9815&lt;/span&gt; &lt;span class="mf"&gt;3.458859&lt;/span&gt;
-&lt;span class="o"&gt;=======================================================================&lt;/span&gt;
-
-&lt;span class="nl"&gt;Call:&lt;/span&gt;
-&lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;formula&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;AT&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt; &lt;span class="n"&gt;Waist&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="nl"&gt;Coefficients:&lt;/span&gt;
-&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Intercept&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;        &lt;span class="n"&gt;Waist&lt;/span&gt;
-   &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;215.981&lt;/span&gt;        &lt;span class="mf"&gt;3.459&lt;/span&gt;
-
-&lt;span class="o"&gt;=======================================================================&lt;/span&gt;
-
-&lt;span class="n"&gt;Therefore&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;there&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="mf"&gt;3.458859&lt;/span&gt; &lt;span class="n"&gt;increment&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;AT&lt;/span&gt; &lt;span class="n"&gt;per&lt;/span&gt; &lt;span class="n"&gt;one&lt;/span&gt; &lt;span class="n"&gt;unit&lt;/span&gt; &lt;span class="n"&gt;change&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;Waist&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;h2&gt;What's next?&lt;/h2&gt;
-&lt;p&gt;We succesfully computed estimates for regression coefficients and fitted values.&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;We are working on only one sample, how can we generalise these results to population?&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;How to measure model's performance quantitatively?&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;strong&gt;  We are working on only one sample, how can we generalise these results to population? &lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Let's focus on question 1. Our regression coefficients are computed using only one sample and these values will change, if we change the sample. But how much they vary? We need to estimate the variation for each beta coefficient to check whether the corresponding regressor is consistently explaining the same behaviour even if we change the sample.&lt;/p&gt;
-&lt;p&gt;Now the big problem is collecting multiple samples to check the above hypothesis. Hence, we use distributions to check statistical significance of regressors.&lt;/p&gt;
-&lt;p&gt;For our example, we need to test below two hypotheses.&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$ Null \ Hypothesis: \beta_{0} = 0 $$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$ Alternative \ Hypothesis: \beta_{0} \neq 0$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$ Null \ Hypothesis: \beta_{1} = 0 $$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$ Alternative \ Hypothesis: \beta_{1} \neq 0$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;Test Statistic for these hypotheses is,&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$t = \frac{\hat{\beta_{i}}}{\sqrt{Var(\hat{\beta_{i}})}}$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;Test statistic &lt;code&gt;t&lt;/code&gt; follows &lt;code&gt;t-distribution&lt;/code&gt;, assuming&lt;a href="#Assumptions"&gt;&lt;span class="math"&gt;\(^2\)&lt;/span&gt;&lt;/a&gt; dependent variable follows &lt;code&gt;normal distribution&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Suggestion:&lt;/strong&gt; If your not aware of &lt;a href="https://en.wikipedia.org/wiki/Statistical_hypothesis_testing"&gt;testing of hypothesis&lt;/a&gt;, &lt;a href="https://en.wikipedia.org/wiki/Probability_distribution"&gt;probability distributions&lt;/a&gt; and &lt;a href="https://en.wikipedia.org/wiki/P-value"&gt;p-values&lt;/a&gt; please browse through the Google.&lt;/p&gt;
-&lt;p&gt;Let's recall that,  &lt;span class="math"&gt;\(\hat{\beta} = (X^\intercal X)^{-1} X^\intercal AT\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$\begin{equation}
-\begin{split}
-Var(\hat{\beta}) &amp;amp; = Var((X^\intercal X)^{-1} X^\intercal AT) \\
- &amp;amp; = (X^\intercal X)^{-1} X^\intercal \ Var(AT) \ X(X^\intercal X)^{-1} \\
- &amp;amp; = (X^\intercal X)^{-1} X^\intercal \ X(X^\intercal X)^{-1} \ \sigma^2 \\
- &amp;amp; = (X^\intercal X)^{-1} \sigma^2
-\end{split}
-\end{equation}
-$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; In the above calculations we assumed&lt;a href="#Assumptions"&gt;&lt;span class="math"&gt;\(^3\)&lt;/span&gt;&lt;/a&gt; &lt;span class="math"&gt;\(Var(AT) = \sigma^2\)&lt;/span&gt; (Constant). Where, &lt;span class="math"&gt;\(\sigma^2\)&lt;/span&gt; is variation in population AT.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Suggestion:&lt;/strong&gt; Try solving &lt;span class="math"&gt;\((X^\intercal X)^{-1}\)&lt;/span&gt; with &lt;span class="math"&gt;\(X = [1, \  x]\)&lt;/span&gt; where &lt;span class="math"&gt;\(x = (x_1, x_2, x_3 ... x_n)\)&lt;/span&gt;. You will get the following expression.&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$
-\
-Var(\hat{\beta}) =
-\frac{1}{n \sum x_i^2 - (\sum x_i)^2}
-\begin{bmatrix}
-    \sum_{i=1}^n x_i^2 &amp;amp; -\sum x_i \\
-    -\sum x_i &amp;amp; n
-\end{bmatrix}
-\sigma^2
-\
-$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;Diagonal elements of above matrix are varinaces of &lt;span class="math"&gt;\(\beta_0\)&lt;/span&gt; and &lt;span class="math"&gt;\(\beta_1\)&lt;/span&gt; respectively. Off-diagonal element is covariance between &lt;span class="math"&gt;\(\beta_0\)&lt;/span&gt; and &lt;span class="math"&gt;\(\beta_1\)&lt;/span&gt;.&lt;/p&gt;
-&lt;p&gt;Hence,&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$Var(\hat{\beta_0}) = \frac{\sigma^2 \sum_{i = 1}^n x_i^2}{n \sum_{i = 1}^n (x_i - \bar{x})^2}$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$Var(\hat{\beta_1}) = \frac{\sigma^2}{\sum_{i = 1}^n (x_i - \bar{x})^2}$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;One important observation from &lt;span class="math"&gt;\(Var(\hat{\beta})\)&lt;/span&gt; expressions is, &lt;span class="math"&gt;\(Var(x)\)&lt;/span&gt; is inversely proportional to &lt;span class="math"&gt;\(Var(\hat{\beta})\)&lt;/span&gt;. That is, we will get more consistent estimators if there is high variation in corresponding predictors.&lt;/p&gt;
-&lt;p&gt;Recall that, &lt;span class="math"&gt;\(\sigma^2\)&lt;/span&gt; in above expression is the population variance, not the sample. Hence, we need to estimate this using the sample that we have.&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$\hat{\sigma^2} = \frac{1}{n-2} \sum_{i = 1}^n e_i^2$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;Where, &lt;span class="math"&gt;\(e_i = AT_i - \hat{AT}_i\)&lt;/span&gt;&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="cp"&gt;# Let&amp;#39;s compute variances of beta hat and test statistic &amp;#39;t&amp;#39;&lt;/span&gt;
-&lt;span class="n"&gt;sigmasq&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;length&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;AThat&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)]))&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;AThat&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;AT&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;^&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;VarBeta0&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sigmasq&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Waist&lt;/span&gt;&lt;span class="o"&gt;^&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;length&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;AThat&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Waist&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Waist&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;^&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
-&lt;span class="n"&gt;VarBeta1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sigmasq&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Waist&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;Waist&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;^&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Let&amp;#39;s compare the computed values with lm() output: &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt; &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;======================================================================= &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Computed Coefficients: &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt; &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;res&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;frame&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Estimate&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;betahat&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Std&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Error&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sqrt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;VarBeta0&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;sqrt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;VarBeta1&lt;/span&gt;&lt;span class="p"&gt;)),&lt;/span&gt; &lt;span class="n"&gt;t_value&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;betahat&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;sqrt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;VarBeta0&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;betahat&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;sqrt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;VarBeta1&lt;/span&gt;&lt;span class="p"&gt;)))&lt;/span&gt;
-&lt;span class="n"&gt;row&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;names&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;res&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;c&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;(Intercept)&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Waist&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;res&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;p_value&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;pt&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;abs&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;res&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;t_value&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;nrow&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;lower&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;tail&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;FALSE&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;res&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;=======================================================================&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;summary&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fit_lm&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;=======================================================================&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Let&lt;/span&gt;&lt;span class="err"&gt;&amp;#39;&lt;/span&gt;&lt;span class="n"&gt;s&lt;/span&gt; &lt;span class="n"&gt;compare&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;computed&lt;/span&gt; &lt;span class="n"&gt;values&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="n"&gt;output&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-
-&lt;span class="o"&gt;=======================================================================&lt;/span&gt;
-&lt;span class="n"&gt;Computed&lt;/span&gt; &lt;span class="n"&gt;Coefficients&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-
-               &lt;span class="n"&gt;Estimate&lt;/span&gt;  &lt;span class="n"&gt;Std&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Error&lt;/span&gt;   &lt;span class="n"&gt;t_value&lt;/span&gt;      &lt;span class="n"&gt;p_value&lt;/span&gt;
-&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Intercept&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;215.981488&lt;/span&gt; &lt;span class="mf"&gt;21.7962708&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;9.909103&lt;/span&gt; &lt;span class="mf"&gt;7.507198e-17&lt;/span&gt;
-&lt;span class="n"&gt;Waist&lt;/span&gt;          &lt;span class="mf"&gt;3.458859&lt;/span&gt;  &lt;span class="mf"&gt;0.2346521&lt;/span&gt; &lt;span class="mf"&gt;14.740376&lt;/span&gt; &lt;span class="mf"&gt;1.297124e-27&lt;/span&gt;
-&lt;span class="o"&gt;=======================================================================&lt;/span&gt;
-
-
-
-&lt;span class="nl"&gt;Call:&lt;/span&gt;
-&lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;formula&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;AT&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt; &lt;span class="n"&gt;Waist&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-
-&lt;span class="nl"&gt;Residuals:&lt;/span&gt;
-     &lt;span class="n"&gt;Min&lt;/span&gt;       &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="n"&gt;Q&lt;/span&gt;   &lt;span class="n"&gt;Median&lt;/span&gt;       &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="n"&gt;Q&lt;/span&gt;      &lt;span class="n"&gt;Max&lt;/span&gt;
-&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;107.288&lt;/span&gt;  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;19.143&lt;/span&gt;   &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;2.939&lt;/span&gt;   &lt;span class="mf"&gt;16.376&lt;/span&gt;   &lt;span class="mf"&gt;90.342&lt;/span&gt;
-
-&lt;span class="nl"&gt;Coefficients:&lt;/span&gt;
-             &lt;span class="n"&gt;Estimate&lt;/span&gt; &lt;span class="n"&gt;Std&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="n"&gt;Error&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt; &lt;span class="n"&gt;Pr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;|&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="o"&gt;|&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Intercept&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;215.9815&lt;/span&gt;    &lt;span class="mf"&gt;21.7963&lt;/span&gt;  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;9.909&lt;/span&gt;   &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="mf"&gt;2e-16&lt;/span&gt; &lt;span class="o"&gt;***&lt;/span&gt;
-&lt;span class="n"&gt;Waist&lt;/span&gt;          &lt;span class="mf"&gt;3.4589&lt;/span&gt;     &lt;span class="mf"&gt;0.2347&lt;/span&gt;  &lt;span class="mf"&gt;14.740&lt;/span&gt;   &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="mf"&gt;2e-16&lt;/span&gt; &lt;span class="o"&gt;***&lt;/span&gt;
-&lt;span class="o"&gt;---&lt;/span&gt;
-&lt;span class="n"&gt;Signif&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt; &lt;span class="n"&gt;codes&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;***&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.001&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.01&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.05&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.1&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt; &lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
-
-&lt;span class="n"&gt;Residual&lt;/span&gt; &lt;span class="n"&gt;standard&lt;/span&gt; &lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;33.06&lt;/span&gt; &lt;span class="n"&gt;on&lt;/span&gt; &lt;span class="mi"&gt;107&lt;/span&gt; &lt;span class="n"&gt;degrees&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;freedom&lt;/span&gt;
-&lt;span class="n"&gt;Multiple&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;squared&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;   &lt;span class="mf"&gt;0.67&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Adjusted&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;squared&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mf"&gt;0.667&lt;/span&gt;
-&lt;span class="n"&gt;F&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;statistic&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;217.3&lt;/span&gt; &lt;span class="n"&gt;on&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="mi"&gt;107&lt;/span&gt; &lt;span class="n"&gt;DF&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;  &lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mf"&gt;2.2e-16&lt;/span&gt;
-
-
-
-&lt;span class="o"&gt;=======================================================================&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; Residual standard error = &lt;span class="math"&gt;\(\sqrt{sigmasq}\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;How to measure model's performance quantitatively?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Let's focus on question 2 (How to measure model's performance quantitatively?). Recall that, our objective of building model is to explain the variation in &lt;code&gt;AT&lt;/code&gt; using the variation in &lt;code&gt;Waist&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Total variation in AT is, &lt;span class="math"&gt;\(\sum_{i=1}^n (AT - mean(AT))^2\)&lt;/span&gt; this can be splitted into two parts as follows:&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$
-\begin{equation}
-\begin{split}
-\sum_{i=1}^n (AT_i - \bar{AT})^2 &amp;amp; = \sum_{i=1}^n (AT  - \hat{AT_i} + \hat{AT_i} - \bar{AT})^2 \\
-&amp;amp; = \sum_{i = 1}^n (\hat{AT_i} - \bar{AT})^2 + \sum_{i=1}^n (AT_i - \hat{AT_i})^2
-\end{split}
-\end{equation}
-$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;Where, &lt;span class="math"&gt;\(\sum_{i=1}^n (AT_i - \bar{AT})^2\)&lt;/span&gt; is the total variation in AT, &lt;span class="math"&gt;\(\sum_{i = 1}^n (\hat{AT_i} - \bar{AT})^2\)&lt;/span&gt; is the explained variation in AT, this is also called as &lt;strong&gt;Regression Sum of Squares&lt;/strong&gt; and &lt;span class="math"&gt;\(\sum_{i=1}^n (AT_i - \hat{AT_i})^2\)&lt;/span&gt; is the unexplained variation in AT, this is also called as &lt;strong&gt;Error Sum of Squares&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;We can measure our model using the proportion of total variation explained by independent variable(s). That is, &lt;span class="math"&gt;\(\frac{Regression \  Sum \ of \ Squares}{Total \ Sum \ of \ Squares}\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;The above measure is called as Multiple R-squared:&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$Multiple \ R-squared = \frac{\sum_{i = 1}^n (\hat{AT_i} - \bar{AT})^2}{\sum_{i=1}^n (AT_i - \bar{AT})^2}$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Interesting facts:&lt;/strong&gt; Multiple R-squared value in SLR is equals to &lt;span class="math"&gt;\(r^2\)&lt;/span&gt; and (1 - Multiple R-squared) is equals to the variance in residuals.&lt;/p&gt;
-&lt;p&gt;Where, r is &lt;a href="https://en.wikipedia.org/wiki/Pearson_correlation_coefficient"&gt;pearson's correlation coefficient&lt;/a&gt; between dependent and independent variable.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="cp"&gt;# Let&amp;#39;s compute Multiple R-squared measure for our example&lt;/span&gt;
-&lt;span class="n"&gt;SSR&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;AThat&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;AT&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;^&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;SST&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sum&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;AT&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;mean&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;AT&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="o"&gt;^&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;MulRSq&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;SSR&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;SST&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Compute Multiple R-squared: &amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;MulRSq&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt; &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Note that computed R squared value is matching with lm() Multiple R-squared value in above output &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt; &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;======================================================================= &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt; &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Compute&lt;/span&gt; &lt;span class="n"&gt;Multiple&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;squared&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mf"&gt;0.6700369&lt;/span&gt;
-
-&lt;span class="n"&gt;Note&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt; &lt;span class="n"&gt;computed&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt; &lt;span class="n"&gt;squared&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;matching&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="n"&gt;Multiple&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;squared&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;above&lt;/span&gt; &lt;span class="n"&gt;output&lt;/span&gt;
-
-&lt;span class="o"&gt;=======================================================================&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;&lt;strong&gt;What happens to the Multiple R-squared value when you add an irrelevant variable to the model?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;In the below model, I am generating a random sample of uniform numbers between 1 to 100 and considering this as one of indepedent variable.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;set&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;seed&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1234&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;fit_lm2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;AT&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt; &lt;span class="n"&gt;Waist&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;runif&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;nrow&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;summary&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fit_lm2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;======================================================================= &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt; &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Call&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-&lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;formula&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;AT&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt; &lt;span class="n"&gt;Waist&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;runif&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;nrow&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="o"&gt;),&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="o"&gt;),&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
-
-&lt;span class="n"&gt;Residuals&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-    &lt;span class="n"&gt;Min&lt;/span&gt;      &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="n"&gt;Q&lt;/span&gt;  &lt;span class="n"&gt;Median&lt;/span&gt;      &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="n"&gt;Q&lt;/span&gt;     &lt;span class="n"&gt;Max&lt;/span&gt;
-&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;106.06&lt;/span&gt;  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;17.53&lt;/span&gt;   &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;3.63&lt;/span&gt;   &lt;span class="mf"&gt;13.70&lt;/span&gt;   &lt;span class="mf"&gt;91.36&lt;/span&gt;
-
-&lt;span class="n"&gt;Coefficients&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-                               &lt;span class="n"&gt;Estimate&lt;/span&gt; &lt;span class="n"&gt;Std&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt; &lt;span class="n"&gt;Error&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt; &lt;span class="n"&gt;Pr&lt;/span&gt;&lt;span class="o"&gt;(&amp;gt;|&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="o"&gt;|)&lt;/span&gt;
-&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Intercept&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;                   &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;226.2894&lt;/span&gt;    &lt;span class="mf"&gt;23.4350&lt;/span&gt;  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;9.656&lt;/span&gt; &lt;span class="mf"&gt;3.33&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt; &lt;span class="o"&gt;***&lt;/span&gt;
-&lt;span class="n"&gt;Waist&lt;/span&gt;                            &lt;span class="mf"&gt;3.5060&lt;/span&gt;     &lt;span class="mf"&gt;0.2376&lt;/span&gt;  &lt;span class="mf"&gt;14.757&lt;/span&gt;  &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt; &lt;span class="o"&gt;***&lt;/span&gt;
-&lt;span class="n"&gt;runif&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;nrow&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="o"&gt;),&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;100&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;    &lt;span class="mf"&gt;0.1397&lt;/span&gt;     &lt;span class="mf"&gt;0.1181&lt;/span&gt;   &lt;span class="mf"&gt;1.183&lt;/span&gt;    &lt;span class="mf"&gt;0.239&lt;/span&gt;
-&lt;span class="o"&gt;---&lt;/span&gt;
-&lt;span class="n"&gt;Signif&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt; &lt;span class="n"&gt;codes&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;***&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.001&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.01&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.05&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.1&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt; &lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
-
-&lt;span class="n"&gt;Residual&lt;/span&gt; &lt;span class="n"&gt;standard&lt;/span&gt; &lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mi"&gt;33&lt;/span&gt; &lt;span class="n"&gt;on&lt;/span&gt; &lt;span class="mi"&gt;106&lt;/span&gt; &lt;span class="n"&gt;degrees&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;freedom&lt;/span&gt;
-&lt;span class="n"&gt;Multiple&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;squared&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mf"&gt;0.6743&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;  &lt;span class="n"&gt;Adjusted&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;squared&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mf"&gt;0.6682&lt;/span&gt;
-&lt;span class="n"&gt;F&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;statistic&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;109.7&lt;/span&gt; &lt;span class="n"&gt;on&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="mi"&gt;106&lt;/span&gt; &lt;span class="n"&gt;DF&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;  &lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mf"&gt;2.2&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;
-
-
-
-&lt;span class="o"&gt;=======================================================================&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;Multiple R-squared value increases irrespective of quality of explanation, which is incorrect. We should penalize our model performance if the quality of explanation is poor, that is why we need to adjust our R-squared value.&lt;/p&gt;
-&lt;p&gt;To penalize the explained part of AT, we inflate the unexplained part of AT with &lt;span class="math"&gt;\(\frac{Total \ degrees \ of \ freedom}{Error \ degrees \ of \ freedom}\)&lt;/span&gt;. That is,&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$Adjusted \ R-squared = 1 - (1 - R^2) \frac{n-1}{n-p-1}$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;Where, n = Total number of observations; p = Total number of predictors (excluding intercept)&lt;/p&gt;
-&lt;p&gt;Adding a new independent variable will increase &lt;span class="math"&gt;\(\frac{n-1}{n-p-1}\)&lt;/span&gt; and &lt;span class="math"&gt;\(R^2\)&lt;/span&gt;. If the amount of increment in &lt;span class="math"&gt;\(R^2\)&lt;/span&gt; is less than the amount of increment in &lt;span class="math"&gt;\(\frac{n-1}{n-p-1}\)&lt;/span&gt; than it will decrease the Adjusted R-squared value.&lt;/p&gt;
-&lt;p&gt;In &lt;code&gt;fit_lm2&lt;/code&gt; model Adjusted R-squared decreases when we add randomly generated variable into the model.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="cp"&gt;# Let&amp;#39;s compute adjusted R-squared  for our example&lt;/span&gt;
-&lt;span class="n"&gt;TDF&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;nrow&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="err"&gt;#&lt;/span&gt; &lt;span class="n"&gt;Total&lt;/span&gt; &lt;span class="n"&gt;degrees&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;freedom&lt;/span&gt;
-&lt;span class="n"&gt;EDF&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;nrow&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Waist_AT&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;])&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="err"&gt;#&lt;/span&gt; &lt;span class="n"&gt;Error&lt;/span&gt; &lt;span class="n"&gt;degrees&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;freedom&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;where&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;number&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;predictors&lt;/span&gt;
-&lt;span class="n"&gt;AdjRSq&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;MulRSq&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;TDF&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;EDF&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="err"&gt;#&lt;/span&gt; &lt;span class="n"&gt;Adjusted&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt; &lt;span class="n"&gt;square&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Compute Multiple R-squared: &amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;AdjRSq&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt; &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Note that computed Adjusted R-squared value is matching with lm() Adjusted R-squared value in the above output &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt; &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Note: We are comparing with fit_lm model, not fit_lm2 &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;======================================================================= &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Compute&lt;/span&gt; &lt;span class="n"&gt;Multiple&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;squared&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mf"&gt;0.6669531&lt;/span&gt;
-
-&lt;span class="n"&gt;Note&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt; &lt;span class="n"&gt;computed&lt;/span&gt; &lt;span class="n"&gt;Adjusted&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;squared&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;matching&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="n"&gt;Adjusted&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;squared&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;above&lt;/span&gt; &lt;span class="n"&gt;output&lt;/span&gt;
-
-&lt;span class="nl"&gt;Note:&lt;/span&gt; &lt;span class="n"&gt;We&lt;/span&gt; &lt;span class="n"&gt;are&lt;/span&gt; &lt;span class="n"&gt;comparing&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;fit_lm&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;not&lt;/span&gt; &lt;span class="n"&gt;fit_lm2&lt;/span&gt;
-&lt;span class="o"&gt;=======================================================================&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;Aforementioned measures (Multiple R-squared &amp;amp; Adjusted R-squared) for &lt;strong&gt;Goodness of fit&lt;/strong&gt; are functions of sample and these will vary as sample changes. Similar to &lt;code&gt;t-test&lt;/code&gt; for regression coefficeints we need some statistical test to test model's performance for population.&lt;/p&gt;
-&lt;p&gt;Objective is to compare the Mean sum of squares due to regression and Mean sum of squares due to error. &lt;code&gt;F-test&lt;/code&gt; is very helpful to compare the variations.&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$ F-test = \frac{\frac{1}{p-1}\sum_{i=1}^n (\hat{AT_i} - \bar{AT})^2}{\frac{1}{n-p-1} \sum_{i=1}^n (\hat{AT_i} - AT_i)^2}$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; Above expression follows F distribution only if, AT follows Normal Distribution&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;RDF&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;TDF&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;EDF&lt;/span&gt;
-&lt;span class="n"&gt;SSE&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;SST&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;SSR&lt;/span&gt;
-&lt;span class="n"&gt;MSR&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;RDF&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;SSR&lt;/span&gt;
-&lt;span class="n"&gt;MSE&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;EDF&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="n"&gt;SSE&lt;/span&gt;
-&lt;span class="n"&gt;F_value&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;MSR&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;MSE&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Compute F statistic: &amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;F_value&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt; &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Note that computed F-statistic is matching with lm() F-statistic value in the above output &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt; &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Note: We are comparing with fit_lm model, not fit_lm2 &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;======================================================================= &lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Compute&lt;/span&gt; &lt;span class="n"&gt;F&lt;/span&gt; &lt;span class="n"&gt;statistic&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mf"&gt;217.2787&lt;/span&gt;
-
-&lt;span class="n"&gt;Note&lt;/span&gt; &lt;span class="n"&gt;that&lt;/span&gt; &lt;span class="n"&gt;computed&lt;/span&gt; &lt;span class="n"&gt;F&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;statistic&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt; &lt;span class="n"&gt;matching&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="n"&gt;F&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;statistic&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;above&lt;/span&gt; &lt;span class="n"&gt;output&lt;/span&gt;
-
-&lt;span class="nl"&gt;Note:&lt;/span&gt; &lt;span class="n"&gt;We&lt;/span&gt; &lt;span class="n"&gt;are&lt;/span&gt; &lt;span class="n"&gt;comparing&lt;/span&gt; &lt;span class="n"&gt;with&lt;/span&gt; &lt;span class="n"&gt;fit_lm&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;not&lt;/span&gt; &lt;span class="n"&gt;fit_lm2&lt;/span&gt;
-&lt;span class="o"&gt;=======================================================================&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;h2&gt;2. Multiple Linear Regression (MLR)&lt;/h2&gt;
-&lt;p&gt;In multiple linear regression we consider more than one predictor and one dependent variable. Most of the above explanation is valid for MLR too.&lt;/p&gt;
-&lt;h3&gt;Example: Car's MPG (Miles Per Gallon) prediction&lt;/h3&gt;
-&lt;p&gt;Our interest is to model the MPG of a car based on the other variables.&lt;/p&gt;
-&lt;p&gt;Variable Description:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;VOL = cubic feet of cab space&lt;/li&gt;
-&lt;li&gt;HP = engine horsepower&lt;/li&gt;
-&lt;li&gt;MPG = average miles per gallon&lt;/li&gt;
-&lt;li&gt;SP = top speed, miles per hour&lt;/li&gt;
-&lt;li&gt;WT = vehicle weight, hundreds of pounds&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="cp"&gt;# Reading Boston housing prices data&lt;/span&gt;
-&lt;span class="n"&gt;car&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;read&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;csv&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Cars.csv&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Number of rows: &amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;nrow&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;car&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;Number of variables: &amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ncol&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;car&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;head&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;car&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Number&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;rows&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mi"&gt;81&lt;/span&gt;
- &lt;span class="n"&gt;Number&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;variables&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mi"&gt;5&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;table&gt;
-&lt;thead&gt;&lt;tr&gt;&lt;th scope=col&gt;HP&lt;/th&gt;&lt;th scope=col&gt;MPG&lt;/th&gt;&lt;th scope=col&gt;VOL&lt;/th&gt;&lt;th scope=col&gt;SP&lt;/th&gt;&lt;th scope=col&gt;WT&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;&lt;td&gt;49      &lt;/td&gt;&lt;td&gt;53.70068&lt;/td&gt;&lt;td&gt;89      &lt;/td&gt;&lt;td&gt;104.1854&lt;/td&gt;&lt;td&gt;28.76206&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;td&gt;55      &lt;/td&gt;&lt;td&gt;50.01340&lt;/td&gt;&lt;td&gt;92      &lt;/td&gt;&lt;td&gt;105.4613&lt;/td&gt;&lt;td&gt;30.46683&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;td&gt;55      &lt;/td&gt;&lt;td&gt;50.01340&lt;/td&gt;&lt;td&gt;92      &lt;/td&gt;&lt;td&gt;105.4613&lt;/td&gt;&lt;td&gt;30.19360&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;td&gt;70      &lt;/td&gt;&lt;td&gt;45.69632&lt;/td&gt;&lt;td&gt;92      &lt;/td&gt;&lt;td&gt;113.4613&lt;/td&gt;&lt;td&gt;30.63211&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;td&gt;53      &lt;/td&gt;&lt;td&gt;50.50423&lt;/td&gt;&lt;td&gt;92      &lt;/td&gt;&lt;td&gt;104.4613&lt;/td&gt;&lt;td&gt;29.88915&lt;/td&gt;&lt;/tr&gt;
-  &lt;tr&gt;&lt;td&gt;70      &lt;/td&gt;&lt;td&gt;45.69632&lt;/td&gt;&lt;td&gt;89      &lt;/td&gt;&lt;td&gt;113.1854&lt;/td&gt;&lt;td&gt;29.59177&lt;/td&gt;&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;Our objective is to model the variation in &lt;code&gt;MPG&lt;/code&gt; using other independent variables. That is,&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$MPG = \beta_0 + \beta_1 VOL + \beta_2 HP + \beta_3 SP + \beta_4 WT + \epsilon$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;Where, &lt;span class="math"&gt;\(\beta_1\)&lt;/span&gt; represents the amount of change in &lt;code&gt;MPG&lt;/code&gt; per one unit change in &lt;code&gt;VOL&lt;/code&gt; provided other variables are fixed. Let's consider below two cases,&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Case1:&lt;/strong&gt; HP = 49; VOL = 89; SP = 104.1854; WT = 28.76206 =&amp;gt; MPG = 104.1854&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Case2:&lt;/strong&gt; HP = 49; VOL = 90; SP = 104.1854; WT = 28.76206 =&amp;gt; MPG = 105.2453&lt;/p&gt;
-&lt;p&gt;then &lt;span class="math"&gt;\(\beta_1 = 105.2453 - 104.1854 = 1.0599\)&lt;/span&gt;. Similarly, &lt;span class="math"&gt;\(\beta_2, \beta_3, \beta_4\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;The above effect is called as &lt;a href="https://en.wikipedia.org/wiki/Ceteris_paribus"&gt;&lt;code&gt;Ceteris Paribus Effect&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;But in real world it is very difficult to collect records in above manner. That's why we compute (function of) partial correlation coefficients to quantify the effect of one variable, keeping others constant.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="cp"&gt;# Let&amp;#39;s build MLR model to predict MPG based using other variables&lt;/span&gt;
-&lt;span class="n"&gt;fit_mlr_actual&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;MPG&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt; &lt;span class="p"&gt;.,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;car&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;summary&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fit_mlr_actual&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Call&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-&lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;formula&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;MPG&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt; &lt;span class="o"&gt;.,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;car&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
-
-&lt;span class="n"&gt;Residuals&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-     &lt;span class="n"&gt;Min&lt;/span&gt;       &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="n"&gt;Q&lt;/span&gt;   &lt;span class="n"&gt;Median&lt;/span&gt;       &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="n"&gt;Q&lt;/span&gt;      &lt;span class="n"&gt;Max&lt;/span&gt;
-&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;0.94530&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;0.32792&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;0.04058&lt;/span&gt;  &lt;span class="mf"&gt;0.24256&lt;/span&gt;  &lt;span class="mf"&gt;1.71034&lt;/span&gt;
-
-&lt;span class="n"&gt;Coefficients&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-              &lt;span class="n"&gt;Estimate&lt;/span&gt; &lt;span class="n"&gt;Std&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt; &lt;span class="n"&gt;Error&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt; &lt;span class="n"&gt;Pr&lt;/span&gt;&lt;span class="o"&gt;(&amp;gt;|&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="o"&gt;|)&lt;/span&gt;
-&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Intercept&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;  &lt;span class="mf"&gt;7.100&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;17&lt;/span&gt;  &lt;span class="mf"&gt;5.461&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;02&lt;/span&gt;   &lt;span class="mf"&gt;0.000&lt;/span&gt;   &lt;span class="mf"&gt;1.0000&lt;/span&gt;
-&lt;span class="n"&gt;HP&lt;/span&gt;          &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;1.285&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;00&lt;/span&gt;  &lt;span class="mf"&gt;2.453&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;01&lt;/span&gt;  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;5.239&lt;/span&gt;  &lt;span class="mf"&gt;1.4&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;06&lt;/span&gt; &lt;span class="o"&gt;***&lt;/span&gt;
-&lt;span class="n"&gt;VOL&lt;/span&gt;         &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;8.207&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;01&lt;/span&gt;  &lt;span class="mf"&gt;1.389&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;00&lt;/span&gt;  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;0.591&lt;/span&gt;   &lt;span class="mf"&gt;0.5563&lt;/span&gt;
-&lt;span class="n"&gt;SP&lt;/span&gt;           &lt;span class="mf"&gt;6.144&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;01&lt;/span&gt;  &lt;span class="mf"&gt;2.458&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;01&lt;/span&gt;   &lt;span class="mf"&gt;2.500&lt;/span&gt;   &lt;span class="mf"&gt;0.0146&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;
-&lt;span class="n"&gt;WT&lt;/span&gt;           &lt;span class="mf"&gt;3.287&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;01&lt;/span&gt;  &lt;span class="mf"&gt;1.390&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;00&lt;/span&gt;   &lt;span class="mf"&gt;0.237&lt;/span&gt;   &lt;span class="mf"&gt;0.8136&lt;/span&gt;
-&lt;span class="o"&gt;---&lt;/span&gt;
-&lt;span class="n"&gt;Signif&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt; &lt;span class="n"&gt;codes&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;***&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.001&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.01&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.05&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.1&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt; &lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
-
-&lt;span class="n"&gt;Residual&lt;/span&gt; &lt;span class="n"&gt;standard&lt;/span&gt; &lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;0.4915&lt;/span&gt; &lt;span class="n"&gt;on&lt;/span&gt; &lt;span class="mi"&gt;76&lt;/span&gt; &lt;span class="n"&gt;degrees&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;freedom&lt;/span&gt;
-&lt;span class="n"&gt;Multiple&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;squared&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mf"&gt;0.7705&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;  &lt;span class="n"&gt;Adjusted&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;squared&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mf"&gt;0.7585&lt;/span&gt;
-&lt;span class="n"&gt;F&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;statistic&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mf"&gt;63.8&lt;/span&gt; &lt;span class="n"&gt;on&lt;/span&gt; &lt;span class="mi"&gt;4&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="mi"&gt;76&lt;/span&gt; &lt;span class="n"&gt;DF&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;  &lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mf"&gt;2.2&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;One key observation from above output is, Std. Error for &lt;code&gt;VOL&lt;/code&gt; and &lt;code&gt;WT&lt;/code&gt; is very huge comparing to others and this inflates &lt;code&gt;t values&lt;/code&gt; and &lt;code&gt;p value&lt;/code&gt;. Hence, these two variables becomes very insignificant for the model.&lt;/p&gt;
-&lt;p&gt;Let's go into deep, what happened to &lt;span class="math"&gt;\(Var(\hat{\beta_{VOL}})\)&lt;/span&gt; and &lt;span class="math"&gt;\(Var(\hat{\beta_{WT}})\)&lt;/span&gt;?&lt;/p&gt;
-&lt;p&gt;Analogy for &lt;span class="math"&gt;\(Var(\hat{\beta})\)&lt;/span&gt; in MLR is as follows:&lt;/p&gt;
-&lt;p&gt;
-&lt;div class="math"&gt;$$Var(\hat{\beta_{VOL}}) = \frac{\sigma^2}{n\sum_{i=1}^n (VOL_i - \bar{VOL})^2 (1 - R_{VOL}^2)}$$&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;Where, &lt;span class="math"&gt;\(R_{VOL}^2\)&lt;/span&gt; = Multiple R-squared value obtained by regressing VOL on all other independent variables&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Task:&lt;/strong&gt; To understand it more clearly, take few random samples from cars data and run the MLR model and observe the variation in &lt;span class="math"&gt;\(\hat{\beta_{VOL}}\)&lt;/span&gt; and &lt;span class="math"&gt;\(\hat{\beta_{WT}}\)&lt;/span&gt;.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="cp"&gt;# Let&amp;#39;s regress VOL on all other independent variables&amp;#39;&lt;/span&gt;
-&lt;span class="n"&gt;fit_mlr&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;VOL&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt; &lt;span class="n"&gt;HP&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;SP&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;WT&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;car&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;summary&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fit_mlr&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Call&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-&lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;formula&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;VOL&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt; &lt;span class="n"&gt;HP&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;SP&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;WT&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;car&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
-
-&lt;span class="n"&gt;Residuals&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-      &lt;span class="n"&gt;Min&lt;/span&gt;        &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="n"&gt;Q&lt;/span&gt;    &lt;span class="n"&gt;Median&lt;/span&gt;        &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="n"&gt;Q&lt;/span&gt;       &lt;span class="n"&gt;Max&lt;/span&gt;
-&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;0.068938&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;0.031641&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;0.008794&lt;/span&gt;  &lt;span class="mf"&gt;0.032018&lt;/span&gt;  &lt;span class="mf"&gt;0.077931&lt;/span&gt;
-
-&lt;span class="n"&gt;Coefficients&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-              &lt;span class="n"&gt;Estimate&lt;/span&gt; &lt;span class="n"&gt;Std&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt; &lt;span class="n"&gt;Error&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt; &lt;span class="n"&gt;Pr&lt;/span&gt;&lt;span class="o"&gt;(&amp;gt;|&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="o"&gt;|)&lt;/span&gt;
-&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Intercept&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;6.155&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;18&lt;/span&gt;  &lt;span class="mf"&gt;4.481&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;03&lt;/span&gt;   &lt;span class="mf"&gt;0.000&lt;/span&gt;    &lt;span class="mf"&gt;1.000&lt;/span&gt;
-&lt;span class="n"&gt;HP&lt;/span&gt;           &lt;span class="mf"&gt;2.331&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;02&lt;/span&gt;  &lt;span class="mf"&gt;1.995&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;02&lt;/span&gt;   &lt;span class="mf"&gt;1.168&lt;/span&gt;    &lt;span class="mf"&gt;0.246&lt;/span&gt;
-&lt;span class="n"&gt;SP&lt;/span&gt;          &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;2.294&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;02&lt;/span&gt;  &lt;span class="mf"&gt;2.000&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;02&lt;/span&gt;  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;1.147&lt;/span&gt;    &lt;span class="mf"&gt;0.255&lt;/span&gt;
-&lt;span class="n"&gt;WT&lt;/span&gt;           &lt;span class="mf"&gt;9.998&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;01&lt;/span&gt;  &lt;span class="mf"&gt;4.557&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;03&lt;/span&gt; &lt;span class="mf"&gt;219.396&lt;/span&gt;   &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt; &lt;span class="o"&gt;***&lt;/span&gt;
-&lt;span class="o"&gt;---&lt;/span&gt;
-&lt;span class="n"&gt;Signif&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt; &lt;span class="n"&gt;codes&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;***&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.001&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.01&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.05&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.1&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt; &lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
-
-&lt;span class="n"&gt;Residual&lt;/span&gt; &lt;span class="n"&gt;standard&lt;/span&gt; &lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;0.04033&lt;/span&gt; &lt;span class="n"&gt;on&lt;/span&gt; &lt;span class="mi"&gt;77&lt;/span&gt; &lt;span class="n"&gt;degrees&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;freedom&lt;/span&gt;
-&lt;span class="n"&gt;Multiple&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;squared&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mf"&gt;0.9984&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;  &lt;span class="n"&gt;Adjusted&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;squared&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mf"&gt;0.9984&lt;/span&gt;
-&lt;span class="n"&gt;F&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;statistic&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;1.637&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;04&lt;/span&gt; &lt;span class="n"&gt;on&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="mi"&gt;77&lt;/span&gt; &lt;span class="n"&gt;DF&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;  &lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mf"&gt;2.2&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;It's surprising that, &lt;span class="math"&gt;\(R_{VOL}^2\)&lt;/span&gt; is 0.9984 and also only &lt;code&gt;WT&lt;/code&gt; is significant. That is, these two predictors (&lt;code&gt;VOL&lt;/code&gt; and &lt;code&gt;WT&lt;/code&gt;) are highly correlated. This inflates &lt;span class="math"&gt;\(Var(\hat{\beta_{VOL}})\)&lt;/span&gt; and thus &lt;code&gt;t value&lt;/code&gt;. We might be missing some of the important information because of high correlation between predictors. This problem is called as &lt;a href="https://en.wikipedia.org/wiki/Multicollinearity"&gt;Multicollinearity&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;One quick solution for this problem is to remove either &lt;code&gt;VOL&lt;/code&gt; or &lt;code&gt;WT&lt;/code&gt; from the model. Let's compute partial correlation coeficient between &lt;code&gt;MPG&lt;/code&gt; and &lt;code&gt;VOL&lt;/code&gt; by removing the effect of &lt;code&gt;WT&lt;/code&gt; (say, &lt;span class="math"&gt;\(r_{MV.W}\)&lt;/span&gt;) and partial correlation coeficient between &lt;code&gt;MPG&lt;/code&gt; and &lt;code&gt;WT&lt;/code&gt; by removing the effect of &lt;code&gt;VOL&lt;/code&gt; (say, &lt;span class="math"&gt;\(r_{MW.V}\)&lt;/span&gt;).&lt;/p&gt;
-&lt;p&gt;To compute &lt;span class="math"&gt;\(r_{MV.W}\)&lt;/span&gt; we need to compute the correlation between (a) part of &lt;code&gt;VOL&lt;/code&gt; which cannot be explained by &lt;code&gt;WT&lt;/code&gt; (regress &lt;code&gt;VOL&lt;/code&gt; on &lt;code&gt;WT&lt;/code&gt; and take the residuals) and (b) the part of &lt;code&gt;MPG&lt;/code&gt; which cannot be explained by &lt;code&gt;WT&lt;/code&gt; (regress &lt;code&gt;MPG&lt;/code&gt; on &lt;code&gt;WT&lt;/code&gt; and take the residuals)&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;fit_partial&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;VOL&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt; &lt;span class="n"&gt;WT&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;car&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;fit_partial2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;MPG&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt; &lt;span class="n"&gt;WT&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;car&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;res1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;fit_partial&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;residual&lt;/span&gt;
-&lt;span class="n"&gt;res2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;fit_partial2&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;residual&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Partial correlation coefficient between MPG and VOL by removing the effect of WT is: &amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;cor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;res1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;res2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Partial&lt;/span&gt; &lt;span class="n"&gt;correlation&lt;/span&gt; &lt;span class="n"&gt;coefficient&lt;/span&gt; &lt;span class="n"&gt;between&lt;/span&gt; &lt;span class="n"&gt;MPG&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;VOL&lt;/span&gt; &lt;span class="n"&gt;by&lt;/span&gt; &lt;span class="n"&gt;removing&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;effect&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;WT&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;0.08008873&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;fit_partial3&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;WT&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt; &lt;span class="n"&gt;VOL&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;car&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;fit_partial4&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;MPG&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt; &lt;span class="n"&gt;VOL&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;car&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;res1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;fit_partia3&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;residual&lt;/span&gt;
-&lt;span class="n"&gt;res2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;fit_partial4&lt;/span&gt;&lt;span class="err"&gt;$&lt;/span&gt;&lt;span class="n"&gt;residual&lt;/span&gt;
-&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Partial correlation coefficient between MPG and WT by removing the effect of VOL is: &amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;cor&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;res1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;res2&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Partial&lt;/span&gt; &lt;span class="n"&gt;correlation&lt;/span&gt; &lt;span class="n"&gt;coefficient&lt;/span&gt; &lt;span class="n"&gt;between&lt;/span&gt; &lt;span class="n"&gt;MPG&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;WT&lt;/span&gt; &lt;span class="n"&gt;by&lt;/span&gt; &lt;span class="n"&gt;removing&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt; &lt;span class="n"&gt;effect&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;VOL&lt;/span&gt; &lt;span class="n"&gt;is&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mf"&gt;0.05538241&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;Since, &lt;span class="math"&gt;\(abs(r_{MV.W}) &amp;gt;= abs(r_{MW.V})\)&lt;/span&gt; we may remove &lt;code&gt;WT&lt;/code&gt; from the model.&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="cp"&gt;# Remove WT and rerun the model&lt;/span&gt;
-&lt;span class="n"&gt;fit_mlr_actual2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;MPG&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt; &lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;WT&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;car&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;span class="n"&gt;summary&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fit_mlr_actual2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;Call&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-&lt;span class="n"&gt;lm&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;formula&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;MPG&lt;/span&gt; &lt;span class="o"&gt;~&lt;/span&gt; &lt;span class="o"&gt;.&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;WT&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;car&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
-
-&lt;span class="n"&gt;Residuals&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-     &lt;span class="n"&gt;Min&lt;/span&gt;       &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="n"&gt;Q&lt;/span&gt;   &lt;span class="n"&gt;Median&lt;/span&gt;       &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="n"&gt;Q&lt;/span&gt;      &lt;span class="n"&gt;Max&lt;/span&gt;
-&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;0.94036&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;0.31695&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;0.03457&lt;/span&gt;  &lt;span class="mf"&gt;0.23316&lt;/span&gt;  &lt;span class="mf"&gt;1.71570&lt;/span&gt;
-
-&lt;span class="n"&gt;Coefficients&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
-              &lt;span class="n"&gt;Estimate&lt;/span&gt; &lt;span class="n"&gt;Std&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt; &lt;span class="n"&gt;Error&lt;/span&gt; &lt;span class="n"&gt;t&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt; &lt;span class="n"&gt;Pr&lt;/span&gt;&lt;span class="o"&gt;(&amp;gt;|&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="o"&gt;|)&lt;/span&gt;
-&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Intercept&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;  &lt;span class="mf"&gt;7.910&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;17&lt;/span&gt;  &lt;span class="mf"&gt;5.427&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;02&lt;/span&gt;   &lt;span class="mf"&gt;0.000&lt;/span&gt;   &lt;span class="mf"&gt;1.0000&lt;/span&gt;
-&lt;span class="n"&gt;HP&lt;/span&gt;          &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;1.293&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;00&lt;/span&gt;  &lt;span class="mf"&gt;2.415&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;01&lt;/span&gt;  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;5.353&lt;/span&gt; &lt;span class="mf"&gt;8.64&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;07&lt;/span&gt; &lt;span class="o"&gt;***&lt;/span&gt;
-&lt;span class="n"&gt;VOL&lt;/span&gt;         &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;4.925&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;01&lt;/span&gt;  &lt;span class="mf"&gt;5.516&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;02&lt;/span&gt;  &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mf"&gt;8.928&lt;/span&gt; &lt;span class="mf"&gt;1.65&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;13&lt;/span&gt; &lt;span class="o"&gt;***&lt;/span&gt;
-&lt;span class="n"&gt;SP&lt;/span&gt;           &lt;span class="mf"&gt;6.222&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;01&lt;/span&gt;  &lt;span class="mf"&gt;2.421&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;01&lt;/span&gt;   &lt;span class="mf"&gt;2.571&lt;/span&gt;   &lt;span class="mf"&gt;0.0121&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;
-&lt;span class="o"&gt;---&lt;/span&gt;
-&lt;span class="n"&gt;Signif&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt; &lt;span class="n"&gt;codes&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;***&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.001&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.01&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.05&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mf"&gt;0.1&lt;/span&gt; &lt;span class="err"&gt;‘&lt;/span&gt; &lt;span class="err"&gt;’&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;
-
-&lt;span class="n"&gt;Residual&lt;/span&gt; &lt;span class="n"&gt;standard&lt;/span&gt; &lt;span class="n"&gt;error&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;0.4884&lt;/span&gt; &lt;span class="n"&gt;on&lt;/span&gt; &lt;span class="mi"&gt;77&lt;/span&gt; &lt;span class="n"&gt;degrees&lt;/span&gt; &lt;span class="n"&gt;of&lt;/span&gt; &lt;span class="n"&gt;freedom&lt;/span&gt;
-&lt;span class="n"&gt;Multiple&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;squared&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mf"&gt;0.7704&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;  &lt;span class="n"&gt;Adjusted&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;squared&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;  &lt;span class="mf"&gt;0.7614&lt;/span&gt;
-&lt;span class="n"&gt;F&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;statistic&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="mf"&gt;86.11&lt;/span&gt; &lt;span class="n"&gt;on&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="mi"&gt;77&lt;/span&gt; &lt;span class="n"&gt;DF&lt;/span&gt;&lt;span class="o"&gt;,&lt;/span&gt;  &lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mf"&gt;2.2&lt;/span&gt;&lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;After eliminating &lt;code&gt;WT&lt;/code&gt; from the model there is an increment of ~0.3% in Adjusted R-squared and more importantly, &lt;code&gt;VOL&lt;/code&gt; becomes significant at 0 &lt;a href="https://en.wikipedia.org/wiki/Statistical_significance"&gt;los&lt;/a&gt; (level of significance)&lt;/p&gt;
-&lt;p&gt;&lt;a id='Assumptions'&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h2&gt;3. Assumptions&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;Linear in Parameters:&lt;/strong&gt; We assume that there is a linear relation between dependent and set of independent variables&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Zero conditional mean:&lt;/strong&gt; &lt;span class="math"&gt;\(E(\epsilon \mid X) = 0\)&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Homoskedasticity:&lt;/strong&gt; &lt;span class="math"&gt;\(Var(\epsilon \mid X) = \sigma^2\)&lt;/span&gt; (Constant)&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;No perfect Collinearity:&lt;/strong&gt; All predecitors must be independent among themselves&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;No serial correlation in errors:&lt;/strong&gt; Erros must be uncorrelated among themselves. In otherwords, observations or records must be independent of each other.&lt;/p&gt;
-&lt;p&gt;We discussed first 4 assumptions in section 1 and 2.&lt;/p&gt;
-&lt;p&gt;Here is a book that I recommend to learn more about this:&lt;/p&gt;
-&lt;p&gt;&lt;a target="_blank"  href="https://www.amazon.com/gp/product/1111531048/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1111531048&amp;linkCode=as2&amp;tag=nkaveti-20&amp;linkId=83f6e694209869322f8bfad406883d2f"&gt;&lt;img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=1111531048&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=nkaveti-20" &gt;&lt;/a&gt;&lt;img src="//ir-na.amazon-adsystem.com/e/ir?t=nkaveti-20&amp;l=am2&amp;o=1&amp;a=1111531048" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /&gt;&lt;/p&gt;
-&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-    var mathjaxscript = document.createElement('script');
-    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-    mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({" +
-        "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
-        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-        "    displayAlign: 'center'," +
-        "    displayIndent: '0em'," +
-        "    showMathMenu: true," +
-        "    tex2jax: { " +
-        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
-        "        displayMath: [ ['$$','$$'] ]," +
-        "        processClass: 'mathjax', " +
-        "        ignoreClass: 'no-mathjax', " +
-        "        processEscapes: true," +
-        "        preview: 'TeX'," +
-        "    }, " +
-        "    'HTML-CSS': { " +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
-        "    } " +
-        "}); ";
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-}
-&lt;/script&gt;</summary><category term="SLR"></category><category term="MLR"></category><category term="Linear Regression"></category><category term="Statistic"></category><category term="Basics"></category><category term="Layman Explanations"></category></entry></feed>
+&lt;p&gt;Till then. Ciao!!!&lt;/p&gt;</summary><category term="Data Science"></category><category term="Statistics"></category><category term="Resources"></category><category term="Learning"></category><category term="Books"></category><category term="Python"></category><category term="Distributions"></category><category term="Statistical Inference"></category><category term="hadoop"></category><category term="spark"></category><category term="deep learning"></category></entry></feed>
