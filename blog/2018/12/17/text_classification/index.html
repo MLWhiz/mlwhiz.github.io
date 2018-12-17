@@ -1860,7 +1860,7 @@ of text of indefinite length into a category of text. How could you use that? </
 <center><img src="/images/text_convolution.png"  height="400" width="700" ></center>
 </div>
 
-<p>Now for some intuition. While for a image we move our conv filter horizontally also since here we have fixed our kernel size to filter_size x embed_size i.e. (3,300) we are just going to move down for the convolution taking look at three words at once since our filter size is 3 in this case.Also one can think of filter sizes as unigrams, bigrams, trigrams etc. Since we are looking at a context window of 1,2,3, and 5 words respectively. Get a more in-depth idea from this blog by Denny Britz. Here is the text classification network coded in Keras: </p>
+<p>Now for some intuition. While for a image we move our conv filter horizontally also since here we have fixed our kernel size to filter_size x embed_size i.e. (3,300) we are just going to move down for the convolution taking look at three words at once since our filter size is 3 in this case.Also one can think of filter sizes as unigrams, bigrams, trigrams etc. Since we are looking at a context window of 1,2,3, and 5 words respectively. Here is the text classification network coded in Keras: </p>
 <pre style="font-size:60%">
 <code class="python"># https://www.kaggle.com/yekenot/2dcnn-textclassifier
 def model_cnn(embedding_matrix):
@@ -1891,9 +1891,9 @@ def model_cnn(embedding_matrix):
 
 <p>I have written a simplified and well commented code to run this network(taking input from a lot of other kernels) on a <a href="https://www.kaggle.com/mlwhiz/learning-text-classification-textcnn">kaggle kernel</a> for this competition. Do take a look there to learn the preprocessing steps, and the word to vec embeddings usage in this model. You will learn something. Please do upvote the kernel if you find it helpful. This kernel scored around 0.661 on the public leaderboard. </p>
 <h3>2. BiDirectional RNN(LSTM/GRU):</h3>
-<p>TextCNN takes care of a lot of things. For example it takes care of words in close range. It is able to see "new york" together. But it still can't take care of all the context provided in a particular text sequence. It still does not learn the seem to learn the sequential structure of the data. where every word is dependednt on the previous word. Or a word in the previous sentence. </p>
-<p>RNN help us with that. They are able to remember previous information using hidden states and connect it to the current task.
-Long Short Term Memory networks (LSTM) are a subclass of RNN, specialized in remembering information for a long period of time. More over the Bidirectional lstms keep the contextual information in both directions which is pretty useful in text classification task(But won't work for a time sweries prediction task).</p>
+<p>TextCNN takes care of a lot of things. For example it takes care of words in close range. It is able to see "new york" together. But it still can't take care of all the context provided in a particular text sequence. It still does not learn the seem to learn the sequential structure of the data, where every word is dependednt on the previous word. Or a word in the previous sentence. </p>
+<p>RNN help us with that. <em>They are able to remember previous information using hidden states and connect it to the current task.</em></p>
+<p>Long Short Term Memory networks (LSTM) are a subclass of RNN, specialized in remembering information for a long period of time. More over the Bidirectional LSTM keeps the contextual information in both directions which is pretty useful in text classification task (But won't work for a time sweries prediction task).</p>
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/birnn.png"  height="400" width="700" ></center>
 </div>
