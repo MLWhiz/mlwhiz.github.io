@@ -1841,7 +1841,7 @@ jQuery(document).ready(function($) {
       <p class="meta"><time datetime="2018-12-17T04:43:00" pubdate>Dec 17, 2018</time></p>
 </header>
 
-  <div class="entry-content"><p>With the problem of Image Classification is more or less solved by Deep learning, Text Classification is the next new developing theme in deep learning. For those who don't know, Text classification is a common task in natural language processing, which transforms a sequence
+  <div class="entry-content"><p>With the problem of Image Classification is more or less solved by Deep learning, <em>Text Classification is the next new developing theme in deep learning</em>. For those who don't know, Text classification is a common task in natural language processing, which transforms a sequence
 of text of indefinite length into a category of text. How could you use that? </p>
 <ul>
 <li>To find sentiment of a review. </li>
@@ -1850,7 +1850,7 @@ of text of indefinite length into a category of text. How could you use that? </
 <li>Find fake reviews on websites</li>
 <li>Will a text advert get clicked or not</li>
 </ul>
-<p>And many more. The whole internet is filled with text and to categorise the information algorithmically will only give us incremental benefits to say the least in the field of AI. </p>
+<p>And much more. The whole internet is filled with text and to categorise that information algorithmically will only give us incremental benefits to say the least in the field of AI. </p>
 <p>Here I am going to use the data from Quora's Insincere questions to talk about the different models that people are building and sharing to perform this task. Obviously these standalone models are not going to put you on the top of the leaderboard, yet I hope that this ensuing discussion would be helpful for people who want to learn more about text classification. This is going to be a long post in that regard.</p>
 <p>As a side note: if you want to know more about NLP, I would like to recommend this awesome course on <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Natural Language Processing</a> in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a>. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few. </p>
 <p>So let me try to go through some of the models which people are using to perform text classification and try to provide a brief intuition for them.</p>
@@ -1898,8 +1898,11 @@ Long Short Term Memory networks (LSTM) are a subclass of RNN, specialized in rem
 <center><img src="/images/birnn.png"  height="400" width="700" ></center>
 </div>
 
-<p>For a most simplistic explanation of Bidirectional RNN, think of RNN cell as taking as input a hidden state(a vector) and the word vector and giving out an output vector and the next hidden state. 
-            Hidden state, Word vector -&gt;(RNN Cell) -&gt; Output Vector , Next Hidden state</p>
+<p>For a most simplistic explanation of Bidirectional RNN, think of RNN cell as taking as input a hidden state(a vector) and the word vector and giving out an output vector and the next hidden state. </p>
+<div class="highlight"><pre>        <span class="n">Hidden</span> <span class="n">state</span><span class="p">,</span> <span class="n">Word</span> <span class="n">vector</span> <span class="o">-&gt;</span><span class="p">(</span><span class="n">RNN</span> <span class="n">Cell</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Output</span> <span class="n">Vector</span> <span class="p">,</span> <span class="n">Next</span> <span class="n">Hidden</span> <span class="n">state</span>
+</pre></div>
+
+
 <p>For a sequence of length 4 like 'you will never believe', The RNN cell will give 4 output vectors. Which can be concatenated and then used as part of a dense feedforward architecture. </p>
 <p>In the Bidirectional RNN the only change is that we read the text in the normal fashion as well in reverse. So we stack two RNNs in parallel and hence we get 8 output vectors to append. </p>
 <p>Once we get the output vectors we send them through a series of dense layers and finally a softmax layer to build a text classifier.</p>
