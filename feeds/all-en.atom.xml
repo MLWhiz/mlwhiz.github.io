@@ -64,7 +64,7 @@ def model_cnn(embedding_matrix):
 &lt;p&gt;For a sequence of length 4 like 'you will never believe', The RNN cell will give 4 output vectors. Which can be concatenated and then used as part of a dense feedforward architecture. &lt;/p&gt;
 &lt;p&gt;In the Bidirectional RNN the only change is that we read the text in the normal fashion as well in reverse. So we stack two RNNs in parallel and hence we get 8 output vectors to append. &lt;/p&gt;
 &lt;p&gt;Once we get the output vectors we send them through a series of dense layers and finally a softmax layer to build a text classifier.&lt;/p&gt;
-&lt;p&gt;Due to the limitations of RNNs like not remembering long term dependencies, in practice we almost always use LSTM/GRU to model long term dependencies. In such a case you can just think of the RNN cell being replaced by a LSTM cell or a GRU cell in the above figure. An example model is provided below. Youc an use CuDNNGRU interchangably with CuDNNLSTM, when you build models. &lt;/p&gt;
+&lt;p&gt;Due to the limitations of RNNs like not remembering long term dependencies, in practice we almost always use LSTM/GRU to model long term dependencies. In such a case you can just think of the RNN cell being replaced by a LSTM cell or a GRU cell in the above figure. An example model is provided below. You can use CuDNNGRU interchangably with CuDNNLSTM, when you build models. &lt;/p&gt;
 &lt;pre style="font-size:60%"&gt;
 &lt;code class="python"&gt;# BiDirectional LSTM
 def model_lstm_du(embedding_matrix):
