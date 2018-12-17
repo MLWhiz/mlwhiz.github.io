@@ -12,7 +12,7 @@ of text of indefinite length into a category of text. How could you use that? &l
 &lt;p&gt;Here I am going to use the data from Quora's Insincere questions to talk about the different models that people are building and sharing to perform this task. Obviously these standalone models are not going to put you on the top of the leaderboard, yet I hope that this ensuing discussion would be helpful for people who want to learn more about text classification. This is going to be a long post in that regard.&lt;/p&gt;
 &lt;p&gt;As a side note: if you want to know more about NLP, I would like to recommend this awesome course on &lt;a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;Natural Language Processing&lt;/a&gt; in the &lt;a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;Advanced machine learning specialization&lt;/a&gt;. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few. &lt;/p&gt;
 &lt;p&gt;So let me try to go through some of the models which people are using to perform text classification and try to provide a brief intuition for them.&lt;/p&gt;
-&lt;h3&gt;1. TextCNN:&lt;/h3&gt;
+&lt;h2&gt;1. TextCNN:&lt;/h2&gt;
 &lt;p&gt;The idea of using a CNN to classify text was first presented in the paper &lt;a href="https://www.aclweb.org/anthology/D14-1181"&gt;Convolutional Neural Networks for Sentence Classification&lt;/a&gt; by Yoon Kim. Instead of image pixels, the input to the tasks are sentences or documents represented as a matrix. Each row of the matrix corresponds to one word vector. That is, each row is word-vector that represents a word. Thus a sequence of max length 70 gives us a image of 70(max sequence length)x300(embedding size)&lt;/p&gt;
 &lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
 &lt;center&gt;&lt;img src="/images/text_convolution.png"  height="400" width="700" &gt;&lt;/center&gt;
@@ -48,7 +48,7 @@ def model_cnn(embedding_matrix):
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;I have written a simplified and well commented code to run this network(taking input from a lot of other kernels) on a &lt;a href="https://www.kaggle.com/mlwhiz/learning-text-classification-textcnn"&gt;kaggle kernel&lt;/a&gt; for this competition. Do take a look there to learn the preprocessing steps, and the word to vec embeddings usage in this model. You will learn something. Please do upvote the kernel if you find it helpful. This kernel scored around 0.661 on the public leaderboard. &lt;/p&gt;
-&lt;h3&gt;2. BiDirectional RNN(LSTM/GRU):&lt;/h3&gt;
+&lt;h2&gt;2. BiDirectional RNN(LSTM/GRU):&lt;/h2&gt;
 &lt;p&gt;TextCNN takes care of a lot of things. For example it takes care of words in close range. It is able to see "new york" together. But it still can't take care of all the context provided in a particular text sequence. It still does not learn the seem to learn the sequential structure of the data, where every word is dependednt on the previous word. Or a word in the previous sentence. &lt;/p&gt;
 &lt;p&gt;RNN help us with that. &lt;em&gt;They are able to remember previous information using hidden states and connect it to the current task.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;Long Short Term Memory networks (LSTM) are a subclass of RNN, specialized in remembering information for a long period of time. More over the Bidirectional LSTM keeps the contextual information in both directions which is pretty useful in text classification task (But won't work for a time sweries prediction task).&lt;/p&gt;
@@ -88,7 +88,7 @@ def model_lstm_du(embedding_matrix):
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;I have written a simplified and well commented code to run this network(taking input from a lot of other kernels) on a &lt;a href="https://www.kaggle.com/mlwhiz/learning-text-classification-bidirectionalrnn"&gt;kaggle kernel&lt;/a&gt; for this competition. Do take a look there to learn the preprocessing steps, and the word to vec embeddings usage in this model. You will learn something. Please do upvote the kernel if you find it helpful. This kernel scored around 0.671 on the public leaderboard. &lt;/p&gt;
-&lt;h3&gt;3. Attention Models&lt;/h3&gt;
+&lt;h2&gt;3. Attention Models&lt;/h2&gt;
 &lt;p&gt;The concept of Attention is relatively new as it comes from &lt;a href="https://www.cs.cmu.edu/~diyiy/docs/naacl16.pdf"&gt;Hierarchical Attention Networks for Document Classification&lt;/a&gt; paper written jointly by CMU and Microsoft guys in 2016. &lt;/p&gt;
 &lt;p&gt;So in the past we used to find features from text by doing a keyword extraction. Some word are more helpful in determining the category of a text than others. But in this method we sort of lost the sequential structure of text. With LSTM and deep learning methods while we are able to take case of the sequence structure we lose the ability to give higher weightage to more important words. 
 Can we have the best of both worlds?&lt;/p&gt;
@@ -234,7 +234,7 @@ def model_lstm_atten(embedding_matrix):
 &lt;p&gt;Hope that Helps! Do checkout the kernels for all the networks and see the comments too. I will try to write a part 2 of this post where I would like to talk about capsule networks and more techniques as they get used in this competition. &lt;/p&gt;
 &lt;p&gt;Here are the kernel links again: &lt;a href="https://www.kaggle.com/mlwhiz/learning-text-classification-textcnn"&gt;TextCNN&lt;/a&gt;,&lt;a href="https://www.kaggle.com/mlwhiz/learning-text-classification-bidirectionalrnn"&gt;BiLSTM/GRU&lt;/a&gt;,&lt;a href="https://www.kaggle.com/mlwhiz/learning-text-classification-attention"&gt;Attention&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Do upvote the kenels if you find them helpful.&lt;/p&gt;
-&lt;h3&gt;References:&lt;/h3&gt;
+&lt;h2&gt;References:&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="http://www.wildml.com/2015/11/understanding-convolutional-neural-networks-for-nlp/"&gt;CNN for NLP&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;https://en.diveintodeeplearning.org/d2l-en.pdf&lt;/li&gt;
