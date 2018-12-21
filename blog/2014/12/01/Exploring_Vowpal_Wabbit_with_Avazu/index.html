@@ -130,14 +130,12 @@
       <p class="meta"><time datetime="2014-12-01T13:43:00" pubdate>Dec 01, 2014</time></p>
 </header>
 
-  <div class="entry-content"><p>
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>In online advertising, click-through rate (CTR) is a very important metric for evaluating ad performance. As a result, click prediction systems are essential and widely used for sponsored search and real-time bidding.</p>
-<p>For this competition, we have provided 11 days worth of Avazu data to build and test prediction models. Can you find a strategy that beats standard classification algorithms? The winning models from this competition will be released under an open-source license.</p>
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="data-fields">Data Fields</h4>
-<pre><code>id: ad identifier
+  <div class="entry-content"><p>In online advertising, click-through rate (CTR) is a very important metric for evaluating ad performance. As a result, click prediction systems are essential and widely used for sponsored search and real-time bidding.</p>
+<p>For this competition, we have provided 11 days worth of Avazu data to build and test prediction models. Can you find a strategy that beats standard classification algorithms? The winning models from this competition will be released under an open-source 
+license.</p>
+<h2>Data Fields</h2>
+<pre style="font-family:courier new,monospace; background-color:#f6c6529c; color:#000000">
+id: ad identifier
 click: 0/1 for non-click/click
 hour: format is YYMMDDHH, so 14091123 means 23:00 on Sept. 11, 2014 UTC.
 C1 -- anonymized categorical variable
@@ -153,174 +151,143 @@ device_ip
 device_model
 device_type
 device_conn_type
-C14-C21 -- anonymized categorical variables</code></pre>
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="loading-data">Loading Data</h4>
-</div>
-<div class="cell border-box-sizing code_cell vbox">
-<div class="input hbox">
-<div class="prompt input_prompt">
-In&nbsp;[9]:
-</div>
-<div class="input_area box-flex1">
-<div class="highlight-ipynb"><pre class="ipynb"><span class="c">## Loading the data </span>
+C14-C21 -- anonymized categorical variables 
+</pre>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">string</span> <span class="kn">as</span> <span class="nn">stri</span>
+<h2>Loading Data</h2>
+<pre style="font-size:60%">
+<code class="python">
+## Loading the data
 
-<span class="c">#too large data not keeping it in memory.</span>
-<span class="c"># will be using line by line scripting.</span>
-<span class="c">#data = pd.read_csv(&quot;/Users/RahulAgarwal/kaggle_cpr/train&quot;)</span>
-</pre></div>
+import pandas as pd
+import numpy as np
+import string as stri
 
-</div>
-</div>
+#too large data not keeping it in memory.
+# will be using line by line scripting.
+#data = pd.read_csv("/Users/RahulAgarwal/kaggle_cpr/train")
+</code></pre>
 
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Since the data istoo large around 6 gb , we will proceed by doing line by line analysis of data. We will try to use vowpal wabbit first of all as it is an online model and it also gives us the option of minimizing log loss as a default. It is also very fast to run and will give us quite an intuition as to how good our prediction can be. - I will use all the variables in the first implementation and we will rediscover things as we move on</p>
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="running-vowpal-wabbit">Running Vowpal Wabbit</h4>
-<h4 id="creating-data-in-vowpal-format-one-time-only">Creating data in vowpal format (One Time Only)</h4>
-</div>
-<div class="cell border-box-sizing code_cell vbox">
-<div class="input hbox">
-<div class="prompt input_prompt">
-In&nbsp;[15]:
-</div>
-<div class="input_area box-flex1">
-<div class="highlight-ipynb"><pre class="ipynb"><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<p>Since the data is too large around 6 gb , we will proceed by doing line by line analysis of data. We will try to use vowpal wabbit first of all as it is an online model and it also gives us the option of minimizing log loss as a default. It is also very fast to run and will give us quite an intuition as to how good our prediction can be.</p>
+<p>I will use all the variables in the first implementation and we will rediscover things as we move on</p>
+<h2>Running Vowpal Wabbit</h2>
+<h2>Creating data in vowpal format (One Time Only)</h2>
+<pre style="font-size:60%">
+<code class="python">from datetime import datetime
 
-<span class="k">def</span> <span class="nf">csv_to_vw</span><span class="p">(</span><span class="n">loc_csv</span><span class="p">,</span> <span class="n">loc_output</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">Turning </span><span class="si">%s</span><span class="s"> into </span><span class="si">%s</span><span class="s">. Is_train_set? </span><span class="si">%s</span><span class="s">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">loc_csv</span><span class="p">,</span><span class="n">loc_output</span><span class="p">,</span><span class="n">train</span><span class="p">))</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">loc_csv</span><span class="p">,</span> <span class="s">&quot;r&quot;</span><span class="p">)</span>
-    <span class="n">j</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">loc_output</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span>
-    <span class="n">counter</span><span class="o">=</span><span class="mi">0</span>
-    <span class="k">with</span> <span class="n">i</span> <span class="k">as</span> <span class="n">infile</span><span class="p">:</span>
-        <span class="n">line_count</span><span class="o">=</span><span class="mi">0</span>
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">infile</span><span class="p">:</span>
-            <span class="c"># to counter the header</span>
-            <span class="k">if</span> <span class="n">line_count</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-                <span class="n">line_count</span><span class="o">=</span><span class="mi">1</span>
-                <span class="k">continue</span>
-            <span class="c"># The data has all categorical features</span>
-            <span class="c">#numerical_features = &quot;&quot;</span>
-            <span class="n">categorical_features</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
-            <span class="n">counter</span> <span class="o">=</span> <span class="n">counter</span><span class="o">+</span><span class="mi">1</span>
-            <span class="c">#print counter</span>
-            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;,&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">train</span><span class="p">:</span>
-                <span class="c">#working on the date column. We will take day , hour</span>
-                <span class="n">a</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-                <span class="n">new_date</span><span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="s">&quot;20&quot;</span><span class="o">+</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]),</span><span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]),</span><span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">]))</span>
-                <span class="n">day</span> <span class="o">=</span> <span class="n">new_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&quot;%A&quot;</span><span class="p">)</span>
-                <span class="n">hour</span><span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span>
-                <span class="n">categorical_features</span> <span class="o">+=</span> <span class="s">&quot; |hr </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">hour</span>
-                <span class="n">categorical_features</span> <span class="o">+=</span> <span class="s">&quot; |day </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">day</span>
-                <span class="c"># 24 columns in data    </span>
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">24</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&quot;&quot;</span><span class="p">:</span>
-                        <span class="n">categorical_features</span> <span class="o">+=</span> <span class="s">&quot;|c</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="n">line</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">a</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                <span class="n">new_date</span><span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="s">&quot;20&quot;</span><span class="o">+</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]),</span><span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]),</span><span class="nb">int</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">]))</span>
-                <span class="n">day</span> <span class="o">=</span> <span class="n">new_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&quot;%A&quot;</span><span class="p">)</span>
-                <span class="n">hour</span><span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">8</span><span class="p">]</span>
-                <span class="n">categorical_features</span> <span class="o">+=</span> <span class="s">&quot; |hr </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">hour</span>
-                <span class="n">categorical_features</span> <span class="o">+=</span> <span class="s">&quot; |day </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">day</span>
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">23</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&quot;&quot;</span><span class="p">:</span>
-                        <span class="n">categorical_features</span> <span class="o">+=</span> <span class="s">&quot; |c</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">line</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-  <span class="c">#Creating the labels</span>
-            <span class="c">#print &quot;a&quot;</span>
-            <span class="k">if</span> <span class="n">train</span><span class="p">:</span> <span class="c">#we care about labels</span>
-                <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&quot;1&quot;</span><span class="p">:</span>
-                    <span class="n">label</span> <span class="o">=</span> <span class="mi">1</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">label</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="c">#we set negative label to -1</span>
-                <span class="c">#print (numerical_features)</span>
-                <span class="c">#print categorical_features</span>
-                <span class="n">j</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s"> &#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">label</span><span class="p">,</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">categorical_features</span><span class="p">))</span>
+def csv_to_vw(loc_csv, loc_output, train=True):
+    start = datetime.now()
+    print("\nTurning %s into %s. Is_train_set? %s"%(loc_csv,loc_output,train))
+    i = open(loc_csv, "r")
+    j = open(loc_output, 'wb')
+    counter=0
+    with i as infile:
+        line_count=0
+        for line in infile:
+            # to counter the header
+            if line_count==0:
+                line_count=1
+                continue
+            # The data has all categorical features
+            #numerical_features = ""
+            categorical_features = ""
+            counter = counter+1
+            #print counter
+            line = line.split(",")
+            if train:
+                #working on the date column. We will take day , hour
+                a = line[2]
+                new_date= datetime(int("20"+a[0:2]),int(a[2:4]),int(a[4:6]))
+                day = new_date.strftime("%A")
+                hour= a[6:8]
+                categorical_features += " |hr %s" % hour
+                categorical_features += " |day %s" % day
+                # 24 columns in data    
+                for i in range(3,24):
+                    if line[i] != "":
+                        categorical_features += "|c%s %s" % (str(i),line[i])
+            else:
+                a = line[1]
+                new_date= datetime(int("20"+a[0:2]),int(a[2:4]),int(a[4:6]))
+                day = new_date.strftime("%A")
+                hour= a[6:8]
+                categorical_features += " |hr %s" % hour
+                categorical_features += " |day %s" % day
+                for i in range(2,23):
+                    if line[i] != "":
+                        categorical_features += " |c%s %s" % (str(i+1),line[i])
+  #Creating the labels
+            #print "a"
+            if train: #we care about labels
+                if line[1] == "1":
+                    label = 1
+                else:
+                    label = -1 #we set negative label to -1
+                #print (numerical_features)
+                #print categorical_features
+                j.write( "%s '%s %s\n" % (label,line[0],categorical_features))
 
-            <span class="k">else</span><span class="p">:</span> <span class="c">#we dont care about labels</span>
-                <span class="c">#print ( &quot;1 &#39;%s |i%s |c%s\n&quot; % (line[0],numerical_features,categorical_features) )</span>
-                <span class="n">j</span><span class="o">.</span><span class="n">write</span><span class="p">(</span> <span class="s">&quot;1 &#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">categorical_features</span><span class="p">)</span> <span class="p">)</span>
+            else: #we dont care about labels
+                #print ( "1 '%s |i%s |c%s\n" % (line[0],numerical_features,categorical_features) )
+                j.write( "1 '%s %s\n" % (line[0],categorical_features) )
 
-  <span class="c">#Reporting progress</span>
-            <span class="c">#print counter</span>
-            <span class="k">if</span> <span class="n">counter</span> <span class="o">%</span> <span class="mi">1000000</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">print</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%s</span><span class="s">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">counter</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)))</span>
+  #Reporting progress
+            #print counter
+            if counter % 1000000 == 0:
+                print("%s\t%s"%(counter, str(datetime.now() - start)))
 
-    <span class="k">print</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s"> </span><span class="si">%s</span><span class="s"> Task execution time:</span><span class="se">\n\t</span><span class="si">%s</span><span class="s">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">counter</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)))</span>
+    print("\n %s Task execution time:\n\t%s"%(counter, str(datetime.now() - start)))
 
-<span class="c">#csv_to_vw(&quot;/Users/RahulAgarwal/kaggle_cpr/train&quot;, &quot;/Users/RahulAgarwal/kaggle_cpr/click.train_original_data.vw&quot;,train=True)</span>
-<span class="c">#csv_to_vw(&quot;/Users/RahulAgarwal/kaggle_cpr/test&quot;, &quot;/Users/RahulAgarwal/kaggle_cpr/click.test_original_data.vw&quot;,train=False)</span>
-</pre></div>
+#csv_to_vw("/Users/RahulAgarwal/kaggle_cpr/train", "/Users/RahulAgarwal/kaggle_cpr/click.train_original_data.vw",train=True)
+#csv_to_vw("/Users/RahulAgarwal/kaggle_cpr/test", "/Users/RahulAgarwal/kaggle_cpr/click.test_original_data.vw",train=False)
+</code></pre>
 
-</div>
-</div>
-
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="running-vowpal-wabbit-on-the-data">Running Vowpal Wabbit on the data</h4>
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
+<h2>Running Vowpal Wabbit on the data</h2>
 <p>The Vowpal Wabbit will be run on the command line itself.</p>
-<p>Training VW:</p>
-<p>vw click.train_original_data.vw -f click.model.vw --loss_function logistic</p>
+<p>Training VW:
+<pre style="font-size:60%">
+<code class="bash">vw click.train_original_data.vw -f click.model.vw --loss_function logistic
+</code></pre></p>
 <p>Testing VW:</p>
-<p>vw click.test_original_data.vw -t -i click.model.vw -p click.preds.txt</p>
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="creating-kaggle-submission-file">Creating Kaggle Submission File</h4>
-</div>
-<div class="cell border-box-sizing code_cell vbox">
-<div class="input hbox">
-<div class="prompt input_prompt">
-In&nbsp;[17]:
-</div>
-<div class="input_area box-flex1">
-<div class="highlight-ipynb"><pre class="ipynb"><span class="kn">import</span> <span class="nn">math</span>
+<pre style="font-size:60%">
+<code class="bash">vw click.test_original_data.vw  -t -i click.model.vw -p click.preds.txt
+</code></pre>
 
-<span class="k">def</span> <span class="nf">zygmoid</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+<h2>Creating Kaggle Submission File</h2>
+<pre style="font-size:60%">
+<code class="python">import math
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;kaggle.click.submission.csv&quot;</span><span class="p">,</span><span class="s">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
-    <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;id,click</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;click.preds.txt&quot;</span><span class="p">):</span>
-        
-        <span class="n">row</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot; &quot;</span><span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s">,</span><span class="si">%f</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">zygmoid</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]))))</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="k">pass</span>
-</pre></div>
+def zygmoid(x):
+    return 1 / (1 + math.exp(-x))
 
-</div>
-</div>
+with open("kaggle.click.submission.csv","wb") as outfile:
+    outfile.write("id,click\n")
+    for line in open("click.preds.txt"):
 
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
+        row = line.strip().split(" ")
+        try:
+            outfile.write("%s,%f\n"%(row[1],zygmoid(float(row[0]))))
+        except:
+            pass
+</code></pre>
+
 <p>This solution ranked 211/371 submissions at the time and the leaderboard score was 0.4031825 while the best leaderboard score was 0.3901120</p>
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="next-steps">Next Steps</h4>
+<h2>Next Steps</h2>
 <ul>
-<li>Create a better VW model
+<li>
+<p>Create a better VW model</p>
 <ul>
-<li>Shuffle the data before making the model as the VW algorithm is an online learner and might have given more preference to the latest data</li>
+<li>Shuffle the data before making the model as the VW algorithm is an online learner and might have given more preference to the latest data </li>
 <li>provide high weights for clicks as data is skewed. How Much?</li>
 <li>tune VW algorithm using vw-hypersearch. What should be tuned?</li>
-<li>Use categorical features like |C1 &quot;C1&quot;&amp;&quot;1&quot;</li>
-</ul></li>
-<li>Create a XGBoost Model.</li>
+<li>Use categorical features like |C1 "C1"&amp;"1"</li>
+</ul>
+</li>
+<li>
+<p>Create a XGBoost Model.</p>
+</li>
 <li>Create a Sofia-ML Model and see how it works on this data.</li>
 </ul>
-</div></p>
 <script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script></div>
 
 <a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=495576.362&subid=0&type=4"><IMG border="0"   alt="Online data science courses to jumpstart your future." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=495576.362&subid=0&type=4&gridnum=16"></a>    <footer>

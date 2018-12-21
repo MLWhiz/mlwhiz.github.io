@@ -1,261 +1,240 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>mlwhiz</title><link href="http://mlwhiz.com/" rel="alternate"></link><link href="http://mlwhiz.com/feeds/hadoop.atom.xml" rel="self"></link><id>http://mlwhiz.com/</id><updated>2015-05-09T13:43:00-03:00</updated><entry><title>Hadoop Mapreduce Streaming Tricks and Techniques</title><link href="http://mlwhiz.com/blog/2015/05/09/Hadoop_Mapreduce_Streaming_Tricks_and_Techniques/" rel="alternate"></link><updated>2015-05-09T13:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.com,2015-05-09:blog/2015/05/09/Hadoop_Mapreduce_Streaming_Tricks_and_Techniques/</id><summary type="html">&lt;p&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;p&gt;I have been using Hadoop a lot now a days and thought about writing some of the novel techniques that a user could use to get the most out of the Hadoop Ecosystem.&lt;/p&gt;
-&lt;h3 id="using-shell-scripts-to-run-your-programs"&gt;Using Shell Scripts to run your Programs&lt;/h3&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>mlwhiz</title><link href="http://mlwhiz.com/" rel="alternate"></link><link href="http://mlwhiz.com/feeds/hadoop.atom.xml" rel="self"></link><id>http://mlwhiz.com/</id><updated>2015-05-09T13:43:00-03:00</updated><entry><title>Hadoop Mapreduce Streaming Tricks and Techniques</title><link href="http://mlwhiz.com/blog/2015/05/09/Hadoop_Mapreduce_Streaming_Tricks_and_Techniques/" rel="alternate"></link><updated>2015-05-09T13:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.com,2015-05-09:blog/2015/05/09/Hadoop_Mapreduce_Streaming_Tricks_and_Techniques/</id><summary type="html">&lt;p&gt;I have been using Hadoop a lot now a days and thought about writing some of the novel techniques that a user could use to get the most out of the Hadoop Ecosystem.&lt;/p&gt;
+&lt;h2&gt;Using Shell Scripts to run your Programs&lt;/h2&gt;
 &lt;div style="margin-top: -9px; margin-bottom: -30px;"&gt;
-&lt;p&gt;&lt;img src="/images/I-love-bash-1024x220.png" &gt;&lt;/p&gt;
+&lt;img src="/images/I-love-bash-1024x220.png" &gt;
 &lt;/div&gt;
-&lt;p&gt;&lt;br&gt; I am not a fan of large bash commands. The ones where you have to specify the whole path of the jar files and the such. &lt;em&gt;You can effectively organize your workflow by using shell scripts.&lt;/em&gt; Now Shell scripts are not as formidable as they sound. We wont be doing programming perse using these shell scripts(Though they are pretty good at that too), we will just use them to store commands that we need to use sequentially.&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;I am not a fan of large bash commands. The ones where you have to specify the whole path of the jar files and the such. &lt;em&gt;You can effectively organize your workflow by using shell scripts.&lt;/em&gt; Now Shell scripts are not as formidable as they sound. We wont be doing programming perse using these shell scripts(Though they are pretty good at that too), we will just use them to store commands that we need to use sequentially.&lt;/p&gt;
 &lt;p&gt;Below is a sample of the shell script I use to run my Mapreduce Codes.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;link rel="stylesheet" href="/theme/highlight/styles/default.css"&gt;
+&lt;p&gt;&lt;link rel="stylesheet" href="/theme/highlight/styles/default.css"&gt;
 &lt;script src="/theme/highlight/highlight.pack.js"&gt;&lt;/script&gt;
 &lt;script&gt;hljs.initHighlightingOnLoad();&lt;/script&gt;
 &lt;pre style="font-size:80%; padding:7px; margin:0em; background-color:#000000;"&gt;
-&lt;code class="bash" style="background-color:#000000; color:#FFFFFF"&gt;#!/bin/bash
-#Defining program variables
-IP="/data/input"
+&lt;code class="bash" style="background-color:#000000; color:#FFFFFF"&gt;#!/bin/bash&lt;/p&gt;
+&lt;h1&gt;Defining program variables&lt;/h1&gt;
+&lt;p&gt;IP="/data/input"
 OP="/data/output"
 HADOOP_JAR_PATH="/opt/cloudera/parcels/CDH/lib/hadoop-0.20-mapreduce/contrib/streaming/hadoop-streaming-2.0.0-mr1-cdh4.5.0.jar"
 MAPPER="test_m.py"
-REDUCER="test_r.py"
-
-hadoop fs -rmr -skipTrash&amp;nbsp;$OP
-hadoop jar&amp;nbsp;$HADOOP_JAR_PATH \
--file&amp;nbsp;$MAPPER -mapper "python test_m.py" \
--file&amp;nbsp;$REDUCER -reducer "python test_r.py" \
--input&amp;nbsp;$IP -output&amp;nbsp;$OP
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-I generally save them as test_s.sh and whenever i need to run them i simply type &lt;code&gt;sh test_s.sh&lt;/code&gt;. This helps in three ways.
-&lt;ul&gt;
-&lt;li&gt;
-It helps me to store hadoop commands in a manageable way.
-&lt;/li&gt;
-&lt;li&gt;
-It is easy to run the mapreduce code using the shell script.
-&lt;/li&gt;
-&lt;li&gt;
-&lt;em&gt;&lt;strong&gt;If the code fails, I do not have to manually delete the output directory&lt;/strong&gt;&lt;/em&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
+REDUCER="test_r.py"&lt;/p&gt;
+&lt;p&gt;hadoop fs -rmr -skipTrash&amp;nbsp;&lt;span class="math"&gt;\(OP
+hadoop jar&amp;amp;nbsp;\)&lt;/span&gt;HADOOP_JAR_PATH \
+-file&amp;nbsp;&lt;span class="math"&gt;\(MAPPER -mapper "python test_m.py" \
+-file&amp;amp;nbsp;\)&lt;/span&gt;REDUCER -reducer "python test_r.py" \
+-input&amp;nbsp;&lt;span class="math"&gt;\(IP -output&amp;amp;nbsp;\)&lt;/span&gt;OP
+&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;
+&lt;p&gt;I generally save them as test_s.sh and whenever i need to run them i simply type &lt;code&gt;sh test_s.sh&lt;/code&gt;. This helps in three ways. 
+&lt;ul&gt;&lt;li&gt; It helps me to store hadoop commands in a manageable way. &lt;/li&gt;
+&lt;li&gt; It is easy to run the mapreduce code using the shell script. &lt;/li&gt;
+&lt;li&gt; &lt;em&gt;&lt;strong&gt;If the code fails, I do not have to manually delete the output directory&lt;/strong&gt;&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;em&gt; The simplification of anything is always sensational. &lt;br&gt;&lt;/em&gt; &lt;small&gt;Gilbert K. Chesterton&lt;/small&gt;
+&lt;em&gt;
+The simplification of anything is always sensational.
+&lt;br&gt;&lt;/em&gt;
+&lt;small&gt;Gilbert K. Chesterton&lt;/small&gt;
 &lt;/blockquote&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;h3 id="using-distributed-cache-to-provide-mapper-with-a-dictionary"&gt;Using Distributed Cache to provide mapper with a dictionary&lt;/h3&gt;
+
+&lt;h2&gt;Using Distributed Cache to provide mapper with a dictionary&lt;/h2&gt;
 &lt;div style="margin-top: -9px; margin-bottom: -30px;"&gt;
-&lt;p&gt;&lt;img src="/images/Game-Of-Thrones-Wallpaper-House-Sigils-1.png"&gt;&lt;/p&gt;
+&lt;img src="/images/Game-Of-Thrones-Wallpaper-House-Sigils-1.png"&gt;
 &lt;/div&gt;
-&lt;br&gt; Often times it happens that you want that your Hadoop Mapreduce program is able to access some static file. This static file could be a dictionary, could be parameters for the program or could be anything. What distributed cache does is that it provides this file to all the mapper nodes so that you can use that file in any way across all your mappers. Now this concept although simple would help you to think about Mapreduce in a whole new light. Lets start with an example. Supppose you have to create a sample Mapreduce program that reads a big file containing the information about all the characters in &lt;a href="http://www.hbo.com/game-of-thrones"&gt;Game of Thrones&lt;/a&gt; stored as &lt;strong&gt;&lt;code&gt;&amp;quot;/data/characters/&amp;quot;&lt;/code&gt;&lt;/strong&gt;:
+
+&lt;p&gt;&lt;br&gt;
+Often times it happens that you want that your Hadoop Mapreduce program is able to access some static file. This static file could be a dictionary, could be parameters for the program or could be anything. What distributed cache does is that it provides this file to all the mapper nodes so that you can use that file in any way across all your mappers.
+Now this concept although simple would help you to think about Mapreduce in a whole new light.
+Lets start with an example. 
+Supppose you have to create a sample Mapreduce program that reads a big file containing the information about all the characters in &lt;a href="http://www.hbo.com/game-of-thrones"&gt;Game of Thrones&lt;/a&gt; stored as &lt;strong&gt;&lt;code&gt;"/data/characters/"&lt;/code&gt;&lt;/strong&gt;:
 &lt;div style="width: 50%; margin: 0 auto;"&gt;
 &lt;table class="table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
-&lt;th&gt;
-Cust_ID
-&lt;/th&gt;
-&lt;th&gt;
-User_Name
-&lt;/th&gt;
-&lt;th&gt;
-House
-&lt;/th&gt;
+&lt;th&gt;Cust_ID&lt;/th&gt;
+&lt;th&gt;User_Name&lt;/th&gt;
+&lt;th&gt;House&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
-&lt;td&gt;
-1
-&lt;/td&gt;
-&lt;td&gt;
-Daenerys Targaryen
-&lt;/td&gt;
-&lt;td&gt;
-Targaryen
-&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;Daenerys Targaryen&lt;/td&gt;
+&lt;td&gt;Targaryen&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;
-2
-&lt;/td&gt;
-&lt;td&gt;
-Tyrion Lannister
-&lt;/td&gt;
-&lt;td&gt;
-Lannister
-&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;Tyrion Lannister&lt;/td&gt;
+&lt;td&gt;Lannister&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;
-3
-&lt;/td&gt;
-&lt;td&gt;
-Cersei Lannister
-&lt;/td&gt;
-&lt;td&gt;
-Lannister
-&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;Cersei Lannister&lt;/td&gt;
+&lt;td&gt;Lannister&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr class="warning"&gt;
-&lt;td&gt;
-4
-&lt;/td&gt;
-&lt;td&gt;
-Robert Baratheon
-&lt;/td&gt;
-&lt;td&gt;
-Baratheon
-&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;Robert Baratheon&lt;/td&gt;
+&lt;td&gt;Baratheon&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr class="warning"&gt;
-&lt;td&gt;
-5
-&lt;/td&gt;
-&lt;td&gt;
-Robb Stark
-&lt;/td&gt;
-&lt;td&gt;
-Stark
-&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;Robb Stark&lt;/td&gt;
+&lt;td&gt;Stark&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;/div&gt;
-&lt;p&gt;But you dont want to use the dead characters in the file for the analysis you want to do. &lt;em&gt;You want to count the number of living characters in Game of Thrones grouped by their House&lt;/em&gt;. (I know its easy!!!!!) One thing you could do is include an if statement in your Mapper Code which checks if the persons ID is 4 then exclude it from the mapper and such. But the problem is that you would have to do it again and again for the same analysis as characters die like flies when it comes to George RR Martin.(Also where is the fun in that) So you create a file which contains the Ids of all the dead characters at &lt;strong&gt;&lt;code&gt;&amp;quot;/data/dead_characters.txt&amp;quot;&lt;/code&gt;&lt;/strong&gt;:&lt;/p&gt;
+&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;But you dont want to use the dead characters in the file for the analysis you want to do. &lt;em&gt;You want to count the number of living characters in Game of Thrones grouped by their House&lt;/em&gt;. (I know its easy!!!!!)
+One thing you could do is include an if statement in your Mapper Code which checks if the persons ID is 4 then exclude it from the mapper and such.
+But the problem is that you would have to do it again and again for the same analysis as characters die like flies when it comes to George RR Martin.(Also where is the fun in that)
+So you create a file which contains the Ids of all the dead characters at &lt;strong&gt;&lt;code&gt;"/data/dead_characters.txt"&lt;/code&gt;&lt;/strong&gt;:&lt;/p&gt;
 &lt;div style="width: 50%; margin: 0 auto;"&gt;
 &lt;table class="table"&gt;
 &lt;thead&gt;
 &lt;tr&gt;
-&lt;th&gt;
-Died
-&lt;/th&gt;
+&lt;th&gt;Died&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
-&lt;td&gt;
-4
-&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;
-5
-&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;/div&gt;
-&lt;p&gt;Whenever you have to run the analysis you can just add to this file and you wont have to change anything in the code. Also sometimes this file would be long and you would not want to clutter your code with IDs and such.&lt;/p&gt;
-&lt;p&gt;So How Would we do it. Let's go in a step by step way around this. We will create a shell script, a mapper script and a reducer script for this task.&lt;/p&gt;
-&lt;h5 id="shell-script"&gt;1) Shell Script&lt;/h5&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;link rel="stylesheet" href="/theme/highlight/styles/default.css"&gt;
+
+&lt;p&gt;Whenever you have to run the analysis you can just add to this file and you wont have to change anything in the code.
+Also sometimes this file would be long and you would not want to clutter your code with IDs and such.&lt;/p&gt;
+&lt;p&gt;So How Would we do it. 
+Let's go in a step by step way around this.
+We will create a shell script, a mapper script and a reducer script for this task.&lt;/p&gt;
+&lt;h2&gt;1) Shell Script&lt;/h2&gt;
+&lt;p&gt;&lt;link rel="stylesheet" href="/theme/highlight/styles/default.css"&gt;
 &lt;script src="/theme/highlight/highlight.pack.js"&gt;&lt;/script&gt;
 &lt;script&gt;hljs.initHighlightingOnLoad();&lt;/script&gt;
 &lt;pre style="font-size:80%; padding:7px; margin:0em; background-color:#000000;"&gt;
-&lt;code class="bash" style="background-color:#000000; color:#FFFFFF"&gt;#!/bin/bash
-#Defining program variables
-DC="/data/dead_characters.txt"
+&lt;code class="bash" style="background-color:#000000; color:#FFFFFF"&gt;#!/bin/bash&lt;/p&gt;
+&lt;h1&gt;Defining program variables&lt;/h1&gt;
+&lt;p&gt;DC="/data/dead_characters.txt"
 IP="/data/characters"
 OP="/data/output"
 HADOOP_JAR_PATH="/opt/cloudera/parcels/CDH/lib/hadoop-0.20-mapreduce/contrib/streaming/hadoop-streaming-2.0.0-mr1-cdh4.5.0.jar"
 MAPPER="got_living_m.py"
-REDUCER="got_living_r.py"
-
-hadoop jar&amp;nbsp;$HADOOP_JAR_PATH \
--file&amp;nbsp;$MAPPER -mapper "python got_living_m.py" \
--file&amp;nbsp;$REDUCER -reducer "python got_living_r.py" \
--cacheFile&amp;nbsp;$DC#ref \
--input&amp;nbsp;$IP -output&amp;nbsp;$OP
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;p&gt;Note how we use the &lt;code&gt;&amp;quot;-cacheFile&amp;quot;&lt;/code&gt; option here. We have specified that we will refer to the file that has been provided in the Distributed cache as &lt;code&gt;#ref&lt;/code&gt;.&lt;/p&gt;
+REDUCER="got_living_r.py"&lt;/p&gt;
+&lt;p&gt;hadoop jar&amp;nbsp;&lt;span class="math"&gt;\(HADOOP_JAR_PATH \
+-file&amp;amp;nbsp;\)&lt;/span&gt;MAPPER -mapper "python got_living_m.py" \
+-file&amp;nbsp;&lt;span class="math"&gt;\(REDUCER -reducer "python got_living_r.py" \
+-cacheFile&amp;amp;nbsp;\)&lt;/span&gt;DC#ref \
+-input&amp;nbsp;&lt;span class="math"&gt;\(IP -output&amp;amp;nbsp;\)&lt;/span&gt;OP
+&lt;/code&gt;&lt;/pre&gt;&lt;/p&gt;
+&lt;p&gt;Note how we use the &lt;code&gt;"-cacheFile"&lt;/code&gt; option here. We have specified that we will refer to the file that has been provided in the Distributed cache as &lt;code&gt;#ref&lt;/code&gt;. &lt;/p&gt;
 &lt;p&gt;Next is our Mapper Script.&lt;/p&gt;
-&lt;h5 id="mapper-script"&gt;2) Mapper Script&lt;/h5&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;link rel="stylesheet" href="/theme/highlight/styles/default.css"&gt;
+&lt;h2&gt;2) Mapper Script&lt;/h2&gt;
+&lt;p&gt;&lt;link rel="stylesheet" href="/theme/highlight/styles/default.css"&gt;
 &lt;script src="/theme/highlight/highlight.pack.js"&gt;&lt;/script&gt;
 &lt;script&gt;hljs.initHighlightingOnLoad();&lt;/script&gt;
 &lt;pre style="font-size:80%; padding:7px; margin:0em; background-color:#000000;"&gt;
 &lt;code class="python" style="background-color:#000000; color:#FFFFFF"&gt;import sys
-dead_ids = set()
-
-def read_cache():
+dead_ids = set()&lt;/p&gt;
+&lt;p&gt;def read_cache():
     for line in open('ref'):
         id = line.strip()
-        dead_ids.add(id)
-
-read_cache()
-
-for line in sys.stdin:
+        dead_ids.add(id)&lt;/p&gt;
+&lt;p&gt;read_cache()&lt;/p&gt;
+&lt;p&gt;for line in sys.stdin:
     rec = line.strip().split("|") # Split using Delimiter "|"
     id = rec[0]
     house = rec[2]
     if id not in dead_ids:
         print "%s\t%s" % (house,1)
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;And our Reducer Script.&lt;/p&gt;
-&lt;h5 id="reducer-script"&gt;3) Reducer Script&lt;/h5&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;link rel="stylesheet" href="/theme/highlight/styles/darkula.css"&gt;
+And our Reducer Script.&lt;/p&gt;
+&lt;h2&gt;3) Reducer Script&lt;/h2&gt;
+&lt;p&gt;&lt;link rel="stylesheet" href="/theme/highlight/styles/darkula.css"&gt;
 &lt;script src="/theme/highlight/highlight.pack.js"&gt;&lt;/script&gt;
 &lt;script&gt;hljs.initHighlightingOnLoad();&lt;/script&gt;
 &lt;pre style="font-size:80%; padding:7px; margin:0em; background-color:#000000;"&gt;
 &lt;code class="python" style="background-color:#000000; color:#FFFFFF"&gt;import sys
 current_key = None
 key = None
-count = 0
-
-for line in sys.stdin:
+count = 0&lt;/p&gt;
+&lt;p&gt;for line in sys.stdin:
     line = line.strip()
     rec = line.split('\t')
-    key = rec[0]    
-    value = int(rec[1])
-    
-    if current_key == key:
-        count += value
-    else:
-        if current_key:
-            print "%s:%s" %(key,str(count))     
-        current_key = key
-        count = value
+    key = rec[0]  &lt;br /&gt;
+    value = int(rec[1])&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;current_key&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;key&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;count&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;
+&lt;span class="nl"&gt;else:&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;current_key&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;print&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;%s:%s&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;key&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;str&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;count&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;     
+    &lt;span class="n"&gt;current_key&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;key&lt;/span&gt;
+    &lt;span class="n"&gt;count&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;value&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
 
-if current_key == key:
+
+&lt;p&gt;if current_key == key:
     print "%s:%s" %(key,str(count)) 
 &lt;/code&gt;
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;p&gt;This was a simple program and the output will be just what you expected and not very exciting. &lt;em&gt;&lt;strong&gt;But the Technique itself solves a variety of common problems. You can use it to pass any big dictionary to your Mapreduce Program&lt;/strong&gt;&lt;/em&gt;. Atleast thats what I use this feature mostly for. Hope You liked it. Will try to expand this post with more tricks.&lt;/p&gt;
+&lt;/pre&gt;&lt;/p&gt;
+&lt;p&gt;This was a simple program and the output will be just what you expected and not very exciting. &lt;em&gt;&lt;strong&gt;But the Technique itself solves a variety of common problems. You can use it to pass any big dictionary to your Mapreduce Program&lt;/strong&gt;&lt;/em&gt;. Atleast thats what I use this feature mostly for.
+Hope You liked it. Will try to expand this post with more tricks.&lt;/p&gt;
 &lt;p&gt;The codes for this post are posted at github &lt;a href="https://github.com/MLWhiz/Hadoop-Mapreduce-Tricks"&gt;here&lt;/a&gt;.&lt;/p&gt;
-Other Great Learning Resources For Hadoop:
+&lt;p&gt;Other Great Learning Resources For Hadoop:
 &lt;ul&gt;
 &lt;li&gt;
-&amp;lt;a href=&amp;quot;http://www.google.co.in/url?sa=t&amp;amp;rct=j&amp;amp;q=&amp;amp;esrc=s&amp;amp;source=web&amp;amp;cd=1&amp;amp;cad=rja&amp;amp;uact=8&amp;amp;ved=0CB0QFjAA&amp;amp;url=http%3A%2F%2Fwww.michael-noll.com%2Ftutorials%2Fwriting-an-hadoop-mapreduce-program-in-python%2F&amp;amp;ei=8RRVVdP2IMe0uQShsYDYBg&amp;amp;usg=AFQjCNH3DqrlSIG8D-K8jgQWTALic1no5A&amp;amp;sig2=BivwTW6mdJs5c9w9VaSK2Q&amp;amp;bvm=bv.93112503,d.c2E&amp;quot;&amp;gt;Michael Noll's Hadoop Mapreduce Tutorial&lt;/a&gt;
+&lt;a href="http://www.google.co.in/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0CB0QFjAA&amp;url=http%3A%2F%2Fwww.michael-noll.com%2Ftutorials%2Fwriting-an-hadoop-mapreduce-program-in-python%2F&amp;ei=8RRVVdP2IMe0uQShsYDYBg&amp;usg=AFQjCNH3DqrlSIG8D-K8jgQWTALic1no5A&amp;sig2=BivwTW6mdJs5c9w9VaSK2Q&amp;bvm=bv.93112503,d.c2E"&gt;Michael Noll's Hadoop Mapreduce Tutorial&lt;/a&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&amp;lt;a href=&amp;quot;http://www.google.co.in/url?sa=t&amp;amp;rct=j&amp;amp;q=&amp;amp;esrc=s&amp;amp;source=web&amp;amp;cd=2&amp;amp;cad=rja&amp;amp;uact=8&amp;amp;ved=0CCMQFjAB&amp;amp;url=http%3A%2F%2Fhadoop.apache.org%2Fdocs%2Fr1.2.1%2Fstreaming.html&amp;amp;ei=8RRVVdP2IMe0uQShsYDYBg&amp;amp;usg=AFQjCNEIB4jmqcBs-GepHdn7DRxqTI9zXA&amp;amp;sig2=nYkAnDjjjaum5YVlYuMUJQ&amp;amp;bvm=bv.93112503,d.c2E&amp;quot;&amp;gt;Apache's Hadoop Streaming Documentation&lt;/a&gt;
+&lt;a href="http://www.google.co.in/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=2&amp;cad=rja&amp;uact=8&amp;ved=0CCMQFjAB&amp;url=http%3A%2F%2Fhadoop.apache.org%2Fdocs%2Fr1.2.1%2Fstreaming.html&amp;ei=8RRVVdP2IMe0uQShsYDYBg&amp;usg=AFQjCNEIB4jmqcBs-GepHdn7DRxqTI9zXA&amp;sig2=nYkAnDjjjaum5YVlYuMUJQ&amp;bvm=bv.93112503,d.c2E"&gt;Apache's Hadoop Streaming Documentation&lt;/a&gt;
 &lt;/li&gt;
-&lt;/div&gt;&lt;/p&gt;
+&lt;/ul&gt;&lt;/p&gt;
 &lt;p&gt;Also I like these books a lot. Must have for a Hadooper....&lt;/p&gt;
 &lt;div style="margin-left:1em ; text-align: center;"&gt;
 &lt;a target="_blank"  href="https://www.amazon.com/gp/product/1785887211/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1785887211&amp;linkCode=as2&amp;tag=mlwhizcon-20&amp;linkId=a0e7b4f0b2ea4a5146042890e1c04f7e"&gt;&lt;img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=1785887211&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=mlwhizcon-20" &gt;&lt;/a&gt;&lt;img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;l=am2&amp;o=1&amp;a=1785887211" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /&gt;
+
 &lt;/t&gt;&lt;/t&gt;
+
 &lt;a target="_blank"  href="https://www.amazon.com/gp/product/1491901632/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1491901632&amp;linkCode=as2&amp;tag=mlwhizcon-20&amp;linkId=4122280e94f7bbd0ceebc9d13e60d103"&gt;&lt;img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=1491901632&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=mlwhizcon-20" &gt;&lt;/a&gt;&lt;img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;l=am2&amp;o=1&amp;a=1491901632" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /&gt;
 &lt;/div&gt;
 
 &lt;p&gt;The first book is a guide for using Hadoop as well as spark with Python. While the second one contains a detailed overview of all the things in Hadoop. Its the definitive guide.&lt;/p&gt;
 
-&lt;script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"&gt;&lt;/script&gt;</summary><category term="hadoop"></category><category term="python"></category></entry><entry><title>Hadoop, Mapreduce and More – Part 1</title><link href="http://mlwhiz.com/blog/2014/09/27/hadoop_mapreduce/" rel="alternate"></link><updated>2014-09-27T13:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.com,2014-09-27:blog/2014/09/27/hadoop_mapreduce/</id><summary type="html">&lt;p&gt;It has been some time since I was stalling learning Hadoop. Finally got some free time and realized that Hadoop may not be so difficult after all.
+&lt;script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"&gt;&lt;/script&gt;
+
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processClass: 'mathjax', " +
+        "        ignoreClass: 'no-mathjax', " +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</summary><category term="hadoop"></category><category term="python"></category></entry><entry><title>Hadoop, Mapreduce and More – Part 1</title><link href="http://mlwhiz.com/blog/2014/09/27/hadoop_mapreduce/" rel="alternate"></link><updated>2014-09-27T13:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.com,2014-09-27:blog/2014/09/27/hadoop_mapreduce/</id><summary type="html">&lt;p&gt;It has been some time since I was stalling learning Hadoop. Finally got some free time and realized that Hadoop may not be so difficult after all.
 What I understood finally is that Hadoop is basically comprised of 3 elements:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;A File System&lt;/li&gt;
