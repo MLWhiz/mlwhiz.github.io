@@ -139,23 +139,22 @@
 <p><br></p>
 <p>I am not a fan of large bash commands. The ones where you have to specify the whole path of the jar files and the such. <em>You can effectively organize your workflow by using shell scripts.</em> Now Shell scripts are not as formidable as they sound. We wont be doing programming perse using these shell scripts(Though they are pretty good at that too), we will just use them to store commands that we need to use sequentially.</p>
 <p>Below is a sample of the shell script I use to run my Mapreduce Codes.</p>
-<p><link rel="stylesheet" href="/theme/highlight/styles/default.css">
-<script src="/theme/highlight/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-<pre style="font-size:80%; padding:7px; margin:0em; background-color:#000000;">
-<code class="bash" style="background-color:#000000; color:#FFFFFF">#!/bin/bash</p>
-<h1>Defining program variables</h1>
-<p>IP="/data/input"
+<pre style="font-size:60%">
+<code class="bash">#!/bin/bash
+#Defining program variables
+IP="/data/input"
 OP="/data/output"
 HADOOP_JAR_PATH="/opt/cloudera/parcels/CDH/lib/hadoop-0.20-mapreduce/contrib/streaming/hadoop-streaming-2.0.0-mr1-cdh4.5.0.jar"
 MAPPER="test_m.py"
-REDUCER="test_r.py"</p>
-<p>hadoop fs -rmr -skipTrash&nbsp;<span class="math">\(OP
-hadoop jar&amp;nbsp;\)</span>HADOOP_JAR_PATH \
--file&nbsp;<span class="math">\(MAPPER -mapper "python test_m.py" \
--file&amp;nbsp;\)</span>REDUCER -reducer "python test_r.py" \
--input&nbsp;<span class="math">\(IP -output&amp;nbsp;\)</span>OP
-</code></pre></p>
+REDUCER="test_r.py"
+
+hadoop fs -rmr -skipTrash&nbsp;$OP
+hadoop jar&nbsp;$HADOOP_JAR_PATH \
+-file&nbsp;$MAPPER -mapper "python test_m.py" \
+-file&nbsp;$REDUCER -reducer "python test_r.py" \
+-input&nbsp;$IP -output&nbsp;$OP
+</code></pre>
+
 <p>I generally save them as test_s.sh and whenever i need to run them i simply type <code>sh test_s.sh</code>. This helps in three ways. 
 <ul><li> It helps me to store hadoop commands in a manageable way. </li>
 <li> It is easy to run the mapreduce code using the shell script. </li>
@@ -244,74 +243,71 @@ Also sometimes this file would be long and you would not want to clutter your co
 Let's go in a step by step way around this.
 We will create a shell script, a mapper script and a reducer script for this task.</p>
 <h2>1) Shell Script</h2>
-<p><link rel="stylesheet" href="/theme/highlight/styles/default.css">
-<script src="/theme/highlight/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-<pre style="font-size:80%; padding:7px; margin:0em; background-color:#000000;">
-<code class="bash" style="background-color:#000000; color:#FFFFFF">#!/bin/bash</p>
-<h1>Defining program variables</h1>
-<p>DC="/data/dead_characters.txt"
+<pre style="font-size:60%">
+<code class="python">#!/bin/bash
+#Defining program variables
+DC="/data/dead_characters.txt"
 IP="/data/characters"
 OP="/data/output"
 HADOOP_JAR_PATH="/opt/cloudera/parcels/CDH/lib/hadoop-0.20-mapreduce/contrib/streaming/hadoop-streaming-2.0.0-mr1-cdh4.5.0.jar"
 MAPPER="got_living_m.py"
-REDUCER="got_living_r.py"</p>
-<p>hadoop jar&nbsp;<span class="math">\(HADOOP_JAR_PATH \
--file&amp;nbsp;\)</span>MAPPER -mapper "python got_living_m.py" \
--file&nbsp;<span class="math">\(REDUCER -reducer "python got_living_r.py" \
--cacheFile&amp;nbsp;\)</span>DC#ref \
--input&nbsp;<span class="math">\(IP -output&amp;nbsp;\)</span>OP
-</code></pre></p>
+REDUCER="got_living_r.py"
+
+hadoop jar&nbsp;$HADOOP_JAR_PATH \
+-file&nbsp;$MAPPER -mapper "python got_living_m.py" \
+-file&nbsp;$REDUCER -reducer "python got_living_r.py" \
+-cacheFile&nbsp;$DC#ref \
+-input&nbsp;$IP -output&nbsp;$OP
+</code></pre>
+
 <p>Note how we use the <code>"-cacheFile"</code> option here. We have specified that we will refer to the file that has been provided in the Distributed cache as <code>#ref</code>. </p>
 <p>Next is our Mapper Script.</p>
 <h2>2) Mapper Script</h2>
-<p><link rel="stylesheet" href="/theme/highlight/styles/default.css">
-<script src="/theme/highlight/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-<pre style="font-size:80%; padding:7px; margin:0em; background-color:#000000;">
-<code class="python" style="background-color:#000000; color:#FFFFFF">import sys
-dead_ids = set()</p>
-<p>def read_cache():
+<pre style="font-size:60%">
+<code class="python">import sys
+dead_ids = set()
+
+def read_cache():
     for line in open('ref'):
         id = line.strip()
-        dead_ids.add(id)</p>
-<p>read_cache()</p>
-<p>for line in sys.stdin:
+        dead_ids.add(id)
+
+read_cache()
+
+for line in sys.stdin:
     rec = line.strip().split("|") # Split using Delimiter "|"
     id = rec[0]
     house = rec[2]
     if id not in dead_ids:
         print "%s\t%s" % (house,1)
 </code></pre>
-And our Reducer Script.</p>
+
+<p>And our Reducer Script.</p>
 <h2>3) Reducer Script</h2>
-<p><link rel="stylesheet" href="/theme/highlight/styles/darkula.css">
-<script src="/theme/highlight/highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
-<pre style="font-size:80%; padding:7px; margin:0em; background-color:#000000;">
-<code class="python" style="background-color:#000000; color:#FFFFFF">import sys
+<pre style="font-size:60%">
+<code class="python">import sys
 current_key = None
 key = None
-count = 0</p>
-<p>for line in sys.stdin:
+count = 0
+
+for line in sys.stdin:
     line = line.strip()
     rec = line.split('\t')
-    key = rec[0]  <br />
-    value = int(rec[1])</p>
-<div class="highlight"><pre><span class="k">if</span> <span class="n">current_key</span> <span class="o">==</span> <span class="n">key</span><span class="o">:</span>
-    <span class="n">count</span> <span class="o">+=</span> <span class="n">value</span>
-<span class="nl">else:</span>
-    <span class="k">if</span> <span class="n">current_key</span><span class="o">:</span>
-        <span class="n">print</span> <span class="s">&quot;%s:%s&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">str</span><span class="p">(</span><span class="n">count</span><span class="p">))</span>     
-    <span class="n">current_key</span> <span class="o">=</span> <span class="n">key</span>
-    <span class="n">count</span> <span class="o">=</span> <span class="n">value</span>
-</pre></div>
+    key = rec[0]    
+    value = int(rec[1])
 
+    if current_key == key:
+        count += value
+    else:
+        if current_key:
+            print "%s:%s" %(key,str(count))     
+        current_key = key
+        count = value
 
-<p>if current_key == key:
+if current_key == key:
     print "%s:%s" %(key,str(count)) 
-</code>
-</pre></p>
+</code></pre>
+
 <p>This was a simple program and the output will be just what you expected and not very exciting. <em><strong>But the Technique itself solves a variety of common problems. You can use it to pass any big dictionary to your Mapreduce Program</strong></em>. Atleast thats what I use this feature mostly for.
 Hope You liked it. Will try to expand this post with more tricks.</p>
 <p>The codes for this post are posted at github <a href="https://github.com/MLWhiz/Hadoop-Mapreduce-Tricks">here</a>.</p>
@@ -335,37 +331,7 @@ Hope You liked it. Will try to expand this post with more tricks.</p>
 
 <p>The first book is a guide for using Hadoop as well as spark with Python. While the second one contains a detailed overview of all the things in Hadoop. Its the definitive guide.</p>
 
-<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script>
-
-<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
-    var mathjaxscript = document.createElement('script');
-    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
-    mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
-    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
-        "MathJax.Hub.Config({" +
-        "    config: ['MMLorHTML.js']," +
-        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
-        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
-        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
-        "    displayAlign: 'center'," +
-        "    displayIndent: '0em'," +
-        "    showMathMenu: true," +
-        "    tex2jax: { " +
-        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
-        "        displayMath: [ ['$$','$$'] ]," +
-        "        processClass: 'mathjax', " +
-        "        ignoreClass: 'no-mathjax', " +
-        "        processEscapes: true," +
-        "        preview: 'TeX'," +
-        "    }, " +
-        "    'HTML-CSS': { " +
-        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
-        "    } " +
-        "}); ";
-    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
-}
-</script></div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script></div>
 
 <a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=495576.362&subid=0&type=4"><IMG border="0"   alt="Online data science courses to jumpstart your future." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=495576.362&subid=0&type=4&gridnum=16"></a>    <footer>
 <p class="meta">
