@@ -140,62 +140,58 @@ The way this formula works is:&lt;/p&gt;
 &lt;h3&gt;Undecideds Bias:&lt;/h3&gt;
 &lt;p&gt;The night before the elections the polls stood at 42% Trump, 46% Hillary, 12% Undecided. I would focus on the 12 % here. Where do you think these 12% votes went. This is just a speculation but there is a high chance that the undecideds were not undecideds at all. Most of them wanted to support Trump while keeping it under wraps and not lying. The undecided group proportion was high as compared to other election years. In 2008 and 2012 the undecideds were 4% and 3% respectively. so there is a ~8% increase in number of undecideds, and to what can we attribute that? The only thing that comes to my mind is that the people who were gonna vote trump were calling themselves undecided.&lt;/p&gt;
 &lt;p&gt;&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;Now I would sincerely thank Mr Trump who put us in such a diabolical situation that provides us with such twisted biases and thereby close my rant.&lt;/p&gt;</summary><category term=""></category></entry><entry><title>Behold the power of MCMC</title><link href="http://mlwhiz.com/blog/2015/08/21/MCMC_Algorithms_Cryptography/" rel="alternate"></link><updated>2015-08-21T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.com,2015-08-21:blog/2015/08/21/MCMC_Algorithms_Cryptography/</id><summary type="html">&lt;p&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
-&lt;center&gt;
-&lt;img src="/images/mcmc.png"&gt;
-&lt;/center&gt;
+&lt;p&gt;Now I would sincerely thank Mr Trump who put us in such a diabolical situation that provides us with such twisted biases and thereby close my rant.&lt;/p&gt;</summary><category term=""></category></entry><entry><title>Behold the power of MCMC</title><link href="http://mlwhiz.com/blog/2015/08/21/MCMC_Algorithms_Cryptography/" rel="alternate"></link><updated>2015-08-21T04:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.com,2015-08-21:blog/2015/08/21/MCMC_Algorithms_Cryptography/</id><summary type="html">&lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
+&lt;center&gt;&lt;img src="/images/mcmc.png"&gt;&lt;/center&gt;
 &lt;/div&gt;
+
 &lt;p&gt;Last time I wrote an article on MCMC and how they could be useful. We learned how MCMC chains could be used to simulate from a random variable whose distribution is partially known i.e. we don't know the normalizing constant.&lt;/p&gt;
-&lt;p&gt;So MCMC Methods may sound interesting to some (for these what follows is a treat) and for those who don't really appreciate MCMC till now, I hope I will be able to pique your interest by the end of this blog post.&lt;/p&gt;
+&lt;p&gt;So MCMC Methods may sound interesting to some (for these what follows is a treat) and for those who don't really appreciate MCMC till now, I hope I will be able to pique your interest by the end of this blog post. &lt;/p&gt;
 &lt;p&gt;So here goes. This time we will cover some applications of MCMC in various areas of Computer Science using Python. If you feel the problems difficult to follow with, I would advice you to go back and read the &lt;a href="http://mlwhiz.com/blog/2015/08/19/MCMC_Algorithms_Beta_Distribution/"&gt;previous post&lt;/a&gt;, which tries to explain MCMC Methods. We Will try to solve the following two problems:&lt;/p&gt;
-&lt;ol style="list-style-type: decimal"&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Breaking the Code&lt;/strong&gt; - This problem has got somewhat of a great pedigree as this method was suggested by Persi Diaconis- The Mathemagician. So Someone comes to you with the below text. This text looks like gibberish but this is a code, Could you decrypyt it?&lt;br&gt;&lt;br&gt; &lt;em&gt;XZ STAVRK HXVR MYAZ OAKZM JKSSO SO MYR OKRR XDP JKSJRK XBMASD SO YAZ TWDHZ MYR JXMBYNSKF BSVRKTRM NYABY NXZ BXKRTRZZTQ OTWDH SVRK MYR AKSD ERPZMRXP KWZMTRP MYR JXTR OXBR SO X QSWDH NSIXD NXZ KXAZRP ORRETQ OKSI MYR JATTSN XDP X OXADM VSABR AIJRKORBMTQ XKMABWTXMRP MYR NSKPZ TRM IR ZRR MYR BYATP XDP PAR MYR ZWKHRSD YXP ERRD ZAMMADH NAMY YAZ OXBR MWKDRP MSNXKPZ MYR OAKR HAVADH MYR JXTIZ SO YAZ YXDPZ X NXKI XDP X KWE XTMRKDXMRTQ XZ MYR QSWDH NSIXD ZJSFR YR KSZR XDP XPVXDBADH MS MYR ERP Z YRXP ZXAP NAMY ISKR FADPDRZZ MYXD IAHYM YXVR ERRD RGJRBMRP SO YAI&lt;/em&gt;&lt;br&gt;&lt;br&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;The Knapsack Problem&lt;/strong&gt; - This problem comes from &lt;a href="http://www.amazon.com/Introduction-Probability-Chapman-Statistical-Science-ebook/dp/B00MMOJ19I"&gt;Introduction to probability&lt;/a&gt; by Joseph Blitzstein. You should check out his courses (&lt;a href="http://projects.iq.harvard.edu/stat110/handouts"&gt;STAT110&lt;/a&gt; And &lt;a href="http://cm.dce.harvard.edu/2014/01/14328/publicationListing.shtml"&gt;CS109&lt;/a&gt;) as they are awesome. Also as it turns out Diaconis was the advisor of Joseph. So you have Bilbo a Thief who goes to Smaug's Lair. He finds M treasures. Each treasure has some Weight and some Gold value. But Bilbo cannot really take all of that. He could only carry a certain Maximum Weight. But being a smart hobbit, he wants to Maximize the value of the treasures he takes. Given the values for weights and value of the treasures and the maximum weight that Bilbo could carry, could you find a good solution? This is known as the Knapsack Problem in Computer Science.&lt;/p&gt;&lt;/li&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Breaking the Code&lt;/strong&gt; - This problem has got somewhat of a great pedigree as this method was suggested by Persi Diaconis- The Mathemagician. So Someone comes to you with the below text. This text looks like gibberish but this is a code, Could you decrypyt it?&lt;br&gt;&lt;br&gt;
+&lt;em&gt;XZ STAVRK HXVR MYAZ OAKZM JKSSO SO MYR OKRR XDP JKSJRK XBMASD SO YAZ TWDHZ  MYR JXMBYNSKF BSVRKTRM NYABY NXZ BXKRTRZZTQ OTWDH SVRK MYR AKSD ERPZMRXP  KWZMTRP  MYR JXTR OXBR SO X QSWDH NSIXD NXZ KXAZRP ORRETQ OKSI MYR JATTSN  XDP X OXADM VSABR AIJRKORBMTQ XKMABWTXMRP MYR NSKPZ  TRM IR ZRR MYR BYATP  XDP PAR  MYR ZWKHRSD YXP ERRD ZAMMADH NAMY YAZ OXBR MWKDRP MSNXKPZ MYR OAKR  HAVADH MYR JXTIZ SO YAZ YXDPZ X NXKI XDP X KWE XTMRKDXMRTQ  XZ MYR QSWDH NSIXD ZJSFR  YR KSZR  XDP XPVXDBADH MS MYR ERP Z YRXP  ZXAP  NAMY ISKR FADPDRZZ MYXD IAHYM YXVR ERRD RGJRBMRP SO YAI&lt;/em&gt;&lt;br&gt;&lt;br&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;The Knapsack Problem&lt;/strong&gt; - This problem comes from &lt;a href="http://www.amazon.com/Introduction-Probability-Chapman-Statistical-Science-ebook/dp/B00MMOJ19I"&gt;Introduction to probability&lt;/a&gt; by Joseph Blitzstein. You should check out his courses (&lt;a href="http://projects.iq.harvard.edu/stat110/handouts"&gt;STAT110&lt;/a&gt; And &lt;a href="http://cm.dce.harvard.edu/2014/01/14328/publicationListing.shtml"&gt;CS109&lt;/a&gt;) as they are awesome. Also as it turns out Diaconis was the advisor of Joseph. So you have Bilbo a Thief who goes to Smaug's Lair. He finds M treasures. Each treasure has some Weight and some Gold value. But Bilbo cannot really take all of that. He could only carry a certain Maximum Weight. But being a smart hobbit, he wants to Maximize the value of the treasures he takes. Given the values for weights and value of the treasures and the maximum weight that Bilbo could carry, could you find a good solution? This is known as the Knapsack Problem in Computer Science.&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;h2 id="breaking-the-code"&gt;Breaking the Code&lt;/h2&gt;
+&lt;h2&gt;Breaking the Code&lt;/h2&gt;
 &lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
-&lt;center&gt;
-&lt;img src="/images/security.png"&gt;
-&lt;/center&gt;
+&lt;center&gt;&lt;img src="/images/security.png"&gt;&lt;/center&gt;
 &lt;/div&gt;
+
 &lt;p&gt;So we look at the data and form a hypothesis that the data has been scrambled using a Substitution Cipher. We don't know the encryption key, and we would like to know the Decryption Key so that we can decrypt the data and read the code.&lt;/p&gt;
-&lt;p&gt;To create this example, this data has actually been taken from Oliver Twist. We scrambled the data using a random encryption key, which we forgot after encrypting and we would like to decrypt this encrypted text using MCMC Chains. The real decryption key actually is &amp;quot;ICZNBKXGMPRQTWFDYEOLJVUAHS&amp;quot;&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;p&gt;So lets think about this problem for a little bit. The decryption key could be any 26 letter string with all alphabets appearing exactly once. How many string permutations are there like that? That number would come out to be &lt;span class="math inline"&gt;\(26! \approx 10^{26}\)&lt;/span&gt; permutations. That is a pretty large number. If we go for using a brute force approach we are screwed. So what could we do? MCMC Chains come to rescue.&lt;/p&gt;
+&lt;p&gt;To create this example, this data has actually been taken from Oliver Twist. We scrambled the data using a random encryption key, which we forgot after encrypting and we would like to decrypt this encrypted text using MCMC Chains. The real decryption key actually is "ICZNBKXGMPRQTWFDYEOLJVUAHS"&lt;/p&gt;
+&lt;p&gt;So lets think about this problem for a little bit. The decryption key could be any 26 letter string with all alphabets appearing exactly once. How many string permutations are there like that? That number would come out to be &lt;span class="math"&gt;\(26! \approx 10^{26}\)&lt;/span&gt; permutations. That is a pretty large number. If we go for using a brute force approach we are screwed. 
+So what could we do? MCMC Chains come to rescue. &lt;/p&gt;
 &lt;p&gt;We will devise a Chain whose states theoritically could be any of these permutations. Then we will:&lt;/p&gt;
-&lt;ol style="list-style-type: decimal"&gt;
-&lt;li&gt;Start by picking up a random current state.&lt;/li&gt;
+&lt;ol&gt;
+&lt;li&gt;Start by picking up a random current state. &lt;/li&gt;
 &lt;li&gt;Create a proposal for a new state by swapping two random letters in the current state.&lt;/li&gt;
-&lt;li&gt;Use a Scoring Function which calculates the score of the current state &lt;span class="math inline"&gt;\(Score_C\)&lt;/span&gt; and the proposed State &lt;span class="math inline"&gt;\(Score_P\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;Use a Scoring Function which calculates the score of the current state &lt;span class="math"&gt;\(Score_C\)&lt;/span&gt; and the proposed State &lt;span class="math"&gt;\(Score_P\)&lt;/span&gt;.&lt;/li&gt;
 &lt;li&gt;If the score of the proposed state is more than current state, Move to Proposed State.&lt;/li&gt;
-&lt;li&gt;Else flip a coin which has a probability of Heads &lt;span class="math inline"&gt;\(Score_P/Score_C\)&lt;/span&gt;. If it comes heads move to proposed State.&lt;/li&gt;
+&lt;li&gt;Else flip a coin which has a probability of Heads &lt;span class="math"&gt;\(Score_P/Score_C\)&lt;/span&gt;. If it comes heads move to proposed State.&lt;/li&gt;
 &lt;li&gt;Repeat from 2nd State.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;If we get lucky we may reach a steady state where the chain has the stationary distribution of the needed states and the state that the chain is at could be used as a solution.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;So the Question is what is the scoring function that we will want to use. We want to use a scoring function for each state(Decryption key) which assigns a positive score to each decryption key. This score intuitively should be more if the encrypted text looks more like actual english if decrypted using this decryption key.&lt;/p&gt;
 &lt;p&gt;So how can we quantify such a function. We will check a long text and calculate some statistics. See how many times one alphabet comes after another in a legitimate long text like War and Peace. For example we want to find out how many times does 'BA' appears in the text or how many times 'TH' occurs in the text.&lt;/p&gt;
-&lt;p&gt;For each pair of characters &lt;span class="math inline"&gt;\(\beta_1\)&lt;/span&gt; and &lt;span class="math inline"&gt;\(\beta_2\)&lt;/span&gt; (e.g. &lt;span class="math inline"&gt;\(\beta_1\)&lt;/span&gt; = T and &lt;span class="math inline"&gt;\(\beta_2\)&lt;/span&gt; =H), we let &lt;span class="math inline"&gt;\(R(\beta_1,\beta_2)\)&lt;/span&gt; record the number of times that specific pair(e.g. &amp;quot;TH&amp;quot;) appears consecutively in the reference text.&lt;/p&gt;
-&lt;p&gt;Similarly, for a putative decryption key x, we let &lt;span class="math inline"&gt;\(F_x(\beta_1,\beta_2)\)&lt;/span&gt; record the number of times that pair appears when the cipher text is decrypted using the decryption key x.&lt;/p&gt;
+&lt;p&gt;For each pair of characters &lt;span class="math"&gt;\(\beta_1\)&lt;/span&gt; and &lt;span class="math"&gt;\(\beta_2\)&lt;/span&gt; (e.g. &lt;span class="math"&gt;\(\beta_1\)&lt;/span&gt; = T and &lt;span class="math"&gt;\(\beta_2\)&lt;/span&gt; =H), we let &lt;span class="math"&gt;\(R(\beta_1,\beta_2)\)&lt;/span&gt; record the number of times that specific pair(e.g. "TH") appears consecutively in the reference text.&lt;/p&gt;
+&lt;p&gt;Similarly, for a putative decryption key x, we let &lt;span class="math"&gt;\(F_x(\beta_1,\beta_2)\)&lt;/span&gt; record the number of times that
+pair appears when the cipher text is decrypted using the decryption key x.&lt;/p&gt;
 &lt;p&gt;We then Score a particular decryption key x using:&lt;/p&gt;
-&lt;p&gt;&lt;span class="math display"&gt;\[Score(x) = \prod R(\beta_1,\beta_2)^{F_x(\beta_1,\beta_2)}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;This function can be thought of as multiplying, for each consecutive pair of letters in the decrypted text, the number of times that pair occurred in the reference text. Intuitively, the score function is higher when the pair frequencies in the decrypted text most closely match those of the reference text, and the decryption key is thus most likely to be correct.&lt;/p&gt;
-&lt;p&gt;To make life easier with calculations we will calculate &lt;span class="math inline"&gt;\(log(Score(x))\)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$Score(x) = \prod R(\beta_1,\beta_2)^{F_x(\beta_1,\beta_2)}$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;This function can be thought of as multiplying, for each consecutive pair of letters in the decrypted
+text, the number of times that pair occurred in the reference text.  Intuitively, the score function
+is higher when the pair frequencies in the decrypted text most closely match those of the reference
+text,  and  the  decryption  key  is  thus  most  likely  to  be  correct.&lt;/p&gt;
+&lt;p&gt;To make life easier with calculations we will calculate &lt;span class="math"&gt;\(log(Score(x))\)&lt;/span&gt;&lt;/p&gt;
 &lt;p&gt;So lets start working through the problem step by step.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;link rel="stylesheet" href="/theme/highlight/styles/default.css"&gt;
-&lt;script src="/theme/highlight/highlight.pack.js"&gt;&lt;/script&gt;
-&lt;script&gt;hljs.initHighlightingOnLoad();&lt;/script&gt;
-&lt;pre style="font-size:80%; padding:7px; margin:0em; background-color:#000000;"&gt;
-&lt;code class="python" style="background-color:#000000; color:#FFFFFF"&gt;
-# AIM: To Decrypt a text using MCMC approach. i.e. find decryption key which we will call cipher from now on.
+&lt;pre style="font-size:60%"&gt;
+&lt;code class="python"&gt;# AIM: To Decrypt a text using MCMC approach. i.e. find decryption key which we will call cipher from now on.
 import string
 import math
 import random
@@ -300,7 +296,7 @@ def random_coin(p):
         return False
     else:
         return True
-    
+
 # Takes as input a text to decrypt and runs a MCMC algorithm for n_iter. Returns the state having maximum score and also
 # the last few states 
 def MCMC_decrypt(n_iter,cipher_text,scoring_params):
@@ -347,41 +343,35 @@ print "\n"
 print "MCMC KEY FOUND:",best_state
 print "ACTUAL DECRYPTION KEY:",decryption_key
 &lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+
 &lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
-&lt;center&gt;
-&lt;img src="/images/result1_MCMC.png"&gt;
-&lt;/center&gt;
+&lt;center&gt;&lt;img src="/images/result1_MCMC.png"&gt;&lt;/center&gt;
 &lt;/div&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;p&gt;This chain converges around the 2000th iteration and we are able to unscramble the code. That's awesome!!! Now as you see the MCMC Key found is not exactly the encryption key. So the solution is not a deterministic one, but we can see that it does not actually decrease any of the value that the MCMC Methods provide. Now Lets Help Bilbo :)&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;h1 id="the-knapsack-problem"&gt;The Knapsack Problem&lt;/h1&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+
+&lt;p&gt;This chain converges around the 2000th iteration and we are able to unscramble the code. That's awesome!!!
+Now as you see the MCMC Key found is not exactly the encryption key. So the solution is not a deterministic one, but we can see that it does not actually decrease any of the value that the MCMC Methods provide. Now Lets Help Bilbo :)&lt;/p&gt;
+&lt;h2&gt;The Knapsack Problem&lt;/h2&gt;
 &lt;p&gt;Restating, we have Bilbo a Thief who goes to Smaug's Lair. He finds M treasures. Each treasure has some Weight and some Gold value. But Bilbo cannot really take all of that. He could only carry a certain Maximum Weight. But being a smart hobbit, he wants to Maximize the value of the treasures he takes. Given the values for weights and value of the treasures and the maximum weight that Bilbo could carry, could you find a good solution?&lt;/p&gt;
-&lt;p&gt;So in this problem we have an &lt;span class="math inline"&gt;\(1\)&lt;/span&gt;x&lt;span class="math inline"&gt;\(M\)&lt;/span&gt; array of Weight Values W, Gold Values G and a value for the maximum weight &lt;span class="math inline"&gt;\(w_{MAX}\)&lt;/span&gt; that Bilbo can carry. We want to find out an &lt;span class="math inline"&gt;\(1\)&lt;/span&gt;x&lt;span class="math inline"&gt;\(M\)&lt;/span&gt; array &lt;span class="math inline"&gt;\(X\)&lt;/span&gt; of 1's and 0's, which holds weather Bilbo Carries a particular treasure or not. This array needs to follow the constraint &lt;span class="math inline"&gt;\(WX^T &amp;lt; w_{MAX}\)&lt;/span&gt; and we want to maximize &lt;span class="math inline"&gt;\(GX^T\)&lt;/span&gt; for a particular state X.(Here the T means transpose)&lt;/p&gt;
-&lt;p&gt;So lets first discuss as to how we will create a proposal from a previous state.&lt;/p&gt;
-&lt;ol style="list-style-type: decimal"&gt;
-&lt;li&gt;Pick a random index from the state and toggle the index value.&lt;/li&gt;
+&lt;p&gt;So in this problem we have an &lt;span class="math"&gt;\(1\)&lt;/span&gt;x&lt;span class="math"&gt;\(M\)&lt;/span&gt; array of Weight Values W, Gold Values G and a value for the maximum weight &lt;span class="math"&gt;\(w_{MAX}\)&lt;/span&gt; that Bilbo can carry.
+We want to find out an &lt;span class="math"&gt;\(1\)&lt;/span&gt;x&lt;span class="math"&gt;\(M\)&lt;/span&gt; array &lt;span class="math"&gt;\(X\)&lt;/span&gt; of 1's and 0's, which holds weather Bilbo Carries a particular treasure or not. 
+This array needs to follow the constraint &lt;span class="math"&gt;\(WX^T &amp;lt; w_{MAX}\)&lt;/span&gt; and we want to maximize &lt;span class="math"&gt;\(GX^T\)&lt;/span&gt; for a particular state X.(Here the T means transpose)&lt;/p&gt;
+&lt;p&gt;So lets first discuss as to how we will create a proposal from a previous state. &lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Pick a random index from the state and toggle the index value. &lt;/li&gt;
 &lt;li&gt;Check if we satisfy our constraint. If yes this state is the proposal state.&lt;/li&gt;
 &lt;li&gt;Else pick up another random index and repeat.&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;We also need to think about the Scoring Function. We need to give high values to states with high gold value. We will use: &lt;br&gt;&lt;/p&gt;
-&lt;p&gt;&lt;span class="math display"&gt;\[Score(X)=e^{\beta GX^T}\]&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;We give exponentially more value to higher score. The Beta here is a +ve constant. But how to choose it? If &lt;span class="math inline"&gt;\(\beta\)&lt;/span&gt; is big we will give very high score to good solutions and the chain will not be able to try new solutions as it can get stuck in local optimas. If we give a small value the chain will not converge to very good solutions. So weuse an Optimization Technique called &lt;strong&gt;&lt;a href="https://en.wikipedia.org/wiki/Simulated_annealing"&gt;Simulated Annealing&lt;/a&gt;&lt;/strong&gt; i.e. we will start with a small value of &lt;span class="math inline"&gt;\(\beta\)&lt;/span&gt; and increase as no of iterations go up. That way the chain will explore in the starting stages and stay at the best solution in the later stages.&lt;/p&gt;
+&lt;p&gt;We also need to think about the Scoring Function. 
+We need to give high values to states with high gold value. We will use:
+&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;div class="math"&gt;$$Score(X)=e^{\beta GX^T}$$&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;We give exponentially more value to higher score. The Beta here is a +ve constant. But how to choose it? If &lt;span class="math"&gt;\(\beta\)&lt;/span&gt; is big we will give very high score to good solutions and the chain will not be able to try new solutions as it can get stuck in local optimas. If we give a small value the chain will not converge to very good solutions. So weuse an Optimization Technique called &lt;strong&gt;&lt;a href="https://en.wikipedia.org/wiki/Simulated_annealing"&gt;Simulated Annealing&lt;/a&gt;&lt;/strong&gt; i.e. we will start with a small value of &lt;span class="math"&gt;\(\beta\)&lt;/span&gt; and increase as no of iterations go up.
+That way the chain will explore in the starting stages and stay at the best solution in the later stages.&lt;/p&gt;
 &lt;p&gt;So now we have everything we need to get started&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;link rel="stylesheet" href="/theme/highlight/styles/default.css"&gt;
-&lt;script src="/theme/highlight/highlight.pack.js"&gt;&lt;/script&gt;
-&lt;script&gt;hljs.initHighlightingOnLoad();&lt;/script&gt;
-&lt;pre style="font-size:80%; padding:7px; margin:0em; background-color:#000000;"&gt;
-&lt;code class="python" style="background-color:#000000; color:#FFFFFF"&gt;
-import numpy as np
+&lt;pre style="font-size:60%"&gt;
+&lt;code class="python"&gt;import numpy as np
 
 W = [20,40,60,12,34,45,67,33,23,12,34,56,23,56]
 G = [120,420,610,112,341,435,657,363,273,812,534,356,223,516]
@@ -404,7 +394,7 @@ def create_proposal(X,W,W_max):
         return proposal
     else:
         return create_proposal(X,W,W_max)
-    
+
 # Takes as input a text to decrypt and runs a MCMC algorithm for n_iter. Returns the state having maximum score and also
 # the last few states 
 def MCMC_Golddigger(n_iter,W,G,W_max, Beta_start = 0.05, Beta_increments=.02):
@@ -414,7 +404,7 @@ def MCMC_Golddigger(n_iter,W,G,W_max, Beta_start = 0.05, Beta_increments=.02):
     state_keeper = []
     best_state = ''
     score = 0
-    
+
     for i in range(n_iter):
         state_keeper.append(current_X)
         proposed_X = create_proposal(current_X,W,W_max)
@@ -431,20 +421,13 @@ def MCMC_Golddigger(n_iter,W,G,W_max, Beta_start = 0.05, Beta_increments=.02):
         # You can use these below two lines to tune value of Beta
         #if i%20==0:
         #    print "iter:",i," |Beta=",Beta," |Gold Value=",np.dot(current_X,G)
-            
+
     return state_keeper,best_state
 &lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+
 &lt;p&gt;Running the Main program:&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;link rel="stylesheet" href="/theme/highlight/styles/default.css"&gt;
-&lt;script src="/theme/highlight/highlight.pack.js"&gt;&lt;/script&gt;
-&lt;script&gt;hljs.initHighlightingOnLoad();&lt;/script&gt;
-&lt;pre style="font-size:80%; padding:7px; margin:0em; background-color:#000000;"&gt;
-&lt;code class="python" style="background-color:#000000; color:#FFFFFF"&gt;
-max_state_value =0 
+&lt;pre style="font-size:60%"&gt;
+&lt;code class="python"&gt;max_state_value =0 
 Solution_MCMC = [0]
 for i in range(10):
     state_keeper,best_state = MCMC_Golddigger(50000,W,G,W_max,0.0005, .0005)
@@ -455,21 +438,22 @@ for i in range(10):
 
 print "MCMC Solution is :" , str(Solution_MCMC) , "with Gold Value:", str(max_state_value)
 &lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;pre&gt;&lt;code&gt;MCMC Solution is : [0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0] with Gold Value: 2435&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre style="font-family:courier new,monospace; background-color:#f6c6529c; color:#000000"&gt;
+MCMC Solution is : [0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0] with Gold Value: 2435
+&lt;/pre&gt;
+
 &lt;p&gt;Now I won't say that this is the best solution. The deterministic solution using DP will be the best for such use case but sometimes when the problems gets large, having such techniques at disposal becomes invaluable.&lt;/p&gt;
-&lt;p&gt;So tell me What do you think about MCMC Methods?&lt;/p&gt;
-&lt;p&gt;Also, If you find any good applications or would like to apply these techniques to some area, I would really be glad to know about them and help if possible.&lt;/p&gt;
+&lt;p&gt;So tell me What do you think about MCMC Methods? &lt;/p&gt;
+&lt;p&gt;Also, If you find any good applications or would like to apply these techniques to some area, I would really be glad to know about them and help if possible. &lt;/p&gt;
 &lt;p&gt;The codes for both examples are sourced at &lt;a href="https://github.com/MLWhiz/MCMC_Project"&gt;Github&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id="references-and-sources"&gt;References and Sources:&lt;/h2&gt;
-&lt;ol style="list-style-type: decimal"&gt;
+&lt;h2&gt;References and Sources:&lt;/h2&gt;
+&lt;ol&gt;
 &lt;li&gt;&lt;a href="http://www.amazon.com/Introduction-Probability-Chapman-Statistical-Science-ebook/dp/B00MMOJ19I"&gt;Introduction to Probability Joseph K Blitzstein, Jessica Hwang&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://en.wikipedia.org/wiki/"&gt;Wikipedia&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://statweb.stanford.edu/~cgates/PERSI/papers/MCMCRev.pdf"&gt;The Markov Chain Monte Carlo Revolution, Persi Diaconis&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://www.utstat.toronto.edu/wordpress/WSFiles/technicalreports/1005.pdf"&gt;Decrypting Classical Cipher Text Using Markov Chain Monte Carlo, Jian Chen and Jeffrey S. Rosenthal&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;&lt;/p&gt;
 &lt;p&gt;One of the newest and best resources that you can keep an eye on is the &lt;a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;Bayesian Methods for Machine Learning&lt;/a&gt; course in the &lt;a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;Advanced machine learning specialization&lt;/a&gt; created jointly by Kazanova(Number 3 Kaggler at the time of writing)&lt;/p&gt;
 &lt;p&gt;Apart from that I also found a course on &lt;strong&gt;&lt;a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;amp;offerid=495576.8910375858&amp;amp;type=2&amp;amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbayesian"&gt;Bayesian Statistics on Coursera&lt;/a&gt;&lt;/strong&gt;. In the process of doing it right now so couldn't really comment on it. But since I had done an course on &lt;strong&gt;&lt;a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;amp;offerid=495576.8839843074&amp;amp;type=2&amp;amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Finferential-statistics-intro"&gt;Inferential Statistics&lt;/a&gt;&lt;/strong&gt; taught by the same professor before(Mine Çetinkaya-Rundel), I am very hopeful for this course. Let's see.&lt;/p&gt;
 &lt;p&gt;Also look out for these two books to learn more about MCMC. I have not yet read them whole but still I liked whatever I read:&lt;/p&gt;
@@ -480,7 +464,36 @@ print "MCMC Solution is :" , str(Solution_MCMC) , "with Gold Value:", str(max_st
 &lt;a target="_blank"  href="https://www.amazon.com/gp/product/1584885874/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1584885874&amp;linkCode=as2&amp;tag=mlwhizcon-20&amp;linkId=ee3e2a0bc99359d6c5db0463ab1abb13"&gt;&lt;img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=1584885874&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=mlwhizcon-20" &gt;&lt;/a&gt;&lt;img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;l=am2&amp;o=1&amp;a=1584885874" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /&gt;
 &lt;/div&gt;
 
-&lt;p&gt;Both these books are pretty high level and hard on math. But these are the best texts out there too. :)&lt;/p&gt;</summary><category term="Statistics"></category><category term="python"></category></entry><entry><title>My Tryst With MCMC Algorithms</title><link href="http://mlwhiz.com/blog/2015/08/19/MCMC_Algorithms_Beta_Distribution/" rel="alternate"></link><updated>2015-08-19T13:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.com,2015-08-19:blog/2015/08/19/MCMC_Algorithms_Beta_Distribution/</id><summary type="html">&lt;p&gt;The things that I find hard to understand push me to my limits. One of the things that I have always found hard is &lt;strong&gt;Markov Chain Monte Carlo Methods&lt;/strong&gt;. 
+&lt;p&gt;Both these books are pretty high level and hard on math. But these are the best texts out there too. :)&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processClass: 'mathjax', " +
+        "        ignoreClass: 'no-mathjax', " +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</summary><category term="Statistics"></category><category term="python"></category></entry><entry><title>My Tryst With MCMC Algorithms</title><link href="http://mlwhiz.com/blog/2015/08/19/MCMC_Algorithms_Beta_Distribution/" rel="alternate"></link><updated>2015-08-19T13:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.com,2015-08-19:blog/2015/08/19/MCMC_Algorithms_Beta_Distribution/</id><summary type="html">&lt;p&gt;The things that I find hard to understand push me to my limits. One of the things that I have always found hard is &lt;strong&gt;Markov Chain Monte Carlo Methods&lt;/strong&gt;. 
 When I first encountered them, I read a lot about them but mostly it ended like this.&lt;/p&gt;
 &lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
 &lt;center&gt;&lt;img src="/images/flabbergasted.png"&gt;&lt;/center&gt;
