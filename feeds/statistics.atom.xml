@@ -480,146 +480,111 @@ print "MCMC Solution is :" , str(Solution_MCMC) , "with Gold Value:", str(max_st
 &lt;a target="_blank"  href="https://www.amazon.com/gp/product/1584885874/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1584885874&amp;linkCode=as2&amp;tag=mlwhizcon-20&amp;linkId=ee3e2a0bc99359d6c5db0463ab1abb13"&gt;&lt;img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=1584885874&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=mlwhizcon-20" &gt;&lt;/a&gt;&lt;img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;l=am2&amp;o=1&amp;a=1584885874" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /&gt;
 &lt;/div&gt;
 
-&lt;p&gt;Both these books are pretty high level and hard on math. But these are the best texts out there too. :)&lt;/p&gt;</summary><category term="Statistics"></category><category term="python"></category></entry><entry><title>My Tryst With MCMC Algorithms</title><link href="http://mlwhiz.com/blog/2015/08/19/MCMC_Algorithms_Beta_Distribution/" rel="alternate"></link><updated>2015-08-19T13:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.com,2015-08-19:blog/2015/08/19/MCMC_Algorithms_Beta_Distribution/</id><summary type="html">&lt;p&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-The things that I find hard to understand push me to my limits. One of the things that I have always found hard is &lt;strong&gt;Markov Chain Monte Carlo Methods&lt;/strong&gt;. When I first encountered them, I read a lot about them but mostly it ended like this.
+&lt;p&gt;Both these books are pretty high level and hard on math. But these are the best texts out there too. :)&lt;/p&gt;</summary><category term="Statistics"></category><category term="python"></category></entry><entry><title>My Tryst With MCMC Algorithms</title><link href="http://mlwhiz.com/blog/2015/08/19/MCMC_Algorithms_Beta_Distribution/" rel="alternate"></link><updated>2015-08-19T13:43:00-03:00</updated><author><name>Rahul Agarwal</name></author><id>tag:mlwhiz.com,2015-08-19:blog/2015/08/19/MCMC_Algorithms_Beta_Distribution/</id><summary type="html">&lt;p&gt;The things that I find hard to understand push me to my limits. One of the things that I have always found hard is &lt;strong&gt;Markov Chain Monte Carlo Methods&lt;/strong&gt;. 
+When I first encountered them, I read a lot about them but mostly it ended like this.&lt;/p&gt;
 &lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
-&lt;center&gt;
-&lt;img src="/images/flabbergasted.png"&gt;
-&lt;/center&gt;
+&lt;center&gt;&lt;img src="/images/flabbergasted.png"&gt;&lt;/center&gt;
 &lt;/div&gt;
-&lt;p&gt;The meaning is normally hidden in deep layers of Mathematical noise and not easy to decipher. This blog post is intended to clear up the confusion around MCMC methods, Know what they are actually useful for and Get hands on with some applications.&lt;/p&gt;
-&lt;h2 id="so-what-really-are-mcmc-methods"&gt;&lt;strong&gt;So what really are MCMC Methods?&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;The meaning is normally hidden in deep layers of Mathematical noise and not easy to decipher.
+This blog post is intended to clear up the confusion around MCMC methods, Know what they are actually useful for and Get hands on with some applications.&lt;/p&gt;
+&lt;h2&gt;&lt;strong&gt;So what really are MCMC Methods?&lt;/strong&gt;&lt;/h2&gt;
 &lt;p&gt;First of all we have to understand what are &lt;strong&gt;&lt;em&gt;Monte Carlo&lt;/em&gt;&lt;/strong&gt; Methods!!!&lt;/p&gt;
 &lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/Monte_Carlo_method"&gt;Monte Carlo&lt;/a&gt; methods derive their name from Monte Carlo Casino in Monaco. There are many card games that need probability of winning against the dealer. Sometimes calculating this probability can be mathematically complex or highly intractable. But we can always run a computer simulation to simulate the whole game many times and see the probability as the number of wins divided by the number of games played.&lt;/p&gt;
 &lt;p&gt;So that is all you need to know about Monte carlo Methods. Yes it is just a simple simulation technique with a Fancy Name.&lt;/p&gt;
-&lt;p&gt;So as we have got the first part of MCMC, we also need to understand what are &lt;strong&gt;&lt;em&gt;&lt;a href="https://en.wikipedia.org/wiki/Markov_chain"&gt;Markov Chains&lt;/a&gt;&lt;/em&gt;&lt;/strong&gt;. Before Jumping onto Markov Chains let us learn a little bit about &lt;strong&gt;Markov Property&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;Suppose you have a system of &lt;span class="math inline"&gt;\(M\)&lt;/span&gt; possible states, and you are hopping from one state to another. &lt;em&gt;Markov Property&lt;/em&gt; says that given a process which is at a state &lt;span class="math inline"&gt;\(X_n\)&lt;/span&gt; at a particular point of time, the probability of &lt;span class="math inline"&gt;\(X_{n+1} = k\)&lt;/span&gt;, where &lt;span class="math inline"&gt;\(k\)&lt;/span&gt; is any of the &lt;span class="math inline"&gt;\(M\)&lt;/span&gt; states the process can hop to, will only be dependent on which state it is at the given moment of time. And not on how it reached the current state.&lt;/p&gt;
+&lt;p&gt;So as we have got the first part of MCMC, we also need to understand what are &lt;strong&gt;&lt;em&gt;&lt;a href="https://en.wikipedia.org/wiki/Markov_chain"&gt;Markov Chains&lt;/a&gt;&lt;/em&gt;&lt;/strong&gt;.
+Before Jumping onto Markov Chains let us learn a little bit about &lt;strong&gt;Markov Property&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Suppose you have a system of &lt;span class="math"&gt;\(M\)&lt;/span&gt; possible states, and you are hopping from one state to another.
+&lt;em&gt;Markov Property&lt;/em&gt; says that given a process which is at a state &lt;span class="math"&gt;\(X_n\)&lt;/span&gt; at a particular point of time, the probability of &lt;span class="math"&gt;\(X_{n+1} = k\)&lt;/span&gt;, where &lt;span class="math"&gt;\(k\)&lt;/span&gt; is any of the &lt;span class="math"&gt;\(M\)&lt;/span&gt; states the process can hop to, will only be dependent on which state it is at the given moment of time.
+And not on how it reached the current state.&lt;/p&gt;
 &lt;p&gt;Mathematically speaking:&lt;/p&gt;
-&lt;center&gt;
-&lt;span class="math display"&gt;\[ P(X_{n+1}=k | X_n=k_n,X_{n-1}=k_{n-1},....,X_1=k_1) = P(X_{n+1}=k|X_n=k_n)\]&lt;/span&gt;
-&lt;/center&gt;
+&lt;p&gt;&lt;center&gt;&lt;div class="math"&gt;$$ P(X_{n+1}=k | X_n=k_n,X_{n-1}=k_{n-1},....,X_1=k_1) = P(X_{n+1}=k|X_n=k_n)$$&lt;/div&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;If a process exhibits the Markov Property than it is known as a Markov Process.&lt;/p&gt;
-&lt;p&gt;Now Why is a Markov Chain important? It is important because of its &lt;strong&gt;stationary distribution&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Now Why is a Markov Chain important? 
+It is important because of its &lt;strong&gt;stationary distribution&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;So what is a &lt;strong&gt;Stationary Distribution&lt;/strong&gt;?&lt;/p&gt;
-&lt;p&gt;Assume you have a markov process like below. You start from any state &lt;span class="math inline"&gt;\(X_i\)&lt;/span&gt; and want to find out the state Probability distribution at &lt;span class="math inline"&gt;\(X_{i+1}\)&lt;/span&gt;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;p&gt;Assume you have a markov process like below. You start from any state &lt;span class="math"&gt;\(X_i\)&lt;/span&gt; and want to find out the state Probability distribution at &lt;span class="math"&gt;\(X_{i+1}\)&lt;/span&gt;.&lt;/p&gt;
 &lt;div style="margin-top: 10px; margin-bottom: -10px;"&gt;
-&lt;center&gt;
-&lt;img src="/images/Finance_Markov_chain_example_state_space.svg"&gt;
-&lt;/center&gt;
+&lt;center&gt;&lt;img src="/images/Finance_Markov_chain_example_state_space.svg"&gt;&lt;/center&gt;
 &lt;/div&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-You have a matrix of transition probability
+
+&lt;p&gt;You have a matrix of transition probability
 &lt;div style="margin-top: 9px; margin-bottom: 10px;"&gt;
-&lt;center&gt;
-&lt;img src="/images/transition_matrix.png"&gt;
-&lt;/center&gt;
-&lt;/div&gt;
-&lt;p&gt;which defines the probability of going from a state &lt;span class="math inline"&gt;\(X_i\)&lt;/span&gt; to &lt;span class="math inline"&gt;\(X_j\)&lt;/span&gt;. You start calculating the Probability distribution for the next state. If you are at Bull Market State at time &lt;span class="math inline"&gt;\(i\)&lt;/span&gt; , you have a state Probability distribution as [0,1,0]&lt;/p&gt;
-&lt;p&gt;you want to get the state pdf at &lt;span class="math inline"&gt;\(X_{i+1}\)&lt;/span&gt;. That is given by&lt;/p&gt;
-&lt;div&gt;
-&lt;center&gt;
-&lt;span class="math display"&gt;\[s_{i+1} = s_{i}Q\]&lt;/span&gt;
-&lt;/center&gt;
-&lt;/div&gt;
-&lt;div&gt;
-&lt;center&gt;
-&lt;span class="math display"&gt;\[ s_{i+1}=\left[ {\begin{array}{cc}   .15 &amp;amp; .8 &amp;amp; .05      \end{array} } \right]\]&lt;/span&gt;
-&lt;/center&gt;
-&lt;/div&gt;
+&lt;center&gt;&lt;img src="/images/transition_matrix.png"&gt;&lt;/center&gt;
+&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;which defines the probability of going from a state &lt;span class="math"&gt;\(X_i\)&lt;/span&gt; to &lt;span class="math"&gt;\(X_j\)&lt;/span&gt;.
+You start calculating the Probability distribution for the next state. If you are at Bull Market State at time &lt;span class="math"&gt;\(i\)&lt;/span&gt; , you have a state Probability distribution as [0,1,0]&lt;/p&gt;
+&lt;p&gt;you want to get the state pdf at &lt;span class="math"&gt;\(X_{i+1}\)&lt;/span&gt;. That is given by&lt;/p&gt;
+&lt;div&gt;&lt;center&gt;$$s_{i+1} = s_{i}Q$$&lt;/center&gt;&lt;/div&gt;
+
+&lt;div&gt;&lt;center&gt;$$ s_{i+1}=\left[ {\begin{array}{cc}   .15 &amp; .8 &amp; .05      \end{array} } \right]$$&lt;/center&gt;&lt;/div&gt;
+
 &lt;p&gt;And the next state distribution could be found out by&lt;/p&gt;
-&lt;center&gt;
-&lt;span class="math display"&gt;\[s_{i+1} = s_iQ^2\]&lt;/span&gt;
-&lt;/center&gt;
-and so on. Eventually you will reach a stationary state s where:
-&lt;center&gt;
-&lt;span class="math display"&gt;\[sQ=s\]&lt;/span&gt;
-&lt;/center&gt;
-For this transition matrix Q the Stationary distribution &lt;span class="math inline"&gt;\(s\)&lt;/span&gt; is
-&lt;center&gt;
-&lt;span class="math display"&gt;\[ s_{i+1}=\left[ {\begin{array}{cc}   .625 &amp;amp; .3125 &amp;amp; .0625      \end{array} } \right]\]&lt;/span&gt;
-&lt;/center&gt;
+&lt;p&gt;&lt;center&gt;&lt;div class="math"&gt;$$s_{i+1} = s_iQ^2$$&lt;/div&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;and so on. 
+Eventually you will reach a stationary state s where:
+&lt;center&gt;&lt;div class="math"&gt;$$sQ=s$$&lt;/div&gt;&lt;/center&gt;
+For this transition matrix Q the Stationary distribution &lt;span class="math"&gt;\(s\)&lt;/span&gt; is
+&lt;center&gt;&lt;div class="math"&gt;$$ s_{i+1}=\left[ {\begin{array}{cc}   .625 &amp;amp; .3125 &amp;amp; .0625      \end{array} } \right]$$&lt;/div&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;The stationary state distribution is important because it lets you define the probability for every state of a system at a random time. That is for this particular example we can say that 62.5% of the times market will be in a bull market state, 31.25% of weeks it will be a bear market and 6.25% of weeks it will be stagnant&lt;/p&gt;
 &lt;p&gt;Intuitively you can think of it as an random walk on a chain. You might visit some nodes more often than others based on node probabilities. In the &lt;em&gt;Google Pagerank&lt;/em&gt; problem you might think of a node as a page, and the probability of a page in the stationary distribution as its relative importance.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;&lt;em&gt;Woah!&lt;/em&gt;&lt;/strong&gt; That was a lot of information and we have yet not started talking about the MCMC Methods. Well if you are with me till now, we can now get on to the real topic now.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;h2 id="so-what-is-mcmc"&gt;So What is MCMC?&lt;/h2&gt;
-According to &lt;a href="https://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo"&gt;Wikipedia&lt;/a&gt;:
+&lt;h2&gt;So What is MCMC?&lt;/h2&gt;
+&lt;p&gt;According to &lt;a href="https://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo"&gt;Wikipedia&lt;/a&gt;: 
 &lt;blockquote&gt;
 &lt;strong&gt;Markov Chain Monte Carlo&lt;/strong&gt; (MCMC) methods are a class of algorithms for &lt;strong&gt;sampling from a probability distribution&lt;/strong&gt; based on constructing a Markov chain that has the desired distribution as its stationary distribution. The state of the chain after a number of steps is then used as a sample of the desired distribution. The quality of the sample improves as a function of the number of steps.
-&lt;/blockquote&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;/blockquote&gt;&lt;/p&gt;
 &lt;p&gt;So let's explain this with an example: Assume that &lt;strong&gt;we want to sample from a &lt;a href="https://en.wikipedia.org/wiki/Beta_distribution"&gt;Beta distribution&lt;/a&gt;&lt;/strong&gt;. The &lt;em&gt;PDF&lt;/em&gt; is:&lt;/p&gt;
-&lt;center&gt;
-&lt;span class="math display"&gt;\[f(x) = Cx^{\alpha -1}(1-x)^{\beta -1}\]&lt;/span&gt;
-&lt;/center&gt;
-&lt;p&gt;where &lt;span class="math inline"&gt;\(C\)&lt;/span&gt; is the normalizing constant &lt;em&gt;(which we actually don't need to Sample from the distribution as we will see later)&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;This is a &lt;strong&gt;fairly difficult problem&lt;/strong&gt; with the Beta Distribution if not intractable. In reality you might need to work with a lot harder Distribution Functions and sometimes you won't actually know the normalizing constants.&lt;/p&gt;
-&lt;p&gt;MCMC methods make life easier for us by providing us with algorithms that could create a Markov Chain which has the Beta distribution as its &lt;strong&gt;stationary distribution&lt;/strong&gt; given that we can sample from a uniform distribution(which is &lt;em&gt;fairly&lt;/em&gt; easy).&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;&lt;div class="math"&gt;$$f(x) = Cx^{\alpha -1}(1-x)^{\beta -1}$$&lt;/div&gt;&lt;/center&gt;
+where &lt;span class="math"&gt;\(C\)&lt;/span&gt; is the normalizing constant &lt;em&gt;(which we actually don't need to Sample from the distribution as we will see later)&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;This is a &lt;strong&gt;fairly difficult problem&lt;/strong&gt; with the Beta Distribution if not intractable. In reality you might need to work with a lot harder Distribution Functions and sometimes you won't actually know the normalizing constants. &lt;/p&gt;
+&lt;p&gt;MCMC methods make life easier for us by providing us with algorithms that could create a Markov Chain which has the Beta distribution as its &lt;strong&gt;stationary distribution&lt;/strong&gt; given that we can sample from a uniform distribution(which is &lt;em&gt;fairly&lt;/em&gt; easy). &lt;/p&gt;
 &lt;p&gt;If we start from a random state and traverse to the next state based on some algorithm repeatedly, we will end up creating a Markov Chain which has the Beta distribution as its &lt;strong&gt;stationary distribution&lt;/strong&gt; and the states we are at after a long time could be used as sample from the Beta Distribution.&lt;/p&gt;
 &lt;p&gt;One such MCMC Algorithm is the &lt;strong&gt;&lt;a href="https://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm"&gt;Metropolis Hastings Algorithm&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;
-&lt;h2 id="metropolis-hastings-algorithm"&gt;Metropolis Hastings Algorithm&lt;/h2&gt;
-&lt;p&gt;Let &lt;span class="math inline"&gt;\(s=(s_1,s_2,....,s_M)\)&lt;/span&gt; be the desired stationary distribution. We want to create a Markov Chain that has this stationary distribution. We start with an arbitrary Markov Chain &lt;span class="math inline"&gt;\(P\)&lt;/span&gt; with &lt;span class="math inline"&gt;\(M\)&lt;/span&gt; states with transition matrix &lt;span class="math inline"&gt;\(Q\)&lt;/span&gt;, so that &lt;span class="math inline"&gt;\(Q_{ij}\)&lt;/span&gt; represents the probability of going from state &lt;span class="math inline"&gt;\(i\)&lt;/span&gt; to &lt;span class="math inline"&gt;\(j\)&lt;/span&gt;. Intuitively we know how to wander around this Markov Chain but this Markov Chain does not have the required Stationary Distribution. This chain does have some stationary distribution(which is not of our use)&lt;/p&gt;
-&lt;p&gt;Our Goal is to change the way we wander on the this Markov Chain &lt;span class="math inline"&gt;\(P\)&lt;/span&gt; so that this chain has the desired Stationary distribution.&lt;/p&gt;
+&lt;h2&gt;Metropolis Hastings Algorithm&lt;/h2&gt;
+&lt;p&gt;Let &lt;span class="math"&gt;\(s=(s_1,s_2,....,s_M)\)&lt;/span&gt; be the desired stationary distribution. We want to create a Markov Chain that has this stationary distribution. We start with an arbitrary Markov Chain &lt;span class="math"&gt;\(P\)&lt;/span&gt; with &lt;span class="math"&gt;\(M\)&lt;/span&gt; states with transition matrix &lt;span class="math"&gt;\(Q\)&lt;/span&gt;, so that &lt;span class="math"&gt;\(Q_{ij}\)&lt;/span&gt; represents the probability of going from state &lt;span class="math"&gt;\(i\)&lt;/span&gt; to &lt;span class="math"&gt;\(j\)&lt;/span&gt;. Intuitively we know how to wander around this Markov Chain but this Markov Chain does not have the required Stationary Distribution. This chain does have some stationary distribution(which is not of our use)&lt;/p&gt;
+&lt;p&gt;Our Goal is to change the way we wander on the this Markov Chain &lt;span class="math"&gt;\(P\)&lt;/span&gt; so that this chain has the desired Stationary distribution.&lt;/p&gt;
 &lt;p&gt;To do this we:&lt;/p&gt;
-&lt;ol style="list-style-type: decimal"&gt;
-&lt;li&gt;Start at a random initial State &lt;span class="math inline"&gt;\(i\)&lt;/span&gt;.&lt;/li&gt;
+&lt;ol&gt;
+&lt;li&gt;Start at a random initial State &lt;span class="math"&gt;\(i\)&lt;/span&gt;.&lt;/li&gt;
 &lt;li&gt;Randomly pick a new &lt;em&gt;Proposal State&lt;/em&gt; by looking at the transition probabilities in the ith row of the transition matrix Q.&lt;/li&gt;
 &lt;li&gt;Compute an measure called the &lt;em&gt;Acceptance Probability&lt;/em&gt; which is defined as:
-&lt;center&gt;
-&lt;span class="math display"&gt;\[a_{ij} = min(s_jp_{ji}/s_{i}p_{ij},1)\]&lt;/span&gt;
-&lt;/center&gt;&lt;/li&gt;
-&lt;li&gt;Now Flip a coin that lands head with probability &lt;span class="math inline"&gt;\(a_{ij}\)&lt;/span&gt;. If the coin comes up heads, accept the proposal i.e move to next state else reject the proposal i.e. stay at the current state.&lt;/li&gt;
+&lt;center&gt;&lt;div class="math"&gt;$$a_{ij} = min(s_jp_{ji}/s_{i}p_{ij},1)$$&lt;/div&gt;&lt;/center&gt;&lt;/li&gt;
+&lt;li&gt;Now Flip a coin that lands head with probability &lt;span class="math"&gt;\(a_{ij}\)&lt;/span&gt;. If the coin comes up heads, accept the proposal i.e move to next state else reject the proposal i.e. stay at the current state.&lt;/li&gt;
 &lt;li&gt;Repeat for a long time&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;After a long time this chain will converge and will have a stationary distribution &lt;span class="math inline"&gt;\(s\)&lt;/span&gt;. &lt;strong&gt;We can then use the states of the chain as the sample from any distribution.&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;While doing this to sample the Beta Distribution, the only time we are using the PDF is to find the acceptance probability and in that we divide &lt;span class="math inline"&gt;\(s_j\)&lt;/span&gt; by &lt;span class="math inline"&gt;\(s_i\)&lt;/span&gt;, i.e. the &lt;strong&gt;normalizing constant &lt;span class="math inline"&gt;\(C\)&lt;/span&gt; gets cancelled&lt;/strong&gt;.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-Now Let's Talk about the intuition. For the Intuition I am quoting an &lt;a href="http://stats.stackexchange.com/a/12657"&gt;Answer&lt;/a&gt; from the site Stack Exchange,as this was the best intuitive explanation that I could find:
+&lt;p&gt;After a long time this chain will converge and will have a stationary distribution &lt;span class="math"&gt;\(s\)&lt;/span&gt;. &lt;strong&gt;We can then use the states of the chain as the sample from any distribution.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;While doing this to sample the Beta Distribution, the only time we are using the PDF is to find the acceptance probability and in that we divide &lt;span class="math"&gt;\(s_j\)&lt;/span&gt; by &lt;span class="math"&gt;\(s_i\)&lt;/span&gt;, i.e. the &lt;strong&gt;normalizing constant &lt;span class="math"&gt;\(C\)&lt;/span&gt; gets cancelled&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Now Let's Talk about the intuition. For the Intuition I am quoting an &lt;a href="http://stats.stackexchange.com/a/12657"&gt;Answer&lt;/a&gt; from the site Stack Exchange,as this was the best intuitive explanation that I could find:
 &lt;blockquote&gt;
-I think there's a nice and simple intuition to be gained from the (independence-chain) Metropolis-Hastings algorithm. &lt;br&gt; &lt;br&gt; First, what's the goal? The goal of MCMC is to &lt;strong&gt;draw samples from some probability distribution&lt;/strong&gt; without having to know its exact height at any point(We don't need to know C). The way MCMC achieves this is to &lt;strong&gt;&amp;quot;wander around&amp;quot; on that distribution in such a way that the amount of time spent in each location is proportional to the height of the distribution&lt;/strong&gt;. If the &amp;quot;wandering around&amp;quot; process is set up correctly, you can make sure that this proportionality (between time spent and height of the distribution) is achieved. &lt;br&gt; &lt;br&gt; Intuitively, what we want to do is to to walk around on some (lumpy) surface in such a way that the amount of time we spend (or # samples drawn) in each location is proportional to the height of the surface at that location. So, e.g., we'd like to spend twice as much time on a hilltop that's at an altitude of 100m as we do on a nearby hill that's at an altitude of 50m. The nice thing is that we can do this even if we don't know the absolute heights of points on the surface: all we have to know are the relative heights. e.g., if one hilltop A is twice as high as hilltop B, then we'd like to spend twice as much time at A as we spend at B. &lt;br&gt; &lt;br&gt; The simplest variant of the Metropolis-Hastings algorithm (independence chain sampling) achieves this as follows: assume that in every (discrete) time-step, we pick a random new &amp;quot;proposed&amp;quot; location (selected uniformly across the entire surface). If the proposed location is higher than where we're standing now, move to it. If the proposed location is lower, then move to the new location with probability p, where p is the ratio of the height of that point to the height of the current location. (i.e., flip a coin with a probability p of getting heads; if it comes up heads, move to the new location; if it comes up tails, stay where we are). Keep a list of the locations you've been at on every time step, and that list will (asyptotically) have the right proportion of time spent in each part of the surface. (And for the A and B hills described above, you'll end up with twice the probability of moving from B to A as you have of moving from A to B). &lt;br&gt; &lt;br&gt; There are more complicated schemes for proposing new locations and the rules for accepting them, but the basic idea is still: &lt;strong&gt;(1) pick a new &amp;quot;proposed&amp;quot; location; (2) figure out how much higher or lower that location is compared to your current location; (3) probabilistically stay put or move to that location in a way that respects the overall goal of spending time proportional to height of the location. &amp;quot;&amp;quot;&amp;quot;&lt;/strong&gt;
-&lt;/blockquote&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;h2 id="sampling-from-beta-distribution"&gt;Sampling from Beta Distribution&lt;/h2&gt;
-&lt;p&gt;Now Let's Move on to the problem of Simulating from Beta Distribution. Now Beta Distribution is a continuous Distribution on [0,1] and it can have infinite states on [0,1].&lt;/p&gt;
-&lt;p&gt;Lets Assume an arbitrary Markov Chain P with infinite states on [0,1] having transition Matrix Q such that &lt;span class="math inline"&gt;\(Q_{ij} = Q_{ji} =\)&lt;/span&gt; All entries in Matrix. We don't really need the Matrix Q as we will see later, But I want to keep the problem description as close to the algorihm we suggested.&lt;/p&gt;
-&lt;ol style="list-style-type: decimal"&gt;
-&lt;li&gt;Start at a random &lt;strong&gt;initial State &lt;span class="math inline"&gt;\(i\)&lt;/span&gt;&lt;/strong&gt; given by Unif(0,1).&lt;/li&gt;
-&lt;li&gt;Randomly pick a new &lt;strong&gt;Proposal State&lt;/strong&gt; by looking at the transition probabilities in the ith row of the transition matrix Q. Lets say we pick up another Unif(0,1) state as a proposal state &lt;span class="math inline"&gt;\(j\)&lt;/span&gt;.&lt;/li&gt;
+I think there's a nice and simple intuition to be gained from the (independence-chain) Metropolis-Hastings algorithm.
+&lt;br&gt;
+&lt;br&gt;
+First, what's the goal? The goal of MCMC is to &lt;strong&gt;draw samples from some probability distribution&lt;/strong&gt; without having to know its exact height at any point(We don't need to know C). The way MCMC achieves this is to &lt;strong&gt;"wander around" on that distribution in such a way that the amount of time spent in each location is proportional to the height of the distribution&lt;/strong&gt;. If the "wandering around" process is set up correctly, you can make sure that this proportionality (between time spent and height of the distribution) is achieved.
+&lt;br&gt;
+&lt;br&gt;
+Intuitively, what we want to do is to to walk around on some (lumpy) surface in such a way that the amount of time we spend (or # samples drawn) in each location is proportional to the height of the surface at that location. So, e.g., we'd like to spend twice as much time on a hilltop that's at an altitude of 100m as we do on a nearby hill that's at an altitude of 50m. The nice thing is that we can do this even if we don't know the absolute heights of points on the surface: all we have to know are the relative heights. e.g., if one hilltop A is twice as high as hilltop B, then we'd like to spend twice as much time at A as we spend at B.
+&lt;br&gt;
+&lt;br&gt;
+The simplest variant of the Metropolis-Hastings algorithm (independence chain sampling) achieves this as follows: assume that in every (discrete) time-step, we pick a random new "proposed" location (selected uniformly across the entire surface). If the proposed location is higher than where we're standing now, move to it. If the proposed location is lower, then move to the new location with probability p, where p is the ratio of the height of that point to the height of the current location. (i.e., flip a coin with a probability p of getting heads; if it comes up heads, move to the new location; if it comes up tails, stay where we are). Keep a list of the locations you've been at on every time step, and that list will (asyptotically) have the right proportion of time spent in each part of the surface. (And for the A and B hills described above, you'll end up with twice the probability of moving from B to A as you have of moving from A to B).
+&lt;br&gt;
+&lt;br&gt;
+There are more complicated schemes for proposing new locations and the rules for accepting them, but the basic idea is still: &lt;strong&gt;(1) pick a new "proposed" location; (2) figure out how much higher or lower that location is compared to your current location; (3) probabilistically stay put or move to that location in a way that respects the overall goal of spending time proportional to height of the location. """&lt;/strong&gt;
+&lt;/blockquote&gt;&lt;/p&gt;
+&lt;h2&gt;Sampling from Beta Distribution&lt;/h2&gt;
+&lt;p&gt;Now Let's Move on to the problem of Simulating from Beta Distribution. Now Beta Distribution is a continuous Distribution on [0,1] and it can have infinite states on [0,1]. &lt;/p&gt;
+&lt;p&gt;Lets Assume an arbitrary Markov Chain P with infinite states on [0,1] having transition Matrix Q such that $Q_{ij} = Q_{ji} = $ All entries in Matrix. We don't really need the Matrix Q as we will see later, But I want to keep the problem description as close to the algorihm we suggested.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Start at a random &lt;strong&gt;initial State &lt;span class="math"&gt;\(i\)&lt;/span&gt;&lt;/strong&gt; given by Unif(0,1).&lt;/li&gt;
+&lt;li&gt;Randomly pick a new &lt;strong&gt;Proposal State&lt;/strong&gt; by looking at the transition probabilities in the ith row of the transition matrix Q. Lets say we pick up another Unif(0,1) state as a proposal state &lt;span class="math"&gt;\(j\)&lt;/span&gt;.&lt;/li&gt;
 &lt;li&gt;Compute an measure called the &lt;strong&gt;Acceptance Probability&lt;/strong&gt; :
-&lt;center&gt;
-&lt;span class="math display"&gt;\[a_{ij} = min(s_jp_{ji}/s_{i}p_{ij},1)\]&lt;/span&gt;
-&lt;/center&gt;
-which is,
-&lt;center&gt;
-&lt;span class="math display"&gt;\[a_{ij} = min(s_j/s_i,1)\]&lt;/span&gt;
-&lt;/center&gt;
-where,
-&lt;center&gt;
-&lt;span class="math display"&gt;\[s_i = Ci^{\alpha -1}(1-i)^{\beta -1}\]&lt;/span&gt;
-&lt;/center&gt;
-and,
-&lt;center&gt;
-&lt;span class="math display"&gt;\[s_j = Cj^{\alpha -1}(1-j)^{\beta -1}\]&lt;/span&gt;
-&lt;/center&gt;&lt;/li&gt;
-&lt;li&gt;Now Flip a coin that lands head with probability &lt;span class="math inline"&gt;\(a_{ij}\)&lt;/span&gt;. If the coin comes up heads, accept the proposal i.e move to next state else reject the proposal i.e. stay at the current state.&lt;/li&gt;
+&lt;center&gt;&lt;div class="math"&gt;$$a_{ij} = min(s_jp_{ji}/s_{i}p_{ij},1)$$&lt;/div&gt;&lt;/center&gt; which is, &lt;center&gt;&lt;div class="math"&gt;$$a_{ij} = min(s_j/s_i,1)$$&lt;/div&gt;&lt;/center&gt; where, &lt;center&gt;&lt;div class="math"&gt;$$s_i = Ci^{\alpha -1}(1-i)^{\beta -1}$$&lt;/div&gt;&lt;/center&gt; and, &lt;center&gt;&lt;div class="math"&gt;$$s_j = Cj^{\alpha -1}(1-j)^{\beta -1}$$&lt;/div&gt;&lt;/center&gt;&lt;/li&gt;
+&lt;li&gt;Now Flip a coin that lands head with probability &lt;span class="math"&gt;\(a_{ij}\)&lt;/span&gt;. If the coin comes up heads, accept the proposal i.e move to next state else reject the proposal i.e. stay at the current state.&lt;/li&gt;
 &lt;li&gt;Repeat for a long time&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;So enough with theory, Let's Move on to python to create our Beta Simulations Now....&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;link rel="stylesheet" href="/theme/highlight/styles/default.css"&gt;
-&lt;script src="/theme/highlight/highlight.pack.js"&gt;&lt;/script&gt;
-&lt;script&gt;hljs.initHighlightingOnLoad();&lt;/script&gt;
-&lt;pre style="font-size:80%; padding:7px; margin:0em; background-color:#000000;"&gt;
-&lt;code class="python" style="background-color:#000000; color:#FFFFFF"&gt;import random
+&lt;pre style="font-size:60%"&gt;
+&lt;code class="python"&gt;import random
 # Lets define our Beta Function to generate s for any particular state. We don't care for the normalizing constant here.
 def beta_s(w,a,b):
     return w**(a-1)*(1-w)**(b-1)
@@ -644,17 +609,10 @@ def beta_mcmc(N_hops,a,b):
             cur = next
     return states[-1000:] # Returns the last 100 states of the chain
 &lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+
 &lt;p&gt;Let us check our results of the MCMC Sampled Beta distribution against the actual beta distribution.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;link rel="stylesheet" href="/theme/highlight/styles/default.css"&gt;
-&lt;script src="/theme/highlight/highlight.pack.js"&gt;&lt;/script&gt;
-&lt;script&gt;hljs.initHighlightingOnLoad();&lt;/script&gt;
-&lt;pre style="font-size:80%; padding:7px; margin:0em; background-color:#000000;"&gt;
-&lt;code class="python" style="background-color:#000000; color:#FFFFFF"&gt;
-import numpy as np
+&lt;pre style="font-size:60%"&gt;
+&lt;code class="python"&gt;import numpy as np
 import pylab as pl
 import scipy.special as ss
 %matplotlib inline
@@ -681,32 +639,29 @@ def plot_beta(a, b):
     pl.hist(beta_mcmc(100000,a,b),normed=True,bins =25, histtype='step',label="Simulated_MCMC: a="+str(a)+", b="+str(b))
     pl.legend()
     pl.show()
-    
+
 plot_beta(0.1, 0.1)
 plot_beta(1, 1)
 plot_beta(2, 3)
 &lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+
 &lt;div style="margin-top: -9px; margin-bottom: 30px;"&gt;
-&lt;p&gt;&lt;img src="/images/graphs.png"&gt;&lt;/p&gt;
+&lt;img src="/images/graphs.png"&gt;
 &lt;/div&gt;
-&lt;/div&gt;
-&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+
 &lt;p&gt;As we can see our sampled beta values closely resemble the beta distribution.&lt;/p&gt;
 &lt;p&gt;So MCMC Methods are useful for the following basic problems.&lt;/p&gt;
-&lt;ol style="list-style-type: decimal"&gt;
+&lt;ol&gt;
 &lt;li&gt;Simulating from a Random Variable PDF. Example: Simulate from a Beta(0.5,0.5) or from a Normal(0,1).&lt;/li&gt;
 &lt;li&gt;Solve problems with a large state space.For Example: Knapsack Problem, Encrytion Cipher etc. We will work on this in the &lt;a href="http://mlwhiz.com/blog/2015/08/21/MCMC_Algorithms_Cryptography/"&gt;Next Blog Post&lt;/a&gt; as this one has already gotten bigger than what I expected.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Till Then Ciao!!!!!!&lt;/p&gt;
-&lt;h2 id="references-and-sources"&gt;References and Sources:&lt;/h2&gt;
-&lt;ol style="list-style-type: decimal"&gt;
+&lt;h2&gt;References and Sources:&lt;/h2&gt;
+&lt;ol&gt;
 &lt;li&gt;&lt;a href="http://www.amazon.com/Introduction-Probability-Chapman-Statistical-Science-ebook/dp/B00MMOJ19I"&gt;Introduction to Probability Joseph K Blitzstein, Jessica Hwang&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://en.wikipedia.org/wiki/"&gt;Wikipedia&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://stats.stackexchange.com/a/12657"&gt;StackExchange&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;&lt;/p&gt;
 &lt;p&gt;One of the newest and best resources that you can keep an eye on is the &lt;a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;Bayesian Methods for Machine Learning&lt;/a&gt; course in the &lt;a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;Advanced machine learning specialization&lt;/a&gt; created jointly by Kazanova(Number 3 Kaggler at the time of writing)&lt;/p&gt;
 &lt;p&gt;Apart from that I also found a course on &lt;strong&gt;&lt;a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;amp;offerid=495576.8910375858&amp;amp;type=2&amp;amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbayesian"&gt;Bayesian Statistics on Coursera&lt;/a&gt;&lt;/strong&gt;. In the process of doing it right now so couldn't really comment on it. But since I had done an course on &lt;strong&gt;&lt;a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;amp;offerid=495576.8839843074&amp;amp;type=2&amp;amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Finferential-statistics-intro"&gt;Inferential Statistics&lt;/a&gt;&lt;/strong&gt; taught by the same professor before(Mine Çetinkaya-Rundel), I am very hopeful for this course. Let's see.&lt;/p&gt;
 &lt;p&gt;Also look out for these two books to learn more about MCMC. I have not yet read them whole but still I liked whatever I read:&lt;/p&gt;
@@ -717,4 +672,33 @@ plot_beta(2, 3)
 &lt;a target="_blank"  href="https://www.amazon.com/gp/product/1584885874/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1584885874&amp;linkCode=as2&amp;tag=mlwhizcon-20&amp;linkId=ee3e2a0bc99359d6c5db0463ab1abb13"&gt;&lt;img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=1584885874&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=mlwhizcon-20" &gt;&lt;/a&gt;&lt;img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;l=am2&amp;o=1&amp;a=1584885874" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /&gt;
 &lt;/div&gt;
 
-&lt;p&gt;Both these books are pretty high level and hard on math. But these are the best texts out there too. :)&lt;/p&gt;</summary><category term="Statistics"></category><category term="python"></category></entry></feed>
+&lt;p&gt;Both these books are pretty high level and hard on math. But these are the best texts out there too. :)&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processClass: 'mathjax', " +
+        "        ignoreClass: 'no-mathjax', " +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</summary><category term="Statistics"></category><category term="python"></category></entry></feed>
