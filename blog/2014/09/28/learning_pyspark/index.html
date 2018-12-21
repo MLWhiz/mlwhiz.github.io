@@ -130,117 +130,51 @@
       <p class="meta"><time datetime="2014-09-28T13:43:00" pubdate>Sep 28, 2014</time></p>
 </header>
 
-  <div class="entry-content"><p>
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>This is part one of a learning series of pyspark, which is a python binding to the spark program written in Scala.</p>
+  <div class="entry-content"><p>This is part one of a learning series of pyspark, which is a python binding to the spark program written in Scala.</p>
 <p>The installation is pretty simple. These steps were done on Mac OS Mavericks but should work for Linux too. Here are the steps for the installation:</p>
-<h3 id="download-the-binaries">1. Download the Binaries:</h3>
-</div>
-<div class="cell border-box-sizing code_cell vbox">
-<div class="input hbox">
-<div class="prompt input_prompt">
-In&nbsp;[]:
-</div>
-<div class="input_area box-flex1">
-<div class="highlight-ipynb"><pre class="ipynb"><span class="n">Spark</span> <span class="p">:</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">spark</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">downloads</span><span class="o">.</span><span class="n">html</span>
-<span class="n">Scala</span> <span class="p">:</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">www</span><span class="o">.</span><span class="n">scala</span><span class="o">-</span><span class="n">lang</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">download</span><span class="o">/</span>
+<h2>1. Download the Binaries:</h2>
+<pre style="font-size:60%">
+<code class="python">Spark : http://spark.apache.org/downloads.html
+Scala : http://www.scala-lang.org/download/
 
-<span class="n">Dont</span> <span class="n">use</span> <span class="n">Latest</span> <span class="n">Version</span> <span class="n">of</span> <span class="n">Scala</span><span class="p">,</span> <span class="n">Use</span> <span class="n">Scala</span> <span class="mf">2.10</span><span class="o">.</span><span class="n">x</span>
-</pre></div>
+Dont use Latest Version of Scala, Use Scala 2.10.x
+</code></pre>
 
-</div>
-</div>
+<h2>2. Add these lines to your .bash_profile:</h2>
+<pre style="font-size:60%">
+<code class="bash">export SCALA_HOME=your_path_to_scala
+export SPARK_HOME=your_path_to_spark
 
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="add-these-lines-to-your-.bash_profile">2. Add these lines to your .bash_profile:</h3>
-</div>
-<div class="cell border-box-sizing code_cell vbox">
-<div class="input hbox">
-<div class="prompt input_prompt">
-In&nbsp;[]:
-</div>
-<div class="input_area box-flex1">
-<div class="highlight-ipynb"><pre class="ipynb"><span class="n">export</span> <span class="n">SCALA_HOME</span><span class="o">=</span><span class="n">your_path_to_scala</span>
-<span class="n">export</span> <span class="n">SPARK_HOME</span><span class="o">=</span><span class="n">your_path_to_spark</span>
-</pre></div>
+</code></pre>
 
-</div>
-</div>
+<h2>3. Build Spark(This will take time):</h2>
+<pre style="font-size:60%">
+<code class="bash">brew install sbt
+cd $SPARK_HOME
+sbt/sbt assembly
+</code></pre>
 
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="build-sparkthis-will-take-time">3. Build Spark(This will take time):</h3>
-</div>
-<div class="cell border-box-sizing code_cell vbox">
-<div class="input hbox">
-<div class="prompt input_prompt">
-In&nbsp;[]:
-</div>
-<div class="input_area box-flex1">
-<div class="highlight-ipynb"><pre class="ipynb"><span class="n">brew</span> <span class="n">install</span> <span class="n">sbt</span>
-<span class="n">cd</span> <span class="err">$</span><span class="n">SPARK_HOME</span>
-<span class="n">sbt</span><span class="o">/</span><span class="n">sbt</span> <span class="n">assembly</span>
-</pre></div>
+<h2>4. Start the Pyspark Shell:</h2>
+<pre style="font-size:60%">
+<code class="bash">$SPARK_HOME/bin/pyspark
+</code></pre>
 
-</div>
-</div>
-
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="start-the-pyspark-shell">4. Start the Pyspark Shell:</h3>
-</div>
-<div class="cell border-box-sizing code_cell vbox">
-<div class="input hbox">
-<div class="prompt input_prompt">
-In&nbsp;[]:
-</div>
-<div class="input_area box-flex1">
-<div class="highlight-ipynb"><pre class="ipynb"><span class="err">$</span><span class="n">SPARK_HOME</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">pyspark</span>
-</pre></div>
-
-</div>
-</div>
-
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
 <p>And Voila. You are running pyspark on your Machine</p>
 <p>To check that everything is properly installed, Lets run a simple program:</p>
-</div>
-<div class="cell border-box-sizing code_cell vbox">
-<div class="input hbox">
-<div class="prompt input_prompt">
-In&nbsp;[]:
-</div>
-<div class="input_area box-flex1">
-<div class="highlight-ipynb"><pre class="ipynb"><span class="n">test</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">parallelize</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
-<span class="n">test</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-</pre></div>
+<pre style="font-size:60%">
+<code class="python">test = sc.parallelize([1,2,3])
+test.count()
+</code></pre>
 
-</div>
-</div>
+<p>This should return 3.
+So Now Just Run Hadoop On your Machine and then run pyspark Using:</p>
+<pre style="font-size:60%">
+<code class="bash">cd /usr/local/hadoop/
+bin/start-all.sh
+jps
+$SPARK_HOME/bin/pyspark
+</code></pre>
 
-</div>
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>This should return 3.</p>
-<p>So Now Just Run Hadoop On your Machine and then run pyspark Using:</p>
-</div>
-<div class="cell border-box-sizing code_cell vbox">
-<div class="input hbox">
-<div class="prompt input_prompt">
-In&nbsp;[]:
-</div>
-<div class="input_area box-flex1">
-<div class="highlight-ipynb"><pre class="ipynb"><span class="n">cd</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span>
-<span class="nb">bin</span><span class="o">/</span><span class="n">start</span><span class="o">-</span><span class="nb">all</span><span class="o">.</span><span class="n">sh</span>
-<span class="n">jps</span>
-<span class="err">$</span><span class="n">SPARK_HOME</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">pyspark</span>
-</pre></div>
-
-</div>
-</div>
-
-</div></p>
 <script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script></div>
 
 <a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=495576.362&subid=0&type=4"><IMG border="0"   alt="Online data science courses to jumpstart your future." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=495576.362&subid=0&type=4&gridnum=16"></a>    <footer>
