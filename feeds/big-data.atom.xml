@@ -21,7 +21,7 @@
 &lt;img src="/images/ipython_startup.png"&gt;
 &lt;/center&gt;
 &lt;/div&gt;
-&lt;p&gt;Ahh! so you have got Spark up and running now. That's actually like half the process. I like to learn by examples so let's get done with the Hello World of Distributed computing: The WordCount Program.&lt;/p&gt;
+&lt;p&gt;Ahh! so you have got Spark up and running now. That’s actually like half the process. I like to learn by examples so let’s get done with the Hello World of Distributed computing: The WordCount Program.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;link rel="stylesheet" href="/theme/highlight/styles/default.css"&gt;
@@ -46,9 +46,9 @@ for (word, count) in output:                             # print output
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;p&gt;So that is a small example. Pretty small code when you compare it with Hadoop. And most of the work gets done in the second command. Don't worry if you are not able to follow this yet as I need to tell you about the things that make Spark work.&lt;/p&gt;
+&lt;p&gt;So that is a small example. Pretty small code when you compare it with Hadoop. And most of the work gets done in the second command. Don’t worry if you are not able to follow this yet as I need to tell you about the things that make Spark work.&lt;/p&gt;
 &lt;p&gt;But before we get into Spark basics, Let us refresh some of our python Basics. Understanding Spark becomes a lot easier if you have used Lambda functions in Python.&lt;/p&gt;
-&lt;p&gt;For those of you who haven't used it, below is a brief intro.&lt;/p&gt;
+&lt;p&gt;For those of you who haven’t used it, below is a brief intro.&lt;/p&gt;
 &lt;h2 id="lambda-functions-in-python"&gt;Lambda Functions in Python&lt;/h2&gt;
 &lt;h4 id="map"&gt;Map&lt;/h4&gt;
 &lt;p&gt;Map is used to map a function to a array or a list. Say you want to apply some function to every element in a list. You can do this by simply using a for loop but python lambda functions let you do this in a single line in Python.&lt;/p&gt;
@@ -66,7 +66,7 @@ print squared_list
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;p&gt;In the above example you could think of map as a function which takes two arguments - A function and a list. It then applies the function to every element of the list. What lambda allows you to do is write an inline function. In here the part &lt;strong&gt;&amp;quot;lambda x:x**2&amp;quot;&lt;/strong&gt; defines a function that takes x as input and returns x^2.&lt;/p&gt;
+&lt;p&gt;In the above example you could think of map as a function which takes two arguments - A function and a list. It then applies the function to every element of the list. What lambda allows you to do is write an inline function. In here the part &lt;strong&gt;“lambda x:x**2”&lt;/strong&gt; defines a function that takes x as input and returns x^2.&lt;/p&gt;
 &lt;p&gt;You could have also provided a proper function in place of lambda. For Example:&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
@@ -155,7 +155,7 @@ new_rdd
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;So lets say you have got your data in the form of an RDD. To requote your data is now accesible b all the worker machines. You want to do some transformations on the data now. You may want to filter, Apply some function etc. In Spark this is done using Transformation functions. Spark provides many transformation functions. You can see a comprehensive list &lt;a href="http://spark.apache.org/docs/latest/programming-guide.html#transformations"&gt;here&lt;/a&gt;. Some of the main ones that I use frequently are:&lt;/p&gt;
 &lt;h5 id="map"&gt;1. Map:&lt;/h5&gt;
-&lt;p&gt;Applies a given function to an RDD. Note that the syntax is a little bit different from python, but it necessarily does the same thing. Don't worry about collet yet. For now just think of it as a function that collects the data in squared_rdd back to a list.&lt;/p&gt;
+&lt;p&gt;Applies a given function to an RDD. Note that the syntax is a little bit different from python, but it necessarily does the same thing. Don’t worry about collet yet. For now just think of it as a function that collects the data in squared_rdd back to a list.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;link rel="stylesheet" href="/theme/highlight/styles/default.css"&gt;
@@ -368,17 +368,17 @@ rdd.takeOrdered(3,lambda s:-1*s[1])      # descending order
 &lt;p&gt;The first lines creates a RDD and distributeds to the workers.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;lines = sc.textFile(&amp;quot;data/cs100/lab1/shakespeare.txt&amp;quot;)  &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;This RDD lines contains a list of strings that are actually the line in file. This RDD is of the form:&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;['word1 word2 word3','word4 word3 word2']&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;[‘word1 word2 word3’,‘word4 word3 word2’]&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;This next line is actually the workhorse function in the whole script.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;counts = (lines.flatMap(lambda x: x.split(&amp;#39; &amp;#39;))          
                   .map(lambda x: (x, 1))                 
                   .reduceByKey(lambda x,y : x + y))      &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;It contains a series of transformations that we do to the lines RDD. First of all we do a flatmap transformation. The flatmap transformation takes as input the lines and gives words as output. So after the flatmap transformation the RDD is of the form:&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;['word1','word2','word3','word4','word3','word2']&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;[‘word1’,‘word2’,‘word3’,‘word4’,‘word3’,‘word2’]&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;Next we do a map transformation on the flatmap output which converts the rdd to :&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;[('word1',1),('word2',1),('word3',1),('word4',1),('word3',1),('word2',1)]&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;[(‘word1’,1),(‘word2’,1),(‘word3’,1),(‘word4’,1),(‘word3’,1),(‘word2’,1)]&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;Finally we do a reduceByKey transformation which counts the number of time each word appeared. After which the rdd approaches the final desirable form.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;[('word1',1),('word2',2),('word3',2),('word4',1)]&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;[(‘word1’,1),(‘word2’,2),(‘word3’,2),(‘word4’,1)]&lt;/em&gt;&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;This next line is an action that takes the first 10 elements of the resulting RDD locally.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;output = counts.take(10)                                 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;This line just prints the output&lt;/p&gt;
@@ -387,19 +387,18 @@ rdd.takeOrdered(3,lambda s:-1*s[1])      # descending order
 &lt;h2 id="getting-serious"&gt;Getting Serious&lt;/h2&gt;
 &lt;/div&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
-&lt;p&gt;So till now we have talked about the Wordcount example and the basic transformations and actions that you could use in Spark. But we don't do wordcount in real life. We have to work on bigger problems which are much more complex. Worry not! whatever we have learned till now will let us do that and more.&lt;/p&gt;
+&lt;p&gt;So till now we have talked about the Wordcount example and the basic transformations and actions that you could use in Spark. But we don’t do wordcount in real life. We have to work on bigger problems which are much more complex. Worry not! whatever we have learned till now will let us do that and more.&lt;/p&gt;
 &lt;p&gt;Lets work with a concrete example: I will work on an example in which Greg Rada Worked on &lt;a href="http://grouplens.org/datasets/movielens/"&gt;Movielens&lt;/a&gt; Data with &lt;a href="http://www.gregreda.com/2013/10/26/using-pandas-on-the-movielens-dataset/"&gt;Pandas&lt;/a&gt; (BTW a great resource to learn Pandas). This example takes care of every sort of transformation that you may like to do with this data.&lt;/p&gt;
 &lt;p&gt;So lets first talk about the dataset. The movielens dataset contains a lot of files but we are going to be working with 3 files only:&lt;/p&gt;
-&lt;ol style="list-style-type: decimal"&gt;
-&lt;li&gt;&lt;p&gt;Users: This file name is kept as &amp;quot;u.user&amp;quot;, The columns in this file are:&lt;/p&gt;
-&lt;p&gt;['user_id', 'age', 'sex', 'occupation', 'zip_code']&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Ratings: This file name is kept as &amp;quot;u.data&amp;quot;, The columns in this file are:&lt;/p&gt;
-&lt;p&gt;['user_id', 'movie_id', 'rating', 'unix_timestamp']&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Movies: This file name is kept as &amp;quot;u.item&amp;quot;, The columns in this file are:&lt;/p&gt;
-&lt;p&gt;['movie_id', 'title', 'release_date', 'video_release_date', 'imdb_url', and 18 more columns.....]&lt;/p&gt;&lt;/li&gt;
+&lt;ol type="1"&gt;
+&lt;li&gt;&lt;p&gt;Users: This file name is kept as “u.user”, The columns in this file are:&lt;/p&gt;
+&lt;p&gt;[‘user_id’, ‘age’, ‘sex’, ‘occupation’, ‘zip_code’]&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Ratings: This file name is kept as “u.data”, The columns in this file are:&lt;/p&gt;
+&lt;p&gt;[‘user_id’, ‘movie_id’, ‘rating’, ‘unix_timestamp’]&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Movies: This file name is kept as “u.item”, The columns in this file are:&lt;/p&gt;
+&lt;p&gt;[‘movie_id’, ‘title’, ‘release_date’, ‘video_release_date’, ‘imdb_url’, and 18 more columns…..]&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h2 id="what-are-the-25-most-rated-movies"&gt;What are the 25 most rated movies?&lt;/h2&gt;
-&lt;p&gt;First of all lets load the data in different rdds. And see what the data contains.&lt;/p&gt;
+&lt;p&gt;##What are the 25 most rated movies? First of all lets load the data in different rdds. And see what the data contains.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;link rel="stylesheet" href="/theme/highlight/styles/default.css"&gt;
@@ -483,7 +482,7 @@ print "#####################################"
 &lt;img src="/images/result_rating_cnt_25_2.png"&gt;
 &lt;/center&gt;
 &lt;/div&gt;
-&lt;h2 id="which-movies-are-most-highly-rated"&gt;Which movies are most highly rated?&lt;/h2&gt;
+&lt;p&gt;##Which movies are most highly rated?&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;Now we want to find the most highly rated 25 movvies using the same dataset. We actually want only those movies which have been rated atleast 100 times. Lets do this using Spark:&lt;/p&gt;
@@ -535,7 +534,7 @@ print "#####################################"
 &lt;/div&gt;
 &lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
 &lt;p&gt;So Spark has Already provided an interface where we could apply transformations sequentially much easily than Hadoop. And it is fast. While in hadoop things are a pain to do sequentially, the infrastructure that Spark provides seem to fit naturally into the analytics use case.&lt;/p&gt;
-&lt;p&gt;Hopefully I've covered the basics well enough to pique your interest and help you get started with Spark. If I've missed something critical, feel free to let me know on Twitter or in the comments - I'd love constructive feedback.&lt;/p&gt;
+&lt;p&gt;Hopefully I’ve covered the basics well enough to pique your interest and help you get started with Spark. If I’ve missed something critical, feel free to let me know on Twitter or in the comments - I’d love constructive feedback.&lt;/p&gt;
 &lt;p&gt;You can find the Jupyter notebook &lt;a href="http://nbviewer.ipython.org/github/MLWhiz/Spark_blog/blob/master/Spark_Part1.ipynb"&gt;HERE&lt;/a&gt;&lt;/p&gt;
 &lt;/div&gt;&lt;/p&gt;
 &lt;p&gt;One of the newest and best resources that you can keep an eye on is the &lt;a href="https://www.coursera.org/specializations/big-data?ranMID=40328&amp;amp;ranEAID=lVarvwc5BD0&amp;amp;ranSiteID=lVarvwc5BD0-NVLix0UOweGz5rWmJlt8.A&amp;amp;siteID=lVarvwc5BD0-NVLix0UOweGz5rWmJlt8.A&amp;amp;utm_content=3&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;Introduction to Big Data&lt;/a&gt; course in the &lt;a href="https://www.coursera.org/specializations/big-data?ranMID=40328&amp;amp;ranEAID=lVarvwc5BD0&amp;amp;ranSiteID=lVarvwc5BD0-NVLix0UOweGz5rWmJlt8.A&amp;amp;siteID=lVarvwc5BD0-NVLix0UOweGz5rWmJlt8.A&amp;amp;utm_content=3&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;Big Data Specialization&lt;/a&gt; from UCSanDiego&lt;/p&gt;
