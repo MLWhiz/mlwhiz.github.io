@@ -207,13 +207,13 @@
 </ul>
 <h4>Why is this Classy?</h4>
 <p>Obviously classes because Classes. Duh! But jokes apart, I found it beneficial due to a couple of reasons:</p>
-<p>1) It gives you a lot of control on how your network is build. </p>
-<p>2) You understand a lot about the network when you are building it since you have to specify input and output dimensions. So less chances of error. (Although this one is really up to the skill level)</p>
-<p>3) Easy to debug networks. Any time you find any problem with the network just use something like <code>print("avg_pool", avg_pool.size())</code> in the forward pass to check the sizes of the layer and you will debug the network easily</p>
-<p>4) You can return multiple outputs from the forward layer. This is pretty helpful in the Encoder-Decoder architecture where you can return both the encoder and decorder output. Or in case of autoencoder where you can retun output of model and the hidden layer embedding for the data.</p>
-<p>5) Pytorch tensors work in a very similar manner to numpy arrays. For example : I could have used Pytorch Maxpool function to write the maxpool layer but <code>max_pool, _ = torch.max(h_gru, 1)</code> will also work.</p>
-<p>6) You can set up different layers with different initialization schemes. Something you won't be able to do in Keras. For example in the below network I have changed the initialization scheme of my LSTM layer. The LSTM layer has different initializations for biases, input layer weights and hidden layer weights. </p>
-<p>7) Wait until you see the training loop in Pytorch. You will be amazed at the sort of control it provides. </p>
+<p>1) It gives you a <strong>lot of control</strong> on how your network is build. </p>
+<p>2) You understand a lot about the network when you are building it since you have to specify input and output dimensions. So <strong>less chances of error</strong>. (Although this one is really up to the skill level)</p>
+<p>3) <strong>Easy to debug</strong> networks. Any time you find any problem with the network just use something like <code>print("avg_pool", avg_pool.size())</code> in the forward pass to check the sizes of the layer and you will debug the network easily</p>
+<p>4) You can <strong>return multiple outputs</strong> from the forward layer. This is pretty helpful in the Encoder-Decoder architecture where you can return both the encoder and decorder output. Or in case of autoencoder where you can retun output of model and the hidden layer embedding for the data.</p>
+<p>5) <strong>Pytorch tensors work in a very similar manner to numpy arrays</strong>. For example : I could have used Pytorch Maxpool function to write the maxpool layer but <code>max_pool, _ = torch.max(h_gru, 1)</code> will also work.</p>
+<p>6) You can set up <strong>different layers with different initialization schemes</strong>. Something you won't be able to do in Keras. For example in the below network I have changed the initialization scheme of my LSTM layer. The LSTM layer has different initializations for biases, input layer weights and hidden layer weights. </p>
+<p>7) Wait until you see the <strong>training loop in Pytorch</strong> You will be amazed at the sort of <strong>control</strong> it provides. </p>
 <p>Now the same model in Pytorch will look like something like this. Do go through the  code comments to understand more on how to port. </p>
 <pre style="font-size:80%">
 <code class="python">class Alex_NeuralNet_Meta(nn.Module):
@@ -308,7 +308,6 @@
 <h2>Tailored or Readymade: The Best Fit with a highly customizable Training Loop</h2>
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/sewing-machine.jpg"  height="300" width="700" ></center>
-<figcaption>Customizable==Beautiful</figcaption>
 </div>
 
 <p>In the above section I wrote that you will be amazed once you saw the training loop. That was an exaggeration. On the first try you will be a little baffled/confused. But as soon as you read through the loop more than once it will make a lot of intuituve sense. Once again read up the comments and the code to gain a better understanding. </p>
@@ -456,7 +455,6 @@
 <h4>But Why? Why so much code?</h4>
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/binary.jpg"  height="300" width="700" ></center>
-<figcaption>Code! Code! Code!</figcaption>
 </div>
 
 <p>Okay. I get it. That was probably a handful. What you could have done with a simple<code>.fit</code> in keras, takes a lot of code to accomplish in Pytorch. But understand that you get a lot of power too. Some use cases for you to understand:</p>
@@ -468,7 +466,6 @@
 <h2>Wanna Run it Yourself?</h2>
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/tools.jpg" alt="You have all the tools it seems" height="400" width="700" ></center>
-<figcaption>You got all the tools you need!</figcaption>
 </div>
 
 <p>So another small confession here. The code above will not run as is as there are some code artifacts which I have not shown here. I did this in favor of making the post more readable. Like you see the <code>seed_everything</code>, <code>MyDataset</code> and <code>CyclicLR</code> (From Jeremy Howard Course) functions and classes in the code above which are not really included with Pytorch. But fret not my friend. I have tried to write a <a href="https://www.kaggle.com/mlwhiz/third-place-model-for-toxic-comments-in-pytorch/edit">Kaggle Kernel</a> with the whole running code. You can see the code here and include it in your projects. </p>
