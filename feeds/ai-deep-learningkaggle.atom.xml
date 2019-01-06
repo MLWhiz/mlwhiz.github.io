@@ -3,9 +3,9 @@
 &lt;center&gt;&lt;img src="/images/artificial-neural-network.png"  height="350" width="700" &gt;&lt;/center&gt;
 &lt;/div&gt;
 
-&lt;p&gt;Recently I started up with a competition on kaggle on text classification, and as a part of the competition I had to somehow move to Pytorch to get deterministic results. Now I have always worked with Keras in the past and it has given me pretty good results, but somehow I got to know that the &lt;strong&gt;CuDNNGRU/CuDNNLSTM layers in keras are not deterministic&lt;/strong&gt;, even after setting the seeds. So Pytorch did came to rescue. And am  I  glad that I moved. &lt;/p&gt;
+&lt;p&gt;Recently I started up with a competition on kaggle on text classification, and as a part of the competition, I had to somehow move to Pytorch to get deterministic results. Now I have always worked with Keras in the past and it has given me pretty good results, but somehow I got to know that the &lt;strong&gt;CuDNNGRU/CuDNNLSTM layers in keras are not deterministic&lt;/strong&gt;, even after setting the seeds. So Pytorch did come to rescue. And am  I  glad that I moved. &lt;/p&gt;
 &lt;p&gt;As a &lt;strong&gt;side note&lt;/strong&gt;: if you want to know more about &lt;strong&gt;NLP&lt;/strong&gt;, I would like to recommend this awesome course on &lt;strong&gt;&lt;a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;Natural Language Processing&lt;/a&gt;&lt;/strong&gt; in the &lt;strong&gt;&lt;a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0"&gt;Advanced machine learning specialization&lt;/a&gt;&lt;/strong&gt;. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: Sentiment Analysis, summarization, dialogue state tracking, to name a few. &lt;/p&gt;
-&lt;p&gt;Ok back to task at hand. &lt;em&gt;While Keras is great to start with deep learning, with time you are going to resent some of its limitations.&lt;/em&gt; I sort of thought about moving to Tensorflow.It seemed like a good transition as TF is the backend of Keras. But was it hard? With the whole &lt;code&gt;session.run&lt;/code&gt; commands and tensorflow sessions, I was sort of confused. It was not Pythonic at all.&lt;/p&gt;
+&lt;p&gt;Ok back to the task at hand. &lt;em&gt;While Keras is great to start with deep learning, with time you are going to resent some of its limitations.&lt;/em&gt; I sort of thought about moving to Tensorflow. It seemed like a good transition as TF is the backend of Keras. But was it hard? With the whole &lt;code&gt;session.run&lt;/code&gt; commands and tensorflow sessions, I was sort of confused. It was not Pythonic at all.&lt;/p&gt;
 &lt;p&gt;Pytorch helps in that since it seems like the &lt;strong&gt;python way to do things&lt;/strong&gt;. You have things under your control and you are not losing anything on the performance front. In the words of Andrej Karpathy:&lt;/p&gt;
 &lt;p&gt;&lt;center&gt;&lt;blockquote class="twitter-tweet" data-lang="en"&gt;&lt;p lang="en" dir="ltr"&gt;I&amp;#39;ve been using PyTorch a few months now and I&amp;#39;ve never felt better. I have more energy. My skin is clearer. My eye sight has improved.&lt;/p&gt;&amp;mdash; Andrej Karpathy (@karpathy) &lt;a href="https://twitter.com/karpathy/status/868178954032513024?ref_src=twsrc%5Etfw"&gt;May 26, 2017&lt;/a&gt;&lt;/blockquote&gt;
 &lt;script async src="https://platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
@@ -15,7 +15,7 @@
 &lt;center&gt;&lt;img src="/images/structured.jpeg"  height="400" width="700" &gt;&lt;/center&gt;
 &lt;/div&gt;
 
-&lt;p&gt;Ok, lets create an example network in keras first which we will try to port into Pytorch. Here I would like to give an advice too. When you try to move from Keras to Pytorch &lt;strong&gt;take any network you have and try porting it to Pytorch&lt;/strong&gt;. It will make you understand Pytorch in a much better way. Here I am trying to write one of the networks that gave pretty good results in the Quora Insincere questions classification challenge for me. This model has all the bells and whistles which atleast any Text Classification deep learning network could contain with its GRU,LSTM and embedding layers and also a meta input layer. And thus would serve as a good example. Also if you want to read up more on how the BiLSTM/GRU and Attention model work do visit my post &lt;a href="https://mlwhiz.com/blog/2018/12/17/text_classification/"&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Ok, let us create an example network in keras first which we will try to port into Pytorch. Here I would like to give a piece of advice too. When you try to move from Keras to Pytorch &lt;strong&gt;take any network you have and try porting it to Pytorch&lt;/strong&gt;. It will make you understand Pytorch in a much better way. Here I am trying to write one of the networks that gave pretty good results in the Quora Insincere questions classification challenge for me. This model has all the bells and whistles which at least any Text Classification deep learning network could contain with its GRU, LSTM and embedding layers and also a meta input layer. And thus would serve as a good example. Also if you want to read up more on how the BiLSTM/GRU and Attention model work do visit my post &lt;a href="https://mlwhiz.com/blog/2018/12/17/text_classification/"&gt;here&lt;/a&gt;.&lt;/p&gt;
 &lt;pre style="font-size:80%"&gt;
 &lt;code class="python"&gt;def get_model(features,clipvalue=1.,num_filters=40,dropout=0.1,embed_size=501):
     features_input = Input(shape=(features.shape[1],))
@@ -59,25 +59,25 @@
     return model
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;So a model in pytorch is defined as a class(therefore a little more classy) which inherits from &lt;code&gt;nn.module&lt;/code&gt; . Every class necessarily contains a &lt;code&gt;__init__&lt;/code&gt; procedure block and a block for the &lt;code&gt;forward&lt;/code&gt; pass.&lt;/p&gt;
+&lt;p&gt;So a model in pytorch is defined as a class(therefore a little more classy) which inherits from &lt;code&gt;nn.module&lt;/code&gt; . Every class necessarily contains an &lt;code&gt;__init__&lt;/code&gt; procedure block and a block for the &lt;code&gt;forward&lt;/code&gt; pass.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;In the &lt;code&gt;__init__&lt;/code&gt; part the user defines all the layers the network is going to have but doesn't yet define how those layers would be connected to each other&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;In the forward pass block the user defines how data flows from one layer to another inside the network. &lt;/p&gt;
+&lt;p&gt;In the forward pass block, the user defines how data flows from one layer to another inside the network. &lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h4&gt;Why is this Classy?&lt;/h4&gt;
-&lt;p&gt;Obviously classy because Classes. Duh! But jokes apart, I found it beneficial due to a couple of reasons:&lt;/p&gt;
-&lt;p&gt;1) It gives you a &lt;strong&gt;lot of control&lt;/strong&gt; on how your network is build. &lt;/p&gt;
-&lt;p&gt;2) You understand a lot about the network when you are building it since you have to specify input and output dimensions. So &lt;strong&gt;less chances of error&lt;/strong&gt;. (Although this one is really up to the skill level)&lt;/p&gt;
+&lt;p&gt;Obviously classy because of Classes. Duh! But jokes apart, I found it beneficial due to a couple of reasons:&lt;/p&gt;
+&lt;p&gt;1) It gives you a &lt;strong&gt;lot of control&lt;/strong&gt; on how your network is built. &lt;/p&gt;
+&lt;p&gt;2) You understand a lot about the network when you are building it since you have to specify input and output dimensions. So &lt;strong&gt; fewer chances of error&lt;/strong&gt;. (Although this one is really up to the skill level)&lt;/p&gt;
 &lt;p&gt;3) &lt;strong&gt;Easy to debug&lt;/strong&gt; networks. Any time you find any problem with the network just use something like &lt;code&gt;print("avg_pool", avg_pool.size())&lt;/code&gt; in the forward pass to check the sizes of the layer and you will debug the network easily&lt;/p&gt;
-&lt;p&gt;4) You can &lt;strong&gt;return multiple outputs&lt;/strong&gt; from the forward layer. This is pretty helpful in the Encoder-Decoder architecture where you can return both the encoder and decorder output. Or in case of autoencoder where you can retun output of model and the hidden layer embedding for the data.&lt;/p&gt;
-&lt;p&gt;5) &lt;strong&gt;Pytorch tensors work in a very similar manner to numpy arrays&lt;/strong&gt;. For example : I could have used Pytorch Maxpool function to write the maxpool layer but &lt;code&gt;max_pool, _ = torch.max(h_gru, 1)&lt;/code&gt; will also work.&lt;/p&gt;
-&lt;p&gt;6) You can set up &lt;strong&gt;different layers with different initialization schemes&lt;/strong&gt;. Something you won't be able to do in Keras. For example in the below network I have changed the initialization scheme of my LSTM layer. The LSTM layer has different initializations for biases, input layer weights and hidden layer weights. &lt;/p&gt;
+&lt;p&gt;4) You can &lt;strong&gt;return multiple outputs&lt;/strong&gt; from the forward layer. This is pretty helpful in the Encoder-Decoder architecture where you can return both the encoder and decoder output. Or in the case of autoencoder where you can return the output of the model and the hidden layer embedding for the data.&lt;/p&gt;
+&lt;p&gt;5) &lt;strong&gt;Pytorch tensors work in a very similar manner to numpy arrays&lt;/strong&gt;. For example, I could have used Pytorch Maxpool function to write the maxpool layer but &lt;code&gt;max_pool, _ = torch.max(h_gru, 1)&lt;/code&gt; will also work.&lt;/p&gt;
+&lt;p&gt;6) You can set up &lt;strong&gt;different layers with different initialization schemes&lt;/strong&gt;. Something you won't be able to do in Keras. For example, in the below network I have changed the initialization scheme of my LSTM layer. The LSTM layer has different initializations for biases, input layer weights, and hidden layer weights. &lt;/p&gt;
 &lt;p&gt;7) Wait until you see the &lt;strong&gt;training loop in Pytorch&lt;/strong&gt; You will be amazed at the sort of &lt;strong&gt;control&lt;/strong&gt; it provides. &lt;/p&gt;
-&lt;p&gt;Now the same model in Pytorch will look like something like this. Do go through the  code comments to understand more on how to port. &lt;/p&gt;
+&lt;p&gt;Now the same model in Pytorch will look like something like this. Do go through the code comments to understand more on how to port. &lt;/p&gt;
 &lt;pre style="font-size:80%"&gt;
 &lt;code class="python"&gt;class Alex_NeuralNet_Meta(nn.Module):
     def __init__(self,hidden_size,lin_size, embedding_matrix=embedding_matrix):
@@ -174,7 +174,7 @@
 &lt;/div&gt;
 
 &lt;p&gt;In the above section I wrote that you will be amazed once you saw the training loop. That was an exaggeration. On the first try you will be a little baffled/confused. But as soon as you read through the loop more than once it will make a lot of intuituve sense. Once again read up the comments and the code to gain a better understanding. &lt;/p&gt;
-&lt;p&gt;This training loop does a k-fold cross validation on your training data and outputs Out-of-fold train_preds and test_preds averaged over the runs on the test data. I apologize if the flow looks something straight out of a kaggle competition, but if you understand this you would be able to create a training loop for your own workflow. And that is the beauty of Pytorch. &lt;/p&gt;
+&lt;p&gt;This training loop does k-fold cross-validation on your training data and outputs Out-of-fold train_preds and test_preds averaged over the runs on the test data. I apologize if the flow looks something straight out of a kaggle competition, but if you understand this you would be able to create a training loop for your own workflow. And that is the beauty of Pytorch. &lt;/p&gt;
 &lt;p&gt;So a brief summary of this loop are as follows:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Create stratified splits using train data&lt;/li&gt;
@@ -183,22 +183,22 @@
 &lt;code&gt;X_train_fold = torch.tensor(x_train[train_idx.astype(int)], dtype=torch.long).cuda()&lt;/code&gt; command&lt;/li&gt;
 &lt;li&gt;Load the model onto the GPU using the &lt;code&gt;model.cuda()&lt;/code&gt; command&lt;/li&gt;
 &lt;li&gt;Define Loss function, Scheduler and Optimizer&lt;/li&gt;
-&lt;li&gt;create &lt;code&gt;train_loader&lt;/code&gt; and     valid_loader` to iterate through batches.&lt;/li&gt;
+&lt;li&gt;create &lt;code&gt;train_loader&lt;/code&gt;    and     valid_loader` to iterate through batches.&lt;/li&gt;
 &lt;li&gt;Start running epochs. In each epoch&lt;ul&gt;
 &lt;li&gt;Set the model mode to train using &lt;code&gt;model.train()&lt;/code&gt;. &lt;/li&gt;
 &lt;li&gt;Go through the batches in &lt;code&gt;train_loader&lt;/code&gt; and run the forward pass&lt;/li&gt;
-&lt;li&gt;Run a scheduler step to change learning rate&lt;/li&gt;
+&lt;li&gt;Run a scheduler step to change the learning rate&lt;/li&gt;
 &lt;li&gt;Compute loss&lt;/li&gt;
 &lt;li&gt;Set the existing gradients in the optimizer to zero&lt;/li&gt;
-&lt;li&gt;Back propogate the losses through the network&lt;/li&gt;
+&lt;li&gt;Backpropagate the losses through the network&lt;/li&gt;
 &lt;li&gt;Clip the gradients&lt;/li&gt;
-&lt;li&gt;Take an optimizer step to change the weights in whole network&lt;/li&gt;
+&lt;li&gt;Take an optimizer step to change the weights in the whole network&lt;/li&gt;
 &lt;li&gt;Set the model mode to eval using &lt;code&gt;model.eval()&lt;/code&gt;. &lt;/li&gt;
 &lt;li&gt;Get predictions for the validation data using &lt;code&gt;valid_loader&lt;/code&gt; and store in variable &lt;code&gt;valid_preds_fold&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;Calculate Loss and print&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;After all epochs are done. Predict the test data and store the predictions. These predicions will be averaged at the end of the split loop to get the final &lt;code&gt;test_preds&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;After all epochs are done. Predict the test data and store the predictions. These predictions will be averaged at the end of the split loop to get the final &lt;code&gt;test_preds&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;Get Out-of-fold(OOF) predictions for train set using &lt;code&gt;train_preds[valid_idx] = valid_preds_fold&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;These OOF predictions can then be used to calculate the Local CV score for your model.&lt;/li&gt;
 &lt;/ul&gt;
@@ -334,7 +334,7 @@
 &lt;p&gt;So another small confession here. The code above will not run as is as there are some code artifacts which I have not shown here. I did this in favor of making the post more readable. Like you see the &lt;code&gt;seed_everything&lt;/code&gt;, &lt;code&gt;MyDataset&lt;/code&gt; and &lt;code&gt;CyclicLR&lt;/code&gt; (From Jeremy Howard Course) functions and classes in the code above which are not really included with Pytorch. But fret not my friend. I have tried to write a &lt;a href="https://www.kaggle.com/mlwhiz/third-place-model-for-toxic-comments-in-pytorch/edit"&gt;Kaggle Kernel&lt;/a&gt; with the whole running code. You can see the code here and include it in your projects. &lt;/p&gt;
 &lt;p&gt;If you liked this post, &lt;strong&gt;please don't forget to upvote the &lt;a href="https://www.kaggle.com/mlwhiz/third-place-model-for-toxic-comments-in-pytorch/edit"&gt;Kernel&lt;/a&gt; too. &lt;/strong&gt; I will be obliged.&lt;/p&gt;
 &lt;h2&gt;Endnotes and References&lt;/h2&gt;
-&lt;p&gt;This post is a result of an effort of a lot of excellent Kagglers and I will try to reference them in this section. If I leave out someone do understand that it was not my intention to do so.&lt;/p&gt;
+&lt;p&gt;This post is a result of an effort of a lot of excellent Kagglers and I will try to reference them in this section. If I leave out someone, do understand that it was not my intention to do so.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/discussion/52644"&gt;Discussion on 3rd Place winner model in Toxic comment&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="https://www.kaggle.com/larryfreeman/toxic-comments-code-for-alexander-s-9872-model"&gt;3rd Place model in Keras by Larry Freeman&lt;/a&gt;&lt;/li&gt;
