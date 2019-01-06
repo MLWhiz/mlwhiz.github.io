@@ -144,10 +144,8 @@
 <p>As a <strong>side note</strong>: if you want to know more about <strong>NLP</strong>, I would like to recommend this awesome course on <strong><a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Natural Language Processing</a></strong> in the <strong><a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a></strong>. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: Sentiment Analysis, summarization, dialogue state tracking, to name a few. </p>
 <p>Ok back to task at hand. <em>While Keras is great to start with deep learning, with time you are going to resent some of its limitations.</em> I sort of thought about moving to Tensorflow.It seemed like a good transition as TF is the backend of Keras. But was it hard? With the whole <code>session.run</code> commands and tensorflow sessions, I was sort of confused. It was not Pythonic at all.</p>
 <p>Pytorch helps in that since it seems like the <strong>python way to do things</strong>. You have things under your control and you are not losing anything on the performance front. In the words of Andrej Karpathy:</p>
-<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">I&#39;ve been using PyTorch a few months now and I&#39;ve never felt better. I have more energy. My skin is clearer. My eye sight has improved.</p>&mdash; Andrej Karpathy (@karpathy) <a href="https://twitter.com/karpathy/status/868178954032513024?ref_src=twsrc%5Etfw">May 26, 2017</a></blockquote>
-
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
+<p><center><blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">I&#39;ve been using PyTorch a few months now and I&#39;ve never felt better. I have more energy. My skin is clearer. My eye sight has improved.</p>&mdash; Andrej Karpathy (@karpathy) <a href="https://twitter.com/karpathy/status/868178954032513024?ref_src=twsrc%5Etfw">May 26, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></center></p>
 <p>So without further ado let me translate Keras to Pytorch for you. </p>
 <h2>The Classy way to write your network?</h2>
 <div style="margin-top: 9px; margin-bottom: 10px;">
@@ -209,13 +207,13 @@
 </ul>
 <h4>Why is this Classy?</h4>
 <p>Obviously classes because Classes. Duh! But jokes apart, I found it beneficial due to a couple of reasons:</p>
-<p>1) It gives you a lot of control on how your network is build. 
-2) You understand a lot about the network when you are building it since you have to specify input and output dimensions. So less chances of error. (Although this one is really up to the skill level)
-3) Easy to debug networks. Any time you find any problem with the network just use something like <code>print("avg_pool", avg_pool.size())</code> in the forward pass to check the sizes of the layer and you will debug the network easily
-4) You can return multiple outputs from the forward layer. This is pretty helpful in the Encoder-Decoder architecture where you can return both the encoder and decorder output. Or in case of autoencoder where you can retun output of model and the hidden layer embedding for the data.
-5) Pytorch tensors work in a very similar manner to numpy arrays. For example : I could have used Pytorch Maxpool function to write the maxpool layer but <code>max_pool, _ = torch.max(h_gru, 1)</code> will also work.
-6) You can set up different layers with different initialization schemes. Something you won't be able to do in Keras. For example in the below network I have changed the initialization scheme of my LSTM layer. The LSTM layer has different initializations for biases, input layer weights and hidden layer weights. 
-7. Wait until you see the training loop in Pytorch. You will be amazed at the sort of control it provides. </p>
+<p>1) It gives you a lot of control on how your network is build. </p>
+<p>2) You understand a lot about the network when you are building it since you have to specify input and output dimensions. So less chances of error. (Although this one is really up to the skill level)</p>
+<p>3) Easy to debug networks. Any time you find any problem with the network just use something like <code>print("avg_pool", avg_pool.size())</code> in the forward pass to check the sizes of the layer and you will debug the network easily</p>
+<p>4) You can return multiple outputs from the forward layer. This is pretty helpful in the Encoder-Decoder architecture where you can return both the encoder and decorder output. Or in case of autoencoder where you can retun output of model and the hidden layer embedding for the data.</p>
+<p>5) Pytorch tensors work in a very similar manner to numpy arrays. For example : I could have used Pytorch Maxpool function to write the maxpool layer but <code>max_pool, _ = torch.max(h_gru, 1)</code> will also work.</p>
+<p>6) You can set up different layers with different initialization schemes. Something you won't be able to do in Keras. For example in the below network I have changed the initialization scheme of my LSTM layer. The LSTM layer has different initializations for biases, input layer weights and hidden layer weights. </p>
+<p>7) Wait until you see the training loop in Pytorch. You will be amazed at the sort of control it provides. </p>
 <p>Now the same model in Pytorch will look like something like this. Do go through the  code comments to understand more on how to port. </p>
 <pre style="font-size:80%">
 <code class="python">class Alex_NeuralNet_Meta(nn.Module):
