@@ -150,7 +150,7 @@
 <p>Now each of these problems has something in common. From a Machine Learning perspective, these are essentially the same problem with just the target labels changing and nothing else. With that said, the addition of business knowledge can help make these models more robust and that is what we want to incorporate while preprocessing the data for test classification. While the preprocessing pipeline I am focussing on in this post is mainly centered around Deep Learning but most of it will also be applicable to conventional machine learning models too.</p>
 <p>But let me first go through the flow of a deep learning pipeline for text data before going through all the steps to get a higher level perspective about the whole process.</p>
 <div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="images/text_processing_flow_1.png"  style="height:90%;width:90%"></center>
+<center><img src="/images/text_processing_flow_1.png"  style="height:90%;width:90%"></center>
 </div>
 
 <p>We normally start with cleaning up the text data and performing basic EDA. Here we try to improve our data quality by cleaning up the data. We also try to improve the quality of our word2vec embeddings by removing OOV(Out-of-Vocabulary) words. These first two steps normally don't have much order between them and I generally go back and forth between these two steps. Next, we create a representation for text that could be fed into a deep learning model. We then start with creating our models and training them. Finally, we evaluate the models using appropriate metrics and get approval from respective shareholders to deploy our models. Don't worry if these terms don't make much sense now. I will try to explain them through the course of this article.</p>
@@ -163,7 +163,7 @@
 <p>Given the structure of one hot encoded vectors, the similarity is always going to come as 0 between different words. Another reason is that as the size of vocabulary increases these one hot encoded vectors become very large.</p>
 <p>Word2Vec overcomes the above difficulties by providing us with a fixed length vector representation of words and by capturing the similarity and analogy relationships between different words. </p>
 <div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="images/word2vec.png" style="height:80%;width:80%" ></center>
+<center><img src="/images/word2vec.png" style="height:80%;width:80%" ></center>
 </div>
 
 <p>Word2vec vectors of words are learned in such a way that they allow us to learn different analogies. It enables us to do algebraic manipulations on words which were not possible before. For example: What is king - man + woman? It comes out to be Queen.</p>
@@ -344,7 +344,7 @@ lower=True, split=' ', char_level=False, oov_token=None, document_count=0, **kwa
 <p>The num_words parameter keeps a prespecified number of words in the text only. This is helpful as we don't want our models to get a lot of noise by considering words that occur very infrequently. In real-world data, most of the words we leave using num_words param are normally misspells. The tokenizer also filters some non-wanted tokens by default and converts the text into lowercase.</p>
 <p>The tokenizer once fitted to the data also keeps an index of words(dictionary of words which we can use to assign a unique number to a word) which can be accessed by tokenizer.word_index. The words in the indexed dictionary are ranked in order of frequencies.</p>
 <div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="images/tokenizer_working.png" style="height:80%;width:80%" ></center>
+<center><img src="/images/tokenizer_working.png" style="height:80%;width:80%" ></center>
 </div>
 
 <p>So the whole code to use tokenizer is as follows:</p>
@@ -361,7 +361,7 @@ test_X = tokenizer.texts_to_sequences(test_X)
 <p>Normally our model expects that each sequence(each training example) will be of the same length(same number of words/tokens). We can control this using the <code>maxlen</code> parameter. </p>
 <p>For example: 
 <div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="images/pad_seq.png" style="height:40%;width:40%" ></center>
+<center><img src="/images/pad_seq.png" style="height:40%;width:40%" ></center>
 </div></p>
 <pre style="font-size:80%">
 <code class="python">train_X = pad_sequences(train_X, maxlen=maxlen)
@@ -383,7 +383,7 @@ glove_embedding_index = load_glove_index()
 
 <p>Be sure to put the path of the folder where you download these GLoVE vectors. What does this <code>glove_embedding_index</code> contain? It is just a dictionary in which the key is the word and the value is the word vector, a <code>np.array</code> of length 300. The length of this dictionary is somewhere around a billion. Since we only want the embeddings of words that are in our <code>word_index</code>, we will create a matrix which just contains required embeddings. </p>
 <div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="images/embedding_matrix_creation.png" style="height:100%;width:100%" ></center>
+<center><img src="/images/embedding_matrix_creation.png" style="height:100%;width:100%" ></center>
 </div>
 
 <pre style="font-size:80%">
@@ -478,7 +478,7 @@ print(word_sent.polarity,word_sent.subjectivity)
 <p>Engineering embeddings is an essential part of getting better performance from the Deep learning models at a later stage. Generally, I revisit this part of code multiple times during the stage of a project while trying to improve my models even further. You can show up a lot of creativity here to improve coverage over your <code>word_index</code> and to include extra features in your embedding.</p>
 <h2>More Engineered Features</h2>
 <div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="images/example_nlp_network.png" style="height:100%;width:100%" ></center>
+<center><img src="/images/example_nlp_network.png" style="height:100%;width:100%" ></center>
 </div>
 
 <p>One can always add sentence specific features like sentence length, number of unique words etc. as another input layer to give extra information to the Deep Neural Network. For example: I created these extra features as part of a feature engineering pipeline for Quora Insincerity Classification Challenge.</p>
