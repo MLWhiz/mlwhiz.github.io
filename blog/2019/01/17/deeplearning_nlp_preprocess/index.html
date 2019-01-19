@@ -350,7 +350,8 @@ lower=True, split=' ', char_level=False, oov_token=None, document_count=0, **kwa
 
 <p>So the whole code to use tokenizer is as follows:</p>
 <pre style="font-size:80%">
-<code class="python">## Tokenize the sentences
+<code class="python">from keras.preprocessing.text import Tokenizer
+## Tokenize the sentences
 tokenizer = Tokenizer(num_words=max_features)
 tokenizer.fit_on_texts(list(train_X)+list(test_X))
 train_X = tokenizer.texts_to_sequences(train_X)
