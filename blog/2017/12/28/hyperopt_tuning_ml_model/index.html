@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Hyperopt - A bayesian Parameter Tuning Framework</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="Learn about Hyperopt, A bayesian Parameter Tuning Framework. And how to use it with xgboost">
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="Hyperopt - A bayesian Parameter Tuning Framework" />
+<meta property="og:description" content="Learn about Hyperopt, A bayesian Parameter Tuning Framework. And how to use it with xgboost" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2017/12/28/hyperopt_tuning_ml_model/" /><meta property="article:published_time" content="2017-12-28T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2017-12-28T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Hyperopt - A bayesian Parameter Tuning Framework"/>
+<meta name="twitter:description" content="Learn about Hyperopt, A bayesian Parameter Tuning Framework. And how to use it with xgboost"/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link href="/favicon.png" rel="icon">
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Hyperopt - A bayesian Parameter Tuning Framework</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2017-12-28T00:00:00">December 28, 2017</time>
+</div>
+</div>
+		</header><div class="content post__content clearfix">
+			
+
+<p>Recently I was working on a in-class competition from the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">&ldquo;How to win a data science competition&rdquo;</a> Coursera course. You can start for free with the 7-day Free Trial. Learned a lot of new things from that about using <a href="/blog/2017/12/26/How_to_win_a_data_science_competition/">XGBoost for time series prediction</a> tasks.</p>
+
+<p>The one thing that I tired out in this competition was the Hyperopt package - A bayesian Parameter Tuning Framework. And I was literally amazed. Left the machine with hyperopt in the night. And in the morning I had my results. It was really awesome and I did avoid a lot of hit and trial.</p>
+
+<h2 id="what-really-is-hyperopt">What really is Hyperopt?</h2>
+
+<p>From the site:</p>
+
+<blockquote>
+<p>Hyperopt is a Python library for serial and parallel optimization over awkward search spaces, which may include real-valued, discrete, and conditional dimensions.</p>
+</blockquote>
+
+<p>What the above means is that it is a optimizer that could minimize/maximize the loss function/accuracy(or whatever metric) for you.</p>
+
+<p>All of us are fairly known to cross-grid search or random-grid search. Hyperopt takes as an input a space of hyperparams in which it will search, and moves according to the result of past trials.</p>
+
+<p>To know more about how it does this, take a look at this <a href="https://conference.scipy.org/proceedings/scipy2013/pdfs/bergstra_hyperopt.pdf" rel="nofollow" target="_blank">paper</a> by J Bergstra.
+Here is the <a href="https://github.com/hyperopt/hyperopt/wiki/FMin" rel="nofollow" target="_blank">documentation</a> from github.</p>
+
+<h2 id="how">How?</h2>
+
+<p>Let me just put the code first. This is how I define the objective function. The objective function takes space(the hyperparam space) as the input and returns the loss(The thing you want to minimize.Or negative of the thing you want to maximize)</p>
+
+<p>(X,y) and (Xcv,ycv) are the train and cross validation dataframes respectively.</p>
+
+<p>We have defined a hyperparam space by using the variable <code>space</code> which is actually just a dictionary. We could choose different distributions for different parameter values.</p>
+
+<p>We use the <code>fmin</code> function from the hyperopt package to minimize our <code>fn</code> through the <code>space</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> mean_squared_error
+<span style="color:#f92672">import</span> xgboost <span style="color:#f92672">as</span> xgb
+<span style="color:#f92672">from</span> hyperopt <span style="color:#f92672">import</span> hp, fmin, tpe, STATUS_OK, Trials
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">objective</span>(space):
+    <span style="color:#66d9ef">print</span>(space)
+    clf <span style="color:#f92672">=</span> xgb<span style="color:#f92672">.</span>XGBRegressor(n_estimators <span style="color:#f92672">=</span><span style="color:#ae81ff">1000</span>,colsample_bytree<span style="color:#f92672">=</span>space[<span style="color:#e6db74">&#39;colsample_bytree&#39;</span>],
+                           learning_rate <span style="color:#f92672">=</span> <span style="color:#f92672">.</span><span style="color:#ae81ff">3</span>,
+                            max_depth <span style="color:#f92672">=</span> int(space[<span style="color:#e6db74">&#39;max_depth&#39;</span>]),
+                            min_child_weight <span style="color:#f92672">=</span> space[<span style="color:#e6db74">&#39;min_child_weight&#39;</span>],
+                            subsample <span style="color:#f92672">=</span> space[<span style="color:#e6db74">&#39;subsample&#39;</span>],
+                           gamma <span style="color:#f92672">=</span> space[<span style="color:#e6db74">&#39;gamma&#39;</span>],
+                           reg_lambda <span style="color:#f92672">=</span> space[<span style="color:#e6db74">&#39;reg_lambda&#39;</span>],)
+
+    eval_set  <span style="color:#f92672">=</span> [( X, y), ( Xcv, ycv)]
+
+    clf<span style="color:#f92672">.</span>fit(X, y,
+            eval_set<span style="color:#f92672">=</span>eval_set, eval_metric<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;rmse&#34;</span>,
+            early_stopping_rounds<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>,verbose<span style="color:#f92672">=</span>False)
+
+    pred <span style="color:#f92672">=</span> clf<span style="color:#f92672">.</span>predict(Xcv)
+    mse_scr <span style="color:#f92672">=</span> mean_squared_error(ycv, pred)
+    <span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;SCORE:&#34;</span>, np<span style="color:#f92672">.</span>sqrt(mse_scr)
+    <span style="color:#75715e">#change the metric if you like</span>
+    <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#39;loss&#39;</span>:mse_scr, <span style="color:#e6db74">&#39;status&#39;</span>: STATUS_OK }
+
+
+space <span style="color:#f92672">=</span>{<span style="color:#e6db74">&#39;max_depth&#39;</span>: hp<span style="color:#f92672">.</span>quniform(<span style="color:#e6db74">&#34;x_max_depth&#34;</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">1</span>),
+        <span style="color:#e6db74">&#39;min_child_weight&#39;</span>: hp<span style="color:#f92672">.</span>quniform (<span style="color:#e6db74">&#39;x_min_child&#39;</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">1</span>),
+        <span style="color:#e6db74">&#39;subsample&#39;</span>: hp<span style="color:#f92672">.</span>uniform (<span style="color:#e6db74">&#39;x_subsample&#39;</span>, <span style="color:#ae81ff">0.7</span>, <span style="color:#ae81ff">1</span>),
+        <span style="color:#e6db74">&#39;gamma&#39;</span> : hp<span style="color:#f92672">.</span>uniform (<span style="color:#e6db74">&#39;x_gamma&#39;</span>, <span style="color:#ae81ff">0.1</span>,<span style="color:#ae81ff">0.5</span>),
+        <span style="color:#e6db74">&#39;colsample_bytree&#39;</span> : hp<span style="color:#f92672">.</span>uniform (<span style="color:#e6db74">&#39;x_colsample_bytree&#39;</span>, <span style="color:#ae81ff">0.7</span>,<span style="color:#ae81ff">1</span>),
+        <span style="color:#e6db74">&#39;reg_lambda&#39;</span> : hp<span style="color:#f92672">.</span>uniform (<span style="color:#e6db74">&#39;x_reg_lambda&#39;</span>, <span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>)
+    }
+
+
+trials <span style="color:#f92672">=</span> Trials()
+best <span style="color:#f92672">=</span> fmin(fn<span style="color:#f92672">=</span>objective,
+            space<span style="color:#f92672">=</span>space,
+            algo<span style="color:#f92672">=</span>tpe<span style="color:#f92672">.</span>suggest,
+            max_evals<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>,
+            trials<span style="color:#f92672">=</span>trials)
+
+<span style="color:#66d9ef">print</span> best</code></pre></div>
+<h2 id="finally">Finally:</h2>
+
+<p>Running the above gives us pretty good hyperparams for our learning algorithm.
+In fact I bagged up the results from multiple hyperparam settings and it gave me the best score on the LB.
+If you like this and would like to get more information about such things, subscribe to the mailing list on the right hand side.
+Also I would definitely recommend this <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">course</a> about winning Kaggle competitions by Kazanova, Kaggle rank 3 . Do take a look.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/machine-learning/" rel="tag">machine learning</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/hyperparameter-tuning/" rel="tag">hyperparameter tuning</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/bayesian-optimization/" rel="tag">bayesian optimization</a></li>
+	</ul>
+</div>
+		<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+		<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.415&subid=0&type=4"><IMG border="0"   alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.415&subid=0&type=4&gridnum=16"></a>
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2017/12/26/how_to_win_a_data_science_competition/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Using XGBoost for time series prediction tasks</p></a>
+	</div>
+	<div class="post-nav__item post-nav__item--next">
+		<a class="post-nav__link" href="/blog/2018/09/22/object_detection/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">Object Detection: An End to End Theoretical Perspective</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2019 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
