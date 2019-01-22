@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Create basic graph visualizations with SeaBorn- The Most Awesome Python Library For Visualization yet</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="This post provides a template to use Seaborn to create customized plots.">
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="Create basic graph visualizations with SeaBorn- The Most Awesome Python Library For Visualization yet" />
+<meta property="og:description" content="This post provides a template to use Seaborn to create customized plots." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2015/09/13/seaborn_visualizations/" /><meta property="article:published_time" content="2015-09-13T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2015-09-13T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Create basic graph visualizations with SeaBorn- The Most Awesome Python Library For Visualization yet"/>
+<meta name="twitter:description" content="This post provides a template to use Seaborn to create customized plots."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link href="/favicon.png" rel="icon">
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Create basic graph visualizations with SeaBorn- The Most Awesome Python Library For Visualization yet</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2015-09-13T00:00:00">September 13, 2015</time>
+</div>
+</div>
+		</header><div class="content post__content clearfix">
+			
+
+<p>When it comes to data preparation and getting acquainted with data, the <strong>one step we normally skip is the data visualization</strong>.
+While a part of it could be attributed to the <strong>lack of good visualization tools</strong> for the platforms we use, most of us also <strong>get lazy</strong> at times.</p>
+
+<p>Now as we know of it Python never had any good Visualization library. For most of our plotting needs, I would read up blogs, hack up with StackOverflow solutions and haggle with <a href="http://matplotlib.org/" target="_blank" rel="nofollow">Matplotlib</a> documentation each and every time I needed to make a simple graph. This led me to think that a <strong>Blog post to create common Graph types</strong> in Python is in order. But being the procrastinator that I am it always got pushed to the back of my head.</p>
+
+<p>One thing that helped me in pursuit of my data visualization needs in Python was this awesome course about <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&ranEAID=lVarvwc5BD0&ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&utm_content=3&utm_medium=partners&utm_source=linkshare&utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow">Data Visualization and applied plotting</a> from University of Michigan which is a part of a pretty good <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&ranEAID=lVarvwc5BD0&ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&utm_content=3&utm_medium=partners&utm_source=linkshare&utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow">Data Science Specialization with Python</a> in itself. Highly Recommended.</p>
+
+<p>But, yesterday I got introduced to <strong><a href="http://stanford.edu/~mwaskom/software/seaborn/" target="_blank" rel="nofollow">Seaborn</a></strong> and I must say I am <strong>quite impressed</strong> with it. It makes <strong>beautiful graphs</strong> that are in my opinion <strong>better than R&rsquo;s <a href="http://ggplot2.org" target="_blank" rel="nofollow">ggplot2</a></strong>. Gives you enough options to <strong>customize</strong> and the best part is that it is so <strong>easy to learn</strong>.</p>
+
+<p>So I am finally writing this blog post with a basic <strong>purpose of creating a code base</strong> that provides me with ready to use codes which could be put into analysis in a fairly straight-forward manner.</p>
+
+<p>Right. So here Goes.</p>
+
+<p>We Start by importing the libraries that we will need to use.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt  <span style="color:#75715e">#sets up plotting under plt</span>
+<span style="color:#f92672">import</span> seaborn <span style="color:#f92672">as</span> sns 			<span style="color:#75715e">#sets up styles and gives us more plotting options</span>
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd 			<span style="color:#75715e">#lets us handle data as dataframes</span></code></pre></div>
+<p>To create a use case for our graphs, we will be working with the <strong>Tips data</strong> that contains the following information.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">tips <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>load_dataset(<span style="color:#e6db74">&#34;tips&#34;</span>)
+tips<span style="color:#f92672">.</span>head()</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/tips.png"  height="400" width="500" ></center>
+</div>
+
+<h2 id="scatterplot-with-regression-line">Scatterplot With Regression Line</h2>
+
+<p>Now let us work on visualizing this data.
+We will use the <strong><a href="http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.regplot.html#seaborn.regplot" target="_blank" rel="nofollow">regplot</a></strong> option in seaborn.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># We dont Probably need the Gridlines. Do we? If yes comment this line</span>
+sns<span style="color:#f92672">.</span>set(style<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ticks&#34;</span>)
+
+<span style="color:#75715e"># Here we create a matplotlib axes object. The extra parameters we use</span>
+<span style="color:#75715e"># &#34;ci&#34; to remove confidence interval</span>
+<span style="color:#75715e"># &#34;marker&#34; to have a x as marker.</span>
+<span style="color:#75715e"># &#34;scatter_kws&#34; to provide style info for the points.[s for size]</span>
+<span style="color:#75715e"># &#34;line_kws&#34; to provide style info for the line.[lw for line width]</span>
+
+g <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>regplot(x<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;tip&#34;</span>, y<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;total_bill&#34;</span>, data<span style="color:#f92672">=</span>tips, ci <span style="color:#f92672">=</span> False,
+	scatter_kws<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;color&#34;</span>:<span style="color:#e6db74">&#34;darkred&#34;</span>,<span style="color:#e6db74">&#34;alpha&#34;</span>:<span style="color:#ae81ff">0.3</span>,<span style="color:#e6db74">&#34;s&#34;</span>:<span style="color:#ae81ff">90</span>},
+	line_kws<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;color&#34;</span>:<span style="color:#e6db74">&#34;g&#34;</span>,<span style="color:#e6db74">&#34;alpha&#34;</span>:<span style="color:#ae81ff">0.5</span>,<span style="color:#e6db74">&#34;lw&#34;</span>:<span style="color:#ae81ff">4</span>},marker<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;x&#34;</span>)
+
+<span style="color:#75715e"># remove the top and right line in graph</span>
+sns<span style="color:#f92672">.</span>despine()
+
+<span style="color:#75715e"># Set the size of the graph from here</span>
+g<span style="color:#f92672">.</span>figure<span style="color:#f92672">.</span>set_size_inches(<span style="color:#ae81ff">12</span>,<span style="color:#ae81ff">8</span>)
+<span style="color:#75715e"># Set the Title of the graph from here</span>
+g<span style="color:#f92672">.</span>axes<span style="color:#f92672">.</span>set_title(<span style="color:#e6db74">&#39;Total Bill vs. Tip&#39;</span>, fontsize<span style="color:#f92672">=</span><span style="color:#ae81ff">34</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;r&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+<span style="color:#75715e"># Set the xlabel of the graph from here</span>
+g<span style="color:#f92672">.</span>set_xlabel(<span style="color:#e6db74">&#34;Tip&#34;</span>,size <span style="color:#f92672">=</span> <span style="color:#ae81ff">67</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;r&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+<span style="color:#75715e"># Set the ylabel of the graph from here</span>
+g<span style="color:#f92672">.</span>set_ylabel(<span style="color:#e6db74">&#34;Total Bill&#34;</span>,size <span style="color:#f92672">=</span> <span style="color:#ae81ff">67</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;r&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+<span style="color:#75715e"># Set the ticklabel size and color of the graph from here</span>
+g<span style="color:#f92672">.</span>tick_params(labelsize<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>,labelcolor<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;black&#34;</span>)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/regplot.png"></center>
+</div>
+
+<p>Now that required a bit of a code but i feel that it <strong>looks much better than what either Matplotlib or ggPlot2 could have rendered</strong>. We got a lot of customization without too much code.</p>
+
+<p>But that is not really what actually made me like Seaborn. The plot type that actually got my attention was <strong><a href="http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.lmplot.html#seaborn.lmplot" target="_blank" rel="nofollow">lmplot</a></strong>, which lets us use <strong>regplot</strong> in a <strong>faceted</strong> mode.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># So this function creates a faceted plot. The plot is parameterized by the following:</span>
+
+<span style="color:#75715e"># col : divides the data points into days and creates that many plots</span>
+<span style="color:#75715e"># palette: deep, muted, pastel, bright, dark, and colorblind. change the colors in graph. Experiment with these</span>
+<span style="color:#75715e"># col_wrap: we want 2 graphs in a row? Yes.We do</span>
+<span style="color:#75715e"># scatter_kws: attributes for points</span>
+<span style="color:#75715e"># hue: Colors on a particular column.</span>
+<span style="color:#75715e"># size: controls the size of graph</span>
+
+g <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>lmplot(x<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;tip&#34;</span>, y<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;total_bill&#34;</span>,ci<span style="color:#f92672">=</span>None,data<span style="color:#f92672">=</span>tips, col<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;day&#34;</span>,
+	palette<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;muted&#34;</span>,col_wrap<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>,scatter_kws<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;s&#34;</span>: <span style="color:#ae81ff">100</span>,<span style="color:#e6db74">&#34;alpha&#34;</span>:<span style="color:#f92672">.</span><span style="color:#ae81ff">5</span>},
+	line_kws<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;lw&#34;</span>:<span style="color:#ae81ff">4</span>,<span style="color:#e6db74">&#34;alpha&#34;</span>:<span style="color:#ae81ff">0.5</span>},hue<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;day&#34;</span>,x_jitter<span style="color:#f92672">=</span><span style="color:#ae81ff">1.0</span>,y_jitter<span style="color:#f92672">=</span><span style="color:#ae81ff">1.0</span>,size<span style="color:#f92672">=</span><span style="color:#ae81ff">6</span>)
+
+<span style="color:#75715e"># remove the top and right line in graph</span>
+sns<span style="color:#f92672">.</span>despine()
+<span style="color:#75715e"># Additional line to adjust some appearance issue</span>
+plt<span style="color:#f92672">.</span>subplots_adjust(top<span style="color:#f92672">=</span><span style="color:#ae81ff">0.9</span>)
+
+<span style="color:#75715e"># Set the Title of the graph from here</span>
+g<span style="color:#f92672">.</span>fig<span style="color:#f92672">.</span>suptitle(<span style="color:#e6db74">&#39;Total Bill vs. Tip&#39;</span>, fontsize<span style="color:#f92672">=</span><span style="color:#ae81ff">34</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;r&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+
+<span style="color:#75715e"># Set the xlabel of the graph from here</span>
+g<span style="color:#f92672">.</span>set_xlabels(<span style="color:#e6db74">&#34;Tip&#34;</span>,size <span style="color:#f92672">=</span> <span style="color:#ae81ff">50</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;r&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+
+<span style="color:#75715e"># Set the ylabel of the graph from here</span>
+g<span style="color:#f92672">.</span>set_ylabels(<span style="color:#e6db74">&#34;Total Bill&#34;</span>,size <span style="color:#f92672">=</span> <span style="color:#ae81ff">50</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;r&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+
+<span style="color:#75715e"># Set the ticklabel size and color of the graph from here</span>
+titles <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;Thursday&#39;</span>,<span style="color:#e6db74">&#39;Friday&#39;</span>,<span style="color:#e6db74">&#39;Saturday&#39;</span>,<span style="color:#e6db74">&#39;Sunday&#39;</span>]
+<span style="color:#66d9ef">for</span> ax,title <span style="color:#f92672">in</span> zip(g<span style="color:#f92672">.</span>axes<span style="color:#f92672">.</span>flat,titles):
+    ax<span style="color:#f92672">.</span>tick_params(labelsize<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>,labelcolor<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;black&#34;</span>)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/lmplot.png"></center>
+</div>
+
+<div style="color:black; background-color: #E9DAEE;">
+<a href="http://stanford.edu/~mwaskom/software/seaborn/tutorial/color_palettes.html#building-color-palettes-with-color-palette"  target="_blank" rel="nofollow"><strong>A side Note on Palettes</strong></a>:<br>
+You can build your own color palettes using <strong>color_palette()</strong> function.
+color_palette() will accept the name of any <strong>seaborn palette</strong> or <a href="http://matplotlib.org/users/colormaps.html"  target="_blank" rel="nofollow"><strong>matplotlib colormap</strong></a>(except jet, which you should never use). It can also take a <strong>list of colors</strong> specified in any valid matplotlib format (RGB tuples, <strong>hex color codes</strong>, or HTML color names).
+The return value is always a list of RGB tuples. This allows you to use your own color palettes in graph.
+</div>
+
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script>
+
+<h2 id="barplots">Barplots</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">sns<span style="color:#f92672">.</span>set(style<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ticks&#34;</span>)
+
+flatui <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;#9b59b6&#34;</span>, <span style="color:#e6db74">&#34;#3498db&#34;</span>, <span style="color:#e6db74">&#34;#95a5a6&#34;</span>, <span style="color:#e6db74">&#34;#e74c3c&#34;</span>, <span style="color:#e6db74">&#34;#34495e&#34;</span>, <span style="color:#e6db74">&#34;#2ecc71&#34;</span>]
+
+<span style="color:#75715e"># This Function takes as input a custom palette</span>
+g <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>barplot(x<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;sex&#34;</span>, y<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;tip&#34;</span>, hue<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;day&#34;</span>,
+	palette<span style="color:#f92672">=</span>sns<span style="color:#f92672">.</span>color_palette(flatui),data<span style="color:#f92672">=</span>tips,ci<span style="color:#f92672">=</span>None)
+
+<span style="color:#75715e"># remove the top and right line in graph</span>
+sns<span style="color:#f92672">.</span>despine()
+
+<span style="color:#75715e"># Set the size of the graph from here</span>
+g<span style="color:#f92672">.</span>figure<span style="color:#f92672">.</span>set_size_inches(<span style="color:#ae81ff">12</span>,<span style="color:#ae81ff">7</span>)
+<span style="color:#75715e"># Set the Title of the graph from here</span>
+g<span style="color:#f92672">.</span>axes<span style="color:#f92672">.</span>set_title(<span style="color:#e6db74">&#39;Do We tend to </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Tip high on Weekends?&#39;</span>,
+	fontsize<span style="color:#f92672">=</span><span style="color:#ae81ff">34</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;b&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.3</span>)
+<span style="color:#75715e"># Set the xlabel of the graph from here</span>
+g<span style="color:#f92672">.</span>set_xlabel(<span style="color:#e6db74">&#34;Gender&#34;</span>,size <span style="color:#f92672">=</span> <span style="color:#ae81ff">67</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;g&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+<span style="color:#75715e"># Set the ylabel of the graph from here</span>
+g<span style="color:#f92672">.</span>set_ylabel(<span style="color:#e6db74">&#34;Mean Tips&#34;</span>,size <span style="color:#f92672">=</span> <span style="color:#ae81ff">67</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;r&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+<span style="color:#75715e"># Set the ticklabel size and color of the graph from here</span>
+g<span style="color:#f92672">.</span>tick_params(labelsize<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>,labelcolor<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;black&#34;</span>)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/barplot.png"></center>
+</div>
+
+<h2 id="histograms-and-distribution-diagrams">Histograms and Distribution Diagrams</h2>
+
+<p>They form another part of my workflow. Lets plot the normal Histogram using seaborn.
+For this we will use the <strong><a href="http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.distplot.html#seaborn.distplot" target="_blank" rel="nofollow">distplot</a></strong> function. This function combines the matplotlib hist function (with automatic calculation of a good default bin size) with the seaborn kdeplot() function.
+It can also fit <strong>scipy.stats</strong> distributions and plot the estimated PDF over the data.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Create a list of 1000 Normal RVs</span>
+x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>normal(size<span style="color:#f92672">=</span><span style="color:#ae81ff">1000</span>)
+
+sns<span style="color:#f92672">.</span>set_context(<span style="color:#e6db74">&#34;poster&#34;</span>)
+sns<span style="color:#f92672">.</span>set_style(<span style="color:#e6db74">&#34;ticks&#34;</span>)
+<span style="color:#75715e"># This  Function creates a normed Histogram by default.</span>
+<span style="color:#75715e"># If we use the parameter kde=False and norm_hist=False then</span>
+<span style="color:#75715e"># we will be using a count histogram</span>
+
+g<span style="color:#f92672">=</span>sns<span style="color:#f92672">.</span>distplot(x,
+         	kde_kws<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;color&#34;</span>:<span style="color:#e6db74">&#34;g&#34;</span>,<span style="color:#e6db74">&#34;lw&#34;</span>:<span style="color:#ae81ff">4</span>,<span style="color:#e6db74">&#34;label&#34;</span>:<span style="color:#e6db74">&#34;KDE Estim&#34;</span>,<span style="color:#e6db74">&#34;alpha&#34;</span>:<span style="color:#ae81ff">0.5</span>},
+            hist_kws<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;color&#34;</span>:<span style="color:#e6db74">&#34;r&#34;</span>,<span style="color:#e6db74">&#34;alpha&#34;</span>:<span style="color:#ae81ff">0.3</span>,<span style="color:#e6db74">&#34;label&#34;</span>:<span style="color:#e6db74">&#34;Freq&#34;</span>})
+
+
+<span style="color:#75715e"># remove the top and right line in graph</span>
+sns<span style="color:#f92672">.</span>despine()
+
+<span style="color:#75715e"># Set the size of the graph from here</span>
+g<span style="color:#f92672">.</span>figure<span style="color:#f92672">.</span>set_size_inches(<span style="color:#ae81ff">12</span>,<span style="color:#ae81ff">7</span>)
+<span style="color:#75715e"># Set the Title of the graph from here</span>
+g<span style="color:#f92672">.</span>axes<span style="color:#f92672">.</span>set_title(<span style="color:#e6db74">&#39;Normal Simulation&#39;</span>, fontsize<span style="color:#f92672">=</span><span style="color:#ae81ff">34</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;b&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.3</span>)
+<span style="color:#75715e"># Set the xlabel of the graph from here</span>
+g<span style="color:#f92672">.</span>set_xlabel(<span style="color:#e6db74">&#34;X&#34;</span>,size <span style="color:#f92672">=</span> <span style="color:#ae81ff">67</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;g&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+<span style="color:#75715e"># Set the ylabel of the graph from here</span>
+g<span style="color:#f92672">.</span>set_ylabel(<span style="color:#e6db74">&#34;Density&#34;</span>,size <span style="color:#f92672">=</span> <span style="color:#ae81ff">67</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;r&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+<span style="color:#75715e"># Set the ticklabel size and color of the graph from here</span>
+g<span style="color:#f92672">.</span>tick_params(labelsize<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>,labelcolor<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;black&#34;</span>)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/hist_normal.png"></center>
+</div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> scipy.stats <span style="color:#f92672">as</span> stats
+
+a <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.5</span>
+b <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.5</span>
+x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">0.01</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0.01</span>)
+y <span style="color:#f92672">=</span> stats<span style="color:#f92672">.</span>beta<span style="color:#f92672">.</span>rvs(a,b,size<span style="color:#f92672">=</span><span style="color:#ae81ff">10000</span>)
+y_act <span style="color:#f92672">=</span> stats<span style="color:#f92672">.</span>beta<span style="color:#f92672">.</span>pdf(x,a,b)
+g<span style="color:#f92672">=</span>sns<span style="color:#f92672">.</span>distplot(y,kde<span style="color:#f92672">=</span>False,norm_hist<span style="color:#f92672">=</span>True,
+            kde_kws<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;color&#34;</span>:<span style="color:#e6db74">&#34;g&#34;</span>,<span style="color:#e6db74">&#34;lw&#34;</span>:<span style="color:#ae81ff">4</span>,<span style="color:#e6db74">&#34;label&#34;</span>:<span style="color:#e6db74">&#34;KDE Estim&#34;</span>,<span style="color:#e6db74">&#34;alpha&#34;</span>:<span style="color:#ae81ff">0.5</span>},
+            hist_kws<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;color&#34;</span>:<span style="color:#e6db74">&#34;r&#34;</span>,<span style="color:#e6db74">&#34;alpha&#34;</span>:<span style="color:#ae81ff">0.3</span>,<span style="color:#e6db74">&#34;label&#34;</span>:<span style="color:#e6db74">&#34;Freq&#34;</span>})
+<span style="color:#75715e"># Note that we plotted on the graph using plt matlabplot function</span>
+plt<span style="color:#f92672">.</span>plot(x,y_act)
+
+<span style="color:#75715e"># remove the top and right line in graph</span>
+sns<span style="color:#f92672">.</span>despine()
+
+<span style="color:#75715e"># Set the size of the graph from here</span>
+g<span style="color:#f92672">.</span>figure<span style="color:#f92672">.</span>set_size_inches(<span style="color:#ae81ff">12</span>,<span style="color:#ae81ff">7</span>)
+<span style="color:#75715e"># Set the Title of the graph from here</span>
+g<span style="color:#f92672">.</span>axes<span style="color:#f92672">.</span>set_title((<span style="color:#e6db74">&#34;Beta Simulation vs. Calculated Beta Density</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">For a=</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">,b=</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span>)
+	<span style="color:#f92672">%</span>(a,b),fontsize<span style="color:#f92672">=</span><span style="color:#ae81ff">34</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;b&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.3</span>)
+<span style="color:#75715e"># Set the xlabel of the graph from here</span>
+g<span style="color:#f92672">.</span>set_xlabel(<span style="color:#e6db74">&#34;X&#34;</span>,size <span style="color:#f92672">=</span> <span style="color:#ae81ff">67</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;g&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+<span style="color:#75715e"># Set the ylabel of the graph from here</span>
+g<span style="color:#f92672">.</span>set_ylabel(<span style="color:#e6db74">&#34;Density&#34;</span>,size <span style="color:#f92672">=</span> <span style="color:#ae81ff">67</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;r&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+<span style="color:#75715e"># Set the ticklabel size and color of the graph from here</span>
+g<span style="color:#f92672">.</span>tick_params(labelsize<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>,labelcolor<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;black&#34;</span>)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/hist_beta.png"></center>
+</div>
+
+<h2 id="pairplots">PairPlots</h2>
+
+<p>You need to see how variables vary with one another. What is the distribution of variables in the dataset. This is the graph to use with the <strong><a href="http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.pairplot.html#seaborn.pairplot" target="_blank" rel="nofollow">pairplot</a></strong> function. Very helpful And Seaborn males it a joy to use. We will use <strong>Iris Dataset</strong> here for this example.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">iris <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>load_dataset(<span style="color:#e6db74">&#34;iris&#34;</span>)
+iris<span style="color:#f92672">.</span>head()</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/iris.png" height="500" width="600"></center>
+</div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Create a Pairplot</span>
+g <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>pairplot(iris,hue<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;species&#34;</span>,palette<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;muted&#34;</span>,size<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>,
+	vars<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#34;sepal_width&#34;</span>, <span style="color:#e6db74">&#34;sepal_length&#34;</span>],kind<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;reg&#39;</span>,markers<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;o&#39;</span>,<span style="color:#e6db74">&#39;x&#39;</span>,<span style="color:#e6db74">&#39;+&#39;</span>])
+
+<span style="color:#75715e"># To change the size of the scatterpoints in graph</span>
+g <span style="color:#f92672">=</span> g<span style="color:#f92672">.</span>map_offdiag(plt<span style="color:#f92672">.</span>scatter,  s<span style="color:#f92672">=</span><span style="color:#ae81ff">35</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+
+<span style="color:#75715e"># remove the top and right line in graph</span>
+sns<span style="color:#f92672">.</span>despine()
+<span style="color:#75715e"># Additional line to adjust some appearance issue</span>
+plt<span style="color:#f92672">.</span>subplots_adjust(top<span style="color:#f92672">=</span><span style="color:#ae81ff">0.9</span>)
+
+<span style="color:#75715e"># Set the Title of the graph from here</span>
+g<span style="color:#f92672">.</span>fig<span style="color:#f92672">.</span>suptitle(<span style="color:#e6db74">&#39;Relation between Sepal Width and Sepal Length&#39;</span>,
+	fontsize<span style="color:#f92672">=</span><span style="color:#ae81ff">34</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;b&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.3</span>)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/pairplot.png"></center>
+</div>
+
+<p>Hope you found this post useful and worth your time. You can find the iPython notebook at <a href="https://github.com/MLWhiz/visualization/blob/master/Graphs.ipynb" target="_blank" rel="nofollow">github</a></p>
+
+<p>I tried to make this as simple as possible but You may always <strong>ask me</strong> or see the documentation for doubts.</p>
+
+<p>If you have <strong>any more ideas</strong> on how to use Seaborn or <strong>which graphs should i add here</strong>, please suggest in the <strong>comments</strong> section.</p>
+
+<p>I will definitely try to add to this post as I start using more visualizations and encounter other libraries as good as seaborn.</p>
+
+<p>Also since this is my first visualization post on this blog, I would like to call out a good course about <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&ranEAID=lVarvwc5BD0&ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&utm_content=3&utm_medium=partners&utm_source=linkshare&utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow">Data Visualization and applied plotting</a> from University of Michigan which is a part of a pretty good <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&ranEAID=lVarvwc5BD0&ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&utm_content=3&utm_medium=partners&utm_source=linkshare&utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow">Data Science Specialization with Python</a> in itself. Do check it out.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/visualization/" rel="tag">Visualization</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/matplotlib/" rel="tag">Matplotlib</a></li>
+	</ul>
+</div>
+		<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+		<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.415&subid=0&type=4"><IMG border="0"   alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.415&subid=0&type=4&gridnum=16"></a>
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2015/09/07/spark_basics_explained/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Learning Spark using Python: Basics and Applications</p></a>
+	</div>
+	<div class="post-nav__item post-nav__item--next">
+		<a class="post-nav__link" href="/blog/2015/10/09/shell_basics_for_data_science/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">Shell Basics every Data Scientist Should know -Part I</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2019 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
