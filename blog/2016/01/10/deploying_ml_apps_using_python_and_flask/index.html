@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Deploying ML Apps using Python and Flask- Learning about Flask</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="This post provides a way to create a Barebones flask app and deploy it using the free service from Openshift">
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="Deploying ML Apps using Python and Flask- Learning about Flask" />
+<meta property="og:description" content="This post provides a way to create a Barebones flask app and deploy it using the free service from Openshift" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2016/01/10/deploying_ml_apps_using_python_and_flask/" /><meta property="article:published_time" content="2016-01-10T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2016-01-10T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Deploying ML Apps using Python and Flask- Learning about Flask"/>
+<meta name="twitter:description" content="This post provides a way to create a Barebones flask app and deploy it using the free service from Openshift"/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link href="/favicon.png" rel="icon">
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Deploying ML Apps using Python and Flask- Learning about Flask</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2016-01-10T00:00:00">January 10, 2016</time>
+</div>
+</div>
+		</header><div class="content post__content clearfix">
+			
+
+<p>It has been a long time since I wrote anything on my blog. So thought about giving everyone a treat this time. Or so I think it is.</p>
+
+<p>Recently I was thinking about a way to deploy all these machine learning models I create in python. I searched through the web but couldn&rsquo;t find anything nice and easy.
+Then I fell upon <a href="http://sebastianraschka.com/blog/2015/writing-pymle.html" rel="nofollow" target="_blank">this book</a> by Sebastian Rashcka and I knew that it was what I was looking for.
+To tell you the truth I did had some experience in Flask earlier but this book made it a whole lot easier to deploy a machine learning model in flask.</p>
+
+<p>So today I am going to give a brief intro about Flask Apps and how to deploy them using a service called Openshift.</p>
+
+<h4 id="so-what-is-flask">So What is flask?</h4>
+
+<p>Flask is a Python Web Framework that makes it easier to create webapps from python.</p>
+
+<h4 id="and-openshift">And Openshift?</h4>
+
+<p>Openshift is a free service(if we only use 1 small instance) which lets us use their services to deploy our flask web-apps.</p>
+
+<p>So that we don&rsquo;t get lost, let me tell you the flow of this post.</p>
+
+<ul>
+<li>First of all we will learn about the <strong>installation</strong>* of Openshift and Flask.</li>
+<li>We will create a <strong>Hello World</strong> application using Flask.</li>
+<li>We will work on creating a very <strong>simple calculator App</strong> that operates on two numbers provided by the user. This will help us in understanding how user forms work with Flask by implementing a barebones app.</li>
+</ul>
+
+<h2 id="installation">Installation:</h2>
+
+<ul>
+<li>Create your <a href="https://www.openshift.com/app/account/new" rel="nofollow" target="_blank">FREE OpenShift account Here</a> Very simple sign-up email + password only</li>
+<li>Install the <a href="https://www.openshift.com/developers/install-the-client-tools" rel="nofollow" target="_blank">OpenShift Client Tools</a>. Use these directions for your particular Operating System these tools have a command line interface and allow more control over your app. The OpenShift tool requires an installation of Ruby.</li>
+</ul>
+
+<p>Now once you do this you have installed Openshift Client tools on your system.</p>
+
+<h2 id="helloworld">Helloworld</h2>
+
+<p>So now I am going to do a lot of things in this post. But don&rsquo;t get bothered much it is just code and HTML quirks. I will try to provide enough details on which parts are necessary.
+First of all, you will need to create a domain on Openshift platform. This can be done by using:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">rhc domain create -n DomainName -l EmailAddress -p password</code></pre></div>
+<p>For this example I created:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">rhc domain create -n mlwhiz -l MyEmailAddress -p Mypassword</code></pre></div>
+<p>In the free version for Openshift you can run 3 web-apps with a single domain.
+For example I can create a maximum of 3 webapps whose web address would be:</p>
+
+<ul>
+<li>myappname1-mlwhiz.rhcloud.com</li>
+<li>myappname2-mlwhiz.rhcloud.com</li>
+<li>myappname3-mlwhiz.rhcloud.com</li>
+</ul>
+
+<p>Once we create a domain we need to create a webapp:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">rhc app create HelloWorld python-2.7</code></pre></div>
+<p>This creates the app named helloworld for us. The app currently resides at this address on web: <a href="http://helloworld-mlwhiz.rhcloud.com/" rel="nofollow" target="_blank">http://helloworld-mlwhiz.rhcloud.com/</a>
+This command also creates a folder where our app resides. cd into this folder.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cd helloworld</code></pre></div>
+<p>Now get a basic template to work upon in this directory. You can think of this as a starter code for flask. We can do this by pulling and merging from Github using the following commands.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git remote add upstream -m master git://github.com/openshift/flask-example.git
+git pull -s recursive -X theirs upstream master</code></pre></div>
+<p>Use Virtualenv to isolate Python development environments. It’s a tool that allows you setup an isolated, self-contained Python environment in a folder on your dev box. This way you can experiment with various versions of Python without affecting your system wide configurations:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">brew install python-virtualenv
+cd helloworld/wsgi/
+virtualenv venv --python<span style="color:#f92672">=</span>python2.7
+<span style="color:#75715e">#Activate the virtual environment</span>
+. venv/bin/activate
+<span style="color:#75715e"># Install all these into your virtual python environment.</span>
+pip install flask flask-wtf flask-babel markdown flup</code></pre></div>
+<p>Now Change the name of flaskapp.py in wsgi to run.py</p>
+
+<p>put this code in run.py</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> os
+<span style="color:#f92672">from</span> flask <span style="color:#f92672">import</span> Flask
+app <span style="color:#f92672">=</span> Flask(__name__)
+<span style="color:#a6e22e">@app.route</span>(<span style="color:#e6db74">&#39;/&#39;</span>)
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">home</span>():
+    <span style="color:#e6db74">&#34;&#34;&#34;Render website&#39;s home page.&#34;&#34;&#34;</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;Hello World!&#39;</span>
+<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
+    app<span style="color:#f92672">.</span>run(debug<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;True&#34;</span>)</code></pre></div>
+<p>Also change the file named application to:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e">#!/usr/bin/python</span>
+<span style="color:#f92672">import</span> os
+<span style="color:#f92672">import</span> sys
+sys<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>insert(<span style="color:#ae81ff">0</span>, os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>dirname(__file__) <span style="color:#f92672">or</span> <span style="color:#e6db74">&#39;.&#39;</span>)
+PY_DIR <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;OPENSHIFT_HOMEDIR&#39;</span>], <span style="color:#e6db74">&#34;python&#34;</span>)
+virtenv <span style="color:#f92672">=</span> PY_DIR <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;/virtenv/&#39;</span>
+PY_CACHE <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(virtenv, <span style="color:#e6db74">&#39;lib&#39;</span>, os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;OPENSHIFT_PYTHON_VERSION&#39;</span>], <span style="color:#e6db74">&#39;site-packages&#39;</span>)
+os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;PYTHON_EGG_CACHE&#39;</span>] <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(PY_CACHE)
+virtualenv <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>join(virtenv, <span style="color:#e6db74">&#39;bin/activate_this.py&#39;</span>)
+<span style="color:#66d9ef">try</span>:
+    <span style="color:#66d9ef">exec</span>(open(virtualenv)<span style="color:#f92672">.</span>read(), dict(__file__<span style="color:#f92672">=</span>virtualenv))
+<span style="color:#66d9ef">except</span> <span style="color:#a6e22e">IOError</span>:
+    <span style="color:#66d9ef">pass</span>
+<span style="color:#f92672">from</span> run <span style="color:#f92672">import</span> app <span style="color:#66d9ef">as</span> application</code></pre></div>
+<p>Run this to host your app:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cd helloworld/wsgi
+python run.py</code></pre></div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script>
+
+<p>You should be able to see your app on: <a href="http://127.0.0.1:5000/" rel="nofollow" target="_blank">http://127.0.0.1:5000/</a>
+You can deploy this webapp to Openshift using:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cd helloworld
+git add .
+git commit -a -m <span style="color:#e6db74">&#34;Initial deployment of this app to the web&#34;</span>
+git push</code></pre></div>
+<p>Open <a href="http://helloworld-mlwhiz.rhcloud.com/" rel="nofollow" target="_blank">http://helloworld-mlwhiz.rhcloud.com/</a> in your browser. You would see Hello World! there. Now we have got a very basic structure complete.</p>
+
+<h2 id="our-simple-calculator-app">Our Simple Calculator App:</h2>
+
+<p>We will now work on creating a app that operates on two numbers provided by the user. The functions possible are +,- and *.
+You can see this web app in action <a href="http://helloworld-mlwhiz.rhcloud.com/" rel="nofollow" target="_blank">here</a> before moving on.
+This app will help us in understanding how user forms work with Flask and how to manage user inputs in Flask.
+First of all change the code in run.py to</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> os
+<span style="color:#f92672">from</span> flask <span style="color:#f92672">import</span> Flask,render_template, request
+<span style="color:#f92672">from</span> wtforms <span style="color:#f92672">import</span> Form, TextAreaField, validators,SelectField
+
+app <span style="color:#f92672">=</span> Flask(__name__)
+
+<span style="color:#75715e"># Code to create a WTForm with three fields. 2 text fields and 1 dropdown menu.</span>
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">OutputForm</span>(Form):
+	myChoices<span style="color:#f92672">=</span>[(<span style="color:#e6db74">&#39;+&#39;</span>, <span style="color:#e6db74">&#39;+&#39;</span>), (<span style="color:#e6db74">&#39;-&#39;</span>, <span style="color:#e6db74">&#39;-&#39;</span>), (<span style="color:#e6db74">&#39;*&#39;</span>, <span style="color:#e6db74">&#39;*&#39;</span>)]
+	num1 <span style="color:#f92672">=</span> TextAreaField(<span style="color:#e6db74">&#39;&#39;</span>,[validators<span style="color:#f92672">.</span>DataRequired()])
+	num2 <span style="color:#f92672">=</span> TextAreaField(<span style="color:#e6db74">&#39;&#39;</span>,[validators<span style="color:#f92672">.</span>DataRequired()])
+	Operator <span style="color:#f92672">=</span> SelectField(<span style="color:#e6db74">u</span><span style="color:#e6db74">&#39;&#39;</span>, choices <span style="color:#f92672">=</span> myChoices, validators <span style="color:#f92672">=</span> [validators<span style="color:#f92672">.</span>DataRequired()])
+
+<span style="color:#75715e"># This uses the render_template method in flask to use a template first_app.html.</span>
+<span style="color:#75715e"># This html contains placeholders for the form that is provided in the kwargs argument to the function call.</span>
+<span style="color:#a6e22e">@app.route</span>(<span style="color:#e6db74">&#39;/&#39;</span>)
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">index</span>():
+	<span style="color:#75715e">#return &#39;Hello World!&#39;</span>
+	form <span style="color:#f92672">=</span> OutputForm(request<span style="color:#f92672">.</span>form)
+	<span style="color:#66d9ef">return</span> render_template(<span style="color:#e6db74">&#39;first_app.html&#39;</span>,form <span style="color:#f92672">=</span> form)
+
+<span style="color:#75715e"># This is the output that is displayed. It checks if the form is validated and POST request is made.</span>
+<span style="color:#75715e"># If true it renders the output.html else renders the main index page.</span>
+<span style="color:#75715e"># Most of the work is done here. Gets the user inputs using the request.form method.</span>
+<span style="color:#a6e22e">@app.route</span>(<span style="color:#e6db74">&#39;/output&#39;</span>, methods<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;POST&#39;</span>])
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">output</span>():
+	form <span style="color:#f92672">=</span> OutputForm(request<span style="color:#f92672">.</span>form)
+	<span style="color:#66d9ef">if</span> request<span style="color:#f92672">.</span>method <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;POST&#39;</span> <span style="color:#f92672">and</span> form<span style="color:#f92672">.</span>validate():
+		num1 <span style="color:#f92672">=</span> request<span style="color:#f92672">.</span>form[<span style="color:#e6db74">&#39;num1&#39;</span>]
+		num2 <span style="color:#f92672">=</span> request<span style="color:#f92672">.</span>form[<span style="color:#e6db74">&#39;num2&#39;</span>]
+		op <span style="color:#f92672">=</span> request<span style="color:#f92672">.</span>form[<span style="color:#e6db74">&#39;Operator&#39;</span>]
+		<span style="color:#66d9ef">if</span> op<span style="color:#f92672">==</span><span style="color:#e6db74">&#34;+&#34;</span>:
+			name<span style="color:#f92672">=</span>str(int(num1)<span style="color:#f92672">+</span>int(num2))
+		<span style="color:#66d9ef">elif</span> op<span style="color:#f92672">==</span><span style="color:#e6db74">&#34;-&#34;</span>:
+			name<span style="color:#f92672">=</span>str(int(num1)<span style="color:#f92672">-</span>int(num2))
+		<span style="color:#66d9ef">elif</span> op<span style="color:#f92672">==</span><span style="color:#e6db74">&#34;*&#34;</span>:
+			name<span style="color:#f92672">=</span>str(int(num1)<span style="color:#f92672">*</span>int(num2))
+		<span style="color:#66d9ef">return</span> render_template(<span style="color:#e6db74">&#39;output.html&#39;</span>, name<span style="color:#f92672">=</span>name)
+	<span style="color:#66d9ef">return</span> render_template(<span style="color:#e6db74">&#39;first_app.html&#39;</span>, form<span style="color:#f92672">=</span>form)
+
+<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;__main__&#39;</span>:
+    app<span style="color:#f92672">.</span>run(debug<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;True&#34;</span>)</code></pre></div>
+<p>We use WTF forms here to create a form object. We pass this form object to the HTML render_template method. We have accessed these again in the output function so that we can show them in output.html where all the major work is done for creating the app.</p>
+
+<p>Now Create a folder named template in helloworld/wsgi and create a file named _formhelpers.html with this content. You really don&rsquo;t need to see the content in this file.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">{% macro render_field(field) %}
+	&lt;<span style="color:#f92672">dt</span>&gt;{{ field.label }}
+	&lt;<span style="color:#f92672">dd</span>&gt;{{ field(**kwargs)|safe }}
+	{% if field.errors %}
+		&lt;<span style="color:#f92672">ul</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">errors</span>&gt;
+		{% for error in field.errors %}
+			&lt;<span style="color:#f92672">li</span>&gt;{{ error }}&lt;/<span style="color:#f92672">li</span>&gt;
+		{% endfor %}
+		&lt;/<span style="color:#f92672">ul</span>&gt;
+	{% endif %}
+	&lt;/<span style="color:#f92672">dd</span>&gt;
+{% endmacro %}</code></pre></div>
+<p>Also add another file named first_app.html with this content. Notice how we access the wtform here.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#75715e">&lt;!doctype html&gt;</span>
+&lt;<span style="color:#f92672">html</span>&gt;
+&lt;<span style="color:#f92672">head</span>&gt;
+&lt;<span style="color:#f92672">title</span>&gt;First app&lt;/<span style="color:#f92672">title</span>&gt;
+&lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ url_for(&#39;static&#39;,filename=&#39;style.css&#39;) }}&#34;</span>&gt;
+&lt;/<span style="color:#f92672">head</span>&gt;
+&lt;<span style="color:#f92672">body</span>&gt;
+	{% from &#34;_formhelpers.html&#34; import render_field %}
+	&lt;<span style="color:#f92672">div</span>&gt;Calculator: Please enter two numbers and a function you want to apply&lt;/<span style="color:#f92672">div</span>&gt;
+	&lt;<span style="color:#f92672">form</span> <span style="color:#a6e22e">method</span><span style="color:#f92672">=</span><span style="color:#e6db74">post</span> <span style="color:#a6e22e">action</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/output&#34;</span>&gt;
+	{{ render_field(form.num1) }}{{ render_field(form.Operator) }}{{ render_field(form.num2) }}
+		&lt;<span style="color:#f92672">input</span> <span style="color:#a6e22e">type</span><span style="color:#f92672">=</span><span style="color:#e6db74">submit</span> <span style="color:#a6e22e">value</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Result&#39;</span> <span style="color:#a6e22e">name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#39;submit_btn&#39;</span>&gt;
+	&lt;/<span style="color:#f92672">form</span>&gt;
+&lt;/<span style="color:#f92672">body</span>&gt;
+&lt;/<span style="color:#f92672">html</span>&gt;</code></pre></div>
+<p>Create a file named output.html where the final output will be shown.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#75715e">&lt;!doctype html&gt;</span>
+&lt;<span style="color:#f92672">html</span>&gt;
+&lt;<span style="color:#f92672">head</span>&gt;
+&lt;<span style="color:#f92672">title</span>&gt;First app&lt;/<span style="color:#f92672">title</span>&gt;
+&lt;<span style="color:#f92672">link</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;stylesheet&#34;</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;{{ url_for(&#39;static&#39;,filename=&#39;style.css&#39;) }}&#34;</span>&gt;
+&lt;/<span style="color:#f92672">head</span>&gt;
+	&lt;<span style="color:#f92672">body</span>&gt;
+		&lt;<span style="color:#f92672">div</span>&gt;The output is: {{ name }}&lt;/<span style="color:#f92672">div</span>&gt;
+	&lt;/<span style="color:#f92672">body</span>&gt;
+&lt;/<span style="color:#f92672">html</span>&gt;</code></pre></div>
+<p>Also add a style.css file in the static folder. You can put this in it for right now or any other thing you want.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">h1 {
+    color: blue;
+    font-family: verdana;
+    font-size: 300%;
+}
+p  {
+    color: red;
+    font-family: courier;
+    font-size: 160%;
+}</code></pre></div>
+<p>And we are mostly done. Run run.py in the wsgi directory and you would be able to access the app at : <a href="http://127.0.0.1:5000/" rel="nofollow" target="_blank">http://127.0.0.1:5000/</a>.
+Again deploy this webapp to Openshift using:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cd helloworld
+git add .
+git commit -a -m <span style="color:#e6db74">&#34;Initial deployment of this app to the web&#34;</span>
+git push</code></pre></div>
+<h2 id="endnotes">Endnotes</h2>
+
+<p>So here we took inputs from the user and show the output using the flask App. The final app is hosted at <a href="http://helloworld-mlwhiz.rhcloud.com/" rel="nofollow" target="_blank">http://helloworld-mlwhiz.rhcloud.com/</a> for you to see.
+This code provides us with a code skeletn which will be valuable when we will deploy a whole ML model, which is the main motive of this series.</p>
+
+<h2 id="references">References</h2>
+
+<ol>
+<li>Most of the code here is taken from this awesome book by Sebastian Raschka: <a rel="nofollow" href="http://www.amazon.com/gp/product/1783555130/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1783555130&linkCode=as2&tag=mlwhizcon-20&linkId=QOKIQ2S5LIQI7L2N">Python Machine Learning</a><img src="http://ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&l=as2&o=1&a=1783555130" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
+<li><a href="https://blog.openshift.com/beginners-guide-to-writing-flask-apps-on-openshift/" rel="nofollow" target="_blank">https://blog.openshift.com/beginners-guide-to-writing-flask-apps-on-openshift/</a></li>
+</ol>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/flaskapp/" rel="tag">FlaskApp</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/deploy-ml-models/" rel="tag">Deploy ML Models</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/openshift/" rel="tag">Openshift</a></li>
+	</ul>
+</div>
+		<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+		<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.415&subid=0&type=4"><IMG border="0"   alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.415&subid=0&type=4&gridnum=16"></a>
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2015/10/11/shell_basics_for_data_science_2/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Shell Basics every Data Scientist Should know - Part II(AWK)</p></a>
+	</div>
+	<div class="post-nav__item post-nav__item--next">
+		<a class="post-nav__link" href="/blog/2016/10/27/baby_panda/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">Pandas For All - Some Basic Pandas Functions</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2019 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
