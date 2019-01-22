@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>The story of every distribution - Discrete Distributions</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="Distributions play an important role in the life of every Statistician. Properties of famous discrete distributions">
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="The story of every distribution - Discrete Distributions" />
+<meta property="og:description" content="Distributions play an important role in the life of every Statistician. Properties of famous discrete distributions" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2017/09/14/discrete_distributions/" /><meta property="article:published_time" content="2017-09-14T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2017-09-14T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="The story of every distribution - Discrete Distributions"/>
+<meta name="twitter:description" content="Distributions play an important role in the life of every Statistician. Properties of famous discrete distributions"/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link href="/favicon.png" rel="icon">
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">The story of every distribution - Discrete Distributions</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2017-09-14T00:00:00">September 14, 2017</time>
+</div>
+</div>
+		</header><div class="content post__content clearfix">
+			
+
+<p>Distributions play an important role in the life of every Statistician. I coming from a non-statistic background am not so well versed in these and keep forgetting about the properties of these famous distributions. That is why I chose to write my own understanding in an intuitive way to keep a track.
+One of the most helpful way to learn more about these is the <a href="https://projects.iq.harvard.edu/stat110/home" rel="nofollow" target="_blank">STAT110</a> course by Joe Blitzstein and his <a href="http://amzn.to/2xAsYzE" rel="nofollow" target="_blank">book</a>. You can check out this <a href="https://www.coursera.org/specializations/statistics?siteID=lVarvwc5BD0-1nQtJg8.ENATqSUIufAaaw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">Coursera</a> course too. Hope it could be useful to someone else too. So here goes:</p>
+
+<h2 id="1-bernoulli-distribution">1. Bernoulli Distribution:</h2>
+
+<p>Perhaps the most simple discrete distribution of all.</p>
+
+<p><strong>Story:</strong> A Coin is tossed with probability p of heads.</p>
+
+<p><strong>PMF of Bernoulli Distribution is given by:</strong></p>
+
+<div>$$P(X=k) = \begin{cases}1-p & k = 0\\p & k = 1\end{cases}$$</div>
+
+<p><strong>CDF of Bernoulli Distribution is given by:</strong></p>
+
+<div>$$P(X \leq k) = \begin{cases}0 & k \lt 0\\1-p & 0 \leq k \lt 1 \\1 & k \geq 1\end{cases}$$</div>
+
+<p><strong>Expected Value:</strong></p>
+
+<p>$$E[X] = \sum kP(X=k)$$
+$$E[X] = 0*P(X=0)+1*P(X=1) = p$$</p>
+
+<p><strong>Variance:</strong></p>
+
+<p>$$Var[X] = E[X^2] - E[X]^2$$
+Now we find,
+$$E[X]^2 = p^2$$
+and
+$$E[X^2] = \sum k^2P(X=k)$$
+$$E[X^2] =  0^2P(X=0) + 1^2P(X=1) = p $$
+Thus,
+$$Var[X] = p(1-p)$$</p>
+
+<h2 id="2-binomial-distribution">2. Binomial Distribution:</h2>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/maxresdefault.jpg"  height="400" width="500" ></center>
+</div>
+
+<p>One of the most basic distribution in the Statistician toolkit. The parameters of this distribution is n(number of trials) and p(probability of success).</p>
+
+<p><strong>Story:</strong>
+Probability of getting exactly k successes in n trials</p>
+
+<p><strong>PMF of binomial Distribution is given by:</strong></p>
+
+<p>$$P(X=k) = \left(\begin{array}{c}n\ k\end{array}\right) p^{k}(1-p)^{n-k}$$</p>
+
+<p><strong>CDF of binomial Distribution is given by:</strong></p>
+
+<p>$$ P(X\leq k) = \sum_{i=0}^k  \left(\begin{array}{c}n\ i\end{array}\right)  p^i(1-p)^{n-i} $$</p>
+
+<p><strong>Expected Value:</strong></p>
+
+<p>$$E[X] = \sum kP(X=k)$$
+$$E[X] = \sum_{k=0}^n k \left(\begin{array}{c}n\ k\end{array}\right) * p^{k}(1-p)^{n-k} = np $$</p>
+
+<p>A better way to solve this:</p>
+
+<div>$$ X = I_{1} + I_{2} + ....+ I_{n-1}+ I_{n} $$</div>
+
+<p>X is the sum on n Indicator Bernoulli random variables.</p>
+
+<p>Thus,</p>
+
+<div>
+$$E[X] = E[I_{1} + I_{2} + ....+ I_{n-1}+ I_{n}]$$</div>
+
+<div>$$E[X] = E[I_{1}] + E[I_{2}] + ....+ E[I_{n-1}]+ E[I_{n}]$$</div>
+
+<div>$$E[X] = \underbrace{p + p + ....+ p + p}_{n} = np$$</div>
+
+<p><strong>Variance:</strong></p>
+
+<div>$$ X = I_{1} + I_{2} + ....+ I_{n-1}+ I_{n} $$</div>
+X is the sum on n Indicator Bernoulli random variables.
+<div>$$Var[X] = Var[I_{1} + I_{2} + ....+ I_{n-1}+ I_{n}]$$</div>
+<div>$$Var[X] = Var[I_{1}] + Var[I_{2}] + ....+ Var[I_{n-1}]+ Var[I_{n}]$$</div>
+<div>$$Var[X] = \underbrace{p(1-p) + p(1-p) + ....+ p(1-p) + p(1-p)}_{n} = np(1-p)$$</div>
+
+<h2 id="3-geometric-distribution">3. Geometric Distribution:</h2>
+
+<p>The parameters of this distribution is p(probability of success).</p>
+
+<p><strong>Story:</strong>
+The number of failures before the first success(Heads) when a coin with probability p is tossed</p>
+
+<p><strong>PMF of Geometric Distribution is given by:</strong></p>
+
+<p>$$P(X=k) = (1-p)^kp$$</p>
+
+<p><strong>CDF of Geometric Distribution is given by:</strong></p>
+
+<p>$$ P(X\leq k) = \sum_{i=0}^k (1-p)^{i}p$$
+$$ P(X\leq k) = p(1+q+q^2&hellip;+q^k)= p(1-q^k)/(1-q) = 1-(1-p)^k $$</p>
+
+<p><strong>Expected Value:</strong></p>
+
+<p>$$E[X] = \sum kP(X=k)$$
+$$E[X] = \sum_{k=0}^{inf} k (1-p)^kp$$
+$$E[X] = qp +2q^2p +3q^3p +4q^4p &hellip;. $$
+$$E[X] = qp(1+2q+3q^2+4q^3+&hellip;.)$$
+$$E[X] = qp/(1-q)^2 = q/p $$</p>
+
+<p><strong>Variance:</strong></p>
+
+<p>$$Var[X] = E[X^2] - E[X]^2$$
+Now we find,
+$$E[X]^2 = q^2/p^2$$
+and
+$$E[X^2] = \sum_0^k k^2q^kp= qp + 4q^2p + 9q^3p +16q^4p &hellip; = qp(1+4q+9q^2+16q^3&hellip;.)$$
+$$E[X^2] = qp^{-2}(1+q)$$</p>
+
+<p>Thus,
+$$Var[X] =q/p^2$$</p>
+
+<p>Check Math appendix at bottom of this post for Geometric Series Proofs.</p>
+
+<p><strong>Example:</strong></p>
+
+<p>Q. A doctor is seeking an anti-depressant for a newly diagnosed patient. Suppose that, of the available anti-depressant drugs, the probability that any particular drug will be effective for a particular patient is p=0.6. What is the probability that the first drug found to be effective for this patient is the first drug tried, the second drug tried, and so on? What is the expected number of drugs that will be tried to find one that is effective?</p>
+
+<p>A. Expected number of drugs that will be tried to find one that is effective = q/p = .4/.6 =.67</p>
+
+<h2 id="4-negative-binomial-distribution">4. Negative Binomial Distribution:</h2>
+
+<p>The parameters of this distribution is p(probability of success) and r(number of success).</p>
+
+<p><strong>Story:</strong>
+The <strong>number of failures</strong> of independent Bernoulli(p) trials before the rth success.</p>
+
+<p><strong>PMF of Negative Binomial Distribution is given by:</strong></p>
+
+<p>r successes , k failures , last attempt needs to be a success:
+$$P(X=k) = \left(\begin{array}{c}k+r-1\ k\end{array}\right) p^r(1-p)^k$$</p>
+
+<p><strong>Expected Value:</strong></p>
+
+<p>The negative binomial RV could be stated as the sum of r Geometric RVs
+$$X = X^1+X^2&hellip;. X^{r-1} +X^r$$
+Thus,
+$$E[X] = E[X^1]+E[X^2]&hellip;. E[X^{r-1}] +E[X^r]$$</p>
+
+<p>$$E[X] = rq/p$$</p>
+
+<p><strong>Variance:</strong></p>
+
+<p>The negative binomial RV could be stated as the sum of r independent Geometric RVs
+$$X = X^1+X^2&hellip;. X^{r-1} +X^r$$
+Thus,
+$$Var[X] = Var[X^1]+Var[X^2]&hellip;. Var[X^{r-1}] +Var[X^r]$$</p>
+
+<p>$$E[X] = rq/p^2$$</p>
+
+<p><strong>Example:</strong></p>
+
+<p>Q. Pat is required to sell candy bars to raise money for the 6th grade field trip. There are thirty houses in the neighborhood, and Pat is not supposed to return home until five candy bars have been sold. So the child goes door to door, selling candy bars. At each house, there is a 0.4 probability of selling one candy bar and a 0.6 probability of selling nothing.
+What&rsquo;s the probability of selling the last candy bar at the nth house?</p>
+
+<p>A. r = 5 ; k = n - r</p>
+
+<p>Probability of selling the last candy bar at the nth house =
+$$P(X=k) = \left(\begin{array}{c}k+r-1\ k\end{array}\right) p^r(1-p)^k$$
+$$P(X=k) = \left(\begin{array}{c}n-1\ n-5\end{array}\right) .4^5(.6)^{n-5}$$</p>
+
+<h2 id="5-poisson-distribution">5. Poisson Distribution:</h2>
+
+<p>The parameters of this distribution is $\lambda$ the rate parameter.</p>
+
+<p><strong>Motivation:</strong>
+There is as such no story to this distribution but only motivation for using this distribution. The Poisson distribution is often used for applications where we count the successes of a large number of trials where the per-trial success rate is small. For example, the Poisson distribution is a good starting point for counting the number of people who email you over the course of an hour.The number of chocolate chips in a chocolate chip cookie is another good candidate for a Poisson distribution, or the number of earthquakes in a year in some particular region</p>
+
+<p><strong>PMF of Poisson Distribution is given by:</strong>
+$$ P(X=k) = \frac{e^{-\lambda}\lambda^k} {k!}$$</p>
+
+<p><strong>Expected Value:</strong></p>
+
+<div>$$E[X] = \sum kP(X=k)$$</div>
+
+<div>$$ E[X] = \sum_{k=0}^{inf} k \frac{e^{-\lambda}\lambda^k} {k!}$$</div>
+<div>$$ E[X] = \lambda e^{-\lambda}\sum_{k=0}^{inf}  \frac{\lambda^{k-1}} {(k-1)!}$$</div>
+<div>$$ E[X] = \lambda e^{-\lambda} e^{\lambda} = \lambda $$</div>
+
+<p><strong>Variance:</strong></p>
+
+<div>$$Var[X] = E[X^2] - E[X]^2$$</div>
+
+<p>Now we find,
+<div>$$E[X]^2 = \lambda + \lambda^2$$</div>
+Thus,
+$$Var[X] = \lambda$$</p>
+
+<p><strong>Example:</strong></p>
+
+<p>Q. If electricity power failures occur according to a Poisson distribution with an average of 3 failures every twenty weeks, calculate the probability that there will not be more than one failure during a particular week?</p>
+
+<p>A. Probability = P(X=0)+P(X=1) =</p>
+
+<div>$$e^{-3/20} + e^{-3/20}3/20 = 23/20*e^{-3/20} $$</div>
+
+<p>Probability of selling the last candy bar at the nth house =
+$$P(X=k) = \left(\begin{array}{c}k+r-1\ k\end{array}\right) p^r(1-p)^k$$
+$$P(X=k) = \left(\begin{array}{c}n-1\ n-5\end{array}\right) .4^5(.6)^{n-5}$$</p>
+
+<h2 id="math-appendix">Math Appendix:</h2>
+
+<p>Some Math (For Geometric Distribution) :</p>
+
+<p>$$a+ar+ar^2+ar^3+⋯=a/(1−r)=a(1−r)^{−1}$$
+Taking the derivatives of both sides, the first derivative with respect to r must be:
+$$a+2ar+3ar^2+4ar^3⋯=a(1−r)^{−2}$$
+Multiplying above with r:
+$$ar+2ar^2+3ar^3+4ar^4⋯=ar(1−r)^{−2}$$
+Taking the derivatives of both sides, the first derivative with respect to r must be:
+$$a+4ar+9ar^2+16ar^3⋯=a(1−r)^{-3}(1+r)$$</p>
+
+<h2 id="bonus-python-graphs-and-functions">Bonus - Python Graphs and Functions:</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Useful Function to create graph</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">chart_creator</span>(x,y,title):
+    <span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt  <span style="color:#75715e">#sets up plotting under plt</span>
+    <span style="color:#f92672">import</span> seaborn <span style="color:#f92672">as</span> sns           <span style="color:#75715e">#sets up styles and gives us more plotting options</span>
+    <span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd             <span style="color:#75715e">#lets us handle data as dataframes</span>
+    <span style="color:#f92672">%</span>matplotlib inline
+    <span style="color:#75715e"># Create a list of 100 Normal RVs</span>
+    data <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame(zip(x,y))
+    data<span style="color:#f92672">.</span>columns <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;x&#39;</span>,<span style="color:#e6db74">&#39;y&#39;</span>]
+    <span style="color:#75715e"># We dont Probably need the Gridlines. Do we? If yes comment this line</span>
+    sns<span style="color:#f92672">.</span>set(style<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ticks&#34;</span>)
+
+    <span style="color:#75715e"># Here we create a matplotlib axes object. The extra parameters we use</span>
+    <span style="color:#75715e"># &#34;ci&#34; to remove confidence interval</span>
+    <span style="color:#75715e"># &#34;marker&#34; to have a x as marker.</span>
+    <span style="color:#75715e"># &#34;scatter_kws&#34; to provide style info for the points.[s for size]</span>
+    <span style="color:#75715e"># &#34;line_kws&#34; to provide style info for the line.[lw for line width]</span>
+
+    g <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>regplot(x<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;x&#39;</span>, y<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;y&#39;</span>, data<span style="color:#f92672">=</span>data, ci <span style="color:#f92672">=</span> False,
+        scatter_kws<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;color&#34;</span>:<span style="color:#e6db74">&#34;darkred&#34;</span>,<span style="color:#e6db74">&#34;alpha&#34;</span>:<span style="color:#ae81ff">0.3</span>,<span style="color:#e6db74">&#34;s&#34;</span>:<span style="color:#ae81ff">90</span>},
+        line_kws<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;color&#34;</span>:<span style="color:#e6db74">&#34;g&#34;</span>,<span style="color:#e6db74">&#34;alpha&#34;</span>:<span style="color:#ae81ff">0.5</span>,<span style="color:#e6db74">&#34;lw&#34;</span>:<span style="color:#ae81ff">0</span>},marker<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;x&#34;</span>)
+
+    <span style="color:#75715e"># remove the top and right line in graph</span>
+    sns<span style="color:#f92672">.</span>despine()
+
+    <span style="color:#75715e"># Set the size of the graph from here</span>
+    g<span style="color:#f92672">.</span>figure<span style="color:#f92672">.</span>set_size_inches(<span style="color:#ae81ff">12</span>,<span style="color:#ae81ff">8</span>)
+    <span style="color:#75715e"># Set the Title of the graph from here</span>
+    g<span style="color:#f92672">.</span>axes<span style="color:#f92672">.</span>set_title(title, fontsize<span style="color:#f92672">=</span><span style="color:#ae81ff">34</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;r&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+    <span style="color:#75715e"># Set the xlabel of the graph from here</span>
+    g<span style="color:#f92672">.</span>set_xlabel(<span style="color:#e6db74">&#34;k&#34;</span>,size <span style="color:#f92672">=</span> <span style="color:#ae81ff">67</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;r&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+    <span style="color:#75715e"># Set the ylabel of the graph from here</span>
+    g<span style="color:#f92672">.</span>set_ylabel(<span style="color:#e6db74">&#34;pmf&#34;</span>,size <span style="color:#f92672">=</span> <span style="color:#ae81ff">67</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;r&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+    <span style="color:#75715e"># Set the ticklabel size and color of the graph from here</span>
+    g<span style="color:#f92672">.</span>tick_params(labelsize<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>,labelcolor<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;black&#34;</span>)</code></pre></div>
+<p>And here I will generate the PMFs of the discrete distributions we just discussed above using Pythons built in functions. For more details on the upper function, please see my previous post - <a href="http://mlwhiz.com/blog/2015/09/13/seaborn_visualizations/" rel="nofollow" target="_blank">Create basic graph visualizations with SeaBorn</a>. Also take a look at the <a href="https://docs.scipy.org/doc/scipy/reference/stats.html" rel="nofollow" target="_blank">documentation</a> guide for the below functions</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Binomial :</span>
+<span style="color:#f92672">from</span> scipy.stats <span style="color:#f92672">import</span> binom
+n<span style="color:#f92672">=</span><span style="color:#ae81ff">30</span>
+p<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>
+k <span style="color:#f92672">=</span> range(<span style="color:#ae81ff">0</span>,n)
+pmf <span style="color:#f92672">=</span> binom<span style="color:#f92672">.</span>pmf(k, n, p)
+chart_creator(k,pmf,<span style="color:#e6db74">&#34;Binomial PMF&#34;</span>)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/output_12_0.png"  height="400" width="700" ></center>
+</div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Geometric :</span>
+<span style="color:#f92672">from</span> scipy.stats <span style="color:#f92672">import</span> geom
+n<span style="color:#f92672">=</span><span style="color:#ae81ff">30</span>
+p<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>
+k <span style="color:#f92672">=</span> range(<span style="color:#ae81ff">0</span>,n)
+<span style="color:#75715e"># -1 here is the location parameter for generating the PMF we want.</span>
+pmf <span style="color:#f92672">=</span> geom<span style="color:#f92672">.</span>pmf(k, p,<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+chart_creator(k,pmf,<span style="color:#e6db74">&#34;Geometric PMF&#34;</span>)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/output_13_0.png"  height="400" width="700" ></center>
+</div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Negative Binomial :</span>
+<span style="color:#f92672">from</span> scipy.stats <span style="color:#f92672">import</span> nbinom
+r<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span> <span style="color:#75715e"># number of successes</span>
+p<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span> <span style="color:#75715e"># probability of Success</span>
+k <span style="color:#f92672">=</span> range(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">25</span>) <span style="color:#75715e"># number of failures</span>
+<span style="color:#75715e"># -1 here is the location parameter for generating the PMF we want.</span>
+pmf <span style="color:#f92672">=</span> nbinom<span style="color:#f92672">.</span>pmf(k, r, p)
+chart_creator(k,pmf,<span style="color:#e6db74">&#34;Nbinom PMF&#34;</span>)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/output_14_0.png"  height="400" width="700" ></center>
+</div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e">#Poisson</span>
+<span style="color:#f92672">from</span> scipy.stats <span style="color:#f92672">import</span> poisson
+lamb <span style="color:#f92672">=</span> <span style="color:#f92672">.</span><span style="color:#ae81ff">3</span> <span style="color:#75715e"># Rate</span>
+k <span style="color:#f92672">=</span> range(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">5</span>)
+pmf <span style="color:#f92672">=</span> poisson<span style="color:#f92672">.</span>pmf(k, lamb)
+chart_creator(k,pmf,<span style="color:#e6db74">&#34;Poisson PMF&#34;</span>)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/output_15_0.png"  height="400" width="700" ></center>
+</div>
+
+<h2 id="references">References:</h2>
+
+<ol>
+<li><a href="http://amzn.to/2xAsYzE" rel="nofollow" target="_blank">Introduction to Probability by Joe Blitzstein</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Negative_binomial_distribution" rel="nofollow" target="_blank">Wikipedia</a></li>
+</ol>
+
+<p>Next thing I want to come up with is a same sort of post for continuous distributions too. Keep checking for the same. Till then Ciao.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/probability/" rel="tag">probability</a></li>
+	</ul>
+</div>
+		<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+		<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.415&subid=0&type=4"><IMG border="0"   alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.415&subid=0&type=4&gridnum=16"></a>
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2017/04/17/deep_learning_pretrained_models/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Today I Learned This Part 2: Pretrained Neural Networks What are they?</p></a>
+	</div>
+	<div class="post-nav__item post-nav__item--next">
+		<a class="post-nav__link" href="/blog/2017/09/14/kaggle_tricks/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">Good Feature Building Techniques - Tricks for Kaggle -  My Kaggle Code Repository</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2019 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
