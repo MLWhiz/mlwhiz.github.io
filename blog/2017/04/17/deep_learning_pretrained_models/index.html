@@ -1,485 +1,318 @@
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<html class="no-js" lang="en-us">
 <head>
-
-  <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-NMQD44T');</script>
-  <!-- End Google Tag Manager -->
-
-  <meta charset="utf-8">
-  <title>Today I Learned This Part 2: Pretrained Neural Networks What are they?</title>
-  <meta name="author" content="Rahul Agarwal">
-  <meta name="description" content="Deeplearning is the buzz word right now. I was working on the course for deep learning by Jeremy Howard and one thing I noticed were pretrained deep Neural Networks. In the first lesson he used the pretrained NN to predict on the Dogs vs Cats competition on Kaggle to achieve ..." >
-  <meta name="keywords" content="deeplearning, pretrained models, use pretrained neural nets for classifying images, deep learning, kaggle competition dogs vs cats, neural neworks pretrained" >
-
-<!-- OpenGraph protocol tags: http://ogp.me/ -->
-<!-- originally adopted to be used for: https://blog.kmonsoor.com -->
-<meta property="og:site_name" content="mlwhiz" />
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Today I Learned This Part 2: Pretrained Neural Networks What are they?</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="Your Daily dose of data science.This is a series of post in which I write about the things I learn almost everyday. This post particularly provides a way to use pretrained neural nets for classifying images.">
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="Today I Learned This Part 2: Pretrained Neural Networks What are they?" />
+<meta property="og:description" content="Your Daily dose of data science.This is a series of post in which I write about the things I learn almost everyday. This post particularly provides a way to use pretrained neural nets for classifying images." />
 <meta property="og:type" content="article" />
+<meta property="og:url" content="/blog/2017/04/17/deep_learning_pretrained_models/" /><meta property="article:published_time" content="2017-04-17T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2017-04-17T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Today I Learned This Part 2: Pretrained Neural Networks What are they?"/>
+<meta name="twitter:description" content="Your Daily dose of data science.This is a series of post in which I write about the things I learn almost everyday. This post particularly provides a way to use pretrained neural nets for classifying images."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="shortcut icon" href="/favicon.ico">
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
     
-<meta property="og:title" content="Today I Learned This Part 2: Pretrained Neural Networks What are they?" />
-<meta property="og:url" content="https://mlwhiz.com/blog/2017/04/17/deep_learning_pretrained_models/" />
-<meta property="og:description" content="Deeplearning is the buzz word right now. I was working on the course for deep learning by Jeremy Howard and one thing I noticed were pretrained deep Neural Networks. In the first lesson he used the pretrained NN to predict on the Dogs vs Cats competition on Kaggle to achieve ..." />
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
 
-<meta name="twitter:image" content="https://mlwhiz.com" />
-
-<meta property="article:published_time" content="2017-04-17 04:43:00" />
-<!-- End of OpenGraph protocol tags -->
-
-
-<meta name="twitter:card" content="summary_large_image" />
-<meta property="twitter:title" content="Today I Learned This Part 2: Pretrained Neural Networks What are they?" />
-<meta property="twitter:description" content="Deeplearning is the buzz word right now. I was working on the course for deep learning by Jeremy Howard and one thing I noticed were pretrained deep Neural Networks. In the first lesson he used the pretrained NN to predict on the Dogs vs Cats competition on Kaggle to achieve ..." />
-<meta property="twitter:url" content="https://mlwhiz.com/blog/2017/04/17/deep_learning_pretrained_models/" />
-<meta name="twitter:image" content="https://mlwhiz.com" />
-
-
-  <link href="http://mlwhiz.com/atom.xml" type="application/atom+xml" rel="alternate"
-        title="mlwhiz Atom Feed" />
-  <link href="http://mlwhiz.com/feed.rss" type="application/rss+xml" rel="alternate"
-        title="mlwhiz RSS Feed" />
-
-
-<link rel="canonical" href="https://mlwhiz.com/blog/2017/04/17/deep_learning_pretrained_models/"/>
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
-  <link href="https://mlwhiz.com/favicon.png" rel="icon">
-  <link href="https://mlwhiz.com/theme/css/main.css" media="screen, projection"
-        rel="stylesheet" type="text/css">
-      <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
- <link href="https://mlwhiz.com/theme/css/custom.css"
-        rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="https://mlwhiz.com/theme/highlight/styles/atelier-dune.dark.css">
-
-  <script src="https://mlwhiz.com/theme/js/modernizr-2.0.js"></script>
-  <script src="https://mlwhiz.com/theme/js/ender.js"></script>
-  <script src="https://mlwhiz.com/theme/js/octopress.js" type="text/javascript"></script>
-
-  <script src="https://mlwhiz.com/theme/highlight/highlight.pack.js"></script>
-  <script>hljs.initHighlightingOnLoad();</script>
-
-  <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic"
-        rel="stylesheet" type="text/css">
-  <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic"
-        rel="stylesheet" type="text/css">
-
-  <!--added buttons to share....-->
-
-<!-- BEGIN SHAREAHOLIC CODE -->
-<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
-<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
-
-<!-- END SHAREAHOLIC CODE -->
-<!--
-  <script src="//load.sumome.com/" data-sumo-site-id="22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48" async="async"></script>
- --> 
-<!--
-  <script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5a1bdf9806d3310011e61348&product=sticky-share-buttons' async='async'></script>
--->
-
-
-<!-- SUMO CODE FOR EMAILS-->
-  <script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
-
-
-</head>
-
-<body>
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
-  <header role="banner"><hgroup>
-  <h1><a href="https://mlwhiz.com/">mlwhiz</a></h1>
-    <h2>Deep Learning, Data Science and NLP Enthusiast</h2>
-</hgroup></header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="http://mlwhiz.com/atom.xml" rel="subscribe-atom">Atom</a></li>
-
-</ul>
-
-
-<form onsubmit="this['q'].value = this['q_raw'].value + ' site:mlwhiz.com';" method="get" action="https://google.com/search">
-  <fieldset role="search">
-	<input type="hidden" value="" name="q">
-	<input class="search" type="text" placeholder="Search" results="0" name="q_raw">
-  </fieldset>
-
-</form>
-
-<ul class="main-navigation">
-    <li><a href="http://mlwhiz.com">Blog</a></li>
-    <li><a href="http://mlwhiz.com/archives.html">Archives</a></li>
-    <li><a href="http://mlwhiz.com/pages/about.html">About</a></li>
-    <li><a href="http://mlwhiz.com/pages/links.html">Great Links</a></li>
+  MathJax.Hub.Config({
   
-</ul></nav>
-  <div id="main">
-    <div id="content">
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+			<img style="position: absolute;  top:24px; right: 32px; height:46%; width:8%" src="/images/M_2000.png" alt="MLWhiz" />
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
 
-<div>
-  <article class="hentry" role="article">
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
 
-<header>
-      <h1 class="entry-title">Today I Learned This Part 2: Pretrained Neural Networks What are they?</h1>
-      <p class="meta"><time datetime="2017-04-17T04:43:00" pubdate>Apr 17, 2017</time></p>
+	</div>
 </header>
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Today I Learned This Part 2: Pretrained Neural Networks What are they?</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2017-04-17T00:00:00">April 17, 2017</time>
+</div>
+</div>
+		</header><div class="content post__content clearfix">
+			
 
-  <div class="entry-content"><p>Deeplearning is the buzz word right now. I was working on the <a href="http://www.fast.ai/">course</a> for deep learning by Jeremy Howard and one thing I noticed were pretrained deep Neural Networks. In the first lesson he used the pretrained NN to predict on the <a href="https://www.kaggle.com/c/dogs-vs-cats">Dogs vs Cats</a> competition on Kaggle to achieve very good results.</p>
-<h2>What are pretrained Neural Networks?</h2>
+<p>Deeplearning is the buzz word right now. I was working on the <a href="http://www.fast.ai/" rel="nofollow" target="_blank">course</a> for deep learning by Jeremy Howard and one thing I noticed were pretrained deep Neural Networks. In the first lesson he used the pretrained NN to predict on the <a href="https://www.kaggle.com/c/dogs-vs-cats" rel="nofollow" target="_blank">Dogs vs Cats</a> competition on Kaggle to achieve very good results.</p>
+
+<h2 id="what-are-pretrained-neural-networks">What are pretrained Neural Networks?</h2>
+
 <p>So let me tell you about the background a little bit. There is a challenge that happens every year in the visual recognition community - The Imagenet Challenge. The task there is to classify the images in 1000 categories using Image training data. People train big convolutional deep learning models for this challenge.</p>
+
 <p>Now what does training a neural model actually mean? It just means that they learn the weights for a NN. What if we can get the weights they learn? We can use those weights to load them into our own NN model and predict on the test dataset. Right?</p>
+
 <p>But actually we can go further than that. We can add an extra layer on top of the NN they have prepared to classify our own dataset.</p>
+
 <p>In a way you can think of the intermediate features created by the Pretrained neural networks to be the features for the next layer.</p>
-<h2>Why it works?</h2>
+
+<h2 id="why-it-works">Why it works?</h2>
+
 <p>We are essentially doing the image classification task only. We need to find out edges, shapes, intensities and other features from the images that are given to us. The pretrained model is already pretty good at finding these sort of features. Forget neural nets, if we plug these features into a machine learning algorithm we should be good.</p>
+
 <p>What we actually do here is replace the last layer of the neural network with a new prediction/output layer and train while keeping the weights for all the layers before the second last layer constant.</p>
-<h2>Code:</h2>
+
+<h2 id="code">Code:</h2>
+
 <p>I assume that you understand Keras a little. If not you can look at the docs.
 Let us get into coding now. First of all we will create the architecture of the neural network the VGG Team created in 2014. Then we will load the weights.</p>
+
 <p>Import some stuff</p>
-<pre style="font-size:80%; padding:7px; margin:0em;">
-<code class="python">import numpy as np
-from numpy.random import random, permutation
-from scipy import misc, ndimage
-from scipy.ndimage.interpolation import zoom
-import keras
-from keras import backend as K
-from keras.utils.data_utils import get_file
-from keras.models import Sequential, Model
-from keras.layers.core import Flatten, Dense, Dropout, Lambda
-from keras.layers import Input
-from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
-from keras.optimizers import SGD, RMSprop, Adam
-from keras.preprocessing import image
-</code></pre>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">from</span> numpy.random <span style="color:#f92672">import</span> random, permutation
+<span style="color:#f92672">from</span> scipy <span style="color:#f92672">import</span> misc, ndimage
+<span style="color:#f92672">from</span> scipy.ndimage.interpolation <span style="color:#f92672">import</span> zoom
+<span style="color:#f92672">import</span> keras
+<span style="color:#f92672">from</span> keras <span style="color:#f92672">import</span> backend <span style="color:#66d9ef">as</span> K
+<span style="color:#f92672">from</span> keras.utils.data_utils <span style="color:#f92672">import</span> get_file
+<span style="color:#f92672">from</span> keras.models <span style="color:#f92672">import</span> Sequential, Model
+<span style="color:#f92672">from</span> keras.layers.core <span style="color:#f92672">import</span> Flatten, Dense, Dropout, Lambda
+<span style="color:#f92672">from</span> keras.layers <span style="color:#f92672">import</span> Input
+<span style="color:#f92672">from</span> keras.layers.convolutional <span style="color:#f92672">import</span> Convolution2D, MaxPooling2D, ZeroPadding2D
+<span style="color:#f92672">from</span> keras.optimizers <span style="color:#f92672">import</span> SGD, RMSprop, Adam
+<span style="color:#f92672">from</span> keras.preprocessing <span style="color:#f92672">import</span> image</code></pre></div>
+<p>VGG has just one type of convolutional block, and one type of fully connected (&lsquo;dense&rsquo;) block. We start by defining the building blocks of our Deep learning model.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ConvBlock</span>(layers, model, filters):
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(layers):
+        model<span style="color:#f92672">.</span>add(ZeroPadding2D((<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>)))
+        model<span style="color:#f92672">.</span>add(Convolution2D(filters, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">3</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>))
+    model<span style="color:#f92672">.</span>add(MaxPooling2D((<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">2</span>), strides<span style="color:#f92672">=</span>(<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">2</span>)))
 
-<p>VGG has just one type of convolutional block, and one type of fully connected ('dense') block. We start by defining the building blocks of our Deep learning model.</p>
-<pre style="font-size:80%; padding:7px; margin:0em;">
-<code class="python">def ConvBlock(layers, model, filters):
-    for i in range(layers):
-        model.add(ZeroPadding2D((1,1)))
-        model.add(Convolution2D(filters, 3, 3, activation='relu'))
-    model.add(MaxPooling2D((2,2), strides=(2,2)))
-
-def FCBlock(model):
-    model.add(Dense(4096, activation='relu'))
-    model.add(Dropout(0.5))
-</code></pre>
-
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">FCBlock</span>(model):
+    model<span style="color:#f92672">.</span>add(Dense(<span style="color:#ae81ff">4096</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>))
+    model<span style="color:#f92672">.</span>add(Dropout(<span style="color:#ae81ff">0.5</span>))</code></pre></div>
 <script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script>
 
 <p>Now the input of the VGG Model was images. When the VGG model was trained in 2014, the creators subtracted the average of each of the three (R,G,B) channels first, so that the data for each channel had a mean of zero. Furthermore, their software that expected the channels to be in B,G,R order, whereas Python by default uses R,G,B. We need to preprocess our data to make these two changes, so that it is compatible with the VGG model. We also add some helper functions.</p>
-<pre style="font-size:80%; padding:7px; margin:0em;">
-<code class="python">#Mean of each channel as provided by VGG researchers
-vgg_mean = np.array([123.68, 116.779, 103.939]).reshape((3,1,1))
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e">#Mean of each channel as provided by VGG researchers</span>
+vgg_mean <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">123.68</span>, <span style="color:#ae81ff">116.779</span>, <span style="color:#ae81ff">103.939</span>])<span style="color:#f92672">.</span>reshape((<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>))
 
-def vgg_preprocess(x):
-    x = x - vgg_mean     # subtract mean
-    return x[:, ::-1]    # reverse axis bgr->rgb
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">vgg_preprocess</span>(x):
+    x <span style="color:#f92672">=</span> x <span style="color:#f92672">-</span> vgg_mean     <span style="color:#75715e"># subtract mean</span>
+    <span style="color:#66d9ef">return</span> x[:, ::<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]    <span style="color:#75715e"># reverse axis bgr-&gt;rgb</span>
 
-def VGG_16():
-    model = Sequential()
-    model.add(Lambda(vgg_preprocess, input_shape=(3,224,224)))
-    ConvBlock(2, model, 64)
-    ConvBlock(2, model, 128)
-    ConvBlock(3, model, 256)
-    ConvBlock(3, model, 512)
-    ConvBlock(3, model, 512)
-    model.add(Flatten())
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">VGG_16</span>():
+    model <span style="color:#f92672">=</span> Sequential()
+    model<span style="color:#f92672">.</span>add(Lambda(vgg_preprocess, input_shape<span style="color:#f92672">=</span>(<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">224</span>,<span style="color:#ae81ff">224</span>)))
+    ConvBlock(<span style="color:#ae81ff">2</span>, model, <span style="color:#ae81ff">64</span>)
+    ConvBlock(<span style="color:#ae81ff">2</span>, model, <span style="color:#ae81ff">128</span>)
+    ConvBlock(<span style="color:#ae81ff">3</span>, model, <span style="color:#ae81ff">256</span>)
+    ConvBlock(<span style="color:#ae81ff">3</span>, model, <span style="color:#ae81ff">512</span>)
+    ConvBlock(<span style="color:#ae81ff">3</span>, model, <span style="color:#ae81ff">512</span>)
+    model<span style="color:#f92672">.</span>add(Flatten())
     FCBlock(model)
     FCBlock(model)
-    model.add(Dense(1000, activation='softmax'))
-    return model
+    model<span style="color:#f92672">.</span>add(Dense(<span style="color:#ae81ff">1000</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>))
+    <span style="color:#66d9ef">return</span> model
 
 
-def finetune(model, num_classes):
-    # Drop last layer
-    model.pop()
-    # Make all layers untrainable. i.e fix all weights
-    for layer in model.layers: layer.trainable=False
-    # Add a new layer which is the new output layer
-    model.add(Dense(num_classes, activation='softmax'))
-    model.compile(optimizer=Adam(lr=0.001),
-                loss='categorical_crossentropy', metrics=['accuracy'])
-    return model
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">finetune</span>(model, num_classes):
+    <span style="color:#75715e"># Drop last layer</span>
+    model<span style="color:#f92672">.</span>pop()
+    <span style="color:#75715e"># Make all layers untrainable. i.e fix all weights</span>
+    <span style="color:#66d9ef">for</span> layer <span style="color:#f92672">in</span> model<span style="color:#f92672">.</span>layers: layer<span style="color:#f92672">.</span>trainable<span style="color:#f92672">=</span>False
+    <span style="color:#75715e"># Add a new layer which is the new output layer</span>
+    model<span style="color:#f92672">.</span>add(Dense(num_classes, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>))
+    model<span style="color:#f92672">.</span>compile(optimizer<span style="color:#f92672">=</span>Adam(lr<span style="color:#f92672">=</span><span style="color:#ae81ff">0.001</span>),
+                loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;categorical_crossentropy&#39;</span>, metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>])
+    <span style="color:#66d9ef">return</span> model
 
 
-# A way to generate batches of images
-def get_batches(path, dirname, gen=image.ImageDataGenerator(), shuffle=True,
-                batch_size=64, class_mode='categorical'):
-    return gen.flow_from_directory(path+dirname, target_size=(224,224),
-                class_mode=class_mode, shuffle=shuffle, batch_size=batch_size)
-</code></pre>
-
-<p>The hard part is done now. Just create a VGG object and load the weights.We will need to load pretrained weights into the model too. You can download the "VGG16_weights.h5" file <a href="https://drive.google.com/file/d/0Bz7KyqmuGsilT0J5dmRCM0ROVHc/view">here</a></p>
-<pre style="font-size:80%; padding:7px; margin:0em;">
-<code class="python">model = VGG_16()
-model.load_weights('VGG16_weights.h5')
-# Since our dogs vs cat dataset is binary classification model
-ftmodel = finetune(model,2)
-print ftmodel.summary()
-</code></pre>
-
-<div style="margin-top: 9px; margin-bottom: 10px;">
+<span style="color:#75715e"># A way to generate batches of images</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_batches</span>(path, dirname, gen<span style="color:#f92672">=</span>image<span style="color:#f92672">.</span>ImageDataGenerator(), shuffle<span style="color:#f92672">=</span>True,
+                batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span>, class_mode<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;categorical&#39;</span>):
+    <span style="color:#66d9ef">return</span> gen<span style="color:#f92672">.</span>flow_from_directory(path<span style="color:#f92672">+</span>dirname, target_size<span style="color:#f92672">=</span>(<span style="color:#ae81ff">224</span>,<span style="color:#ae81ff">224</span>),
+                class_mode<span style="color:#f92672">=</span>class_mode, shuffle<span style="color:#f92672">=</span>shuffle, batch_size<span style="color:#f92672">=</span>batch_size)</code></pre></div>
+<p>The hard part is done now. Just create a VGG object and load the weights.We will need to load pretrained weights into the model too. You can download the &ldquo;VGG16_weights.h5&rdquo; file <a href="https://drive.google.com/file/d/0Bz7KyqmuGsilT0J5dmRCM0ROVHc/view" rel="nofollow" target="_blank">here</a></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">model <span style="color:#f92672">=</span> VGG_16()
+model<span style="color:#f92672">.</span>load_weights(<span style="color:#e6db74">&#39;VGG16_weights.h5&#39;</span>)
+<span style="color:#75715e"># Since our dogs vs cat dataset is binary classification model</span>
+ftmodel <span style="color:#f92672">=</span> finetune(model,<span style="color:#ae81ff">2</span>)
+<span style="color:#66d9ef">print</span> ftmodel<span style="color:#f92672">.</span>summary()</code></pre></div>
+<p><div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/keras_net.png"  height="400" width="500" ></center>
 </div>
+Showing a little bit of output here. This is how the last layers of our Neural net look after training. Now we have got a architecture which we got to train. Here we are only training to get the last layer weights. As you can see from the trainable params.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">path <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;dogscats/&#34;</span>
+batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span>
 
-<p>Showing a little bit of output here. This is how the last layers of our Neural net look after training. Now we have got a architecture which we got to train. Here we are only training to get the last layer weights. As you can see from the trainable params.</p>
-<pre style="font-size:80%; padding:7px; margin:0em;">
-<code class="python">path = "dogscats/"
-batch_size=64
+<span style="color:#75715e"># Iterators to get our images from our datasets. The datasets are folders named train and valid. Both folder contain two directories &#39;dogs&#39; and &#39;cats&#39;. In each directory the corresponding images are kept.</span>
 
-# Iterators to get our images from our datasets. The datasets are folders named train and valid. Both folder contain two directories 'dogs' and 'cats'. In each directory the corresponding images are kept.
+batches <span style="color:#f92672">=</span> get_batches(path,<span style="color:#e6db74">&#39;train&#39;</span>, batch_size<span style="color:#f92672">=</span>batch_size)
+val_batches <span style="color:#f92672">=</span> get_batches(path,<span style="color:#e6db74">&#39;valid&#39;</span>, batch_size<span style="color:#f92672">=</span>batch_size)
 
-batches = get_batches(path,'train', batch_size=batch_size)
-val_batches = get_batches(path,'valid', batch_size=batch_size)
+<span style="color:#75715e"># Now run for some epochs till the validation loss stops decreasing.</span>
+no_of_epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
 
-# Now run for some epochs till the validation loss stops decreasing.
-no_of_epochs=1
+<span style="color:#66d9ef">for</span> epoch <span style="color:#f92672">in</span> range(no_of_epochs):
+    <span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;Running epoch: </span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> epoch
+    ftmodel<span style="color:#f92672">.</span>fit_generator(batches, samples_per_epoch<span style="color:#f92672">=</span>batches<span style="color:#f92672">.</span>nb_sample, nb_epoch<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>,
+                validation_data<span style="color:#f92672">=</span>val_batches, nb_val_samples<span style="color:#f92672">=</span>val_batches<span style="color:#f92672">.</span>nb_sample)
+    latest_weights_filename <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;ft</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">.h5&#39;</span> <span style="color:#f92672">%</span> epoch
+    ftmodel<span style="color:#f92672">.</span>save_weights(latest_weights_filename)
 
-for epoch in range(no_of_epochs):
-    print "Running epoch: %d" % epoch
-    ftmodel.fit_generator(batches, samples_per_epoch=batches.nb_sample, nb_epoch=1,
-                validation_data=val_batches, nb_val_samples=val_batches.nb_sample)
-    latest_weights_filename = 'ft%d.h5' % epoch
-    ftmodel.save_weights(latest_weights_filename)
+<span style="color:#75715e">#Create Predictions on test set. The test images should be in the folder dogscats/test/test_images/ , which is a single directory containing all images.</span>
 
-#Create Predictions on test set. The test images should be in the folder dogscats/test/test_images/ , which is a single directory containing all images.
+test_batches <span style="color:#f92672">=</span> get_batches(path, <span style="color:#e6db74">&#39;test&#39;</span>, batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span><span style="color:#f92672">*</span>batch_size, class_mode<span style="color:#f92672">=</span>None)
 
-test_batches = get_batches(path, 'test', batch_size=2*batch_size, class_mode=None)
+preds <span style="color:#f92672">=</span> ftmodel<span style="color:#f92672">.</span>predict_generator(test_batches, test_batches<span style="color:#f92672">.</span>nb_sample)
 
-preds = ftmodel.predict_generator(test_batches, test_batches.nb_sample)
+isdog <span style="color:#f92672">=</span> preds[:,<span style="color:#ae81ff">1</span>]
+image_id <span style="color:#f92672">=</span> batches<span style="color:#f92672">.</span>filenames
+final_submission <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>stack([ids,isdog], axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)</code></pre></div>
+<p>And we are done!</p>
 
-isdog = preds[:,1]
-image_id = batches.filenames
-final_submission = np.stack([ids,isdog], axis=1)
-</code></pre>
-
-<p>And we are done!</p></div>
-
-<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.415&subid=0&type=4"><IMG border="0"   alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.415&subid=0&type=4&gridnum=16"></a>    <footer>
-<p class="meta">
-  <span class="byline author vcard">
-    Posted by <span class="fn">Rahul Agarwal</span>
-  </span>
-<time datetime="2017-04-17T04:43:00" pubdate>Apr 17, 2017</time>  <span class="categories">
-    <a class="category" href="https://mlwhiz.com/tag/deeplearning.html">deeplearning</a>
-    <a class="category" href="https://mlwhiz.com/tag/pretrained-models.html">pretrained models</a>
-  </span>
-  <br>
-  <span style="font-size:14px;color:green">
-  Advertiser Disclosure: All Amazon links are affiliate links, which means I receive compensation for any purchases through them. You do not have to purchase via my links, but you support me if you do.
-  </span>
-</p><div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
-
-<!--
-<div class="sharing">
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mlwhiz.com/blog/2017/04/17/deep_learning_pretrained_models/" data-via="MLWhiz" data-counturl="mlwhiz.com/blog/2017/04/17/deep_learning_pretrained_models/" >Tweet</a>
-  <div class="g-plusone" data-size="medium"></div>
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/deeplearning/" rel="tag">deeplearning</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/pretrained-models/" rel="tag">pretrained models</a></li>
+	</ul>
 </div>
--->    </footer>
-  </article>
-  
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
-  </section>
-
-</div>
-<aside class="sidebar">
-  <section>
-
-     <!-- Bbuy coffee ko-fi Form -->
-  <div style="text-align:center">    
-  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
-  </div>
-
-    <h1>Recent Posts</h1>
-    <ul id="recent_posts">
-      <li class="post">
-          <a href="https://mlwhiz.com/blog/2019/01/17/deeplearning_nlp_preprocess/">NLP Learning Series: Text Preprocessing Methods for Deep Learning</a>
-      </li>
-      <li class="post">
-          <a href="https://mlwhiz.com/blog/2019/01/06/pytorch_keras_conversion/">A Layman guide to moving from Keras to Pytorch</a>
-      </li>
-      <li class="post">
-          <a href="https://mlwhiz.com/blog/2018/12/17/text_classification/">What Kagglers are using for Text Classification</a>
-      </li>
-      <li class="post">
-          <a href="https://mlwhiz.com/blog/2018/12/07/connected_components/">To all Data Scientists - The one Graph Algorithm you need to know</a>
-      </li>
-      <li class="post">
-          <a href="https://mlwhiz.com/blog/2018/09/22/object_detection/">Object Detection: An End to End Theoretical Perspective</a>
-      </li>
-      <li class="post">
-          <a href="https://mlwhiz.com/blog/2017/12/28/hyperopt_tuning_ml_model/">Hyperopt - A bayesian Parameter Tuning Framework</a>
-      </li>
-      <li class="post">
-          <a href="https://mlwhiz.com/blog/2017/12/26/How_to_win_a_data_science_competition/">Using XGBoost for time series prediction tasks</a>
-      </li>
-    </ul>
-  </section>
-<!--
-  <section>
-
-    <h1>Categories</h1>
-    <ul id="recent_posts">
-        <li><a href="https://mlwhiz.com/category/ai-deep-learningkaggle.html">ai, deep learning,kaggle</a></li>
-        <li><a href="https://mlwhiz.com/category/ai-deep-learningkaggle-nlp.html">ai, deep learning,kaggle, NLP</a></li>
-        <li><a href="https://mlwhiz.com/category/big-data.html">Big Data</a></li>
-        <li><a href="https://mlwhiz.com/category/data-science-statistics-resources-learning-books-python-distributions-statistical-inference-hadoop-spark-deep-learning.html">Data Science, Statistics, Resources, Learning, Books, Python, Distributions, Statistical Inference, hadoop, spark, deep learning</a></li>
-        <li><a href="https://mlwhiz.com/category/deep-learning-image.html">deep learning, image</a></li>
-        <li><a href="https://mlwhiz.com/category/hadoop.html">Hadoop</a></li>
-        <li><a href="https://mlwhiz.com/category/machine-learning-statistics-linear-regression.html">Machine Learning, Statistics, Linear Regression</a></li>
-        <li><a href="https://mlwhiz.com/category/pyspark-python.html">pyspark, python</a></li>
-        <li><a href="https://mlwhiz.com/category/python.html">Python</a></li>
-        <li><a href="https://mlwhiz.com/category/python-bash-tools.html">Python, bash, tools</a></li>
-        <li><a href="https://mlwhiz.com/category/python-flask-ml.html">Python, Flask, ML</a></li>
-        <li><a href="https://mlwhiz.com/category/python-kaggle-coursera.html">Python, kaggle, coursera,</a></li>
-        <li><a href="https://mlwhiz.com/category/python-machine-learning.html">Python, machine learning</a></li>
-        <li><a href="https://mlwhiz.com/category/python-machine-learning-hyperopt-bayesian-xgboost.html">Python, machine learning, hyperopt, bayesian, xgboost</a></li>
-        <li><a href="https://mlwhiz.com/category/python-machine-learning-probability.html">Python, machine learning, probability</a></li>
-        <li><a href="https://mlwhiz.com/category/python-nlp-algorithms-kaggle.html">Python, NLP, Algorithms, Kaggle</a></li>
-        <li><a href="https://mlwhiz.com/category/python-nlp-algorithms-kaggle-tilt.html">Python, NLP, Algorithms, Kaggle ,TILT</a></li>
-        <li><a href="https://mlwhiz.com/category/python-statistics.html">Python, Statistics</a></li>
-        <li><a href="https://mlwhiz.com/category/python-visualization-statistics.html">Python, Visualization, Statistics</a></li>
-        <li><a href="https://mlwhiz.com/category/statistics.html">Statistics</a></li>
-        <li><a href="https://mlwhiz.com/category/statisticsdata-science.html">statistics,data science</a></li>
-        <li><a href="https://mlwhiz.com/category/statisticsprobability.html">statistics,probability</a></li>
-        <li><a href="https://mlwhiz.com/category/vw.html">VW</a></li>
-    </ul>
-  </section>
+		<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+	</article>
+</main>
 
 
-  <section>
-  <h1>Tags</h1>
-    <a href="https://mlwhiz.com/tag/.html"></a>,    <a href="https://mlwhiz.com/tag/nlp.html">NLP</a>,    <a href="https://mlwhiz.com/tag/data-munging.html">data munging</a>,    <a href="https://mlwhiz.com/tag/attention-models-for-text.html">Attention models for text</a>,    <a href="https://mlwhiz.com/tag/data-science.html">data science</a>,    <a href="https://mlwhiz.com/tag/probability.html">probability</a>,    <a href="https://mlwhiz.com/tag/big-data.html">Big Data</a>,    <a href="https://mlwhiz.com/tag/cdf.html">cdf</a>,    <a href="https://mlwhiz.com/tag/dataframe.html">dataframe</a>,    <a href="https://mlwhiz.com/tag/deep-learning.html">deep learning</a>,    <a href="https://mlwhiz.com/tag/rcnn.html">rcnn</a>,    <a href="https://mlwhiz.com/tag/books.html">Books</a>,    <a href="https://mlwhiz.com/tag/ggplot2.html">ggplot2</a>,    <a href="https://mlwhiz.com/tag/text-classification.html">text classification</a>,    <a href="https://mlwhiz.com/tag/learning.html">learning</a>,    <a href="https://mlwhiz.com/tag/statistic.html">Statistic</a>,    <a href="https://mlwhiz.com/tag/bidirectional-rnn.html">bidirectional RNN</a>,    <a href="https://mlwhiz.com/tag/graph-algorithms.html">graph algorithms</a>,    <a href="https://mlwhiz.com/tag/distributions.html">distributions</a>,    <a href="https://mlwhiz.com/tag/hyperparameter-tuning.html">hyperparameter tuning</a>,    <a href="https://mlwhiz.com/tag/stanford-software-seaborn.html">stanford software seaborn</a>,    <a href="https://mlwhiz.com/tag/apache-spark.html">Apache Spark</a>,    <a href="https://mlwhiz.com/tag/statistics.html">Statistics</a>,    <a href="https://mlwhiz.com/tag/vw.html">vw</a>,    <a href="https://mlwhiz.com/tag/pairplot-seaborn.html">pairplot seaborn</a>,    <a href="https://mlwhiz.com/tag/bidirectional-gru-for-text.html">bidirectional GRU for text</a>,    <a href="https://mlwhiz.com/tag/seaborn.html">Seaborn</a>,    <a href="https://mlwhiz.com/tag/artificial-intelligence.html">artificial intelligence</a>,    <a href="https://mlwhiz.com/tag/hadoop.html">hadoop</a>,    <a href="https://mlwhiz.com/tag/categorical-data.html">categorical data</a>,    <a href="https://mlwhiz.com/tag/birnn.html">birnn</a>,    <a href="https://mlwhiz.com/tag/machine-learning.html">machine learning</a>,    <a href="https://mlwhiz.com/tag/deeplearning.html">deeplearning</a>,    <a href="https://mlwhiz.com/tag/geometric.html">geometric</a>,    <a href="https://mlwhiz.com/tag/pandas.html">pandas</a>,    <a href="https://mlwhiz.com/tag/resources.html">Resources</a>,    <a href="https://mlwhiz.com/tag/linear-regression.html">Linear Regression</a>,    <a href="https://mlwhiz.com/tag/object-detection.html">object detection</a>,    <a href="https://mlwhiz.com/tag/pyspark.html">Pyspark</a>,    <a href="https://mlwhiz.com/tag/python.html">python</a>,    <a href="https://mlwhiz.com/tag/faster-rcnn.html">faster rcnn</a>,    <a href="https://mlwhiz.com/tag/kaggle.html">Kaggle</a>,    <a href="https://mlwhiz.com/tag/matplotlib.html">Matplotlib</a>,    <a href="https://mlwhiz.com/tag/binomial.html">binomial</a>,    <a href="https://mlwhiz.com/tag/variance.html">variance</a>,    <a href="https://mlwhiz.com/tag/regplot.html">regplot</a>,    <a href="https://mlwhiz.com/tag/python-visualizations.html">Python Visualizations</a>,    <a href="https://mlwhiz.com/tag/spark.html">spark</a>,    <a href="https://mlwhiz.com/tag/cs109.html">cs109</a>,    <a href="https://mlwhiz.com/tag/bash-for-data-science.html">bash for data science</a>,    <a href="https://mlwhiz.com/tag/web-scraping.html">web scraping</a>,    <a href="https://mlwhiz.com/tag/basics.html">Basics</a>,    <a href="https://mlwhiz.com/tag/ctr.html">ctr</a>,    <a href="https://mlwhiz.com/tag/statistical-inference.html">Statistical Inference</a>,    <a href="https://mlwhiz.com/tag/expected-value.html">expected value</a>,    <a href="https://mlwhiz.com/tag/bidirectional-lstm-for-text.html">bidirectional LSTM for text</a>,    <a href="https://mlwhiz.com/tag/layman-explanations.html">Layman Explanations</a>,    <a href="https://mlwhiz.com/tag/mapreduce.html">mapreduce</a>,    <a href="https://mlwhiz.com/tag/slr.html">SLR</a>,    <a href="https://mlwhiz.com/tag/openshift.html">Openshift</a>,    <a href="https://mlwhiz.com/tag/mlr.html">MLR</a>,    <a href="https://mlwhiz.com/tag/pretrained-models.html">pretrained models</a>,    <a href="https://mlwhiz.com/tag/algorithms.html">Algorithms</a>,    <a href="https://mlwhiz.com/tag/poisson.html">poisson</a>,    <a href="https://mlwhiz.com/tag/bayesian-optimization.html">bayesian optimization</a>,    <a href="https://mlwhiz.com/tag/bash-commands.html">bash commands</a>,    <a href="https://mlwhiz.com/tag/pdf.html">pdf</a>,    <a href="https://mlwhiz.com/tag/deploy-ml-models.html">Deploy ML Models</a>,    <a href="https://mlwhiz.com/tag/lmplot-seaborn.html">lmplot seaborn</a>,    <a href="https://mlwhiz.com/tag/flaskapp.html">FlaskApp</a>  </section>
--->
-<!--
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2017/04/16/maths_beats_intuition/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Maths Beats Intuition probably every damn time</p></a>
+	</div>
+	<div class="post-nav__item post-nav__item--next">
+		<a class="post-nav__link" href="/blog/2017/09/14/discrete_distributions/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">The story of every distribution - Discrete Distributions</p></a>
+	</div>
+</nav>
 
-    <section>
-        <h1>Social</h1>
-        <ul>
-            <li><a href="http://mlwhiz.com/feed.rss" type="application/rss+xml" rel="alternate">RSS</a></li>
-            <li><a href="http://mlwhiz.com/atom.xml" type="application/atom+xml" rel="alternate">Atom</a></li>
-            <li><a href="http://twitter.com/mlwhiz" target="_blank">twitter</a></li>
-        </ul>
-    </section>
-
-
-<section>
-    <a href="http://twitter.com/MLWhiz" class="twitter-follow-button" data-show-count="true">Follow @MLWhiz</a>
-</section>
--->
-
-  <section>
-
-
-
-
- <!-- Begin shareaholic follow -->
-   <div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
-  <!-- Begin MailChimp Signup Form -->
-<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
-<style type="text/css">
-  #mc_embed_signup .button {background-color: #127edc;}
-  #mc_embed_signup form {
-    display: block;
-    position: relative;
-    text-align: left;
-    padding: 10px -5px 10px 3%;}
-  /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
-     We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
-</style>
-<div id="mc_embed_signup">
-<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-    <div id="mc_embed_signup_scroll">
-    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
-    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
-    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-    </div>
-</form>
-</div>
-</section>
-<!--End mc_embed_signup-->
-
-</aside>    </div>
-  </div>
-  <footer role="contentinfo" style="margin-bottom:0em"><p>
-  <script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
-    Copyright &copy;  2014-2019  - Rahul Agarwal -
-  <span class="credit">Powered by <a href="http://getpelican.com">Pelican</a></span>
-</p>  <script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
-  </footer>
-    <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-54777926-1']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-    ga('create', 'UA-54777926-1');
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
     
-    ga('send', 'pageview');
-</script>
-	<script type="text/javascript">
-	  var disqus_shortname = 'mlwhiz';
-          var disqus_identifier = '/blog/2017/04/17/deep_learning_pretrained_models/';
-          var disqus_url = 'https://mlwhiz.com/blog/2017/04/17/deep_learning_pretrained_models/';
-          var disqus_title = 'Today I Learned This Part 2: Pretrained Neural Networks What are they?';
-	  (function() {
-	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-	    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
-	    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	   })();
-	</script>
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-	  
-    })();
-  </script>
-  <script type="text/javascript">
+    
+    
+    };
     (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
-  </script>
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {return;}
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-</body>
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
 
+
+			</div>
+			
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2019 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script async defer src="/js/menu.js"></script></body>
 </html>
