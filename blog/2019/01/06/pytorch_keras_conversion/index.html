@@ -294,7 +294,14 @@ if (!doNotTrack) {
 </span><span style="color:#e6db74">        and the second one is a additional feature vector(x[1])
 </span><span style="color:#e6db74">        &#39;&#39;&#39;</span>
         h_embedding <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>embedding(x[<span style="color:#ae81ff">0</span>])
-        h_embedding <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>squeeze(self<span style="color:#f92672">.</span>embedding_dropout(torch<span style="color:#f92672">.</span>unsqueeze(h_embedding, <span style="color:#ae81ff">0</span>)))
+        <span style="color:#75715e"># Based on comment by Ivank to integrate spatial dropout. </span>
+        embeddings <span style="color:#f92672">=</span> h_embedding<span style="color:#f92672">.</span>unsqueeze(<span style="color:#ae81ff">2</span>)    <span style="color:#75715e"># (N, T, 1, K)</span>
+        embeddings <span style="color:#f92672">=</span> embeddings<span style="color:#f92672">.</span>permute(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>)  <span style="color:#75715e"># (N, K, 1, T)</span>
+        embeddings <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>embedding_dropout(embeddings)  <span style="color:#75715e"># (N, K, 1, T), some features are masked</span>
+        embeddings <span style="color:#f92672">=</span> embeddings<span style="color:#f92672">.</span>permute(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>)  <span style="color:#75715e"># (N, T, 1, K)</span>
+        h_embedding <span style="color:#f92672">=</span> embeddings<span style="color:#f92672">.</span>squeeze(<span style="color:#ae81ff">2</span>)  <span style="color:#75715e"># (N, T, K)</span>
+        <span style="color:#75715e">#h_embedding = torch.squeeze(self.embedding_dropout(torch.unsqueeze(h_embedding, 0)))</span>
+        
         <span style="color:#75715e">#print(&#34;emb&#34;, h_embedding.size())</span>
         h_lstm, _ <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>lstm(h_embedding)
         <span style="color:#75715e">#print(&#34;lst&#34;,h_lstm.size())</span>
