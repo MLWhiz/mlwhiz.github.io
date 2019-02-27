@@ -8,7 +8,7 @@
     <language>en-us</language>
     <lastBuildDate>Thu, 28 Dec 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://mlwhiz.com/tags/bayesian-optimization/atom.xml" rel="self" type="application/rss" />
+        <atom:link href="https://mlwhiz.com/tags/bayesian-optimization/atom.xml" rel="self" type="application/rss" />
     
     
     <item>
@@ -17,8 +17,88 @@
       <pubDate>Thu, 28 Dec 2017 00:00:00 +0000</pubDate>
       
       <guid>https://mlwhiz.com/blog/2017/12/28/hyperopt_tuning_ml_model/</guid>
-      <description>Recently I was working on a in-class competition from the &amp;ldquo;How to win a data science competition&amp;rdquo; Coursera course. You can start for free with the 7-day Free Trial. Learned a lot of new things from that about using XGBoost for time series prediction tasks.
-The one thing that I tried out in this competition was the Hyperopt package - A bayesian Parameter Tuning Framework. And I was literally amazed.</description>
+      <description>
+
+&lt;p&gt;Recently I was working on a in-class competition from the &lt;a href=&#34;https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&amp;ldquo;How to win a data science competition&amp;rdquo;&lt;/a&gt; Coursera course. You can start for free with the 7-day Free Trial. Learned a lot of new things from that about using &lt;a href=&#34;https://mlwhiz.com/blog/2017/12/26/how_to_win_a_data_science_competition/&#34;&gt;XGBoost for time series prediction&lt;/a&gt; tasks.&lt;/p&gt;
+
+&lt;p&gt;The one thing that I tried out in this competition was the Hyperopt package - A bayesian Parameter Tuning Framework. And I was literally amazed. Left the machine with hyperopt in the night. And in the morning I had my results. It was really awesome and I did avoid a lot of hit and trial.&lt;/p&gt;
+
+&lt;h2 id=&#34;what-really-is-hyperopt&#34;&gt;What really is Hyperopt?&lt;/h2&gt;
+
+&lt;p&gt;From the site:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Hyperopt is a Python library for serial and parallel optimization over awkward search spaces, which may include real-valued, discrete, and conditional dimensions.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;What the above means is that it is a optimizer that could minimize/maximize the loss function/accuracy(or whatever metric) for you.&lt;/p&gt;
+
+&lt;p&gt;All of us are fairly known to cross-grid search or random-grid search. Hyperopt takes as an input a space of hyperparams in which it will search, and moves according to the result of past trials.&lt;/p&gt;
+
+&lt;p&gt;To know more about how it does this, take a look at this &lt;a href=&#34;https://conference.scipy.org/proceedings/scipy2013/pdfs/bergstra_hyperopt.pdf&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;paper&lt;/a&gt; by J Bergstra.
+Here is the &lt;a href=&#34;https://github.com/hyperopt/hyperopt/wiki/FMin&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;documentation&lt;/a&gt; from github.&lt;/p&gt;
+
+&lt;h2 id=&#34;how&#34;&gt;How?&lt;/h2&gt;
+
+&lt;p&gt;Let me just put the code first. This is how I define the objective function. The objective function takes space(the hyperparam space) as the input and returns the loss(The thing you want to minimize.Or negative of the thing you want to maximize)&lt;/p&gt;
+
+&lt;p&gt;(X,y) and (Xcv,ycv) are the train and cross validation dataframes respectively.&lt;/p&gt;
+
+&lt;p&gt;We have defined a hyperparam space by using the variable &lt;code&gt;space&lt;/code&gt; which is actually just a dictionary. We could choose different distributions for different parameter values.&lt;/p&gt;
+
+&lt;p&gt;We use the &lt;code&gt;fmin&lt;/code&gt; function from the hyperopt package to minimize our &lt;code&gt;fn&lt;/code&gt; through the &lt;code&gt;space&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; sklearn.metrics &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; mean_squared_error
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; xgboost &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; xgb
+&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; hyperopt &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; hp, fmin, tpe, STATUS_OK, Trials
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; np
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;objective&lt;/span&gt;(space):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(space)
+    clf &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; xgb&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;XGBRegressor(n_estimators &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;,colsample_bytree&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;space[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;colsample_bytree&amp;#39;&lt;/span&gt;],
+                           learning_rate &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;,
+                            max_depth &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; int(space[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;max_depth&amp;#39;&lt;/span&gt;]),
+                            min_child_weight &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; space[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;min_child_weight&amp;#39;&lt;/span&gt;],
+                            subsample &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; space[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;subsample&amp;#39;&lt;/span&gt;],
+                           gamma &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; space[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;gamma&amp;#39;&lt;/span&gt;],
+                           reg_lambda &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; space[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;reg_lambda&amp;#39;&lt;/span&gt;],)
+
+    eval_set  &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [( X, y), ( Xcv, ycv)]
+
+    clf&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fit(X, y,
+            eval_set&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;eval_set, eval_metric&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;rmse&amp;#34;&lt;/span&gt;,
+            early_stopping_rounds&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;,verbose&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False)
+
+    pred &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; clf&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;predict(Xcv)
+    mse_scr &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; mean_squared_error(ycv, pred)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;SCORE:&amp;#34;&lt;/span&gt;, np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sqrt(mse_scr)
+    &lt;span style=&#34;color:#75715e&#34;&gt;#change the metric if you like&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; {&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;loss&amp;#39;&lt;/span&gt;:mse_scr, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;status&amp;#39;&lt;/span&gt;: STATUS_OK }
+
+
+space &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;max_depth&amp;#39;&lt;/span&gt;: hp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;quniform(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;x_max_depth&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;16&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;),
+        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;min_child_weight&amp;#39;&lt;/span&gt;: hp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;quniform (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;x_min_child&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;),
+        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;subsample&amp;#39;&lt;/span&gt;: hp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;uniform (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;x_subsample&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.7&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;),
+        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;gamma&amp;#39;&lt;/span&gt; : hp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;uniform (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;x_gamma&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.1&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;),
+        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;colsample_bytree&amp;#39;&lt;/span&gt; : hp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;uniform (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;x_colsample_bytree&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.7&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;),
+        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;reg_lambda&amp;#39;&lt;/span&gt; : hp&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;uniform (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;x_reg_lambda&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+    }
+
+
+trials &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Trials()
+best &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; fmin(fn&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;objective,
+            space&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;space,
+            algo&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;tpe&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;suggest,
+            max_evals&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;,
+            trials&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;trials)
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt; best&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;finally&#34;&gt;Finally:&lt;/h2&gt;
+
+&lt;p&gt;Running the above gives us pretty good hyperparams for our learning algorithm.
+In fact I bagged up the results from multiple hyperparam settings and it gave me the best score on the LB.
+If you like this and would like to get more information about such things, subscribe to the mailing list on the right hand side.
+Also I would definitely recommend this &lt;a href=&#34;https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;course&lt;/a&gt; about winning Kaggle competitions by Kazanova, Kaggle rank 3 . Do take a look.&lt;/p&gt;
+</description>
     </item>
     
   </channel>

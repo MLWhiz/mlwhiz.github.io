@@ -8,7 +8,7 @@
     <language>en-us</language>
     <lastBuildDate>Sun, 13 Sep 2015 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://mlwhiz.com/tags/matplotlib/atom.xml" rel="self" type="application/rss" />
+        <atom:link href="https://mlwhiz.com/tags/matplotlib/atom.xml" rel="self" type="application/rss" />
     
     
     <item>
@@ -17,8 +17,243 @@
       <pubDate>Sun, 13 Sep 2015 00:00:00 +0000</pubDate>
       
       <guid>https://mlwhiz.com/blog/2015/09/13/seaborn_visualizations/</guid>
-      <description>When it comes to data preparation and getting acquainted with data, the one step we normally skip is the data visualization. While a part of it could be attributed to the lack of good visualization tools for the platforms we use, most of us also get lazy at times.
-Now as we know of it Python never had any good Visualization library. For most of our plotting needs, I would read up blogs, hack up with StackOverflow solutions and haggle with Matplotlib documentation each and every time I needed to make a simple graph.</description>
+      <description>
+
+&lt;p&gt;When it comes to data preparation and getting acquainted with data, the &lt;strong&gt;one step we normally skip is the data visualization&lt;/strong&gt;.
+While a part of it could be attributed to the &lt;strong&gt;lack of good visualization tools&lt;/strong&gt; for the platforms we use, most of us also &lt;strong&gt;get lazy&lt;/strong&gt; at times.&lt;/p&gt;
+
+&lt;p&gt;Now as we know of it Python never had any good Visualization library. For most of our plotting needs, I would read up blogs, hack up with StackOverflow solutions and haggle with &lt;a href=&#34;http://matplotlib.org/&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;Matplotlib&lt;/a&gt; documentation each and every time I needed to make a simple graph. This led me to think that a &lt;strong&gt;Blog post to create common Graph types&lt;/strong&gt; in Python is in order. But being the procrastinator that I am it always got pushed to the back of my head.&lt;/p&gt;
+
+&lt;p&gt;One thing that helped me in pursuit of my data visualization needs in Python was this awesome course about &lt;a href=&#34;https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;Data Visualization and applied plotting&lt;/a&gt; from University of Michigan which is a part of a pretty good &lt;a href=&#34;https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;Data Science Specialization with Python&lt;/a&gt; in itself. Highly Recommended.&lt;/p&gt;
+
+&lt;p&gt;But, yesterday I got introduced to &lt;strong&gt;&lt;a href=&#34;http://stanford.edu/~mwaskom/software/seaborn/&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;Seaborn&lt;/a&gt;&lt;/strong&gt; and I must say I am &lt;strong&gt;quite impressed&lt;/strong&gt; with it. It makes &lt;strong&gt;beautiful graphs&lt;/strong&gt; that are in my opinion &lt;strong&gt;better than R&amp;rsquo;s &lt;a href=&#34;http://ggplot2.org&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;ggplot2&lt;/a&gt;&lt;/strong&gt;. Gives you enough options to &lt;strong&gt;customize&lt;/strong&gt; and the best part is that it is so &lt;strong&gt;easy to learn&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;So I am finally writing this blog post with a basic &lt;strong&gt;purpose of creating a code base&lt;/strong&gt; that provides me with ready to use codes which could be put into analysis in a fairly straight-forward manner.&lt;/p&gt;
+
+&lt;p&gt;Right. So here Goes.&lt;/p&gt;
+
+&lt;p&gt;We Start by importing the libraries that we will need to use.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; matplotlib.pyplot &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; plt  &lt;span style=&#34;color:#75715e&#34;&gt;#sets up plotting under plt&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; seaborn &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; sns 			&lt;span style=&#34;color:#75715e&#34;&gt;#sets up styles and gives us more plotting options&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; pandas &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; pd 			&lt;span style=&#34;color:#75715e&#34;&gt;#lets us handle data as dataframes&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;To create a use case for our graphs, we will be working with the &lt;strong&gt;Tips data&lt;/strong&gt; that contains the following information.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;tips &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;load_dataset(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tips&amp;#34;&lt;/span&gt;)
+tips&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;head()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/tips.png&#34;  height=&#34;400&#34; width=&#34;500&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;scatterplot-with-regression-line&#34;&gt;Scatterplot With Regression Line&lt;/h2&gt;
+
+&lt;p&gt;Now let us work on visualizing this data.
+We will use the &lt;strong&gt;&lt;a href=&#34;http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.regplot.html#seaborn.regplot&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;regplot&lt;/a&gt;&lt;/strong&gt; option in seaborn.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# We dont Probably need the Gridlines. Do we? If yes comment this line&lt;/span&gt;
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set(style&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ticks&amp;#34;&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Here we create a matplotlib axes object. The extra parameters we use&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# &amp;#34;ci&amp;#34; to remove confidence interval&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# &amp;#34;marker&amp;#34; to have a x as marker.&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# &amp;#34;scatter_kws&amp;#34; to provide style info for the points.[s for size]&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# &amp;#34;line_kws&amp;#34; to provide style info for the line.[lw for line width]&lt;/span&gt;
+
+g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;regplot(x&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tip&amp;#34;&lt;/span&gt;, y&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;total_bill&amp;#34;&lt;/span&gt;, data&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;tips, ci &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; False,
+	scatter_kws&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;color&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;darkred&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;alpha&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;0.3&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;s&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;90&lt;/span&gt;},
+	line_kws&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;color&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;g&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;alpha&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;lw&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;},marker&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;x&amp;#34;&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# remove the top and right line in graph&lt;/span&gt;
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;despine()
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the size of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;figure&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_size_inches(&lt;span style=&#34;color:#ae81ff&#34;&gt;12&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the Title of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;axes&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Total Bill vs. Tip&amp;#39;&lt;/span&gt;, fontsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;34&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the xlabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Tip&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;67&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ylabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Total Bill&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;67&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ticklabel size and color of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;tick_params(labelsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;,labelcolor&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;black&amp;#34;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/regplot.png&#34;&gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now that required a bit of a code but i feel that it &lt;strong&gt;looks much better than what either Matplotlib or ggPlot2 could have rendered&lt;/strong&gt;. We got a lot of customization without too much code.&lt;/p&gt;
+
+&lt;p&gt;But that is not really what actually made me like Seaborn. The plot type that actually got my attention was &lt;strong&gt;&lt;a href=&#34;http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.lmplot.html#seaborn.lmplot&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;lmplot&lt;/a&gt;&lt;/strong&gt;, which lets us use &lt;strong&gt;regplot&lt;/strong&gt; in a &lt;strong&gt;faceted&lt;/strong&gt; mode.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# So this function creates a faceted plot. The plot is parameterized by the following:&lt;/span&gt;
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# col : divides the data points into days and creates that many plots&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# palette: deep, muted, pastel, bright, dark, and colorblind. change the colors in graph. Experiment with these&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# col_wrap: we want 2 graphs in a row? Yes.We do&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# scatter_kws: attributes for points&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# hue: Colors on a particular column.&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# size: controls the size of graph&lt;/span&gt;
+
+g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;lmplot(x&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tip&amp;#34;&lt;/span&gt;, y&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;total_bill&amp;#34;&lt;/span&gt;,ci&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;None,data&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;tips, col&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;day&amp;#34;&lt;/span&gt;,
+	palette&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;muted&amp;#34;&lt;/span&gt;,col_wrap&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;,scatter_kws&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;s&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;alpha&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;},
+	line_kws&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;lw&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;alpha&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;},hue&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;day&amp;#34;&lt;/span&gt;,x_jitter&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1.0&lt;/span&gt;,y_jitter&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1.0&lt;/span&gt;,size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# remove the top and right line in graph&lt;/span&gt;
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;despine()
+&lt;span style=&#34;color:#75715e&#34;&gt;# Additional line to adjust some appearance issue&lt;/span&gt;
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;subplots_adjust(top&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.9&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the Title of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fig&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;suptitle(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Total Bill vs. Tip&amp;#39;&lt;/span&gt;, fontsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;34&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the xlabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_xlabels(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Tip&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;50&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ylabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_ylabels(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Total Bill&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;50&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ticklabel size and color of the graph from here&lt;/span&gt;
+titles &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Thursday&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Friday&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Saturday&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Sunday&amp;#39;&lt;/span&gt;]
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; ax,title &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; zip(g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;axes&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;flat,titles):
+    ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;tick_params(labelsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;,labelcolor&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;black&amp;#34;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/lmplot.png&#34;&gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;div style=&#34;color:black; background-color: #E9DAEE;&#34;&gt;
+&lt;a href=&#34;http://stanford.edu/~mwaskom/software/seaborn/tutorial/color_palettes.html#building-color-palettes-with-color-palette&#34;  target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;&lt;strong&gt;A side Note on Palettes&lt;/strong&gt;&lt;/a&gt;:&lt;br&gt;
+You can build your own color palettes using &lt;strong&gt;color_palette()&lt;/strong&gt; function.
+color_palette() will accept the name of any &lt;strong&gt;seaborn palette&lt;/strong&gt; or &lt;a href=&#34;http://matplotlib.org/users/colormaps.html&#34;  target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;&lt;strong&gt;matplotlib colormap&lt;/strong&gt;&lt;/a&gt;(except jet, which you should never use). It can also take a &lt;strong&gt;list of colors&lt;/strong&gt; specified in any valid matplotlib format (RGB tuples, &lt;strong&gt;hex color codes&lt;/strong&gt;, or HTML color names).
+The return value is always a list of RGB tuples. This allows you to use your own color palettes in graph.
+&lt;/div&gt;
+
+&lt;script src=&#34;//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e&#34;&gt;&lt;/script&gt;
+
+&lt;h2 id=&#34;barplots&#34;&gt;Barplots&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set(style&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ticks&amp;#34;&lt;/span&gt;)
+
+flatui &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#9b59b6&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#3498db&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#95a5a6&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#e74c3c&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#34495e&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#2ecc71&amp;#34;&lt;/span&gt;]
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# This Function takes as input a custom palette&lt;/span&gt;
+g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;barplot(x&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;sex&amp;#34;&lt;/span&gt;, y&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tip&amp;#34;&lt;/span&gt;, hue&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;day&amp;#34;&lt;/span&gt;,
+	palette&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;color_palette(flatui),data&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;tips,ci&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;None)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# remove the top and right line in graph&lt;/span&gt;
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;despine()
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the size of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;figure&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_size_inches(&lt;span style=&#34;color:#ae81ff&#34;&gt;12&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the Title of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;axes&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Do We tend to &lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;Tip high on Weekends?&amp;#39;&lt;/span&gt;,
+	fontsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;34&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;b&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.3&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the xlabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Gender&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;67&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;g&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ylabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Mean Tips&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;67&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ticklabel size and color of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;tick_params(labelsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;,labelcolor&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;black&amp;#34;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/barplot.png&#34;&gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;histograms-and-distribution-diagrams&#34;&gt;Histograms and Distribution Diagrams&lt;/h2&gt;
+
+&lt;p&gt;They form another part of my workflow. Lets plot the normal Histogram using seaborn.
+For this we will use the &lt;strong&gt;&lt;a href=&#34;http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.distplot.html#seaborn.distplot&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;distplot&lt;/a&gt;&lt;/strong&gt; function. This function combines the matplotlib hist function (with automatic calculation of a good default bin size) with the seaborn kdeplot() function.
+It can also fit &lt;strong&gt;scipy.stats&lt;/strong&gt; distributions and plot the estimated PDF over the data.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Create a list of 1000 Normal RVs&lt;/span&gt;
+x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;normal(size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;)
+
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_context(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;poster&amp;#34;&lt;/span&gt;)
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_style(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ticks&amp;#34;&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# This  Function creates a normed Histogram by default.&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# If we use the parameter kde=False and norm_hist=False then&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# we will be using a count histogram&lt;/span&gt;
+
+g&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;distplot(x,
+         	kde_kws&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;color&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;g&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;lw&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;label&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;KDE Estim&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;alpha&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;},
+            hist_kws&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;color&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;alpha&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;0.3&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;label&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Freq&amp;#34;&lt;/span&gt;})
+
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# remove the top and right line in graph&lt;/span&gt;
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;despine()
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the size of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;figure&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_size_inches(&lt;span style=&#34;color:#ae81ff&#34;&gt;12&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the Title of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;axes&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Normal Simulation&amp;#39;&lt;/span&gt;, fontsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;34&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;b&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.3&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the xlabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;X&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;67&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;g&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ylabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Density&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;67&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ticklabel size and color of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;tick_params(labelsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;,labelcolor&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;black&amp;#34;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/hist_normal.png&#34;&gt;&lt;/center&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; scipy.stats &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; stats
+
+a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1.5&lt;/span&gt;
+b &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1.5&lt;/span&gt;
+x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;arange(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.01&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.01&lt;/span&gt;)
+y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; stats&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;beta&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;rvs(a,b,size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;10000&lt;/span&gt;)
+y_act &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; stats&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;beta&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pdf(x,a,b)
+g&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;distplot(y,kde&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False,norm_hist&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;True,
+            kde_kws&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;color&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;g&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;lw&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;label&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;KDE Estim&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;alpha&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;},
+            hist_kws&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;color&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;alpha&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;0.3&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;label&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Freq&amp;#34;&lt;/span&gt;})
+&lt;span style=&#34;color:#75715e&#34;&gt;# Note that we plotted on the graph using plt matlabplot function&lt;/span&gt;
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x,y_act)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# remove the top and right line in graph&lt;/span&gt;
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;despine()
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the size of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;figure&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_size_inches(&lt;span style=&#34;color:#ae81ff&#34;&gt;12&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the Title of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;axes&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_title((&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Beta Simulation vs. Calculated Beta Density&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;For a=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;,b=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+	&lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt;(a,b),fontsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;34&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;b&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.3&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the xlabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;X&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;67&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;g&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ylabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Density&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;67&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ticklabel size and color of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;tick_params(labelsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;,labelcolor&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;black&amp;#34;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/hist_beta.png&#34;&gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;pairplots&#34;&gt;PairPlots&lt;/h2&gt;
+
+&lt;p&gt;You need to see how variables vary with one another. What is the distribution of variables in the dataset. This is the graph to use with the &lt;strong&gt;&lt;a href=&#34;http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.pairplot.html#seaborn.pairplot&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;pairplot&lt;/a&gt;&lt;/strong&gt; function. Very helpful And Seaborn males it a joy to use. We will use &lt;strong&gt;Iris Dataset&lt;/strong&gt; here for this example.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;iris &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;load_dataset(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;iris&amp;#34;&lt;/span&gt;)
+iris&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;head()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/iris.png&#34; height=&#34;500&#34; width=&#34;600&#34;&gt;&lt;/center&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Create a Pairplot&lt;/span&gt;
+g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pairplot(iris,hue&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;species&amp;#34;&lt;/span&gt;,palette&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;muted&amp;#34;&lt;/span&gt;,size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;,
+	vars&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;sepal_width&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;sepal_length&amp;#34;&lt;/span&gt;],kind&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;reg&amp;#39;&lt;/span&gt;,markers&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;o&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;x&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;+&amp;#39;&lt;/span&gt;])
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# To change the size of the scatterpoints in graph&lt;/span&gt;
+g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;map_offdiag(plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;scatter,  s&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;35&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# remove the top and right line in graph&lt;/span&gt;
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;despine()
+&lt;span style=&#34;color:#75715e&#34;&gt;# Additional line to adjust some appearance issue&lt;/span&gt;
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;subplots_adjust(top&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.9&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the Title of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fig&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;suptitle(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Relation between Sepal Width and Sepal Length&amp;#39;&lt;/span&gt;,
+	fontsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;34&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;b&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.3&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/pairplot.png&#34;&gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Hope you found this post useful and worth your time. You can find the iPython notebook at &lt;a href=&#34;https://github.com/MLWhiz/visualization/blob/master/Graphs.ipynb&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;github&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I tried to make this as simple as possible but You may always &lt;strong&gt;ask me&lt;/strong&gt; or see the documentation for doubts.&lt;/p&gt;
+
+&lt;p&gt;If you have &lt;strong&gt;any more ideas&lt;/strong&gt; on how to use Seaborn or &lt;strong&gt;which graphs should i add here&lt;/strong&gt;, please suggest in the &lt;strong&gt;comments&lt;/strong&gt; section.&lt;/p&gt;
+
+&lt;p&gt;I will definitely try to add to this post as I start using more visualizations and encounter other libraries as good as seaborn.&lt;/p&gt;
+
+&lt;p&gt;Also since this is my first visualization post on this blog, I would like to call out a good course about &lt;a href=&#34;https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;Data Visualization and applied plotting&lt;/a&gt; from University of Michigan which is a part of a pretty good &lt;a href=&#34;https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;Data Science Specialization with Python&lt;/a&gt; in itself. Do check it out.&lt;/p&gt;
+</description>
     </item>
     
   </channel>

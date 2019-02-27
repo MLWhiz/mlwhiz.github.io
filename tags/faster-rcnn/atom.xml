@@ -8,7 +8,7 @@
     <language>en-us</language>
     <lastBuildDate>Sat, 22 Sep 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://mlwhiz.com/tags/faster-rcnn/atom.xml" rel="self" type="application/rss" />
+        <atom:link href="https://mlwhiz.com/tags/faster-rcnn/atom.xml" rel="self" type="application/rss" />
     
     
     <item>
@@ -17,7 +17,312 @@
       <pubDate>Sat, 22 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>https://mlwhiz.com/blog/2018/09/22/object_detection/</guid>
-      <description>We all know about the image classification problem. Given an image can you find out the class the image belongs to? We can solve any new image classification problem with ConvNets and Transfer Learning using pre-trained nets. ConvNet as fixed feature extractor. Take a ConvNet pretrained on ImageNet, remove the last fully-connected layer (this layer&amp;rsquo;s outputs are the 1000 class scores for a different task like ImageNet), then treat the rest of the ConvNet as a fixed feature extractor for the new dataset.</description>
+      <description>
+
+&lt;p&gt;We all know about the image classification problem. Given an image can you find out the class the image belongs to? We can solve any new image classification problem with ConvNets and &lt;a href=&#34;https://medium.com/@14prakash/transfer-learning-using-keras-d804b2e04ef8&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Transfer Learning&lt;/a&gt; using pre-trained nets.
+&lt;br&gt;
+&lt;div style=&#34;color:black; background-color: #E9DAEE;&#34;&gt;
+ConvNet as fixed feature extractor. Take a ConvNet pretrained on ImageNet, remove the last fully-connected layer (this layer&amp;rsquo;s outputs are the 1000 class scores for a different task like ImageNet), then treat the rest of the ConvNet as a fixed feature extractor for the new dataset. In an AlexNet, this would compute a 4096-D vector for every image that contains the activations of the hidden layer immediately before the classifier. We call these features CNN codes. It is important for performance that these codes are ReLUd (i.e. thresholded at zero) if they were also thresholded during the training of the ConvNet on ImageNet (as is usually the case). Once you extract the 4096-D codes for all images, train a linear classifier (e.g. Linear SVM or Softmax classifier) for the new dataset.
+&lt;/div&gt;
+&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;As a side note: if you want to know more about convnets and Transfer Learning I would like to recommend this awesome course on &lt;a href=&#34;https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Deep Learning in Computer Vision&lt;/a&gt; in the &lt;a href=&#34;https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Advanced machine learning specialization&lt;/a&gt;. You can start for free with the 7-day Free Trial. This course talks about various CNN architetures and covers a wide variety of problems in the image domain including detection and segmentation.&lt;/p&gt;
+
+&lt;p&gt;But there are a lot many interesting problems in the Image domain. The one which we are going to focus on today is the Segmentation, Localization and Detection problem.
+So what are these problems?&lt;/p&gt;
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/id1.png&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;So these problems are divided into 4 major buckets. In the next few lines I would try to explain each of these problems concisely before we take a deeper dive:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Semantic Segmentation: Given an image, can we classify each pixel as belonging to a particular class?&lt;/li&gt;
+&lt;li&gt;Classification+Localization: We were able to classify an image as a cat. Great. Can we also get the location of the said cat in that image by drawing a bounding box around the cat? Here we assume that there is a fixed number(commonly 1) in the image.&lt;/li&gt;
+&lt;li&gt;Object Detection: A More general case of the Classification+Localization problem. In a real-world setting, we don&amp;rsquo;t know how many objects are in the image beforehand. So can we detect all the objects in the image and draw bounding boxes around them?&lt;/li&gt;
+&lt;li&gt;Instance Segmentation: Can we create masks for each individual object in the image? It is different from semantic segmentation. How? If you look in the 4th image on the top, we won&amp;rsquo;t be able to distinguish between the two dogs using semantic segmentation procedure as it would sort of merge both the dogs together.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;In this post, we will focus mainly on Object Detection.&lt;/p&gt;
+
+&lt;h2 id=&#34;classification-localization&#34;&gt;Classification+Localization&lt;/h2&gt;
+
+&lt;p&gt;So lets first try to understand how we can solve the problem when we have a single object in the image. The Classification+Localization case. Pretty neatly said in the CS231n notes:&lt;/p&gt;
+
+&lt;div style=&#34;color:black; background-color: #E9DAEE;&#34;&gt;
+Treat localization as a regression problem!
+&lt;/div&gt;
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/id2.png&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Input Data:&lt;/strong&gt; Lets first talk about what sort of data such sort of model expects. Normally in an image classification setting we used to have data in the form (X,y) where X is the image and y used to be the class labels.
+In the Classification+Localization setting we will have data normally in the form (X,y), where X is still the image and y is a array containing (class_label, x,y,w,h) where,&lt;/p&gt;
+
+&lt;p&gt;x = bounding box top left corner x-coordinate&lt;/p&gt;
+
+&lt;p&gt;y = bounding box top left corner y-coordinate&lt;/p&gt;
+
+&lt;p&gt;w = width of bounding box in pixel&lt;/p&gt;
+
+&lt;p&gt;h = height of bounding box in pixel&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Model:&lt;/strong&gt; So in this setting we create a multi-output model which takes an image as the input and has (n_labels + 4) output nodes. n_labels nodes for each of the output class and 4 nodes that give the predictions for (x,y,w,h).&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Loss:&lt;/strong&gt; In such a setting setting up the loss is pretty important. Normally the loss is a weighted sum of the Softmax Loss(from the Classification Problem) and the regression L2 loss(from the bounding box coordinates).&lt;/p&gt;
+
+&lt;p&gt;$$Loss = alpha*SoftmaxLoss + (1-alpha)*L2Loss$$&lt;/p&gt;
+
+&lt;p&gt;Since these two losses would be on a different scale, the alpha hyper-parameter needs to be tuned.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;There is one thing I would like to note here. We are trying to do object localization task but we still have our convnets in place here. We are just adding one more output layer to also predict the coordinates of the bounding box and tweaking our loss function. And here in lies the essence of the whole Deep Learning framework - Stack layers on top of each other, reuse components to create better models, and create architectures to solve your own problem. And that is what we are going to see a lot going forward.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;object-detection&#34;&gt;Object Detection&lt;/h2&gt;
+
+&lt;p&gt;&lt;em&gt;So how does this idea of localization using regression get mapped to Object Detection?&lt;/em&gt; It doesn&amp;rsquo;t. We don&amp;rsquo;t have a fixed number of objects. So we can&amp;rsquo;t have 4 outputs denoting, the bounding box coordinates.&lt;/p&gt;
+
+&lt;p&gt;One naive idea could be to apply a CNN to many different crops of the image, CNN classifies each crop as object class or background class. This is intractable. There could be a lot of such crops that you can create.&lt;/p&gt;
+
+&lt;h3 id=&#34;region-proposals&#34;&gt;Region Proposals:&lt;/h3&gt;
+
+&lt;p&gt;If just there was a method(Normally called Region Proposal Network)which could find some cropped regions for us automatically, we could just run our convnet on those regions and be done with object detection. And that is what selective search (Uijlings et al, &amp;ldquo;&lt;a href=&#34;https://medium.com/r/?url=http%3A%2F%2Fwww.huppelen.nl%2Fpublications%2FselectiveSearchDraft.pdf&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Selective Search for Object Recognition&lt;/a&gt;&amp;rdquo;, IJCV 2013) provided for RCNN.&lt;/p&gt;
+
+&lt;p&gt;So what are Region Proposals:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Find &lt;em&gt;&amp;ldquo;blobby&amp;rdquo;&lt;/em&gt; image regions that are likely to contain objects&lt;/li&gt;
+&lt;li&gt;Relatively fast to run; e.g. Selective Search gives 2000 region proposals in a few seconds on CPU&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;How the region proposals are being made?&lt;/p&gt;
+
+&lt;h3 id=&#34;selective-search-for-object-recognition&#34;&gt;Selective Search for Object Recognition:&lt;/h3&gt;
+
+&lt;p&gt;So this paper starts with a set of some initial regions using &lt;a href=&#34;P. F. Felzenszwalb and D. P. Huttenlocher. [Efficient GraphBased Image Segmentation](https://medium.com/r/?url=http%3A%2F%2Fpeople.cs.uchicago.edu%2F~pff%2Fpapers%2Fseg-ijcv.pdf). IJCV, 59:167–181, 2004. 1, 3, 4, 5, 7&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;13&lt;/a&gt;
+&lt;br&gt;
+&lt;div style=&#34;color:black; background-color: #E9DAEE;&#34;&gt;
+Graph-based image segmentation techniques generally represent the problem in terms of a graph G = (V, E) where each node v ∈ V corresponds to a pixel in the image, and the edges in E connect certain pairs of neighboring pixels. A weight is associated with each edge based on some property of the pixels that it connects, such as their image intensities. Depending on the method, there may or may not be an edge connecting each pair of vertices.
+&lt;/div&gt;
+&lt;br&gt;
+In this paper they take an approach:
+&lt;br&gt;
+&lt;div style=&#34;color:black; background-color: #E9DAEE;&#34;&gt;
+Each edge (vi , vj )∈ E has a corresponding weight w((vi , vj )), which is a non-negative measure of the dissimilarity between neighboring elements vi and vj . In the case of image segmentation, the elements in V are pixels and the weight of an edge is some measure of the dissimilarity between the two pixels connected by that edge (e.g., the difference in intensity, color, motion, location or some other local attribute). In the graph-based approach, a segmentation S is a partition of V into components such that each component (or region) C ∈ S corresponds to a connected component in a graph.
+&lt;/div&gt;
+&lt;br&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/id3.png&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;&lt;/p&gt;
+
+&lt;p&gt;As you can see if we create bounding boxes around these masks we will be losing a lot of regions. We want to have the whole baseball player in a single bounding box/frame. We need to somehow group these initial regions.
+For that the authors of &lt;a href=&#34;https://medium.com/r/?url=http%3A%2F%2Fwww.huppelen.nl%2Fpublications%2FselectiveSearchDraft.pdf&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Selective Search for Object Recognition&lt;/a&gt; apply the Hierarchical Grouping algorithm to these initial regions. In this algorithm they merge most similar regions together based on different notions of similarity based on colour, texture, size and fill.&lt;/p&gt;
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/id5.png&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/id6.png&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;rcnn&#34;&gt;RCNN&lt;/h2&gt;
+
+&lt;p&gt;The above selective search is the region proposal they used in RCNN paper. But what is RCNN and how does it use region proposals?&lt;/p&gt;
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/id7.png&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;div style=&#34;color:black; background-color: #E9DAEE;&#34;&gt;
+Object detection system overview. Our system
+(1) takes an input image, (2) extracts around 2000 bottom-up region proposals, (3) computes features for each proposal using a large convolutional neural network (CNN), and then (4) classifies each region using class-specific linear SVM.
+&lt;/div&gt;
+&lt;br&gt;
+Along with this, the authors have also used a class specific bounding box regressor, that takes:
+Input : (Px,Py,Ph,Pw) - the location of the proposed region.
+Target: (Gx,Gy,Gh,Gw) - Ground truth labels for the region.
+The goal is to learn a transformation that maps the proposed region(P) to the Ground truth box(G)
+
+### Training RCNN
+
+What is the input to an RCNN?
+So we have got an image, Region Proposals from the RPN strategy and the ground truths of the labels (labels, ground truth boxes)
+Next we treat all region proposals with ≥ 0.5 IoU(Intersection over union) overlap with a ground-truth box as positive training example for that box&#39;s class and the rest as negative. We train class specific SVM&#39;s
+
+So every region proposal becomes a training example. and the convnet gives a feature vector for that region proposal. We can then train our n-SVMs using the class specific data.
+
+### Test Time RCNN
+
+At test time we predict detection boxes using class specific SVMs. We will be getting a lot of overlapping detection boxes at the time of testing. Non-maximum suppression is an integral part of the object detection pipeline. First, it sorts all detection boxes on the basis of their scores. The detection box M with the maximum score is selected and all other detection boxes with a significant overlap (using a pre-defined threshold) with M are suppressed. This process is recursively applied on the remaining boxes
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/id8.jpeg&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&#34;problems-with-rcnn&#34;&gt;Problems with RCNN:&lt;/h3&gt;
+
+&lt;p&gt;Training is slow.
+Inference (detection) is slow. 47s / image with VGG16 - Since the Convnet needs to be run many times.&lt;/p&gt;
+
+&lt;p&gt;Need for speed. Hence comes in picture by the same authors:&lt;/p&gt;
+
+&lt;h2 id=&#34;fast-rcnn&#34;&gt;Fast RCNN&lt;/h2&gt;
+
+&lt;div style=&#34;color:black; background-color: #E9DAEE;&#34;&gt;
+So the next idea from the same authors: Why not create convolution map of input image and then just select the regions from that convolutional map? Do we really need to run so many convnets? What we can do is run just a single convnet and then apply region proposal crops on the features calculated by the convnet and use a simple SVM to classify those crops.
+&lt;/div&gt;
+&lt;br&gt;
+Something like:
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/id9.png&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;div style=&#34;color:black; background-color: #E9DAEE;&#34;&gt;
+From Paper: Fig. illustrates the Fast R-CNN architecture. A Fast R-CNN network takes as input an entire image and a set of object proposals. The network first processes the whole image with several convolutional (conv) and max pooling layers to produce a conv feature map. Then, for each object proposal a region of interest (RoI) pooling layer extracts a fixed-length feature vector from the feature map. Each feature vector is fed into a sequence of fully connected (fc) layers that finally branch into two sibling output layers: one that produces softmax probability estimates over K object classes plus a catch-all &#34;background&#34; class and another layer that outputs four real-valued numbers for each of the K object classes. Each set of 4 values encodes refined bounding-box positions for one of the K classes.
+&lt;/div&gt;
+&lt;br&gt;
+This idea depends a little upon the architecture of the model that get used too. Do we take the 4096 bottleneck layer from VGG16?
+So the architecture that the authors have proposed is:
+
+&lt;div style=&#34;color:black; background-color: #E9DAEE;&#34;&gt;
+We experiment with three pre-trained ImageNet [4] networks, each with five max pooling layers and between five and thirteen conv layers (see Section 4.1 for network details). When a pre-trained network initializes a Fast R-CNN network, it undergoes three transformations. First, the last max pooling layer is replaced by a RoI pooling layer that is configured by setting H and W to be compatible with the net&#39;s first fully connected layer (e.g., H = W = 7 for VGG16). Second, the network&#39;s last fully connected layer and softmax (which were trained for 1000-way ImageNet classification) are replaced with the two sibling layers described earlier (a fully connected layer and softmax over K + 1 categories and category-specific bounding-box regressors). Third, the network is modified to take two data inputs: a list of images and a list of RoIs in those images.
+&lt;/div&gt;
+&lt;br&gt;
+This obviously is a little confusing and &#34;hairy&#34;, let us break this down. But for that, we need to see the VGG16 architecture.
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/id10.png&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The last pooling layer is 7x7x512. This is the layer the network authors intend to replace by the ROI pooling layers. This pooling layer has got as input the location of the region proposal(xmin_roi,ymin_roi,h_roi,w_roi) and the previous feature map(14x14x512).&lt;/p&gt;
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/id11.png&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now the location of ROI coordinates are in the units of the input image i.e. 224x224 pixels. But the layer on which we have to apply the ROI pooling operation is 14x14x512. As we are using VGG we will transform image (224 x 224 x 3) into (14 x 14 x 512) - height and width is divided by 16. we can map ROIs coordinates onto the feature map just by dividing them by 16.&lt;/p&gt;
+
+&lt;div style=&#34;color:black; background-color: #E9DAEE;&#34;&gt;
+In its depth, the convolutional feature map has encoded all the information for the image while maintaining the location of the &#34;things&#34; it has encoded relative to the original image. For example, if there was a red square on the top left of the image and the convolutional layers activate for it, then the information for that red square would still be on the top left of the convolutional feature map.
+&lt;/div&gt;
+&lt;br&gt;
+How the ROI pooling is done?
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/id12.gif&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;In the above image our region proposal is (0,3,5,7) and we divide that area into 4 regions since we want to have a ROI pooling layer of 2x2.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://medium.com/r/?url=https%3A%2F%2Fstackoverflow.com%2Fquestions%2F48163961%2Fhow-do-you-do-roi-pooling-on-areas-smaller-than-the-target-size&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;How do you do ROI-Pooling on Areas smaller than the target size?&lt;/a&gt; if region proposal size is 5x5 and ROI pooling layer of size 7x7. If this happens, we resize to 35x35 just by copying 7 times each cell and then max-pooling back to 7x7.&lt;/p&gt;
+
+&lt;p&gt;After replacing the pooling layer, the authors also replaced the 1000 layer imagenet classification layer by a fully connected layer and softmax over K + 1 categories(+1 for Background) and category-specific bounding-box regressors.&lt;/p&gt;
+
+&lt;h3 id=&#34;training-fast-rcnn&#34;&gt;Training Fast-RCNN&lt;/h3&gt;
+
+&lt;p&gt;What is the input to an Fast- RCNN?&lt;/p&gt;
+
+&lt;p&gt;Pretty much similar: So we have got an image, Region Proposals from the RPN strategy and the ground truths of the labels (labels, ground truth boxes)&lt;/p&gt;
+
+&lt;p&gt;Next we treat all region proposals with ≥ 0.5 IoU(Intersection over union) overlap with a ground-truth box as positive training example for that box&amp;rsquo;s class and the rest as negative. This time we have a dense layer on top, and we use multi task loss.&lt;/p&gt;
+
+&lt;p&gt;So every ROI becomes a training example. The main difference is that there is concept of multi-task loss:&lt;/p&gt;
+
+&lt;p&gt;A Fast R-CNN network has two sibling output layers. The first outputs a discrete probability distribution (per RoI), p = (p0, . . . , pK), over K + 1 categories. As usual, p is computed by a softmax over the K+1 outputs of a fully connected layer. The second sibling layer outputs bounding-box regression offsets, t= (tx , ty , tw, th), for each of the K object classes. Each training RoI is labeled with a ground-truth class u and a ground-truth bounding-box regression target v. We use a multi-task loss L on each labeled RoI to jointly train for classification and bounding-box regression&lt;/p&gt;
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/id13.png&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Where Lcls is the softmax classification loss and Lloc is the regression loss. u=0 is for BG class and hence we add to loss only when we have a boundary box for any of the other class. Further:&lt;/p&gt;
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/id14.png&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&#34;problem&#34;&gt;Problem:&lt;/h3&gt;
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/id15.png&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;faster-rcnn&#34;&gt;Faster-RCNN&lt;/h2&gt;
+
+&lt;p&gt;The next question that got asked was : Can the network itself do region proposals?&lt;/p&gt;
+
+&lt;div style=&#34;color:black; background-color: #E9DAEE;&#34;&gt;
+The intuition is that: With FastRCNN we&#39;re already computing an Activation Map in the CNN, why not run the Activation Map through a few more layers to find the interesting regions, and then finish off the forward pass by predicting the classes + bbox coordinates?
+&lt;/div&gt;
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/id16.png&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&#34;how-does-the-region-proposal-network-work&#34;&gt;How does the Region Proposal Network work?&lt;/h3&gt;
+
+&lt;p&gt;One of the main idea in the paper is the idea of Anchors. Anchors are fixed bounding boxes that are placed throughout the image with different sizes and ratios that are going to be used for reference when first predicting object locations.&lt;/p&gt;
+
+&lt;p&gt;So first of all we define anchor centers on the image.&lt;/p&gt;
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/id17.png&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The anchor centers are separated by 16 px in case of VGG16 network as the final convolution layer of (14x14x512) subsamples the image by a factor of 16(&lt;sup&gt;224&lt;/sup&gt;&amp;frasl;&lt;sub&gt;14&lt;/sub&gt;).
+This is how anchors look like:&lt;/p&gt;
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/id18.png&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;ol&gt;
+&lt;li&gt;So we start with some predefined regions we think our objects could be with Anchors.&lt;/li&gt;
+&lt;li&gt;Our RPN Classifies which regions have the object and the offset of the object bounding box. 1 if IOU for anchor with bounding box&amp;gt;0.5 0 otherwise.&lt;/li&gt;
+&lt;li&gt;Non-Maximum suppression to reduce region proposals&lt;/li&gt;
+&lt;li&gt;Fast RCNN detection network on top of proposals&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;faster-rcnn-loss&#34;&gt;Faster-RCNN Loss:&lt;/h3&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;The whole network is then jointly trained with 4 losses:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;RPN classify object / not object&lt;/li&gt;
+&lt;li&gt;RPN regress box coordinates offset&lt;/li&gt;
+&lt;li&gt;Final classification score (object classes)&lt;/li&gt;
+&lt;li&gt;Final box coordinates offset&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;results&#34;&gt;Results:&lt;/h2&gt;
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/id19.jpeg&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Disclaimer:&lt;/strong&gt; &lt;em&gt;This is my own understanding of these papers with inputs from many blogs and slides on the internet. Let me know if you find something wrong with my understanding. I will be sure to correct myself and post.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;references&#34;&gt;References:&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;http://cs231n.github.io/transfer-learning/#tf&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Transfer Learning&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture11.pdf&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;CS231 Object detection Lecture Slides&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://people.cs.uchicago.edu/~pff/papers/seg-ijcv.pdf&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Efficient Graph-Based Image Segmentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/pdf/1311.2524.pdf&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Rich feature hierarchies for accurate object detection and semantic segmentation(RCNN Paper)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://medium.com/r/?url=http%3A%2F%2Fwww.huppelen.nl%2Fpublications%2FselectiveSearchDraft.pdf&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Selective Search for Object Recognition&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://deepsense.ai/region-of-interest-pooling-explained/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;ROI Pooling Explanation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://towardsdatascience.com/fasterrcnn-explained-part-1-with-code-599c16568cff&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Faster RCNN Blog&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://stackoverflow.com/questions/48163961/how-do-you-do-roi-pooling-on-areas-smaller-than-the-target-size&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;StackOverflow&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://medium.com/@smallfishbigsea/faster-r-cnn-explained-864d4fb7e3f8&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Faster RCNN Blog&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://tryolabs.com/blog/2018/01/18/faster-r-cnn-down-the-rabbit-hole-of-modern-object-detection/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Faster RCNN Blog&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://medium.com/r/?url=https%3A%2F%2Farxiv.org%2Fpdf%2F1506.01497.pdf&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.slideshare.net/WenjingChen7/deep-learning-for-object-detection&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;https://www.slideshare.net/WenjingChen7/deep-learning-for-object-detection&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
     </item>
     
   </channel>
