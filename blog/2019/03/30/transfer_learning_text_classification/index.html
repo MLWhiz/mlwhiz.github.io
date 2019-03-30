@@ -154,6 +154,8 @@ if (!doNotTrack) {
 
 <p>Before introducing the notion of transfer learning to NLP applications, we will first need to understand a little bit about Language models.</p>
 
+<hr />
+
 <h2 id="language-models-and-nlp-transfer-learning-intuition">Language Models And NLP Transfer Learning Intuition:</h2>
 
 <p>In very basic terms the objective of the language model is to <strong>predict the next word given a stream of input words.</strong> In the past, many different approaches have been used to solve this particular problem. Probabilistic models using Markov assumption is one example of this sort of models.</p>
@@ -248,7 +250,7 @@ Test: None
 
 <h4 id="b-finetune-base-language-model-on-task-specific-data">b) Finetune Base Language Model on Task Specific Data</h4>
 
-<p>This task is also pretty easy when we look at the code. The specific details of why we do the training is what holds the essence.</p>
+<p>This task is also pretty easy when we look at the code. The specific details of how we do the training is what holds the essence.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Learning with Discriminative fine tuning</span>
 learn<span style="color:#f92672">.</span>fit_one_cycle(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1e-2</span>)
 learn<span style="color:#f92672">.</span>unfreeze()
