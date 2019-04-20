@@ -1,62 +1,26 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>
-    Spark on 
-    MLWhiz
-    </title>
+    <title>Spark on MLWhiz</title>
     <link>https://mlwhiz.com/tags/spark/</link>
-    <description>Recent content in Spark 
-    on MLWhiz</description>
+    <description>Recent content in Spark on MLWhiz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    
-    
     <lastBuildDate>Sun, 28 Sep 2014 00:00:00 +0000</lastBuildDate>
-    
     
         <atom:link href="https://mlwhiz.com/tags/spark/atom.xml" rel="self" type="application/rss" />
     
     
+
     <item>
       <title>Learning pyspark – Installation – Part 1</title>
       <link>https://mlwhiz.com/blog/2014/09/28/learning_pyspark/</link>
       <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
       
       <guid>https://mlwhiz.com/blog/2014/09/28/learning_pyspark/</guid>
-      <description>
-
-&lt;p&gt;This is part one of a learning series of pyspark, which is a python binding to the spark program written in Scala.&lt;/p&gt;
-
-&lt;p&gt;The installation is pretty simple. These steps were done on Mac OS Mavericks but should work for Linux too. Here are the steps for the installation:&lt;/p&gt;
-
-&lt;h2 id=&#34;1-download-the-binaries&#34;&gt;1. Download the Binaries:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;Spark : http:&lt;span style=&#34;color:#f92672&#34;&gt;//&lt;/span&gt;spark&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;apache&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;org&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;downloads&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;html
-Scala : http:&lt;span style=&#34;color:#f92672&#34;&gt;//&lt;/span&gt;www&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;scala&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;lang&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;org&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;download&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;
-
-Dont use Latest Version of Scala, Use Scala &lt;span style=&#34;color:#ae81ff&#34;&gt;2.10&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;x&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;2-add-these-lines-to-your-bash-profile&#34;&gt;2. Add these lines to your .bash_profile:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;export SCALA_HOME&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;your_path_to_scala
-export SPARK_HOME&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;your_path_to_spark&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;3-build-spark-this-will-take-time&#34;&gt;3. Build Spark(This will take time):&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;brew install sbt
-cd $SPARK_HOME
-sbt/sbt assembly&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;4-start-the-pyspark-shell&#34;&gt;4. Start the Pyspark Shell:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$SPARK_HOME/bin/pyspark&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;And Voila. You are running pyspark on your Machine&lt;/p&gt;
-
-&lt;p&gt;To check that everything is properly installed, Lets run a simple program:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;test &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sc&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;parallelize([&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;])
-test&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;count()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;This should return 3.
-So Now Just Run Hadoop On your Machine and then run pyspark Using:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cd /usr/local/hadoop/
-bin/start-all.sh
-jps
-$SPARK_HOME/bin/pyspark&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;script src=&#34;//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e&#34;&gt;&lt;/script&gt;
-</description>
+      <description>This is part one of a learning series of pyspark, which is a python binding to the spark program written in Scala.
+The installation is pretty simple. These steps were done on Mac OS Mavericks but should work for Linux too. Here are the steps for the installation:
+1. Download the Binaries: Spark : http://spark.apache.org/downloads.html Scala : http://www.scala-lang.org/download/ Dont use Latest Version of Scala, Use Scala 2.10.x 2. Add these lines to your .</description>
     </item>
     
   </channel>

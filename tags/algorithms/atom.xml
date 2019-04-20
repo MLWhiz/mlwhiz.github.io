@@ -1,562 +1,59 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>
-    Algorithms on 
-    MLWhiz
-    </title>
+    <title>Algorithms on MLWhiz</title>
     <link>https://mlwhiz.com/tags/algorithms/</link>
-    <description>Recent content in Algorithms 
-    on MLWhiz</description>
+    <description>Recent content in Algorithms on MLWhiz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    
-    
     <lastBuildDate>Tue, 26 Dec 2017 00:00:00 +0000</lastBuildDate>
-    
     
         <atom:link href="https://mlwhiz.com/tags/algorithms/atom.xml" rel="self" type="application/rss" />
     
     
+
     <item>
       <title>Using XGBoost for time series prediction tasks</title>
       <link>https://mlwhiz.com/blog/2017/12/26/win_a_data_science_competition/</link>
       <pubDate>Tue, 26 Dec 2017 00:00:00 +0000</pubDate>
       
       <guid>https://mlwhiz.com/blog/2017/12/26/win_a_data_science_competition/</guid>
-      <description>
-
-&lt;p&gt;Recently Kaggle master Kazanova along with some of his friends released a &lt;a href=&#34;https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&amp;ldquo;How to win a data science competition&amp;rdquo;&lt;/a&gt; Coursera course. You can start for free with the 7-day Free Trial. The Course involved a final project which itself was a time series prediction problem. Here I will describe how I got a top 10 position as of writing this article.&lt;/p&gt;
-
-&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
-&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/lboard.png&#34;  height=&#34;800&#34; width=&#34;600&#34; &gt;&lt;/center&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&#34;description-of-the-problem&#34;&gt;Description of the Problem:&lt;/h2&gt;
-
-&lt;p&gt;In this competition we were given a challenging time-series dataset consisting of daily sales data, kindly provided by one of the largest Russian software firms - 1C Company.&lt;/p&gt;
-
-&lt;p&gt;We were asked you to predict total sales for every product and store in the next month.&lt;/p&gt;
-
-&lt;p&gt;The evaluation metric was RMSE where True target values are clipped into [0,20] range. This target range will be a lot important in understanding the submissions that I will prepare.&lt;/p&gt;
-
-&lt;p&gt;The main thing that I noticed was that the data preparation aspect of this competition was by far the most important thing. I creted a variety of features. Here are the steps I took and the features I created.&lt;/p&gt;
-
-&lt;h2 id=&#34;1-created-a-dataframe-of-all-date-block-num-store-and-item-combinations&#34;&gt;1. Created a dataframe of all Date_block_num, Store and  Item combinations:&lt;/h2&gt;
-
-&lt;p&gt;This is important because in the months we don&amp;rsquo;t have a data for an item store combination, the machine learning algorithm needs to be specifically told that the sales is zero.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; itertools &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; product
-&lt;span style=&#34;color:#75715e&#34;&gt;# Create &amp;#34;grid&amp;#34; with columns&lt;/span&gt;
-index_cols &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;shop_id&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_id&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;date_block_num&amp;#39;&lt;/span&gt;]
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# For every month we create a grid from all shops/items combinations from that month&lt;/span&gt;
-grid &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
-&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; block_num &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sales[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;date_block_num&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;unique():
-    cur_shops &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sales&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;loc[sales[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;date_block_num&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; block_num, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;shop_id&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;unique()
-    cur_items &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sales&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;loc[sales[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;date_block_num&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; block_num, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_id&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;unique()
-    grid&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array(list(product(&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;[cur_shops, cur_items, [block_num]])),dtype&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;int32&amp;#39;&lt;/span&gt;))
-grid &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pd&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;DataFrame(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;vstack(grid), columns &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; index_cols,dtype&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;int32)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;2-cleaned-up-a-little-of-sales-data-after-some-basic-eda&#34;&gt;2. Cleaned up a little of sales data after some basic EDA:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;sales &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sales[sales&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;item_price&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;100000&lt;/span&gt;]
-sales &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sales[sales&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;item_cnt_day&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;3-created-mean-encodings&#34;&gt;3. Created Mean Encodings:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;sales_m &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sales&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;groupby([&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;date_block_num&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;shop_id&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_id&amp;#39;&lt;/span&gt;])&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;agg({&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_cnt_day&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;sum&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_price&amp;#39;&lt;/span&gt;: np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean})&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reset_index()
-sales_m &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pd&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;merge(grid,sales_m,on&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;date_block_num&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;shop_id&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_id&amp;#39;&lt;/span&gt;],how&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;left&amp;#39;&lt;/span&gt;)&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fillna(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
-&lt;span style=&#34;color:#75715e&#34;&gt;# adding the category id too&lt;/span&gt;
-sales_m &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pd&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;merge(sales_m,items,on&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_id&amp;#39;&lt;/span&gt;],how&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;left&amp;#39;&lt;/span&gt;)
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; type_id &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_id&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;shop_id&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_category_id&amp;#39;&lt;/span&gt;]:
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; column_id,aggregator,aggtype &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; [(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_price&amp;#39;&lt;/span&gt;,np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;avg&amp;#39;&lt;/span&gt;),(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_cnt_day&amp;#39;&lt;/span&gt;,np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sum,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;sum&amp;#39;&lt;/span&gt;),(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_cnt_day&amp;#39;&lt;/span&gt;,np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;avg&amp;#39;&lt;/span&gt;)]:
-
-        mean_df &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sales&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;groupby([type_id,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;date_block_num&amp;#39;&lt;/span&gt;])&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;aggregate(aggregator)&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reset_index()[[column_id,type_id,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;date_block_num&amp;#39;&lt;/span&gt;]]
-        mean_df&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;columns &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [type_id&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;_&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;aggtype&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;_&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;column_id,type_id,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;date_block_num&amp;#39;&lt;/span&gt;]
-
-        sales_m &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pd&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;merge(sales_m,mean_df,on&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;date_block_num&amp;#39;&lt;/span&gt;,type_id],how&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;left&amp;#39;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;These above lines add the following 9 features :&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&amp;lsquo;item_id_avg_item_price&amp;rsquo;&lt;/li&gt;
-&lt;li&gt;&amp;lsquo;item_id_sum_item_cnt_day&amp;rsquo;&lt;/li&gt;
-&lt;li&gt;&amp;lsquo;item_id_avg_item_cnt_day&amp;rsquo;&lt;/li&gt;
-&lt;li&gt;&amp;lsquo;shop_id_avg_item_price&amp;rsquo;,&lt;/li&gt;
-&lt;li&gt;&amp;lsquo;shop_id_sum_item_cnt_day&amp;rsquo;&lt;/li&gt;
-&lt;li&gt;&amp;lsquo;shop_id_avg_item_cnt_day&amp;rsquo;&lt;/li&gt;
-&lt;li&gt;&amp;lsquo;item_category_id_avg_item_price&amp;rsquo;&lt;/li&gt;
-&lt;li&gt;&amp;lsquo;item_category_id_sum_item_cnt_day&amp;rsquo;&lt;/li&gt;
-&lt;li&gt;&amp;lsquo;item_category_id_avg_item_cnt_day&amp;rsquo;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;4-create-lag-features&#34;&gt;4. Create Lag Features:&lt;/h2&gt;
-
-&lt;p&gt;Next we create lag features with diferent lag periods on the following features:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&amp;lsquo;item_id_avg_item_price&amp;rsquo;,&lt;/li&gt;
-&lt;li&gt;&amp;lsquo;item_id_sum_item_cnt_day&amp;rsquo;&lt;/li&gt;
-&lt;li&gt;&amp;lsquo;item_id_avg_item_cnt_day&amp;rsquo;&lt;/li&gt;
-&lt;li&gt;&amp;lsquo;shop_id_avg_item_price&amp;rsquo;&lt;/li&gt;
-&lt;li&gt;&amp;lsquo;shop_id_sum_item_cnt_day&amp;rsquo;&lt;/li&gt;
-&lt;li&gt;&amp;lsquo;shop_id_avg_item_cnt_day&amp;rsquo;&lt;/li&gt;
-&lt;li&gt;&amp;lsquo;item_category_id_avg_item_price&amp;rsquo;&lt;/li&gt;
-&lt;li&gt;&amp;lsquo;item_category_id_sum_item_cnt_day&amp;rsquo;&lt;/li&gt;
-&lt;li&gt;&amp;lsquo;item_category_id_avg_item_cnt_day&amp;rsquo;&lt;/li&gt;
-&lt;li&gt;&amp;lsquo;item_cnt_day&amp;rsquo;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;lag_variables  &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; list(sales_m&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;columns[&lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;:])&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_cnt_day&amp;#39;&lt;/span&gt;]
-lags &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; ,&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; ,&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; ,&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;12&lt;/span&gt;]
-&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; lag &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; lags:
-    sales_new_df &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sales_m&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;copy()
-    sales_new_df&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;date_block_num&lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt;lag
-    sales_new_df &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sales_new_df[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;date_block_num&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;shop_id&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_id&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;lag_variables]
-    sales_new_df&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;columns &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;date_block_num&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;shop_id&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_id&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; [lag_feat&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;_lag_&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;str(lag) &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; lag_feat &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; lag_variables]
-    sales_means &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pd&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;merge(sales_means, sales_new_df,on&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;date_block_num&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;shop_id&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_id&amp;#39;&lt;/span&gt;] ,how&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;left&amp;#39;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;5-fill-na-with-zeros&#34;&gt;5. Fill NA with zeros:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; feat &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; sales_means&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;columns:
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_cnt&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; feat:
-        sales_means[feat]&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;sales_means[feat]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fillna(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_price&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; feat:
-        sales_means[feat]&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;sales_means[feat]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fillna(sales_means[feat]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;median())&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;6-drop-the-columns-that-we-are-not-going-to-use-in-training&#34;&gt;6. Drop the columns that we are not going to use in training:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;cols_to_drop &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; lag_variables[:&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_name&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_price&amp;#39;&lt;/span&gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;7-take-a-recent-bit-of-data-only&#34;&gt;7. Take a recent bit of data only:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;sales_means &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sales_means[sales_means[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;date_block_num&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;12&lt;/span&gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;8-split-in-train-and-cv&#34;&gt;8. Split in train and CV :&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;X_train &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sales_means[sales_means[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;date_block_num&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;33&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;drop(cols_to_drop, axis&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
-X_cv &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;  sales_means[sales_means[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;date_block_num&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;33&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;drop(cols_to_drop, axis&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;9-the-magic-sauce&#34;&gt;9. THE MAGIC SAUCE:&lt;/h2&gt;
-
-&lt;p&gt;In the start I told that the clipping aspect of [0,20] will be important.
-In the next few lines I clipped the days to range[0,40]. You might ask me why 40. An intuitive answer is if I had clipped to range [0,20] there would be very few tree nodes that could give 20 as an answer. While if I increase it to 40 having a 20 becomes much more easier. Please note that We will clip our predictions in the [0,20] range in the end.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;clip&lt;/span&gt;(x):
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; x&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;40&lt;/span&gt;:
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;40&lt;/span&gt;
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; x&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;:
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; x
-train[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_cnt_day&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; train&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;apply(&lt;span style=&#34;color:#66d9ef&#34;&gt;lambda&lt;/span&gt; x: clip(x[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_cnt_day&amp;#39;&lt;/span&gt;]),axis&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
-cv[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_cnt_day&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; cv&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;apply(&lt;span style=&#34;color:#66d9ef&#34;&gt;lambda&lt;/span&gt; x: clip(x[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;item_cnt_day&amp;#39;&lt;/span&gt;]),axis&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;10-modelling&#34;&gt;10: Modelling:&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Created a XGBoost model to get the most important features(Top 42 features)&lt;/li&gt;
-&lt;li&gt;Use hyperopt to tune xgboost&lt;/li&gt;
-&lt;li&gt;Used top 10 models from tuned XGBoosts to generate predictions.&lt;/li&gt;
-&lt;li&gt;clipped the predictions to [0,20] range&lt;/li&gt;
-&lt;li&gt;Final solution was the average of these 10 predictions.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Learned a lot of new things from this &lt;a href=&#34;https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;awesome course&lt;/a&gt;. Most recommended.&lt;/p&gt;
-</description>
+      <description>Recently Kaggle master Kazanova along with some of his friends released a &amp;ldquo;How to win a data science competition&amp;rdquo; Coursera course. You can start for free with the 7-day Free Trial. The Course involved a final project which itself was a time series prediction problem. Here I will describe how I got a top 10 position as of writing this article.
+  Description of the Problem: In this competition we were given a challenging time-series dataset consisting of daily sales data, kindly provided by one of the largest Russian software firms - 1C Company.</description>
     </item>
     
+
     <item>
       <title>Good Feature Building Techniques - Tricks for Kaggle -  My Kaggle Code Repository</title>
       <link>https://mlwhiz.com/blog/2017/09/14/kaggle_tricks/</link>
       <pubDate>Thu, 14 Sep 2017 00:00:00 +0000</pubDate>
       
       <guid>https://mlwhiz.com/blog/2017/09/14/kaggle_tricks/</guid>
-      <description>
-
-&lt;p&gt;Often times it happens that we fall short of creativity. And creativity is one of the basic ingredients of what we do. Creating features needs creativity. So here is the list of ideas I gather in day to day life, where people have used creativity to get great results on Kaggle leaderboards.&lt;/p&gt;
-
-&lt;p&gt;Take a look at the &lt;a href=&#34;https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;How to Win a Data Science Competition: Learn from Top Kagglers&lt;/a&gt; course in the &lt;a href=&#34;https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;amp;utm_content=2&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Advanced machine learning specialization&lt;/a&gt; by Kazanova(Number 3 Kaggler at the time of writing). You can start for free with the 7-day Free Trial.&lt;/p&gt;
-
-&lt;p&gt;This post is inspired by a &lt;a href=&#34;https://www.kaggle.com/gaborfodor/from-eda-to-the-top-lb-0-368&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Kernel&lt;/a&gt; on Kaggle written by Beluga, one of the top Kagglers, for a knowledge based &lt;a href=&#34;https://www.kaggle.com/c/nyc-taxi-trip-duration&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;competition&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Some of the techniques/tricks I am sharing have been taken directly from that kernel so you could take a look yourself.
-Otherwise stay here and read on.&lt;/p&gt;
-
-&lt;h2 id=&#34;1-don-t-try-predicting-the-future-when-you-don-t-have-to&#34;&gt;1. Don&amp;rsquo;t try predicting the future when you don&amp;rsquo;t have to:&lt;/h2&gt;
-
-&lt;p&gt;If both training/test comes from the same timeline, we can get really crafty with features. Although this is a case with Kaggle only, we can use this to our advantage. For example: In the Taxi Trip duration challenge the test data is randomly sampled from the train data. In this case we can use the target variable averaged over different categorical variable as a feature. Like in this case Beluga actually used the averaged the target variable over different weekdays. He then mapped the same averaged value as a variable by mapping it to test data too.&lt;/p&gt;
-
-&lt;h2 id=&#34;2-logloss-clipping-technique&#34;&gt;2. logloss clipping Technique:&lt;/h2&gt;
-
-&lt;p&gt;Something that I learned in the Neural Network course by Jeremy Howard. Its based on a very simple Idea. Logloss penalises a lot if we are very confident and wrong. So in case of Classification problems where we have to predict probabilities, it would be much better to clip our probabilities between 0.05-0.95 so that we are never very sure about our prediction.&lt;/p&gt;
-
-&lt;h2 id=&#34;3-kaggle-submission-in-gzip-format&#34;&gt;3. kaggle submission in gzip format:&lt;/h2&gt;
-
-&lt;p&gt;A small piece of code that will help you save countless hours of uploading. Enjoy.
-df.to_csv(&amp;lsquo;submission.csv.gz&amp;rsquo;, index=False, compression=&amp;lsquo;gzip&amp;rsquo;)&lt;/p&gt;
-
-&lt;h2 id=&#34;4-how-best-to-use-latitude-and-longitude-features-part-1&#34;&gt;4. How best to use Latitude and Longitude features - Part 1:&lt;/h2&gt;
-
-&lt;p&gt;One of the best things that I liked about the Beluga Kernel is how he used the Lat/Lon Data. So in the example we had pickup Lat/Lon and Dropoff Lat/Lon. We created features like:&lt;/p&gt;
-
-&lt;h4 id=&#34;a-haversine-distance-between-the-two-lat-lons&#34;&gt;A. Haversine Distance Between the Two Lat/Lons:&lt;/h4&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;haversine_array&lt;/span&gt;(lat1, lng1, lat2, lng2):
-    lat1, lng1, lat2, lng2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; map(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;radians, (lat1, lng1, lat2, lng2))
-    AVG_EARTH_RADIUS &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;6371&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;# in km&lt;/span&gt;
-    lat &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; lat2 &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; lat1
-    lng &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; lng2 &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; lng1
-    d &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sin(lat &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;cos(lat1) &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;cos(lat2) &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sin(lng &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
-    h &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; AVG_EARTH_RADIUS &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;arcsin(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sqrt(d))
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; h&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h4 id=&#34;b-manhattan-distance-between-the-two-lat-lons&#34;&gt;B. Manhattan Distance Between the two Lat/Lons:&lt;/h4&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dummy_manhattan_distance&lt;/span&gt;(lat1, lng1, lat2, lng2):
-    a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; haversine_array(lat1, lng1, lat1, lng2)
-    b &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; haversine_array(lat1, lng1, lat2, lng1)
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; a &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; b&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h4 id=&#34;c-bearing-between-the-two-lat-lons&#34;&gt;C. Bearing Between the two Lat/Lons:&lt;/h4&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;bearing_array&lt;/span&gt;(lat1, lng1, lat2, lng2):
-    AVG_EARTH_RADIUS &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;6371&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;# in km&lt;/span&gt;
-    lng_delta_rad &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;radians(lng2 &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; lng1)
-    lat1, lng1, lat2, lng2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; map(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;radians, (lat1, lng1, lat2, lng2))
-    y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sin(lng_delta_rad) &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;cos(lat2)
-    x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;cos(lat1) &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sin(lat2) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sin(lat1) &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;cos(lat2) &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;cos(lng_delta_rad)
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;degrees(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;arctan2(y, x))&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h4 id=&#34;d-center-latitude-and-longitude-between-pickup-and-dropoff&#34;&gt;D. Center Latitude and Longitude between Pickup and Dropoff:&lt;/h4&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;train&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;loc[:, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;center_latitude&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (train[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_latitude&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;values &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; train[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_latitude&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;values) &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
-train&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;loc[:, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;center_longitude&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (train[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_longitude&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;values &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; train[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_longitude&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;values) &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;5-how-best-to-use-latitude-and-longitude-features-part-2&#34;&gt;5. How best to use Latitude and Longitude features - Part 2:&lt;/h2&gt;
-
-&lt;p&gt;The Second way he used the Lat/Lon Feats was to create clusters for Pickup and Dropoff Lat/Lons. The way it worked was it created sort of Boroughs in the data by design.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; sklearn.cluster &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; MiniBatchKMeans
-coords &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;vstack((train[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_latitude&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_longitude&amp;#39;&lt;/span&gt;]]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;values,
-                    train[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_latitude&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_longitude&amp;#39;&lt;/span&gt;]]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;values,
-                    test[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_latitude&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_longitude&amp;#39;&lt;/span&gt;]]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;values,
-                    test[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_latitude&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_longitude&amp;#39;&lt;/span&gt;]]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;values))
-
-sample_ind &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;permutation(len(coords))[:&lt;span style=&#34;color:#ae81ff&#34;&gt;500000&lt;/span&gt;]
-kmeans &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; MiniBatchKMeans(n_clusters&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;, batch_size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;10000&lt;/span&gt;)&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fit(coords[sample_ind])
-
-train&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;loc[:, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_cluster&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; kmeans&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;predict(train[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_latitude&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_longitude&amp;#39;&lt;/span&gt;]])
-train&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;loc[:, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_cluster&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; kmeans&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;predict(train[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_latitude&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_longitude&amp;#39;&lt;/span&gt;]])
-test&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;loc[:, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_cluster&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; kmeans&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;predict(test[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_latitude&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_longitude&amp;#39;&lt;/span&gt;]])
-test&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;loc[:, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_cluster&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; kmeans&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;predict(test[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_latitude&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_longitude&amp;#39;&lt;/span&gt;]])&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;He then used these Clusters to create features like counting no of trips going out and coming in on a particular day.&lt;/p&gt;
-
-&lt;h2 id=&#34;6-how-best-to-use-latitude-and-longitude-features-part-3&#34;&gt;6. How best to use Latitude and Longitude features - Part 3&lt;/h2&gt;
-
-&lt;p&gt;He used PCA to transform longitude and latitude coordinates. In this case it is not about dimension reduction since he transformed 2D-&amp;gt; 2D. The rotation could help for decision tree splits, and it did actually.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;pca &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; PCA()&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fit(coords)
-train[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_pca0&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pca&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;transform(train[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_latitude&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_longitude&amp;#39;&lt;/span&gt;]])[:, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]
-train[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_pca1&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pca&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;transform(train[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_latitude&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_longitude&amp;#39;&lt;/span&gt;]])[:, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
-train[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_pca0&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pca&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;transform(train[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_latitude&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_longitude&amp;#39;&lt;/span&gt;]])[:, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]
-train[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_pca1&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pca&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;transform(train[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_latitude&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_longitude&amp;#39;&lt;/span&gt;]])[:, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
-test[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_pca0&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pca&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;transform(test[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_latitude&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_longitude&amp;#39;&lt;/span&gt;]])[:, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]
-test[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_pca1&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pca&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;transform(test[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_latitude&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pickup_longitude&amp;#39;&lt;/span&gt;]])[:, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
-test[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_pca0&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pca&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;transform(test[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_latitude&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_longitude&amp;#39;&lt;/span&gt;]])[:, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]
-test[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_pca1&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pca&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;transform(test[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_latitude&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;dropoff_longitude&amp;#39;&lt;/span&gt;]])[:, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;7-lets-not-forget-the-normal-things-you-can-do-with-your-features&#34;&gt;7. Lets not forget the Normal Things you can do with your features:&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Scaling by Max-Min&lt;/li&gt;
-&lt;li&gt;Normalization using Standard Deviation&lt;/li&gt;
-&lt;li&gt;Log based feature/Target: use log based features or log based target function.&lt;/li&gt;
-&lt;li&gt;One Hot Encoding&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;8-creating-intuitive-additional-features&#34;&gt;8. Creating Intuitive Additional Features:&lt;/h2&gt;
-
-&lt;p&gt;A) Date time Features: Time based Features like &amp;ldquo;Evening&amp;rdquo;, &amp;ldquo;Noon&amp;rdquo;, &amp;ldquo;Night&amp;rdquo;, &amp;ldquo;Purchases_last_month&amp;rdquo;, &amp;ldquo;Purchases_last_week&amp;rdquo; etc.&lt;/p&gt;
-
-&lt;p&gt;B) Thought Features: Suppose you have shopping cart data and you want to categorize TripType (See Walmart Recruiting: Trip Type Classification on &lt;a href=&#34;https://www.kaggle.com/c/walmart-recruiting-trip-type-classification/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Kaggle&lt;/a&gt; for some background).&lt;/p&gt;
-
-&lt;p&gt;You could think of creating a feature like &amp;ldquo;Stylish&amp;rdquo; where you create this variable by adding together number of items that belong to category Men&amp;rsquo;s Fashion, Women&amp;rsquo;s Fashion, Teens Fashion.&lt;/p&gt;
-
-&lt;p&gt;You could create a feature like &amp;ldquo;Rare&amp;rdquo; which is created by tagging some items as rare, based on the data we have and then counting the number of those rare items in the shopping cart. Such features might work or might not work. From what I have observed they normally provide a lot of value.&lt;/p&gt;
-
-&lt;p&gt;I feel this is the way that Target&amp;rsquo;s &amp;ldquo;Pregnant Teen model&amp;rdquo; was made. They would have had a variable in which they kept all the items that a pregnant teen could buy and put it into a classification algorithm.&lt;/p&gt;
-
-&lt;h2 id=&#34;9-the-not-so-normal-things-which-people-do&#34;&gt;9 . The not so Normal Things which people do:&lt;/h2&gt;
-
-&lt;p&gt;These features are highly unintuitive and should not be created where the machine learning model needs to be interpretable.&lt;/p&gt;
-
-&lt;p&gt;A) Interaction Features: If you have features A and B create features A*B, A+B, A/B, A-B. This explodes the feature space. If you have 10 features and you are creating two variable interactions you will be adding 10C2 * 4  features = 180 features to your model. And most of us have a lot more than 10 features.&lt;/p&gt;
-
-&lt;p&gt;B) Bucket Feature Using Hashing: Suppose you have a lot of features. In the order of Thousands but you don&amp;rsquo;t want to use all the thousand features because of the training times of algorithms involved. People bucket their features using some hashing algorithm to achieve this.Mostly done for text classification tasks.
-For example:
-If we have 6 features A,B,C,D,E,F.
-And the row of data is:
-A:1,B:1,C:1,D:0,E:1,F:0
-I may decide to use a hashing function so that these 6 features correspond to 3 buckets and create the data using this feature hashing vector.
-After processing my data might look like:
-Bucket1:2,Bucket2:2,Bucket3:0
-Which happened because A and B fell in bucket1, C and E fell in bucket2 and D and F fell in bucket 3. I summed up the observations here, but you could substitute addition with any math function you like.
-Now i would use Bucket1,Bucket2,Bucket3 as my variables for machine learning.&lt;/p&gt;
-
-&lt;p&gt;Will try to keep on expanding. Wait for more&amp;hellip;.&lt;/p&gt;
-</description>
+      <description>Often times it happens that we fall short of creativity. And creativity is one of the basic ingredients of what we do. Creating features needs creativity. So here is the list of ideas I gather in day to day life, where people have used creativity to get great results on Kaggle leaderboards.
+Take a look at the How to Win a Data Science Competition: Learn from Top Kagglers course in the Advanced machine learning specialization by Kazanova(Number 3 Kaggler at the time of writing).</description>
     </item>
     
+
     <item>
       <title>Today I Learned This Part I: What are word2vec Embeddings?</title>
       <link>https://mlwhiz.com/blog/2017/04/09/word_vec_embeddings_examples_understanding/</link>
       <pubDate>Sun, 09 Apr 2017 00:00:00 +0000</pubDate>
       
       <guid>https://mlwhiz.com/blog/2017/04/09/word_vec_embeddings_examples_understanding/</guid>
-      <description>
-
-&lt;p&gt;Recently Quora put out a &lt;a href=&#34;https://www.kaggle.com/c/quora-question-pairs&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Question similarity&lt;/a&gt; competition on Kaggle. This is the first time I was attempting an NLP problem so a lot to learn. The one thing that blew my mind away was the word2vec embeddings.&lt;/p&gt;
-
-&lt;p&gt;Till now whenever I heard the term word2vec I visualized it as a way to create a bag of words vector for a sentence.&lt;/p&gt;
-
-&lt;p&gt;For those who don&amp;rsquo;t know &lt;em&gt;bag of words&lt;/em&gt;:
-If we have a series of sentences(documents)&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;This is good       - [1,1,1,0,0]&lt;/li&gt;
-&lt;li&gt;This is bad        - [1,1,0,1,0]&lt;/li&gt;
-&lt;li&gt;This is awesome    - [1,1,0,0,1]&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Bag of words would encode it using &lt;em&gt;0:This 1:is 2:good 3:bad 4:awesome&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;But it is much more powerful than that.&lt;/p&gt;
-
-&lt;p&gt;What word2vec does is that it creates vectors for words.
-What I mean by that is that we have a 300 dimensional vector for every word(common bigrams too) in a dictionary.&lt;/p&gt;
-
-&lt;h2 id=&#34;how-does-that-help&#34;&gt;How does that help?&lt;/h2&gt;
-
-&lt;p&gt;We can use this for multiple scenarios but the most common are:&lt;/p&gt;
-
-&lt;p&gt;A. &lt;em&gt;Using word2vec embeddings we can find out similarity between words&lt;/em&gt;.
-Assume you have to answer if these two statements signify the same thing:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;President greets press in Chicago&lt;/li&gt;
-&lt;li&gt;Obama speaks to media in Illinois.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;If we do a sentence similarity metric or a bag of words approach to compare these two sentences we will get a pretty low score.&lt;/p&gt;
-
-&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
-&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/word2vecembed.png&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
-&lt;/div&gt;
-
-&lt;p&gt;But with a word encoding we can say that&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;President is similar to Obama&lt;/li&gt;
-&lt;li&gt;greets is similar to speaks&lt;/li&gt;
-&lt;li&gt;press is similar to media&lt;/li&gt;
-&lt;li&gt;Chicago is similar to Illinois&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;B. &lt;em&gt;Encode Sentences&lt;/em&gt;: I read a &lt;a href=&#34;https://www.linkedin.com/pulse/duplicate-quora-question-abhishek-thakur&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;post&lt;/a&gt; from Abhishek Thakur a prominent kaggler.(Must Read). What he did was he used these word embeddings to create a 300 dimensional vector for every sentence.&lt;/p&gt;
-
-&lt;p&gt;His Approach: Lets say the sentence is &amp;ldquo;What is this&amp;rdquo;
-And lets say the embedding for every word is given in 4 dimension(normally 300 dimensional encoding is given)&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;what : [.25 ,.25 ,.25 ,.25]&lt;/li&gt;
-&lt;li&gt;is   : [  1 ,  0 ,  0 ,  0]&lt;/li&gt;
-&lt;li&gt;this : [ .5 ,  0 ,  0 , .5]&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Then the vector for the sentence is normalized elementwise addition of the vectors. i.e.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Elementwise addition : [.25+1+0.5, 0.25+0+0 , 0.25+0+0, .25+0+.5] = [1.75, .25, .25, .75]
-divided by
-math.sqrt(1.25^2 + .25^2 + .25^2 + .75^2) = 1.5
-gives:[1.16, .17, .17, 0.5]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Thus I can convert any sentence to a vector  of a fixed dimension(decided by the embedding). To find similarity between two sentences I can use a variety of distance/similarity metrics.&lt;/p&gt;
-
-&lt;p&gt;C. Also It enables us to do algebraic manipulations on words which was not possible before. For example: What is king - man + woman ?&lt;/p&gt;
-
-&lt;p&gt;Guess what it comes out to be : &lt;em&gt;Queen&lt;/em&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;application-coding&#34;&gt;Application/Coding:&lt;/h2&gt;
-
-&lt;p&gt;Now lets get down to the coding part as we know a little bit of fundamentals.&lt;/p&gt;
-
-&lt;p&gt;First of all we download a custom word embedding from Google. There are many other embeddings too.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;wget https://s3.amazonaws.com/dl4j-distribution/GoogleNews-vectors-negative300.bin.gz&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;The above file is pretty big. Might take some time. Then moving on to coding.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; gensim.models &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; word2vec
-model &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; gensim&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;models&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;KeyedVectors&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;load_word2vec_format(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;data/GoogleNews-vectors-negative300.bin.gz&amp;#39;&lt;/span&gt;, binary&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;True)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id=&#34;1-starting-simple-lets-find-out-similar-words-want-to-find-similar-words-to-python&#34;&gt;1. Starting simple, lets find out similar words. Want to find similar words to python?&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;most_similar(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;python&amp;#39;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;div style=&#34;font-size:80%;color:black;font-family: helvetica;line-height:18px;margin-top:8px;margin-left:20px&#34;&gt;
-[(u&#39;pythons&#39;, 0.6688377261161804),&lt;br&gt;
- (u&#39;Burmese_python&#39;, 0.6680364608764648),&lt;br&gt;
- (u&#39;snake&#39;, 0.6606293320655823),&lt;br&gt;
- (u&#39;crocodile&#39;, 0.6591362953186035),&lt;br&gt;
- (u&#39;boa_constrictor&#39;, 0.6443519592285156),&lt;br&gt;
- (u&#39;alligator&#39;, 0.6421656608581543),&lt;br&gt;
- (u&#39;reptile&#39;, 0.6387745141983032),&lt;br&gt;
- (u&#39;albino_python&#39;, 0.6158879995346069),&lt;br&gt;
- (u&#39;croc&#39;, 0.6083582639694214),&lt;br&gt;
- (u&#39;lizard&#39;, 0.601341724395752)]&lt;br&gt;
- &lt;/div&gt;
-
-&lt;h3 id=&#34;2-now-we-can-use-this-model-to-find-the-solution-to-the-equation&#34;&gt;2. Now we can use this model to find the solution to the equation:&lt;/h3&gt;
-
-&lt;p&gt;What is king - man + woman?&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;most_similar(positive &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;king&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;woman&amp;#39;&lt;/span&gt;],negative &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;man&amp;#39;&lt;/span&gt;])&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;div style=&#34;font-size:80%;color:black;font-family: helvetica;line-height:18px;margin-top:8px;margin-left:20px&#34;&gt;
-[(u&#39;queen&#39;, 0.7118192315101624),&lt;br&gt;
- (u&#39;monarch&#39;, 0.6189674139022827),&lt;br&gt;
- (u&#39;princess&#39;, 0.5902431011199951),&lt;br&gt;
- (u&#39;crown_prince&#39;, 0.5499460697174072),&lt;br&gt;
- (u&#39;prince&#39;, 0.5377321839332581),&lt;br&gt;
- (u&#39;kings&#39;, 0.5236844420433044),&lt;br&gt;
- (u&#39;Queen_Consort&#39;, 0.5235946178436279),&lt;br&gt;
- (u&#39;queens&#39;, 0.5181134343147278),&lt;br&gt;
- (u&#39;sultan&#39;, 0.5098593235015869),&lt;br&gt;
- (u&#39;monarchy&#39;, 0.5087412595748901)]&lt;br&gt;
-&lt;/div&gt;
-
-&lt;p&gt;You can do plenty of freaky/cool things using this:&lt;/p&gt;
-
-&lt;h3 id=&#34;3-lets-say-you-wanted-a-girl-and-had-a-girl-name-like-emma-in-mind-but-you-got-a-boy-so-what-is-the-male-version-for-emma&#34;&gt;3. Lets say you wanted a girl and had a girl name like emma in mind but you got a boy. So what is the male version for emma?&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;most_similar(positive &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;emma&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;he&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;male&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;mr&amp;#39;&lt;/span&gt;],negative &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;she&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;mrs&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;female&amp;#39;&lt;/span&gt;])&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;div style=&#34;font-size:80%;color:black;font-family: helvetica;line-height:18px;margin-top:8px;margin-left:20px&#34;&gt;
-[(u&#39;sanchez&#39;, 0.4920658469200134),&lt;br&gt;
- (u&#39;kenny&#39;, 0.48300960659980774),&lt;br&gt;
- (u&#39;alves&#39;, 0.4684845209121704),&lt;br&gt;
- (u&#39;gareth&#39;, 0.4530612826347351),&lt;br&gt;
- (u&#39;bellamy&#39;, 0.44884198904037476),&lt;br&gt;
- (u&#39;gibbs&#39;, 0.445194810628891),&lt;br&gt;
- (u&#39;dos_santos&#39;, 0.44508373737335205),&lt;br&gt;
- (u&#39;gasol&#39;, 0.44387346506118774),&lt;br&gt;
- (u&#39;silva&#39;, 0.4424275755882263),&lt;br&gt;
- (u&#39;shaun&#39;, 0.44144102931022644)]&lt;br&gt;&lt;br&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&#34;4-find-which-word-doesn-t-belong-to-a-list-https-github-com-dhammack-word2vecexample-blob-master-main-py&#34;&gt;4. Find which word doesn&amp;rsquo;t belong to a &lt;a href=&#34;https://github.com/dhammack/Word2VecExample/blob/master/main.py&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;list&lt;/a&gt;?&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;doesnt_match(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;math shopping reading science&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;))&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;I think staple doesn&amp;rsquo;t belong in this list!&lt;/p&gt;
-
-&lt;h2 id=&#34;other-cool-things&#34;&gt;Other Cool Things&lt;/h2&gt;
-
-&lt;h3 id=&#34;1-recommendations&#34;&gt;1. Recommendations:&lt;/h3&gt;
-
-&lt;div style=&#34;margin-top: 4px; margin-bottom: 10px;&#34;&gt;
-&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/recommendationpaper.png&#34;  height=&#34;400&#34; width=&#34;700&#34; &gt;&lt;/center&gt;
-&lt;/div&gt;
-
-&lt;p&gt;In this &lt;a href=&#34;https://arxiv.org/abs/1603.04259&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;paper&lt;/a&gt;, the authors have shown that itembased CF can be cast in the same framework of word embedding.&lt;/p&gt;
-
-&lt;h3 id=&#34;2-some-other-examples-http-byterot-blogspot-in-2015-06-five-crazy-abstractions-my-deep-learning-word2doc-model-just-did-nlp-gensim-html-that-people-have-seen-after-using-their-own-embeddings&#34;&gt;2. Some other &lt;a href=&#34;http://byterot.blogspot.in/2015/06/five-crazy-abstractions-my-deep-learning-word2doc-model-just-did-NLP-gensim.html&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;examples&lt;/a&gt; that people have seen after using their own embeddings:&lt;/h3&gt;
-
-&lt;p&gt;Library - Books = Hall&lt;br&gt;
-Obama + Russia - USA = Putin&lt;br&gt;
-Iraq - Violence = Jordan&lt;br&gt;
-President - Power = Prime Minister (Not in India Though)&lt;br&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;3-seeing-the-above-i-started-playing-with-it-a-little&#34;&gt;3.Seeing the above I started playing with it a little.&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;Is this model sexist?&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;most_similar(positive &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;donald_trump&amp;#34;&lt;/span&gt;],negative &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;brain&amp;#39;&lt;/span&gt;])&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;div style=&#34;font-size:80%;color:black;font-family: helvetica;line-height:18px;margin-top:8px;margin-left:20px&#34;&gt;
-[(u&#39;novak&#39;, 0.40405112504959106),&lt;br&gt;
- (u&#39;ozzie&#39;, 0.39440611004829407),&lt;br&gt;
- (u&#39;democrate&#39;, 0.39187556505203247),&lt;br&gt;
- (u&#39;clinton&#39;, 0.390536367893219),&lt;br&gt;
- (u&#39;hillary_clinton&#39;, 0.3862358033657074),&lt;br&gt;
- (u&#39;bnp&#39;, 0.38295692205429077),&lt;br&gt;
- (u&#39;klaar&#39;, 0.38228923082351685),&lt;br&gt;
- (u&#39;geithner&#39;, 0.380607008934021),&lt;br&gt;
- (u&#39;bafana_bafana&#39;, 0.3801495432853699),&lt;br&gt;
- (u&#39;whitman&#39;, 0.3790769875049591)]&lt;br&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Whatever it is doing it surely feels like magic. Next time I will try to write more on how it works once I understand it fully.&lt;/p&gt;
-</description>
+      <description>Recently Quora put out a Question similarity competition on Kaggle. This is the first time I was attempting an NLP problem so a lot to learn. The one thing that blew my mind away was the word2vec embeddings.
+Till now whenever I heard the term word2vec I visualized it as a way to create a bag of words vector for a sentence.
+For those who don&amp;rsquo;t know bag of words: If we have a series of sentences(documents)</description>
     </item>
     
+
     <item>
       <title>Machine Learning Algorithms for Data Scientists</title>
       <link>https://mlwhiz.com/blog/2017/02/05/ml_algorithms_for_data_scientist/</link>
       <pubDate>Sun, 05 Feb 2017 00:00:00 +0000</pubDate>
       
       <guid>https://mlwhiz.com/blog/2017/02/05/ml_algorithms_for_data_scientist/</guid>
-      <description>
-
-&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
-&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/mlago_fords.png&#34;  height=&#34;400&#34; width=&#34;600&#34; &gt;&lt;/center&gt;
-&lt;/div&gt;
-
-&lt;p&gt;As a data scientist I believe that a lot of work has to be done before Classification/Regression/Clustering methods are applied to the data you get. The data which may be messy, unwieldy and big. So here are the list of algorithms that helps a data scientist to make better models using the data they have:&lt;/p&gt;
-
-&lt;h2 id=&#34;1-sampling-algorithms-in-case-you-want-to-work-with-a-sample-of-data&#34;&gt;1. Sampling Algorithms. In case you want to work with a sample of data.&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Simple Random Sampling :&lt;/strong&gt; &lt;em&gt;Say you want to select a subset of a population in which each member of the subset has an equal probability of being chosen.&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Stratified Sampling:&lt;/strong&gt; Assume that we need to estimate average number of votes for each candidate in an election. Assume that country has 3 towns : Town A has 1 million factory workers, Town B has 2 million workers and Town C has 3 million retirees. We can choose to get a random sample of size 60 over entire population but there is some chance that the random sample turns out to be not well balanced across these towns and hence is biased causing a significant error in estimation. Instead if we choose to take a random sample of 10, 20 and 30 from Town A, B and C respectively then we can produce a smaller error in estimation for the same total size of sample.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Reservoir Sampling&lt;/strong&gt; :&lt;em&gt;Say you have a stream of items of large and unknown length that we can only iterate over once. Create an algorithm that randomly chooses an item from this stream such that each item is equally likely to be selected.&lt;/em&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;2-map-reduce-if-you-want-to-work-with-the-whole-data&#34;&gt;2. &lt;strong&gt;Map-Reduce. If you want to work with the whole data&lt;/strong&gt;.&lt;/h2&gt;
-
-&lt;p&gt;Can be used for feature creation. For Example: I had a use case where I had a graph of 60 Million customers and 130 Million accounts. Each account was connected to other account if they had the Same SSN or Same Name+DOB+Address. I had to find customer ID’s for each of the accounts. On a single node parsing such a graph took more than 2 days. On a Hadoop cluster of 80 nodes running a &lt;em&gt;Connected Component Algorithm&lt;/em&gt; took less than 24 minutes. On Spark it is even faster.&lt;/p&gt;
-
-&lt;h2 id=&#34;3-graph-algorithms&#34;&gt;3. &lt;strong&gt;Graph Algorithms.&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;Recently I was working on an optimization problem which was focussed on finding shortest distance and routes between two points in a store layout. Routes which don’t pass through different aisles, so we cannot use euclidean distances. We solved this problem by considering turning points in the store layout and the &lt;em&gt;djikstra’s Algorithm.&lt;/em&gt;&lt;/p&gt;
-
-&lt;script src=&#34;//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e&#34;&gt;&lt;/script&gt;
-
-&lt;h2 id=&#34;4-feature-selection&#34;&gt;4. &lt;strong&gt;Feature Selection.&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Univariate Selection.&lt;/strong&gt; Statistical tests can be used to select those features that have the strongest relationship with the output variable.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;VarianceThreshold.&lt;/strong&gt; Feature selector that removes all low-variance features.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Recursive Feature Elimination.&lt;/strong&gt; The goal of recursive feature elimination (RFE) is to select features by recursively considering smaller and smaller sets of features. First, the estimator is trained on the initial set of features and weights are assigned to each one of them. Then, features whose absolute weights are the smallest are pruned from the current set features. That procedure is recursively repeated on the pruned set until the desired number of features to select is eventually reached.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Feature Importance:&lt;/strong&gt; Methods that use ensembles of decision trees (like Random Forest or Extra Trees) can also compute the relative importance of each attribute. These importance values can be used to inform a feature selection process.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;5-algorithms-to-work-efficiently&#34;&gt;5. &lt;strong&gt;Algorithms to work efficiently.&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;p&gt;Apart from these above algorithms sometimes you may need to write your own algorithms. Now I think of big algorithms as a combination of small but powerful algorithms. You just need to have idea of these algorithms to make a more better/efficient product. So some of these powerful algorithms which can help you are:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Recursive Algorithms:&lt;/strong&gt;Binary search algorithm.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Divide and Conquer Algorithms:&lt;/strong&gt; Merge-Sort.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Dynamic Programming:&lt;/strong&gt;Solving a complex problem by breaking it down into a collection of simpler subproblems, solving each of those subproblems just once, and storing their solutions.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;6-classification-regression-algorithms-the-usual-suspects-minimum-you-must-know&#34;&gt;6. &lt;strong&gt;Classification/Regression Algorithms.&lt;/strong&gt; The usual suspects. Minimum you must know:&lt;/h2&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;Linear Regression -&lt;/strong&gt; Ridge Regression, Lasso Regression, ElasticNet&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Logistic Regression&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;From there you can build upon:
-
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;Decision Trees -&lt;/strong&gt; ID3, CART, C4.5, C5.0&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;KNN&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;SVM&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;ANN&lt;/strong&gt; - Back Propogation, CNN&lt;/li&gt;
-&lt;/ol&gt;&lt;/li&gt;
-&lt;li&gt;And then on to Ensemble based algorithms:
-
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;Boosting&lt;/strong&gt;: Gradient Boosted Trees&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Bagging&lt;/strong&gt;: Random Forests&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Blending&lt;/strong&gt;: Prediction outputs of different learning algorithms are fed into another learning algorithm.&lt;/li&gt;
-&lt;/ol&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&#34;7-clustering-methods-for-unsupervised-learning&#34;&gt;7 . &lt;strong&gt;Clustering Methods.&lt;/strong&gt;For unsupervised learning.&lt;/h2&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;k-Means&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;k-Medians&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Expectation Maximisation (EM)&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Hierarchical Clustering&lt;/strong&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&#34;8-other-algorithms-you-can-learn-about&#34;&gt;8. &lt;strong&gt;Other algorithms you can learn about:&lt;/strong&gt;&lt;/h2&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;Apriori algorithm&lt;/strong&gt;- Association Rule Mining&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Eclat algorithm -&lt;/strong&gt; Association Rule Mining&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Item/User Based Similarity -&lt;/strong&gt; Recommender Systems&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Reinforcement learning -&lt;/strong&gt; Build your own robot.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Graphical Models&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Bayesian Algorithms&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;NLP -&lt;/strong&gt; For language based models. Chatbots.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Hope this has been helpful&amp;hellip;..&lt;/p&gt;
-</description>
+      <description>As a data scientist I believe that a lot of work has to be done before Classification/Regression/Clustering methods are applied to the data you get. The data which may be messy, unwieldy and big. So here are the list of algorithms that helps a data scientist to make better models using the data they have:
+1. Sampling Algorithms. In case you want to work with a sample of data.</description>
     </item>
     
   </channel>

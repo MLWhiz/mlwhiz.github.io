@@ -1,208 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>
-    Pandas on 
-    MLWhiz
-    </title>
+    <title>Pandas on MLWhiz</title>
     <link>https://mlwhiz.com/tags/pandas/</link>
-    <description>Recent content in Pandas 
-    on MLWhiz</description>
+    <description>Recent content in Pandas on MLWhiz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    
-    
     <lastBuildDate>Thu, 27 Oct 2016 00:00:00 +0000</lastBuildDate>
-    
     
         <atom:link href="https://mlwhiz.com/tags/pandas/atom.xml" rel="self" type="application/rss" />
     
     
+
     <item>
       <title>Pandas For All - Some Basic Pandas Functions</title>
       <link>https://mlwhiz.com/blog/2016/10/27/baby_panda/</link>
       <pubDate>Thu, 27 Oct 2016 00:00:00 +0000</pubDate>
       
       <guid>https://mlwhiz.com/blog/2016/10/27/baby_panda/</guid>
-      <description>
-
-&lt;p&gt;It has been quite a few days I have been working with Pandas and apparently I feel I have gotten quite good at it. (Quite a Braggard I know)
-So thought about adding a post about Pandas usage here. I intend to make this post quite practical and since I find the pandas syntax quite self explanatory, I won&amp;rsquo;t be explaining much of the codes. Just the use cases and the code to achieve them.&lt;/p&gt;
-
-&lt;h2 id=&#34;1-import-pandas&#34;&gt;1. Import Pandas&lt;/h2&gt;
-
-&lt;p&gt;We Start by importing the libraries that we will need to use.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; pandas &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; pd&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;2-read-a-datasource&#34;&gt;2. Read a Datasource:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Read from csv data files&lt;/span&gt;
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# With Header&lt;/span&gt;
-df &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pd&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;read_csv(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/Users/ragarw5/Downloads/SalesJan2009.csv&amp;#34;&lt;/span&gt;)
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# Without Header. sep param to provide the delimiter&lt;/span&gt;
-df &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pd&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;read_csv(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/Users/ragarw5/Downloads/SalesJan2009.csv&amp;#34;&lt;/span&gt;, header&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;None, sep&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;,&amp;#34;&lt;/span&gt;)
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# Reading from SQL Datasource&lt;/span&gt;
-
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; MySQLdb
-&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; pandas &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; DataFrame
-&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; pandas.io.sql &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; read_sql
-
-db &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; MySQLdb&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;connect(host&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;localhost&amp;#34;&lt;/span&gt;,    &lt;span style=&#34;color:#75715e&#34;&gt;# your host, usually localhost&lt;/span&gt;
-                     user&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;root&amp;#34;&lt;/span&gt;,         &lt;span style=&#34;color:#75715e&#34;&gt;# your username&lt;/span&gt;
-                     passwd&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;password&amp;#34;&lt;/span&gt;,   &lt;span style=&#34;color:#75715e&#34;&gt;# your password&lt;/span&gt;
-                     db&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;dbname&amp;#34;&lt;/span&gt;)         &lt;span style=&#34;color:#75715e&#34;&gt;# name of the data base&lt;/span&gt;
-
-query &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;SELECT * FROM tablename&amp;#34;&lt;/span&gt;
-
-data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; read_sql(query, db)
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# Reading from ExcelFile&lt;/span&gt;
-data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pd&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;read_excel(filename)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;For now, we will be working with the file at &lt;a href=&#34;http://samplecsvs.s3.amazonaws.com/SalesJan2009.csv&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;http://samplecsvs.s3.amazonaws.com/SalesJan2009.csv&lt;/a&gt;. The Sales Jan 2009 file contains some “sanitized” sales transactions during the month of January. If you want to work along you can download this file from that location.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;df &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pd&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;read_csv(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/Users/ragarw5/Downloads/SalesJan2009.csv&amp;#34;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;3-see-few-rows-of-data&#34;&gt;3. See few rows of data:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# top 5 rows&lt;/span&gt;
-df&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;head()
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# top 50 rows&lt;/span&gt;
-df&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;head(&lt;span style=&#34;color:#ae81ff&#34;&gt;50&lt;/span&gt;)
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# last 5 rows&lt;/span&gt;
-df&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;tail()
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# last 50 rows&lt;/span&gt;
-df&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;tail(&lt;span style=&#34;color:#ae81ff&#34;&gt;50&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;4-getting-column-names-in-a-list&#34;&gt;4. Getting Column Names in a list:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;columnnames &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; df&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;columns&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;5-specifying-user-defined-column-names&#34;&gt;5. Specifying user defined Column Names:&lt;/h2&gt;
-
-&lt;p&gt;Sometimes you want to change the column names:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;df&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;columns &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Transdate&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Product&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Price&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;PaymentType&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Name&amp;#39;&lt;/span&gt;,
-       &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;City&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;State&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Country&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;AccountCreated&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;LastLogin&amp;#39;&lt;/span&gt;,
-       &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Latitude&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Longitude&amp;#39;&lt;/span&gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;6-subsetting-specific-columns&#34;&gt;6. Subsetting specific columns:&lt;/h2&gt;
-
-&lt;p&gt;Sometimes you only need to work with specific columns in a dataframe only. You can subset the columns in the dataframe using&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;newDf &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; df[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Product&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Price&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;PaymentType&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Name&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;City&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;State&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Country&amp;#39;&lt;/span&gt;]]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;7-seeing-column-types&#34;&gt;7. Seeing column types:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;newDf&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;dtypes&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;8-change-type-of-a-column&#34;&gt;8. Change type of a column&lt;/h2&gt;
-
-&lt;p&gt;First thing i try is this.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;newDf[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Price&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; newDf[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Price&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;astype(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;int&amp;#39;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;It gives error : ValueError: invalid literal for long() with base 10: &amp;lsquo;13,000&amp;rsquo;. That is you cannot cast a string with &amp;ldquo;,&amp;rdquo; to an int. To do that we first have to get rid of the comma. For that we use a particular lambda-apply functionality which lets us apply functions to each row in the data.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;newDf[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Price&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; newDf&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;apply(&lt;span style=&#34;color:#66d9ef&#34;&gt;lambda&lt;/span&gt; x: int(x[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Price&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;replace(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;)),axis&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;script src=&#34;//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e&#34;&gt;&lt;/script&gt;
-
-&lt;h2 id=&#34;9-simple-dataframe-statistics&#34;&gt;9. Simple Dataframe Statistics:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# To get statistics of numerical columns&lt;/span&gt;
-newDf&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;describe()
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# To get maximum value of a column. When you take a single column you can think of it as a list and apply functions you would apply to a list&lt;/span&gt;
-max(newDf[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Price&amp;#39;&lt;/span&gt;])
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# no of rows in dataframe&lt;/span&gt;
-len(newDf)
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# Shape of Dataframe&lt;/span&gt;
-newDf&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;shape&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;10-creating-a-new-column&#34;&gt;10. Creating a new column:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Create a column Address containing City,State and Country. Simply concat the columns.&lt;/span&gt;
-newDf[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Address&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; newDf[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;City&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;,&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; newDf[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;State&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;,&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; newDf[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Country&amp;#39;&lt;/span&gt;]
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# I like to use a function defined approach with lambda-apply as it gives me more flexibility and more options. Like if i want to create a column which is 1 if the price is greater than 1200 and 0 otherwise.&lt;/span&gt;
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;gt&lt;/span&gt;(x):
-	&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; x&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1200&lt;/span&gt;:
-		&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
-	&lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;:
-		&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
-
-newDf[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Pricegt1200&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; newDf&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;apply(&lt;span style=&#34;color:#66d9ef&#34;&gt;lambda&lt;/span&gt; x: gt(x[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Price&amp;#39;&lt;/span&gt;]),axis&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;11-subset-a-dataframe&#34;&gt;11. Subset a DataFrame:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Single condition: dataframe with all entries priced greater than 1500&lt;/span&gt;
-
-df_gt_1500 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; newDf[newDf[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Price&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1500&lt;/span&gt;]
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# Multiple conditions: AND - dataframe with all entries priced greater than 1500 and from London&lt;/span&gt;
-
-And_df &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; newDf[(newDf[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Price&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1500&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt; (newDf[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;City&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;London&amp;#39;&lt;/span&gt;)]
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# Multiple conditions: OR - dataframe with all entries priced greater than 1500 or from London&lt;/span&gt;
-
-Or_df &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; newDf[(newDf[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Price&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1500&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; (newDf[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;City&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;London&amp;#39;&lt;/span&gt;)]
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# Multiple conditions: NOT - dataframe with all entries priced greater than 1500 or from London have to be excluded&lt;/span&gt;
-
-Not_df &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; newDf[&lt;span style=&#34;color:#f92672&#34;&gt;~&lt;/span&gt;((newDf[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Price&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1500&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; (newDf[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;City&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;London&amp;#39;&lt;/span&gt;))]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;12-change-the-column-at-particular-places-or-impute&#34;&gt;12. Change the Column at particular places or impute:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# In the state column the state is abbreviated as &amp;#39;TX&amp;#39;. We want the whole name &amp;#39;Texas&amp;#39; in there&lt;/span&gt;
-newDf&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;loc[newDf[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;State&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;TX&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;State&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Texas&amp;#39;&lt;/span&gt;
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# When City is Monaco State is not given. You want to impute &amp;#39;Monaco State&amp;#39; as state also.&lt;/span&gt;
-newDf&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;loc[newDf[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;City&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Monaco&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;State&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Monaco State&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;13-groupby&#34;&gt;13. GroupBy:&lt;/h2&gt;
-
-&lt;p&gt;One of the most used functionality. One simple example&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Find out the sum of transactions by a state. reset_index() is a function that resets the index of a dataframe. I apply this function ALWAYS whenever I do a groupby and you might think of it as a default syntax for groupby operations&lt;/span&gt;
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; np
-newDf&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;groupby([&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;State&amp;#39;&lt;/span&gt;])&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;aggregate(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sum)&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reset_index()
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# You might get a few extra columns that you dont need. Just subset the columns in the dataframe. You could just chain the commands to subset for the columns you need.&lt;/span&gt;
-newDf&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;groupby([&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;State&amp;#39;&lt;/span&gt;])&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;aggregate(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sum)&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reset_index()[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;State&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Price&amp;#39;&lt;/span&gt;]]
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# Find minimum transaction in each state&lt;/span&gt;
-newDf&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;groupby([&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;State&amp;#39;&lt;/span&gt;])&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;aggregate(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;min)&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reset_index()[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;State&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Price&amp;#39;&lt;/span&gt;]]
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# You might want to groupby more than one column&lt;/span&gt;
-
-newDf&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;groupby([&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;State&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;City&amp;#39;&lt;/span&gt;])&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;aggregate(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sum)&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reset_index()[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;State&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;City&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Price&amp;#39;&lt;/span&gt;]]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;14-concat&#34;&gt;14. Concat:&lt;/h2&gt;
-
-&lt;p&gt;You have two datarames df1 and df2 you need to concat. Means append one below the other you can do it using:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;pd&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;concat([df1,df2])&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;15-merge&#34;&gt;15. Merge:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#Suppose in the start, you had two dataframes. One which contains city and price information:&lt;/span&gt;
-City_Price &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; newwDf[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;City&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Price&amp;#39;&lt;/span&gt;]]
-
-&lt;span style=&#34;color:#75715e&#34;&gt;#And another which contains &amp;#39;City&amp;#39; and &amp;#39;State&amp;#39; insformation&lt;/span&gt;
-City_State &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; newDf[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;City&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;State&amp;#39;&lt;/span&gt;]]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;drop_duplicates(keep&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False)&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reset_index()
-
-&lt;span style=&#34;color:#75715e&#34;&gt;#You need to merge these datatframes on basis of city. You need to do:&lt;/span&gt;
-City_Price_State_df &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pd&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;merge(City_Price,City_State,on&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;City&amp;#39;&lt;/span&gt;],how&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;left&amp;#39;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;16-save-a-dataframe-to-external-file&#34;&gt;16. Save a Dataframe to external File:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# To Csv file&lt;/span&gt;
-newDf&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;to_csv(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;NewDfData.csv&amp;#34;&lt;/span&gt;,index&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False)
-
-&lt;span style=&#34;color:#75715e&#34;&gt;# To Excel File&lt;/span&gt;
-&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; pandas &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; ExcelWriter
-writer &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;  ExcelWriter(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;NewDfData.xlsx&amp;#39;&lt;/span&gt;)
-newDf&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;to_excel(writer,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Sheet1&amp;#39;&lt;/span&gt;)
-writer&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;save()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h2 id=&#34;17-pushing-pandas-df-to-a-sql-database&#34;&gt;17. Pushing Pandas Df to a sql database:&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; pandas.io &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sql
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; MySQLdb
-
-db &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; MySQLdb&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;connect(host&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;localhost&amp;#34;&lt;/span&gt;,    &lt;span style=&#34;color:#75715e&#34;&gt;# your host, usually localhost&lt;/span&gt;
-                     user&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;root&amp;#34;&lt;/span&gt;,         &lt;span style=&#34;color:#75715e&#34;&gt;# your username&lt;/span&gt;
-                     passwd&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;password&amp;#34;&lt;/span&gt;,  &lt;span style=&#34;color:#75715e&#34;&gt;# your password&lt;/span&gt;
-                     db&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;dbname&amp;#34;&lt;/span&gt;)        &lt;span style=&#34;color:#75715e&#34;&gt;# name of the data base&lt;/span&gt;
-
-newDf&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;to_sql(con &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; db, name&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;tablename&amp;#39;&lt;/span&gt;,if_exists&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;append&amp;#39;&lt;/span&gt;,flavor&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;mysql&amp;#39;&lt;/span&gt;, chunksize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;10000&lt;/span&gt;,index&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Hope you found this post useful and worth your time. I tried to make this as simple as possible but You may always &lt;strong&gt;ask me&lt;/strong&gt; or see the documentation for doubts.&lt;/p&gt;
-
-&lt;p&gt;If you have &lt;strong&gt;any more ideas&lt;/strong&gt; on how to use Pandas or &lt;strong&gt;other usecases&lt;/strong&gt;, please suggest in the &lt;strong&gt;comments&lt;/strong&gt; section.&lt;/p&gt;
-
-&lt;p&gt;Till then ciao!!&lt;/p&gt;
-
-&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;a href=&#34;http://www.gregreda.com/2013/10/26/intro-to-pandas-data-structures/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Intro to Pandas By Greg Rada&lt;/a&gt; What I have written is in a condensed form, If you want to get a detailed description visit Greg Rada&amp;rsquo;s 3 posts series.&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://pandas.pydata.org/pandas-docs/stable/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Pandas Documentation&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-</description>
+      <description>It has been quite a few days I have been working with Pandas and apparently I feel I have gotten quite good at it. (Quite a Braggard I know) So thought about adding a post about Pandas usage here. I intend to make this post quite practical and since I find the pandas syntax quite self explanatory, I won&amp;rsquo;t be explaining much of the codes. Just the use cases and the code to achieve them.</description>
     </item>
     
   </channel>
