@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Bash on MLWhiz</title>
+    <title>
+    Bash on 
+    MLWhiz
+    </title>
     <link>https://mlwhiz.com/tags/bash/</link>
-    <description>Recent content in Bash on MLWhiz</description>
+    <description>Recent content in Bash 
+    on MLWhiz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    
+    
     <lastBuildDate>Sun, 11 Oct 2015 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://mlwhiz.com/tags/bash/atom.xml" rel="self" type="application/rss" />
+    
+        <atom:link href="https://mlwhiz.com/tags/bash/atom.xml" rel="self" type="application/rss" />
     
     
     <item>
@@ -17,8 +24,294 @@
       <pubDate>Sun, 11 Oct 2015 00:00:00 +0000</pubDate>
       
       <guid>https://mlwhiz.com/blog/2015/10/11/shell_basics_for_data_science_2/</guid>
-      <description>Yesterday I got introduced to awk programming on the shell and is it cool. It lets you do stuff on the command line which you never imagined. As a matter of fact, it&amp;rsquo;s a whole data analytics software in itself when you think about it. You can do selections, groupby, mean, median, sum, duplication, append. You just ask. There is no limit actually.
-And it is easy to learn.</description>
+      <description>
+
+&lt;p&gt;Yesterday I got introduced to awk programming on the shell and is it cool. It lets you do stuff on the command line which you never imagined. As a matter of fact, it&amp;rsquo;s a whole data analytics software in itself when you think about it. You can do selections, groupby, mean, median, sum, duplication, append. You just ask. There is no limit actually.&lt;/p&gt;
+
+&lt;p&gt;And it is easy to learn.&lt;/p&gt;
+
+&lt;p&gt;In this post, I will try to give you a brief intro about how you could add awk to your daily work-flow.&lt;/p&gt;
+
+&lt;p&gt;Please see my previous &lt;a href=&#34;http://mlwhiz.com/blog/2015/10/09/shell_basics_for_data_science/&#34; target=&#34;_blank&#34; &gt;post&lt;/a&gt; if you want some background or some basic to intermediate understanding of shell commands.&lt;/p&gt;
+
+&lt;h2 id=&#34;basics-fundamentals&#34;&gt;Basics/ Fundamentals&lt;/h2&gt;
+
+&lt;p&gt;So let me start with an example first. Say you wanted to sum a column in a comma delimited file. How would you do that in shell?&lt;/p&gt;
+
+&lt;p&gt;Here is the command. The great thing about awk is that it took me nearly 5 sec to write this command. I did not have to open any text editor to write a python script.&lt;/p&gt;
+
+&lt;p&gt;It lets you do adhoc work quickly.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;awk &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;BEGIN{ sum=0; FS=&amp;#34;,&amp;#34;} { sum += $5 } END { print sum }&amp;#39;&lt;/span&gt; data.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF112&#34;&gt;44662539172
+&lt;/pre&gt;
+
+&lt;p&gt;See the command one more time. There is a basic structure to the awk command&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;
+
+&lt;pre&gt;&lt;span class=&#34;n&#34;&gt;BEGIN&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;action&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;pattern&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;action&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;pattern&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;action&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;pattern&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;action&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;END&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;action&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;
+
+&lt;/div&gt;
+
+&lt;p&gt;An awk program consists of:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;An optional BEGIN segment : In the begin part we initialize our variables before we even start reading from the file or the standard input.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;pattern - action pairs: In the middle part we Process the input data. You put multiple pattern action pairs when you want to do multiple things with the same line.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;An optional END segment: In the end part we do something we want to do when we have reached the end of file.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;An awk command is called on a file using:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;awk &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;BEGIN{SOMETHING HERE} {SOMETHING HERE: could put Multiple Blocks Like this} END {SOMETHING HERE}&amp;#39;&lt;/span&gt; file.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;You also need to know about these preinitialized variables that awk keeps track of.:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;FS : field separator. Default is whitespace (1 or more spaces or tabs). If you are using any other seperator in the file you should specify it in the Begin Part.&lt;/li&gt;
+&lt;li&gt;RS : record separator. Default record separator is newline. Can be changed in BEGIN action.&lt;/li&gt;
+&lt;li&gt;NR : NR is the variable whose value is the number of the current record. You normally use it in the action blocks in the middle.&lt;/li&gt;
+&lt;li&gt;NF : The Number of Fields after the single line has been split up using FS.&lt;/li&gt;
+&lt;li&gt;Dollar variables : awk splits up the line which is coming to it by using the given FS and keeps the split parts in the $ variables. For example column 1 is in &lt;code&gt;$1&lt;/code&gt;, column 2 is in &lt;code&gt;$2&lt;/code&gt;. &lt;code&gt;$0&lt;/code&gt; is the string representation of the whole line. Note that if you want to access last column you don&amp;rsquo;t have to count. You can just use &lt;code&gt;$NF&lt;/code&gt;. For second last column you can use &lt;code&gt;$(NF-1)&lt;/code&gt;. Pretty handy. Right.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;So If you are with me till here, the hard part is done. Now the fun part starts. Lets look at the first awk command again and try to understand it.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;awk &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;BEGIN{ sum=0; FS=&amp;#34;,&amp;#34;} { sum += $5 } END { print sum }&amp;#39;&lt;/span&gt; data.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;So there is a begin block. Remember before we read any line. We initialize sum to 0 and FS to &amp;ldquo;,&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;Now as awk reads its input line by line it increments sum by the value in column 5(as specified by &lt;code&gt;$5&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;Note that there is no pattern specified here so awk will do the action for every line.&lt;/p&gt;
+
+&lt;p&gt;When awk has completed reading the file it prints out the sum.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;What if you wanted mean?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;We could create a cnt Variable:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;awk &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;BEGIN{ sum=0;cnt=0; FS=&amp;#34;,&amp;#34;} { sum += $5; cnt+=1 } END { print sum/cnt }&amp;#39;&lt;/span&gt; data.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF112&#34;&gt;1.86436e+06
+&lt;/pre&gt;
+
+&lt;p&gt;or better yet, use our friend NR which bash is already keeping track of:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;awk &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;BEGIN{ sum=0; FS=&amp;#34;,&amp;#34;} { sum += $5 } END { print sum/NR }&amp;#39;&lt;/span&gt; data.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF112&#34;&gt;1.86436e+06
+&lt;/pre&gt;
+
+&lt;h2 id=&#34;filter-a-file&#34;&gt;Filter a file&lt;/h2&gt;
+
+&lt;p&gt;In the mean and sum awk commands we did not put any pattern in our middle commands. Let us use a simple pattern now. Suppose we have a file Salaries.csv which contains:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;head salaries.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF112&#34;&gt;yearID,teamID,lgID,playerID,salary
+1985,BAL,AL,murraed02,1472819
+1985,BAL,AL,lynnfr01,1090000
+1985,BAL,AL,ripkeca01,800000
+1985,BAL,AL,lacyle01,725000
+1985,BAL,AL,flanami01,641667
+1985,BAL,AL,boddimi01,625000
+1985,BAL,AL,stewasa01,581250
+1985,BAL,AL,martide01,560000
+1985,BAL,AL,roeniga01,558333
+&lt;/pre&gt;
+
+&lt;p&gt;I want to filter records for players who who earn more than 22 M in 2013 just because I want to. You just do:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;awk &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;BEGIN{FS=&amp;#34;,&amp;#34;} $5&amp;gt;=22000000 &amp;amp;&amp;amp; $1==2013{print $0}&amp;#39;&lt;/span&gt; Salaries.csv&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF112&#34;&gt;2013,DET,AL,fieldpr01,23000000
+2013,MIN,AL,mauerjo01,23000000
+2013,NYA,AL,rodrial01,29000000
+2013,NYA,AL,wellsve01,24642857
+2013,NYA,AL,sabatcc01,24285714
+2013,NYA,AL,teixema01,23125000
+2013,PHI,NL,leecl02,25000000
+2013,SFN,NL,linceti01,22250000
+&lt;/pre&gt;
+
+&lt;p&gt;Cool right. Now let me explain it a little bit. The part in the command &amp;ldquo;&lt;code&gt;$5&lt;/code&gt;&amp;gt;=22000000 &amp;amp;&amp;amp; &lt;code&gt;$1&lt;/code&gt;==2013&amp;rdquo; is called a pattern. It says that print this line(&lt;code&gt;$0&lt;/code&gt;) if and only if the Salary(&lt;code&gt;$5&lt;/code&gt;) is more than 22M and(&amp;amp;&amp;amp;) year(&lt;code&gt;$1&lt;/code&gt;) is equal to 2013. If the incoming record(line) does not satisfy this pattern it never reaches the inner block.&lt;/p&gt;
+
+&lt;p&gt;So Now you could do basic Select SQL at the command line only if you had:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;The logic Operators:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;== equality operator; returns TRUE is both sides are equal&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;!= inverse equality operator&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&amp;amp;&amp;amp; logical AND&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;|| logical OR&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;! logical NOT&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&amp;lt;, &amp;gt;, &amp;lt;=, &amp;gt;= relational operators&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Normal Arithmetic Operators:&lt;/strong&gt; +, -, /, *, %, ^&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Some String Functions:&lt;/strong&gt; length, substr, split&lt;/p&gt;
+
+&lt;h2 id=&#34;groupby&#34;&gt;GroupBy&lt;/h2&gt;
+
+&lt;p&gt;Now you will say: &amp;ldquo;Hey Dude SQL without groupby is incomplete&amp;rdquo;. You are right and for that we can use the associative array. Lets just see the command first and then I will explain. So lets create another useless use case(or may be something useful to someone :)) We want to find out the number of records for each year in the file. i.e we want to find the distribution of years in the file. Here is the command:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;awk &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;BEGIN{FS=&amp;#34;,&amp;#34;}
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    {my_array[$1]=my_array[$1]+1}
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    END{
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    for (k in my_array){if(k!=&amp;#34;yearID&amp;#34;)print k&amp;#34;|&amp;#34;my_array[k]};
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    }&amp;#39;&lt;/span&gt; Salaries.csv&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF112&#34;&gt;1990|867
+1991|685
+1996|931
+1997|925
+...
+&lt;/pre&gt;
+
+&lt;p&gt;Now I would like to tell you a secret. You don&amp;rsquo;t really need to declare the variables you want to use in awk. So you did not really needed to define sum, cnt variables before. I only did that because it is good practice. If you don&amp;rsquo;t declare a user defined variable in awk, awk assumes it to be null or zero depending on the context. So in the command above we don&amp;rsquo;t declare our myarray in the begin block and that is fine.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Associative Array&lt;/strong&gt;: The variable myarray is actually an associative array. i.e. It stores data in a key value format.(Python dictionaries anyone). The same array could keep integer keys and String keys. For example, I can do this in a single code.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;
+
+&lt;pre&gt;&lt;span class=&#34;n&#34;&gt;myarray&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&#34;key&#34;&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;myarray&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&#39;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;mlwhiz&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;
+&lt;/pre&gt;
+
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;For Loop for associative arrays&lt;/strong&gt;: I could use a for loop to read associative array&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;
+
+&lt;pre&gt;&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;k&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;array&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;DO&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SOMETHING&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;cp&#34;&gt;# Assigns to k each Key of array (unordered)&lt;/span&gt;
+&lt;span class=&#34;cp&#34;&gt;# Element is array[k]&lt;/span&gt;
+&lt;/pre&gt;
+
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;If Statement&lt;/strong&gt;:Uses a syntax like C for the if statement. the else block is optional:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;
+
+&lt;pre&gt;&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&gt;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
+  &lt;span class=&#34;n&#34;&gt;DO&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SOMETHING&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;else&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;n&#34;&gt;DO&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SOMETHING&lt;/span&gt;
+  &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/pre&gt;
+
+&lt;/div&gt;
+
+&lt;p&gt;So lets dissect the above command now.&lt;/p&gt;
+
+&lt;p&gt;I set the File separator to &amp;ldquo;,&amp;rdquo; in the beginning. I use the first column as the key of myarray. If the key exists I increment the value by 1.&lt;/p&gt;
+
+&lt;p&gt;At the end, I loop through all the keys and print out key value pairs separated by &amp;ldquo;|&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;I know that the header line in my file contains &amp;ldquo;yearID&amp;rdquo; in column 1 and I don&amp;rsquo;t want &amp;lsquo;yearID|1&amp;rsquo; in the output. So I only print when Key is not equal to &amp;lsquo;yearID&amp;rsquo;.&lt;/p&gt;
+
+&lt;h2 id=&#34;groupby-with-case-statement&#34;&gt;GroupBy with case statement:&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat Salaries.csv | awk &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;BEGIN{FS=&amp;#34;,&amp;#34;}
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    $5&amp;lt;100000{array5[&amp;#34;[0-100000)&amp;#34;]+=1}
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    $5&amp;gt;=100000&amp;amp;&amp;amp;$5&amp;lt;250000{array5[&amp;#34;[100000,250000)&amp;#34;]=array5[&amp;#34;[100000,250000)&amp;#34;]+1}
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    $5&amp;gt;=250000&amp;amp;&amp;amp;$5&amp;lt;500000{array5[&amp;#34;[250000-500000)&amp;#34;]=array5[&amp;#34;[250000-500000)&amp;#34;]+1}
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    $5&amp;gt;=500000&amp;amp;&amp;amp;$5&amp;lt;1000000{array5[&amp;#34;[500000-1000000)&amp;#34;]=array5[&amp;#34;[500000-1000000)&amp;#34;]+1}
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    $5&amp;gt;=1000000{array5[&amp;#34;[1000000)&amp;#34;]=array5[&amp;#34;[1000000)&amp;#34;]+1}
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    END{
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    print &amp;#34;VAR Distrib:&amp;#34;;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    for (v in array5){print v&amp;#34;|&amp;#34;array5[v]}
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    }&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF112&#34;&gt;VAR Distrib:
+[250000-500000)|8326
+[0-100000)|2
+[1000000)|23661
+[100000,250000)|9480
+&lt;/pre&gt;
+
+&lt;p&gt;Here we used multiple pattern-action blocks to create a case statement.&lt;/p&gt;
+
+&lt;h2 id=&#34;for-the-brave&#34;&gt;For The Brave:&lt;/h2&gt;
+
+&lt;p&gt;This is a awk code that I wrote to calculate the Mean,Median,min,max and sum of a column simultaneously. Try to go through the code and understand it.I have added comments too. Think of this as an exercise. Try to run this code and play with it. You may learn some new tricks in the process. If you don&amp;rsquo;t understand it do not worry. Just get started writing your own awk codes, you will be able to understand it in very little time.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# Create a New file named A.txt to keep only the salary column.&lt;/span&gt;
+    cat Salaries.csv | cut -d &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;,&amp;#34;&lt;/span&gt; -f &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt; &amp;gt; A.txt
+    FILENAME&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;A.txt&amp;#34;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;# The first awk counts the number of lines which are numeric. We use a regex here to check if the column is numeric or not.&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;# &amp;#39;;&amp;#39; stands for Synchronous execution i.e sort only runs after the awk is over.&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;# The output of both commands are given to awk command which does the whole work.&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;# So Now the first line going to the second awk is the number of lines in the file which are numeric.&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;# and from the second to the end line the file is sorted.&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;awk &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;BEGIN {c=0} $1 ~ /^[-0-9]*(\.[0-9]*)?$/ {c=c+1;} END {print c;}&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$FILENAME&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;; &lt;span style=&#34;color:#ae81ff&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;            sort -n &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;$FILENAME&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; | awk &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;      BEGIN {
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        c = 0;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        sum = 0;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        med1_loc = 0;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        med2_loc = 0;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        med1_val = 0;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        med2_val = 0;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        min = 0;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        max = 0;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;      }
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;      NR==1 {
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        LINES = $1
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        # We check whether numlines is even or odd so that we keep only
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        # the locations in the array where the median might be.
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        if (LINES%2==0) {med1_loc = LINES/2-1; med2_loc = med1_loc+1;}
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        if (LINES%2!=0) {med1_loc = med2_loc = (LINES-1)/2;}
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;      }
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;      $1 ~ /^[-0-9]*(\.[0-9]*)?$/  &amp;amp;&amp;amp;  NR!=1 {
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        # setting min value
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        if (c==0) {min = $1;}
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        # middle two values in array
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        if (c==med1_loc) {med1_val = $1;}
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        if (c==med2_loc) {med2_val = $1;}
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        c++
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        sum += $1
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        max = $1
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;      }
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;      END {
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        ave = sum / c
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        median = (med1_val + med2_val ) / 2
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        print &amp;#34;sum:&amp;#34; sum
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        print &amp;#34;count:&amp;#34; c
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        print &amp;#34;mean:&amp;#34; ave
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        print &amp;#34;median:&amp;#34; median
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        print &amp;#34;min:&amp;#34; min
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;        print &amp;#34;max:&amp;#34; max
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;      }
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    &amp;#39;&lt;/span&gt;
+
+&amp;lt;pre style&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF112&amp;#34;&lt;/span&gt;&amp;gt;sum:44662539172
+count:23956
+mean:1.86436e+06
+median:507950
+min:0
+max:33000000
+&amp;lt;/pre&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;endnote&#34;&gt;Endnote:&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;awk&lt;/strong&gt; is an awesome tool and there are a lot of use-cases where it can make your life simple. There is a sort of a learning curve, but I think that it would be worth it in the long term. I have tried to give you a taste of awk and I have covered a lot of ground here in this post. To tell you a bit more there, awk is a full programming language. There are for loops, while loops, conditionals, booleans, functions and everything else that you would expect from a programming language. So you could look more still.&lt;/p&gt;
+
+&lt;p&gt;To learn more about awk you can use this &lt;a href=&#34;http://ir.nmu.org.ua/bitstream/handle/123456789/143548/ecf2f2d8a72e7c3cffca0036a73aeed4.pdf?sequence=1&amp;amp;&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;book&lt;/a&gt;. This book is a free resource and you could learn more about awk and use cases.&lt;/p&gt;
+
+&lt;p&gt;Or if you like to have your book binded and in paper like me you can buy this book, which is a gem:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.amazon.com/gp/product/1565922255/ref=as_li_tl?ie=UTF8&amp;amp;camp=1789&amp;amp;creative=9325&amp;amp;creativeASIN=1565922255&amp;amp;linkCode=as2&amp;amp;tag=mlwhizcon-20&amp;amp;linkId=YC37WW67AJHS3T6S&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;amp;ASIN=1565922255&amp;amp;Format=_SL250_&amp;amp;ID=AsinImage&amp;amp;MarketPlace=US&amp;amp;ServiceVersion=20070822&amp;amp;WS=1&amp;amp;tag=mlwhizcon-20&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;img src=&#34;http://ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;amp;l=as2&amp;amp;o=1&amp;amp;a=1565922255&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Do leave comments in case you find more use-cases for awk or if you want me to write on new use-cases. Or just comment weather you liked it or not and how I could improve as I am also new and trying to learn more of this.&lt;/p&gt;
+
+&lt;p&gt;Till then Ciao !!!&lt;/p&gt;
+</description>
     </item>
     
     <item>
@@ -27,8 +320,321 @@ And it is easy to learn.</description>
       <pubDate>Fri, 09 Oct 2015 00:00:00 +0000</pubDate>
       
       <guid>https://mlwhiz.com/blog/2015/10/09/shell_basics_for_data_science/</guid>
-      <description>Shell Commands are powerful. And life would be like hell without shell is how I like to say it(And that is probably the reason that I dislike windows).
-Consider a case when you have a 6 GB pipe-delimited file sitting on your laptop and you want to find out the count of distinct values in one particular column. You can probably do this in more than one way. You could put that file in a database and run SQL Commands, or you could write a python/perl script.</description>
+      <description>
+
+&lt;p&gt;Shell Commands are powerful. And life would be like &lt;strong&gt;hell without shell&lt;/strong&gt; is how I like to say it(And that is probably the reason that I dislike windows).&lt;/p&gt;
+
+&lt;p&gt;Consider a case when you have a 6 GB pipe-delimited file sitting on your laptop and you want to find out the count of distinct values in one particular column. You can probably do this in more than one way. You could put that file in a database and run SQL Commands, or you could write a python/perl script.&lt;/p&gt;
+
+&lt;p&gt;Probably whatever you do it won&amp;rsquo;t be simpler/less time consuming than this&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat data.txt | cut -d &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;|&amp;#34;&lt;/span&gt; -f &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; | sort | uniq | wc -l&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;30
+&lt;/pre&gt;
+
+&lt;p&gt;And this will &lt;strong&gt;run way faster&lt;/strong&gt; than whatever you do with perl/python script.&lt;/p&gt;
+
+&lt;p&gt;Now this command says&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Use the &lt;strong&gt;cat&lt;/strong&gt; command to print/stream the contents of the file to stdout.&lt;/li&gt;
+&lt;li&gt;Pipe the streaming contents from our cat command to the next command &lt;strong&gt;cut&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;The &lt;strong&gt;cut&lt;/strong&gt; commands specifies the delimiter by the argument &lt;strong&gt;-d&lt;/strong&gt; and the column by the argument &lt;strong&gt;-f&lt;/strong&gt; and streams the output to stdout.&lt;/li&gt;
+&lt;li&gt;Pipe the streaming content to the &lt;strong&gt;sort&lt;/strong&gt; command which sorts the input and streams only the distinct values to the stdout. It takes the argument &lt;strong&gt;-u&lt;/strong&gt; that specifies that we only need unique values.&lt;/li&gt;
+&lt;li&gt;Pipe the output to the wc -l command which counts the number of lines in the input.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;There is a &lt;strong&gt;lot going on here&lt;/strong&gt; and I will try my best to ensure that &lt;strong&gt;you will be able to understand most of it by the end of this Blog post&lt;/strong&gt;.Although I will also try to explain more advanced concepts than the above command in this post.&lt;/p&gt;
+
+&lt;p&gt;Now, I use shell commands extensively at my job. I will try to explain the usage of each of the commands based on use cases that I counter nearly daily at may day job as a data scientist.&lt;/p&gt;
+
+&lt;h2 id=&#34;some-basic-commands-in-shell&#34;&gt;Some Basic Commands in Shell:&lt;/h2&gt;
+
+&lt;p&gt;There are a lot of times when you just need to know a little bit about the data. You just want to see may be a couple of lines to inspect a file. One way of doing this is opening the txt/csv file in the notepad. And that is probably the best way for small files. But you could also do it in the shell using:&lt;/p&gt;
+
+&lt;h3 id=&#34;1-cat&#34;&gt;1. cat&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat data.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;
+yearID|teamID|lgID|playerID|salary
+1985|BAL|AL|murraed02|1472819
+1985|BAL|AL|lynnfr01|1090000
+1985|BAL|AL|ripkeca01|800000
+1985|BAL|AL|lacyle01|725000
+1985|BAL|AL|flanami01|641667
+1985|BAL|AL|boddimi01|625000
+1985|BAL|AL|stewasa01|581250
+1985|BAL|AL|martide01|560000
+1985|BAL|AL|roeniga01|558333
+&lt;/pre&gt;
+
+&lt;p&gt;Now the &lt;a href=&#34;https://en.wikipedia.org/wiki/Cat_%28Unix%29&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;cat&lt;/a&gt; command prints the whole file in the terminal window for you.I have not shown the whole file here.&lt;/p&gt;
+
+&lt;p&gt;But sometimes the files will be so big that you wont be able to open them up in notepad++ or any other software utility and there the cat command will shine.&lt;/p&gt;
+
+&lt;h3 id=&#34;2-head-and-tail&#34;&gt;2. Head and Tail&lt;/h3&gt;
+
+&lt;p&gt;Now you might ask me why would you print the whole file in the terminal itself? Generally I won&amp;rsquo;t. But I just wanted to tell you about the cat command. For the use case when you want only the top/bottom n lines of your data you will generally use the &lt;a href=&#34;https://en.wikipedia.org/wiki/Head_%28Unix%29&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;head&lt;/a&gt;/&lt;a href=&#34;https://en.wikipedia.org/wiki/Tail_%28Unix%29&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;tail&lt;/a&gt; commands. You can use them as below.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;head data.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;yearID|teamID|lgID|playerID|salary
+1985|BAL|AL|murraed02|1472819
+1985|BAL|AL|lynnfr01|1090000
+1985|BAL|AL|ripkeca01|800000
+1985|BAL|AL|lacyle01|725000
+1985|BAL|AL|flanami01|641667
+1985|BAL|AL|boddimi01|625000
+1985|BAL|AL|stewasa01|581250
+1985|BAL|AL|martide01|560000
+1985|BAL|AL|roeniga01|558333
+&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;head -n &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; data.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;yearID|teamID|lgID|playerID|salary
+1985|BAL|AL|murraed02|1472819
+1985|BAL|AL|lynnfr01|1090000
+&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;tail data.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;2013|WAS|NL|bernaro01|1212500
+2013|WAS|NL|tracych01|1000000
+2013|WAS|NL|stammcr01|875000
+2013|WAS|NL|dukeza01|700000
+2013|WAS|NL|espinda01|526250
+2013|WAS|NL|matthry01|504500
+2013|WAS|NL|lombast02|501250
+2013|WAS|NL|ramoswi01|501250
+2013|WAS|NL|rodrihe03|501000
+2013|WAS|NL|moorety01|493000
+&lt;/pre&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;tail -n &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; data.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;2013|WAS|NL|rodrihe03|501000
+2013|WAS|NL|moorety01|493000
+&lt;/pre&gt;
+
+&lt;p&gt;Notice the structure of the shell command here.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;
+
+&lt;pre&gt;&lt;span class=&#34;n&#34;&gt;CommandName&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;arg1name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;arg1value&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;arg2name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;arg2value&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;filename&lt;/span&gt;
+&lt;/pre&gt;
+
+&lt;/div&gt;
+
+&lt;h3 id=&#34;3-piping&#34;&gt;3. Piping&lt;/h3&gt;
+
+&lt;p&gt;Now we could have also written the same command as:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat data.txt | head&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;yearID|teamID|lgID|playerID|salary
+1985|BAL|AL|murraed02|1472819
+1985|BAL|AL|lynnfr01|1090000
+1985|BAL|AL|ripkeca01|800000
+1985|BAL|AL|lacyle01|725000
+1985|BAL|AL|flanami01|641667
+1985|BAL|AL|boddimi01|625000
+1985|BAL|AL|stewasa01|581250
+1985|BAL|AL|martide01|560000
+1985|BAL|AL|roeniga01|558333
+&lt;/pre&gt;
+
+&lt;p&gt;This brings me to one of the most important concepts of Shell usage - &lt;a href=&#34;https://en.wikipedia.org/wiki/Pipeline_%28Unix%29&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;strong&gt;piping&lt;/strong&gt;&lt;/a&gt;. You won&amp;rsquo;t be able to utilize the full power the shell provides without using this concept. And the concept is actually simple.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Just read the &amp;ldquo;|&amp;rdquo; in the command as &amp;ldquo;pass the data on to&amp;rdquo;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;So I would read the above command as:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;cat&lt;/em&gt;(print) the whole data to stream, &lt;strong&gt;pass the data on to&lt;/strong&gt; &lt;em&gt;head&lt;/em&gt; so that it can just give me the first few lines only.&lt;/p&gt;
+
+&lt;p&gt;So did you understood what piping did? &lt;strong&gt;It is providing us a way to use our basic commands in a consecutive manner&lt;/strong&gt;. There are a lot of commands that are fairly basic and it lets us use these basic commands in sequence to do some fairly non trivial things.&lt;/p&gt;
+
+&lt;p&gt;Now let me tell you about a couple of more commands before I show you how we can &lt;strong&gt;chain&lt;/strong&gt; them to do fairly advanced tasks.&lt;/p&gt;
+
+&lt;h3 id=&#34;4-wc&#34;&gt;4. wc&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Wc_%28Unix%29&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;wc&lt;/a&gt; is a fairly useful shell utility/command that lets us &lt;strong&gt;count the number of lines(-l)&lt;/strong&gt;, &lt;strong&gt;words(-w)&lt;/strong&gt; or &lt;strong&gt;characters(-c)&lt;/strong&gt; in a given file&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;wc -l data.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;23957 data.txt
+&lt;/pre&gt;
+
+&lt;h3 id=&#34;5-grep&#34;&gt;5. grep&lt;/h3&gt;
+
+&lt;p&gt;You may want to print all the lines in your file which have a particular word. Or as a Data case you might like to see the salaries for the team BAL in 2000. In this case we have printed all the lines in the file which contain &amp;ldquo;2000|BAL&amp;rdquo;. &lt;a href=&#34;https://en.wikipedia.org/wiki/Grep&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;grep&lt;/a&gt; is your friend.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;grep &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;2000|BAL&amp;#34;&lt;/span&gt; data.txt | head&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;2000|BAL|AL|belleal01|12868670
+2000|BAL|AL|anderbr01|7127199
+2000|BAL|AL|mussimi01|6786032
+2000|BAL|AL|ericksc01|6620921
+2000|BAL|AL|ripkeca01|6300000
+2000|BAL|AL|clarkwi02|6000000
+2000|BAL|AL|johnsch04|4600000
+2000|BAL|AL|timlimi01|4250000
+2000|BAL|AL|deshide01|4209324
+2000|BAL|AL|surhobj01|4146789
+&lt;/pre&gt;
+
+&lt;p&gt;you could also use regular expressions with grep.&lt;/p&gt;
+
+&lt;h3 id=&#34;6-sort&#34;&gt;6. sort&lt;/h3&gt;
+
+&lt;p&gt;You may want to &lt;a href=&#34;https://en.wikipedia.org/wiki/Sort_%28Unix%29&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;sort&lt;/a&gt; your dataset on a particular column.Sort is your friend. Say you want to find out the top 10 maximum salaries given to any player in your dataset.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;sort -t &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;|&amp;#34;&lt;/span&gt; -k &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt; -r -n data.txt | head -10&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;2010|NYA|AL|rodrial01|33000000
+2009|NYA|AL|rodrial01|33000000
+2011|NYA|AL|rodrial01|32000000
+2012|NYA|AL|rodrial01|30000000
+2013|NYA|AL|rodrial01|29000000
+2008|NYA|AL|rodrial01|28000000
+2011|LAA|AL|wellsve01|26187500
+2005|NYA|AL|rodrial01|26000000
+2013|PHI|NL|leecl02|25000000
+2013|NYA|AL|wellsve01|24642857
+&lt;/pre&gt;
+
+&lt;p&gt;So there are certainly a lot of options in this command. Lets go through them one by one.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;-t&lt;/strong&gt;: Which delimiter to use?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;-k&lt;/strong&gt;: Which column to sort on?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;-n&lt;/strong&gt;: If you want Numerical Sorting. Dont use this option if you want Lexographical sorting.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;-r&lt;/strong&gt;: I want to sort Descending. Sorts Ascending by Default.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;7-cut&#34;&gt;7. cut&lt;/h3&gt;
+
+&lt;p&gt;This command lets you select certain columns from your data. Sometimes you may want to look at just some of the columns in your data. As in you may want to look only at the year, team and salary and not the other columns. &lt;a href=&#34;https://en.wikipedia.org/wiki/Cut_(Unix)&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;cut&lt;/a&gt; is the command to use.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cut -d &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;|&amp;#34;&lt;/span&gt; -f &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,2,5 data.txt | head&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;yearID|teamID|salary
+1985|BAL|1472819
+1985|BAL|1090000
+1985|BAL|800000
+1985|BAL|725000
+1985|BAL|641667
+1985|BAL|625000
+1985|BAL|581250
+1985|BAL|560000
+1985|BAL|558333
+&lt;/pre&gt;
+
+&lt;p&gt;The options are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;-d&lt;/strong&gt;: Which delimiter to use?&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;-f&lt;/strong&gt;: Which column/columns to cut?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;8-uniq&#34;&gt;8. uniq&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Uniq&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;uniq&lt;/a&gt; is a little bit tricky as in you will want to use this command in sequence with sort. This command removes sequential duplicates. So in conjunction with sort it can be used to get the distinct values in the data. For example if I wanted to find out 10 distinct teamIDs in data, I would use:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat data.txt | cut -d &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;|&amp;#34;&lt;/span&gt; -f &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; | sort | uniq | head&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;ANA
+ARI
+ATL
+BAL
+BOS
+CAL
+CHA
+CHN
+CIN
+CLE
+&lt;/pre&gt;
+
+&lt;p&gt;This command could be used with argument &lt;strong&gt;-c&lt;/strong&gt; to count the occurrence of these distinct values. Something akin to &lt;strong&gt;count distinct&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat data.txt | cut -d &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;|&amp;#34;&lt;/span&gt; -f &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; | sort | uniq -c | head&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;247 ANA
+458 ARI
+838 ATL
+855 BAL
+852 BOS
+368 CAL
+812 CHA
+821 CHN
+46 CIN
+867 CLE
+&lt;/pre&gt;
+
+&lt;h2 id=&#34;some-other-utility-commands-for-other-operations&#34;&gt;Some Other Utility Commands for Other Operations&lt;/h2&gt;
+
+&lt;p&gt;Some Other command line tools that you could use without going in the specifics as the specifics are pretty hard.&lt;/p&gt;
+
+&lt;h3 id=&#34;1-change-delimiter-in-a-file&#34;&gt;1. Change delimiter in a file&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;Find and Replace Magic.&lt;/strong&gt;: You may want to replace certain characters in file with something else using the &lt;a href=&#34;https://en.wikipedia.org/wiki/Tr_%28Unix%29&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;tr&lt;/a&gt; command.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat data.txt | tr &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;|&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; |  head -4&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;yearID,teamID,lgID,playerID,salary
+1985,BAL,AL,murraed02,1472819
+1985,BAL,AL,lynnfr01,1090000
+1985,BAL,AL,ripkeca01,800000
+&lt;/pre&gt;
+
+&lt;p&gt;or the &lt;a href=&#34;https://en.wikipedia.org/wiki/Sed&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;strong&gt;sed&lt;/strong&gt;&lt;/a&gt; command&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat data.txt | sed -e &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;s/|/,/g&amp;#39;&lt;/span&gt; | head -4&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;yearID,teamID,lgID,playerID,salary
+1985,BAL,AL,murraed02,1472819
+1985,BAL,AL,lynnfr01,1090000
+1985,BAL,AL,ripkeca01,800000
+&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-sum-of-a-column-in-a-file&#34;&gt;2. Sum of a column in a file&lt;/h3&gt;
+
+&lt;p&gt;Using the &lt;a href=&#34;https://en.wikipedia.org/wiki/AWK&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;awk&lt;/a&gt; command you could find the sum of column in file. Divide it by the number of lines and you can get the mean.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat data.txt | awk -F &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;|&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;{ sum += $5 } END { printf sum }&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;44662539172
+&lt;/pre&gt;
+
+&lt;p&gt;awk is a powerful command which is sort of a whole language in itself. Do see the wiki page for &lt;a href=&#34;https://en.wikipedia.org/wiki/AWK&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;awk&lt;/a&gt; for a lot of great usecases of awk. I also wrote a post on awk as a second part in this series. Check it &lt;a href=&#34;http://mlwhiz.com/blog/2015/10/11/shell_basics_for_data_science_2/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;HERE&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;3-find-the-files-in-a-directory-that-satisfy-a-certain-condition&#34;&gt;3. Find the files in a directory that satisfy a certain condition&lt;/h3&gt;
+
+&lt;p&gt;You can do this by using the find command. Lets say you want to &lt;strong&gt;find all the .txt files&lt;/strong&gt; in the current working dir that &lt;strong&gt;start with lowercase h&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;find . -name &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;h*.txt&amp;#34;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;./hamlet.txt
+&lt;/pre&gt;
+
+&lt;p&gt;To find &lt;strong&gt;all .txt files starting with h regarless of case&lt;/strong&gt; we could use regex.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;find . -name &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;[Hh]*.txt&amp;#34;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;./hamlet.txt
+./Hamlet1.txt
+&lt;/pre&gt;
+
+&lt;h3 id=&#34;4-passing-file-list-as-argument&#34;&gt;4. Passing file list as Argument.&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Xargs&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;xargs&lt;/a&gt; was suggested by Gaurav in the comments, so I read about it and it is actually a very nice command which you could use in a variety of use cases.&lt;/p&gt;
+
+&lt;p&gt;So if you just use a pipe, any command/utility receives data on STDIN (the standard input stream) as a raw pile of data that it can sort through one line at a time. However some programs don&amp;rsquo;t accept their commands on standard in. For example the rm command(which is used to remove files), touch command(used to create file with a given name) or a certain python script you wrote(which takes command line arguments). They expect it to be spelled out in the arguments to the command.&lt;/p&gt;
+
+&lt;p&gt;For example: rm takes a file name as a parameter on the command line like so: rm file1.txt. If I wanted to &lt;strong&gt;delete all &amp;lsquo;.txt&amp;rsquo; files starting with &amp;ldquo;h/H&amp;rdquo;&lt;/strong&gt; from my working directory, the below command won&amp;rsquo;t work because rm expects a file as an input.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;find . -name &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;[hH]*.txt&amp;#34;&lt;/span&gt; | rm&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;usage: rm [-f | -i] [-dPRrvW] file ...
+unlink file
+&lt;/pre&gt;
+
+&lt;p&gt;To get around it we can use the xargs command which reads the STDIN stream data and converts each line into space separated arguments to the command.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;find . -name &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;[hH]*.txt&amp;#34;&lt;/span&gt; | xargs&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;./hamlet.txt ./Hamlet1.txt
+&lt;/pre&gt;
+
+&lt;p&gt;Now you could use rm to remove all .txt files that start with h/H. A word of advice: Always see the output of xargs first before using rm.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;find . -name &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;[hH]*.txt&amp;#34;&lt;/span&gt; | xargs rm&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Another usage of xargs could be in conjunction with grep to &lt;strong&gt;find all files that contain a given string&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;find . -name &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;*.txt&amp;#34;&lt;/span&gt; | xargs grep &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;honest soldier&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;pre style=&#34;font-size:50%; padding:7px; margin:0em;  background-color:#FFF122&#34;&gt;./Data1.txt:O, farewell, honest soldier;
+./Data2.txt:O, farewell, honest soldier;
+./Data3.txt:O, farewell, honest soldier;
+&lt;/pre&gt;
+
+&lt;p&gt;Hopefully You could come up with varied uses building up on these examples. One other use case could be to use this for &lt;strong&gt;passing arguments to a python script&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;other-cool-tricks&#34;&gt;Other Cool Tricks&lt;/h2&gt;
+
+&lt;p&gt;Sometimes you want your data that you got by some command line utility(Shell commands/ Python scripts) not to be shown on stdout but stored in a textfile. You can use the &lt;strong&gt;&amp;rdquo;&amp;gt;&amp;rdquo;&lt;/strong&gt; operator for that. For Example: You could have stored the file after replacing the delimiters in the previous example into anther file called newdata.txt as follows:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat data.txt | tr &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;|&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; &amp;gt; newdata.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I really got confused between &lt;strong&gt;&amp;rdquo;|&amp;rdquo;&lt;/strong&gt; (piping) and &lt;strong&gt;&amp;rdquo;&amp;gt;&amp;rdquo;&lt;/strong&gt; (to_file) operations a lot in the beginning. One way to remember is that you should only use &lt;strong&gt;&amp;rdquo;&amp;gt;&amp;rdquo;&lt;/strong&gt; when you want to write something to a file. &lt;strong&gt;&amp;rdquo;|&amp;rdquo; cannot be used to write to a file.&lt;/strong&gt; Another operation you should know about is the &lt;strong&gt;&amp;rdquo;&amp;gt;&amp;gt;&amp;rdquo;&lt;/strong&gt; operation. It is analogous to &lt;strong&gt;&amp;rdquo;&amp;gt;&amp;rdquo;&lt;/strong&gt; but it appends to an existing file rather that replacing the file and writing over.&lt;/p&gt;
+
+&lt;p&gt;If you would like to know more about commandline, which I guess you would, here are some books that I would recommend for a beginner:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.amazon.com/gp/product/1593273894/ref=as_li_tl?ie=UTF8&amp;amp;camp=1789&amp;amp;creative=9325&amp;amp;creativeASIN=1593273894&amp;amp;linkCode=as2&amp;amp;tag=mlwhizcon-20&amp;amp;linkId=IXZOHV6FHPTYCBCT&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;amp;ASIN=1593273894&amp;amp;Format=_SL250_&amp;amp;ID=AsinImage&amp;amp;MarketPlace=US&amp;amp;ServiceVersion=20070822&amp;amp;WS=1&amp;amp;tag=mlwhizcon-20&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;img src=&#34;http://ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;amp;l=as2&amp;amp;o=1&amp;amp;a=1593273894&#34; alt=&#34;&#34; /&gt; &lt;a href=&#34;http://www.amazon.com/gp/product/0596009658/ref=as_li_tl?ie=UTF8&amp;amp;camp=1789&amp;amp;creative=9325&amp;amp;creativeASIN=0596009658&amp;amp;linkCode=as2&amp;amp;tag=mlwhizcon-20&amp;amp;linkId=2ZHHZIAJBFW3BFF7&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;amp;ASIN=0596009658&amp;amp;Format=_SL250_&amp;amp;ID=AsinImage&amp;amp;MarketPlace=US&amp;amp;ServiceVersion=20070822&amp;amp;WS=1&amp;amp;tag=mlwhizcon-20&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;img src=&#34;http://ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&amp;amp;l=as2&amp;amp;o=1&amp;amp;a=0596009658&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The first book is more of a fun read at leisure type of book. THe second book is a little more serious. Whatever suits you.&lt;/p&gt;
+
+&lt;p&gt;So, this is just the tip of the iceberg. Although I am not an expert in shell usage, these commands reduced my workload to a large extent. If there are some shell commands you use on a regular basis or some shell command that are cool, do tell in the comments. I would love to include it in the blogpost.&lt;/p&gt;
+
+&lt;p&gt;I wrote a blogpost on awk as a second part of this post. Check it &lt;a href=&#34;http://mlwhiz.com/blog/2015/10/11/shell_basics_for_data_science_2/&#34; target=&#34;_blank&#34;&gt;Here&lt;/a&gt;&lt;/p&gt;
+</description>
     </item>
     
   </channel>

@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Visualization on MLWhiz</title>
+    <title>
+    Visualization on 
+    MLWhiz
+    </title>
     <link>https://mlwhiz.com/tags/visualization/</link>
-    <description>Recent content in Visualization on MLWhiz</description>
+    <description>Recent content in Visualization 
+    on MLWhiz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    
+    
     <lastBuildDate>Fri, 19 Apr 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://mlwhiz.com/tags/visualization/atom.xml" rel="self" type="application/rss" />
+    
+        <atom:link href="https://mlwhiz.com/tags/visualization/atom.xml" rel="self" type="application/rss" />
     
     
     <item>
@@ -17,10 +24,389 @@
       <pubDate>Fri, 19 Apr 2019 00:00:00 +0000</pubDate>
       
       <guid>https://mlwhiz.com/blog/2019/04/19/awesome_seaborn_visuals/</guid>
-      <description>Visualizations are awesome. However, a good visualization is annoyingly hard to make.
-Moreover, it takes time and effort when it comes to present these visualizations to a bigger audience.
-We all know how to make Bar-Plots, Scatter Plots, and Histograms, yet we don&amp;rsquo;t pay much attention to beautify them.
-This hurts us - our credibility with peers and managers. You won&amp;rsquo;t feel it now, but it happens.</description>
+      <description>
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/visualizations/kelly_Sikemma.jpeg&#34; style=&#34;height:80%;width:80%&#34;&gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Visualizations are awesome. &lt;strong&gt;However, a good visualization is annoyingly hard to make.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Moreover, it takes time and effort when it comes to present these visualizations to a bigger audience.&lt;/p&gt;
+
+&lt;p&gt;We all know how to make &lt;a href=&#34;https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;amp;ranEAID=lVarvwc5BD0&amp;amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;amp;utm_content=3&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0&amp;amp;ranMID=40328&amp;amp;ranEAID=je6NUbpObpQ&amp;amp;ranSiteID=je6NUbpObpQ-vcqjNx1ZulOAw6KkBwc5gg&amp;amp;siteID=je6NUbpObpQ-vcqjNx1ZulOAw6KkBwc5gg&amp;amp;utm_content=10&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=je6NUbpObpQ&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Bar-Plots, Scatter Plots, and Histograms&lt;/a&gt;, yet &lt;strong&gt;we don&amp;rsquo;t pay much attention to beautify them.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This hurts us - our credibility with peers and managers. You won&amp;rsquo;t feel it now, but it happens.&lt;/p&gt;
+
+&lt;p&gt;Also, I find it essential to reuse my code. Every time I visit a new dataset do I need to start again? Some &lt;strong&gt;&lt;em&gt;reusable ideas of graphs that can help us to find information about the data FAST.&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In this post, I am also going to talk about 3 cool visual tools:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Categorical Correlation with Graphs,&lt;/li&gt;
+&lt;li&gt;Pairplots,&lt;/li&gt;
+&lt;li&gt;Swarmplots and Graph Annotations using Seaborn.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;In short, this post is about useful and presentable graphs.&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;I will be using data from &lt;a href=&#34;https://www.kaggle.com/karangadiya/fifa19&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;FIFA 19 complete player dataset&lt;/a&gt; on kaggle - Detailed attributes for every player registered in the latest edition of FIFA 19 database.&lt;/p&gt;
+
+&lt;p&gt;Since the Dataset has many columns, we will only focus on a subset of categorical and continuous columns.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; np
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; pandas &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; pd
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; seaborn &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; sns
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; matplotlib.pyplot &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; plt
+&lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt;matplotlib inline
+&lt;span style=&#34;color:#75715e&#34;&gt;# We dont Probably need the Gridlines. Do we? If yes comment this line&lt;/span&gt;
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set(style&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ticks&amp;#34;&lt;/span&gt;)
+player_df &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pd&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;read_csv(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;../input/data.csv&amp;#34;&lt;/span&gt;)
+numcols &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [
+ &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Overall&amp;#39;&lt;/span&gt;,
+ &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Potential&amp;#39;&lt;/span&gt;,
+&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Crossing&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Finishing&amp;#39;&lt;/span&gt;,  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;ShortPassing&amp;#39;&lt;/span&gt;,  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Dribbling&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;LongPassing&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;BallControl&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Acceleration&amp;#39;&lt;/span&gt;,
+       &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;SprintSpeed&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Agility&amp;#39;&lt;/span&gt;,  &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Stamina&amp;#39;&lt;/span&gt;,
+ &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Value&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Wage&amp;#39;&lt;/span&gt;]
+catcols &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Name&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Club&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Nationality&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Preferred Foot&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Position&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Body Type&amp;#39;&lt;/span&gt;]
+&lt;span style=&#34;color:#75715e&#34;&gt;# Subset the columns&lt;/span&gt;
+player_df &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; player_df[numcols&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; catcols]
+&lt;span style=&#34;color:#75715e&#34;&gt;# Few rows of data&lt;/span&gt;
+player_df&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;head(&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;
+    &lt;figure&gt;
+      &lt;img src=&#34;https://mlwhiz.com/images/visualizations/football_dataset_head.png&#34;&gt;
+      &lt;figcaption style=&#34;font-size: 12px;&#34;&gt;Player Data&lt;/figcaption&gt;
+    &lt;/figure&gt;
+&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This is a nicely formatted data, yet we need to do &lt;strong&gt;some preprocessing to the Wage and Value columns&lt;/strong&gt;(as they are in Euro and contain strings) to make them numeric for our subsequent analysis.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;wage_split&lt;/span&gt;(x):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; int(x&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;K&amp;#34;&lt;/span&gt;)[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;][&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:])
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt;:
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+player_df[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Wage&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; player_df[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Wage&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;apply(&lt;span style=&#34;color:#66d9ef&#34;&gt;lambda&lt;/span&gt; x : wage_split(x))
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;value_split&lt;/span&gt;(x):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;M&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; x:
+            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; float(x&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;M&amp;#34;&lt;/span&gt;)[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;][&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:])
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;K&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; x:
+            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; float(x&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;K&amp;#34;&lt;/span&gt;)[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;][&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:])&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt;:
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+player_df[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Value&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; player_df[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Value&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;apply(&lt;span style=&#34;color:#66d9ef&#34;&gt;lambda&lt;/span&gt; x : value_split(x))&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;categorical-correlation-with-graphs&#34;&gt;Categorical Correlation with Graphs:&lt;/h2&gt;
+
+&lt;p&gt;In Simple terms, Correlation is a measure of how two variables move together.&lt;/p&gt;
+
+&lt;p&gt;For example, In the real world, &lt;em&gt;Income and Spend are positively correlated. If one increases the other also increases.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Academic Performance and Video Games Usage is negatively correlated. Increase in one predicts a decrease in another.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;So if our predictor variable is positively or negatively correlated with our target variable, it is valuable.&lt;/p&gt;
+
+&lt;p&gt;I feel that Correlations among different variables are a pretty good thing to do when we try to understand our data.&lt;/p&gt;
+
+&lt;p&gt;We can create a pretty good correlation plot using Seaborn easily.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;corr &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; player_df&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;corr()
+g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;heatmap(corr,  vmax&lt;span style=&#34;color:#f92672&#34;&gt;=.&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, center&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,
+            square&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;True, linewidths&lt;span style=&#34;color:#f92672&#34;&gt;=.&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;, cbar_kws&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;shrink&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;}, annot&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;True, fmt&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;.2f&amp;#39;&lt;/span&gt;, cmap&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;coolwarm&amp;#39;&lt;/span&gt;)
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;despine()
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;figure&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_size_inches(&lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;)
+    
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;
+    &lt;figure&gt;
+      &lt;img src=&#34;https://mlwhiz.com/images/visualizations/correlation_numerical.png&#34;&gt;
+      &lt;figcaption style=&#34;font-size: 12px;&#34;&gt;Where did all the categorical variables go?&lt;/figcaption&gt;
+    &lt;/figure&gt;
+&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;But do you notice any problem?&lt;/p&gt;
+
+&lt;p&gt;Yes, this graph only calculates Correlation between Numerical columns.
+What if my target variable is &lt;code&gt;Club&lt;/code&gt; or &lt;code&gt;Position&lt;/code&gt;?&lt;/p&gt;
+
+&lt;p&gt;I want to be able to get a correlation among three different cases, and we use the following metrics of correlation to calculate these:&lt;/p&gt;
+
+&lt;h3 id=&#34;1-numerical-variables&#34;&gt;1. Numerical Variables&lt;/h3&gt;
+
+&lt;p&gt;We already have this in the form of &lt;a href=&#34;https://en.wikipedia.org/wiki/Pearson_correlation_coefficient&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Pearson&amp;rsquo;s Correlation&lt;/a&gt; which is a measure of how two variables move together. This Ranges from [-1,1]&lt;/p&gt;
+
+&lt;h3 id=&#34;2-categorical-variables&#34;&gt;2. Categorical Variables&lt;/h3&gt;
+
+&lt;p&gt;We will use &lt;a href=&#34;https://en.wikipedia.org/wiki/Cram%C3%A9r%27s_V&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Cramer&amp;rsquo;s V&lt;/a&gt; for categorical-categorical cases. It is the intercorrelation of two discrete variables and used with variables having two or more levels. It is a symmetrical measure as in the order of variable does not matter. Cramer(A,B) == Cramer(B,A).&lt;/p&gt;
+
+&lt;p&gt;For Example: In our dataset, &lt;code&gt;Club&lt;/code&gt; and &lt;code&gt;Nationality&lt;/code&gt; must be somehow correlated.&lt;/p&gt;
+
+&lt;p&gt;Let us check this using a stacked graph which is an excellent way to understand distribution between categorical vs. categorical variables. Note that we use a subset of data since there are a lot of nationalities and club in this data.&lt;/p&gt;
+
+&lt;p&gt;We keep only the best teams(Kept FC Porto just for more diversity in the sample)and the most common nationalities.&lt;/p&gt;
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/visualizations/stacked_club_nationality.png&#34; &#34;&gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;Note that Club preference says quite a bit about Nationality: knowing the former helps a lot in predicting the latter.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;We can see that if a player belongs to England, it is more probable that he plays in Chelsea or Manchester United and not in FC Barcelona or Bayern Munchen or Porto.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;So there is some information present here. Cramer&amp;rsquo;s V captures the same information.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;If all clubs have the same proportion of players from every nationality, Cramer&amp;rsquo;s V is 0.&lt;/p&gt;
+
+&lt;p&gt;If Every club prefers a single nationality Cramer&amp;rsquo;s V ==1, for example, all England player play in Manchester United, All Germans in Bayern Munchen and so on.&lt;/p&gt;
+
+&lt;p&gt;In all other cases, it ranges from [0,1]&lt;/p&gt;
+
+&lt;h3 id=&#34;3-numerical-and-categorical-variables&#34;&gt;3. Numerical and Categorical variables&lt;/h3&gt;
+
+&lt;p&gt;We will use the &lt;a href=&#34;https://en.wikipedia.org/wiki/Correlation_ratio&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Correlation Ratio&lt;/a&gt; for categorical-continuous cases.&lt;/p&gt;
+
+&lt;p&gt;Without getting into too much Maths, it is a measure of Dispersion.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Given a number can we find out which category it belongs to?&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;For Example:&lt;/p&gt;
+
+&lt;p&gt;Suppose we have two columns from our dataset: &lt;code&gt;SprintSpeed&lt;/code&gt; and &lt;code&gt;Position&lt;/code&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;GK: 58(De Gea),52(T. Courtois), 58(M. Neuer), 43(G. Buffon)&lt;/li&gt;
+&lt;li&gt;CB: 68(D. Godin), 59(V. Kompany), 73(S. Umtiti), 75(M. Benatia)&lt;/li&gt;
+&lt;li&gt;ST: 91(C.Ronaldo), 94(G. Bale), 80(S.Aguero), 76(R. Lewandowski)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;em&gt;As you can see these numbers are pretty predictive of the bucket they fall into and thus high Correlation Ratio.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;If I know the sprint speed is more than 85, I can definitely say this player plays at ST.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;This ratio also ranges from [0,1]&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;The code to do this is taken from the dython package. I won&amp;rsquo;t write too much into code which you can anyway find in my &lt;a href=&#34;https://www.kaggle.com/mlwhiz/seaborn-visualizations-using-football-data&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Kaggle Kernel&lt;/a&gt;. The final result looks something like:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;player_df &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; player_df&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fillna(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
+results &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; associations(player_df,nominal_columns&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;catcols,return_results&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;True)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;
+    &lt;figure&gt;
+      &lt;img src=&#34;https://mlwhiz.com/images/visualizations/correlation_plot_full.png&#34;&gt;
+      &lt;figcaption style=&#34;font-size: 12px;&#34;&gt;Categorical vs. Categorical, Categorical vs. Numeric, Numeric vs. Numeric. Much more interesting&lt;/figcaption&gt;
+    &lt;/figure&gt;
+&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Isn&amp;rsquo;t it Beautiful?&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;We can understand so much about Football just by looking at this data. For Example:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;The position of a player is highly correlated with dribbling ability. You won&amp;rsquo;t play Messi at the back. Right?&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Value is more highly correlated with passing and ball control than dribbling. The rule is to pass the ball always. Neymar I am looking at you.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Club and Wage have high Correlation. To be expected.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Body Type and Preferred Foot is correlated highly. Does that mean if you are Lean, you are most likely left-footed? Doesn&amp;rsquo;t make much sense. One can investigate further.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Moreover, so much info we could find with this simple graph which was not visible in the typical correlation plot without Categorical Variables.&lt;/p&gt;
+
+&lt;p&gt;I leave it here at that. One can look more into the chart and find more meaningful results, but the point is that this makes life so much easier to find patterns.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;pairplots&#34;&gt;Pairplots&lt;/h2&gt;
+
+&lt;p&gt;While I talked a lot about correlation, it is a fickle metric.&lt;/p&gt;
+
+&lt;p&gt;To understand what I mean let us see one example.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Anscombe&amp;rsquo;s quartet&lt;/strong&gt; comprises four datasets that have nearly identical Correlation of 1, yet have very different distributions and appear very different when graphed.&lt;/p&gt;
+
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;
+    &lt;figure&gt;
+      &lt;img src=&#34;https://mlwhiz.com/images/visualizations/anscombe.png&#34;&gt;
+      &lt;figcaption style=&#34;font-size: 12px;&#34;&gt;Anscombe Quartet - Correlations can be fickle.&lt;/figcaption&gt;
+    &lt;/figure&gt;
+&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Thus sometimes it becomes crucial to plot correlated data. And see the distributions individually.&lt;/p&gt;
+
+&lt;p&gt;Now we have many columns in our dataset. Graphing them all would be so much effort.&lt;/p&gt;
+
+&lt;p&gt;No, it is a single line of code.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;filtered_player_df &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; player_df[(player_df[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Club&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;isin([&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;FC Barcelona&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Paris Saint-Germain&amp;#39;&lt;/span&gt;,
+       &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Manchester United&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Manchester City&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Chelsea&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Real Madrid&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;FC Porto&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;FC Bayern München&amp;#39;&lt;/span&gt;])) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt; 
+                      (player_df[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Nationality&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;isin([&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;England&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Brazil&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Argentina&amp;#39;&lt;/span&gt;,
+       &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Brazil&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Italy&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Spain&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Germany&amp;#39;&lt;/span&gt;])) 
+                     ]
+&lt;span style=&#34;color:#75715e&#34;&gt;# Single line to create pairplot&lt;/span&gt;
+g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pairplot(filtered_player_df[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Value&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;SprintSpeed&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Potential&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Wage&amp;#39;&lt;/span&gt;]])&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/visualizations/pairplot_normal.png&#34; &#34;&gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Pretty Good. We can see so much in this graph.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Wage and Value are highly correlated.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Most of the other values are correlated too. However, the trend of potential vs. value is unusual. We can see how the value increases exponentially as we reach a particular potential threshold. This information can be helpful in modeling. Can use some transformation on Potential to make it more correlated?&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Caveat:&lt;/strong&gt; No categorical columns.&lt;/p&gt;
+
+&lt;p&gt;Can we do better? We always can.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pairplot(filtered_player_df[[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Value&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;SprintSpeed&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Potential&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Wage&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Club&amp;#39;&lt;/span&gt;]],hue &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Club&amp;#39;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/visualizations/pairplot_color.png&#34; &#34;&gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;So much more info. Just by adding the &lt;code&gt;hue&lt;/code&gt; parameter as a categorical variable &lt;code&gt;Club&lt;/code&gt;.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Porto&amp;rsquo;s Wage distribution is too much towards the lower side.&lt;/li&gt;
+&lt;li&gt;I don&amp;rsquo;t see that steep distribution in value of Porto players. Porto&amp;rsquo;s players would always be looking out for an opportunity.&lt;/li&gt;
+&lt;li&gt;See how a lot of pink points(Chelsea) form sort of a cluster on Potential vs. wage graph. Chelsea has a lot of high potential players with lower wages. Needs more attention.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I already know some of the points on the Wage/Value Subplot.&lt;/p&gt;
+
+&lt;p&gt;The blue point for wage 500k is Messi. Also, the orange point having more value than Messi is Neymar.&lt;/p&gt;
+
+&lt;p&gt;Although this hack still doesn&amp;rsquo;t solve the Categorical problem, I have something cool to look into categorical variables distribution. Though individually.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;swarmplots&#34;&gt;SwarmPlots&lt;/h2&gt;
+
+&lt;p&gt;How to see the relationship between categorical and numerical data?&lt;/p&gt;
+
+&lt;p&gt;Enter into picture Swarmplots, just like their name. &lt;em&gt;A swarm of points plotted for each category with a little dispersion on the y-axis to make them easier to see.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;They are my current favorite for plotting such relationships.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;swarmplot(y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Club&amp;#34;&lt;/span&gt;,
+              x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Wage&amp;#39;&lt;/span&gt;, 
+              data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; filtered_player_df,
+              &lt;span style=&#34;color:#75715e&#34;&gt;# Decrease the size of the points to avoid crowding &lt;/span&gt;
+              size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# remove the top and right line in graph&lt;/span&gt;
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;despine()
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;figure&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_size_inches(&lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;
+    &lt;figure&gt;
+      &lt;img src=&#34;https://mlwhiz.com/images/visualizations/club and wage.png&#34;&gt;
+      &lt;figcaption style=&#34;font-size: 12px;&#34;&gt;Swarmplot...&lt;/figcaption&gt;
+    &lt;/figure&gt;
+&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Why don&amp;rsquo;t I use Boxplots? &lt;strong&gt;Where are the median values? Can I plot that?&lt;/strong&gt; Obviously. Overlay a bar plot on top, and we have a great looking graph.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;boxplot(y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Club&amp;#34;&lt;/span&gt;,
+              x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Wage&amp;#39;&lt;/span&gt;, 
+              data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; filtered_player_df, whis&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;inf)
+g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;swarmplot(y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Club&amp;#34;&lt;/span&gt;,
+              x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Wage&amp;#39;&lt;/span&gt;, 
+              data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; filtered_player_df,
+              &lt;span style=&#34;color:#75715e&#34;&gt;# Decrease the size of the points to avoid crowding &lt;/span&gt;
+              size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;,color &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;black&amp;#39;&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# remove the top and right line in graph&lt;/span&gt;
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;despine()
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;figure&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_size_inches(&lt;span style=&#34;color:#ae81ff&#34;&gt;12&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;
+    &lt;figure&gt;
+      &lt;img src=&#34;https://mlwhiz.com/images/visualizations/swarn_box.png&#34;&gt;
+      &lt;figcaption style=&#34;font-size: 12px;&#34;&gt;Swarmplot+Boxplot, Interesting&lt;/figcaption&gt;
+    &lt;/figure&gt;
+&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Pretty good. We can see the individual points on the graph, see some statistics and understand the wage difference categorically.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;The far right point is Messi. However, I should not have to tell you that in a text below the chart. Right?&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This graph is going to go in a presentation. Your boss says. I want to write Messi on this graph. Comes into picture &lt;strong&gt;annotations.&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;max_wage &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; filtered_player_df&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Wage&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;max()
+max_wage_player &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; filtered_player_df[(player_df[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Wage&amp;#39;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; max_wage)][&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Name&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;values[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]
+g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;boxplot(y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Club&amp;#34;&lt;/span&gt;,
+              x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Wage&amp;#39;&lt;/span&gt;, 
+              data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; filtered_player_df, whis&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;inf)
+g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;swarmplot(y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Club&amp;#34;&lt;/span&gt;,
+              x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Wage&amp;#39;&lt;/span&gt;, 
+              data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; filtered_player_df,
+              &lt;span style=&#34;color:#75715e&#34;&gt;# Decrease the size of the points to avoid crowding &lt;/span&gt;
+              size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;black&amp;#39;&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# remove the top and right line in graph&lt;/span&gt;
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;despine()
+&lt;span style=&#34;color:#75715e&#34;&gt;# Annotate. xy for coordinate. max_wage is x and 0 is y. In this plot y ranges from 0 to 7 for each level&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# xytext for coordinates of where I want to put my text&lt;/span&gt;
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;annotate(s &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; max_wage_player,
+             xy &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (max_wage,&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;),
+             xytext &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;500&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), 
+             &lt;span style=&#34;color:#75715e&#34;&gt;# Shrink the arrow to avoid occlusion&lt;/span&gt;
+             arrowprops &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;facecolor&amp;#39;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;gray&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;width&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;shrink&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;0.03&lt;/span&gt;},
+             backgroundcolor &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;white&amp;#39;&lt;/span&gt;)
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;figure&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_size_inches(&lt;span style=&#34;color:#ae81ff&#34;&gt;12&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;
+    &lt;figure&gt;
+      &lt;img src=&#34;https://mlwhiz.com/images/visualizations/annotated_box_swarn.png&#34;&gt;
+      &lt;figcaption style=&#34;font-size: 12px;&#34;&gt;Annotated, Statistical Info and point swarm. To the presentation, I go.&lt;/figcaption&gt;
+    &lt;/figure&gt;
+&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+&lt;li&gt;See Porto Down there. Competing with the giants with such a small wage budget.&lt;/li&gt;
+&lt;li&gt;So many Highly paid players in Real and Barcelona.&lt;/li&gt;
+&lt;li&gt;Manchester City has the highest median Wage.&lt;/li&gt;
+&lt;li&gt;Manchester United and Chelsea believes in equality. Many players clustered in around the same wage scale.&lt;/li&gt;
+&lt;li&gt;I am happy that while Neymar is more valued than Messi, Messi and Neymar have a huge Wage difference.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;A semblance of normalcy in this crazy world.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;So to recap, in this post, we talked about calculating and reading correlations between different variable types, plotting correlations between numerical data and Plotting categorical data with Numerical data using Swarmplots. I love how we can overlay chart elements on top of each other in Seaborn.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Also if you want to learn more about Visualizations, I would like to call out an excellent course about &lt;a href=&#34;https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;amp;ranEAID=lVarvwc5BD0&amp;amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;amp;utm_content=3&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Data Visualization and applied plotting&lt;/a&gt; from the University of Michigan which is a part of a pretty good &lt;a href=&#34;https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;amp;ranEAID=lVarvwc5BD0&amp;amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;amp;utm_content=3&amp;amp;utm_medium=partners&amp;amp;utm_source=linkshare&amp;amp;utm_campaign=lVarvwc5BD0&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Data Science Specialization with Python&lt;/a&gt; in itself. Do check it out&lt;/p&gt;
+
+&lt;p&gt;If you liked this post, do look at my other &lt;a href=&#34;https://mlwhiz.com/blog/2015/09/13/seaborn_visualizations/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;post&lt;/a&gt; on Seaborn too where I have created some more straightforward reusable graphs.&lt;/p&gt;
+
+&lt;p&gt;Code for this post in this &lt;a href=&#34;https://www.kaggle.com/mlwhiz/seaborn-visualizations-using-football-data&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;kaggle kernel&lt;/a&gt;.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;references&#34;&gt;References:&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://towardsdatascience.com/the-search-for-categorical-correlation-a1cf7f1888c9&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;The Search for Categorical Correlation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://seaborn.pydata.org/generated/seaborn.swarmplot.html&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Seaborn Swarmplot Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://seaborn.pydata.org/generated/seaborn.pairplot.html&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Seaborn Pairplot Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
     </item>
     
     <item>
@@ -29,8 +415,243 @@ This hurts us - our credibility with peers and managers. You won&amp;rsquo;t
       <pubDate>Sun, 13 Sep 2015 00:00:00 +0000</pubDate>
       
       <guid>https://mlwhiz.com/blog/2015/09/13/seaborn_visualizations/</guid>
-      <description>When it comes to data preparation and getting acquainted with data, the one step we normally skip is the data visualization. While a part of it could be attributed to the lack of good visualization tools for the platforms we use, most of us also get lazy at times.
-Now as we know of it Python never had any good Visualization library. For most of our plotting needs, I would read up blogs, hack up with StackOverflow solutions and haggle with Matplotlib documentation each and every time I needed to make a simple graph.</description>
+      <description>
+
+&lt;p&gt;When it comes to data preparation and getting acquainted with data, the &lt;strong&gt;one step we normally skip is the data visualization&lt;/strong&gt;.
+While a part of it could be attributed to the &lt;strong&gt;lack of good visualization tools&lt;/strong&gt; for the platforms we use, most of us also &lt;strong&gt;get lazy&lt;/strong&gt; at times.&lt;/p&gt;
+
+&lt;p&gt;Now as we know of it Python never had any good Visualization library. For most of our plotting needs, I would read up blogs, hack up with StackOverflow solutions and haggle with &lt;a href=&#34;http://matplotlib.org/&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;Matplotlib&lt;/a&gt; documentation each and every time I needed to make a simple graph. This led me to think that a &lt;strong&gt;Blog post to create common Graph types&lt;/strong&gt; in Python is in order. But being the procrastinator that I am it always got pushed to the back of my head.&lt;/p&gt;
+
+&lt;p&gt;One thing that helped me in pursuit of my data visualization needs in Python was this awesome course about &lt;a href=&#34;https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;Data Visualization and applied plotting&lt;/a&gt; from University of Michigan which is a part of a pretty good &lt;a href=&#34;https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;Data Science Specialization with Python&lt;/a&gt; in itself. Highly Recommended.&lt;/p&gt;
+
+&lt;p&gt;But, yesterday I got introduced to &lt;strong&gt;&lt;a href=&#34;http://stanford.edu/~mwaskom/software/seaborn/&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;Seaborn&lt;/a&gt;&lt;/strong&gt; and I must say I am &lt;strong&gt;quite impressed&lt;/strong&gt; with it. It makes &lt;strong&gt;beautiful graphs&lt;/strong&gt; that are in my opinion &lt;strong&gt;better than R&amp;rsquo;s &lt;a href=&#34;http://ggplot2.org&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;ggplot2&lt;/a&gt;&lt;/strong&gt;. Gives you enough options to &lt;strong&gt;customize&lt;/strong&gt; and the best part is that it is so &lt;strong&gt;easy to learn&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;So I am finally writing this blog post with a basic &lt;strong&gt;purpose of creating a code base&lt;/strong&gt; that provides me with ready to use codes which could be put into analysis in a fairly straight-forward manner.&lt;/p&gt;
+
+&lt;p&gt;Right. So here Goes.&lt;/p&gt;
+
+&lt;p&gt;We Start by importing the libraries that we will need to use.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; matplotlib.pyplot &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; plt  &lt;span style=&#34;color:#75715e&#34;&gt;#sets up plotting under plt&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; seaborn &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; sns 			&lt;span style=&#34;color:#75715e&#34;&gt;#sets up styles and gives us more plotting options&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; pandas &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; pd 			&lt;span style=&#34;color:#75715e&#34;&gt;#lets us handle data as dataframes&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;To create a use case for our graphs, we will be working with the &lt;strong&gt;Tips data&lt;/strong&gt; that contains the following information.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;tips &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;load_dataset(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tips&amp;#34;&lt;/span&gt;)
+tips&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;head()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/tips.png&#34;  height=&#34;400&#34; width=&#34;500&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;scatterplot-with-regression-line&#34;&gt;Scatterplot With Regression Line&lt;/h2&gt;
+
+&lt;p&gt;Now let us work on visualizing this data.
+We will use the &lt;strong&gt;&lt;a href=&#34;http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.regplot.html#seaborn.regplot&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;regplot&lt;/a&gt;&lt;/strong&gt; option in seaborn.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# We dont Probably need the Gridlines. Do we? If yes comment this line&lt;/span&gt;
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set(style&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ticks&amp;#34;&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Here we create a matplotlib axes object. The extra parameters we use&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# &amp;#34;ci&amp;#34; to remove confidence interval&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# &amp;#34;marker&amp;#34; to have a x as marker.&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# &amp;#34;scatter_kws&amp;#34; to provide style info for the points.[s for size]&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# &amp;#34;line_kws&amp;#34; to provide style info for the line.[lw for line width]&lt;/span&gt;
+
+g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;regplot(x&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tip&amp;#34;&lt;/span&gt;, y&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;total_bill&amp;#34;&lt;/span&gt;, data&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;tips, ci &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; False,
+	scatter_kws&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;color&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;darkred&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;alpha&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;0.3&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;s&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;90&lt;/span&gt;},
+	line_kws&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;color&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;g&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;alpha&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;lw&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;},marker&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;x&amp;#34;&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# remove the top and right line in graph&lt;/span&gt;
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;despine()
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the size of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;figure&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_size_inches(&lt;span style=&#34;color:#ae81ff&#34;&gt;12&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the Title of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;axes&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Total Bill vs. Tip&amp;#39;&lt;/span&gt;, fontsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;34&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the xlabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Tip&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;67&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ylabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Total Bill&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;67&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ticklabel size and color of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;tick_params(labelsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;,labelcolor&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;black&amp;#34;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/regplot.png&#34;&gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now that required a bit of a code but i feel that it &lt;strong&gt;looks much better than what either Matplotlib or ggPlot2 could have rendered&lt;/strong&gt;. We got a lot of customization without too much code.&lt;/p&gt;
+
+&lt;p&gt;But that is not really what actually made me like Seaborn. The plot type that actually got my attention was &lt;strong&gt;&lt;a href=&#34;http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.lmplot.html#seaborn.lmplot&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;lmplot&lt;/a&gt;&lt;/strong&gt;, which lets us use &lt;strong&gt;regplot&lt;/strong&gt; in a &lt;strong&gt;faceted&lt;/strong&gt; mode.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# So this function creates a faceted plot. The plot is parameterized by the following:&lt;/span&gt;
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# col : divides the data points into days and creates that many plots&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# palette: deep, muted, pastel, bright, dark, and colorblind. change the colors in graph. Experiment with these&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# col_wrap: we want 2 graphs in a row? Yes.We do&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# scatter_kws: attributes for points&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# hue: Colors on a particular column.&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# size: controls the size of graph&lt;/span&gt;
+
+g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;lmplot(x&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tip&amp;#34;&lt;/span&gt;, y&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;total_bill&amp;#34;&lt;/span&gt;,ci&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;None,data&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;tips, col&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;day&amp;#34;&lt;/span&gt;,
+	palette&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;muted&amp;#34;&lt;/span&gt;,col_wrap&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;,scatter_kws&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;s&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;alpha&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;},
+	line_kws&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;lw&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;alpha&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;},hue&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;day&amp;#34;&lt;/span&gt;,x_jitter&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1.0&lt;/span&gt;,y_jitter&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1.0&lt;/span&gt;,size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# remove the top and right line in graph&lt;/span&gt;
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;despine()
+&lt;span style=&#34;color:#75715e&#34;&gt;# Additional line to adjust some appearance issue&lt;/span&gt;
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;subplots_adjust(top&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.9&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the Title of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fig&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;suptitle(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Total Bill vs. Tip&amp;#39;&lt;/span&gt;, fontsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;34&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the xlabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_xlabels(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Tip&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;50&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ylabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_ylabels(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Total Bill&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;50&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ticklabel size and color of the graph from here&lt;/span&gt;
+titles &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Thursday&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Friday&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Saturday&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Sunday&amp;#39;&lt;/span&gt;]
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; ax,title &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; zip(g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;axes&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;flat,titles):
+    ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;tick_params(labelsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;,labelcolor&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;black&amp;#34;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/lmplot.png&#34;&gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;div style=&#34;color:black; background-color: #E9DAEE;&#34;&gt;
+&lt;a href=&#34;http://stanford.edu/~mwaskom/software/seaborn/tutorial/color_palettes.html#building-color-palettes-with-color-palette&#34;  target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;&lt;strong&gt;A side Note on Palettes&lt;/strong&gt;&lt;/a&gt;:&lt;br&gt;
+You can build your own color palettes using &lt;strong&gt;color_palette()&lt;/strong&gt; function.
+color_palette() will accept the name of any &lt;strong&gt;seaborn palette&lt;/strong&gt; or &lt;a href=&#34;http://matplotlib.org/users/colormaps.html&#34;  target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;&lt;strong&gt;matplotlib colormap&lt;/strong&gt;&lt;/a&gt;(except jet, which you should never use). It can also take a &lt;strong&gt;list of colors&lt;/strong&gt; specified in any valid matplotlib format (RGB tuples, &lt;strong&gt;hex color codes&lt;/strong&gt;, or HTML color names).
+The return value is always a list of RGB tuples. This allows you to use your own color palettes in graph.
+&lt;/div&gt;
+
+&lt;script src=&#34;//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e&#34;&gt;&lt;/script&gt;
+
+&lt;h2 id=&#34;barplots&#34;&gt;Barplots&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set(style&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ticks&amp;#34;&lt;/span&gt;)
+
+flatui &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#9b59b6&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#3498db&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#95a5a6&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#e74c3c&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#34495e&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;#2ecc71&amp;#34;&lt;/span&gt;]
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# This Function takes as input a custom palette&lt;/span&gt;
+g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;barplot(x&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;sex&amp;#34;&lt;/span&gt;, y&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;tip&amp;#34;&lt;/span&gt;, hue&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;day&amp;#34;&lt;/span&gt;,
+	palette&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;color_palette(flatui),data&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;tips,ci&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;None)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# remove the top and right line in graph&lt;/span&gt;
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;despine()
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the size of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;figure&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_size_inches(&lt;span style=&#34;color:#ae81ff&#34;&gt;12&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the Title of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;axes&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Do We tend to &lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;Tip high on Weekends?&amp;#39;&lt;/span&gt;,
+	fontsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;34&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;b&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.3&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the xlabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Gender&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;67&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;g&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ylabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Mean Tips&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;67&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ticklabel size and color of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;tick_params(labelsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;,labelcolor&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;black&amp;#34;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/barplot.png&#34;&gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;histograms-and-distribution-diagrams&#34;&gt;Histograms and Distribution Diagrams&lt;/h2&gt;
+
+&lt;p&gt;They form another part of my workflow. Lets plot the normal Histogram using seaborn.
+For this we will use the &lt;strong&gt;&lt;a href=&#34;http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.distplot.html#seaborn.distplot&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;distplot&lt;/a&gt;&lt;/strong&gt; function. This function combines the matplotlib hist function (with automatic calculation of a good default bin size) with the seaborn kdeplot() function.
+It can also fit &lt;strong&gt;scipy.stats&lt;/strong&gt; distributions and plot the estimated PDF over the data.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Create a list of 1000 Normal RVs&lt;/span&gt;
+x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;normal(size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;)
+
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_context(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;poster&amp;#34;&lt;/span&gt;)
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_style(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ticks&amp;#34;&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# This  Function creates a normed Histogram by default.&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# If we use the parameter kde=False and norm_hist=False then&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# we will be using a count histogram&lt;/span&gt;
+
+g&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;distplot(x,
+         	kde_kws&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;color&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;g&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;lw&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;label&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;KDE Estim&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;alpha&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;},
+            hist_kws&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;color&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;alpha&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;0.3&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;label&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Freq&amp;#34;&lt;/span&gt;})
+
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# remove the top and right line in graph&lt;/span&gt;
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;despine()
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the size of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;figure&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_size_inches(&lt;span style=&#34;color:#ae81ff&#34;&gt;12&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the Title of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;axes&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Normal Simulation&amp;#39;&lt;/span&gt;, fontsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;34&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;b&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.3&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the xlabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;X&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;67&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;g&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ylabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Density&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;67&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ticklabel size and color of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;tick_params(labelsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;,labelcolor&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;black&amp;#34;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/hist_normal.png&#34;&gt;&lt;/center&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; scipy.stats &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; stats
+
+a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1.5&lt;/span&gt;
+b &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1.5&lt;/span&gt;
+x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;arange(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.01&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.01&lt;/span&gt;)
+y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; stats&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;beta&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;rvs(a,b,size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;10000&lt;/span&gt;)
+y_act &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; stats&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;beta&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pdf(x,a,b)
+g&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;distplot(y,kde&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False,norm_hist&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;True,
+            kde_kws&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;color&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;g&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;lw&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;label&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;KDE Estim&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;alpha&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;},
+            hist_kws&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;color&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;alpha&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;0.3&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;label&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Freq&amp;#34;&lt;/span&gt;})
+&lt;span style=&#34;color:#75715e&#34;&gt;# Note that we plotted on the graph using plt matlabplot function&lt;/span&gt;
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x,y_act)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# remove the top and right line in graph&lt;/span&gt;
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;despine()
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the size of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;figure&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_size_inches(&lt;span style=&#34;color:#ae81ff&#34;&gt;12&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the Title of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;axes&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_title((&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Beta Simulation vs. Calculated Beta Density&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;For a=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;,b=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+	&lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt;(a,b),fontsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;34&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;b&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.3&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the xlabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;X&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;67&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;g&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ylabel of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Density&amp;#34;&lt;/span&gt;,size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;67&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the ticklabel size and color of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;tick_params(labelsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;14&lt;/span&gt;,labelcolor&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;black&amp;#34;&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/hist_beta.png&#34;&gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;pairplots&#34;&gt;PairPlots&lt;/h2&gt;
+
+&lt;p&gt;You need to see how variables vary with one another. What is the distribution of variables in the dataset. This is the graph to use with the &lt;strong&gt;&lt;a href=&#34;http://stanford.edu/~mwaskom/software/seaborn/generated/seaborn.pairplot.html#seaborn.pairplot&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;pairplot&lt;/a&gt;&lt;/strong&gt; function. Very helpful And Seaborn males it a joy to use. We will use &lt;strong&gt;Iris Dataset&lt;/strong&gt; here for this example.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;iris &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;load_dataset(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;iris&amp;#34;&lt;/span&gt;)
+iris&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;head()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/iris.png&#34; height=&#34;500&#34; width=&#34;600&#34;&gt;&lt;/center&gt;
+&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Create a Pairplot&lt;/span&gt;
+g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pairplot(iris,hue&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;species&amp;#34;&lt;/span&gt;,palette&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;muted&amp;#34;&lt;/span&gt;,size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;,
+	vars&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;sepal_width&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;sepal_length&amp;#34;&lt;/span&gt;],kind&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;reg&amp;#39;&lt;/span&gt;,markers&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;o&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;x&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;+&amp;#39;&lt;/span&gt;])
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# To change the size of the scatterpoints in graph&lt;/span&gt;
+g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;map_offdiag(plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;scatter,  s&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;35&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# remove the top and right line in graph&lt;/span&gt;
+sns&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;despine()
+&lt;span style=&#34;color:#75715e&#34;&gt;# Additional line to adjust some appearance issue&lt;/span&gt;
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;subplots_adjust(top&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.9&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Set the Title of the graph from here&lt;/span&gt;
+g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fig&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;suptitle(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Relation between Sepal Width and Sepal Length&amp;#39;&lt;/span&gt;,
+	fontsize&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;34&lt;/span&gt;,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;b&amp;#34;&lt;/span&gt;,alpha&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.3&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/pairplot.png&#34;&gt;&lt;/center&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Hope you found this post useful and worth your time. You can find the iPython notebook at &lt;a href=&#34;https://github.com/MLWhiz/visualization/blob/master/Graphs.ipynb&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;github&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I tried to make this as simple as possible but You may always &lt;strong&gt;ask me&lt;/strong&gt; or see the documentation for doubts.&lt;/p&gt;
+
+&lt;p&gt;If you have &lt;strong&gt;any more ideas&lt;/strong&gt; on how to use Seaborn or &lt;strong&gt;which graphs should i add here&lt;/strong&gt;, please suggest in the &lt;strong&gt;comments&lt;/strong&gt; section.&lt;/p&gt;
+
+&lt;p&gt;I will definitely try to add to this post as I start using more visualizations and encounter other libraries as good as seaborn.&lt;/p&gt;
+
+&lt;p&gt;Also since this is my first visualization post on this blog, I would like to call out a good course about &lt;a href=&#34;https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;Data Visualization and applied plotting&lt;/a&gt; from University of Michigan which is a part of a pretty good &lt;a href=&#34;https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&#34; target=&#34;_blank&#34; rel=&#34;nofollow&#34;&gt;Data Science Specialization with Python&lt;/a&gt; in itself. Do check it out.&lt;/p&gt;
+</description>
     </item>
     
   </channel>

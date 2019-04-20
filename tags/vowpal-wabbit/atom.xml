@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Vowpal Wabbit on MLWhiz</title>
+    <title>
+    Vowpal Wabbit on 
+    MLWhiz
+    </title>
     <link>https://mlwhiz.com/tags/vowpal-wabbit/</link>
-    <description>Recent content in Vowpal Wabbit on MLWhiz</description>
+    <description>Recent content in Vowpal Wabbit 
+    on MLWhiz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    
+    
     <lastBuildDate>Mon, 01 Dec 2014 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://mlwhiz.com/tags/vowpal-wabbit/atom.xml" rel="self" type="application/rss" />
+    
+        <atom:link href="https://mlwhiz.com/tags/vowpal-wabbit/atom.xml" rel="self" type="application/rss" />
     
     
     <item>
@@ -17,8 +24,164 @@
       <pubDate>Mon, 01 Dec 2014 00:00:00 +0000</pubDate>
       
       <guid>https://mlwhiz.com/blog/2014/12/01/exploring_vowpal_wabbit_avazu/</guid>
-      <description>In online advertising, click-through rate (CTR) is a very important metric for evaluating ad performance. As a result, click prediction systems are essential and widely used for sponsored search and real-time bidding.
-For this competition, we have provided 11 days worth of Avazu data to build and test prediction models. Can you find a strategy that beats standard classification algorithms? The winning models from this competition will be released under an open-source license.</description>
+      <description>
+
+&lt;p&gt;In online advertising, click-through rate (CTR) is a very important metric for evaluating ad performance. As a result, click prediction systems are essential and widely used for sponsored search and real-time bidding.&lt;/p&gt;
+
+&lt;p&gt;For this competition, we have provided 11 days worth of Avazu data to build and test prediction models. Can you find a strategy that beats standard classification algorithms? The winning models from this competition will be released under an open-source
+license.&lt;/p&gt;
+
+&lt;h2 id=&#34;data-fields&#34;&gt;Data Fields&lt;/h2&gt;
+
+&lt;pre style=&#34;font-family:courier new,monospace; background-color:#f6c6529c; color:#000000&#34;&gt;
+id: ad identifier
+click: 0/1 for non-click/click
+hour: format is YYMMDDHH, so 14091123 means 23:00 on Sept. 11, 2014 UTC.
+C1 -- anonymized categorical variable
+banner_pos
+site_id
+site_domain
+site_category
+app_id
+app_domain
+app_category
+device_id
+device_ip
+device_model
+device_type
+device_conn_type
+C14-C21 -- anonymized categorical variables 
+&lt;/pre&gt;
+    
+
+&lt;h2 id=&#34;loading-data&#34;&gt;Loading Data&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;## Loading the data &lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; pandas &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; pd
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; np
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; string &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; stri
+
+&lt;span style=&#34;color:#75715e&#34;&gt;#too large data not keeping it in memory.&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# will be using line by line scripting.&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;#data = pd.read_csv(&amp;#34;/Users/RahulAgarwal/kaggle_cpr/train&amp;#34;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Since the data is too large around 6 gb , we will proceed by doing line by line analysis of data. We will try to use vowpal wabbit first of all as it is an online model and it also gives us the option of minimizing log loss as a default. It is also very fast to run and will give us quite an intuition as to how good our prediction can be.&lt;/p&gt;
+
+&lt;p&gt;I will use all the variables in the first implementation and we will rediscover things as we move on&lt;/p&gt;
+
+&lt;h2 id=&#34;running-vowpal-wabbit&#34;&gt;Running Vowpal Wabbit&lt;/h2&gt;
+
+&lt;h2 id=&#34;creating-data-in-vowpal-format-one-time-only&#34;&gt;Creating data in vowpal format (One Time Only)&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; datetime &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; datetime
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;csv_to_vw&lt;/span&gt;(loc_csv, loc_output, train&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;True):
+    start &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; datetime&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;now()
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;Turning &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; into &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;. Is_train_set? &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt;(loc_csv,loc_output,train))
+    i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; open(loc_csv, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;)
+    j &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; open(loc_output, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;wb&amp;#39;&lt;/span&gt;)
+    counter&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;with&lt;/span&gt; i &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; infile:
+        line_count&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; line &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; infile:
+            &lt;span style=&#34;color:#75715e&#34;&gt;# to counter the header&lt;/span&gt;
+            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; line_count&lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:
+                line_count&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+                &lt;span style=&#34;color:#66d9ef&#34;&gt;continue&lt;/span&gt;
+            &lt;span style=&#34;color:#75715e&#34;&gt;# The data has all categorical features&lt;/span&gt;
+            &lt;span style=&#34;color:#75715e&#34;&gt;#numerical_features = &amp;#34;&amp;#34;&lt;/span&gt;
+            categorical_features &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+            counter &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; counter&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+            &lt;span style=&#34;color:#75715e&#34;&gt;#print counter&lt;/span&gt;
+            line &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; line&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;,&amp;#34;&lt;/span&gt;)
+            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; train:
+                &lt;span style=&#34;color:#75715e&#34;&gt;#working on the date column. We will take day , hour&lt;/span&gt;
+                a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; line[&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;]
+                new_date&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; datetime(int(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;20&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;a[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;]),int(a[&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;]),int(a[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;]))
+                day &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; new_date&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;strftime(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%A&amp;#34;&lt;/span&gt;)
+                hour&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; a[&lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;]
+                categorical_features &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; |hr &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; hour
+                categorical_features &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; |day &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; day
+                &lt;span style=&#34;color:#75715e&#34;&gt;# 24 columns in data    &lt;/span&gt;
+                &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;24&lt;/span&gt;):
+                    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; line[i] &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;:
+                        categorical_features &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;|c&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; (str(i),line[i])
+            &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;:
+                a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; line[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+                new_date&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; datetime(int(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;20&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;a[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;]),int(a[&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;]),int(a[&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;]))
+                day &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; new_date&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;strftime(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%A&amp;#34;&lt;/span&gt;)
+                hour&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; a[&lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;:&lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;]
+                categorical_features &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; |hr &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; hour
+                categorical_features &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; |day &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; day
+                &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;23&lt;/span&gt;):
+                    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; line[i] &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;:
+                        categorical_features &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; |c&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; (str(i&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;),line[i])
+  &lt;span style=&#34;color:#75715e&#34;&gt;#Creating the labels&lt;/span&gt;
+            &lt;span style=&#34;color:#75715e&#34;&gt;#print &amp;#34;a&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; train: &lt;span style=&#34;color:#75715e&#34;&gt;#we care about labels&lt;/span&gt;
+                &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; line[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;:
+                    label &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+                &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;:
+                    label &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;#we set negative label to -1&lt;/span&gt;
+                &lt;span style=&#34;color:#75715e&#34;&gt;#print (numerical_features)&lt;/span&gt;
+                &lt;span style=&#34;color:#75715e&#34;&gt;#print categorical_features&lt;/span&gt;
+                j&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;write( &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; &amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; (label,line[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;],categorical_features))
+
+            &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;: &lt;span style=&#34;color:#75715e&#34;&gt;#we dont care about labels&lt;/span&gt;
+                &lt;span style=&#34;color:#75715e&#34;&gt;#print ( &amp;#34;1 &amp;#39;%s |i%s |c%s\n&amp;#34; % (line[0],numerical_features,categorical_features) )&lt;/span&gt;
+                j&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;write( &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;1 &amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; (line[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;],categorical_features) )
+
+  &lt;span style=&#34;color:#75715e&#34;&gt;#Reporting progress&lt;/span&gt;
+            &lt;span style=&#34;color:#75715e&#34;&gt;#print counter&lt;/span&gt;
+            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; counter &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000000&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:
+                &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt;(counter, str(datetime&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;now() &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; start)))
+
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; Task execution time:&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n\t&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt;(counter, str(datetime&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;now() &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; start)))
+
+&lt;span style=&#34;color:#75715e&#34;&gt;#csv_to_vw(&amp;#34;/Users/RahulAgarwal/kaggle_cpr/train&amp;#34;, &amp;#34;/Users/RahulAgarwal/kaggle_cpr/click.train_original_data.vw&amp;#34;,train=True)&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;#csv_to_vw(&amp;#34;/Users/RahulAgarwal/kaggle_cpr/test&amp;#34;, &amp;#34;/Users/RahulAgarwal/kaggle_cpr/click.test_original_data.vw&amp;#34;,train=False)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;running-vowpal-wabbit-on-the-data&#34;&gt;Running Vowpal Wabbit on the data&lt;/h2&gt;
+
+&lt;p&gt;The Vowpal Wabbit will be run on the command line itself.&lt;/p&gt;
+
+&lt;p&gt;Training VW:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;vw click.train_original_data.vw -f click.model.vw --loss_function logistic&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Testing VW:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;vw click.test_original_data.vw  -t -i click.model.vw -p click.preds.txt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&#34;creating-kaggle-submission-file&#34;&gt;Creating Kaggle Submission File&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; math
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;zygmoid&lt;/span&gt;(x):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; math&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exp(&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;x))
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;with&lt;/span&gt; open(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;kaggle.click.submission.csv&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;wb&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; outfile:
+    outfile&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;write(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;id,click&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; line &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; open(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;click.preds.txt&amp;#34;&lt;/span&gt;):
+        
+        row &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; line&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;strip()&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;split(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;)
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt;:
+            outfile&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;write(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%f&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt;(row[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;],zygmoid(float(row[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]))))
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;except&lt;/span&gt;:
+            &lt;span style=&#34;color:#66d9ef&#34;&gt;pass&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This solution ranked &lt;sup&gt;211&lt;/sup&gt;&amp;frasl;&lt;sub&gt;371&lt;/sub&gt; submissions at the time and the leaderboard score was 0.4031825 while the best leaderboard score was 0.3901120&lt;/p&gt;
+
+&lt;h2 id=&#34;next-steps&#34;&gt;Next Steps&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Create a better VW model&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Shuffle the data before making the model as the VW algorithm is an online learner and might have given more preference to the latest data&lt;/li&gt;
+&lt;li&gt;provide high weights for clicks as data is skewed. How Much?&lt;/li&gt;
+&lt;li&gt;tune VW algorithm using vw-hypersearch. What should be tuned?&lt;/li&gt;
+&lt;li&gt;Use categorical features like |C1 &amp;ldquo;C1&amp;rdquo;&amp;amp;&amp;ldquo;1&amp;rdquo;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Create a XGBoost Model.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Create a Sofia-ML Model and see how it works on this data.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script src=&#34;//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e&#34;&gt;&lt;/script&gt;
+</description>
     </item>
     
   </channel>

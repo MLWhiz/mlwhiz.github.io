@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Pretrained Models on MLWhiz</title>
+    <title>
+    Pretrained Models on 
+    MLWhiz
+    </title>
     <link>https://mlwhiz.com/tags/pretrained-models/</link>
-    <description>Recent content in Pretrained Models on MLWhiz</description>
+    <description>Recent content in Pretrained Models 
+    on MLWhiz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    
+    
     <lastBuildDate>Mon, 17 Apr 2017 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://mlwhiz.com/tags/pretrained-models/atom.xml" rel="self" type="application/rss" />
+    
+        <atom:link href="https://mlwhiz.com/tags/pretrained-models/atom.xml" rel="self" type="application/rss" />
     
     
     <item>
@@ -17,8 +24,136 @@
       <pubDate>Mon, 17 Apr 2017 00:00:00 +0000</pubDate>
       
       <guid>https://mlwhiz.com/blog/2017/04/17/deep_learning_pretrained_models/</guid>
-      <description>Deeplearning is the buzz word right now. I was working on the course for deep learning by Jeremy Howard and one thing I noticed were pretrained deep Neural Networks. In the first lesson he used the pretrained NN to predict on the Dogs vs Cats competition on Kaggle to achieve very good results.
-What are pretrained Neural Networks? So let me tell you about the background a little bit. There is a challenge that happens every year in the visual recognition community - The Imagenet Challenge.</description>
+      <description>
+
+&lt;p&gt;Deeplearning is the buzz word right now. I was working on the &lt;a href=&#34;http://www.fast.ai/&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;course&lt;/a&gt; for deep learning by Jeremy Howard and one thing I noticed were pretrained deep Neural Networks. In the first lesson he used the pretrained NN to predict on the &lt;a href=&#34;https://www.kaggle.com/c/dogs-vs-cats&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;Dogs vs Cats&lt;/a&gt; competition on Kaggle to achieve very good results.&lt;/p&gt;
+
+&lt;h2 id=&#34;what-are-pretrained-neural-networks&#34;&gt;What are pretrained Neural Networks?&lt;/h2&gt;
+
+&lt;p&gt;So let me tell you about the background a little bit. There is a challenge that happens every year in the visual recognition community - The Imagenet Challenge. The task there is to classify the images in 1000 categories using Image training data. People train big convolutional deep learning models for this challenge.&lt;/p&gt;
+
+&lt;p&gt;Now what does training a neural model actually mean? It just means that they learn the weights for a NN. What if we can get the weights they learn? We can use those weights to load them into our own NN model and predict on the test dataset. Right?&lt;/p&gt;
+
+&lt;p&gt;But actually we can go further than that. We can add an extra layer on top of the NN they have prepared to classify our own dataset.&lt;/p&gt;
+
+&lt;p&gt;In a way you can think of the intermediate features created by the Pretrained neural networks to be the features for the next layer.&lt;/p&gt;
+
+&lt;h2 id=&#34;why-it-works&#34;&gt;Why it works?&lt;/h2&gt;
+
+&lt;p&gt;We are essentially doing the image classification task only. We need to find out edges, shapes, intensities and other features from the images that are given to us. The pretrained model is already pretty good at finding these sort of features. Forget neural nets, if we plug these features into a machine learning algorithm we should be good.&lt;/p&gt;
+
+&lt;p&gt;What we actually do here is replace the last layer of the neural network with a new prediction/output layer and train while keeping the weights for all the layers before the second last layer constant.&lt;/p&gt;
+
+&lt;h2 id=&#34;code&#34;&gt;Code:&lt;/h2&gt;
+
+&lt;p&gt;I assume that you understand Keras a little. If not you can look at the docs.
+Let us get into coding now. First of all we will create the architecture of the neural network the VGG Team created in 2014. Then we will load the weights.&lt;/p&gt;
+
+&lt;p&gt;Import some stuff&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; np
+&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; numpy.random &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; random, permutation
+&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; scipy &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; misc, ndimage
+&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; scipy.ndimage.interpolation &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; zoom
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; keras
+&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; keras &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; backend &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; K
+&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; keras.utils.data_utils &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; get_file
+&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; keras.models &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; Sequential, Model
+&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; keras.layers.core &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; Flatten, Dense, Dropout, Lambda
+&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; keras.layers &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; Input
+&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; keras.layers.convolutional &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; Convolution2D, MaxPooling2D, ZeroPadding2D
+&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; keras.optimizers &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; SGD, RMSprop, Adam
+&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; keras.preprocessing &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; image&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;VGG has just one type of convolutional block, and one type of fully connected (&amp;lsquo;dense&amp;rsquo;) block. We start by defining the building blocks of our Deep learning model.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ConvBlock&lt;/span&gt;(layers, model, filters):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(layers):
+        model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add(ZeroPadding2D((&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)))
+        model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add(Convolution2D(filters, &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, activation&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;relu&amp;#39;&lt;/span&gt;))
+    model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add(MaxPooling2D((&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;), strides&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)))
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;FCBlock&lt;/span&gt;(model):
+    model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add(Dense(&lt;span style=&#34;color:#ae81ff&#34;&gt;4096&lt;/span&gt;, activation&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;relu&amp;#39;&lt;/span&gt;))
+    model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add(Dropout(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;))&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;script src=&#34;//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e&#34;&gt;&lt;/script&gt;
+
+&lt;p&gt;Now the input of the VGG Model was images. When the VGG model was trained in 2014, the creators subtracted the average of each of the three (R,G,B) channels first, so that the data for each channel had a mean of zero. Furthermore, their software that expected the channels to be in B,G,R order, whereas Python by default uses R,G,B. We need to preprocess our data to make these two changes, so that it is compatible with the VGG model. We also add some helper functions.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#Mean of each channel as provided by VGG researchers&lt;/span&gt;
+vgg_mean &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([&lt;span style=&#34;color:#ae81ff&#34;&gt;123.68&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;116.779&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;103.939&lt;/span&gt;])&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reshape((&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;))
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;vgg_preprocess&lt;/span&gt;(x):
+    x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; vgg_mean     &lt;span style=&#34;color:#75715e&#34;&gt;# subtract mean&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; x[:, ::&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]    &lt;span style=&#34;color:#75715e&#34;&gt;# reverse axis bgr-&amp;gt;rgb&lt;/span&gt;
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;VGG_16&lt;/span&gt;():
+    model &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Sequential()
+    model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add(Lambda(vgg_preprocess, input_shape&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;224&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;224&lt;/span&gt;)))
+    ConvBlock(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, model, &lt;span style=&#34;color:#ae81ff&#34;&gt;64&lt;/span&gt;)
+    ConvBlock(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, model, &lt;span style=&#34;color:#ae81ff&#34;&gt;128&lt;/span&gt;)
+    ConvBlock(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, model, &lt;span style=&#34;color:#ae81ff&#34;&gt;256&lt;/span&gt;)
+    ConvBlock(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, model, &lt;span style=&#34;color:#ae81ff&#34;&gt;512&lt;/span&gt;)
+    ConvBlock(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, model, &lt;span style=&#34;color:#ae81ff&#34;&gt;512&lt;/span&gt;)
+    model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add(Flatten())
+    FCBlock(model)
+    FCBlock(model)
+    model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add(Dense(&lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;, activation&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;softmax&amp;#39;&lt;/span&gt;))
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; model
+
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;finetune&lt;/span&gt;(model, num_classes):
+    &lt;span style=&#34;color:#75715e&#34;&gt;# Drop last layer&lt;/span&gt;
+    model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pop()
+    &lt;span style=&#34;color:#75715e&#34;&gt;# Make all layers untrainable. i.e fix all weights&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; layer &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;layers: layer&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;trainable&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False
+    &lt;span style=&#34;color:#75715e&#34;&gt;# Add a new layer which is the new output layer&lt;/span&gt;
+    model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;add(Dense(num_classes, activation&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;softmax&amp;#39;&lt;/span&gt;))
+    model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;compile(optimizer&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;Adam(lr&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.001&lt;/span&gt;),
+                loss&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;categorical_crossentropy&amp;#39;&lt;/span&gt;, metrics&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;accuracy&amp;#39;&lt;/span&gt;])
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; model
+
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# A way to generate batches of images&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get_batches&lt;/span&gt;(path, dirname, gen&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;image&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ImageDataGenerator(), shuffle&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;True,
+                batch_size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;64&lt;/span&gt;, class_mode&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;categorical&amp;#39;&lt;/span&gt;):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; gen&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;flow_from_directory(path&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;dirname, target_size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;224&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;224&lt;/span&gt;),
+                class_mode&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;class_mode, shuffle&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;shuffle, batch_size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;batch_size)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The hard part is done now. Just create a VGG object and load the weights.We will need to load pretrained weights into the model too. You can download the &amp;ldquo;VGG16_weights.h5&amp;rdquo; file &lt;a href=&#34;https://drive.google.com/file/d/0Bz7KyqmuGsilT0J5dmRCM0ROVHc/view&#34; rel=&#34;nofollow&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;model &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; VGG_16()
+model&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;load_weights(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;VGG16_weights.h5&amp;#39;&lt;/span&gt;)
+&lt;span style=&#34;color:#75715e&#34;&gt;# Since our dogs vs cat dataset is binary classification model&lt;/span&gt;
+ftmodel &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; finetune(model,&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)
+&lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt; ftmodel&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;summary()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;div style=&#34;margin-top: 9px; margin-bottom: 10px;&#34;&gt;
+&lt;center&gt;&lt;img src=&#34;https://mlwhiz.com/images/keras_net.png&#34;  height=&#34;400&#34; width=&#34;500&#34; &gt;&lt;/center&gt;
+&lt;/div&gt;
+Showing a little bit of output here. This is how the last layers of our Neural net look after training. Now we have got a architecture which we got to train. Here we are only training to get the last layer weights. As you can see from the trainable params.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;path &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;dogscats/&amp;#34;&lt;/span&gt;
+batch_size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;64&lt;/span&gt;
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Iterators to get our images from our datasets. The datasets are folders named train and valid. Both folder contain two directories &amp;#39;dogs&amp;#39; and &amp;#39;cats&amp;#39;. In each directory the corresponding images are kept.&lt;/span&gt;
+
+batches &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; get_batches(path,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;train&amp;#39;&lt;/span&gt;, batch_size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;batch_size)
+val_batches &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; get_batches(path,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;valid&amp;#39;&lt;/span&gt;, batch_size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;batch_size)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Now run for some epochs till the validation loss stops decreasing.&lt;/span&gt;
+no_of_epochs&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; epoch &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(no_of_epochs):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Running epoch: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; epoch
+    ftmodel&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fit_generator(batches, samples_per_epoch&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;batches&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;nb_sample, nb_epoch&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,
+                validation_data&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;val_batches, nb_val_samples&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;val_batches&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;nb_sample)
+    latest_weights_filename &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;ft&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;.h5&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; epoch
+    ftmodel&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;save_weights(latest_weights_filename)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;#Create Predictions on test set. The test images should be in the folder dogscats/test/test_images/ , which is a single directory containing all images.&lt;/span&gt;
+
+test_batches &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; get_batches(path, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;test&amp;#39;&lt;/span&gt;, batch_size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;batch_size, class_mode&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;None)
+
+preds &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; ftmodel&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;predict_generator(test_batches, test_batches&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;nb_sample)
+
+isdog &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; preds[:,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+image_id &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; batches&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;filenames
+final_submission &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stack([ids,isdog], axis&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And we are done!&lt;/p&gt;
+</description>
     </item>
     
   </channel>
