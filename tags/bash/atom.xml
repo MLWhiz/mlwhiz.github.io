@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1" xmlns:content="http://purl.org/rss/1.0/modules/content" xmlns:media="http://search.yahoo.com/mrss/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1" xmlns:content="http://purl.org/rss/1.0/modules/content" xmlns:media="http://search.yahoo.com/mrss/" >
+
+  
   <channel>
     <title>Bash on MLWhiz</title>
     <link>https://mlwhiz.com/tags/bash/</link>
@@ -23,8 +25,66 @@
       
 
       
-      <description>Yesterday I got introduced to awk programming on the shell and is it cool. It lets you do stuff on the command line which you never imagined. As a matter of fact, it&amp;rsquo;s a whole data analytics software in itself when you think about it. You can do selections, groupby, mean, median, sum, duplication, append. You just ask. There is no limit actually.
+      <description>Yesterday I got introduced to awk programming on the shell and is it cool. It lets you do stuff on the command line which you never imagined. As a matter of fact, it&amp;amp;rsquo;s a whole data analytics software in itself when you think about it. You can do selections, groupby, mean, median, sum, duplication, append. You just ask. There is no limit actually.
 And it is easy to learn.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  Yesterday I got introduced to awk programming on the shell and is it cool. It lets you do stuff on the command line which you never imagined. As a matter of fact, it&amp;rsquo;s a whole data analytics software in itself when you think about it. You can do selections, groupby, mean, median, sum, duplication, append. You just ask. There is no limit actually.
+And it is easy to learn.
+In this post, I will try to give you a brief intro about how you could add awk to your daily work-flow.
+Please see my previous post if you want some background or some basic to intermediate understanding of shell commands.
+Basics/ Fundamentals So let me start with an example first. Say you wanted to sum a column in a comma delimited file. How would you do that in shell?
+Here is the command. The great thing about awk is that it took me nearly 5 sec to write this command. I did not have to open any text editor to write a python script.
+It lets you do adhoc work quickly.
+awk &amp;#39;BEGIN{ sum=0; FS=&amp;#34;,&amp;#34;} { sum &#43;= $5 } END { print sum }&amp;#39; data.txt 44662539172  See the command one more time. There is a basic structure to the awk command
+BEGIN {action} pattern {action} pattern {action} . . pattern { action} END {action}   An awk program consists of:
+ An optional BEGIN segment : In the begin part we initialize our variables before we even start reading from the file or the standard input.
+ pattern - action pairs: In the middle part we Process the input data. You put multiple pattern action pairs when you want to do multiple things with the same line.
+ An optional END segment: In the end part we do something we want to do when we have reached the end of file.
+  An awk command is called on a file using:
+awk &amp;#39;BEGIN{SOMETHING HERE} {SOMETHING HERE: could put Multiple Blocks Like this} END {SOMETHING HERE}&amp;#39; file.txt You also need to know about these preinitialized variables that awk keeps track of.:
+ FS : field separator. Default is whitespace (1 or more spaces or tabs). If you are using any other seperator in the file you should specify it in the Begin Part. RS : record separator. Default record separator is newline. Can be changed in BEGIN action. NR : NR is the variable whose value is the number of the current record. You normally use it in the action blocks in the middle. NF : The Number of Fields after the single line has been split up using FS. Dollar variables : awk splits up the line which is coming to it by using the given FS and keeps the split parts in the $ variables. For example column 1 is in $1, column 2 is in $2. $0 is the string representation of the whole line. Note that if you want to access last column you don&amp;rsquo;t have to count. You can just use $NF. For second last column you can use $(NF-1). Pretty handy. Right.  So If you are with me till here, the hard part is done. Now the fun part starts. Lets look at the first awk command again and try to understand it.
+awk &amp;#39;BEGIN{ sum=0; FS=&amp;#34;,&amp;#34;} { sum &#43;= $5 } END { print sum }&amp;#39; data.txt So there is a begin block. Remember before we read any line. We initialize sum to 0 and FS to &amp;ldquo;,&amp;rdquo;.
+Now as awk reads its input line by line it increments sum by the value in column 5(as specified by $5).
+Note that there is no pattern specified here so awk will do the action for every line.
+When awk has completed reading the file it prints out the sum.
+What if you wanted mean?
+We could create a cnt Variable:
+awk &amp;#39;BEGIN{ sum=0;cnt=0; FS=&amp;#34;,&amp;#34;} { sum &#43;= $5; cnt&#43;=1 } END { print sum/cnt }&amp;#39; data.txt 1.86436e&#43;06  or better yet, use our friend NR which bash is already keeping track of:
+awk &amp;#39;BEGIN{ sum=0; FS=&amp;#34;,&amp;#34;} { sum &#43;= $5 } END { print sum/NR }&amp;#39; data.txt 1.86436e&#43;06  Filter a file In the mean and sum awk commands we did not put any pattern in our middle commands. Let us use a simple pattern now. Suppose we have a file Salaries.csv which contains:
+head salaries.txt yearID,teamID,lgID,playerID,salary 1985,BAL,AL,murraed02,1472819 1985,BAL,AL,lynnfr01,1090000 1985,BAL,AL,ripkeca01,800000 1985,BAL,AL,lacyle01,725000 1985,BAL,AL,flanami01,641667 1985,BAL,AL,boddimi01,625000 1985,BAL,AL,stewasa01,581250 1985,BAL,AL,martide01,560000 1985,BAL,AL,roeniga01,558333  I want to filter records for players who who earn more than 22 M in 2013 just because I want to. You just do:
+awk &amp;#39;BEGIN{FS=&amp;#34;,&amp;#34;} $5&amp;gt;=22000000 &amp;amp;&amp;amp; $1==2013{print $0}&amp;#39; Salaries.csv 2013,DET,AL,fieldpr01,23000000 2013,MIN,AL,mauerjo01,23000000 2013,NYA,AL,rodrial01,29000000 2013,NYA,AL,wellsve01,24642857 2013,NYA,AL,sabatcc01,24285714 2013,NYA,AL,teixema01,23125000 2013,PHI,NL,leecl02,25000000 2013,SFN,NL,linceti01,22250000  Cool right. Now let me explain it a little bit. The part in the command &amp;ldquo;$5&amp;gt;=22000000 &amp;amp;&amp;amp; $1==2013&amp;rdquo; is called a pattern. It says that print this line($0) if and only if the Salary($5) is more than 22M and(&amp;amp;&amp;amp;) year($1) is equal to 2013. If the incoming record(line) does not satisfy this pattern it never reaches the inner block.
+So Now you could do basic Select SQL at the command line only if you had:
+The logic Operators:
+ == equality operator; returns TRUE is both sides are equal
+ != inverse equality operator
+ &amp;amp;&amp;amp; logical AND
+ || logical OR
+ ! logical NOT
+ &amp;lt;, &amp;gt;, &amp;lt;=, &amp;gt;= relational operators
+  Normal Arithmetic Operators: &#43;, -, /, *, %, ^
+Some String Functions: length, substr, split
+GroupBy Now you will say: &amp;ldquo;Hey Dude SQL without groupby is incomplete&amp;rdquo;. You are right and for that we can use the associative array. Lets just see the command first and then I will explain. So lets create another useless use case(or may be something useful to someone :)) We want to find out the number of records for each year in the file. i.e we want to find the distribution of years in the file. Here is the command:
+awk &amp;#39;BEGIN{FS=&amp;#34;,&amp;#34;} {my_array[$1]=my_array[$1]&#43;1} END{ for (k in my_array){if(k!=&amp;#34;yearID&amp;#34;)print k&amp;#34;|&amp;#34;my_array[k]}; }&amp;#39; Salaries.csv 1990|867 1991|685 1996|931 1997|925 ...  Now I would like to tell you a secret. You don&amp;rsquo;t really need to declare the variables you want to use in awk. So you did not really needed to define sum, cnt variables before. I only did that because it is good practice. If you don&amp;rsquo;t declare a user defined variable in awk, awk assumes it to be null or zero depending on the context. So in the command above we don&amp;rsquo;t declare our myarray in the begin block and that is fine.
+Associative Array: The variable myarray is actually an associative array. i.e. It stores data in a key value format.(Python dictionaries anyone). The same array could keep integer keys and String keys. For example, I can do this in a single code.
+myarray[1]=&#34;key&#34; myarray[&#39;mlwhiz&#39;] = 1   For Loop for associative arrays: I could use a for loop to read associative array
+for (k in array) { DO SOMETHING } # Assigns to k each Key of array (unordered) # Element is array[k]   If Statement:Uses a syntax like C for the if statement. the else block is optional:
+if (n  0){ DO SOMETHING } else{ DO SOMETHING }   So lets dissect the above command now.
+I set the File separator to &amp;ldquo;,&amp;rdquo; in the beginning. I use the first column as the key of myarray. If the key exists I increment the value by 1.
+At the end, I loop through all the keys and print out key value pairs separated by &amp;ldquo;|&amp;rdquo;
+I know that the header line in my file contains &amp;ldquo;yearID&amp;rdquo; in column 1 and I don&amp;rsquo;t want &amp;lsquo;yearID|1&amp;rsquo; in the output. So I only print when Key is not equal to &amp;lsquo;yearID&amp;rsquo;.
+GroupBy with case statement: cat Salaries.csv | awk &amp;#39;BEGIN{FS=&amp;#34;,&amp;#34;} $5&amp;lt;100000{array5[&amp;#34;[0-100000)&amp;#34;]&#43;=1} $5&amp;gt;=100000&amp;amp;&amp;amp;$5&amp;lt;250000{array5[&amp;#34;[100000,250000)&amp;#34;]=array5[&amp;#34;[100000,250000)&amp;#34;]&#43;1} $5&amp;gt;=250000&amp;amp;&amp;amp;$5&amp;lt;500000{array5[&amp;#34;[250000-500000)&amp;#34;]=array5[&amp;#34;[250000-500000)&amp;#34;]&#43;1} $5&amp;gt;=500000&amp;amp;&amp;amp;$5&amp;lt;1000000{array5[&amp;#34;[500000-1000000)&amp;#34;]=array5[&amp;#34;[500000-1000000)&amp;#34;]&#43;1} $5&amp;gt;=1000000{array5[&amp;#34;[1000000)&amp;#34;]=array5[&amp;#34;[1000000)&amp;#34;]&#43;1} END{ print &amp;#34;VAR Distrib:&amp;#34;; for (v in array5){print v&amp;#34;|&amp;#34;array5[v]} }&amp;#39; VAR Distrib: [250000-500000)|8326 [0-100000)|2 [1000000)|23661 [100000,250000)|9480  Here we used multiple pattern-action blocks to create a case statement.
+For The Brave: This is a awk code that I wrote to calculate the Mean,Median,min,max and sum of a column simultaneously. Try to go through the code and understand it.I have added comments too. Think of this as an exercise. Try to run this code and play with it. You may learn some new tricks in the process. If you don&amp;rsquo;t understand it do not worry. Just get started writing your own awk codes, you will be able to understand it in very little time.
+# Create a New file named A.txt to keep only the salary column. cat Salaries.csv | cut -d &amp;#34;,&amp;#34; -f 5 &amp;gt; A.txt FILENAME=&amp;#34;A.txt&amp;#34; # The first awk counts the number of lines which are numeric. We use a regex here to check if the column is numeric or not. # &amp;#39;;&amp;#39; stands for Synchronous execution i.e sort only runs after the awk is over. # The output of both commands are given to awk command which does the whole work. # So Now the first line going to the second awk is the number of lines in the file which are numeric. # and from the second to the end line the file is sorted. (awk &amp;#39;BEGIN {c=0} $1 ~ /^[-0-9]*(\.[0-9]*)?$/ {c=c&#43;1;} END {print c;}&amp;#39; &amp;#34;$FILENAME&amp;#34;; \  sort -n &amp;#34;$FILENAME&amp;#34;) | awk &amp;#39; BEGIN { c = 0; sum = 0; med1_loc = 0; med2_loc = 0; med1_val = 0; med2_val = 0; min = 0; max = 0; } NR==1 { LINES = $1 # We check whether numlines is even or odd so that we keep only # the locations in the array where the median might be. if (LINES%2==0) {med1_loc = LINES/2-1; med2_loc = med1_loc&#43;1;} if (LINES%2!=0) {med1_loc = med2_loc = (LINES-1)/2;} } $1 ~ /^[-0-9]*(\.[0-9]*)?$/ &amp;amp;&amp;amp; NR!=1 { # setting min value if (c==0) {min = $1;} # middle two values in array if (c==med1_loc) {med1_val = $1;} if (c==med2_loc) {med2_val = $1;} c&#43;&#43; sum &#43;= $1 max = $1 } END { ave = sum / c median = (med1_val &#43; med2_val ) / 2 print &amp;#34;sum:&amp;#34; sum print &amp;#34;count:&amp;#34; c print &amp;#34;mean:&amp;#34; ave print &amp;#34;median:&amp;#34; median print &amp;#34;min:&amp;#34; min print &amp;#34;max:&amp;#34; max } &amp;#39; &amp;lt;pre style=&amp;#34;font-size:50%; padding:7px; margin:0em; background-color:#FFF112&amp;#34;&amp;gt;sum:44662539172 count:23956 mean:1.86436e&#43;06 median:507950 min:0 max:33000000 &amp;lt;/pre&amp;gt; Endnote: awk is an awesome tool and there are a lot of use-cases where it can make your life simple. There is a sort of a learning curve, but I think that it would be worth it in the long term. I have tried to give you a taste of awk and I have covered a lot of ground here in this post. To tell you a bit more there, awk is a full programming language. There are for loops, while loops, conditionals, booleans, functions and everything else that you would expect from a programming language. So you could look more still.
+To learn more about awk you can use this book. This book is a free resource and you could learn more about awk and use cases.
+Or if you like to have your book binded and in paper like me you can buy this book, which is a gem:
+Do leave comments in case you find more use-cases for awk or if you want me to write on new use-cases. Or just comment weather you liked it or not and how I could improve as I am also new and trying to learn more of this.
+Till then Ciao !!!
+]]>
+        
+      </content:encoded>
+      
       
       
     </item>
@@ -42,6 +102,61 @@ And it is easy to learn.</description>
       
       <description>Shell Commands are powerful. And life would be like hell without shell is how I like to say it(And that is probably the reason that I dislike windows).
 Consider a case when you have a 6 GB pipe-delimited file sitting on your laptop and you want to find out the count of distinct values in one particular column. You can probably do this in more than one way. You could put that file in a database and run SQL Commands, or you could write a python/perl script.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  Shell Commands are powerful. And life would be like hell without shell is how I like to say it(And that is probably the reason that I dislike windows).
+Consider a case when you have a 6 GB pipe-delimited file sitting on your laptop and you want to find out the count of distinct values in one particular column. You can probably do this in more than one way. You could put that file in a database and run SQL Commands, or you could write a python/perl script.
+Probably whatever you do it won&amp;rsquo;t be simpler/less time consuming than this
+cat data.txt | cut -d &amp;#34;|&amp;#34; -f 1 | sort | uniq | wc -l 30  And this will run way faster than whatever you do with perl/python script.
+Now this command says
+ Use the cat command to print/stream the contents of the file to stdout. Pipe the streaming contents from our cat command to the next command cut. The cut commands specifies the delimiter by the argument -d and the column by the argument -f and streams the output to stdout. Pipe the streaming content to the sort command which sorts the input and streams only the distinct values to the stdout. It takes the argument -u that specifies that we only need unique values. Pipe the output to the wc -l command which counts the number of lines in the input.  There is a lot going on here and I will try my best to ensure that you will be able to understand most of it by the end of this Blog post.Although I will also try to explain more advanced concepts than the above command in this post.
+Now, I use shell commands extensively at my job. I will try to explain the usage of each of the commands based on use cases that I counter nearly daily at may day job as a data scientist.
+Some Basic Commands in Shell: There are a lot of times when you just need to know a little bit about the data. You just want to see may be a couple of lines to inspect a file. One way of doing this is opening the txt/csv file in the notepad. And that is probably the best way for small files. But you could also do it in the shell using:
+1. cat cat data.txt yearID|teamID|lgID|playerID|salary 1985|BAL|AL|murraed02|1472819 1985|BAL|AL|lynnfr01|1090000 1985|BAL|AL|ripkeca01|800000 1985|BAL|AL|lacyle01|725000 1985|BAL|AL|flanami01|641667 1985|BAL|AL|boddimi01|625000 1985|BAL|AL|stewasa01|581250 1985|BAL|AL|martide01|560000 1985|BAL|AL|roeniga01|558333  Now the cat command prints the whole file in the terminal window for you.I have not shown the whole file here.
+But sometimes the files will be so big that you wont be able to open them up in notepad&#43;&#43; or any other software utility and there the cat command will shine.
+2. Head and Tail Now you might ask me why would you print the whole file in the terminal itself? Generally I won&amp;rsquo;t. But I just wanted to tell you about the cat command. For the use case when you want only the top/bottom n lines of your data you will generally use the head/tail commands. You can use them as below.
+head data.txt yearID|teamID|lgID|playerID|salary 1985|BAL|AL|murraed02|1472819 1985|BAL|AL|lynnfr01|1090000 1985|BAL|AL|ripkeca01|800000 1985|BAL|AL|lacyle01|725000 1985|BAL|AL|flanami01|641667 1985|BAL|AL|boddimi01|625000 1985|BAL|AL|stewasa01|581250 1985|BAL|AL|martide01|560000 1985|BAL|AL|roeniga01|558333  head -n 3 data.txt yearID|teamID|lgID|playerID|salary 1985|BAL|AL|murraed02|1472819 1985|BAL|AL|lynnfr01|1090000  tail data.txt 2013|WAS|NL|bernaro01|1212500 2013|WAS|NL|tracych01|1000000 2013|WAS|NL|stammcr01|875000 2013|WAS|NL|dukeza01|700000 2013|WAS|NL|espinda01|526250 2013|WAS|NL|matthry01|504500 2013|WAS|NL|lombast02|501250 2013|WAS|NL|ramoswi01|501250 2013|WAS|NL|rodrihe03|501000 2013|WAS|NL|moorety01|493000  tail -n 2 data.txt 2013|WAS|NL|rodrihe03|501000 2013|WAS|NL|moorety01|493000  Notice the structure of the shell command here.
+CommandName [-arg1name] [arg1value] [-arg2name] [arg2value] filename   3. Piping Now we could have also written the same command as:
+cat data.txt | head yearID|teamID|lgID|playerID|salary 1985|BAL|AL|murraed02|1472819 1985|BAL|AL|lynnfr01|1090000 1985|BAL|AL|ripkeca01|800000 1985|BAL|AL|lacyle01|725000 1985|BAL|AL|flanami01|641667 1985|BAL|AL|boddimi01|625000 1985|BAL|AL|stewasa01|581250 1985|BAL|AL|martide01|560000 1985|BAL|AL|roeniga01|558333  This brings me to one of the most important concepts of Shell usage - piping. You won&amp;rsquo;t be able to utilize the full power the shell provides without using this concept. And the concept is actually simple.
+Just read the &amp;ldquo;|&amp;rdquo; in the command as &amp;ldquo;pass the data on to&amp;rdquo;
+So I would read the above command as:
+cat(print) the whole data to stream, pass the data on to head so that it can just give me the first few lines only.
+So did you understood what piping did? It is providing us a way to use our basic commands in a consecutive manner. There are a lot of commands that are fairly basic and it lets us use these basic commands in sequence to do some fairly non trivial things.
+Now let me tell you about a couple of more commands before I show you how we can chain them to do fairly advanced tasks.
+4. wc wc is a fairly useful shell utility/command that lets us count the number of lines(-l), words(-w) or characters(-c) in a given file
+wc -l data.txt 23957 data.txt  5. grep You may want to print all the lines in your file which have a particular word. Or as a Data case you might like to see the salaries for the team BAL in 2000. In this case we have printed all the lines in the file which contain &amp;ldquo;2000|BAL&amp;rdquo;. grep is your friend.
+grep &amp;#34;2000|BAL&amp;#34; data.txt | head 2000|BAL|AL|belleal01|12868670 2000|BAL|AL|anderbr01|7127199 2000|BAL|AL|mussimi01|6786032 2000|BAL|AL|ericksc01|6620921 2000|BAL|AL|ripkeca01|6300000 2000|BAL|AL|clarkwi02|6000000 2000|BAL|AL|johnsch04|4600000 2000|BAL|AL|timlimi01|4250000 2000|BAL|AL|deshide01|4209324 2000|BAL|AL|surhobj01|4146789  you could also use regular expressions with grep.
+6. sort You may want to sort your dataset on a particular column.Sort is your friend. Say you want to find out the top 10 maximum salaries given to any player in your dataset.
+sort -t &amp;#34;|&amp;#34; -k 5 -r -n data.txt | head -10 2010|NYA|AL|rodrial01|33000000 2009|NYA|AL|rodrial01|33000000 2011|NYA|AL|rodrial01|32000000 2012|NYA|AL|rodrial01|30000000 2013|NYA|AL|rodrial01|29000000 2008|NYA|AL|rodrial01|28000000 2011|LAA|AL|wellsve01|26187500 2005|NYA|AL|rodrial01|26000000 2013|PHI|NL|leecl02|25000000 2013|NYA|AL|wellsve01|24642857  So there are certainly a lot of options in this command. Lets go through them one by one.
+ -t: Which delimiter to use? -k: Which column to sort on? -n: If you want Numerical Sorting. Dont use this option if you want Lexographical sorting. -r: I want to sort Descending. Sorts Ascending by Default.  7. cut This command lets you select certain columns from your data. Sometimes you may want to look at just some of the columns in your data. As in you may want to look only at the year, team and salary and not the other columns. cut is the command to use.
+cut -d &amp;#34;|&amp;#34; -f 1,2,5 data.txt | head yearID|teamID|salary 1985|BAL|1472819 1985|BAL|1090000 1985|BAL|800000 1985|BAL|725000 1985|BAL|641667 1985|BAL|625000 1985|BAL|581250 1985|BAL|560000 1985|BAL|558333  The options are:
+ -d: Which delimiter to use? -f: Which column/columns to cut?  8. uniq uniq is a little bit tricky as in you will want to use this command in sequence with sort. This command removes sequential duplicates. So in conjunction with sort it can be used to get the distinct values in the data. For example if I wanted to find out 10 distinct teamIDs in data, I would use:
+cat data.txt | cut -d &amp;#34;|&amp;#34; -f 2 | sort | uniq | head ANA ARI ATL BAL BOS CAL CHA CHN CIN CLE  This command could be used with argument -c to count the occurrence of these distinct values. Something akin to count distinct.
+cat data.txt | cut -d &amp;#34;|&amp;#34; -f 2 | sort | uniq -c | head 247 ANA 458 ARI 838 ATL 855 BAL 852 BOS 368 CAL 812 CHA 821 CHN 46 CIN 867 CLE  Some Other Utility Commands for Other Operations Some Other command line tools that you could use without going in the specifics as the specifics are pretty hard.
+1. Change delimiter in a file Find and Replace Magic.: You may want to replace certain characters in file with something else using the tr command.
+cat data.txt | tr &amp;#39;|&amp;#39; &amp;#39;,&amp;#39; | head -4 yearID,teamID,lgID,playerID,salary 1985,BAL,AL,murraed02,1472819 1985,BAL,AL,lynnfr01,1090000 1985,BAL,AL,ripkeca01,800000  or the sed command
+cat data.txt | sed -e &amp;#39;s/|/,/g&amp;#39; | head -4 yearID,teamID,lgID,playerID,salary 1985,BAL,AL,murraed02,1472819 1985,BAL,AL,lynnfr01,1090000 1985,BAL,AL,ripkeca01,800000  2. Sum of a column in a file Using the awk command you could find the sum of column in file. Divide it by the number of lines and you can get the mean.
+cat data.txt | awk -F &amp;#34;|&amp;#34; &amp;#39;{ sum &#43;= $5 } END { printf sum }&amp;#39; 44662539172  awk is a powerful command which is sort of a whole language in itself. Do see the wiki page for awk for a lot of great usecases of awk. I also wrote a post on awk as a second part in this series. Check it HERE
+3. Find the files in a directory that satisfy a certain condition You can do this by using the find command. Lets say you want to find all the .txt files in the current working dir that start with lowercase h.
+find . -name &amp;#34;h*.txt&amp;#34; ./hamlet.txt  To find all .txt files starting with h regarless of case we could use regex.
+find . -name &amp;#34;[Hh]*.txt&amp;#34; ./hamlet.txt ./Hamlet1.txt  4. Passing file list as Argument. xargs was suggested by Gaurav in the comments, so I read about it and it is actually a very nice command which you could use in a variety of use cases.
+So if you just use a pipe, any command/utility receives data on STDIN (the standard input stream) as a raw pile of data that it can sort through one line at a time. However some programs don&amp;rsquo;t accept their commands on standard in. For example the rm command(which is used to remove files), touch command(used to create file with a given name) or a certain python script you wrote(which takes command line arguments). They expect it to be spelled out in the arguments to the command.
+For example: rm takes a file name as a parameter on the command line like so: rm file1.txt. If I wanted to delete all &amp;lsquo;.txt&amp;rsquo; files starting with &amp;ldquo;h/H&amp;rdquo; from my working directory, the below command won&amp;rsquo;t work because rm expects a file as an input.
+find . -name &amp;#34;[hH]*.txt&amp;#34; | rm usage: rm [-f | -i] [-dPRrvW] file ... unlink file  To get around it we can use the xargs command which reads the STDIN stream data and converts each line into space separated arguments to the command.
+find . -name &amp;#34;[hH]*.txt&amp;#34; | xargs ./hamlet.txt ./Hamlet1.txt  Now you could use rm to remove all .txt files that start with h/H. A word of advice: Always see the output of xargs first before using rm.
+find . -name &amp;#34;[hH]*.txt&amp;#34; | xargs rm Another usage of xargs could be in conjunction with grep to find all files that contain a given string.
+find . -name &amp;#34;*.txt&amp;#34; | xargs grep &amp;#39;honest soldier&amp;#39; ./Data1.txt:O, farewell, honest soldier; ./Data2.txt:O, farewell, honest soldier; ./Data3.txt:O, farewell, honest soldier;  Hopefully You could come up with varied uses building up on these examples. One other use case could be to use this for passing arguments to a python script.
+Other Cool Tricks Sometimes you want your data that you got by some command line utility(Shell commands/ Python scripts) not to be shown on stdout but stored in a textfile. You can use the &amp;rdquo;&amp;gt;&amp;rdquo; operator for that. For Example: You could have stored the file after replacing the delimiters in the previous example into anther file called newdata.txt as follows:
+cat data.txt | tr &amp;#39;|&amp;#39; &amp;#39;,&amp;#39; &amp;gt; newdata.txt I really got confused between &amp;rdquo;|&amp;rdquo; (piping) and &amp;rdquo;&amp;gt;&amp;rdquo; (to_file) operations a lot in the beginning. One way to remember is that you should only use &amp;rdquo;&amp;gt;&amp;rdquo; when you want to write something to a file. &amp;rdquo;|&amp;rdquo; cannot be used to write to a file. Another operation you should know about is the &amp;rdquo;&amp;gt;&amp;gt;&amp;rdquo; operation. It is analogous to &amp;rdquo;&amp;gt;&amp;rdquo; but it appends to an existing file rather that replacing the file and writing over.
+If you would like to know more about commandline, which I guess you would, here are some books that I would recommend for a beginner:
+The first book is more of a fun read at leisure type of book. THe second book is a little more serious. Whatever suits you.
+So, this is just the tip of the iceberg. Although I am not an expert in shell usage, these commands reduced my workload to a large extent. If there are some shell commands you use on a regular basis or some shell command that are cool, do tell in the comments. I would love to include it in the blogpost.
+I wrote a blogpost on awk as a second part of this post. Check it Here
+]]>
+        
+      </content:encoded>
+      
       
       
     </item>

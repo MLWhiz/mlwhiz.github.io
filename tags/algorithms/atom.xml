@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1" xmlns:content="http://purl.org/rss/1.0/modules/content" xmlns:media="http://search.yahoo.com/mrss/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1" xmlns:content="http://purl.org/rss/1.0/modules/content" xmlns:media="http://search.yahoo.com/mrss/" >
+
+  
   <channel>
     <title>Algorithms on MLWhiz</title>
     <link>https://mlwhiz.com/tags/algorithms/</link>
@@ -26,8 +28,25 @@
       
 
       
-      <description>Recently Kaggle master Kazanova along with some of his friends released a &amp;ldquo;How to win a data science competition&amp;rdquo; Coursera course. You can start for free with the 7-day Free Trial. The Course involved a final project which itself was a time series prediction problem. Here I will describe how I got a top 10 position as of writing this article.
+      <description>Recently Kaggle master Kazanova along with some of his friends released a &amp;amp;ldquo;How to win a data science competition&amp;amp;rdquo; Coursera course. You can start for free with the 7-day Free Trial. The Course involved a final project which itself was a time series prediction problem. Here I will describe how I got a top 10 position as of writing this article.
   Description of the Problem: In this competition we were given a challenging time-series dataset consisting of daily sales data, kindly provided by one of the largest Russian software firms - 1C Company.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  Recently Kaggle master Kazanova along with some of his friends released a &amp;ldquo;How to win a data science competition&amp;rdquo; Coursera course. You can start for free with the 7-day Free Trial. The Course involved a final project which itself was a time series prediction problem. Here I will describe how I got a top 10 position as of writing this article.
+  Description of the Problem: In this competition we were given a challenging time-series dataset consisting of daily sales data, kindly provided by one of the largest Russian software firms - 1C Company.
+We were asked you to predict total sales for every product and store in the next month.
+The evaluation metric was RMSE where True target values are clipped into [0,20] range. This target range will be a lot important in understanding the submissions that I will prepare.
+The main thing that I noticed was that the data preparation aspect of this competition was by far the most important thing. I creted a variety of features. Here are the steps I took and the features I created.
+1. Created a dataframe of all Date_block_num, Store and Item combinations: This is important because in the months we don&amp;rsquo;t have a data for an item store combination, the machine learning algorithm needs to be specifically told that the sales is zero.
+from itertools import product # Create &amp;#34;grid&amp;#34; with columns index_cols = [&amp;#39;shop_id&amp;#39;, &amp;#39;item_id&amp;#39;, &amp;#39;date_block_num&amp;#39;] # For every month we create a grid from all shops/items combinations from that month grid = [] for block_num in sales[&amp;#39;date_block_num&amp;#39;].unique(): cur_shops = sales.loc[sales[&amp;#39;date_block_num&amp;#39;] == block_num, &amp;#39;shop_id&amp;#39;].unique() cur_items = sales.loc[sales[&amp;#39;date_block_num&amp;#39;] == block_num, &amp;#39;item_id&amp;#39;].unique() grid.append(np.array(list(product(*[cur_shops, cur_items, [block_num]])),dtype=&amp;#39;int32&amp;#39;)) grid = pd.DataFrame(np.vstack(grid), columns = index_cols,dtype=np.int32) 2. Cleaned up a little of sales data after some basic EDA: sales = sales[sales.item_price&amp;lt;100000] sales = sales[sales.item_cnt_day&amp;lt;=1000] 3. Created Mean Encodings: sales_m = sales.groupby([&amp;#39;date_block_num&amp;#39;,&amp;#39;shop_id&amp;#39;,&amp;#39;item_id&amp;#39;]).agg({&amp;#39;item_cnt_day&amp;#39;: &amp;#39;sum&amp;#39;,&amp;#39;item_price&amp;#39;: np.mean}).reset_index() sales_m = pd.merge(grid,sales_m,on=[&amp;#39;date_block_num&amp;#39;,&amp;#39;shop_id&amp;#39;,&amp;#39;item_id&amp;#39;],how=&amp;#39;left&amp;#39;).fillna(0) # adding the category id too sales_m = pd.merge(sales_m,items,on=[&amp;#39;item_id&amp;#39;],how=&amp;#39;left&amp;#39;) for type_id in [&amp;#39;item_id&amp;#39;,&amp;#39;shop_id&amp;#39;,&amp;#39;item_category_id&amp;#39;]: for column_id,aggregator,aggtype in [(&amp;#39;item_price&amp;#39;,np.mean,&amp;#39;avg&amp;#39;),(&amp;#39;item_cnt_day&amp;#39;,np.sum,&amp;#39;sum&amp;#39;),(&amp;#39;item_cnt_day&amp;#39;,np.mean,&amp;#39;avg&amp;#39;)]: mean_df = sales.groupby([type_id,&amp;#39;date_block_num&amp;#39;]).aggregate(aggregator).reset_index()[[column_id,type_id,&amp;#39;date_block_num&amp;#39;]] mean_df.columns = [type_id&#43;&amp;#39;_&amp;#39;&#43;aggtype&#43;&amp;#39;_&amp;#39;&#43;column_id,type_id,&amp;#39;date_block_num&amp;#39;] sales_m = pd.merge(sales_m,mean_df,on=[&amp;#39;date_block_num&amp;#39;,type_id],how=&amp;#39;left&amp;#39;) These above lines add the following 9 features :
+ &amp;lsquo;item_id_avg_item_price&amp;rsquo; &amp;lsquo;item_id_sum_item_cnt_day&amp;rsquo; &amp;lsquo;item_id_avg_item_cnt_day&amp;rsquo; &amp;lsquo;shop_id_avg_item_price&amp;rsquo;, &amp;lsquo;shop_id_sum_item_cnt_day&amp;rsquo; &amp;lsquo;shop_id_avg_item_cnt_day&amp;rsquo; &amp;lsquo;item_category_id_avg_item_price&amp;rsquo; &amp;lsquo;item_category_id_sum_item_cnt_day&amp;rsquo; &amp;lsquo;item_category_id_avg_item_cnt_day&amp;rsquo;  4. Create Lag Features: Next we create lag features with diferent lag periods on the following features:
+ &amp;lsquo;item_id_avg_item_price&amp;rsquo;, &amp;lsquo;item_id_sum_item_cnt_day&amp;rsquo; &amp;lsquo;item_id_avg_item_cnt_day&amp;rsquo; &amp;lsquo;shop_id_avg_item_price&amp;rsquo; &amp;lsquo;shop_id_sum_item_cnt_day&amp;rsquo; &amp;lsquo;shop_id_avg_item_cnt_day&amp;rsquo; &amp;lsquo;item_category_id_avg_item_price&amp;rsquo; &amp;lsquo;item_category_id_sum_item_cnt_day&amp;rsquo; &amp;lsquo;item_category_id_avg_item_cnt_day&amp;rsquo; &amp;lsquo;item_cnt_day&amp;rsquo;  lag_variables = list(sales_m.columns[7:])&#43;[&amp;#39;item_cnt_day&amp;#39;] lags = [1 ,2 ,3 ,4, 5, 12] for lag in lags: sales_new_df = sales_m.copy() sales_new_df.date_block_num&#43;=lag sales_new_df = sales_new_df[[&amp;#39;date_block_num&amp;#39;,&amp;#39;shop_id&amp;#39;,&amp;#39;item_id&amp;#39;]&#43;lag_variables] sales_new_df.columns = [&amp;#39;date_block_num&amp;#39;,&amp;#39;shop_id&amp;#39;,&amp;#39;item_id&amp;#39;]&#43; [lag_feat&#43;&amp;#39;_lag_&amp;#39;&#43;str(lag) for lag_feat in lag_variables] sales_means = pd.merge(sales_means, sales_new_df,on=[&amp;#39;date_block_num&amp;#39;,&amp;#39;shop_id&amp;#39;,&amp;#39;item_id&amp;#39;] ,how=&amp;#39;left&amp;#39;) 5. Fill NA with zeros: for feat in sales_means.columns: if &amp;#39;item_cnt&amp;#39; in feat: sales_means[feat]=sales_means[feat].fillna(0) elif &amp;#39;item_price&amp;#39; in feat: sales_means[feat]=sales_means[feat].fillna(sales_means[feat].median()) 6. Drop the columns that we are not going to use in training: cols_to_drop = lag_variables[:-1] &#43; [&amp;#39;item_name&amp;#39;,&amp;#39;item_price&amp;#39;] 7. Take a recent bit of data only: sales_means = sales_means[sales_means[&amp;#39;date_block_num&amp;#39;]&amp;gt;12] 8. Split in train and CV : X_train = sales_means[sales_means[&amp;#39;date_block_num&amp;#39;]&amp;lt;33].drop(cols_to_drop, axis=1) X_cv = sales_means[sales_means[&amp;#39;date_block_num&amp;#39;]==33].drop(cols_to_drop, axis=1) 9. THE MAGIC SAUCE: In the start I told that the clipping aspect of [0,20] will be important. In the next few lines I clipped the days to range[0,40]. You might ask me why 40. An intuitive answer is if I had clipped to range [0,20] there would be very few tree nodes that could give 20 as an answer. While if I increase it to 40 having a 20 becomes much more easier. Please note that We will clip our predictions in the [0,20] range in the end.
+def clip(x): if x&amp;gt;40: return 40 elif x&amp;lt;0: return 0 else: return x train[&amp;#39;item_cnt_day&amp;#39;] = train.apply(lambda x: clip(x[&amp;#39;item_cnt_day&amp;#39;]),axis=1) cv[&amp;#39;item_cnt_day&amp;#39;] = cv.apply(lambda x: clip(x[&amp;#39;item_cnt_day&amp;#39;]),axis=1) 10: Modelling:  Created a XGBoost model to get the most important features(Top 42 features) Use hyperopt to tune xgboost Used top 10 models from tuned XGBoosts to generate predictions. clipped the predictions to [0,20] range Final solution was the average of these 10 predictions.  Learned a lot of new things from this awesome course. Most recommended.
+]]>
+        
+      </content:encoded>
+      
       
       
     </item>
@@ -48,6 +67,33 @@
       
       <description>Often times it happens that we fall short of creativity. And creativity is one of the basic ingredients of what we do. Creating features needs creativity. So here is the list of ideas I gather in day to day life, where people have used creativity to get great results on Kaggle leaderboards.
 Take a look at the How to Win a Data Science Competition: Learn from Top Kagglers course in the Advanced machine learning specialization by Kazanova(Number 3 Kaggler at the time of writing).</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  Often times it happens that we fall short of creativity. And creativity is one of the basic ingredients of what we do. Creating features needs creativity. So here is the list of ideas I gather in day to day life, where people have used creativity to get great results on Kaggle leaderboards.
+Take a look at the How to Win a Data Science Competition: Learn from Top Kagglers course in the Advanced machine learning specialization by Kazanova(Number 3 Kaggler at the time of writing). You can start for free with the 7-day Free Trial.
+This post is inspired by a Kernel on Kaggle written by Beluga, one of the top Kagglers, for a knowledge based competition.
+Some of the techniques/tricks I am sharing have been taken directly from that kernel so you could take a look yourself. Otherwise stay here and read on.
+1. Don&amp;rsquo;t try predicting the future when you don&amp;rsquo;t have to: If both training/test comes from the same timeline, we can get really crafty with features. Although this is a case with Kaggle only, we can use this to our advantage. For example: In the Taxi Trip duration challenge the test data is randomly sampled from the train data. In this case we can use the target variable averaged over different categorical variable as a feature. Like in this case Beluga actually used the averaged the target variable over different weekdays. He then mapped the same averaged value as a variable by mapping it to test data too.
+2. logloss clipping Technique: Something that I learned in the Neural Network course by Jeremy Howard. Its based on a very simple Idea. Logloss penalises a lot if we are very confident and wrong. So in case of Classification problems where we have to predict probabilities, it would be much better to clip our probabilities between 0.05-0.95 so that we are never very sure about our prediction.
+3. kaggle submission in gzip format: A small piece of code that will help you save countless hours of uploading. Enjoy. df.to_csv(&amp;lsquo;submission.csv.gz&amp;rsquo;, index=False, compression=&amp;lsquo;gzip&amp;rsquo;)
+4. How best to use Latitude and Longitude features - Part 1: One of the best things that I liked about the Beluga Kernel is how he used the Lat/Lon Data. So in the example we had pickup Lat/Lon and Dropoff Lat/Lon. We created features like:
+A. Haversine Distance Between the Two Lat/Lons: def haversine_array(lat1, lng1, lat2, lng2): lat1, lng1, lat2, lng2 = map(np.radians, (lat1, lng1, lat2, lng2)) AVG_EARTH_RADIUS = 6371 # in km lat = lat2 - lat1 lng = lng2 - lng1 d = np.sin(lat * 0.5) ** 2 &#43; np.cos(lat1) * np.cos(lat2) * np.sin(lng * 0.5) ** 2 h = 2 * AVG_EARTH_RADIUS * np.arcsin(np.sqrt(d)) return h B. Manhattan Distance Between the two Lat/Lons: def dummy_manhattan_distance(lat1, lng1, lat2, lng2): a = haversine_array(lat1, lng1, lat1, lng2) b = haversine_array(lat1, lng1, lat2, lng1) return a &#43; b C. Bearing Between the two Lat/Lons: def bearing_array(lat1, lng1, lat2, lng2): AVG_EARTH_RADIUS = 6371 # in km lng_delta_rad = np.radians(lng2 - lng1) lat1, lng1, lat2, lng2 = map(np.radians, (lat1, lng1, lat2, lng2)) y = np.sin(lng_delta_rad) * np.cos(lat2) x = np.cos(lat1) * np.sin(lat2) - np.sin(lat1) * np.cos(lat2) * np.cos(lng_delta_rad) return np.degrees(np.arctan2(y, x)) D. Center Latitude and Longitude between Pickup and Dropoff: train.loc[:, &amp;#39;center_latitude&amp;#39;] = (train[&amp;#39;pickup_latitude&amp;#39;].values &#43; train[&amp;#39;dropoff_latitude&amp;#39;].values) / 2 train.loc[:, &amp;#39;center_longitude&amp;#39;] = (train[&amp;#39;pickup_longitude&amp;#39;].values &#43; train[&amp;#39;dropoff_longitude&amp;#39;].values) / 2 5. How best to use Latitude and Longitude features - Part 2: The Second way he used the Lat/Lon Feats was to create clusters for Pickup and Dropoff Lat/Lons. The way it worked was it created sort of Boroughs in the data by design.
+from sklearn.cluster import MiniBatchKMeans coords = np.vstack((train[[&amp;#39;pickup_latitude&amp;#39;, &amp;#39;pickup_longitude&amp;#39;]].values, train[[&amp;#39;dropoff_latitude&amp;#39;, &amp;#39;dropoff_longitude&amp;#39;]].values, test[[&amp;#39;pickup_latitude&amp;#39;, &amp;#39;pickup_longitude&amp;#39;]].values, test[[&amp;#39;dropoff_latitude&amp;#39;, &amp;#39;dropoff_longitude&amp;#39;]].values)) sample_ind = np.random.permutation(len(coords))[:500000] kmeans = MiniBatchKMeans(n_clusters=100, batch_size=10000).fit(coords[sample_ind]) train.loc[:, &amp;#39;pickup_cluster&amp;#39;] = kmeans.predict(train[[&amp;#39;pickup_latitude&amp;#39;, &amp;#39;pickup_longitude&amp;#39;]]) train.loc[:, &amp;#39;dropoff_cluster&amp;#39;] = kmeans.predict(train[[&amp;#39;dropoff_latitude&amp;#39;, &amp;#39;dropoff_longitude&amp;#39;]]) test.loc[:, &amp;#39;pickup_cluster&amp;#39;] = kmeans.predict(test[[&amp;#39;pickup_latitude&amp;#39;, &amp;#39;pickup_longitude&amp;#39;]]) test.loc[:, &amp;#39;dropoff_cluster&amp;#39;] = kmeans.predict(test[[&amp;#39;dropoff_latitude&amp;#39;, &amp;#39;dropoff_longitude&amp;#39;]]) He then used these Clusters to create features like counting no of trips going out and coming in on a particular day.
+6. How best to use Latitude and Longitude features - Part 3 He used PCA to transform longitude and latitude coordinates. In this case it is not about dimension reduction since he transformed 2D-&amp;gt; 2D. The rotation could help for decision tree splits, and it did actually.
+pca = PCA().fit(coords) train[&amp;#39;pickup_pca0&amp;#39;] = pca.transform(train[[&amp;#39;pickup_latitude&amp;#39;, &amp;#39;pickup_longitude&amp;#39;]])[:, 0] train[&amp;#39;pickup_pca1&amp;#39;] = pca.transform(train[[&amp;#39;pickup_latitude&amp;#39;, &amp;#39;pickup_longitude&amp;#39;]])[:, 1] train[&amp;#39;dropoff_pca0&amp;#39;] = pca.transform(train[[&amp;#39;dropoff_latitude&amp;#39;, &amp;#39;dropoff_longitude&amp;#39;]])[:, 0] train[&amp;#39;dropoff_pca1&amp;#39;] = pca.transform(train[[&amp;#39;dropoff_latitude&amp;#39;, &amp;#39;dropoff_longitude&amp;#39;]])[:, 1] test[&amp;#39;pickup_pca0&amp;#39;] = pca.transform(test[[&amp;#39;pickup_latitude&amp;#39;, &amp;#39;pickup_longitude&amp;#39;]])[:, 0] test[&amp;#39;pickup_pca1&amp;#39;] = pca.transform(test[[&amp;#39;pickup_latitude&amp;#39;, &amp;#39;pickup_longitude&amp;#39;]])[:, 1] test[&amp;#39;dropoff_pca0&amp;#39;] = pca.transform(test[[&amp;#39;dropoff_latitude&amp;#39;, &amp;#39;dropoff_longitude&amp;#39;]])[:, 0] test[&amp;#39;dropoff_pca1&amp;#39;] = pca.transform(test[[&amp;#39;dropoff_latitude&amp;#39;, &amp;#39;dropoff_longitude&amp;#39;]])[:, 1] 7. Lets not forget the Normal Things you can do with your features:  Scaling by Max-Min Normalization using Standard Deviation Log based feature/Target: use log based features or log based target function. One Hot Encoding  8. Creating Intuitive Additional Features: A) Date time Features: Time based Features like &amp;ldquo;Evening&amp;rdquo;, &amp;ldquo;Noon&amp;rdquo;, &amp;ldquo;Night&amp;rdquo;, &amp;ldquo;Purchases_last_month&amp;rdquo;, &amp;ldquo;Purchases_last_week&amp;rdquo; etc.
+B) Thought Features: Suppose you have shopping cart data and you want to categorize TripType (See Walmart Recruiting: Trip Type Classification on Kaggle for some background).
+You could think of creating a feature like &amp;ldquo;Stylish&amp;rdquo; where you create this variable by adding together number of items that belong to category Men&amp;rsquo;s Fashion, Women&amp;rsquo;s Fashion, Teens Fashion.
+You could create a feature like &amp;ldquo;Rare&amp;rdquo; which is created by tagging some items as rare, based on the data we have and then counting the number of those rare items in the shopping cart. Such features might work or might not work. From what I have observed they normally provide a lot of value.
+I feel this is the way that Target&amp;rsquo;s &amp;ldquo;Pregnant Teen model&amp;rdquo; was made. They would have had a variable in which they kept all the items that a pregnant teen could buy and put it into a classification algorithm.
+9 . The not so Normal Things which people do: These features are highly unintuitive and should not be created where the machine learning model needs to be interpretable.
+A) Interaction Features: If you have features A and B create features A*B, A&#43;B, A/B, A-B. This explodes the feature space. If you have 10 features and you are creating two variable interactions you will be adding 10C2 * 4 features = 180 features to your model. And most of us have a lot more than 10 features.
+B) Bucket Feature Using Hashing: Suppose you have a lot of features. In the order of Thousands but you don&amp;rsquo;t want to use all the thousand features because of the training times of algorithms involved. People bucket their features using some hashing algorithm to achieve this.Mostly done for text classification tasks. For example: If we have 6 features A,B,C,D,E,F. And the row of data is: A:1,B:1,C:1,D:0,E:1,F:0 I may decide to use a hashing function so that these 6 features correspond to 3 buckets and create the data using this feature hashing vector. After processing my data might look like: Bucket1:2,Bucket2:2,Bucket3:0 Which happened because A and B fell in bucket1, C and E fell in bucket2 and D and F fell in bucket 3. I summed up the observations here, but you could substitute addition with any math function you like. Now i would use Bucket1,Bucket2,Bucket3 as my variables for machine learning.
+Will try to keep on expanding. Wait for more&amp;hellip;.
+]]>
+        
+      </content:encoded>
+      
       
       
     </item>
@@ -65,7 +111,83 @@ Take a look at the How to Win a Data Science Competition: Learn from Top Kaggler
       
       <description>Recently Quora put out a Question similarity competition on Kaggle. This is the first time I was attempting an NLP problem so a lot to learn. The one thing that blew my mind away was the word2vec embeddings.
 Till now whenever I heard the term word2vec I visualized it as a way to create a bag of words vector for a sentence.
-For those who don&amp;rsquo;t know bag of words: If we have a series of sentences(documents)</description>
+For those who don&amp;amp;rsquo;t know bag of words: If we have a series of sentences(documents)</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  Recently Quora put out a Question similarity competition on Kaggle. This is the first time I was attempting an NLP problem so a lot to learn. The one thing that blew my mind away was the word2vec embeddings.
+Till now whenever I heard the term word2vec I visualized it as a way to create a bag of words vector for a sentence.
+For those who don&amp;rsquo;t know bag of words: If we have a series of sentences(documents)
+ This is good - [1,1,1,0,0] This is bad - [1,1,0,1,0] This is awesome - [1,1,0,0,1]  Bag of words would encode it using 0:This 1:is 2:good 3:bad 4:awesome
+But it is much more powerful than that.
+What word2vec does is that it creates vectors for words. What I mean by that is that we have a 300 dimensional vector for every word(common bigrams too) in a dictionary.
+How does that help? We can use this for multiple scenarios but the most common are:
+A. Using word2vec embeddings we can find out similarity between words. Assume you have to answer if these two statements signify the same thing:
+ President greets press in Chicago Obama speaks to media in Illinois.  If we do a sentence similarity metric or a bag of words approach to compare these two sentences we will get a pretty low score.
+  But with a word encoding we can say that
+ President is similar to Obama greets is similar to speaks press is similar to media Chicago is similar to Illinois  B. Encode Sentences: I read a post from Abhishek Thakur a prominent kaggler.(Must Read). What he did was he used these word embeddings to create a 300 dimensional vector for every sentence.
+His Approach: Lets say the sentence is &amp;ldquo;What is this&amp;rdquo; And lets say the embedding for every word is given in 4 dimension(normally 300 dimensional encoding is given)
+ what : [.25 ,.25 ,.25 ,.25] is : [ 1 , 0 , 0 , 0] this : [ .5 , 0 , 0 , .5]  Then the vector for the sentence is normalized elementwise addition of the vectors. i.e.
+Elementwise addition : [.25&#43;1&#43;0.5, 0.25&#43;0&#43;0 , 0.25&#43;0&#43;0, .25&#43;0&#43;.5] = [1.75, .25, .25, .75] divided by math.sqrt(1.25^2 &#43; .25^2 &#43; .25^2 &#43; .75^2) = 1.5 gives:[1.16, .17, .17, 0.5]  Thus I can convert any sentence to a vector of a fixed dimension(decided by the embedding). To find similarity between two sentences I can use a variety of distance/similarity metrics.
+C. Also It enables us to do algebraic manipulations on words which was not possible before. For example: What is king - man &#43; woman ?
+Guess what it comes out to be : Queen
+Application/Coding: Now lets get down to the coding part as we know a little bit of fundamentals.
+First of all we download a custom word embedding from Google. There are many other embeddings too.
+wget https://s3.amazonaws.com/dl4j-distribution/GoogleNews-vectors-negative300.bin.gz The above file is pretty big. Might take some time. Then moving on to coding.
+from gensim.models import word2vec model = gensim.models.KeyedVectors.load_word2vec_format(&amp;#39;data/GoogleNews-vectors-negative300.bin.gz&amp;#39;, binary=True) 1. Starting simple, lets find out similar words. Want to find similar words to python? model.most_similar(&amp;#39;python&amp;#39;) [(u&#39;pythons&#39;, 0.6688377261161804),
+(u&#39;Burmese_python&#39;, 0.6680364608764648),
+(u&#39;snake&#39;, 0.6606293320655823),
+(u&#39;crocodile&#39;, 0.6591362953186035),
+(u&#39;boa_constrictor&#39;, 0.6443519592285156),
+(u&#39;alligator&#39;, 0.6421656608581543),
+(u&#39;reptile&#39;, 0.6387745141983032),
+(u&#39;albino_python&#39;, 0.6158879995346069),
+(u&#39;croc&#39;, 0.6083582639694214),
+(u&#39;lizard&#39;, 0.601341724395752)]
+ 2. Now we can use this model to find the solution to the equation: What is king - man &#43; woman?
+model.most_similar(positive = [&amp;#39;king&amp;#39;,&amp;#39;woman&amp;#39;],negative = [&amp;#39;man&amp;#39;]) [(u&#39;queen&#39;, 0.7118192315101624),
+(u&#39;monarch&#39;, 0.6189674139022827),
+(u&#39;princess&#39;, 0.5902431011199951),
+(u&#39;crown_prince&#39;, 0.5499460697174072),
+(u&#39;prince&#39;, 0.5377321839332581),
+(u&#39;kings&#39;, 0.5236844420433044),
+(u&#39;Queen_Consort&#39;, 0.5235946178436279),
+(u&#39;queens&#39;, 0.5181134343147278),
+(u&#39;sultan&#39;, 0.5098593235015869),
+(u&#39;monarchy&#39;, 0.5087412595748901)]
+ You can do plenty of freaky/cool things using this:
+3. Lets say you wanted a girl and had a girl name like emma in mind but you got a boy. So what is the male version for emma? model.most_similar(positive = [&amp;#39;emma&amp;#39;,&amp;#39;he&amp;#39;,&amp;#39;male&amp;#39;,&amp;#39;mr&amp;#39;],negative = [&amp;#39;she&amp;#39;,&amp;#39;mrs&amp;#39;,&amp;#39;female&amp;#39;]) [(u&#39;sanchez&#39;, 0.4920658469200134),
+(u&#39;kenny&#39;, 0.48300960659980774),
+(u&#39;alves&#39;, 0.4684845209121704),
+(u&#39;gareth&#39;, 0.4530612826347351),
+(u&#39;bellamy&#39;, 0.44884198904037476),
+(u&#39;gibbs&#39;, 0.445194810628891),
+(u&#39;dos_santos&#39;, 0.44508373737335205),
+(u&#39;gasol&#39;, 0.44387346506118774),
+(u&#39;silva&#39;, 0.4424275755882263),
+(u&#39;shaun&#39;, 0.44144102931022644)]
+ 4. Find which word doesn&amp;rsquo;t belong to a list? model.doesnt_match(&amp;#34;math shopping reading science&amp;#34;.split(&amp;#34; &amp;#34;)) I think staple doesn&amp;rsquo;t belong in this list!
+Other Cool Things 1. Recommendations:   In this paper, the authors have shown that itembased CF can be cast in the same framework of word embedding.
+2. Some other examples that people have seen after using their own embeddings: Library - Books = Hall
+Obama &#43; Russia - USA = Putin
+Iraq - Violence = Jordan
+President - Power = Prime Minister (Not in India Though)
+3.Seeing the above I started playing with it a little. Is this model sexist?
+model.most_similar(positive = [&amp;#34;donald_trump&amp;#34;],negative = [&amp;#39;brain&amp;#39;]) [(u&#39;novak&#39;, 0.40405112504959106),
+(u&#39;ozzie&#39;, 0.39440611004829407),
+(u&#39;democrate&#39;, 0.39187556505203247),
+(u&#39;clinton&#39;, 0.390536367893219),
+(u&#39;hillary_clinton&#39;, 0.3862358033657074),
+(u&#39;bnp&#39;, 0.38295692205429077),
+(u&#39;klaar&#39;, 0.38228923082351685),
+(u&#39;geithner&#39;, 0.380607008934021),
+(u&#39;bafana_bafana&#39;, 0.3801495432853699),
+(u&#39;whitman&#39;, 0.3790769875049591)]
+ Whatever it is doing it surely feels like magic. Next time I will try to write more on how it works once I understand it fully.
+]]>
+        
+      </content:encoded>
+      
       
       
     </item>
@@ -83,6 +205,18 @@ For those who don&amp;rsquo;t know bag of words: If we have a series of sentence
       
       <description>As a data scientist I believe that a lot of work has to be done before Classification/Regression/Clustering methods are applied to the data you get. The data which may be messy, unwieldy and big. So here are the list of algorithms that helps a data scientist to make better models using the data they have:
 1. Sampling Algorithms. In case you want to work with a sample of data.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[    As a data scientist I believe that a lot of work has to be done before Classification/Regression/Clustering methods are applied to the data you get. The data which may be messy, unwieldy and big. So here are the list of algorithms that helps a data scientist to make better models using the data they have:
+1. Sampling Algorithms. In case you want to work with a sample of data.  Simple Random Sampling : Say you want to select a subset of a population in which each member of the subset has an equal probability of being chosen. Stratified Sampling: Assume that we need to estimate average number of votes for each candidate in an election. Assume that country has 3 towns : Town A has 1 million factory workers, Town B has 2 million workers and Town C has 3 million retirees. We can choose to get a random sample of size 60 over entire population but there is some chance that the random sample turns out to be not well balanced across these towns and hence is biased causing a significant error in estimation. Instead if we choose to take a random sample of 10, 20 and 30 from Town A, B and C respectively then we can produce a smaller error in estimation for the same total size of sample. Reservoir Sampling :Say you have a stream of items of large and unknown length that we can only iterate over once. Create an algorithm that randomly chooses an item from this stream such that each item is equally likely to be selected.  2. Map-Reduce. If you want to work with the whole data. Can be used for feature creation. For Example: I had a use case where I had a graph of 60 Million customers and 130 Million accounts. Each account was connected to other account if they had the Same SSN or Same Name&#43;DOB&#43;Address. I had to find customer ID’s for each of the accounts. On a single node parsing such a graph took more than 2 days. On a Hadoop cluster of 80 nodes running a Connected Component Algorithm took less than 24 minutes. On Spark it is even faster.
+3. Graph Algorithms. Recently I was working on an optimization problem which was focussed on finding shortest distance and routes between two points in a store layout. Routes which don’t pass through different aisles, so we cannot use euclidean distances. We solved this problem by considering turning points in the store layout and the djikstra’s Algorithm.
+ 4. Feature Selection.  Univariate Selection. Statistical tests can be used to select those features that have the strongest relationship with the output variable. VarianceThreshold. Feature selector that removes all low-variance features. Recursive Feature Elimination. The goal of recursive feature elimination (RFE) is to select features by recursively considering smaller and smaller sets of features. First, the estimator is trained on the initial set of features and weights are assigned to each one of them. Then, features whose absolute weights are the smallest are pruned from the current set features. That procedure is recursively repeated on the pruned set until the desired number of features to select is eventually reached. Feature Importance: Methods that use ensembles of decision trees (like Random Forest or Extra Trees) can also compute the relative importance of each attribute. These importance values can be used to inform a feature selection process.  5. Algorithms to work efficiently. Apart from these above algorithms sometimes you may need to write your own algorithms. Now I think of big algorithms as a combination of small but powerful algorithms. You just need to have idea of these algorithms to make a more better/efficient product. So some of these powerful algorithms which can help you are:
+ Recursive Algorithms:Binary search algorithm. Divide and Conquer Algorithms: Merge-Sort. Dynamic Programming:Solving a complex problem by breaking it down into a collection of simpler subproblems, solving each of those subproblems just once, and storing their solutions.  6. Classification/Regression Algorithms. The usual suspects. Minimum you must know:  Linear Regression - Ridge Regression, Lasso Regression, ElasticNet Logistic Regression From there you can build upon:  Decision Trees - ID3, CART, C4.5, C5.0 KNN SVM ANN - Back Propogation, CNN  And then on to Ensemble based algorithms:  Boosting: Gradient Boosted Trees Bagging: Random Forests Blending: Prediction outputs of different learning algorithms are fed into another learning algorithm.   7 . Clustering Methods.For unsupervised learning.  k-Means k-Medians Expectation Maximisation (EM) Hierarchical Clustering  8. Other algorithms you can learn about:  Apriori algorithm- Association Rule Mining Eclat algorithm - Association Rule Mining Item/User Based Similarity - Recommender Systems Reinforcement learning - Build your own robot. Graphical Models Bayesian Algorithms NLP - For language based models. Chatbots.  Hope this has been helpful&amp;hellip;..
+]]>
+        
+      </content:encoded>
+      
       
       
     </item>
