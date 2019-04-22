@@ -8,11 +8,70 @@
     <description>Recent content in Python on MLWhiz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 19 Apr 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 22 Apr 2019 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="https://mlwhiz.com/tags/python/atom.xml" rel="self" type="application/rss+xml" />
     
 
+    
+
+    <item>
+      <title>Python Pro Tip: Start using Python defaultdict and Counter in place of dictionary</title>
+      <link>https://mlwhiz.com/blog/2019/04/22/python_defaultdict/</link>
+      <pubDate>Mon, 22 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2019/04/22/python_defaultdict/</guid>
+      
+      
+      <media:content type="image/jpeg" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/python1/likeaboss.jpeg"></media:content>
+      
+
+      
+      <description>Learning a language is easy. Whenever I start with a new language, I focus on a few things in below order, and it is a breeze to get started with writing code in any language.
+ Operators and Data Types: &#43;,-,int,float,str
+ Conditional statements: if,else,case,switch
+ Loops: For, while
+ Data structures: List, Array, Dict, Hashmaps
+ Define Function
+  However, learning to write a language and writing a language in an optimized way are two different things.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[    Learning a language is easy. Whenever I start with a new language, I focus on a few things in below order, and it is a breeze to get started with writing code in any language.
+ Operators and Data Types: &#43;,-,int,float,str
+ Conditional statements: if,else,case,switch
+ Loops: For, while
+ Data structures: List, Array, Dict, Hashmaps
+ Define Function
+  However, learning to write a language and writing a language in an optimized way are two different things.
+Every Language has some ingredients which make it unique.
+Yet, a new programmer to any language will always do some forced overfitting. A Java programmer, new to python, for example, might write this code to add numbers in a list.
+x=[1,2,3,4,5] sum_x = 0 for i in range(len(x)): sum_x&#43;=x[i] While a python programmer will naturally do this:
+sum_x = sum(x) In this series of posts named ‘Python Shorts’, I will explain some simple constructs that Python provides, some essential tips and some use cases I come up with regularly in my Data Science work.
+This series is about efficient and readable code.
+Counter and defaultdict — Use Cases   Let’s say I need to count the number of word occurrences in a piece of text. Maybe for a book like Hamlet. How could I do that?
+Python always provides us with multiple ways to do the same thing. But only one way that I find elegant.
+This is a Naive Python implementation using the dict object.
+text = &amp;#34;I need to count the number of word occurrences in a piece of text. How could I do that? Python provides us with multiple ways to do the same thing. But only one way I find beautiful.&amp;#34; word_count_dict = {} for w in text.split(&amp;#34; &amp;#34;): if w in word_count_dict: word_count_dict[w]&#43;=1 else: word_count_dict[w]=1 We could use defaultdict to reduce the number of lines in the code.
+from Collections import defaultdict word_count_dict = defaultdict(int) for w in text.split(&amp;#34; &amp;#34;): word_count_dict[w]&#43;=1 We could also have used Counter to do this.
+from Collections import Counter word_count_dict = Counter() for w in text.split(&amp;#34; &amp;#34;): word_count_dict[w]&#43;=1 If we use Counter, we can also get the most common words using a simple function.
+word_count_dict.most_common(10) --------------------------------------------------------------- [(&amp;#39;I&amp;#39;, 3), (&amp;#39;to&amp;#39;, 2), (&amp;#39;the&amp;#39;, 2)] Other use cases of Counter:
+# Count Characters Counter(&amp;#39;abccccccddddd&amp;#39;) --------------------------------------------------------------- Counter({&amp;#39;a&amp;#39;: 1, &amp;#39;b&amp;#39;: 1, &amp;#39;c&amp;#39;: 6, &amp;#39;d&amp;#39;: 5}) # Count List elements Counter([1,2,3,4,5,1,2]) --------------------------------------------------------------- Counter({1: 2, 2: 2, 3: 1, 4: 1, 5: 1}) So, why ever use defaultdict ? Notice that in Counter, the value is always an integer.
+What if we wanted to parse through a list of tuples and wanted to create a dictionary of key and list of values.
+The main functionality provided by a defaultdict is that it defaults a key to empty/zero if it is not found in the defaultdict.
+s = [(&amp;#39;color&amp;#39;, &amp;#39;blue&amp;#39;), (&amp;#39;color&amp;#39;, &amp;#39;orange&amp;#39;), (&amp;#39;color&amp;#39;, &amp;#39;yellow&amp;#39;), (&amp;#39;fruit&amp;#39;, &amp;#39;banana&amp;#39;), (&amp;#39;fruit&amp;#39;, &amp;#39;orange&amp;#39;),(&amp;#39;fruit&amp;#39;,&amp;#39;banana&amp;#39;)] d = defaultdict(list) for k, v in s: d[k].append(v) print(d) --------------------------------------------------------------- defaultdict(&amp;lt;class &amp;#39;list&amp;#39;&amp;gt;, {&amp;#39;color&amp;#39;: [&amp;#39;blue&amp;#39;, &amp;#39;orange&amp;#39;, &amp;#39;yellow&amp;#39;], &amp;#39;fruit&amp;#39;: [&amp;#39;banana&amp;#39;, &amp;#39;orange&amp;#39;, &amp;#39;banana&amp;#39;]}) banana comes two times in fruit, we could use set
+d = defaultdict(set) for k, v in s: d[k].add(v) print(d) --------------------------------------------------------------- defaultdict(&amp;lt;class &amp;#39;set&amp;#39;&amp;gt;, {&amp;#39;color&amp;#39;: {&amp;#39;yellow&amp;#39;, &amp;#39;blue&amp;#39;, &amp;#39;orange&amp;#39;}, &amp;#39;fruit&amp;#39;: {&amp;#39;banana&amp;#39;, &amp;#39;orange&amp;#39;}}) Conclusion To conclude, I will say that there is always a beautiful way to do anything in Python. Search for it before you write code. Going to StackOverflow is okay. I go there a lot of times when I get stuck. Always Remember:
+ Creating a function for what already is provided is not pythonic.
+ Also if you want to learn more about Python 3, I would like to call out an excellent course on Learn Intermediate level Python from the University of Michigan. Do check it out.
+If you liked this post do clap. It will help increase coverage for this post. I am going to be writing more beginner friendly posts in the future too. Let me know what you think about the series. Follow me up at Medium or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
     
 
     <item>

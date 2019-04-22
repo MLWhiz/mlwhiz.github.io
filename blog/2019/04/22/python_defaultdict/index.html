@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Python Pro Tip: Start using Python defaultdict and Counter in place of dictionary</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="This post is a part of my series on Python Shorts. Some tips on how to use python. In this post I talk about defaultdict and Counter in Python and how they should be used in place of a dictionary whenever required.">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="Python Pro Tip: Start using Python defaultdict and Counter in place of dictionary" />
+<meta property="og:description" content="This post is a part of my series on Python Shorts. Some tips on how to use python. In this post I talk about defaultdict and Counter in Python and how they should be used in place of a dictionary whenever required." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2019/04/22/python_defaultdict/" />
+<meta property="og:image" content="https://mlwhiz.com/images/python1/likeaboss.jpeg" />
+<meta property="article:published_time" content="2019-04-22T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-04-22T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/python1/likeaboss.jpeg"/>
+
+<meta name="twitter:title" content="Python Pro Tip: Start using Python defaultdict and Counter in place of dictionary"/>
+<meta name="twitter:description" content="This post is a part of my series on Python Shorts. Some tips on how to use python. In this post I talk about defaultdict and Counter in Python and how they should be used in place of a dictionary whenever required."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Python Pro Tip: Start using Python defaultdict and Counter in place of dictionary</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2019-04-22T00:00:00">April 22, 2019</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/python1/likeaboss.jpeg" style="height:80%;width:80%"></center>
+</div>
+
+<p><strong><em>Learning a language is easy.</em></strong> Whenever I start with a new language, I focus on a few things in below order, and it is a breeze to get started with writing code in any language.</p>
+
+<ul>
+<li><p>Operators and Data Types: +,-,int,float,str</p></li>
+
+<li><p>Conditional statements: if,else,case,switch</p></li>
+
+<li><p>Loops: For, while</p></li>
+
+<li><p>Data structures: List, Array, Dict, Hashmaps</p></li>
+
+<li><p>Define Function</p></li>
+</ul>
+
+<p><strong><em>However, learning to write a language and writing a language in an optimized way are two different things.</em></strong></p>
+
+<p>Every Language has some ingredients which make it unique.</p>
+
+<p>Yet, <strong><em>a new programmer to any language will always do some forced overfitting.</em></strong> A Java programmer, new to python, for example, might write this code to add numbers in a list.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">x<span style="color:#f92672">=</span>[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>]
+
+sum_x <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(x)):
+    sum_x<span style="color:#f92672">+=</span>x[i]</code></pre></div>
+<p>While a python programmer will naturally do this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">sum_x <span style="color:#f92672">=</span> sum(x)</code></pre></div>
+<p>In this series of posts named <strong>‘Python Shorts’</strong>, I will explain some simple constructs that Python provides, some essential tips and some use cases I come up with regularly in my Data Science work.</p>
+
+<p><strong><em>This series is about efficient and readable code.</em></strong></p>
+
+<h2 id="counter-and-defaultdict-use-cases">Counter and defaultdict — Use Cases</h2>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/python1/hamlet_img.jpg" style="height:80%;width:80%"></center>
+</div>
+
+<p><strong>Let’s say I need to count the number of word occurrences in a piece of text.</strong>  Maybe for a book like Hamlet. How could I do that?</p>
+
+<p>Python always provides us with multiple ways to do the same thing. But only one way that I find elegant.</p>
+
+<p>This is a <strong><em>Naive Python implementation</em></strong> using the dict object.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">text <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;I need to count the number of word occurrences in a piece of text. How could I do that? Python provides us with multiple ways to do the same thing. But only one way I find beautiful.&#34;</span>
+
+word_count_dict <span style="color:#f92672">=</span> {}
+<span style="color:#66d9ef">for</span> w <span style="color:#f92672">in</span> text<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34; &#34;</span>):
+    <span style="color:#66d9ef">if</span> w <span style="color:#f92672">in</span> word_count_dict:
+        word_count_dict[w]<span style="color:#f92672">+=</span><span style="color:#ae81ff">1</span>
+    <span style="color:#66d9ef">else</span>:
+        word_count_dict[w]<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span></code></pre></div>
+<p>We could use <strong><em>defaultdict</em></strong> to reduce the number of lines in the code.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> Collections <span style="color:#f92672">import</span> defaultdict
+word_count_dict <span style="color:#f92672">=</span> defaultdict(int)
+<span style="color:#66d9ef">for</span> w <span style="color:#f92672">in</span> text<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34; &#34;</span>):
+    word_count_dict[w]<span style="color:#f92672">+=</span><span style="color:#ae81ff">1</span></code></pre></div>
+<p>We could also have used <strong><em>Counter</em></strong> to do this.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> Collections <span style="color:#f92672">import</span> Counter
+word_count_dict <span style="color:#f92672">=</span> Counter()
+<span style="color:#66d9ef">for</span> w <span style="color:#f92672">in</span> text<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34; &#34;</span>):
+    word_count_dict[w]<span style="color:#f92672">+=</span><span style="color:#ae81ff">1</span></code></pre></div>
+<p>If we use Counter, we can also get the most common words using a simple function.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">word_count_dict<span style="color:#f92672">.</span>most_common(<span style="color:#ae81ff">10</span>)
+<span style="color:#f92672">---------------------------------------------------------------</span>
+[(<span style="color:#e6db74">&#39;I&#39;</span>, <span style="color:#ae81ff">3</span>), (<span style="color:#e6db74">&#39;to&#39;</span>, <span style="color:#ae81ff">2</span>), (<span style="color:#e6db74">&#39;the&#39;</span>, <span style="color:#ae81ff">2</span>)]</code></pre></div>
+<p>Other use cases of Counter:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Count Characters</span>
+Counter(<span style="color:#e6db74">&#39;abccccccddddd&#39;</span>)
+<span style="color:#f92672">---------------------------------------------------------------</span>
+Counter({<span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;b&#39;</span>: <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;c&#39;</span>: <span style="color:#ae81ff">6</span>, <span style="color:#e6db74">&#39;d&#39;</span>: <span style="color:#ae81ff">5</span>})
+
+<span style="color:#75715e"># Count List elements</span>
+Counter([<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>])
+<span style="color:#f92672">---------------------------------------------------------------</span>
+Counter({<span style="color:#ae81ff">1</span>: <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>: <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>: <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">4</span>: <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">5</span>: <span style="color:#ae81ff">1</span>})</code></pre></div>
+<h2 id="so-why-ever-use-defaultdict">So, why ever use defaultdict ?</h2>
+
+<p>Notice that in Counter, the value is always an integer.</p>
+
+<p>What if we wanted to parse through a list of tuples and wanted to create a dictionary of key and list of values.</p>
+
+<p>The main functionality provided by a defaultdict is that it defaults a key to empty/zero if it is not found in the defaultdict.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">s <span style="color:#f92672">=</span> [(<span style="color:#e6db74">&#39;color&#39;</span>, <span style="color:#e6db74">&#39;blue&#39;</span>), (<span style="color:#e6db74">&#39;color&#39;</span>, <span style="color:#e6db74">&#39;orange&#39;</span>), (<span style="color:#e6db74">&#39;color&#39;</span>, <span style="color:#e6db74">&#39;yellow&#39;</span>), (<span style="color:#e6db74">&#39;fruit&#39;</span>, <span style="color:#e6db74">&#39;banana&#39;</span>), (<span style="color:#e6db74">&#39;fruit&#39;</span>, <span style="color:#e6db74">&#39;orange&#39;</span>),(<span style="color:#e6db74">&#39;fruit&#39;</span>,<span style="color:#e6db74">&#39;banana&#39;</span>)]
+
+d <span style="color:#f92672">=</span> defaultdict(list)
+
+<span style="color:#66d9ef">for</span> k, v <span style="color:#f92672">in</span> s:
+     d[k]<span style="color:#f92672">.</span>append(v)
+
+<span style="color:#66d9ef">print</span>(d)
+<span style="color:#f92672">---------------------------------------------------------------</span>
+defaultdict(<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">list</span><span style="color:#e6db74">&#39;&gt;, {&#39;</span>color<span style="color:#e6db74">&#39;: [&#39;</span>blue<span style="color:#e6db74">&#39;, &#39;</span>orange<span style="color:#e6db74">&#39;, &#39;</span>yellow<span style="color:#e6db74">&#39;], &#39;</span>fruit<span style="color:#e6db74">&#39;: [&#39;</span>banana<span style="color:#e6db74">&#39;, &#39;</span>orange<span style="color:#e6db74">&#39;, &#39;</span>banana<span style="color:#e6db74">&#39;]})</span></code></pre></div>
+<p>banana comes two times in fruit, we could use set</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">d <span style="color:#f92672">=</span> defaultdict(set)
+
+<span style="color:#66d9ef">for</span> k, v <span style="color:#f92672">in</span> s:
+     d[k]<span style="color:#f92672">.</span>add(v)
+
+<span style="color:#66d9ef">print</span>(d)
+<span style="color:#f92672">---------------------------------------------------------------</span>
+defaultdict(<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">set</span><span style="color:#e6db74">&#39;&gt;, {&#39;</span>color<span style="color:#e6db74">&#39;: {&#39;</span>yellow<span style="color:#e6db74">&#39;, &#39;</span>blue<span style="color:#e6db74">&#39;, &#39;</span>orange<span style="color:#e6db74">&#39;}, &#39;</span>fruit<span style="color:#e6db74">&#39;: {&#39;</span>banana<span style="color:#e6db74">&#39;, &#39;</span>orange<span style="color:#e6db74">&#39;}})</span></code></pre></div>
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>To conclude, I will say that <strong><em>there is always a beautiful way to do anything in Python</em></strong>. Search for it before you write code. Going to StackOverflow is okay. I go there a lot of times when I get stuck. Always Remember:</p>
+
+<blockquote>
+<p>Creating a function for what already is provided is not pythonic.</p>
+</blockquote>
+
+<p>Also if you want to learn more about Python 3, I would like to call out an excellent course on Learn <a href="https://bit.ly/2XshreA" rel="nofollow" target="_blank">Intermediate level Python</a> from the University of Michigan. Do check it out.</p>
+
+<p>If you liked this post <strong>do clap</strong>. It will help increase coverage for this post. I am going to be writing more beginner friendly posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.com/" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.415&subid=0&type=4"><IMG border="0"   alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.415&subid=0&type=4&gridnum=16"></a>
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2019/04/19/awesome_seaborn_visuals/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">3 Awesome Visualization Techniques for every dataset</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<aside class="sidebar">
+	     
+  <div style="text-align:center">    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/22/python_defaultdict/">Python Pro Tip: Start using Python defaultdict and Counter in place of dictionary</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/19/awesome_seaborn_visuals/">3 Awesome Visualization Techniques for every dataset</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/15/chatbot/">Chatbots  aren&#39;t as difficult to make as You Think</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/03/31/sublime_ds_post/">Why Sublime Text for Data Science is Hotter than Jennifer Lawrence?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/03/30/transfer_learning_text_classification/">NLP  Learning Series: Part 4 - Transfer Learning Intuition for Text Classification</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/03/09/deeplearning_architectures_text_classification/">NLP  Learning Series: Part 3 - Attention, CNN and what not for Text Classification</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/02/19/siver_medal_kaggle_learnings/">What my first Silver Medal taught me about Text Classification and Kaggle in general?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/02/08/deeplearning_nlp_conventional_methods/">NLP  Learning Series: Part 2 - Conventional Methods for Text Classification</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/01/17/deeplearning_nlp_preprocess/">NLP  Learning Series: Part 1 - Text Preprocessing Methods for Deep Learning</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/01/06/pytorch_keras_conversion/">A Layman guide to moving from Keras to Pytorch</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;}
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}
+   
+</style>
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2019 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
