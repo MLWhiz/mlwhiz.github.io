@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Make your own Super Pandas using Multiproc</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="This post is a part of my series on Python Shorts. Some tips on how to use python. This post is about using the computing power we have at hand and applying it to the data structure we use most.">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="Make your own Super Pandas using Multiproc" />
+<meta property="og:description" content="This post is a part of my series on Python Shorts. Some tips on how to use python. This post is about using the computing power we have at hand and applying it to the data structure we use most." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2019/04/22/python_pandas_multiproc/" />
+<meta property="og:image" content="https://mlwhiz.com/images/superpanda/superpanda.png" />
+<meta property="article:published_time" content="2019-05-02T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-05-02T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/superpanda/superpanda.png"/>
+
+<meta name="twitter:title" content="Make your own Super Pandas using Multiproc"/>
+<meta name="twitter:description" content="This post is a part of my series on Python Shorts. Some tips on how to use python. This post is about using the computing power we have at hand and applying it to the data structure we use most."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Make your own Super Pandas using Multiproc</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2019-05-02T00:00:00">May 02, 2019</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/superpanda/superpanda.png" style="height:80%;width:80%"></center>
+</div>
+
+<p><strong><em>Parallelization is awesome.</em></strong></p>
+
+<p>We data scientists have got laptops with quad-core, octa-core, turbo-boost. We work with servers with even more cores and computing power.</p>
+
+<p><strong><em>But do we really utilize the raw power we have at hand?</em></strong></p>
+
+<p>Instead, we wait for time taking processes to finish. Sometimes for hours, when urgent deliverables are at hand.</p>
+
+<p>Can we do better? Can we get better?</p>
+
+<p>In this series of posts named <strong><a href="https://towardsdatascience.com/tagged/python-shorts" rel="nofollow" target="_blank">Python Shorts</a>,</strong> I will explain some simple constructs provided by Python, some essential tips and some use cases I come up with regularly in my Data Science work.</p>
+
+<p><strong><em>This post is about using the computing power we have at hand and applying it to the data structure we use most.</em></strong></p>
+
+<h2 id="problem-statement">Problem Statement</h2>
+
+<p>We have got a huge pandas data frame, and we want to apply a complex function to it which takes a lot of time.</p>
+
+<p>For this post, I will use data from the Quora Insincere Question Classification on Kaggle, and we need to create some numerical features like length, the number of punctuations, etc. on it.</p>
+
+<p>The competition was a Kernel-based competition and the code needed to run in 2 hours. So every minute was essential, and there was too much time going in preprocessing.</p>
+
+<p><strong><em>Can we use parallelization to get extra performance out of our code?</em></strong></p>
+
+<p>Yes, we can.</p>
+
+<h2 id="parallelization-using-just-a-single-function">Parallelization using just a single function</h2>
+
+<p><img src="https://cdn-images-1.medium.com/max/8576/0*ltZjDNBvTB54UM6a" alt="Can we make all our cores run?" /><em>Can we make all our cores run?</em></p>
+
+<p>Let me first start with defining the function I want to use to create our features. add_features is the toy function we wish to apply to our data.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> random
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">from</span> multiprocessing <span style="color:#f92672">import</span>  Pool
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add_features</span>(df):
+    df[<span style="color:#e6db74">&#39;question_text&#39;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#39;question_text&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x:str(x))
+    df[<span style="color:#e6db74">&#34;lower_question_text&#34;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#34;question_text&#34;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x: x<span style="color:#f92672">.</span>lower())
+    df[<span style="color:#e6db74">&#39;total_length&#39;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#39;question_text&#39;</span>]<span style="color:#f92672">.</span>apply(len)
+    df[<span style="color:#e6db74">&#39;capitals&#39;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#39;question_text&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> comment: sum(<span style="color:#ae81ff">1</span> <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> comment <span style="color:#66d9ef">if</span> c<span style="color:#f92672">.</span>isupper()))
+    df[<span style="color:#e6db74">&#39;caps_vs_length&#39;</span>] <span style="color:#f92672">=</span> df<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> row: float(row[<span style="color:#e6db74">&#39;capitals&#39;</span>])<span style="color:#f92672">/</span>float(row[<span style="color:#e6db74">&#39;total_length&#39;</span>]),
+                                axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+    df[<span style="color:#e6db74">&#39;num_words&#39;</span>] <span style="color:#f92672">=</span> df<span style="color:#f92672">.</span>question_text<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>count(<span style="color:#e6db74">&#39;\S+&#39;</span>)
+    df[<span style="color:#e6db74">&#39;num_unique_words&#39;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#39;question_text&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> comment: len(set(w <span style="color:#66d9ef">for</span> w <span style="color:#f92672">in</span> comment<span style="color:#f92672">.</span>split())))
+    df[<span style="color:#e6db74">&#39;words_vs_unique&#39;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#39;num_unique_words&#39;</span>] <span style="color:#f92672">/</span> df[<span style="color:#e6db74">&#39;num_words&#39;</span>] 
+    df[<span style="color:#e6db74">&#39;num_exclamation_marks&#39;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#39;question_text&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> comment: comment<span style="color:#f92672">.</span>count(<span style="color:#e6db74">&#39;!&#39;</span>))
+    df[<span style="color:#e6db74">&#39;num_question_marks&#39;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#39;question_text&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> comment: comment<span style="color:#f92672">.</span>count(<span style="color:#e6db74">&#39;?&#39;</span>))
+    df[<span style="color:#e6db74">&#39;num_punctuation&#39;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#39;question_text&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> comment: sum(comment<span style="color:#f92672">.</span>count(w) <span style="color:#66d9ef">for</span> w <span style="color:#f92672">in</span> <span style="color:#e6db74">&#39;.,;:&#39;</span>))
+    df[<span style="color:#e6db74">&#39;num_symbols&#39;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#39;question_text&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> comment: sum(comment<span style="color:#f92672">.</span>count(w) <span style="color:#66d9ef">for</span> w <span style="color:#f92672">in</span> <span style="color:#e6db74">&#39;*&amp;$%&#39;</span>))
+    df[<span style="color:#e6db74">&#39;num_smilies&#39;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#39;question_text&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> comment: sum(comment<span style="color:#f92672">.</span>count(w) <span style="color:#66d9ef">for</span> w <span style="color:#f92672">in</span> (<span style="color:#e6db74">&#39;:-)&#39;</span>, <span style="color:#e6db74">&#39;:)&#39;</span>, <span style="color:#e6db74">&#39;;-)&#39;</span>, <span style="color:#e6db74">&#39;;)&#39;</span>)))
+    df[<span style="color:#e6db74">&#39;num_sad&#39;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#39;question_text&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> comment: sum(comment<span style="color:#f92672">.</span>count(w) <span style="color:#66d9ef">for</span> w <span style="color:#f92672">in</span> (<span style="color:#e6db74">&#39;:-&lt;&#39;</span>, <span style="color:#e6db74">&#39;:()&#39;</span>, <span style="color:#e6db74">&#39;;-()&#39;</span>, <span style="color:#e6db74">&#39;;(&#39;</span>)))
+    df[<span style="color:#e6db74">&#34;mean_word_len&#34;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#34;question_text&#34;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x: np<span style="color:#f92672">.</span>mean([len(w) <span style="color:#66d9ef">for</span> w <span style="color:#f92672">in</span> str(x)<span style="color:#f92672">.</span>split()]))
+    <span style="color:#66d9ef">return</span> df</code></pre></div>
+<p>We can use parallelized apply using the below function.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parallelize_dataframe</span>(df, func, n_cores<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>):
+    df_split <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array_split(df, n_cores)
+    pool <span style="color:#f92672">=</span> Pool(n_cores)
+    df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat(pool<span style="color:#f92672">.</span>map(func, df_split))
+    pool<span style="color:#f92672">.</span>close()
+    pool<span style="color:#f92672">.</span>join()
+    <span style="color:#66d9ef">return</span> df</code></pre></div>
+<p>What does it do? It breaks the dataframe into n_cores parts, and spawns n_cores processes which apply the function to all the pieces.</p>
+
+<p>Once it applies the function to all the split dataframes, it just concatenates the split dataframe and returns the full dataframe to us.</p>
+
+<h3 id="how-can-we-use-it">How can we use it?</h3>
+
+<p>It is pretty simple to use.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">train <span style="color:#f92672">=</span> parallelize_dataframe(train_df, add_features)</code></pre></div>
+<h3 id="does-this-work">Does this work?</h3>
+
+<p>To check the performance of this parallelize function, I ran %%timeit magic on this function in my Jupyter notebook in a Kaggle Kernel.</p>
+
+<p><img src="https://cdn-images-1.medium.com/max/2248/1*MKR-8UbD5UabvvS9OZLWig.png" alt="" /></p>
+
+<p>vs. just using the function as it is:</p>
+
+<p><img src="https://cdn-images-1.medium.com/max/2408/1*uZ7IGJdazYddXZuMI6JfFA.png" alt="" /></p>
+
+<p>As you can see I gained some performance just by using the parallelize function. And it was using a kaggle kernel which has only got 2 CPUs.</p>
+
+<p>In the actual competition, there was a lot of computation involved, and the add_features function I was using was much more involved. And this parallelize function helped me immensely to reduce processing time and get a <a href="https://mlwhiz.com/blog/2019/02/19/siver_medal_kaggle_learnings/" rel="nofollow" target="_blank">Silver medal</a>.</p>
+
+<p>Here is the <a href="https://www.kaggle.com/mlwhiz/parallelization-kernel" rel="nofollow" target="_blank">kernel</a> with the full code.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p><strong>Parallelization is not a silver bullet; it is buckshot.</strong> It won’t solve all your problems, and you would still have to work on optimizing your functions, but it is a great tool to have in your arsenal.</p>
+
+<p>Time never comes back, and sometimes we have a shortage of it. At these times we should be able to use parallelization easily.</p>
+
+<blockquote>
+<h1 id="parallelization-is-not-a-silver-bullet-it-is-a-buckshot">Parallelization is not a silver bullet it is a buckshot</h1>
+</blockquote>
+
+<p>Also if you want to learn more about Python 3, I would like to call out an excellent course on Learn <a href="https://bit.ly/2XshreA" rel="nofollow" target="_blank">Intermediate level Python</a> from the University of Michigan. Do check it out.</p>
+
+<p>I am going to be writing more beginner friendly posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.com/" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.415&subid=0&type=4"><IMG border="0"   alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.415&subid=0&type=4&gridnum=16"></a>
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2019/04/22/python_forloops/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Minimize for loop usage in Python</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<aside class="sidebar">
+	     
+  <div style="text-align:center">    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/22/python_pandas_multiproc/">Make your own Super Pandas using Multiproc</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/22/python_forloops/">Minimize for loop usage in Python</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/22/python_defaultdict/">Python Pro Tip: Start using Python defaultdict and Counter in place of dictionary</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/19/awesome_seaborn_visuals/">3 Awesome Visualization Techniques for every dataset</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/15/chatbot/">Chatbots  aren&#39;t as difficult to make as You Think</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/03/31/sublime_ds_post/">Why Sublime Text for Data Science is Hotter than Jennifer Lawrence?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/03/30/transfer_learning_text_classification/">NLP  Learning Series: Part 4 - Transfer Learning Intuition for Text Classification</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/03/09/deeplearning_architectures_text_classification/">NLP  Learning Series: Part 3 - Attention, CNN and what not for Text Classification</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/02/19/siver_medal_kaggle_learnings/">What my first Silver Medal taught me about Text Classification and Kaggle in general?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/02/08/deeplearning_nlp_conventional_methods/">NLP  Learning Series: Part 2 - Conventional Methods for Text Classification</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;}
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}
+   
+</style>
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2019 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
