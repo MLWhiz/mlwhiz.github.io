@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Python’s One Liner graph creation library with animations Hans Rosling Style</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="Some awesome visualizations using Plotly Express. Create Hans Rosling animations with a single line of code.">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="Python’s One Liner graph creation library with animations Hans Rosling Style" />
+<meta property="og:description" content="Some awesome visualizations using Plotly Express. Create Hans Rosling animations with a single line of code." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2019/05/05/plotly_express/" />
+<meta property="og:image" content="https://mlwhiz.com/images/plotly_ex/visualization.png" />
+<meta property="article:published_time" content="2019-05-05T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-05-05T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/plotly_ex/visualization.png"/>
+
+<meta name="twitter:title" content="Python’s One Liner graph creation library with animations Hans Rosling Style"/>
+<meta name="twitter:description" content="Some awesome visualizations using Plotly Express. Create Hans Rosling animations with a single line of code."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Python’s One Liner graph creation library with animations Hans Rosling Style</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2019-05-05T00:00:00">May 05, 2019</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/plotly_ex/visualization.png" "></center>
+</div>
+
+<p>I distinctly remember the time when Seaborn came. I was really so fed up with Matplotlib. To create even simple graphs I had to run through so many StackOverflow threads.</p>
+
+<p><strong><em>The time I could have spent in thinking good ideas for presenting my data was being spent in handling Matplotlib. And it was frustrating.</em></strong></p>
+
+<p>Seaborn is much better than Matplotlib, yet it also demands a lot of code for a simple “good looking” graph.</p>
+
+<p>When Plotly came it tried to solve that problem. And when added with Pandas, plotly is a great tool.</p>
+
+<p>Just using the iplot function, you can do so much with Plotly.</p>
+
+<p><strong><em>But still, it is not very intuitive. At least not for me.</em></strong></p>
+
+<p>I still didn’t switch to Plotly just because I had spent enough time with Seaborn to do things “quickly” enough and I didn’t want to spend any more time learning a new visualization library. I had created <a href="https://towardsdatascience.com/3-awesome-visualization-techniques-for-every-dataset-9737eecacbe8?source=friends_link&amp;sk=e32fe5bcd7d6553fca6d7f371980089f" rel="nofollow" target="_blank">my own functions</a> in Seaborn to create the visualizations I most needed. <strong><em>Yet it was still a workaround. I had given up hope of having anything better.</em></strong></p>
+
+<p>Comes <strong><em>Plotly Express</em></strong> in the picture. And is it awesome?</p>
+
+<p>According to the creators of Plotly Express (who also created Plotly obviously), <strong><em>Plotly Express is to Plotly what Seaborn is to Matplotlib.</em></strong>
+&gt; # A terse, consistent, high-level wrapper around Plotly.py for rapid data exploration and figure generation.</p>
+
+<p>I just had to try it out.</p>
+
+<p>And have the creators made it easy to start experimenting with it?</p>
+
+<p><strong><em>One-liners to do everything you want?</em></strong> ✅</p>
+
+<p><strong><em>Standardized functions?</em></strong> Learn to create a scatterplot and you have pretty much learned this tool — ✅</p>
+
+<p><strong>Interactive graphs?</strong> ✅</p>
+
+<p><strong>Animations?</strong> Racing Bar plots, Scatter plots with time, Maps ✅</p>
+
+<p><strong>Free and Open Source?</strong> ✅</p>
+
+<p>Just a sneak peek of what we will be able to create(and more) by the end of this post. <strong><em>Using a single line of code.</em></strong></p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/plotly_ex/animated1.gif" "></center>
+</div>
+
+<p>Ok enough of the talk, let’s get to it.</p>
+
+<h2 id="first-the-dataset-interesting-depressing-and-inspiring-all-at-once">First the Dataset — Interesting, Depressing and Inspiring all at once</h2>
+
+<p><img src="https://cdn-images-1.medium.com/max/3600/1*VL1Vl8hJk7Kfka5atIzH8Q.png" alt="" /></p>
+
+<p>We will be working with the <a href="https://www.kaggle.com/russellyates88/suicide-rates-overview-1985-to-2016" rel="nofollow" target="_blank">Suicide dataset</a> I took from Kaggle. This dataset is compiled from data taken from the UN, World Bank and World Health Organization. <strong><em>The dataset was accumulated with the inspiration for Suicide Prevention. I am always up for such good use of data.</em></strong></p>
+
+<p>You can find all the code for this post and run it yourself in this <a href="https://www.kaggle.com/mlwhiz/plotly-express/" rel="nofollow" target="_blank">Kaggle Kernel</a></p>
+
+<p>First I will do some data Cleaning to add continent information and Country ISO codes as they will be helpful later:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> plotly_express <span style="color:#f92672">as</span> px
+
+<span style="color:#75715e"># Suicide Data</span>
+suicides <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;../input/suicide-rates-overview-1985-to-2016/master.csv&#34;</span>)
+<span style="color:#66d9ef">del</span> suicides[<span style="color:#e6db74">&#39;HDI for year&#39;</span>]
+<span style="color:#66d9ef">del</span> suicides[<span style="color:#e6db74">&#39;country-year&#39;</span>]
+
+<span style="color:#75715e"># Country ISO Codes</span>
+iso_country_map <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;../input/countries-iso-codes/wikipedia-iso-country-codes.csv&#34;</span>)
+iso_country_map <span style="color:#f92672">=</span> iso_country_map<span style="color:#f92672">.</span>rename(columns <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;English short name lower case&#39;</span>:<span style="color:#e6db74">&#34;country&#34;</span>})
+
+<span style="color:#75715e"># Load Country Continents file</span>
+concap <span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;../input/country-to-continent/countryContinent.csv&#34;</span>, encoding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;iso-8859-1&#39;</span>)[[<span style="color:#e6db74">&#39;code_3&#39;</span>, <span style="color:#e6db74">&#39;continent&#39;</span>, <span style="color:#e6db74">&#39;sub_region&#39;</span>]]
+concap <span style="color:#f92672">=</span> concap<span style="color:#f92672">.</span>rename(columns <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;code_3&#39;</span>:<span style="color:#e6db74">&#34;Alpha-3 code&#34;</span>})
+
+correct_names <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;Cabo Verde&#39;</span>: <span style="color:#e6db74">&#39;Cape Verde&#39;</span>, <span style="color:#e6db74">&#39;Macau&#39;</span>: <span style="color:#e6db74">&#39;Macao&#39;</span>, <span style="color:#e6db74">&#39;Republic of Korea&#39;</span>: <span style="color:#e6db74">&#34;Korea, Democratic People&#39;s Republic of&#34;</span> , 
+ <span style="color:#e6db74">&#39;Russian Federation&#39;</span>: <span style="color:#e6db74">&#39;Russia&#39;</span>,
+ <span style="color:#e6db74">&#39;Saint Vincent and Grenadines&#39;</span>:<span style="color:#e6db74">&#39;Saint Vincent and the Grenadines&#39;</span> 
+ , <span style="color:#e6db74">&#39;United States&#39;</span>: <span style="color:#e6db74">&#39;United States Of America&#39;</span>}
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">correct_country</span>(x):
+    <span style="color:#66d9ef">if</span> x <span style="color:#f92672">in</span> correct_names:
+        <span style="color:#66d9ef">return</span> correct_names[x]
+    <span style="color:#66d9ef">else</span>:
+        <span style="color:#66d9ef">return</span> x
+
+suicides[<span style="color:#e6db74">&#39;country&#39;</span>] <span style="color:#f92672">=</span> suicides[<span style="color:#e6db74">&#39;country&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x : correct_country(x))
+
+suicides <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>merge(suicides,iso_country_map,on<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;country&#39;</span>,how<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;left&#39;</span>)
+suicides <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>merge(suicides,concap,on<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Alpha-3 code&#39;</span>,how<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;left&#39;</span>)
+
+suicides[<span style="color:#e6db74">&#39;gdp&#39;</span>] <span style="color:#f92672">=</span> suicides[<span style="color:#e6db74">&#39;gdp_per_capita ($)&#39;</span>]<span style="color:#f92672">*</span>suicides[<span style="color:#e6db74">&#39;population&#39;</span>]</code></pre></div>
+<p>Let us look at the suicides data:</p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/plotly_ex/data_img.png" "></center>
+</div>
+
+<p>I will also group the data by continents. Honestly, I am doing this only to show the power of the library as the main objective of this post will still be to create awesome visualizations.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">suicides_gby_Continent <span style="color:#f92672">=</span> suicides<span style="color:#f92672">.</span>groupby([<span style="color:#e6db74">&#39;continent&#39;</span>,<span style="color:#e6db74">&#39;sex&#39;</span>,<span style="color:#e6db74">&#39;year&#39;</span>])<span style="color:#f92672">.</span>aggregate(np<span style="color:#f92672">.</span>sum)<span style="color:#f92672">.</span>reset_index()
+
+suicides_gby_Continent[<span style="color:#e6db74">&#39;gdp_per_capita ($)&#39;</span>] <span style="color:#f92672">=</span> suicides_gby_Continent[<span style="color:#e6db74">&#39;gdp&#39;</span>]<span style="color:#f92672">/</span>suicides_gby_Continent[<span style="color:#e6db74">&#39;population&#39;</span>]
+
+suicides_gby_Continent[<span style="color:#e6db74">&#39;suicides/100k pop&#39;</span>] <span style="color:#f92672">=</span> suicides_gby_Continent[<span style="color:#e6db74">&#39;suicides_no&#39;</span>]<span style="color:#f92672">*</span><span style="color:#ae81ff">1000</span><span style="color:#f92672">/</span>suicides_gby_Continent[<span style="color:#e6db74">&#39;population&#39;</span>]
+
+<span style="color:#75715e"># 2016 data is not full</span>
+suicides_gby_Continent<span style="color:#f92672">=</span>suicides_gby_Continent[suicides_gby_Continent[<span style="color:#e6db74">&#39;year&#39;</span>]<span style="color:#f92672">!=</span><span style="color:#ae81ff">2016</span>]
+
+suicides_gby_Continent<span style="color:#f92672">.</span>head()</code></pre></div>
+<p>The final data we created:</p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/plotly_ex/data_2.png" "></center>
+</div>
+
+<h2 id="simplicity-of-use">Simplicity of use</h2>
+
+<p>We are ready to visualize our data. Comes <strong><em>Plotly Express</em></strong> time. I can install it just by a simple:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">pip install plotly_express</code></pre></div>
+<p>and import it as:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> plotly_express <span style="color:#f92672">as</span> px</code></pre></div>
+<p>Now let us create a simple scatter plot with it.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">suicides_gby_Continent_2007 <span style="color:#f92672">=</span> suicides_gby_Continent[suicides_gby_Continent[<span style="color:#e6db74">&#39;year&#39;</span>]<span style="color:#f92672">==</span><span style="color:#ae81ff">2007</span>]
+
+px<span style="color:#f92672">.</span>scatter(suicides_gby_Continent_2007,x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;suicides/100k pop&#39;</span>, y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;gdp_per_capita ($)&#39;</span>)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/plotly_ex/point_plot.png" "></center>
+</div>
+
+<p>Not very inspiring. Right. Let us make it better step by step. Lets color the points by Continent.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">px<span style="color:#f92672">.</span>scatter(suicides_gby_Continent_2007,x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;suicides/100k pop&#39;</span>, y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;gdp_per_capita ($)&#39;</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;continent&#39;</span>)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/plotly_ex/colored_point_plot.png" "></center>
+</div>
+
+<p><strong>Better but not inspiring. YET.</strong></p>
+
+<p><strong>The points look so small</strong>. Right. Let us increase the point size. How? What could the parameter be….</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">px<span style="color:#f92672">.</span>scatter(suicides_gby_Continent_2007,x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;suicides/100k pop&#39;</span>, y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;gdp_per_capita ($)&#39;</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;ContinentName&#39;</span>,size <span style="color:#f92672">=</span><span style="color:#e6db74">&#39;suicides/100k pop&#39;</span>)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/plotly_ex/sized_point_plot.png" "></center>
+</div>
+
+<p><strong>Can you see there are two points for every continent?</strong> They are for male and female. Let me show that in the graph. We can show this distinction using a couple of ways. <strong><em>We can use different symbol or use different facets for male and female.</em></strong></p>
+
+<p>Let me show them both.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">px<span style="color:#f92672">.</span>scatter(suicides_gby_Continent_2007,x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;suicides/100k pop&#39;</span>, y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;gdp_per_capita ($)&#39;</span>, size <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;suicides/100k pop&#39;</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;ContinentName&#39;</span>,symbol<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sex&#39;</span>)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/plotly_ex/facet1.png" "></center>
+</div>
+
+<p><img src="https://cdn-images-1.medium.com/max/2000/1*H12_tRVLrX8znkb7WWicvw.png" alt="" /></p>
+
+<p>We could also create a faceted plot.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">px<span style="color:#f92672">.</span>scatter(suicides_gby_Continent_2007,x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;suicides/100k pop&#39;</span>, y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;gdp_per_capita ($)&#39;</span>, size <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;suicides/100k pop&#39;</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;continent&#39;</span>,facet_col<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sex&#39;</span>)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/plotly_ex/facet2.png" "></center>
+</div>
+
+<p>The triangles are for male and the circles are for females in the symbol chart. <strong><em>We are already starting to see some good info from the chart.</em></strong> For example:</p>
+
+<ul>
+<li><p>There is a significant difference between the suicide rates of Male vs Females at least in 2007 data.</p></li>
+
+<li><p><strong><em>European Males were highly susceptible to Suicide in 2007?</em></strong></p></li>
+
+<li><p>The income disparity doesn’t seem to play a big role in suicide rates. Asia has a lower GDP per capita and a lower suicide rate than Europe.</p></li>
+
+<li><p><strong><em>There doesn’t seem to be income disparity amongst males and females.</em></strong></p></li>
+</ul>
+
+<p>Still not inspiring? Umm. <strong><em>Let us add some animation</em></strong>. That shouldn’t have to be hard. I will just add some more parameters,</p>
+
+<ul>
+<li><p>animation_frame which specifies what will be our animation dimension.</p></li>
+
+<li><p>range of x and y values using range_y and range_x</p></li>
+
+<li><p>text which labels all points with continents. Helps in visualizing data better</p></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">px<span style="color:#f92672">.</span>scatter(suicides_gby_Continent,x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;suicides/100k pop&#39;</span>, y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;gdp_per_capita ($)&#39;</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;continent&#39;</span>,
+               size<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;suicides/100k pop&#39;</span>,symbol<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sex&#39;</span>,animation_frame<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;year&#39;</span>, animation_group<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;continent&#39;</span>,range_x <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0.6</span>],
+              range_y <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">70000</span>],text<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;continent&#39;</span>)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/plotly_ex/animated1.gif" "></center>
+</div>
+
+<p><strong>Wait for the gif plot to show.</strong></p>
+
+<p>In the Jupyter notebook, you will be able to stop the visualization, hover over the points, just look at a particular continent and do so much more with interactions.</p>
+
+<p>So much information with a single command. We can see that:</p>
+
+<ul>
+<li><p>From 1991–2001 European Males had a pretty bad Suicide rate.</p></li>
+
+<li><p>Oceania even after having a pretty high GDP per capita, it is still susceptible to suicides.</p></li>
+
+<li><p>Africa has lower suicide rates as compared to other countries.</p></li>
+
+<li><p>For the Americas, the suicide rates have been increasing gradually.</p></li>
+</ul>
+
+<p><strong><em>All of my above observations would warrant more analysis. But that is the point of having so much information on a single graph. It will help you to come up with a lot of hypotheses.</em></strong></p>
+
+<p>The above style of the plot is known as <strong>Hans Rosling plot</strong> named after its founder.</p>
+
+<p>Here I would ask you to see this presentation from Hans Rosling where he uses Gapminder data to explain how income and lifespan emerged in the world through years. See it. It&rsquo;s great.</p>
+
+<p><center><iframe width="560" height="315" src="https://www.youtube.com/embed/jbkSRLYSojo" frameborder="0" allowfullscreen></iframe></center></p>
+
+<h2 id="function-standardization">Function Standardization</h2>
+
+<p><strong><em>So till now, we have learned about scatter plots. So much time to just learn a single class of charts.</em></strong> In the start of my post, I told you that this library has a sort of standardized functions.</p>
+
+<p>Let us specifically look at European data as we saw that European males have a high Suicide rate.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">european_suicide_data <span style="color:#f92672">=</span> suicides[suicides[<span style="color:#e6db74">&#39;continent&#39;</span>] <span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Europe&#39;</span>]
+european_suicide_data_gby <span style="color:#f92672">=</span> european_suicide_data<span style="color:#f92672">.</span>groupby([<span style="color:#e6db74">&#39;age&#39;</span>,<span style="color:#e6db74">&#39;sex&#39;</span>,<span style="color:#e6db74">&#39;year&#39;</span>])<span style="color:#f92672">.</span>aggregate(np<span style="color:#f92672">.</span>sum)<span style="color:#f92672">.</span>reset_index()
+european_suicide_data_gby[<span style="color:#e6db74">&#39;suicides/100k pop&#39;</span>] <span style="color:#f92672">=</span> european_suicide_data_gby[<span style="color:#e6db74">&#39;suicides_no&#39;</span>]<span style="color:#f92672">*</span><span style="color:#ae81ff">1000</span><span style="color:#f92672">/</span>european_suicide_data_gby[<span style="color:#e6db74">&#39;population&#39;</span>]
+
+
+<span style="color:#75715e"># A single line to create an animated Bar chart too.</span>
+px<span style="color:#f92672">.</span>bar(european_suicide_data_gby,x<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;age&#39;</span>,y<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;suicides/100k pop&#39;</span>,facet_col<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sex&#39;</span>,animation_frame<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;year&#39;</span>, 
+       animation_group<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;age&#39;</span>, 
+       category_orders<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#39;age&#39;</span>:[<span style="color:#e6db74">&#39;5-14 years&#39;</span>, <span style="color:#e6db74">&#39;15-24 years&#39;</span>, <span style="color:#e6db74">&#39;25-34 years&#39;</span>, <span style="color:#e6db74">&#39;35-54 years&#39;</span>, 
+       <span style="color:#e6db74">&#39;55-74 years&#39;</span>, <span style="color:#e6db74">&#39;75+ years&#39;</span>]},range_y<span style="color:#f92672">=</span>[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>])</code></pre></div>
+<p><img src="https://cdn-images-1.medium.com/max/2328/1*F1AvmKFQdWB3uswpj2Au_g.gif" alt="" /></p>
+
+<p>Just like that, we have learned about animating our bar plots too. In the function above I provide a category_order for the axes to force the order of categories since they are ordinal. Rest all is still the same.</p>
+
+<p><em>We can see that from 1991 to 2001 the suicide rate of 75+ males was very high. That might have increased the overall suicide rate for males.</em></p>
+
+<p><strong><em>Want to see how the suicide rates decrease in a country using a map?</em></strong> That is why we got the ISO-codes for the country in the data.</p>
+
+<p>How many lines should that take? You guessed right. One.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">suicides_map <span style="color:#f92672">=</span> suicides<span style="color:#f92672">.</span>groupby([<span style="color:#e6db74">&#39;year&#39;</span>,<span style="color:#e6db74">&#39;country&#39;</span>,<span style="color:#e6db74">&#39;Alpha-3 code&#39;</span>])<span style="color:#f92672">.</span>aggregate(np<span style="color:#f92672">.</span>sum)<span style="color:#f92672">.</span>reset_index()[[<span style="color:#e6db74">&#39;country&#39;</span>,<span style="color:#e6db74">&#39;Alpha-3 code&#39;</span>,<span style="color:#e6db74">&#39;suicides_no&#39;</span>,<span style="color:#e6db74">&#39;population&#39;</span>,<span style="color:#e6db74">&#39;year&#39;</span>]]
+
+suicides_map[<span style="color:#e6db74">&#34;suicides/100k pop&#34;</span>]<span style="color:#f92672">=</span>suicides_map[<span style="color:#e6db74">&#34;suicides_no&#34;</span>]<span style="color:#f92672">*</span><span style="color:#ae81ff">1000</span><span style="color:#f92672">/</span>suicides_map[<span style="color:#e6db74">&#34;population&#34;</span>]
+
+px<span style="color:#f92672">.</span>choropleth(suicides_map, locations<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Alpha-3 code&#34;</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;suicides/100k pop&#34;</span>, hover_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;country&#34;</span>, animation_frame<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;year&#34;</span>,
+             color_continuous_scale<span style="color:#f92672">=</span>px<span style="color:#f92672">.</span>colors<span style="color:#f92672">.</span>sequential<span style="color:#f92672">.</span>Plasma)</code></pre></div>
+<p><img src="https://cdn-images-1.medium.com/max/2328/1*YOKJJFQGWnZ9QDb_TjRY-Q.gif" alt="" /></p>
+
+<p>The plot above shows how suicide rates have changed over time in different countries and based on the info we get from the plot the coding effort required is minimal. We can see that:</p>
+
+<ul>
+<li><p>A lot of countries are missing</p></li>
+
+<li><p>Africa has very few countries in data</p></li>
+
+<li><p>Almost all of Asia is also missing.</p></li>
+</ul>
+
+<p>We can get quite a good understanding of our data just by seeing the above graphs.</p>
+
+<p><strong><em>Animations on the time axis also add up a lot of value as we are able to see all our data using a single graph.</em></strong></p>
+
+<p>This can help us in finding hidden patterns in the data. And you have to agree, it looks cool too.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>This was just a preview of Plotly Express. You can do a lot of other things using this library.</p>
+
+<p>The main thing I liked about this library is the way it has tried to simplify graph creation. And how the graphs look cool out of the box.</p>
+
+<p><strong><em>Just think of the lengths one would have to go to to create the same graphs in Seaborn or Matplotlib or even Plotly</em></strong>. And you will be able to appreciate the power the library provides even more.</p>
+
+<p>There is a bit of lack of documentation for this project by Plotly, but I found that the functions are pretty much well documented. On that note, you can see function definitions using Shift+Tab in Jupyter.</p>
+
+<p>Also as per its announcement article: “Plotly Express is <em>totally free</em>: with its permissive open-source MIT license, you can use it however you like (yes, even in commercial products!).”</p>
+
+<p>So there is no excuse left now to put off that visual. Just get to it…</p>
+
+<p>You can find all the code for this post and run it yourself in this <a href="https://www.kaggle.com/mlwhiz/plotly-express/" rel="nofollow" target="_blank">Kaggle Kernel</a></p>
+
+<p>If you want to learn about best strategies for creating Visualizations, I would like to call out an excellent course about <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank"><strong>Data Visualization and applied plotting</strong></a> from the University of Michigan which is a part of a pretty good <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank"><strong>Data Science Specialization with Python</strong></a> in itself. Do check it out</p>
+
+<p>I am going to be writing more beginner friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.com/" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a></p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/visualization/" rel="tag">Visualization</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/plotly-express/" rel="tag">Plotly Express</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.415&subid=0&type=4"><IMG border="0"   alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.415&subid=0&type=4&gridnum=16"></a>
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2019/04/22/python_pandas_multiproc/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Make your own Super Pandas using Multiproc</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<aside class="sidebar">
+	     
+  <div style="text-align:center">    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/05/05/plotly_express/">Python’s One Liner graph creation library with animations Hans Rosling Style</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/22/python_pandas_multiproc/">Make your own Super Pandas using Multiproc</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/22/python_forloops/">Minimize for loop usage in Python</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/22/python_defaultdict/">Python Pro Tip: Start using Python defaultdict and Counter in place of dictionary</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/19/awesome_seaborn_visuals/">3 Awesome Visualization Techniques for every dataset</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/15/chatbot/">Chatbots  aren&#39;t as difficult to make as You Think</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/03/31/sublime_ds_post/">Why Sublime Text for Data Science is Hotter than Jennifer Lawrence?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/03/30/transfer_learning_text_classification/">NLP  Learning Series: Part 4 - Transfer Learning Intuition for Text Classification</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/03/09/deeplearning_architectures_text_classification/">NLP  Learning Series: Part 3 - Attention, CNN and what not for Text Classification</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/02/19/siver_medal_kaggle_learnings/">What my first Silver Medal taught me about Text Classification and Kaggle in general?</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;}
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}
+   
+</style>
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2019 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
