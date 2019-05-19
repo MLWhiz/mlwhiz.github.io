@@ -4,9 +4,9 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Dictvectorizer for One Hot Encoding of Categorical Data</title>
+	<title>The Nation of a Billion Votes</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="How does a DictVectorizer works. There is a lot of stuff around the net for this but I dint get to understand much around it.">
+	<meta name="description" content="Finally the elections are over and the news channels are releasing the exit polls. This is pretty good data to look at.">
 	
 
 	
@@ -15,15 +15,19 @@
 	
 	
 	<meta name="generator" content="Hugo 0.53" />
-	<meta property="og:title" content="Dictvectorizer for One Hot Encoding of Categorical Data" />
-<meta property="og:description" content="How does a DictVectorizer works. There is a lot of stuff around the net for this but I dint get to understand much around it." />
+	<meta property="og:title" content="The Nation of a Billion Votes" />
+<meta property="og:description" content="Finally the elections are over and the news channels are releasing the exit polls. This is pretty good data to look at." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://mlwhiz.com/blog/2014/09/30/dictvectorizer_one_hot_encoding/" /><meta property="article:published_time" content="2014-09-30T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2014-09-30T00:00:00&#43;00:00"/>
+<meta property="og:url" content="https://mlwhiz.com/blog/2019/05/19/election/" />
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/2400/1*8hmipT2UUqjI80pXHp8WFA.png" />
+<meta property="article:published_time" content="2019-05-19T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-05-19T00:00:00&#43;00:00"/>
 
-	<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Dictvectorizer for One Hot Encoding of Categorical Data"/>
-<meta name="twitter:description" content="How does a DictVectorizer works. There is a lot of stuff around the net for this but I dint get to understand much around it."/>
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://cdn-images-1.medium.com/max/2400/1*8hmipT2UUqjI80pXHp8WFA.png"/>
+
+<meta name="twitter:title" content="The Nation of a Billion Votes"/>
+<meta name="twitter:description" content="Finally the elections are over and the news channels are releasing the exit polls. This is pretty good data to look at."/>
 
 
 	<link rel="dns-prefetch" href="//fonts.googleapis.com">
@@ -156,59 +160,129 @@ if (!doNotTrack) {
 <main class="main" role="main">
 	<article class="post">
 		<header class="post__header">
-			<h1 class="post__title">Dictvectorizer for One Hot Encoding of Categorical Data</h1>
+			<h1 class="post__title">The Nation of a Billion Votes</h1>
 			<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
 	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
-	<time class="meta__text" datetime="2014-09-30T00:00:00">September 30, 2014</time>
+	<time class="meta__text" datetime="2019-05-19T00:00:00">May 19, 2019</time>
 </div>
 </div>
 		</header>
 		<div class="content post__content clearfix">
 			
 
-<h2 id="the-problem">THE PROBLEM:</h2>
+<p><img src="https://cdn-images-1.medium.com/max/2400/1*8hmipT2UUqjI80pXHp8WFA.png" alt="" /></p>
 
-<p>Recently I was working on the Criteo Advertising Competition on Kaggle. The competition was a classification problem which basically involved predicting the click through rates based on several features provided in the train data. Seeing the size of the data (11 GB Train), I felt that going with Vowpal Wabbit might be a better option.</p>
+<p>It is election month in India and a quote by <a href="https://twitter.com/rahatindori/status/1032507541606080512" rel="nofollow" target="_blank">Dr. Rahat Indori</a> sums it up pretty well.</p>
 
-<p>But after getting to an CV error of .47 on the Kaggle LB and being stuck there , I felt the need to go back to Scikit learn. While SciKit learn seemed to have a partial_fit method in SGDClassifier, I still could not find a partial_fit method in the OneHotEncoder or DictVectorizer class which made me look to the internet again. Now while I could find many advices on how to use OneHotEncoding and DictVectorizer on small data, I cannot find something relate to data too big to store in the memory. How do I OneHotEncode such a large data file?</p>
+<blockquote>
+<h1 id="सरहद-पर-बह-त-तन-व-ह-क-य-पत-त-कर-च-न-व-ह-क-य">“सरहदों <strong>पर</strong> बहुत <strong>तनाव</strong> है क्या , पता तो करो <strong>चुनाव है</strong> क्या !”</h1>
+</blockquote>
 
-<h2 id="dictvectorizer">DICTVECTORIZER</h2>
+<p>For English speakers, this means: <strong><em>Is there a lot of tension at the borders? just ask if the elections are on.</em></strong></p>
 
-<p>How does a DictVectorizer works. There is a lot of stuff around the net for this but I dint get to understand much around it. This blog from Zygmuntz of Fastml came to rescue then. Although still it didn’t resolve how to apply that to such large amount of data.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.feature_extraction <span style="color:#f92672">import</span> DictVectorizer <span style="color:#66d9ef">as</span> DV
-<span style="color:#75715e"># Create Vectorizer</span>
-vectorizer <span style="color:#f92672">=</span> DV( sparse <span style="color:#f92672">=</span> False )
-<span style="color:#75715e"># Read the whole Data</span>
-traindata <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(train_file, header<span style="color:#f92672">=</span>None, sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;,&#39;</span>, names <span style="color:#f92672">=</span> colnames)
-<span style="color:#75715e"># Retain the categorical Columns</span>
-train_df   <span style="color:#f92672">=</span> traindata[cat_col]
-<span style="color:#75715e"># Convert Panda Data frame to Dict</span>
-train_dict <span style="color:#f92672">=</span> train_df<span style="color:#f92672">.</span>T<span style="color:#f92672">.</span>to_dict()<span style="color:#f92672">.</span>values()
-<span style="color:#75715e"># Create Fit</span>
-vectorizer<span style="color:#f92672">.</span>fit(test_dict)</code></pre></div>
-<h2 id="the-data">THE DATA</h2>
+<p>This election India has talked about a lot of issues. News channels have talked about Patriotism, Socialism, Religion as well as terrorism.</p>
 
-<p>The data was basically comprised of 40 Features with: 1. First two Columns as ID, Label 2. Next 13 columns Continuous columns labelled I1-I13 3. Next 26 Columns Categorical labelled C1-C26 Further the categorical columns were very sparse and some of the categorical variables could take more than a million different values.</p>
+<p>You might have heard of the tension brewing between India and Pakistan.</p>
 
-<h2 id="the-workarounds">THE WORKAROUNDS</h2>
+<p>This election season has also been marred with a cacophony of insults. Politicians seem to have forgotten basic manners.</p>
 
-<p>The main problem that I faced was that I could not fit that much data in a DataFrame, even when I have a machine of 16GB, and that lead me to think that do I have a need for such a large data frame. And that lead me to the first part of the solution. I don’t need to load the whole data at once. I just needed to create another dictionary with all the possible combinations and then fit my dictvectorizer on it.</p>
+<p>Calling the Prime Minister a Chai-Wala(Tea-Seller) and a Chowkidaar(Watchman). And the Prime Minister accepting both titles with grace and putting a Chowkidaar in front of his name on Twitter too. It was pure genius.</p>
 
-<p>I know that it is a lot to take in, so let’s take an example to understand it: Let’s say we have a data of infinite size, which has 3 categorical variables: C1 could take values 1-100 C2 could take values 1-3 C3 could take values 1-1000 Then we just have to find which category could take the maximum number of values (i.e. C3 in the above case) and make a dict which contains other categories replicated to contain as many values In other words, we need to make a dict like: {C1 : [1,2,3,……,97,98,99,100]*10  , C2 : [1,2,3]*333+[1]  , C3: [1….1000]} Notice the star sign at the last of the list. That means that for every key in the dict the number of values is now 1000(i.e. the maximum number of features).</p>
+<p><blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Today is the final phase of the 2019 Lok Sabha elections. I urge all those voting in this phase to vote in record numbers. Your one vote will shape India’s development trajectory in the years to come. I also hope first time voters vote enthusiastically.</p>&mdash; Chowkidar Narendra Modi (@narendramodi) <a href="https://twitter.com/narendramodi/status/1129926748513218560?ref_src=twsrc%5Etfw">May 19, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
 
-<p>And so that is what I did. After we have the Vectorizer Fit, the next task was to transform the data. I took the data transformed it and sent it to my model line by line. P.S. Don’t store the transformed data as around a 100000 records takes ~ 10GB of Hard Disk Space due to the high number of features.</p>
+<p>Now finally the elections are over and the news channels are releasing the exit polls. This is pretty good data to look at.</p>
 
-<p>Hope you find it Informative and happy learning.</p>
+<p><strong><em>And why waste good data?</em></strong></p>
 
-<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script>
+<p>So, here is an effort to showing some of the election data using some interactive visualizations using Flourish.</p>
+
+<h2 id="recap-of-politics-in-india">Recap of Politics in India</h2>
+
+<p>To give a little perspective, in India, the center is held by BJP(Bhartiya Janta Party) and Narendra Modi is the current prime minister of India.</p>
+
+<p>Most of India’s political history has been dominated by INC(Indian National Congress). <strong><em>This is the party of Mahatma Gandhi.</em></strong> INC’s head Rahul Gandhi, who is sometimes called the <strong><em>50 years old youth,</em></strong> could be the perfect example of dynastic politics.</p>
+
+<p><strong><em>There are a lot of other local state parties, which I will call as OTH(Others)</em></strong></p>
+
+<p>For a perspective to the US audience(very broadly): <strong><em>BJP=Right Wing and INC=Left Wing.</em></strong></p>
+
+<p>India has 28 states and each state has a number of electoral seats. This is the seat distribution as per states.</p>
+
+<p><div class="flourish-embed" data-src="visualisation/366631"></div><script src="https://public.flourish.studio/resources/embed.js"></script></p>
+
+<p>Let us talk a little about the <strong><em>swing states</em></strong>.</p>
+
+<p>The first state is <strong><em>Uttar Pradesh</em></strong>. A region of caste-based politics. Holding 8o seats out of 543 seats. A state that could swing the whole election. This state is the home of a large coalition named “MahaGatbandhan”(Literally a large coalition). <strong><em>This coalition is created by two heavy-weights — Akhilesh Yadav and Mayawati.</em></strong> Both have totally opposite views, yet they came together to move the BJP government out of the center.</p>
+
+<p>Then there is the case of West Bengal having 42 seats, which is held by <strong><em>Mamata Banerjee</em></strong>. Sometimes people say that it might be a dictatorship and there have been a lot of violent incidents in this state over the past few days.<strong><em>She might also form a coalition with INC in the later stage to overthrow the current government.</em></strong></p>
+
+<p>All in all, INC, MahaGatbandhan and all others are out there to overthrow BJP(Modi government)</p>
+
+<h2 id="exit-polls">Exit Polls</h2>
+
+<p><img src="https://cdn-images-1.medium.com/max/9400/0*BHEJzh1R-pI9MLHj" alt="" /></p>
+
+<p>Now the elections are over after 7 phases of voting. And today is the exit polls in India.</p>
+
+<p>That means all the news channels will come up with their individual surveys across the 542 Loksabha seats across the 28 states.</p>
+
+<p>Let us not wait further and look at exit poll data of various news channels.</p>
+
+<p>Here it is:</p>
+
+<p><div class="flourish-embed" data-src="visualisation/366687"></div><script src="https://public.flourish.studio/resources/embed.js"></script></p>
+
+<p>Seems like a sweeping victory for BJP and alliance.</p>
+
+<p>And here is a racing bar chart of the same.</p>
+
+<p><div class="flourish-embed" data-src="visualisation/366662"></div><script src="https://public.flourish.studio/resources/embed.js"></script></p>
+
+<p><strong><em>The only thing that doesn’t seem to move is BJP+</em></strong> and seems like there will be a second term based on this visualization.</p>
+
+<p><div class="flourish-embed" data-src="visualisation/366637"></div><script src="https://public.flourish.studio/resources/embed.js"></script></p>
+
+<p>The parliament seems to look a little bit orange(BJP Color)though not as much as the last time.</p>
+
+<p>And the swing states. I am going to look at poll data by TimesNow.</p>
+
+<p><div class="flourish-embed" data-src="visualisation/366731"></div><script src="https://public.flourish.studio/resources/embed.js"></script></p>
+
+<p>While it seems like a defeat for BJP+ in West Bengal, more than 10 seats in WB is actually a lot as per the state politics of left and should be categorized as a win.</p>
+
+<p>In Uttar Pradesh too, BJP+ was able to handle a great opposition in form of Mahagatbandhan and that seems a win too.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p><strong>The 2019 Mandate seems to be favoring BJP and its allies.</strong></p>
+
+<p><strong><em>And it is a sweeping answer to people who promote caste-based politics, dynastic rules, and minority appeasement politics.</em></strong></p>
+
+<p>Here is a tweet showing some frustration by the current CM of West Bengal.</p>
+
+<p><blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">I don’t trust Exit Poll gossip. The game plan is to manipulate or replace thousands of EVMs through this gossip. I appeal to all Opposition parties to be united, strong and bold. We will fight this battle together</p>&mdash; Mamata Banerjee (@MamataOfficial) <a href="https://twitter.com/MamataOfficial/status/1130112216202526720?ref_src=twsrc%5Etfw">May 19, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<p>While the data seems to show a lot of promise for BJP+, we still need to see if the predictions by these news channels stand up to the actuals. The Election results will be published by 23 May.</p>
+
+<p>I would also like to highlight <a href="https://app.flourish.studio" rel="nofollow" target="_blank">Flourish</a> here, which made creating the visualizations a breeze.</p>
+
+<p><strong><em>Visualizations that were Easy to make, Publish and share.</em></strong></p>
+
+<p>If you want to learn about best strategies for creating Visualizations, I would like to call out an excellent course about <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank"><strong>Data Visualization and applied plotting</strong></a> from the University of Michigan which is a part of a pretty good <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank"><strong>Data Science Specialization with Python</strong></a> in itself. Do check it out</p>
+
+<p>I am going to be writing more visualization posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
+<p><strong><em>PS: I am a BJP Supporter but I have tried to be as objective as possible.</em></strong></p>
 
 		</div>
 		
 <div class="post__tags tags clearfix">
 	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
 	<ul class="tags__list">
-		<li class="tags__item"><a class="tags__link btn" href="/tags/machine-learning/" rel="tag">machine learning</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
 	</ul>
 </div>
 		
@@ -223,10 +297,10 @@ vectorizer<span style="color:#f92672">.</span>fit(test_dict)</code></pre></div>
 
 <nav class="post-nav flex">
 	<div class="post-nav__item post-nav__item--prev">
-		<a class="post-nav__link" href="/blog/2014/09/28/learning_pyspark/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Learning pyspark – Installation – Part 1</p></a>
+		<a class="post-nav__link" href="/blog/2019/05/14/python_args_kwargs/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">A primer on *args, **kwargs, decorators for Data Scientists</p></a>
 	</div>
 	<div class="post-nav__item post-nav__item--next">
-		<a class="post-nav__link" href="/blog/2014/10/02/data_science_101_python_pattern/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">Data Science 101 : Playing with Scraping in Python</p></a>
+		<a class="post-nav__link" href="/blog/2019/05/19/feature_extraction/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">The Hitchhiker’s Guide to Feature Extraction</p></a>
 	</div>
 </nav>
 
