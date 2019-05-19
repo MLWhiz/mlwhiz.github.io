@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>The Hitchhiker’s Guide to Feature Extraction</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="Some Tricks and Code for Kaggle and Everyday work. This post is about useful feature engineering methods and tricks that I have learned and end up using often.">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="The Hitchhiker’s Guide to Feature Extraction" />
+<meta property="og:description" content="Some Tricks and Code for Kaggle and Everyday work. This post is about useful feature engineering methods and tricks that I have learned and end up using often." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2019/05/19/feature_extraction/" />
+<meta property="og:image" content="https://mlwhiz.com/images/features/brain.png" />
+<meta property="article:published_time" content="2019-05-19T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-05-19T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/features/brain.png"/>
+
+<meta name="twitter:title" content="The Hitchhiker’s Guide to Feature Extraction"/>
+<meta name="twitter:description" content="Some Tricks and Code for Kaggle and Everyday work. This post is about useful feature engineering methods and tricks that I have learned and end up using often."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">The Hitchhiker’s Guide to Feature Extraction</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2019-05-19T00:00:00">May 19, 2019</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/brain.png" style="height:80%;width:80%"></center>
+</div>
+
+<p>Good Features are the backbone of any machine learning model.</p>
+
+<p>And good feature creation often needs domain knowledge, creativity, and lots of time.</p>
+
+<p>In this post, I am going to talk about:</p>
+
+<ul>
+<li><p>Various methods of feature creation- Both Automated and manual</p></li>
+
+<li><p>Different Ways to handle categorical features</p></li>
+
+<li><p>Longitude and Latitude features</p></li>
+
+<li><p>Some kaggle tricks</p></li>
+
+<li><p>And some other ideas to think about feature creation.</p></li>
+</ul>
+
+<p><strong><em>TLDR; this post is about useful feature engineering methods and tricks that I have learned and end up using often.</em></strong></p>
+
+<h2 id="1-automatic-feature-creation-using-featuretools">1. Automatic Feature Creation using featuretools:</h2>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center>
+    <figure>
+      <img src="/images/features/bot.jpeg">
+      <figcaption style="font-size: 12px;">Automation is the future</figcaption>
+    </figure>
+</center>
+</div>
+
+<p>Have you read about featuretools yet? If not, then you are going to be delighted.</p>
+
+<p><strong>Featuretools</strong> is a framework to perform automated feature engineering. It excels at transforming temporal and relational datasets into feature matrices for machine learning.</p>
+
+<p>How? Let us work with a toy example to show you the power of featuretools.</p>
+
+<p>Let us say that we have three tables in our database: <strong>Customers, Sessions, and Transactions.</strong></p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center>
+    <figure>
+      <img src="/images/features/table_structure.png">
+      <figcaption style="font-size: 12px;">Datasets and relationships</figcaption>
+    </figure>
+</center>
+</div>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/cust.png"></center>
+</div>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/sess.png"></center>
+</div>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/trans.png"></center>
+</div>
+
+<p>This is a reasonably good toy dataset to work on since it has time-based columns as well as categorical and numerical columns.</p>
+
+<p>If we were to create features on this data, we would need to do a lot of merging and aggregations using Pandas.</p>
+
+<p>Featuretools makes it so easy for us. Though there are a few things, we will need to learn before our life gets easier.</p>
+
+<p>Featuretools works with entitysets.</p>
+
+<p><strong><em>You can understand an entityset as a bucket for dataframes as well as relationships between them.</em></strong></p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center>
+    <figure>
+      <img src="/images/features/bucket.jpeg">
+      <figcaption style="font-size: 12px;">Entityset = Bucket of dataframes and relationships</figcaption>
+    </figure>
+</center>
+</div>
+
+<p>So without further ado, let us create an empty entityset. I just gave the name as customers. You can use any name here. It is just an empty bucket right now.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Create new entityset</span>
+es <span style="color:#f92672">=</span> ft<span style="color:#f92672">.</span>EntitySet(id <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;customers&#39;</span>)</code></pre></div>
+<p>Let us add our dataframes to it. The order of adding dataframes is not important. To add a dataframe to an existing entityset, we do the below operation.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Create an entity from the customers dataframe</span>
+
+es <span style="color:#f92672">=</span> es<span style="color:#f92672">.</span>entity_from_dataframe(entity_id <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;customers&#39;</span>, dataframe <span style="color:#f92672">=</span> customers_df, index <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;customer_id&#39;</span>, time_index <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;join_date&#39;</span> ,variable_types <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;zip_code&#34;</span>: ft<span style="color:#f92672">.</span>variable_types<span style="color:#f92672">.</span>ZIPCode})</code></pre></div>
+<p>So here are a few things we did here to add our dataframe to the empty entityset bucket.</p>
+
+<ol>
+<li><p>Provided a <code>entity_id</code>: This is just a name. Put it as customers.</p></li>
+
+<li><p><code>dataframe</code> name set as customers_df</p></li>
+
+<li><p><code>index</code> : This argument takes as input the primary key in the table</p></li>
+
+<li><p><code>time_index</code> : The <strong>time index</strong> is defined as the first time that any information from a row can be used. For customers, it is the joining date. For transactions, it will be the transaction time.</p></li>
+
+<li><p><code>variable_types</code>: This is used to specify if a particular variable must be handled differently. In our Dataframe, we have the zip_code variable, and we want to treat it differently, so we use this. These are the different variable types we could use:</p></li>
+</ol>
+
+<pre><code>[featuretools.variable_types.variable.Datetime,
+ featuretools.variable_types.variable.Numeric,
+ featuretools.variable_types.variable.Timedelta,
+ featuretools.variable_types.variable.Categorical,
+ featuretools.variable_types.variable.Text,
+ featuretools.variable_types.variable.Ordinal,
+ featuretools.variable_types.variable.Boolean,
+ featuretools.variable_types.variable.LatLong,
+ featuretools.variable_types.variable.ZIPCode,
+ featuretools.variable_types.variable.IPAddress,
+ featuretools.variable_types.variable.EmailAddress,
+ featuretools.variable_types.variable.URL,
+ featuretools.variable_types.variable.PhoneNumber,
+ featuretools.variable_types.variable.DateOfBirth,
+ featuretools.variable_types.variable.CountryCode,
+ featuretools.variable_types.variable.SubRegionCode,
+ featuretools.variable_types.variable.FilePath]
+</code></pre>
+
+<p>This is how our entityset bucket looks right now. It has just got one dataframe in it. And no relationships</p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/es1.png"></center>
+</div>
+
+<p>Let us add all our dataframes:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># adding the transactions_df</span>
+es <span style="color:#f92672">=</span> es<span style="color:#f92672">.</span>entity_from_dataframe(entity_id<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;transactions&#34;</span>,
+                                 dataframe<span style="color:#f92672">=</span>transactions_df,
+                                 index<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;transaction_id&#34;</span>,
+                               time_index<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;transaction_time&#34;</span>,
+                               variable_types<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#34;product_id&#34;</span>: ft<span style="color:#f92672">.</span>variable_types<span style="color:#f92672">.</span>Categorical})
+
+<span style="color:#75715e"># adding sessions_df</span>
+es <span style="color:#f92672">=</span> es<span style="color:#f92672">.</span>entity_from_dataframe(entity_id<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;sessions&#34;</span>,
+            dataframe<span style="color:#f92672">=</span>sessions_df,
+            index<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;session_id&#34;</span>, time_index <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;session_start&#39;</span>)</code></pre></div>
+<p>This is how our entityset buckets look now.</p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/es2.png"></center>
+</div>
+
+<p>All three dataframes but no relationships. By relationships, I mean that my bucket doesn’t know that customer_id in customers_df and session_df are the same columns.</p>
+
+<p>We can provide this information to our entityset as:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># adding the customer_id relationship</span>
+cust_relationship <span style="color:#f92672">=</span> ft<span style="color:#f92672">.</span>Relationship(es[<span style="color:#e6db74">&#34;customers&#34;</span>][<span style="color:#e6db74">&#34;customer_id&#34;</span>],
+                       es[<span style="color:#e6db74">&#34;sessions&#34;</span>][<span style="color:#e6db74">&#34;customer_id&#34;</span>])
+
+<span style="color:#75715e"># Add the relationship to the entity set</span>
+es <span style="color:#f92672">=</span> es<span style="color:#f92672">.</span>add_relationship(cust_relationship)
+
+<span style="color:#75715e"># adding the session_id relationship</span>
+sess_relationship <span style="color:#f92672">=</span> ft<span style="color:#f92672">.</span>Relationship(es[<span style="color:#e6db74">&#34;sessions&#34;</span>][<span style="color:#e6db74">&#34;session_id&#34;</span>],
+                       es[<span style="color:#e6db74">&#34;transactions&#34;</span>][<span style="color:#e6db74">&#34;session_id&#34;</span>])
+
+<span style="color:#75715e"># Add the relationship to the entity set</span>
+es <span style="color:#f92672">=</span> es<span style="color:#f92672">.</span>add_relationship(sess_relationship)</code></pre></div>
+<p>After this our entityset looks like:</p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/es3.png"></center>
+</div>
+
+<p>We can see the datasets as well as the relationships. Most of our work here is done. We are ready to cook features.</p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center>
+    <figure>
+      <img src="/images/features/ingredients.jpeg">
+      <figcaption style="font-size: 12px;">Cooking is no different from feature engineering. Think of features as ingredients.</figcaption>
+    </figure>
+</center>
+</div>
+
+<p>Creating features is as simple as:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">feature_matrix, feature_defs <span style="color:#f92672">=</span> ft<span style="color:#f92672">.</span>dfs(entityset<span style="color:#f92672">=</span>es, target_entity<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;customers&#34;</span>,max_depth <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>)
+
+feature_matrix<span style="color:#f92672">.</span>head()</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/final.png"></center>
+</div>
+
+<p>And we end up with <strong>73 new features.</strong> You can see the feature names from feature_defs. Some of the features that we end up creating are:</p>
+
+<pre><code>[&lt;Feature: NUM_UNIQUE(sessions.device)&gt;,
+ &lt;Feature: MODE(sessions.device)&gt;,
+ &lt;Feature: SUM(transactions.amount)&gt;,
+ &lt;Feature: STD(transactions.amount)&gt;,
+ &lt;Feature: MAX(transactions.amount)&gt;,
+ &lt;Feature: SKEW(transactions.amount)&gt;,
+ &lt;Feature: DAY(join_date)&gt;,
+ &lt;Feature: YEAR(join_date)&gt;,
+ &lt;Feature: MONTH(join_date)&gt;,
+ &lt;Feature: WEEKDAY(join_date)&gt;,
+ &lt;Feature: SUM(sessions.STD(transactions.amount))&gt;,
+ &lt;Feature: SUM(sessions.MAX(transactions.amount))&gt;,
+ &lt;Feature: SUM(sessions.SKEW(transactions.amount))&gt;,
+ &lt;Feature: SUM(sessions.MIN(transactions.amount))&gt;,
+ &lt;Feature: SUM(sessions.MEAN(transactions.amount))&gt;,
+ &lt;Feature: SUM(sessions.NUM_UNIQUE(transactions.product_id))&gt;,
+ &lt;Feature: STD(sessions.SUM(transactions.amount))&gt;,
+ &lt;Feature: STD(sessions.MAX(transactions.amount))&gt;,
+ &lt;Feature: STD(sessions.SKEW(transactions.amount))&gt;,
+ &lt;Feature: STD(sessions.MIN(transactions.amount))&gt;,
+ &lt;Feature: STD(sessions.MEAN(transactions.amount))&gt;,
+ &lt;Feature: STD(sessions.COUNT(transactions))&gt;,
+ &lt;Feature: STD(sessions.NUM_UNIQUE(transactions.product_id))&gt;]
+</code></pre>
+
+<p>You can get features like the <strong><em>Sum of std of amount</em></strong>(<code>SUM(sessions.STD(transactions.amount))</code>) or <strong><em>Std of the sum of amount</em></strong>(<code>STD(sessions.SUM(transactions.amount))</code>) This is what max_depth parameter means in the function call. Here we specify it as 2 to get two level aggregations.</p>
+
+<p>If we change max_depth to 3 we can get features like: <code>MAX(sessions.NUM_UNIQUE(transactions.YEAR(transaction_time)))</code></p>
+
+<p>Just think of how much time you would have to spend if you had to write code to get such features. Also, a caveat is that increasing the max_depth might take longer times.</p>
+
+<h2 id="2-handling-categorical-features-label-binary-hashing-and-target-mean-encoding">2. Handling Categorical Features: Label/Binary/Hashing and Target/Mean Encoding</h2>
+
+<p>Creating automated features has its perks. But why would we data scientists be required if a simple library could do all our work?</p>
+
+<p>This is the section where I will talk about handling categorical features.</p>
+
+<h3 id="one-hot-encoding">One hot encoding</h3>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center>
+    <figure>
+      <img src="/images/features/coffee.jpeg">
+      <figcaption style="font-size: 12px;">One Hot Coffee</figcaption>
+    </figure>
+</center>
+</div>
+
+<p>We can use <strong><em>One hot encoding</em></strong> to encode our categorical features. So if we have n levels in a category, we will get n-1 features.</p>
+
+<p>In our sessions_df table, we have a column named device, which contains three levels — desktop, mobile, or tablet. We can get two columns from such a column using:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">pd<span style="color:#f92672">.</span>get_dummies(sessions_df[<span style="color:#e6db74">&#39;device&#39;</span>],drop_first<span style="color:#f92672">=</span>True)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/dummies.png"></center>
+</div>
+
+<p>This is the most natural thing that comes to mind when talking about categorical features and works well in many cases.</p>
+
+<h3 id="ordinalencoding">OrdinalEncoding</h3>
+
+<p>Sometimes there is an order associated with categories. In such a case, I usually use a simple map/apply function in pandas to create a new ordinal column.</p>
+
+<p>For example, if I had a dataframe containing temperature as three levels: high medium and low, I would encode that as:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">map_dict <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;low&#39;</span>:<span style="color:#ae81ff">0</span>,<span style="color:#e6db74">&#39;medium&#39;</span>:<span style="color:#ae81ff">1</span>,<span style="color:#e6db74">&#39;high&#39;</span>:<span style="color:#ae81ff">2</span>}
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">map_values</span>(x):
+    <span style="color:#66d9ef">return</span> map_dict[x]
+df[<span style="color:#e6db74">&#39;Temperature_oe&#39;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#39;Temperature&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x: map_values(x))</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/temp.png"></center>
+</div>
+
+<p>Using this I preserve the information that low &lt; medium &lt; high</p>
+
+<h3 id="labelencoder">LabelEncoder</h3>
+
+<p>We could also have used <strong><em>LabelEncoder</em></strong> to encode our variable to numbers. What a label encoder essentially does is that it sees the first value in the column and converts it to 0, next value to 1 and so on. This approach works reasonably well with tree models, and <strong><em>I end up using it when I have a lot of levels in the categorical variable.</em></strong> We can use this as:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.preprocessing <span style="color:#f92672">import</span> LabelEncoder
+<span style="color:#75715e"># create a labelencoder object</span>
+le <span style="color:#f92672">=</span> LabelEncoder()
+<span style="color:#75715e"># fit and transform on the data</span>
+sessions_df[<span style="color:#e6db74">&#39;device_le&#39;</span>] <span style="color:#f92672">=</span> le<span style="color:#f92672">.</span>fit_transform(sessions_df[<span style="color:#e6db74">&#39;device&#39;</span>])
+sessions_df<span style="color:#f92672">.</span>head()</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/le.png"></center>
+</div>
+
+<h3 id="binaryencoder">BinaryEncoder</h3>
+
+<p>BinaryEncoder is another method that one can use to encode categorical variables. It is an excellent method to use if you have many levels in a column. While we can encode a column with 1024 levels using 1023 columns using One Hot Encoding, using Binary encoding we can do it by just using ten columns.</p>
+
+<p>Let us say we have a column in our FIFA 19 player data that contains all club names. This column has 652 unique values. One Hot encoding means creating 651 columns that would mean a lot of memory usage and a lot of sparse columns.</p>
+
+<p>If we use Binary encoder, we will only need ten columns as 2⁹&lt;652 &lt;2¹⁰.</p>
+
+<p>We can binaryEncode this variable easily by using BinaryEncoder object from category_encoders:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> category_encoders.binary <span style="color:#f92672">import</span> BinaryEncoder
+<span style="color:#75715e"># create a Binaryencoder object</span>
+be <span style="color:#f92672">=</span> BinaryEncoder(cols <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;Club&#39;</span>])
+<span style="color:#75715e"># fit and transform on the data</span>
+players <span style="color:#f92672">=</span> be<span style="color:#f92672">.</span>fit_transform(players)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/be.png"></center>
+</div>
+
+<h3 id="hashingencoder">HashingEncoder</h3>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/hash.png"></center>
+</div>
+
+<p><strong><em>One can think of Hashing Encoder as a black box function that converts a string to a number between 0 to some prespecified value.</em></strong></p>
+
+<p>It differs from binary encoding as in binary encoding two or more of the club parameters could have been 1 while in hashing only one value is 1.</p>
+
+<p>We can use hashing as:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">players <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;../input/fifa19/data.csv&#34;</span>)
+
+<span style="color:#f92672">from</span> category_encoders.hashing <span style="color:#f92672">import</span> HashingEncoder
+<span style="color:#75715e"># create a HashingEncoder object</span>
+he <span style="color:#f92672">=</span> HashingEncoder(cols <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;Club&#39;</span>])
+<span style="color:#75715e"># fit and transform on the data</span>
+players <span style="color:#f92672">=</span> he<span style="color:#f92672">.</span>fit_transform(players)</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/he.png"></center>
+</div>
+
+<p>There are bound to be collisions(two clubs having the same encoding. For example, Juventus and PSG have the same encoding) but sometimes this technique works well.</p>
+
+<h3 id="target-mean-encoding">Target/Mean Encoding</h3>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/target.jpeg"></center>
+</div>
+
+<p>This is a technique that I found works pretty well in Kaggle competitions. If both training/test comes from the same dataset from the same time period(cross-sectional), we can get crafty with features.</p>
+
+<p>For example: In the Titanic knowledge challenge, the test data is randomly sampled from the train data. In this case, we can use the target variable averaged over different categorical variable as a feature.</p>
+
+<p>In Titanic, we can create a target encoded feature over the PassengerClass variable.</p>
+
+<p><strong><em>We have to be careful when using Target encoding as it might induce overfitting in our models.</em></strong> Thus we use k-fold target encoding when we use it.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># taken from https://medium.com/@pouryaayria/k-fold-target-encoding-dfe9a594874b</span>
+<span style="color:#f92672">from</span> sklearn <span style="color:#f92672">import</span> base
+<span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> KFold
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">KFoldTargetEncoderTrain</span>(base<span style="color:#f92672">.</span>BaseEstimator,
+                               base<span style="color:#f92672">.</span>TransformerMixin):
+    <span style="color:#66d9ef">def</span> __init__(self,colnames,targetName,
+                  n_fold<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>, verbosity<span style="color:#f92672">=</span>True,
+                  discardOriginal_col<span style="color:#f92672">=</span>False):
+        self<span style="color:#f92672">.</span>colnames <span style="color:#f92672">=</span> colnames
+        self<span style="color:#f92672">.</span>targetName <span style="color:#f92672">=</span> targetName
+        self<span style="color:#f92672">.</span>n_fold <span style="color:#f92672">=</span> n_fold
+        self<span style="color:#f92672">.</span>verbosity <span style="color:#f92672">=</span> verbosity
+        self<span style="color:#f92672">.</span>discardOriginal_col <span style="color:#f92672">=</span> discardOriginal_col
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">fit</span>(self, X, y<span style="color:#f92672">=</span>None):
+        <span style="color:#66d9ef">return</span> self
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">transform</span>(self,X):
+        <span style="color:#66d9ef">assert</span>(type(self<span style="color:#f92672">.</span>targetName) <span style="color:#f92672">==</span> str)
+        <span style="color:#66d9ef">assert</span>(type(self<span style="color:#f92672">.</span>colnames) <span style="color:#f92672">==</span> str)
+        <span style="color:#66d9ef">assert</span>(self<span style="color:#f92672">.</span>colnames <span style="color:#f92672">in</span> X<span style="color:#f92672">.</span>columns)
+        <span style="color:#66d9ef">assert</span>(self<span style="color:#f92672">.</span>targetName <span style="color:#f92672">in</span> X<span style="color:#f92672">.</span>columns)
+        mean_of_target <span style="color:#f92672">=</span> X[self<span style="color:#f92672">.</span>targetName]<span style="color:#f92672">.</span>mean()
+        kf <span style="color:#f92672">=</span> KFold(n_splits <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>n_fold,
+                   shuffle <span style="color:#f92672">=</span> True, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">2019</span>)
+        col_mean_name <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>colnames <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;_&#39;</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;Kfold_Target_Enc&#39;</span>
+        X[col_mean_name] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>nan
+        <span style="color:#66d9ef">for</span> tr_ind, val_ind <span style="color:#f92672">in</span> kf<span style="color:#f92672">.</span>split(X):
+            X_tr, X_val <span style="color:#f92672">=</span> X<span style="color:#f92672">.</span>iloc[tr_ind], X<span style="color:#f92672">.</span>iloc[val_ind]
+            X<span style="color:#f92672">.</span>loc[X<span style="color:#f92672">.</span>index[val_ind], col_mean_name] <span style="color:#f92672">=</span> X_val[self<span style="color:#f92672">.</span>colnames]<span style="color:#f92672">.</span>map(X_tr<span style="color:#f92672">.</span>groupby(self<span style="color:#f92672">.</span>colnames)
+                                     [self<span style="color:#f92672">.</span>targetName]<span style="color:#f92672">.</span>mean())
+            X[col_mean_name]<span style="color:#f92672">.</span>fillna(mean_of_target, inplace <span style="color:#f92672">=</span> True)
+        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>verbosity:
+            encoded_feature <span style="color:#f92672">=</span> X[col_mean_name]<span style="color:#f92672">.</span>values
+            <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Correlation between the new feature, {} and, {} is {}.&#39;</span><span style="color:#f92672">.</span>format(col_mean_name,self<span style="color:#f92672">.</span>targetName,                    
+                   np<span style="color:#f92672">.</span>corrcoef(X[self<span style="color:#f92672">.</span>targetName]<span style="color:#f92672">.</span>values,
+                               encoded_feature)[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">1</span>]))
+        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>discardOriginal_col:
+            X <span style="color:#f92672">=</span> X<span style="color:#f92672">.</span>drop(self<span style="color:#f92672">.</span>targetName, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+        <span style="color:#66d9ef">return</span> X</code></pre></div>
+<p>We can then create a mean encoded feature as:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">targetc <span style="color:#f92672">=</span> KFoldTargetEncoderTrain(<span style="color:#e6db74">&#39;Pclass&#39;</span>,<span style="color:#e6db74">&#39;Survived&#39;</span>,n_fold<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>)
+new_train <span style="color:#f92672">=</span> targetc<span style="color:#f92672">.</span>fit_transform(train)
+
+new_train[[<span style="color:#e6db74">&#39;Pclass_Kfold_Target_Enc&#39;</span>,<span style="color:#e6db74">&#39;Pclass&#39;</span>]]</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/te.png"></center>
+</div>
+
+<p>You can see how the passenger class 3 gets encoded as 0.261538 and 0.230570 based on which fold the average is taken from.</p>
+
+<p>This feature is pretty helpful as it encodes the value of the target for the category. Just looking at this feature, we can say that the Passenger in class 1 has a high propensity of surviving compared with Class 3.</p>
+
+<h2 id="3-some-kaggle-tricks">3. Some Kaggle Tricks:</h2>
+
+<p>While not necessarily feature creation techniques, some postprocessing techniques that you may find useful.</p>
+
+<h3 id="log-loss-clipping-technique">log loss clipping Technique:</h3>
+
+<p>Something that I learned in the Neural Network course by Jeremy Howard. It is based on an elementary Idea.</p>
+
+<p>Log loss penalizes us a lot if we are very confident and wrong.</p>
+
+<p>So in the case of Classification problems where we have to predict probabilities in Kaggle, it would be much better to clip our probabilities between 0.05–0.95 so that we are never very sure about our prediction. And in turn, get penalized less. Can be done by a simple <code>np.clip</code></p>
+
+<h3 id="kaggle-submission-in-gzip-format">Kaggle submission in gzip format:</h3>
+
+<p>A small piece of code that will help you save countless hours of uploading. Enjoy.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">df<span style="color:#f92672">.</span>to_csv(<span style="color:#960050;background-color:#1e0010">‘</span>submission<span style="color:#f92672">.</span>csv<span style="color:#f92672">.</span>gz<span style="color:#960050;background-color:#1e0010">’</span>, index<span style="color:#f92672">=</span>False, compression<span style="color:#f92672">=</span><span style="color:#960050;background-color:#1e0010">’</span>gzip<span style="color:#960050;background-color:#1e0010">’</span>)</code></pre></div>
+<h2 id="4-using-latitude-and-longitude-features">4. Using Latitude and Longitude features:</h2>
+
+<p>This part will tread upon how to use Latitude and Longitude features well.</p>
+
+<p>For this task, I will be using Data from the Playground competition: <a href="https://www.kaggle.com/c/nyc-taxi-trip-duration/data" rel="nofollow" target="_blank">New York City Taxi Trip Duration</a></p>
+
+<p>The train data looks like:</p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/taxi.png"></center>
+</div>
+
+<p>Most of the functions I am going to write here are inspired by a <a href="https://www.kaggle.com/gaborfodor/from-eda-to-the-top-lb-0-368" rel="nofollow" target="_blank">Kernel</a> on Kaggle written by Beluga.</p>
+
+<p>In this competition, we had to predict the trip duration. We were given many features in which Latitude and Longitude of pickup and Dropoff were also there. We created features like:</p>
+
+<h3 id="a-haversine-distance-between-the-two-lat-lons">A. Haversine Distance Between the Two Lat/Lons:</h3>
+
+<blockquote>
+<p>The <strong>haversine</strong> formula determines the great-circle <strong>distance</strong> between two points on a sphere given their longitudes and latitudes</p>
+</blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">haversine_array</span>(lat1, lng1, lat2, lng2): 
+    lat1, lng1, lat2, lng2 <span style="color:#f92672">=</span> map(np<span style="color:#f92672">.</span>radians, (lat1, lng1, lat2, lng2)) 
+    AVG_EARTH_RADIUS <span style="color:#f92672">=</span> <span style="color:#ae81ff">6371</span> <span style="color:#75715e"># in km </span>
+    lat <span style="color:#f92672">=</span> lat2 <span style="color:#f92672">-</span> lat1 
+    lng <span style="color:#f92672">=</span> lng2 <span style="color:#f92672">-</span> lng1 
+    d <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>sin(lat <span style="color:#f92672">*</span> <span style="color:#ae81ff">0.5</span>) <span style="color:#f92672">**</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">+</span> np<span style="color:#f92672">.</span>cos(lat1) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>cos(lat2) <span style="color:#f92672">*</span>      np<span style="color:#f92672">.</span>sin(lng <span style="color:#f92672">*</span> <span style="color:#ae81ff">0.5</span>) <span style="color:#f92672">**</span> <span style="color:#ae81ff">2</span> 
+    h <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> AVG_EARTH_RADIUS <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>arcsin(np<span style="color:#f92672">.</span>sqrt(d)) 
+    <span style="color:#66d9ef">return</span> h</code></pre></div>
+<p>We could then use the function as:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">train[<span style="color:#e6db74">&#39;haversine_distance&#39;</span>] <span style="color:#f92672">=</span> train<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x: haversine_array(x[<span style="color:#e6db74">&#39;pickup_latitude&#39;</span>], x[<span style="color:#e6db74">&#39;pickup_longitude&#39;</span>], x[<span style="color:#e6db74">&#39;dropoff_latitude&#39;</span>], x[<span style="color:#e6db74">&#39;dropoff_longitude&#39;</span>]),axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)</code></pre></div>
+<h3 id="b-manhattan-distance-between-the-two-lat-lons">B. Manhattan Distance Between the two Lat/Lons:</h3>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center>
+    <figure>
+      <img src="/images/features/manhattan.png">
+      <figcaption style="font-size: 12px;">Manhattan Skyline</figcaption>
+    </figure>
+</center>
+</div>
+
+<blockquote>
+<p>The distance between two points measured along axes at right angles</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">dummy_manhattan_distance</span>(lat1, lng1, lat2, lng2): 
+    a <span style="color:#f92672">=</span> haversine_array(lat1, lng1, lat1, lng2) 
+    b <span style="color:#f92672">=</span> haversine_array(lat1, lng1, lat2, lng1) 
+    <span style="color:#66d9ef">return</span> a <span style="color:#f92672">+</span> b</code></pre></div></blockquote>
+
+<p>We could then use the function as:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">train[<span style="color:#e6db74">&#39;manhattan_distance&#39;</span>] <span style="color:#f92672">=</span> train<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x: dummy_manhattan_distance(x[<span style="color:#e6db74">&#39;pickup_latitude&#39;</span>], x[<span style="color:#e6db74">&#39;pickup_longitude&#39;</span>], x[<span style="color:#e6db74">&#39;dropoff_latitude&#39;</span>], x[<span style="color:#e6db74">&#39;dropoff_longitude&#39;</span>]),axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)</code></pre></div>
+<h3 id="c-bearing-between-the-two-lat-lons">C. Bearing Between the two Lat/Lons:</h3>
+
+<p>A <strong>bearing</strong> is used to represent the direction of <strong>one point</strong> relative to another <strong>point</strong>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">bearing_array</span>(lat1, lng1, lat2, lng2): 
+    AVG_EARTH_RADIUS <span style="color:#f92672">=</span> <span style="color:#ae81ff">6371</span> <span style="color:#75715e"># in km </span>
+    lng_delta_rad <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>radians(lng2 <span style="color:#f92672">-</span> lng1) 
+    lat1, lng1, lat2, lng2 <span style="color:#f92672">=</span> map(np<span style="color:#f92672">.</span>radians, (lat1, lng1, lat2, lng2)) 
+    y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>sin(lng_delta_rad) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>cos(lat2) 
+    x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>cos(lat1) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>sin(lat2) <span style="color:#f92672">-</span> np<span style="color:#f92672">.</span>sin(lat1) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>cos(lat2) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>cos(lng_delta_rad) 
+    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>degrees(np<span style="color:#f92672">.</span>arctan2(y, x))</code></pre></div>
+<p>We could then use the function as:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">train[<span style="color:#e6db74">&#39;bearing&#39;</span>] <span style="color:#f92672">=</span> train<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x: bearing_array(x[<span style="color:#e6db74">&#39;pickup_latitude&#39;</span>], x[<span style="color:#e6db74">&#39;pickup_longitude&#39;</span>], x[<span style="color:#e6db74">&#39;dropoff_latitude&#39;</span>], x[<span style="color:#e6db74">&#39;dropoff_longitude&#39;</span>]),axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)</code></pre></div>
+<h3 id="d-center-latitude-and-longitude-between-pickup-and-dropoff">D. Center Latitude and Longitude between Pickup and Dropoff:</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">train<span style="color:#f92672">.</span>loc[:, <span style="color:#e6db74">&#39;center_latitude&#39;</span>] <span style="color:#f92672">=</span> (train[<span style="color:#e6db74">&#39;pickup_latitude&#39;</span>]<span style="color:#f92672">.</span>values <span style="color:#f92672">+</span> train[<span style="color:#e6db74">&#39;dropoff_latitude&#39;</span>]<span style="color:#f92672">.</span>values) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span> 
+train<span style="color:#f92672">.</span>loc[:, <span style="color:#e6db74">&#39;center_longitude&#39;</span>] <span style="color:#f92672">=</span> (train[<span style="color:#e6db74">&#39;pickup_longitude&#39;</span>]<span style="color:#f92672">.</span>values <span style="color:#f92672">+</span> train[<span style="color:#e6db74">&#39;dropoff_longitude&#39;</span>]<span style="color:#f92672">.</span>values) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span></code></pre></div>
+<p>These are the new columns that we create:</p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/geo_features.png"></center>
+</div>
+
+<h2 id="5-autoencoders">5. AutoEncoders:</h2>
+
+<p>Sometimes people use Autoencoders too for creating automatic features.</p>
+
+<p><strong><em>What are Autoencoders?</em></strong></p>
+
+<p>Encoders are deep learning functions which approximate a mapping from X to X, i.e. input=output. They first compress the input features into a lower-dimensional <em>representation/code</em> and then reconstruct the output from this representation.</p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/autoencoder.png"></center>
+</div>
+
+<p>We can use this <em>representation</em> vector as a feature for our models.</p>
+
+<h2 id="6-some-normal-things-you-can-do-with-your-features">6. Some Normal Things you can do with your features:</h2>
+
+<ul>
+<li><p><strong><em>Scaling by Max-Min:</em></strong> This is good and often required preprocessing for Linear models, Neural Networks</p></li>
+
+<li><p><strong><em>Normalization using Standard Deviation:</em></strong> This is good and often required preprocessing for Linear models, Neural Networks</p></li>
+
+<li><p><strong><em>Log-based feature/Target:</em></strong> Use log based features or log-based target function. If one is using a Linear model which assumes that the features are normally distributed, a log transformation could make the feature normal. It is also handy in case of skewed variables like income.</p></li>
+</ul>
+
+<p>Or in our case trip duration. Below is the graph of trip duration without log transformation.</p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/px1.png"></center>
+</div>
+
+<p>And with log transformation:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">train[<span style="color:#e6db74">&#39;log_trip_duration&#39;</span>] <span style="color:#f92672">=</span> train[<span style="color:#e6db74">&#39;trip_duration&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x: np<span style="color:#f92672">.</span>log(<span style="color:#ae81ff">1</span><span style="color:#f92672">+</span>x))</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/features/px2.png"></center>
+</div>
+
+<p>A log transformation on trip duration is much less skewed and thus much more helpful for a model.</p>
+
+<h2 id="7-some-additional-features-based-on-intuition">7. Some Additional Features based on Intuition:</h2>
+
+<h3 id="date-time-features">Date time Features:</h3>
+
+<p>One could create additional Date time features based on domain knowledge and intuition. For example, Time-based Features like “Evening,” “Noon,” “Night,” “Purchases_last_month,” “Purchases_last_week,” etc. could work for a particular application.</p>
+
+<h3 id="domain-specific-features">Domain Specific Features:</h3>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center>
+    <figure>
+      <img src="/images/features/retail.jpeg">
+      <figcaption style="font-size: 12px;">Style matters</figcaption>
+    </figure>
+</center>
+</div>
+
+<p>Suppose you have got some shopping cart data and you want to categorize the TripType. It was the exact problem in Walmart Recruiting: Trip Type Classification on <a href="https://www.kaggle.com/c/walmart-recruiting-trip-type-classification/" rel="nofollow" target="_blank">Kaggle</a>.</p>
+
+<p>Some examples of trip types: a customer may make a small daily dinner trip, a weekly large grocery trip, a trip to buy gifts for an upcoming holiday, or a seasonal trip to buy clothes.</p>
+
+<p>To solve this problem, you could think of creating a feature like “Stylish” where you create this variable by adding together the number of items that belong to category Men’s Fashion, Women’s Fashion, Teens Fashion.</p>
+
+<p><strong><em>Or you could create a feature like “Rare”</em></strong> which is created by tagging some items as rare, based on the data we have and then counting the number of those rare items in the shopping cart.</p>
+
+<p>Such features might work or might not work. From what I have observed, they usually provide a lot of value.</p>
+
+<p><strong><em>I feel this is the way that Target’s “Pregnant Teen model” was made.</em></strong> They would have had a variable in which they kept all the items that a pregnant teen could buy and put them into a classification algorithm.</p>
+
+<h3 id="interaction-features">Interaction Features:</h3>
+
+<p>If you have features A and B, you can create features A*B, A+B, A/B, A-B, etc.</p>
+
+<p>For example, to predict the price of a house, if we have two features length and breadth, a better idea would be to create an area(length x breadth) feature.</p>
+
+<p>Or in some case, a ratio might be more valuable than having two features alone. Example: Credit Card utilization ratio is more valuable than having the Credit limit and limit utilized variables.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center>
+    <figure>
+      <img src="/images/features/bulb.png">
+      <figcaption style="font-size: 12px;">Creativity is vital!!!</figcaption>
+    </figure>
+</center>
+</div>
+
+<p>These were just some of the methods I use for creating features.</p>
+
+<p><strong><em>But there is surely no limit when it comes to feature engineering, and it is only your imagination that limits you.</em></strong></p>
+
+<p>On that note, I always think about feature engineering while keeping what model I am going to use in mind. Features that work in a random forest may not work well with Logistic Regression.</p>
+
+<p>Feature creation is the territory of trial and error. You won’t be able to know what transformation works or what encoding works best before trying it. It is always a trade-off between time and utility.</p>
+
+<p>Sometimes the feature creation process might take a lot of time. In such cases, you might want to <a href="https://medium.com/me/stats/post/1c04f41944a1" rel="nofollow" target="_blank">parallelize your Pandas function</a>.</p>
+
+<p>While I have tried to keep this post as exhaustive as possible, I might have missed some of the useful methods. Let me know about them in the comments.</p>
+
+<p>You can find all the code for this post and run it yourself in this <a href="https://www.kaggle.com/mlwhiz/feature-creation/" rel="nofollow" target="_blank">Kaggle Kernel</a></p>
+
+<p>Take a look at the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">How to Win a Data Science Competition: Learn from Top Kagglers</a> course in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">Advanced machine learning specialization</a> by Kazanova. This course talks about a lot of intuitive ways to improve your model. Definitely recommended.</p>
+
+<p>I am going to be writing more beginner friendly posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.415&subid=0&type=4"><IMG border="0"   alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.415&subid=0&type=4&gridnum=16"></a>
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2019/05/14/python_args_kwargs/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">A primer on *args, **kwargs, decorators for Data Scientists</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<aside class="sidebar">
+	     
+  <div style="text-align:center">    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/05/19/feature_extraction/">The Hitchhiker’s Guide to Feature Extraction</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/05/14/python_args_kwargs/">A primer on *args, **kwargs, decorators for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/05/05/plotly_express/">Python’s One Liner graph creation library with animations Hans Rosling Style</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/22/python_pandas_multiproc/">Make your own Super Pandas using Multiproc</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/22/python_forloops/">Minimize for loop usage in Python</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/22/python_defaultdict/">Python Pro Tip: Start using Python defaultdict and Counter in place of dictionary</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/19/awesome_seaborn_visuals/">3 Awesome Visualization Techniques for every dataset</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/15/chatbot/">Chatbots  aren&#39;t as difficult to make as You Think</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/03/31/sublime_ds_post/">Why Sublime Text for Data Science is Hotter than Jennifer Lawrence?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/03/30/transfer_learning_text_classification/">NLP  Learning Series: Part 4 - Transfer Learning Intuition for Text Classification</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;}
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}
+   
+</style>
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2019 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
