@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>3 Great Additions for your Jupyter Notebooks</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="I love Jupyter notebooks and the power they provide.They can be used to present findings as well as share code in the most effective manner which was not easy with the previous IDEs.Yet there is something still amiss.There are a few functionalities I aspire in my text editor which don’t come by default in Jupyter.But fret not. Just like everything in Python, Jupyter too has third-party extensions. This post is about some of the most useful extensions I found.">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="3 Great Additions for your Jupyter Notebooks" />
+<meta property="og:description" content="I love Jupyter notebooks and the power they provide.They can be used to present findings as well as share code in the most effective manner which was not easy with the previous IDEs.Yet there is something still amiss.There are a few functionalities I aspire in my text editor which don’t come by default in Jupyter.But fret not. Just like everything in Python, Jupyter too has third-party extensions. This post is about some of the most useful extensions I found." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2019/06/28/jupyter_extensions/" />
+<meta property="og:image" content="https://mlwhiz.com/images/extensions/nbext_snippets.gif" />
+<meta property="article:published_time" content="2019-06-28T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-06-28T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/extensions/nbext_snippets.gif"/>
+
+<meta name="twitter:title" content="3 Great Additions for your Jupyter Notebooks"/>
+<meta name="twitter:description" content="I love Jupyter notebooks and the power they provide.They can be used to present findings as well as share code in the most effective manner which was not easy with the previous IDEs.Yet there is something still amiss.There are a few functionalities I aspire in my text editor which don’t come by default in Jupyter.But fret not. Just like everything in Python, Jupyter too has third-party extensions. This post is about some of the most useful extensions I found."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">3 Great Additions for your Jupyter Notebooks</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2019-06-28T00:00:00">June 28, 2019</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/start.png""></center>
+</div>
+
+<p>I love Jupyter notebooks and the power they provide.</p>
+
+<p>They can be used to present findings as well as share code in the most effective manner which was not easy with the previous IDEs.</p>
+
+<p>Yet there is something still amiss.</p>
+
+<p>There are a few functionalities I aspire in my text editor which don’t come by default in Jupyter.</p>
+
+<p>But fret not. Just like everything in Python, Jupyter too has third-party extensions.</p>
+
+<p><strong><em>This post is about some of the most useful extensions I found.</em></strong></p>
+
+<hr />
+
+<h2 id="1-collapsible-headings">1. Collapsible Headings</h2>
+
+<p>The one extension, I like most is collapsible headings.</p>
+
+<p>It makes the flow of the notebook easier to comprehend and also helps in creating presentable notebooks.</p>
+
+<p>To get this one, install the jupyter_contrib_nbextensions package with this command on the terminal window:</p>
+
+<pre><code>conda install -c conda-forge jupyter_contrib_nbextensions
+</code></pre>
+
+<p>Once the package is installed, we can start jupyter notebook using:</p>
+
+<pre><code>jupyter notebook
+</code></pre>
+
+<p>Once you go to the home page of your jupyter notebook, you can see that a new tab for NBExtensions is created.</p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/jupyter.png""></center>
+</div>
+
+<p>And we can get a lot of extensions using this package.</p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/nbext.png""></center>
+</div>
+
+<p>This is how it looks:</p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/nbextension_collapsible.gif""></center>
+</div>
+
+<hr />
+
+<h2 id="2-automatic-imports">2. Automatic Imports</h2>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/auto.jpeg""></center>
+</div>  
+
+<p>Automation is the future.</p>
+
+<p>One thing that bugs me is that whenever I open a new Jupyter notebook in any of my data science projects, I need to copy paste a lot of libraries and default options for some of them.</p>
+
+<p>To tell you about some of the usual imports I use:</p>
+
+<ul>
+<li><p>Pandas and numpy — In my view, Python must make these two as a default import.</p></li>
+
+<li><p>Seaborn, matplotlib, plotly_express</p></li>
+
+<li><p>change some pandas and seaborn default options.</p></li>
+</ul>
+
+<p>Here is the script that I end up pasting over and over again.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+
+<span style="color:#f92672">import</span> plotly_express <span style="color:#f92672">as</span> px
+<span style="color:#f92672">import</span> seaborn <span style="color:#f92672">as</span> sns
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt
+<span style="color:#f92672">%</span>matplotlib inline
+
+<span style="color:#f92672">*</span><span style="color:#75715e"># We dont Probably need the Gridlines. Do we? If yes comment this line*</span>
+sns<span style="color:#f92672">.</span>set(style<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ticks&#34;</span>)
+
+<span style="color:#75715e"># pandas defaults</span>
+pd<span style="color:#f92672">.</span>options<span style="color:#f92672">.</span>display<span style="color:#f92672">.</span>max_columns <span style="color:#f92672">=</span> <span style="color:#ae81ff">500</span>
+pd<span style="color:#f92672">.</span>options<span style="color:#f92672">.</span>display<span style="color:#f92672">.</span>max_rows <span style="color:#f92672">=</span> <span style="color:#ae81ff">500</span></code></pre></div>
+<p><strong><em>Is there a way I can automate this?</em></strong></p>
+
+<p>Just go to the nbextensions tab and select the snippets extension.</p>
+
+<p>You will need to make the following changes to the snippets.json file. You can find this file at /miniconda3/envs/py36/share/jupyter/nbextensions/snippets location. The py36 in this location here is my conda virtualenv. It took me some time to find this location for me. Yours might be different. Please note that you don’t have to change at the site-packages location.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+    <span style="color:#f92672">&#34;snippets&#34;</span> : [
+        {
+            <span style="color:#f92672">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;example&#34;</span>,
+            <span style="color:#f92672">&#34;code&#34;</span> : [
+                <span style="color:#e6db74">&#34;# This is an example snippet!&#34;</span>,
+                <span style="color:#e6db74">&#34;# To create your own, add a new snippet block to the&#34;</span>,
+                <span style="color:#e6db74">&#34;# snippets.json file in your jupyter nbextensions directory:&#34;</span>,
+                <span style="color:#e6db74">&#34;# /nbextensions/snippets/snippets.json&#34;</span>,
+                <span style="color:#e6db74">&#34;import this&#34;</span>
+            ]
+        },
+
+        {
+            <span style="color:#f92672">&#34;name&#34;</span> : <span style="color:#e6db74">&#34;default&#34;</span>,
+            <span style="color:#f92672">&#34;code&#34;</span> : [
+                <span style="color:#e6db74">&#34;# This is A snippet for all data related tasks&#34;</span>,
+                <span style="color:#e6db74">&#34;import pandas as pd&#34;</span>
+                <span style="color:#e6db74">&#34;import numpy as np&#34;</span>
+                <span style="color:#e6db74">&#34;import plotly_express as px&#34;</span>
+                <span style="color:#e6db74">&#34;import seaborn as sns&#34;</span>
+                <span style="color:#e6db74">&#34;import matplotlib.pyplot as plt&#34;</span>
+                <span style="color:#e6db74">&#34;%matplotlib inline&#34;</span>
+                <span style="color:#e6db74">&#34;# We dont Probably need the Gridlines. Do we? If yes comment this line&#34;</span>
+                <span style="color:#e6db74">&#34;sns.set(style=&#39;ticks&#39;)&#34;</span>
+                <span style="color:#e6db74">&#34;# pandas defaults&#34;</span>
+                <span style="color:#e6db74">&#34;pd.options.display.max_columns = 500&#34;</span>
+                <span style="color:#e6db74">&#34;pd.options.display.max_rows = 500&#34;</span>
+            ]
+        }
+    ]
+}</code></pre></div>
+<p>You can see this extension in action below.</p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/nbext_snippets.gif""></center>
+</div>  
+
+<p>Pretty cool. Right? I also use this to create basic snippets for my deep learning notebooks and NLP based notebooks.</p>
+
+<hr />
+
+<h2 id="3-execution-time">3. Execution Time</h2>
+
+<p>We have used <code>%time</code> as well as decorator based timer functions to measure time for our functions. You can also use this excellent extension to do that.</p>
+
+<p>Plus it looks great.</p>
+
+<p>Just select the ExecutionTime extension from the NBextensions list and you will have an execution result at the bottom of the cell after every cell execution as well as the time when the cell was executed.</p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/time.png""></center>
+</div>  
+
+<hr />
+
+<h2 id="other-extensions">Other Extensions</h2>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/others.jpeg""></center>
+</div>  
+
+<p>NBExtensions has a lot of extensions. Some other extensions from NBExtensions I like and you might want to look at:</p>
+
+<ul>
+<li><p><strong>Limit Output:</strong> Ever had your notebook hang since you printed a lot of text in your notebook. This extension limits the number of characters that can be printed below a code cell</p></li>
+
+<li><p><strong>2to3Convertor:</strong> Having problems with your old python2 notebooks. Tired of changing the print statements. This one is a good one.</p></li>
+</ul>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/demo_2to3.gif""></center>
+</div>  
+
+<ul>
+<li><strong>Live Markdown Preview:</strong> Some of us like writing our blogs using Markdown in a jupyter notebook. Sometimes it can be hectic as you make errors in writing. Now you can see Live-preview of the rendered output of markdown cells while editing their source.</li>
+</ul>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/markdownpreview.gif""></center>
+</div>  
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>I love how there is a package for everything with Python. And that holds good with the Jupyter notebook too.</p>
+
+<p>The jupyter_contrib_nbextensions package works great out of the box.</p>
+
+<p>It has made my life a lot easier when it comes to checking execution times, scrolling through the notebook, and repetitive tasks.</p>
+
+<p>There are many other extensions this package does provide. Do take a look at them and try to see which ones you find useful.</p>
+
+<p>Also, if you want to learn more about Python 3, I would like to call out an excellent course on Learn <a href="https://bit.ly/2XshreA" rel="nofollow" target="_blank">Intermediate level Python</a> from the University of Michigan. Do check it out.</p>
+
+<p>I am going to be writing more of such posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.415&subid=0&type=4"><IMG border="0"   alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.415&subid=0&type=4&gridnum=16"></a>
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2019/06/17/gans/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">An End to End Introduction to GANs</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<aside class="sidebar">
+	     
+  <div style="text-align:center">    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/06/28/jupyter_extensions/">3 Great Additions for your Jupyter Notebooks</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/06/17/gans/">An End to End Introduction to GANs</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/05/19/feature_extraction/">The Hitchhiker’s Guide to Feature Extraction</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/05/19/election/">The Nation of a Billion Votes</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/05/14/python_args_kwargs/">A primer on *args, **kwargs, decorators for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/05/05/plotly_express/">Python’s One Liner graph creation library with animations Hans Rosling Style</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/22/python_pandas_multiproc/">Make your own Super Pandas using Multiproc</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/22/python_forloops/">Minimize for loop usage in Python</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/22/python_defaultdict/">Python Pro Tip: Start using Python defaultdict and Counter in place of dictionary</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/04/19/awesome_seaborn_visuals/">3 Awesome Visualization Techniques for every dataset</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;}
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}
+   
+</style>
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2019 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
