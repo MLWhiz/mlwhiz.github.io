@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>The Ultimate Guide to using the Python regex module</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="This post is about one of the most commonly used regex patterns and some regex functions I end up using regularly.">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="The Ultimate Guide to using the Python regex module" />
+<meta property="og:description" content="This post is about one of the most commonly used regex patterns and some regex functions I end up using regularly." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2019/09/01/regex/" />
+<meta property="og:image" content="https://mlwhiz.com/images/regex/1.png" />
+<meta property="article:published_time" content="2019-09-01T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-09-01T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/regex/1.png"/>
+
+<meta name="twitter:title" content="The Ultimate Guide to using the Python regex module"/>
+<meta name="twitter:description" content="This post is about one of the most commonly used regex patterns and some regex functions I end up using regularly."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">The Ultimate Guide to using the Python regex module</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2019-09-01T00:00:00">September 01, 2019</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/regex/1.png" alt="" /></p>
+
+<p>One of the main tasks while working with text data is to create a lot of text-based features.</p>
+
+<p>One could like to find out certain patterns in the text, emails if present in a text as well as phone numbers in a large text.</p>
+
+<p>While it may sound fairly trivial to achieve such functionalities it is much simpler if we use the power of Python’s regex module.</p>
+
+<p>For example, let&rsquo;s say you are tasked with finding the number of punctuations in a particular piece of text. Using text from Dickens here.</p>
+
+<p>How do you normally go about it?</p>
+
+<p>A simple enough way is to do something like:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">target <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;;&#39;</span>,<span style="color:#e6db74">&#39;.&#39;</span>,<span style="color:#e6db74">&#39;,&#39;</span>,<span style="color:#e6db74">&#39;–&#39;</span>]
+
+string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of Darkness, it was the spring of hope, it was the winter of despair, we had everything before us, we had nothing before us, we were all going direct to Heaven, we were all going direct the other way – in short, the period was so far like the present period, that some of its noisiest authorities insisted on its being received, for good or for evil, in the superlative degree of comparison only.**&#34;</span>
+
+num_puncts <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+<span style="color:#66d9ef">for</span> punct <span style="color:#f92672">in</span> target:
+    <span style="color:#66d9ef">if</span> punct <span style="color:#f92672">in</span> string:
+        num_puncts<span style="color:#f92672">+=</span>string<span style="color:#f92672">.</span>count(punct)
+
+<span style="color:#66d9ef">print</span>(num_puncts)</code></pre></div>
+<pre><code>19
+</code></pre>
+
+<p>And that is all but fine if we didn’t have the re module at our disposal. With re it is simply 2 lines of code:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> re
+pattern <span style="color:#f92672">=</span> <span style="color:#e6db74">r</span><span style="color:#e6db74">&#34;[;.,–]&#34;</span>
+<span style="color:#66d9ef">print</span>(len(re<span style="color:#f92672">.</span>findall(pattern,string)))</code></pre></div>
+<pre><code>    19
+</code></pre>
+
+<p><strong><em>This post is about one of the most commonly used regex patterns and some regex functions I end up using regularly.</em></strong></p>
+
+<h2 id="what-is-regex">What is regex?</h2>
+
+<p>In simpler terms, a regular expression(regex) is used to find patterns in a given string.</p>
+
+<p>The pattern we want to find could be anything.</p>
+
+<p>We can create patterns that resemble an email or a mobile number. We can create patterns that find out words that start with a and ends with z from a string.</p>
+
+<p>In the above example:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> re
+
+pattern <span style="color:#f92672">=</span> <span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;[,;.,–]&#39;</span>
+<span style="color:#66d9ef">print</span>(len(re<span style="color:#f92672">.</span>findall(pattern,string)))</code></pre></div>
+<p>The pattern we wanted to find out was r’[,;.,–]’. This pattern captures any of the 4 characters we wanted to capture. I find <a href="https://regex101.com/" rel="nofollow" target="_blank">regex101</a> a great tool for testing patterns. This is how the pattern looks when applied to the target string.</p>
+
+<p><img src="/images/regex/2.png" alt="" /></p>
+
+<p>As we can see we are able to find all the occurrences of ,;.,– in the target string as required.</p>
+
+<p>I use the above tool whenever I need to test a regex. Much faster than running a python program again and again and much easier to debug.</p>
+
+<p>So now we know that we can find patterns in a target string but how do we really create these patterns?</p>
+
+<hr />
+
+<h2 id="creating-patterns">Creating Patterns</h2>
+
+<p><img src="/images/regex/3.png" alt="" /></p>
+
+<p>The first thing we need to learn while using regex is how to create patterns.</p>
+
+<p>I will go through some most commonly used patterns one by one.</p>
+
+<p>As you would think, the simplest pattern is a simple string.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">pattern <span style="color:#f92672">=</span> <span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;times&#39;</span>
+string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;It was the best of times, it was the worst of times.&#34;</span>
+<span style="color:#66d9ef">print</span>(len(re<span style="color:#f92672">.</span>findall(pattern,string)))</code></pre></div>
+<p>But that is not very useful. To help with creating complex patterns regex provides us with special characters/operators. Let us go through some of these operators one by one. Please wait for the gifs to load.</p>
+
+<h3 id="1-the-operator">1. the [] operator</h3>
+
+<p>This is the one we used in our first example. <strong><em>We want to find one instance of any character within these square brackets.</em></strong></p>
+
+<p>[abc]- will find all occurrences of a or b or c.</p>
+
+<p>[a-z]- will find all occurrences of a to z.</p>
+
+<p>[a-z0–9A-Z]- will find all occurrences of a to z, A to Z and 0 to 9.</p>
+
+<p><img src="/images/regex/4.gif" alt="" /></p>
+
+<p>We can easily use this pattern as below in Python:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">pattern <span style="color:#f92672">=</span> <span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;[a-zA-Z]&#39;</span>
+string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;It was the best of times, it was the worst of times.&#34;</span>
+<span style="color:#66d9ef">print</span>(len(re<span style="color:#f92672">.</span>findall(pattern,string)))</code></pre></div>
+<p>There are other functionalities in regex apart from .findall but we will get to them a little bit later.</p>
+
+<h3 id="2-the-dot-operator">2. The dot Operator</h3>
+
+<p>The dot operator(.) is used to match <strong><em>a single instance of any character</em></strong> except the newline character.</p>
+
+<p>The best part about the operators is that we can use them in conjunction with one another.</p>
+
+<p>For example, We want to find out the substrings in the string that start with small d or Capital D and end with e with a length of 6.</p>
+
+<p><img src="/images/regex/5.gif" alt="" /></p>
+
+<h3 id="3-some-meta-sequences">3. Some Meta Sequences</h3>
+
+<p>There are some patterns that we end up using again and again while using regex. And so regex has created a few shortcuts for them. The most useful shortcuts are:</p>
+
+<p>\w, Matches any letter, digit or underscore. Equivalent to [a-zA-Z0–9_]</p>
+
+<p>\W, Matches anything other than a letter, digit or underscore.</p>
+
+<p>\d, Matches any decimal digit. Equivalent to [0–9].</p>
+
+<p>\D, Matches anything other than a decimal digit.</p>
+
+<h3 id="4-the-plus-and-star-operator">4. The Plus and Star operator</h3>
+
+<p><img src="/images/regex/6.jpg" alt="" /></p>
+
+<p>The dot character is used to get a single instance of any character. What if we want to find more.</p>
+
+<p>The Plus character <code>+</code>, is used to signify 1 or more instance of the leftmost character.</p>
+
+<p>The Star character <code>*</code>, is used to signify 0 or more instance of the leftmost character.</p>
+
+<p>For example, if we want to find out all substrings that start with d and end with e, we can have <strong><em>zero characters or more characters</em></strong> between d and e. We can use: <code>d\w*e</code></p>
+
+<p>If we want to find out all substrings that start with d and end with e with at least one character between d and e, we can use: <code>d\w+e</code></p>
+
+<p><img src="/images/regex/7.gif" alt="" /></p>
+
+<h3 id="we-could-also-have-used-a-more-generic-approach-using">We could also have used a more generic approach using {}</h3>
+
+<p><code>\w{n}</code> - Repeat <code>\w</code> exactly n number of times.</p>
+
+<p><code>\w{n,}</code> - Repeat <code>\w</code> at least n times or more.</p>
+
+<p><code>\w{n1, n2}</code> - Repeat <code>\w</code> at least n1 times but no more than n2 times.</p>
+
+<h3 id="5-caret-operator-and-dollar-operator">5. ^ Caret Operator and $ Dollar operator.</h3>
+
+<p>^ Matches the start of a string, and $ Matches the end of the string.</p>
+
+<p><img src="/images/regex/8.gif" alt="" /></p>
+
+<h3 id="6-word-boundary">6. Word Boundary</h3>
+
+<p>This is an important concept.</p>
+
+<p>Did you notice how I always matched substring and never a word in the above examples?</p>
+
+<p>So, what if we want to find all words that start with d?</p>
+
+<p>Can we use <code>d\w*</code> as the pattern? Let&rsquo;s see using the web tool.</p>
+
+<p><img src="/images/regex/9.gif" alt="" /></p>
+
+<hr />
+
+<h2 id="regex-functions">Regex Functions</h2>
+
+<p>Till now we have only used the findall function from the re package, but it also supports a lot more functions. Let us look into the functions one by one.</p>
+
+<h3 id="1-findall">1. findall</h3>
+
+<p>We already have used findall. It is one of the regex functions I end up using most often. Let us understand it a little more formally.</p>
+
+<p><strong><em>Input:</em></strong> Pattern and test string</p>
+
+<p><strong><em>Output:</em></strong> List of strings.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e">#USAGE:</span>
+
+pattern <span style="color:#f92672">=</span> <span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;[iI]t&#39;</span>
+string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;It was the best of times, it was the worst of times.&#34;</span>
+
+matches <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>findall(pattern,string)
+
+<span style="color:#66d9ef">for</span> match <span style="color:#f92672">in</span> matches:
+    <span style="color:#66d9ef">print</span>(match)</code></pre></div>
+<pre><code>It
+it
+</code></pre>
+
+<h3 id="2-search">2. Search</h3>
+
+<p><img src="/images/regex/10.jpg" alt="" /></p>
+
+<p><strong><em>Input:</em></strong> Pattern and test string</p>
+
+<p><strong><em>Output:</em></strong> Location object for the first match.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e">#USAGE:</span>
+
+pattern <span style="color:#f92672">=</span> <span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;[iI]t&#39;</span>
+string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;It was the best of times, it was the worst of times.&#34;</span>
+
+location <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>search(pattern,string)
+<span style="color:#66d9ef">print</span>(location)</code></pre></div>
+<pre><code>&lt;_sre.SRE_Match object; span=(0, 2), match='It'&gt;
+</code></pre>
+
+<p>We can get this location object’s data using</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">print</span>(location<span style="color:#f92672">.</span>group())</code></pre></div>
+<pre><code>'It'
+</code></pre>
+
+<h3 id="3-substitute">3. Substitute</h3>
+
+<p>This is another great functionality. When you work with NLP you sometimes need to substitute integers with X’s. Or you might need to redact some document. Just the basic find and replace in any of the text editors.</p>
+
+<p><strong><em>Input:</em></strong> search pattern, replacement pattern, and the target string</p>
+
+<p><strong><em>Output:</em></strong> Substituted string</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">string <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;It was the best of times, it was the worst of times.&#34;</span>
+string <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>sub(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;times&#39;</span>, <span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;life&#39;</span>, string)
+<span style="color:#66d9ef">print</span>(string)</code></pre></div>
+<pre><code>It was the best of life, it was the worst of life.
+</code></pre>
+
+<hr />
+
+<h2 id="some-case-studies">Some Case Studies:</h2>
+
+<p>Regex is used in many cases when validation is required. You might have seen prompts on websites like “This is not a valid email address”. While such a prompt could be written using multiple if and else conditions, regex is probably the best for such use cases.</p>
+
+<h3 id="1-pan-numbers">1. PAN Numbers</h3>
+
+<p><img src="/images/regex/11.jpg" alt="" /></p>
+
+<p>In India, we have got PAN Numbers for Tax identification rather than SSN numbers in the US. The basic validation criteria for PAN is that it must have all its letters in uppercase and characters in the following order:</p>
+
+<pre><code>&lt;char&gt;&lt;char&gt;&lt;char&gt;&lt;char&gt;&lt;char&gt;&lt;digit&gt;&lt;digit&gt;&lt;digit&gt;&lt;digit&gt;&lt;char&gt;
+</code></pre>
+
+<p>So the question is:</p>
+
+<p>Is ‘ABcDE1234L’ a valid PAN?</p>
+
+<p>How would you normally attempt to solve this without regex? You will most probably write a for loop and keep an index going through the string. With regex it is as simple as below:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">match<span style="color:#f92672">=</span>re<span style="color:#f92672">.</span>search(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;[A-Z]{5}[0–9]{4}[A-Z]&#39;</span>,<span style="color:#e6db74">&#39;ABcDE1234L&#39;</span>)
+<span style="color:#66d9ef">if</span> match:
+    <span style="color:#66d9ef">print</span>(True)
+<span style="color:#66d9ef">else</span>:
+    <span style="color:#66d9ef">print</span>(False)</code></pre></div>
+<pre><code>False
+</code></pre>
+
+<h3 id="2-find-domain-names">2. Find Domain Names</h3>
+
+<p><img src="/images/regex/12.png" alt="" /></p>
+
+<p>Sometimes we have got a large text document and we have got to find out instances of telephone numbers or email IDs or domain names from the big text document.</p>
+
+<p>For example, Suppose you have this text:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;reflist&#34;</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;list-style-type: decimal;&#34;</span>&gt;
+&lt;<span style="color:#f92672">ol</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;references&#34;</span>&gt;
+&lt;<span style="color:#f92672">li</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cite_note-1&#34;</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;mw-cite-backlink&#34;</span>&gt;&lt;<span style="color:#f92672">b</span>&gt;^ [&#34;Train (noun)&#34;](http://www.askoxford.com/concise_oed/train?view=uk). &lt;<span style="color:#f92672">i</span>&gt;(definition – Compact OED)&lt;/<span style="color:#f92672">i</span>&gt;. Oxford University Press&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;reference-accessdate&#34;</span>&gt;. Retrieved 2008-03-18&lt;/<span style="color:#f92672">span</span>&gt;.&lt;/<span style="color:#f92672">span</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">title</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3ATrain&amp;rft.atitle=Train+%28noun%29&amp;rft.genre=article&amp;rft_id=http%3A%2F%2Fwww.askoxford.com%2Fconcise_oed%2Ftrain%3Fview%3Duk&amp;rft.jtitle=%28definition+%E2%80%93+Compact+OED%29&amp;rft.pub=Oxford+University+Press&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Z3988&#34;</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;display:none;&#34;</span>&gt; &lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">li</span>&gt;
+&lt;<span style="color:#f92672">li</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cite_note-2&#34;</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;mw-cite-backlink&#34;</span>&gt;&lt;<span style="color:#f92672">b</span>&gt;^&lt;/<span style="color:#f92672">b</span>&gt;&lt;/<span style="color:#f92672">span</span>&gt; &lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;reference-text&#34;</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;citation book&#34;</span>&gt;Atchison, Topeka and Santa Fe Railway (1948). &lt;<span style="color:#f92672">i</span>&gt;Rules: Operating Department&lt;/<span style="color:#f92672">i</span>&gt;. p. 7.&lt;/<span style="color:#f92672">span</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">title</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3ATrain&amp;rft.au=Atchison%2C+Topeka+and+Santa+Fe+Railway&amp;rft.aulast=Atchison%2C+Topeka+and+Santa+Fe+Railway&amp;rft.btitle=Rules%3A+Operating+Department&amp;rft.date=1948&amp;rft.genre=book&amp;rft.pages=7&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Z3988&#34;</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;display:none;&#34;</span>&gt; &lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">li</span>&gt;
+&lt;<span style="color:#f92672">li</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cite_note-3&#34;</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;mw-cite-backlink&#34;</span>&gt;&lt;<span style="color:#f92672">b</span>&gt;^ [Hydrogen trains](http://www.hydrogencarsnow.com/blog2/index.php/hydrogen-vehicles/i-hear-the-hydrogen-train-a-comin-its-rolling-round-the-bend/)&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">li</span>&gt;
+&lt;<span style="color:#f92672">li</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cite_note-4&#34;</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;mw-cite-backlink&#34;</span>&gt;&lt;<span style="color:#f92672">b</span>&gt;^ [Vehicle Projects Inc. Fuel cell locomotive](http://www.bnsf.com/media/news/articles/2008/01/2008-01-09a.html)&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">li</span>&gt;
+&lt;<span style="color:#f92672">li</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cite_note-5&#34;</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;mw-cite-backlink&#34;</span>&gt;&lt;<span style="color:#f92672">b</span>&gt;^&lt;/<span style="color:#f92672">b</span>&gt;&lt;/<span style="color:#f92672">span</span>&gt; &lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;reference-text&#34;</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;citation book&#34;</span>&gt;Central Japan Railway (2006). &lt;<span style="color:#f92672">i</span>&gt;Central Japan Railway Data Book 2006&lt;/<span style="color:#f92672">i</span>&gt;. p. 16.&lt;/<span style="color:#f92672">span</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">title</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3ATrain&amp;rft.au=Central+Japan+Railway&amp;rft.aulast=Central+Japan+Railway&amp;rft.btitle=Central+Japan+Railway+Data+Book+2006&amp;rft.date=2006&amp;rft.genre=book&amp;rft.pages=16&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Z3988&#34;</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;display:none;&#34;</span>&gt; &lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">li</span>&gt;
+&lt;<span style="color:#f92672">li</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;cite_note-6&#34;</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;mw-cite-backlink&#34;</span>&gt;&lt;<span style="color:#f92672">b</span>&gt;^ [&#34;Overview Of the existing Mumbai Suburban Railway&#34;](http://web.archive.org/web/20080620033027/http://www.mrvc.indianrail.gov.in/overview.htm). _Official webpage of Mumbai Railway Vikas Corporation_. Archived from [the original](http://www.mrvc.indianrail.gov.in/overview.htm) on 2008-06-20&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;reference-accessdate&#34;</span>&gt;. Retrieved 2008-12-11&lt;/<span style="color:#f92672">span</span>&gt;.&lt;/<span style="color:#f92672">span</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">title</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ctx_ver=Z39.88-2004&amp;rfr_id=info%3Asid%2Fen.wikipedia.org%3ATrain&amp;rft.atitle=Overview+Of+the+existing+Mumbai+Suburban+Railway&amp;rft.genre=article&amp;rft_id=http%3A%2F%2Fwww.mrvc.indianrail.gov.in%2Foverview.htm&amp;rft.jtitle=Official+webpage+of+Mumbai+Railway+Vikas+Corporation&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Ajournal&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Z3988&#34;</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;display:none;&#34;</span>&gt; &lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">li</span>&gt;
+&lt;/<span style="color:#f92672">ol</span>&gt;
+&lt;/<span style="color:#f92672">div</span>&gt;</code></pre></div>
+<p>And you need to find out all the primary domains from this text- <code>askoxford.com;bnsf.com;hydrogencarsnow.com;mrvc.indianrail.gov.in;web.archive.org</code></p>
+
+<p>How would you do this?</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">match<span style="color:#f92672">=</span>re<span style="color:#f92672">.</span>findall(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;http(s:|:)\/\/([www.|ww2.|)([0-9a-z.A-Z-]*\.\w{2,3})&#39;</span>,string)](http:<span style="color:#f92672">//</span>www<span style="color:#f92672">.|</span>ww2<span style="color:#f92672">.|</span>)([<span style="color:#ae81ff">0</span><span style="color:#f92672">-</span><span style="color:#ae81ff">9</span>a<span style="color:#f92672">-</span>z<span style="color:#f92672">.</span>A<span style="color:#f92672">-</span>Z<span style="color:#f92672">-</span>]<span style="color:#f92672">*</span>\<span style="color:#f92672">.</span>\w{<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>})<span style="color:#e6db74">&#39;,string))</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#e6db74">for elem in match:</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#e6db74">    print(elem)</span></code></pre></div>
+<pre><code>(':', 'www.', 'askoxford.com')
+(':', 'www.', 'hydrogencarsnow.com')
+(':', 'www.', 'bnsf.com')
+(':', '', 'web.archive.org')
+(':', 'www.', 'mrvc.indianrail.gov.in')
+(':', 'www.', 'mrvc.indianrail.gov.in')
+</code></pre>
+
+<p>| is the or operator here and match returns tuples where the pattern part inside () is kept.</p>
+
+<h3 id="3-find-email-addresses">3. Find Email Addresses:</h3>
+
+<p><img src="/images/regex/13.jpg" alt="" /></p>
+
+<p>Below is a regex to find email addresses in a long text.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">match<span style="color:#f92672">=</span>re<span style="color:#f92672">.</span>findall(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;([\w0-9-._]+@[\w0-9-.]+[\w0-9]{2,3})&#39;</span>,string)</code></pre></div>
+<p>These are advanced examples but if you try to understand these examples for yourself you should be fine with the info provided.</p>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p><img src="/images/regex/14.jpg" alt="" /></p>
+
+<p>While it might look a little daunting at first, regex provides a great degree of flexibility when it comes to data manipulation, creating features and finding patterns.</p>
+
+<p>I use it quite regularly when I work with text data and it can also be included while working on data validation tasks.</p>
+
+<p>I am also a fan of the regex101 tool and use it frequently to check my regexes. I wonder if I would be using regexes as much if not for this awesome tool.</p>
+
+<p>Also if you want to <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" rel="nofollow" target="_blank"><strong>learn more about NLP</strong> here</a> is an excellent course. You can start for free with the 7-day Free Trial.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>@mlwhiz</strong></a>.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.415&subid=0&type=4"><IMG border="0"   alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.415&subid=0&type=4&gridnum=16"></a>
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2019/08/12/resources/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">How did I learn Data Science?</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<aside class="sidebar">
+	     
+  <div style="text-align:center">    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/09/01/regex/">The Ultimate Guide to using the Python regex module</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/08/12/resources/">How did I learn Data Science?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/08/07/feature_selection/">The 5 Feature Selection Algorithms every Data Scientist should know</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/07/30/sampling/">The 5 Sampling Algorithms every Data Scientist need to know</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/07/21/bandits/">Bayesian Bandits explained simply</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/07/20/pandas_subset/">Minimal Pandas Subset for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/07/07/spark_hitchhiker/">The Hitchhikers guide to handle Big Data using Spark</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/06/28/jupyter_extensions/">3 Great Additions for your Jupyter Notebooks</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/06/17/gans/">An End to End Introduction to GANs</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/05/19/feature_extraction/">The Hitchhiker’s Guide to Feature Extraction</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;}
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}
+   
+</style>
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2019 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
