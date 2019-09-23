@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>A Generative Approach to Classification</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="This post is about understanding Generative Models and how they differ from Discriminative models.">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="A Generative Approach to Classification" />
+<meta property="og:description" content="This post is about understanding Generative Models and how they differ from Discriminative models." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2019/09/23/generative_approach_to_classification/" />
+<meta property="og:image" content="https://mlwhiz.com/images/generative/1.jpeg" />
+<meta property="article:published_time" content="2019-09-23T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-09-23T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/generative/1.jpeg"/>
+
+<meta name="twitter:title" content="A Generative Approach to Classification"/>
+<meta name="twitter:description" content="This post is about understanding Generative Models and how they differ from Discriminative models."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">A Generative Approach to Classification</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2019-09-23T00:00:00">September 23, 2019</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/generative/1.jpeg" alt="" /></p>
+
+<p>I always get confused whenever someone talks about generative vs. discriminative classification models.</p>
+
+<p>I end up reading it again and again, yet somehow it eludes me.</p>
+
+<p>So I thought of writing a post on it to improve my understanding.</p>
+
+<p><strong><em>This post is about understanding Generative Models and how they differ from Discriminative models.</em></strong></p>
+
+<p><em>In the end, we will create a simple generative model ourselves.</em></p>
+
+<hr />
+
+<h2 id="discriminative-vs-generative-classifiers">Discriminative vs. Generative Classifiers</h2>
+
+<p><strong><em>Problem Statement:</em></strong> Having some input data, X we want to classify the data into labels y.</p>
+
+<p>A generative model learns the <strong>joint</strong> probability distribution p(x,y) while a discriminative model learns the <strong>conditional</strong> probability distribution p(y|x)</p>
+
+<p><strong><em>So really, what is the difference? They both look pretty much the same.</em></strong></p>
+
+<p>Suppose we have a small sample of data:</p>
+
+<p>(x,y) : [(0,1), (1,0), (1,0), (1, 1)]</p>
+
+<p>Then p(x,y) is</p>
+
+<p><img src="/images/generative/2.png" alt="" /></p>
+
+<p>While p(y|x) is</p>
+
+<p><img src="/images/generative/3.png" alt="" /></p>
+
+<p>As you can see, they model different probabilities.</p>
+
+<p>The discriminative distribution p(y|x) could be used straightforward to classify an example x into a class y. An example of a discriminative classification model is Logistic regression, where we try to model P(y|X).</p>
+
+<p><img src="/images/generative/4.png" alt="" /></p>
+
+<p>Generative algorithms model p(x,y). An example is the Naive Bayes model in which we try to model P(X,y) and then use the Bayes equation to predict.</p>
+
+<hr />
+
+<h2 id="the-central-idea-behind-generative-classification">The Central Idea Behind Generative Classification</h2>
+
+<ul>
+<li><p>Fit each class separately with a probability distribution.</p></li>
+
+<li><p>To classify a new point, find out which distribution is it most probable to come from.</p></li>
+</ul>
+
+<p><strong><em>Don’t worry if you don’t understand yet. You will surely get it by the end of this post.</em></strong></p>
+
+<hr />
+
+<h2 id="a-small-example">A Small Example</h2>
+
+<p><img src="/images/generative/5.jpg" alt="" /></p>
+
+<p>Let us work with the iris dataset.</p>
+
+<p>For our simple example, we will work with a single x variable SepalLength and our target variable Species.</p>
+
+<p>Let us see the distribution of sepal length with Species. I am using <a href="https://towardsdatascience.com/pythons-one-liner-graph-creation-library-with-animations-hans-rosling-style-f2cb50490396" rel="nofollow" target="_blank">plotly_express</a> for this.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> plotly_express <span style="color:#f92672">as</span> px
+px<span style="color:#f92672">.</span>histogram(iris, x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>,color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Species&#39;</span>,nbins<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)</code></pre></div>
+<p><img src="/images/generative/6.png" alt="" /></p>
+
+<p>To create generative models, we need to find out two sets of values:</p>
+
+<h3 id="1-probability-of-individual-classes">1. Probability of individual classes:</h3>
+
+<p>To get individual class probability is fairly trivial- For example, the number of instances in our dataset, which is setosa divided by the total number of cases in the dataset.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">p_setosa <span style="color:#f92672">=</span> len(iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-setosa&#39;</span>])<span style="color:#f92672">/</span>len(iris)
+p_versicolor <span style="color:#f92672">=</span> len(iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-versicolor&#39;</span>])<span style="color:#f92672">/</span>len(iris)
+p_virginica <span style="color:#f92672">=</span> len(iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-virginica&#39;</span>])<span style="color:#f92672">/</span>len(iris)
+<span style="color:#66d9ef">print</span>(p_setosa,p_versicolor,p_virginica)</code></pre></div>
+<pre><code>0.3333333333333333 0.3333333333333333 0.3333333333333333
+</code></pre>
+
+<p>The iris dataset is pretty much balanced.</p>
+
+<h3 id="2-the-probability-distribution-of-x-for-each-class">2. The probability distribution of x for each class:</h3>
+
+<p>Here we fit a probability distribution over our X. We assume here that the X data is distributed normally. And hence we can find the sample means and variance for these three distributions(As we have three classes)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np                                                              
+<span style="color:#f92672">import</span> seaborn <span style="color:#f92672">as</span> sns                                                           
+<span style="color:#f92672">from</span> scipy <span style="color:#f92672">import</span> stats                                                         
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt
+
+sns<span style="color:#f92672">.</span>set(style<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ticks&#34;</span>)
+<span style="color:#75715e"># calculate the pdf over a range of values</span>
+xx <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(min(iris[<span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>]), max(iris[<span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>]),<span style="color:#ae81ff">0.001</span>)
+x <span style="color:#f92672">=</span> iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-setosa&#39;</span>][<span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>]
+sns<span style="color:#f92672">.</span>distplot(x, kde <span style="color:#f92672">=</span> False, norm_hist<span style="color:#f92672">=</span>True,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;skyblue&#39;</span>,label <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Setosa&#39;</span>)
+yy <span style="color:#f92672">=</span> stats<span style="color:#f92672">.</span>norm<span style="color:#f92672">.</span>pdf(xx,loc<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>mean(x),scale<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>std(x))
+plt<span style="color:#f92672">.</span>plot(xx, yy, <span style="color:#e6db74">&#39;skyblue&#39;</span>, lw<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+x <span style="color:#f92672">=</span> iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-versicolor&#39;</span>][<span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>]
+sns<span style="color:#f92672">.</span>distplot(x, kde <span style="color:#f92672">=</span> False, norm_hist<span style="color:#f92672">=</span>True,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;green&#39;</span>,label <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Versicolor&#39;</span>)
+yy <span style="color:#f92672">=</span> stats<span style="color:#f92672">.</span>norm<span style="color:#f92672">.</span>pdf(xx,loc<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>mean(x),scale<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>std(x))
+plt<span style="color:#f92672">.</span>plot(xx, yy, <span style="color:#e6db74">&#39;green&#39;</span>, lw<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+x <span style="color:#f92672">=</span> iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-virginica&#39;</span>][<span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>]
+g <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>distplot(x, kde <span style="color:#f92672">=</span> False, norm_hist<span style="color:#f92672">=</span>True,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>,label <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Virginica&#39;</span>)
+yy <span style="color:#f92672">=</span> stats<span style="color:#f92672">.</span>norm<span style="color:#f92672">.</span>pdf(xx,loc<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>mean(x),scale<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>std(x))
+plt<span style="color:#f92672">.</span>plot(xx, yy, <span style="color:#e6db74">&#39;red&#39;</span>, lw<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>) 
+sns<span style="color:#f92672">.</span>despine()
+g<span style="color:#f92672">.</span>figure<span style="color:#f92672">.</span>set_size_inches(<span style="color:#ae81ff">20</span>,<span style="color:#ae81ff">10</span>)
+g<span style="color:#f92672">.</span>legend()</code></pre></div>
+<p><img src="/images/generative/7.png" alt="" /></p>
+
+<p>In the above graph, I have fitted three normal distributions for each of the species just using sample means and variances for each of the three species.</p>
+
+<p><strong><em>So, how do we predict using this?</em></strong></p>
+
+<p>Let us say we get a new example with SepalLength = 7 cm.</p>
+
+<p><img src="/images/generative/8.png" alt="" /></p>
+
+<p>Since we see that the maximum probability comes for Virginica, we predict virginica for x=7, and based on the graph too; it looks pretty much the right choice.</p>
+
+<p>You can get the values using the code too.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">x <span style="color:#f92672">=</span> iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-setosa&#39;</span>][<span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>]
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Setosa&#34;</span>,stats<span style="color:#f92672">.</span>norm<span style="color:#f92672">.</span>pdf(<span style="color:#ae81ff">7</span>,loc<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>mean(x),scale<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>std(x))<span style="color:#f92672">*.</span><span style="color:#ae81ff">33</span>)
+x <span style="color:#f92672">=</span> iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-versicolor&#39;</span>][<span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>]
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Versicolor&#34;</span>,stats<span style="color:#f92672">.</span>norm<span style="color:#f92672">.</span>pdf(<span style="color:#ae81ff">7</span>,loc<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>mean(x),scale<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>std(x))<span style="color:#f92672">*.</span><span style="color:#ae81ff">33</span>)
+x <span style="color:#f92672">=</span> iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-virginica&#39;</span>][<span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>]
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Virginica&#34;</span>,stats<span style="color:#f92672">.</span>norm<span style="color:#f92672">.</span>pdf(<span style="color:#ae81ff">7</span>,loc<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>mean(x),scale<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>std(x))<span style="color:#f92672">*.</span><span style="color:#ae81ff">33</span>)</code></pre></div>
+<pre><code>Setosa 3.062104211904799e-08
+Versicolor 0.029478757465669376
+Virginica 0.16881724812694823
+</code></pre>
+
+<p>This is all well and good. But when do we ever work with a single variable?</p>
+
+<p>Let us extend our example for two variables. This time let us use PetalLength too.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">px<span style="color:#f92672">.</span>scatter(iris, <span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>, <span style="color:#e6db74">&#39;PetalLengthCm&#39;</span>,color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Species&#39;</span>)</code></pre></div>
+<p><img src="/images/generative/9.png" alt="" /></p>
+
+<p><strong><em>So how do we proceed in this case?</em></strong></p>
+
+<p>The first time we had fit a Normal Distribution over our single x, this time we will fit Bivariate Normal.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-PY" data-lang="PY"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np                                                              
+<span style="color:#f92672">import</span> seaborn <span style="color:#f92672">as</span> sns                                                           
+<span style="color:#f92672">from</span> scipy <span style="color:#f92672">import</span> stats                                                         
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt 
+<span style="color:#f92672">from</span> matplotlib.mlab <span style="color:#f92672">import</span> bivariate_normal
+sns<span style="color:#f92672">.</span>set(style<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ticks&#34;</span>)
+<span style="color:#75715e"># SETOSA</span>
+x1 <span style="color:#f92672">=</span> iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-setosa&#39;</span>][<span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>]
+x2 <span style="color:#f92672">=</span> iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-setosa&#39;</span>][<span style="color:#e6db74">&#39;PetalLengthCm&#39;</span>]
+sns<span style="color:#f92672">.</span>scatterplot(x1,x2, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;skyblue&#39;</span>,label <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Setosa&#39;</span>)
+mu_x1<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>mean(x1)
+mu_x2<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>mean(x2)
+sigma_x1<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>std(x1)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>
+sigma_x2<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>std(x2)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>
+xx <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(min(x1), max(x1),<span style="color:#ae81ff">0.001</span>)
+yy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(min(x2), max(x2),<span style="color:#ae81ff">0.001</span>)
+X, Y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>meshgrid(xx, yy)
+Z <span style="color:#f92672">=</span> bivariate_normal(X,Y, sigma_x1, sigma_x2, mu_x1, mu_x2)
+plt<span style="color:#f92672">.</span>contour(X,Y,Z,colors<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;skyblue&#39;</span>)
+<span style="color:#75715e"># VERSICOLOR</span>
+x1 <span style="color:#f92672">=</span> iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-versicolor&#39;</span>][<span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>]
+x2 <span style="color:#f92672">=</span> iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-versicolor&#39;</span>][<span style="color:#e6db74">&#39;PetalLengthCm&#39;</span>]
+sns<span style="color:#f92672">.</span>scatterplot(x1,x2,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;green&#39;</span>,label <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Versicolor&#39;</span>)
+mu_x1<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>mean(x1)
+mu_x2<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>mean(x2)
+sigma_x1<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>std(x1)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>
+sigma_x2<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>std(x2)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>
+xx <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(min(x1), max(x1),<span style="color:#ae81ff">0.001</span>)
+yy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(min(x2), max(x2),<span style="color:#ae81ff">0.001</span>)
+X, Y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>meshgrid(xx, yy)
+Z <span style="color:#f92672">=</span> bivariate_normal(X,Y, sigma_x1, sigma_x2, mu_x1, mu_x2)
+plt<span style="color:#f92672">.</span>contour(X,Y,Z,colors<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;green&#39;</span>)
+<span style="color:#75715e"># VIRGINICA</span>
+x1 <span style="color:#f92672">=</span> iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-virginica&#39;</span>][<span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>]
+x2 <span style="color:#f92672">=</span> iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-virginica&#39;</span>][<span style="color:#e6db74">&#39;PetalLengthCm&#39;</span>]
+g <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>scatterplot(x1, x2, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>,label <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Virginica&#39;</span>)
+mu_x1<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>mean(x1)
+mu_x2<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>mean(x2)
+sigma_x1<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>std(x1)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>
+sigma_x2<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>std(x2)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>
+xx <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(min(x1), max(x1),<span style="color:#ae81ff">0.001</span>)
+yy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(min(x2), max(x2),<span style="color:#ae81ff">0.001</span>)
+X, Y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>meshgrid(xx, yy)
+Z <span style="color:#f92672">=</span> bivariate_normal(X,Y, sigma_x1, sigma_x2, mu_x1, mu_x2)
+plt<span style="color:#f92672">.</span>contour(X,Y,Z,colors<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>)
+sns<span style="color:#f92672">.</span>despine()
+g<span style="color:#f92672">.</span>figure<span style="color:#f92672">.</span>set_size_inches(<span style="color:#ae81ff">20</span>,<span style="color:#ae81ff">10</span>)
+g<span style="color:#f92672">.</span>legend()</code></pre></div>
+<p>Here is how it looks:</p>
+
+<p><img src="/images/generative/10.png" alt="" /></p>
+
+<p>Now the rest of the calculations remains the same.</p>
+
+<p>Just the normal gets replaced by Bivariate normal in the above equations. And as you can see, we get a pretty better separation amongst the classes by using the bivariate normal.</p>
+
+<p><em>As an extension to this case for multiple variables(more than 2), we can use the multivariate normal distribution.</em></p>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Generative models are good at generating data. But at the same time, creating such models that capture the underlying distribution of data is extremely hard.</p>
+
+<p>Generative modeling involves a lot of assumptions, and thus, these models don’t perform as well as discriminative models in the classification setting. In the above example also we assumed that the distribution is normal, which might not be correct and hence may induce a bias.</p>
+
+<p>But understanding how they work is helpful all the same. One class of such models is called <a href="https://towardsdatascience.com/an-end-to-end-introduction-to-gans-bf253f1fa52f" rel="nofollow" target="_blank">generative adversarial networks</a> which are pretty useful for generating new images and are pretty interesting too.</p>
+
+<p><a href="https://www.kaggle.com/mlwhiz/generative-modeling" rel="nofollow" target="_blank">Here</a> is the kernel with all the code along with the visualizations.</p>
+
+<p>If you want to learn more about generative models and Machine Learning, I would recommend this <a href="https://www.awin1.com/cread.php?awinmid=6798&amp;awinaffid=633074&amp;clickref=&amp;p=%5B%5Bhttps%3A%2F%2Fwww.edx.org%2Fcourse%2Fmachine-learning-fundamentals-4%5D%5D" rel="nofollow" target="_blank">Machine Learning Fundamentals</a> course from the University of San Diego. The above post is by and large inspired from content from this course in the <a href="https://www.awin1.com/cread.php?awinmid=6798&amp;awinaffid=633074&amp;clickref=&amp;p=%5B%5Bhttps%3A%2F%2Fwww.edx.org%2Fmicromasters%2Fuc-san-diegox-data-science%5D%5D" rel="nofollow" target="_blank">MicroMasters from SanDiego</a>, which I am currently working on to structure my Data Science learning.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/data-science/" rel="tag">Data Science</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.415&subid=0&type=4"><IMG border="0"   alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.415&subid=0&type=4&gridnum=16"></a>
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2019/09/02/graph_algs/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Data Scientists, The 5 Graph Algorithms that you should know</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<aside class="sidebar">
+	     
+  <div style="text-align:center">    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/09/23/generative_approach_to_classification/">A Generative Approach to Classification</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/09/02/graph_algs/">Data Scientists, The 5 Graph Algorithms that you should know</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/09/01/regex/">The Ultimate Guide to using the Python regex module</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/08/12/resources/">How did I learn Data Science?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/08/07/feature_selection/">The 5 Feature Selection Algorithms every Data Scientist should know</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/07/30/sampling/">The 5 Sampling Algorithms every Data Scientist need to know</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/07/21/bandits/">Bayesian Bandits explained simply</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/07/20/pandas_subset/">Minimal Pandas Subset for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/07/07/spark_hitchhiker/">The Hitchhikers guide to handle Big Data using Spark</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/06/28/jupyter_extensions/">3 Great Additions for your Jupyter Notebooks</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;}
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}
+   
+</style>
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2019 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
