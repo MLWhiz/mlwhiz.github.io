@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Automate Hyperparameter Tuning for your models</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="This post is about automating hyperparameter tuning because our time is more important than the machine.">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="Automate Hyperparameter Tuning for your models" />
+<meta property="og:description" content="This post is about automating hyperparameter tuning because our time is more important than the machine." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2019/10/10/hyperopt2/" />
+<meta property="og:image" content="https://mlwhiz.com/images/hyperopt2/1.jpg" />
+<meta property="article:published_time" content="2019-10-10T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-10-10T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/hyperopt2/1.jpg"/>
+
+<meta name="twitter:title" content="Automate Hyperparameter Tuning for your models"/>
+<meta name="twitter:description" content="This post is about automating hyperparameter tuning because our time is more important than the machine."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Automate Hyperparameter Tuning for your models</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2019-10-10T00:00:00">October 10, 2019</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/hyperopt2/1.jpg" alt="" /></p>
+
+<p>When we create our machine learning models, a common task that falls on us is how to tune them.</p>
+
+<p>People end up taking different manual approaches. Some of them work, and some don’t, and a lot of time is spent in anticipation and running the code again and again.</p>
+
+<p><strong><em>So that brings us to the quintessential question: Can we automate this process?</em></strong></p>
+
+<p>A while back, I was working on an in-class competition from the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank"><strong>“How to win a data science competition”</strong></a> Coursera course. Learned a lot of new things, one among them being Hyperopt — A bayesian Parameter Tuning Framework.</p>
+
+<p>And I was amazed. I left my Mac with hyperopt in the night. And in the morning I had my results. It was awesome, and I did avoid a lot of hit and trial.</p>
+
+<p><strong><em>This post is about automating hyperparameter tuning because our time is more important than the machine.</em></strong></p>
+
+<hr />
+
+<h2 id="so-what-is-hyperopt">So, What is Hyperopt?</h2>
+
+<p><img src="/images/hyperopt2/2.jpg" alt="" /></p>
+
+<p>From the Hyperopt site:</p>
+
+<blockquote>
+<p><em>Hyperopt is a Python library for serial and parallel optimization over awkward search spaces, which may include real-valued, discrete, and conditional dimensions</em></p>
+</blockquote>
+
+<p><strong><em>In simple terms, this means that we get an optimizer that could minimize/maximize any function for us.</em></strong> For example, we can use this to minimize the log loss or maximize accuracy.</p>
+
+<p>All of us know how grid search or random-grid search works.</p>
+
+<p>A grid search goes through the parameters one by one, while a random search goes through the parameters randomly.</p>
+
+<p><strong><em>Hyperopt takes as an input space of hyperparameters in which it will search and moves according to the result of past trials.</em></strong></p>
+
+<blockquote>
+<p>Thus, Hyperopt aims to search the parameter space in an informed way.</p>
+</blockquote>
+
+<p>I won’t go in the details. But if you want to know more about how it works, take a look at this <a href="https://conference.scipy.org/proceedings/scipy2013/pdfs/bergstra_hyperopt.pdf" rel="nofollow" target="_blank"><strong>paper</strong></a> by J Bergstra. Here is the <a href="https://github.com/hyperopt/hyperopt/wiki/FMin" rel="nofollow" target="_blank"><strong>documentation</strong></a> from Github.</p>
+
+<hr />
+
+<h2 id="our-dataset">Our Dataset</h2>
+
+<p>To explain how hyperopt works, I will be working on the <a href="https://www.kaggle.com/ronitf/heart-disease-uci" rel="nofollow" target="_blank">heart dataset</a> from UCI precisely because it is a simple dataset. And why not do some good using Data Science apart from just generating profits?</p>
+
+<p>This dataset predicts the presence of a heart disease given some variables.</p>
+
+<p>This is a snapshot of the dataset :</p>
+
+<p><img src="/images/hyperopt2/3.png" alt="" /></p>
+
+<p>This is how the target distribution looks like:</p>
+
+<p><img src="/images/hyperopt2/4.png" alt="" /></p>
+
+<hr />
+
+<h2 id="hyperopt-step-by-step">Hyperopt Step by Step</h2>
+
+<p><img src="/images/hyperopt2/5.jpg" alt="" /></p>
+
+<p>So, while trying to run hyperopt, we will need to create two Python objects:</p>
+
+<ol>
+<li><p><strong><em>An Objective function:</em></strong> The objective function takes the hyperparameter space as the input and returns the loss. Here we call our objective function <code>objective</code></p></li>
+
+<li><p><strong><em>A dictionary of hyperparams:</em></strong> We will define a hyperparam space by using the variable <code>space</code> which is actually just a dictionary. We could choose different distributions for different hyperparameter values.</p></li>
+</ol>
+
+<p>In the end, we will use the <code>fmin</code> function from the hyperopt package to minimize our <code>objective</code> through the <code>space</code>.</p>
+
+<p>You can follow along with the code in this <a href="https://www.kaggle.com/mlwhiz/how-to-use-hyperopt?scriptVersionId=20362799" rel="nofollow" target="_blank">Kaggle Kernel</a>.</p>
+
+<hr />
+
+<h3 id="1-create-the-objective-function">1. Create the objective function</h3>
+
+<p>Here we create an objective function which takes as input a hyperparameter space:</p>
+
+<ul>
+<li><p>We first define a classifier, in this case, XGBoost. Just try to see how we access the parameters from the space. For example <code>space[‘max_depth’]</code></p></li>
+
+<li><p>We fit the classifier to the train data and then predict on the cross-validation set.</p></li>
+
+<li><p>We calculate the required metric we want to maximize or minimize.</p></li>
+
+<li><p>Since we only minimize using <code>fmin</code> in hyperopt, if we want to minimize <code>logloss</code> we just send our metric as is. If we want to maximize accuracy we will try to minimize <code>-accuracy</code></p></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> accuracy_score
+<span style="color:#f92672">from</span> hyperopt <span style="color:#f92672">import</span> hp, fmin, tpe, STATUS_OK, Trials
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> xgboost <span style="color:#f92672">as</span> xgb
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">objective</span>(space):
+    <span style="color:#75715e"># Instantiate the classifier</span>
+    clf <span style="color:#f92672">=</span> xgb<span style="color:#f92672">.</span>XGBClassifier(n_estimators <span style="color:#f92672">=</span><span style="color:#ae81ff">1000</span>,colsample_bytree<span style="color:#f92672">=</span>space[<span style="color:#e6db74">&#39;colsample_bytree&#39;</span>],
+                           learning_rate <span style="color:#f92672">=</span> <span style="color:#f92672">.</span><span style="color:#ae81ff">3</span>,
+                            max_depth <span style="color:#f92672">=</span> int(space[<span style="color:#e6db74">&#39;max_depth&#39;</span>]),
+                            min_child_weight <span style="color:#f92672">=</span> space[<span style="color:#e6db74">&#39;min_child_weight&#39;</span>],
+                            subsample <span style="color:#f92672">=</span> space[<span style="color:#e6db74">&#39;subsample&#39;</span>],
+                           gamma <span style="color:#f92672">=</span> space[<span style="color:#e6db74">&#39;gamma&#39;</span>],
+                           reg_lambda <span style="color:#f92672">=</span> space[<span style="color:#e6db74">&#39;reg_lambda&#39;</span>])
+    
+    eval_set  <span style="color:#f92672">=</span> [( X, y), ( Xcv, ycv)]
+    
+    <span style="color:#75715e"># Fit the classsifier</span>
+    clf<span style="color:#f92672">.</span>fit(X, y,
+            eval_set<span style="color:#f92672">=</span>eval_set, eval_metric<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;rmse&#34;</span>,
+            early_stopping_rounds<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>,verbose<span style="color:#f92672">=</span>False)
+    
+    <span style="color:#75715e"># Predict on Cross Validation data</span>
+    pred <span style="color:#f92672">=</span> clf<span style="color:#f92672">.</span>predict(Xcv)
+    
+    <span style="color:#75715e"># Calculate our Metric - accuracy</span>
+    accuracy <span style="color:#f92672">=</span> accuracy_score(ycv, pred<span style="color:#f92672">&gt;</span><span style="color:#ae81ff">0.5</span>)
+<span style="color:#75715e"># return needs to be in this below format. We use negative of accuracy since we want to maximize it.</span>
+    <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#39;loss&#39;</span>: <span style="color:#f92672">-</span>accuracy, <span style="color:#e6db74">&#39;status&#39;</span>: STATUS_OK }</code></pre></div>
+<h3 id="2-create-the-space-for-your-classifier">2. Create the Space for your classifier</h3>
+
+<p><img src="/images/hyperopt2/6.jpg" alt="" /></p>
+
+<p>Now, we <strong><em>create the search space for hyperparameters</em></strong> for our classifier.</p>
+
+<p>To do this, we end up using many of hyperopt built-in functions which define various distributions.</p>
+
+<p>As you can see in the code below, we use uniform distribution between 0.7 and 1 for our <code>subsample</code> hyperparameter. We also give a label for the subsample parameter <code>x_subsample</code>. You need to provide different labels for each hyperparam you define. I generally add a <code>x_</code> before my parameter name to create this label.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">space <span style="color:#f92672">=</span>{<span style="color:#e6db74">&#39;max_depth&#39;</span>: hp<span style="color:#f92672">.</span>quniform(<span style="color:#e6db74">&#34;x_max_depth&#34;</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">1</span>),
+        <span style="color:#e6db74">&#39;min_child_weight&#39;</span>: hp<span style="color:#f92672">.</span>quniform (<span style="color:#e6db74">&#39;x_min_child&#39;</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">1</span>),
+        <span style="color:#e6db74">&#39;subsample&#39;</span>: hp<span style="color:#f92672">.</span>uniform (<span style="color:#e6db74">&#39;x_subsample&#39;</span>, <span style="color:#ae81ff">0.7</span>, <span style="color:#ae81ff">1</span>),
+        <span style="color:#e6db74">&#39;gamma&#39;</span> : hp<span style="color:#f92672">.</span>uniform (<span style="color:#e6db74">&#39;x_gamma&#39;</span>, <span style="color:#ae81ff">0.1</span>,<span style="color:#ae81ff">0.5</span>),
+        <span style="color:#e6db74">&#39;colsample_bytree&#39;</span> : hp<span style="color:#f92672">.</span>uniform (<span style="color:#e6db74">&#39;x_colsample_bytree&#39;</span>, <span style="color:#ae81ff">0.7</span>,<span style="color:#ae81ff">1</span>),
+        <span style="color:#e6db74">&#39;reg_lambda&#39;</span> : hp<span style="color:#f92672">.</span>uniform (<span style="color:#e6db74">&#39;x_reg_lambda&#39;</span>, <span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>)
+    }</code></pre></div>
+<p>You can also define a lot of other distributions too. Some of the most useful stochastic expressions currently recognized by hyperopt’s optimization algorithms are:</p>
+
+<ul>
+<li><p><code>hp.choice(label, options)</code> — Returns one of the options, which should be a list or tuple.</p></li>
+
+<li><p><code>hp.randint(label, upper)</code> — Returns a random integer in the range [0, upper).</p></li>
+
+<li><p><code>hp.uniform(label, low, high)</code> — Returns a value uniformly between low and high.</p></li>
+
+<li><p><code>hp.quniform(label, low, high, q)</code> — Returns a value like round(uniform(low, high) / q) * q</p></li>
+
+<li><p><code>hp.normal(label, mu, sigma)</code> — Returns a real value that’s normally-distributed with mean mu and standard deviation sigma.</p></li>
+</ul>
+
+<p>There are a lot of other distributions. You can check them out <a href="https://github.com/hyperopt/hyperopt/wiki/FMin" rel="nofollow" target="_blank">here</a>.</p>
+
+<hr />
+
+<h3 id="3-and-finally-run-hyperopt">3. And finally, Run Hyperopt</h3>
+
+<p><img src="/images/hyperopt2/7.jpg" alt="" /></p>
+
+<p>Once we run this, we get the best parameters for our model. Turns out we achieved an accuracy of 90% by just doing this on the problem.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">trials <span style="color:#f92672">=</span> Trials()
+best <span style="color:#f92672">=</span> fmin(fn<span style="color:#f92672">=</span>objective,
+            space<span style="color:#f92672">=</span>space,
+            algo<span style="color:#f92672">=</span>tpe<span style="color:#f92672">.</span>suggest,
+            max_evals<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>,
+            trials<span style="color:#f92672">=</span>trials)
+<span style="color:#66d9ef">print</span>(best)</code></pre></div>
+<p><img src="/images/hyperopt2/8.png" alt="" /></p>
+
+<p><strong><em>Now we can retrain our XGboost algorithm with these best params, and we are done.</em></strong></p>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Running the above gives us pretty good hyperparams for our learning algorithm. And that saves me a lot of time to think about various other hypotheses and testing them.</p>
+
+<p>I tend to use this a lot while tuning my models. <strong><em>From my experience, the most crucial part in this whole procedure is setting up the hyperparameter space, and that comes by experience as well as knowledge about the models.</em></strong></p>
+
+<p>So, Hyperopt is an awesome tool to have in your repository but never neglect to understand what your models does. It will be very helpful in the long run.</p>
+
+<p>You can get the full code in this <a href="https://www.kaggle.com/mlwhiz/how-to-use-hyperopt?scriptVersionId=20362799" rel="nofollow" target="_blank">Kaggle Kernel</a>.</p>
+
+<hr />
+
+<h2 id="continue-learning">Continue Learning</h2>
+
+<p>If you want to learn more about practical data science, do take a look at the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank"><strong>“How to win a data science competition”</strong></a> Coursera course. Learned a lot of new things from this course taught by one of the most prolific Kaggler.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
+<p>Also, a small disclaimer - There might be some affiliate links in this post to relevant resources as sharing knowledge is never a bad idea.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.415&subid=0&type=4"><IMG border="0"   alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.415&subid=0&type=4&gridnum=16"></a>
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2019/09/26/building_ml_system/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">6 Important Steps to build  a Machine Learning System</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<aside class="sidebar">
+	     
+  <div style="text-align:center">    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/10/10/hyperopt2/">Automate Hyperparameter Tuning for your models</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/09/26/building_ml_system/">6 Important Steps to build  a Machine Learning System</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/09/23/generative_approach_to_classification/">A Generative Approach to Classification</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/09/02/graph_algs/">Data Scientists, The 5 Graph Algorithms that you should know</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/09/01/regex/">The Ultimate Guide to using the Python regex module</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/08/12/resources/">How did I learn Data Science?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/08/07/feature_selection/">The 5 Feature Selection Algorithms every Data Scientist should know</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/07/30/sampling/">The 5 Sampling Algorithms every Data Scientist need to know</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/07/21/bandits/">Bayesian Bandits explained simply</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/07/20/pandas_subset/">Minimal Pandas Subset for Data Scientists</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;}
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}
+   
+</style>
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2019 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
