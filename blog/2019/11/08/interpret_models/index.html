@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Adding Interpretability to Multiclass Text Classification models</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="This post is about interpreting complex text classification models.">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="Adding Interpretability to Multiclass Text Classification models" />
+<meta property="og:description" content="This post is about interpreting complex text classification models." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2019/11/08/interpret_models/" />
+<meta property="og:image" content="https://mlwhiz.com/images/eval/interpret.png" />
+<meta property="article:published_time" content="2019-11-08T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-11-08T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/eval/interpret.png"/>
+
+<meta name="twitter:title" content="Adding Interpretability to Multiclass Text Classification models"/>
+<meta name="twitter:description" content="This post is about interpreting complex text classification models."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Adding Interpretability to Multiclass Text Classification models</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2019-11-08T00:00:00">November 08, 2019</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/interpret/main.png" alt="" /></p>
+
+<p>Explain Like I am 5.</p>
+
+<p>It is one of the basic tenets of learning for me where I try to distill any concept in a more palatable form. As Feynman said:</p>
+
+<blockquote>
+<p>I couldn’t do it. I couldn’t reduce it to the freshman level. That means we don’t really understand it.</p>
+</blockquote>
+
+<p>So, when I saw the ELI5 library that aims to interpret machine learning models, I just had to try it out.</p>
+
+<p>One of the basic problems we face while explaining our complex machine learning classifiers to the business is <strong><em>interpretability</em></strong>.</p>
+
+<p>Sometimes the stakeholders want to understand — what is causing a particular result? <strong><em>It may be because the task at hand is very critical and we cannot afford to take a wrong decision.</em></strong> Think of a classifier that takes automated monetary actions based on user reviews.</p>
+
+<p><strong><em>Or it may be to understand a little bit more about the business/the problem space.</em></strong></p>
+
+<p>Or it may be to increase the <strong><em>social acceptance</em></strong> of your model.</p>
+
+<p><strong><em>This post is about interpreting complex text classification models.</em></strong></p>
+
+<hr />
+
+<h2 id="the-dataset">The Dataset:</h2>
+
+<p>To explain how ELI5 works, I will be working with the stack overflow dataset on Kaggle. This dataset contains around 40000 posts and the corresponding tag for the post.</p>
+
+<p>This is how the dataset looks:</p>
+
+<p><img src="/images/interpret/0.png" alt="" /></p>
+
+<p>And given below is the distribution for different categories.</p>
+
+<p><img src="/images/interpret/1.png" alt="" /></p>
+
+<p>This is a balanced dataset and thus suited well for our purpose of understanding.</p>
+
+<p>So let us start. You can follow along with the code in this <a href="https://www.kaggle.com/mlwhiz/interpreting-text-classification-models-with-eli5" rel="nofollow" target="_blank">Kaggle Kernel</a></p>
+
+<hr />
+
+<h2 id="staring-simple">Staring Simple:</h2>
+
+<p><img src="/images/interpret/2.png" alt="[Interpretable ML Book](https://christophm.github.io/interpretable-ml-book/terminology.html)" /></p>
+
+<p>Let us first try to use a simple scikit-learn pipeline to build our text classifier which we will try to interpret later. <strong><em>In this pipeline, I will be using a very simple count vectorizer along with Logistic regression.</em></strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> train_test_split
+<span style="color:#f92672">from</span> sklearn.feature_extraction.text <span style="color:#f92672">import</span> CountVectorizer
+<span style="color:#f92672">from</span> sklearn.linear_model <span style="color:#f92672">import</span> LogisticRegressionCV
+<span style="color:#f92672">from</span> sklearn.pipeline <span style="color:#f92672">import</span> make_pipeline
+
+<span style="color:#75715e"># Creating train-test Split</span>
+X <span style="color:#f92672">=</span> sodata[[<span style="color:#e6db74">&#39;post&#39;</span>]]
+y <span style="color:#f92672">=</span> sodata[[<span style="color:#e6db74">&#39;tags&#39;</span>]]
+
+X_train, X_test, y_train, y_test <span style="color:#f92672">=</span> train_test_split(X, y, test_size<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+
+<span style="color:#75715e"># fitting the classifier</span>
+vec <span style="color:#f92672">=</span> CountVectorizer()
+clf <span style="color:#f92672">=</span> LogisticRegressionCV()
+pipe <span style="color:#f92672">=</span> make_pipeline(vec, clf)
+pipe<span style="color:#f92672">.</span>fit(X_train<span style="color:#f92672">.</span>post, y_train<span style="color:#f92672">.</span>tags)</code></pre></div>
+<p>Let’s see the results we get:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn <span style="color:#f92672">import</span> metrics
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">print_report</span>(pipe):
+    y_actuals <span style="color:#f92672">=</span> y_test[<span style="color:#e6db74">&#39;tags&#39;</span>]
+    y_preds <span style="color:#f92672">=</span> pipe<span style="color:#f92672">.</span>predict(X_test[<span style="color:#e6db74">&#39;post&#39;</span>])
+    report <span style="color:#f92672">=</span> metrics<span style="color:#f92672">.</span>classification_report(y_actuals, y_preds)
+    <span style="color:#66d9ef">print</span>(report)
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;accuracy: {:0.3f}&#34;</span><span style="color:#f92672">.</span>format(metrics<span style="color:#f92672">.</span>accuracy_score(y_actuals, y_preds)))
+
+print_report(pipe)</code></pre></div>
+<p><img src="/images/interpret/3.png" alt="" /></p>
+
+<p>The above is a pretty simple Logistic regression model and it performs pretty well. <strong><em>We can check out its weights using the below function:</em></strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">for</span> i, tag <span style="color:#f92672">in</span> enumerate(clf<span style="color:#f92672">.</span>classes_):
+    coefficients <span style="color:#f92672">=</span> clf<span style="color:#f92672">.</span>coef_[i]
+    weights <span style="color:#f92672">=</span> list(zip(vec<span style="color:#f92672">.</span>get_feature_names(),coefficients))
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Tag:&#39;</span>,tag)
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Most Positive Coefficients:&#39;</span>)
+    <span style="color:#66d9ef">print</span>(sorted(weights,key<span style="color:#f92672">=</span><span style="color:#66d9ef">lambda</span> x: <span style="color:#f92672">-</span>x[<span style="color:#ae81ff">1</span>])[:<span style="color:#ae81ff">10</span>])
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Most Negative Coefficients:&#39;</span>)
+    <span style="color:#66d9ef">print</span>(sorted(weights,key<span style="color:#f92672">=</span><span style="color:#66d9ef">lambda</span> x: x[<span style="color:#ae81ff">1</span>])[:<span style="color:#ae81ff">10</span>])
+    <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;--------------------------------------&#34;</span>)</code></pre></div>
+<pre><code>------------------------------------------------------------
+OUTPUT:
+------------------------------------------------------------
+
+Tag: python
+Most Positive Coefficients:
+[('python', 6.314761719932758), ('def', 2.288467823831321), ('import', 1.4032539284357077), ('dict', 1.1915110448370732), ('ordered', 1.1558015932799253), ('print', 1.1219958415166653), ('tuples', 1.053837204818975), ('elif', 0.9642251085198578), ('typeerror', 0.9595246314353266), ('tuple', 0.881802590839166)]
+Most Negative Coefficients:
+[('java', -1.8496383139251245), ('php', -1.4335540858871623), ('javascript', -1.3374796382615586), ('net', -1.2542682749949605), ('printf', -1.2014123042575882), ('objective', -1.1635960146614717), ('void', -1.1433460304246827), ('var', -1.059642972412936), ('end', -1.0498078813349798), ('public', -1.0134828865993966)]
+--------------------------------------
+Tag: ruby-on-rails
+Most Positive Coefficients:
+[('rails', 6.364037640161158), ('ror', 1.804826792986176), ('activerecord', 1.6892552000017307), ('ruby', 1.41428459023012), ('erb', 1.3927336940889532), ('end', 1.3650227017877463), ('rb', 1.2280121863441906), ('gem', 1.1988196865523322), ('render', 1.1035255831838242), ('model', 1.0813278895692746)]
+Most Negative Coefficients:
+[('net', -1.5818801311532575), ('php', -1.3483618692617583), ('python', -1.201167422237274), ('mysql', -1.187479885113293), ('objective', -1.1727511956332588), ('sql', -1.1418573958542007), ('messageform', -1.0551060751109618), ('asp', -1.0342831159678236), ('ios', -1.0319120624686084), ('iphone', -0.9400116321217807)]
+--------------------------------------
+.......
+</code></pre>
+
+<p>And that is all pretty good. We can see the coefficients make sense and we can try to improve our model using this information.</p>
+
+<p>But above was a lot of code. <strong><em>ELI5 makes this exercise pretty simple for us</em></strong>. We just have to use the below command:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> eli5
+eli5<span style="color:#f92672">.</span>show_weights(clf, vec<span style="color:#f92672">=</span>vec, top<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)</code></pre></div>
+<p><img src="/images/interpret/4.png" alt="" /></p>
+
+<p>Now as you can see the weights value for Python is the same as from the values we got from the function we wrote manually. And it is much prettier and wholesome to explore.</p>
+
+<p>But that is just the tip of the iceberg. ELI5 can also help us to debug our models as we can see below.</p>
+
+<h2 id="understanding-our-simple-text-classification-model">Understanding our Simple Text Classification Model</h2>
+
+<p>Let us now try to find out why a particular example is misclassified. I am using an example which was originally from the class Python but got misclassified as Java:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">y_preds <span style="color:#f92672">=</span> pipe<span style="color:#f92672">.</span>predict(sodata[<span style="color:#e6db74">&#39;post&#39;</span>])
+
+sodata[<span style="color:#e6db74">&#39;predicted_label&#39;</span>] <span style="color:#f92672">=</span> y_preds
+
+misclassified_examples <span style="color:#f92672">=</span> sodata[(sodata[<span style="color:#e6db74">&#39;tags&#39;</span>]<span style="color:#f92672">!=</span>sodata[<span style="color:#e6db74">&#39;predicted_label&#39;</span>])<span style="color:#f92672">&amp;</span>(sodata[<span style="color:#e6db74">&#39;tags&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;python&#39;</span>)<span style="color:#f92672">&amp;</span>(sodata[<span style="color:#e6db74">&#39;predicted_label&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;java&#39;</span>)]
+
+eli5<span style="color:#f92672">.</span>show_prediction(clf, misclassified_examples[<span style="color:#e6db74">&#39;post&#39;</span>]<span style="color:#f92672">.</span>values[<span style="color:#ae81ff">1</span>], vec<span style="color:#f92672">=</span>vec)</code></pre></div>
+<p><img src="/images/interpret/5.png" alt="" /></p>
+
+<p><img src="/images/interpret/6.png" alt="" /></p>
+
+<p>In the above example, the classifier predicts Java with a low probability. And we can examine a lot of things going on in the above example to improve our model. For example:</p>
+
+<ol>
+<li><p>We get to see that the classifier is taking a lot of digits into consideration(not good)which brings us to the conclusion of cleaning up the digits. Or replacing DateTime objects with a DateTime token.</p></li>
+
+<li><p>Also see that while dictionary has a negative weight for Java, the word dictionaries has a positive weight. So maybe stemming could also help.</p></li>
+
+<li><p>We also see that there are words like <code>&lt;pre&gt;&lt;code&gt;</code> that are influencing our classifier. These words should be removed while cleaning.</p></li>
+
+<li><p>Why is the word date influencing the results? Something to think about.</p></li>
+</ol>
+
+<p>We can take a look at more examples to get more such ideas. You get the gist.</p>
+
+<h2 id="going-deep-and-complex">Going Deep And Complex</h2>
+
+<p>This is all good and fine but*** what if models that we use don’t provide weights for the individual features like LSTM?*** It is with these models that explainability can play a very important role.</p>
+
+<p><img src="/images/interpret/7.png" alt="" /></p>
+
+<p>To understand how to do this, we first create a TextCNN model on our data. <em>Not showing the model creation process in the interest of preserving space</em> but think of it as a series of preprocessing steps and then creating the deep learning model. If interested, you can check out the modelling steps in this <a href="https://www.kaggle.com/mlwhiz/interpreting-text-classification-models-with-eli5" rel="nofollow" target="_blank">Kaggle kernel</a>.</p>
+
+<p><strong><em>Things get interesting from our point of view when we have a trained black-box model object.</em></strong></p>
+
+<p>ELI5 provides us with the <code>eli5.lime.TextExplainer</code> to debug our prediction - to check what was important in the document to make a prediction decision.</p>
+
+<p>To use <a href="https://eli5.readthedocs.io/en/latest/autodocs/lime.html#eli5.lime.lime.TextExplainer" rel="nofollow" target="_blank"><strong>TextExplainer</strong></a> instance, we pass a document to explain and a black-box classifier (a predict function which returns probabilities) to the <a href="https://eli5.readthedocs.io/en/latest/autodocs/lime.html#eli5.lime.lime.TextExplainer.fit" rel="nofollow" target="_blank"><strong>fit()</strong></a> method. From the documentation this is how our predict function should look like:</p>
+
+<blockquote>
+<p><strong>predict</strong> (<em>callable</em>) — Black-box classification pipeline. <strong><em>predict</em></strong> should be a function which takes a list of strings (documents) and return a matrix of shape <strong><em>(n_samples, n_classes)</em></strong> with probability values - a row per document and a column per output label.</p>
+</blockquote>
+
+<p>So to use ELI5 we will need to define our own function which takes as input a list of strings (documents) and return a matrix of shape <strong>(n_samples, n_classes).</strong> You can see how we first preprocess and then predict.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">predict_complex</span>(docs):
+    <span style="color:#75715e"># preprocess the docs as required by our model</span>
+    val_X <span style="color:#f92672">=</span> tokenizer<span style="color:#f92672">.</span>texts_to_sequences(docs)
+    val_X <span style="color:#f92672">=</span> pad_sequences(val_X, maxlen<span style="color:#f92672">=</span>maxlen)
+    y_preds <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>predict([val_X], batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">1024</span>, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+    <span style="color:#66d9ef">return</span> y_preds</code></pre></div>
+<p>Given below is how we can use TextExplainer. Using the same misclassified example as before in our simple classifier.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> eli5
+<span style="color:#f92672">from</span> eli5.lime <span style="color:#f92672">import</span> TextExplainer
+
+te <span style="color:#f92672">=</span> TextExplainer(random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">2019</span>)
+te<span style="color:#f92672">.</span>fit(sodata[<span style="color:#e6db74">&#39;post&#39;</span>]<span style="color:#f92672">.</span>values[<span style="color:#ae81ff">0</span>], predict_complex)
+te<span style="color:#f92672">.</span>show_prediction(target_names<span style="color:#f92672">=</span>list(encoder<span style="color:#f92672">.</span>classes_))</code></pre></div>
+<p><img src="/images/interpret/8.png" alt="" /></p>
+
+<p>This time it doesn’t get misclassified. You can see that the presence of keywords dict and list is what is influencing the decision of our classifier. One can try to see more examples to find more insights.</p>
+
+<p><strong><em>So how does this work exactly?</em></strong></p>
+
+<p><a href="https://eli5.readthedocs.io/en/latest/autodocs/lime.html#eli5.lime.lime.TextExplainer" rel="nofollow" target="_blank"><strong>TextExplainer</strong></a> generates a lot of texts similar to the document by removing some of the words, and then trains a white-box classifier which predicts the output of the black-box classifier and not the true labels. The explanation we see is for this white-box classifier.</p>
+
+<p>This is, in essence, a little bit similar to the Teacher-Student model distillation, where we use a simpler model to predict outputs from a much more complex teacher model.</p>
+
+<p>Put simply, it tries to create a simpler model that emulates a complex model and then shows us the simpler model weights.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<blockquote>
+<p>Understanding is crucial. Being able to interpret our models can help us to understand our models better and in turn, explain them better.</p>
+</blockquote>
+
+<p>ELI5 provides us with a good way to do this. It works for a variety of models and the <a href="https://eli5.readthedocs.io/en/latest/index.html" rel="nofollow" target="_blank">documentation</a> for this library is one of the best I have ever seen.</p>
+
+<p>Also, I love the decorated output the ELI5 library provides with the simple and fast way it provides to interpret my models. And debug them too.</p>
+
+<p>To use ELI5 with your models you can follow along with the code in this <a href="https://www.kaggle.com/mlwhiz/interpreting-text-classification-models-with-eli5" rel="nofollow" target="_blank">Kaggle Kernel</a></p>
+
+<h2 id="continue-learning">Continue Learning</h2>
+
+<p>If you want to <a href="https://towardsdatascience.com/how-did-i-start-with-data-science-3f4de6b501b0?source=---------8------------------" rel="nofollow" target="_blank">learn</a> more about NLP and how to create Text Classification models, I would like to call out the <a href="https://www.coursera.org/learn/language-processing?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-HcQgnbxBjnlE7bTEy2jJRw&amp;siteID=lVarvwc5BD0-HcQgnbxBjnlE7bTEy2jJRw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank"><strong><em>Natural Language Processing</em></strong></a> course in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank"><strong>Advanced machine learning specialization</strong></a>. Do check it out. It talks about a lot of beginners to advanced level topics in NLP. You might also like to take a look at some of my <a href="https://towardsdatascience.com/tagged/nlp-learning-series" rel="nofollow" target="_blank">posts on NLP</a> in the NLP Learning series.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a></p>
+
+<p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources as sharing knowledge is never a bad idea.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2019/11/07/eval_metrics/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">The 5 Classification Evaluation metrics every Data Scientist must know</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<aside class="sidebar">
+	     
+  <div style="text-align:center">    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/11/08/interpret_models/">Adding Interpretability to Multiclass Text Classification models</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/11/07/eval_metrics/">The 5 Classification Evaluation metrics every Data Scientist must know</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/10/20/cugraph/">4 Graph Algorithms on Steroids for data Scientists with cuGraph</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/10/10/hyperopt2/">Automate Hyperparameter Tuning for your models</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/09/26/building_ml_system/">6 Important Steps to build  a Machine Learning System</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/09/23/generative_approach_to_classification/">A Generative Approach to Classification</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/09/02/graph_algs/">Data Scientists, The 5 Graph Algorithms that you should know</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/09/01/regex/">The Ultimate Guide to using the Python regex module</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/08/12/resources/">How did I learn Data Science?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/08/07/feature_selection/">The 5 Feature Selection Algorithms every Data Scientist should know</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;}
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}
+   
+</style>
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2019 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
