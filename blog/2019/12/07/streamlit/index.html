@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>How to write Web apps using simple Python for Data Scientists?</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="This post is about implementing and getting an object detector on our custom dataset of streamlit">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="How to write Web apps using simple Python for Data Scientists?" />
+<meta property="og:description" content="This post is about implementing and getting an object detector on our custom dataset of streamlit" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2019/12/07/streamlit/" />
+<meta property="og:image" content="https://mlwhiz.com/images/streamlit/main.jpeg" />
+<meta property="article:published_time" content="2019-12-07T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-12-07T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/streamlit/main.jpeg"/>
+
+<meta name="twitter:title" content="How to write Web apps using simple Python for Data Scientists?"/>
+<meta name="twitter:description" content="This post is about implementing and getting an object detector on our custom dataset of streamlit"/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">How to write Web apps using simple Python for Data Scientists?</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2019-12-07T00:00:00">December 07, 2019</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/streamlit/main.jpeg" alt="" /></p>
+
+<p>A Machine Learning project is never really complete if we don’t have a good way to showcase it.</p>
+
+<p>While in the past, a well-made visualization or a small PPT used to be enough for showcasing a data science project, with the advent of dashboarding tools like RShiny and Dash, a good data scientist needs to have a fair bit of knowledge of web frameworks to get along.</p>
+
+<p>And Web frameworks are hard to learn. I still get confused in all that HTML, CSS, and Javascript with all the hit and trials, for something seemingly simple to do.</p>
+
+<p>Not to mention the many ways to do the same thing, making it confusing for us data science folks for whom web development is a secondary skill.</p>
+
+<p><strong><em>So, are we doomed to learn web frameworks? Or to call our developer friend for silly doubts in the middle of the night?</em></strong></p>
+
+<p>This is where StreamLit comes in and delivers on its promise to create web apps just using Python.</p>
+
+<blockquote>
+<p>Zen of Python: Simple is better than complex and Streamlit makes it dead simple to create apps.</p>
+</blockquote>
+
+<p><strong><em>This post is about understanding how to create apps that support data science projects using Streamlit.</em></strong></p>
+
+<p>To understand more about the architecture and the thought process that led to streamlit, have a look at this excellent <a href="https://towardsdatascience.com/coding-ml-tools-like-you-code-ml-models-ddba3357eace" rel="nofollow" target="_blank">post</a> by one of the original developers/founder <a href="undefined" rel="nofollow" target="_blank">Adrien Treuille</a>.</p>
+
+<hr />
+
+<h2 id="installation">Installation</h2>
+
+<p>Installation is as simple as running the command:</p>
+
+<p><code>pip install streamlit</code></p>
+
+<p>To see if our installation is successful, we can just run:</p>
+
+<p><code>streamlit hello</code></p>
+
+<p>This should show you a screen that says:</p>
+
+<p><img src="/images/streamlit/0.png" alt="" /></p>
+
+<p>You can go to the local URL: <code>localhost:8501</code> in your browser to see a Streamlit app in action. The developers have provided some cool demos that you can play with. Do take your time and feel the power of the tool before coming back.</p>
+
+<p><img src="/images/streamlit/1.png" alt="" /></p>
+
+<hr />
+
+<h2 id="streamlit-hello-world">Streamlit Hello World</h2>
+
+<p>Streamlit aims to make app development easy using simple Python.</p>
+
+<p>So let us write a simple app to see if it delivers on that promise.</p>
+
+<p>Here I start with a simple app which we will call the Hello World of streamlit. Just paste the code given below in a file named helloworld.py</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> streamlit <span style="color:#f92672">as</span> st
+
+x <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>slider(<span style="color:#e6db74">&#39;x&#39;</span>)
+st<span style="color:#f92672">.</span>write(x, <span style="color:#e6db74">&#39;squared is&#39;</span>, x <span style="color:#f92672">*</span> x)</code></pre></div>
+<p>And, on the terminal run:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">streamlit run helloworld<span style="color:#f92672">.</span>py</code></pre></div>
+<p>And voila, you should be able to see a simple app in action in your browser at localhost:8501 that allows you to move a slider and gives the result.</p>
+
+<p><img src="/images/streamlit/2.png" alt="A Simple slider widget app" /></p>
+
+<p>It was pretty easy. In the above app, we used two features from Streamlit:</p>
+
+<ul>
+<li><p>the <code>st.slider</code> widget that we can slide to change the output of the web app.</p></li>
+
+<li><p>and the versatile <code>st.write</code> command. I am amazed at how it can write anything from charts, dataframes, and simple text. More on this later.</p></li>
+</ul>
+
+<p><strong><em>Important: Remember that every time we change the widget value, the whole app runs from top to bottom.</em></strong></p>
+
+<hr />
+
+<h2 id="streamlit-widgets">Streamlit Widgets</h2>
+
+<p>Widgets provide us a way to control our app. The best place to read about the widgets is the <a href="https://streamlit.io/docs/api.html" rel="nofollow" target="_blank">API reference</a> documentation itself but I will describe some most prominent ones that you might end up using.</p>
+
+<h3 id="1-slider">1. Slider</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">streamlit<span style="color:#f92672">.</span>slider(label, min_value<span style="color:#f92672">=</span>None, max_value<span style="color:#f92672">=</span>None, value<span style="color:#f92672">=</span>None, step<span style="color:#f92672">=</span>None, format<span style="color:#f92672">=</span>None)</code></pre></div>
+<p>We already saw st.slider in action above. It can be used with min_value,max_value, and step for getting inputs in a range.</p>
+
+<h3 id="2-text-input">2. Text Input</h3>
+
+<p>The simplest way to get user input be it some URL input or some text input for sentiment analysis. It just needs a single label for naming the textbox.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> streamlit <span style="color:#f92672">as</span> st
+
+url <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>text_input(<span style="color:#e6db74">&#39;Enter URL&#39;</span>)
+st<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#39;The Entered URL is&#39;</span>, url)</code></pre></div>
+<p>This is how the app looks:</p>
+
+<p><img src="/images/streamlit/3.png" alt="A Simple text_input widget app" /></p>
+
+<p><strong>Tip:</strong> You can just change the file <code>helloworld.py</code> and refresh the browser. The way I work is to open and change <code>helloworld.py</code> in sublime text and see the changes in the browser side by side.</p>
+
+<h3 id="3-checkbox">3. Checkbox</h3>
+
+<p>One use case for checkboxes is to hide or show/hide a specific section in an app. Another could be setting up a boolean value in the parameters for a function.<a href="https://streamlit.io/docs/api.html#streamlit.checkbox" rel="nofollow" target="_blank">st.checkbox()</a> takes a single argument, which is the widget label. In this app, the checkbox is used to toggle a conditional statement.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> streamlit <span style="color:#f92672">as</span> st
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+
+df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;football_data.csv&#34;</span>)
+<span style="color:#66d9ef">if</span> st<span style="color:#f92672">.</span>checkbox(<span style="color:#e6db74">&#39;Show dataframe&#39;</span>):
+    st<span style="color:#f92672">.</span>write(df)</code></pre></div>
+<p><img src="/images/streamlit/4.png" alt="A Simple checkbox widget app" /></p>
+
+<h3 id="4-selectbox">4. SelectBox</h3>
+
+<p>We can use <a href="https://streamlit.io/docs/api.html#streamlit.selectbox" rel="nofollow" target="_blank">st.selectbox</a> to choose from a series or a list. Normally a use case is to use it as a simple dropdown to select values from a list.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> streamlit <span style="color:#f92672">as</span> st
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+
+df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;football_data.csv&#34;</span>)
+
+option <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>selectbox(
+    <span style="color:#e6db74">&#39;Which Club do you like best?&#39;</span>,
+     df[<span style="color:#e6db74">&#39;Club&#39;</span>]<span style="color:#f92672">.</span>unique())
+
+st<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#39;You selected:&#39;</span>, option)</code></pre></div>
+<p><img src="/images/streamlit/5.png" alt="A Simple dropdown/selectbox widget app" /></p>
+
+<h3 id="5-multiselect">5. MultiSelect</h3>
+
+<p>We can also use multiple values from a dropdown. Here we use st.multiselect to get multiple values as a list in the variable options</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> streamlit <span style="color:#f92672">as</span> st
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+
+df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;football_data.csv&#34;</span>)
+
+options <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>multiselect(
+ <span style="color:#e6db74">&#39;What are your favorite clubs?&#39;</span>, df[<span style="color:#e6db74">&#39;Club&#39;</span>]<span style="color:#f92672">.</span>unique())
+
+st<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#39;You selected:&#39;</span>, options)</code></pre></div>
+<p><img src="/images/streamlit/6.png" alt="A Simple multiselect widget app" /></p>
+
+<hr />
+
+<h2 id="creating-our-simple-app-step-by-step">Creating Our Simple App Step by Step</h2>
+
+<p>So much for understanding the important widgets. Now, we are going to create a simple app using multiple widgets at once.</p>
+
+<p>To start simple, we will try to visualize our football data using streamlit. It is pretty much simple to do this with the help of the above widgets.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> streamlit <span style="color:#f92672">as</span> st
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+
+df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;football_data.csv&#34;</span>)
+
+clubs <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>multiselect(<span style="color:#e6db74">&#39;Show Player for clubs?&#39;</span>, df[<span style="color:#e6db74">&#39;Club&#39;</span>]<span style="color:#f92672">.</span>unique())
+
+nationalities <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>multiselect(<span style="color:#e6db74">&#39;Show Player from Nationalities?&#39;</span>, df[<span style="color:#e6db74">&#39;Nationality&#39;</span>]<span style="color:#f92672">.</span>unique())
+
+<span style="color:#75715e"># Filter dataframe</span>
+new_df <span style="color:#f92672">=</span> df[(df[<span style="color:#e6db74">&#39;Club&#39;</span>]<span style="color:#f92672">.</span>isin(clubs)) <span style="color:#f92672">&amp;</span> (df[<span style="color:#e6db74">&#39;Nationality&#39;</span>]<span style="color:#f92672">.</span>isin(nationalities))]
+
+<span style="color:#75715e"># write dataframe to screen</span>
+st<span style="color:#f92672">.</span>write(new_df)</code></pre></div>
+<p>Our simple app looks like:</p>
+
+<p><img src="/images/streamlit/7.png" alt="Using multiple widgets in conjunction" /></p>
+
+<p>That was easy. But it seems pretty basic right now. Can we add some charts?</p>
+
+<p>Streamlit currently supports many libraries for plotting.<strong><em>Plotly, Bokeh, Matplotlib, Altair, and Vega charts</em></strong> being some of them. <strong><em>Plotly Express</em></strong> also works, although they didn’t specify it in the docs. It also has some inbuilt chart types that are “native” to Streamlit, like <code>st.line_chart</code> and <code>st.area_chart</code>.</p>
+
+<p>We will work with <code>plotly_express</code> here. Here is the code for our simple app. We just used four calls to streamlit. Rest is all simple python.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> streamlit <span style="color:#f92672">as</span> st
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> plotly_express <span style="color:#f92672">as</span> px
+
+df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;football_data.csv&#34;</span>)
+
+clubs <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>multiselect(<span style="color:#e6db74">&#39;Show Player for clubs?&#39;</span>, df[<span style="color:#e6db74">&#39;Club&#39;</span>]<span style="color:#f92672">.</span>unique())
+nationalities <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>multiselect(<span style="color:#e6db74">&#39;Show Player from Nationalities?&#39;</span>, df[<span style="color:#e6db74">&#39;Nationality&#39;</span>]<span style="color:#f92672">.</span>unique())
+
+new_df <span style="color:#f92672">=</span> df[(df[<span style="color:#e6db74">&#39;Club&#39;</span>]<span style="color:#f92672">.</span>isin(clubs)) <span style="color:#f92672">&amp;</span> (df[<span style="color:#e6db74">&#39;Nationality&#39;</span>]<span style="color:#f92672">.</span>isin(nationalities))]
+st<span style="color:#f92672">.</span>write(new_df)
+
+<span style="color:#75715e"># create figure using plotly express</span>
+fig <span style="color:#f92672">=</span> px<span style="color:#f92672">.</span>scatter(new_df, x <span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Overall&#39;</span>,y<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Age&#39;</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Name&#39;</span>)
+
+<span style="color:#75715e"># Plot!</span>
+st<span style="color:#f92672">.</span>plotly_chart(fig)</code></pre></div>
+<p><img src="/images/streamlit/8.png" alt="Adding charts" /></p>
+
+<hr />
+
+<h2 id="improvements">Improvements</h2>
+
+<p>In the start we said that each time we change any widget, the whole app runs from start to end. This is not feasible when we create apps that will serve deep learning models or complicated machine learning models. Streamlit covers us in this aspect by introducing <strong><em>Caching</em></strong>.</p>
+
+<h3 id="1-caching">1. Caching</h3>
+
+<p>In our simple app. We read the pandas dataframe again and again whenever a value changes. While it works for the small data we have, it will not work for big data or when we have to do a lot of processing on the data. Let us use caching using the <code>st.cache</code> decorator function in streamlit like below.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> streamlit <span style="color:#f92672">as</span> st
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> plotly_express <span style="color:#f92672">as</span> px
+
+df <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>cache(pd<span style="color:#f92672">.</span>read_csv)(<span style="color:#e6db74">&#34;football_data.csv&#34;</span>)</code></pre></div>
+<p>Or for more complex and time taking functions that need to run only once(think loading big Deep Learning models), using:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#a6e22e">@st.cache</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">complex_func</span>(a,b):
+    DO SOMETHING COMPLEX
+
+<span style="color:#75715e"># Won&#39;t run again and again.</span>
+complex_func(a,b)</code></pre></div>
+<p>When we mark a function with Streamlit’s cache decorator, whenever the function is called streamlit checks the input parameters that you called the function with.</p>
+
+<p><strong><em>If this is the first time Streamlit has seen these params, it runs the function and stores the result in a local cache.</em></strong></p>
+
+<p>When the function is called the next time, if those params have not changed, Streamlit knows it can skip executing the function altogether. It just uses the results from the cache.</p>
+
+<h3 id="2-sidebar">2. Sidebar</h3>
+
+<p>For a cleaner look based on your preference, you might want to move your widgets into a sidebar, something like Rshiny dashboards. <strong><em>This is pretty simple. Just add <code>st.sidebar</code> in your widget’s code.</em></strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> streamlit <span style="color:#f92672">as</span> st
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> plotly_express <span style="color:#f92672">as</span> px
+
+df <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>cache(pd<span style="color:#f92672">.</span>read_csv)(<span style="color:#e6db74">&#34;football_data.csv&#34;</span>)
+
+clubs <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>sidebar<span style="color:#f92672">.</span>multiselect(<span style="color:#e6db74">&#39;Show Player for clubs?&#39;</span>, df[<span style="color:#e6db74">&#39;Club&#39;</span>]<span style="color:#f92672">.</span>unique())
+nationalities <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>sidebar<span style="color:#f92672">.</span>multiselect(<span style="color:#e6db74">&#39;Show Player from Nationalities?&#39;</span>, df[<span style="color:#e6db74">&#39;Nationality&#39;</span>]<span style="color:#f92672">.</span>unique())
+
+new_df <span style="color:#f92672">=</span> df[(df[<span style="color:#e6db74">&#39;Club&#39;</span>]<span style="color:#f92672">.</span>isin(clubs)) <span style="color:#f92672">&amp;</span> (df[<span style="color:#e6db74">&#39;Nationality&#39;</span>]<span style="color:#f92672">.</span>isin(nationalities))]
+st<span style="color:#f92672">.</span>write(new_df)
+
+<span style="color:#75715e"># Create distplot with custom bin_size</span>
+fig <span style="color:#f92672">=</span> px<span style="color:#f92672">.</span>scatter(new_df, x <span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Overall&#39;</span>,y<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Age&#39;</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Name&#39;</span>)
+
+<span style="color:#75715e"># Plot!</span>
+st<span style="color:#f92672">.</span>plotly_chart(fig)</code></pre></div>
+<p><img src="/images/streamlit/9.png" alt="Move widgets to the sidebar" /></p>
+
+<h3 id="3-markdown">3. Markdown?</h3>
+
+<p>I love writing in Markdown. I find it less verbose than HTML and much more suited for data science work. So, can we use Markdown with the streamlit app?</p>
+
+<p>Yes, we can. There are a couple of ways to do this. In my view, the best one is to use <a href="https://streamlit.io/docs/api.html#id1" rel="nofollow" target="_blank">Magic commands</a>. Magic commands allow you to write markdown as easily as comments. You could also have used the command <code>st.markdown</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> streamlit <span style="color:#f92672">as</span> st
+<span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> plotly_express <span style="color:#f92672">as</span> px
+
+<span style="color:#e6db74">&#39;&#39;&#39;
+</span><span style="color:#e6db74"># Club and Nationality App
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">This very simple webapp allows you to select and visualize players from certain clubs and certain nationalities.
+</span><span style="color:#e6db74">&#39;&#39;&#39;</span>
+df <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>cache(pd<span style="color:#f92672">.</span>read_csv)(<span style="color:#e6db74">&#34;football_data.csv&#34;</span>)
+
+clubs <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>sidebar<span style="color:#f92672">.</span>multiselect(<span style="color:#e6db74">&#39;Show Player for clubs?&#39;</span>, df[<span style="color:#e6db74">&#39;Club&#39;</span>]<span style="color:#f92672">.</span>unique())
+nationalities <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>sidebar<span style="color:#f92672">.</span>multiselect(<span style="color:#e6db74">&#39;Show Player from Nationalities?&#39;</span>, df[<span style="color:#e6db74">&#39;Nationality&#39;</span>]<span style="color:#f92672">.</span>unique())
+
+new_df <span style="color:#f92672">=</span> df[(df[<span style="color:#e6db74">&#39;Club&#39;</span>]<span style="color:#f92672">.</span>isin(clubs)) <span style="color:#f92672">&amp;</span> (df[<span style="color:#e6db74">&#39;Nationality&#39;</span>]<span style="color:#f92672">.</span>isin(nationalities))]
+st<span style="color:#f92672">.</span>write(new_df)
+
+<span style="color:#75715e"># Create distplot with custom bin_size</span>
+fig <span style="color:#f92672">=</span> px<span style="color:#f92672">.</span>scatter(new_df, x <span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Overall&#39;</span>,y<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Age&#39;</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Name&#39;</span>)
+
+<span style="color:#e6db74">&#39;&#39;&#39;
+</span><span style="color:#e6db74">### Here is a simple chart between player age and overall
+</span><span style="color:#e6db74">&#39;&#39;&#39;</span>
+
+st<span style="color:#f92672">.</span>plotly_chart(fig)</code></pre></div>
+<p><img src="/images/streamlit/10.png" alt="Our final App Demo" /></p>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Streamlit has democratized the whole process to create apps, and I couldn’t recommend it more.</p>
+
+<p>In this post, we created a simple web app. But the possibilities are endless. To give an example here is <a href="https://research.nvidia.com/publication/2017-10_Progressive-Growing-of" rel="nofollow" target="_blank">face GAN</a> from the streamlit site. And it works by just using the same guiding ideas of widgets and caching.</p>
+
+<p><img src="/images/streamlit/11.png" alt="" /></p>
+
+<p>I love the default colors and styles that the developers have used, and I found it much more comfortable than using Dash, which I was using until now for my demos. You can also include <a href="https://streamlit.io/docs/api.html#display-interactive-widgets" rel="nofollow" target="_blank">audio</a> and video in your streamlit apps.</p>
+
+<p><strong>On top of that, Streamlit is a free and open-source rather than a proprietary web app that just works out of the box.</strong></p>
+
+<p>In the past, I had to reach out to my developer friends for any single change in a demo or presentation; now it is relatively trivial to do that.</p>
+
+<blockquote>
+<p>I aim to use it more in my workflow from now on, and considering the capabilities it provides without all the hard work, I think you should too.</p>
+</blockquote>
+
+<p>I don’t have an idea if it will perform well in a production environment yet, but its a boon for the small proof of concept projects and demos. I aim to use it more in my workflow from now on, and considering the capabilities it provides without all the hard work, I think you should too.</p>
+
+<p>You can find the full code for the final app <a href="https://github.com/MLWhiz/streamlit_football_demo" rel="nofollow" target="_blank">here</a>.</p>
+
+<p>If you want to learn about the best strategies for creating Visualizations, I would like to call out an excellent course about <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank"><strong>Data Visualization and applied plotting</strong></a> from the University of Michigan, which is a part of a pretty good <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank"><strong>Data Science Specialization with Python</strong></a> in itself. Do check it out.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
+<p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2019/12/06/weapons/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Implementing Object Detection and Instance Segmentation for Data Scientists</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<aside class="sidebar">
+	     
+  <div style="text-align:center">    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/12/07/streamlit/">How to write Web apps using simple Python for Data Scientists?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/12/06/weapons/">Implementing Object Detection and Instance Segmentation for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/12/05/od/">Demystifying Object Detection and Instance Segmentation for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/12/04/blackbox/">How to find Feature importances for BlackBox Models?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/11/27/cities/">Top 5 Cities for Data Scientists to Thrive In</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/11/12/dtsplits/">The Simple Math behind 3 Decision Tree Splitting criterions</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/11/11/pval/">P-value Explained Simply for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/11/08/interpret_models/">Adding Interpretability to Multiclass Text Classification models</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/11/07/eval_metrics/">The 5 Classification Evaluation metrics every Data Scientist must know</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/10/20/cugraph/">4 Graph Algorithms on Steroids for data Scientists with cuGraph</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;}
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}
+   
+</style>
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2019 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
