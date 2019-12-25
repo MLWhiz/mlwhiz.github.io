@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Take your Machine Learning Models to Production with these 5 simple steps</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="This post is about explaining some of the worst mistakes people do in a data science interview so that you don’t end up repeating them">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="Take your Machine Learning Models to Production with these 5 simple steps" />
+<meta property="og:description" content="This post is about explaining some of the worst mistakes people do in a data science interview so that you don’t end up repeating them" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2019/12/25/prod/" />
+<meta property="og:image" content="https://mlwhiz.com/images/prod/main.png" />
+<meta property="article:published_time" content="2019-12-25T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-12-25T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/prod/main.png"/>
+
+<meta name="twitter:title" content="Take your Machine Learning Models to Production with these 5 simple steps"/>
+<meta name="twitter:description" content="This post is about explaining some of the worst mistakes people do in a data science interview so that you don’t end up repeating them"/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Take your Machine Learning Models to Production with these 5 simple steps</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2019-12-25T00:00:00">December 25, 2019</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/prod/main.png" alt="" /></p>
+
+<blockquote>
+<p>Creating a great machine learning system is an art.</p>
+</blockquote>
+
+<p>There are a lot of things to consider while building a great machine learning system. But often it happens that we as data scientists only worry about certain parts of the project.</p>
+
+<p><strong><em>But do we ever think about how we will deploy our models once we have them?</em></strong></p>
+
+<p>I have seen a lot of ML projects, and a lot of them are doomed to fail as they don’t have a set plan for production from the onset.</p>
+
+<p>This post is about the process requirements for a successful ML project — One that goes to production.</p>
+
+<hr />
+
+<h2 id="1-establish-a-baseline-at-the-onset">1. Establish a Baseline at the onset</h2>
+
+<p>You don’t really have to have a model to get the baseline results.</p>
+
+<p>Let us say we will be using RMSE as an evaluation metric for our time series models. We evaluated the model on the test set, and the RMSE came out to be 3.64.</p>
+
+<p>Is 3.64 a good RMSE? How do we know? We need a baseline RMSE.</p>
+
+<p>This could come from a currently employed model for the same task. Or by using some very simple heuristic. For a Time series model, a baseline to defeat is last day prediction. i.e., predict the number on the previous day.</p>
+
+<p>Or how about Image classification task. Take 1000 labelled samples and get them classified by humans. And Human accuracy can be your Baseline. If a human is not able to get a 70% prediction accuracy on the task, you can always think of automating a process if your models reach a similar level.</p>
+
+<p><strong><em>Learning</em></strong>: Try to be aware of the results you are going to get before you create your models. Setting some out of the world expectations is only going to disappoint you and your client.</p>
+
+<hr />
+
+<h2 id="2-continuous-integration-is-the-way-forward">2. Continuous Integration is the Way Forward</h2>
+
+<p><img src="/images/prod/0.png" alt="" /></p>
+
+<p>You have created your model now. It performs better than the baseline/your current model on your local test dataset. Should we go forward?</p>
+
+<p>We have two choices-</p>
+
+<ol>
+<li><p>Go into an endless loop in improving our model further.</p></li>
+
+<li><p>Test our model in production settings, get more insights about what could go wrong and then continue improving our model with <strong><em>continuous integration.</em></strong></p></li>
+</ol>
+
+<p>I am a fan of the second approach. In his awesome <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11421702016&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fmachine-learning-projects" rel="nofollow" target="_blank">third course</a> named Structuring Machine learning projects in the Coursera <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdeep-learning" rel="nofollow" target="_blank">Deep Learning Specialization</a>, Andrew Ng says —</p>
+
+<blockquote>
+<p>“Don’t start off trying to design and build the perfect system. Instead, build and train a basic system quickly — perhaps in just a few days. Even if the basic system is far from the “best” system you can build, it is valuable to examine how the basic system functions: you will quickly find clues that show you the most promising directions in which to invest your time.”</p>
+</blockquote>
+
+<p>Done is better than perfect.</p>
+
+<p><strong><em>Learning</em></strong>: If your new model is better than the current model in production or your new model is better than the baseline, it doesn’t make sense to wait to go to production.</p>
+
+<hr />
+
+<h2 id="3-your-model-might-break-into-production">3. Your model might break into Production</h2>
+
+<p>Is your model better than the Baseline? It performed better on the local test dataset, but will it really work well on the whole?</p>
+
+<p>To test the validity of your assumption that your model is better than the existing model, you can set up an <strong><em>A/B test</em></strong>. Some users(Test group)see predictions from your model while some users(Control) see the predictions from the previous model.</p>
+
+<p>In fact, this is the right way to deploy your model. And you might find that indeed your model is not as good as it seems.</p>
+
+<blockquote>
+<p>Being wrong is not wrong really, what’s wrong is to not anticipate that we could be wrong.</p>
+</blockquote>
+
+<p>It is hard to point out the real reason behind why your model performs poorly in production settings, but some causes could be:</p>
+
+<ul>
+<li><p>You might see the data coming in real-time to be significantly different from the training data.</p></li>
+
+<li><p>Or you have not done the preprocessing pipeline correctly.</p></li>
+
+<li><p>Or you do not measure the performance correctly.</p></li>
+
+<li><p>Or maybe there is a bug in your implementation.</p></li>
+</ul>
+
+<p><strong><em>Learning:</em></strong> <strong><em>Don’t go into production with a full scale.</em></strong> A/B test is always an excellent way to go forward. Have something ready to fall back upon(An older model perhaps). There might always be things that might break, which you couldn’t have anticipated.</p>
+
+<hr />
+
+<h2 id="4-your-model-might-not-even-go-to-production">4. Your model might not even go to Production</h2>
+
+<p>I have created this impressive ML model, it gives 90% accuracy, but it takes around 10 seconds to fetch a prediction.</p>
+
+<p><strong><em>Is that acceptable?</em></strong> For some use-cases maybe, but really no.</p>
+
+<p>In the past, there have been many Kaggle competitions whose winners ended up creating monster ensembles to take the top spots on the leaderboard. Below is a particular mindblowing example model which was used to win Otto classification challenge on Kaggle:</p>
+
+<p><img src="/images/prod/1.png" alt="" /></p>
+
+<p>Another example is the Netflix Million dollar Recommendation Engine Challenge. The Netflix team ended up <a href="https://www.wired.com/2012/04/netflix-prize-costs/" rel="nofollow" target="_blank">never</a> using the wining solution due to the engineering costs involved.</p>
+
+<p><strong><em>So how do you make your models accurate yet easy on the machine?</em></strong></p>
+
+<p><img src="/images/prod/2.png" alt="" /></p>
+
+<p><em>Teacher — Student Model: <a href="https://towardsdatascience.com/knowledge-distillation-simplified-dd4973dbc764" rel="nofollow" target="_blank">Source</a></em></p>
+
+<p>Here comes the concept of Teacher-Student models or <strong><em>Knowledge distillation</em></strong>. In Knowledge distillation, we train a smaller student model on a bigger already trained teacher model.</p>
+
+<p>Here we use the soft labels/probabilities from the teacher model and use it as the training data for the Student model.</p>
+
+<blockquote>
+<p>The point is that the teacher is outputting class probabilities — “soft labels” rather than “hard labels”. For example, a fruit classifier might say “Apple 0.9, Pear 0.1” instead of “Apple 1.0, Pear 0.0” . Why bother? Because these “soft labels” are more informative than the original ones — telling the student that yes, a particular apple does very slightly resemble a pear. Student models can often come very close to teacher-level performance, even while using 1–2 orders of magnitude fewer parameters! — <a href="https://www.quora.com/What-is-a-teacher-student-model-in-a-Convolutional-neural-network" rel="nofollow" target="_blank">Source</a></p>
+</blockquote>
+
+<p><strong><em>Learning:</em></strong> Sometimes, we don’t have a lot of compute available at prediction time, and so we want to have a lighter model. We can try to build simpler models or try using knowledge distillation for such use cases.</p>
+
+<hr />
+
+<h2 id="5-maintainance-and-feedback-loop">5. Maintainance and Feedback Loop</h2>
+
+<blockquote>
+<p>The world is not constant and so are your model weights</p>
+</blockquote>
+
+<p>The world around us is rapidly changing, and what might be applicable two months back might not be relevant now. In a way, the models we build are reflections of the world, and if the world is changing our models should be able to reflect this change.</p>
+
+<p><img src="/images/prod/3.png" alt="" /></p>
+
+<p>Model performance deteriorates typically with time.</p>
+
+<p><strong><em>For this reason, we must think of ways to upgrade our models as part of the maintenance cycle at the onset itself.</em></strong></p>
+
+<p>The frequency of this cycle depends entirely on the business problem that you are trying to solve. In an Ad prediction system where the users tend to be fickle and buying patterns emerge continuously, the frequency needs to be pretty high. While in a review sentiment analysis system, the frequency need not be that high as language doesn’t change its structure quite so much.</p>
+
+<p><img src="/images/prod/4.png" alt="" />
+<em>Feedback Loop: <a href="https://www.clarifai.com/blog/closing-the-loop-how-feedback-loops-help-to-maintain-quality-long-term-ai-results" rel="nofollow" target="_blank">Source</a></em></p>
+
+<p>I would also like to acknowledge <strong><em>the importance of the feedback loop in a machine learning system</em></strong>. Let’s say that you predicted that a particular image is a dog with low probability in a dog vs cat classifier. Can we learn something from these low confidence examples? You can send it to manual review to check if it could be used to retrain the model or not. In this way, we train our classifier on instances it is unsure about.</p>
+
+<p><strong><em>Learning:</em></strong> When thinking of production, come up with a plan to maintain and improve the model using feedback as well.</p>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>These are some of the things I find important before thinking of putting a model into production.</p>
+
+<p>While this is not an exhaustive list of things that you need to think about and things that could go wrong, it might undoubtedly act as food for thought for the next time you create your machine learning system.</p>
+
+<p>If you want to learn more about how to structure a Machine Learning project and the best practices, I would like to call out his excellent <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11421702016&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fmachine-learning-projects" rel="nofollow" target="_blank">third course</a> named Structuring Machine learning projects in the Coursera <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdeep-learning" rel="nofollow" target="_blank">Deep Learning Specialization</a>. Do check it out.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a></p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2019/12/24/mistakes/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">3 Mistakes you should not make in a Data Science Interview</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<aside class="sidebar">
+  <div style="text-align:center">    
+    <a href="https://www.patreon.com/bePatron?u=28135435" data-patreon-widget-type="become-patron-button">Become a Patron!</a><script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+  
+	     
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/12/25/prod/">Take your Machine Learning Models to Production with these 5 simple steps</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/12/24/mistakes/">3 Mistakes you should not make in a Data Science Interview</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/12/09/pc/">3 Programming concepts for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/12/07/streamlit/">How to write Web apps using simple Python for Data Scientists?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/12/06/weapons/">Implementing Object Detection and Instance Segmentation for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/12/05/od/">Demystifying Object Detection and Instance Segmentation for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/12/04/blackbox/">How to find Feature importances for BlackBox Models?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/11/27/cities/">Top 5 Cities for Data Scientists to Thrive In</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/11/12/dtsplits/">The Simple Math behind 3 Decision Tree Splitting criterions</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/11/11/pval/">P-value Explained Simply for Data Scientists</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;}
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}
+   
+</style>
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2019 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
