@@ -8,11 +8,80 @@
     <description>Recent content on MLWhiz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 25 Dec 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 28 Dec 2019 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="https://mlwhiz.com/atom.xml" rel="self" type="application/rss+xml" />
     
 
+    
+
+    <item>
+      <title>Using Gradient Boosting for Time Series prediction tasks</title>
+      <link>https://mlwhiz.com/blog/2019/12/28/timeseries/</link>
+      <pubDate>Sat, 28 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2019/12/28/timeseries/</guid>
+      
+      
+      <media:content type="image/png" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/timeseries/main.png"></media:content>
+      
+
+      
+      <description>Time series prediction problems are pretty frequent in the retail domain.
+Companies like Walmart and Target need to keep track of how much product should be shipped from Distribution Centres to stores. Even a small improvement in such a demand forecasting system can help save a lot of dollars in term of workforce management, inventory cost and out of stock loss.
+While there are many techniques to solve this particular problem like ARIMA, Prophet, and LSTMs, we can also treat such a problem as a regression problem too and use trees to solve it.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  Time series prediction problems are pretty frequent in the retail domain.
+Companies like Walmart and Target need to keep track of how much product should be shipped from Distribution Centres to stores. Even a small improvement in such a demand forecasting system can help save a lot of dollars in term of workforce management, inventory cost and out of stock loss.
+While there are many techniques to solve this particular problem like ARIMA, Prophet, and LSTMs, we can also treat such a problem as a regression problem too and use trees to solve it.
+In this post, we will try to solve the time series problem using XGBoost.
+The main things I am going to focus on are the sort of features such a setup takes and how to create such features.
+Dataset Kaggle master Kazanova along with some of his friends released a “How to win a data science competition” Coursera course. The Course involved a final project which itself was a time series prediction problem.
+In this competition, we are given a challenging time-series dataset consisting of daily sales data, provided by one of the largest Russian software firms — 1C Company.
+We have to predict total sales for every product and store in the next month.
+Here is how the data looks like:
+We are given the data at a daily level, and we want to build a model which predicts total sales for every product and store in the next month.
+The variable date_block_num is a consecutive month number, used for convenience. January 2013 is 0, and October 2015 is 33. You can think of it as a proxy to month variable. I think all the other variables are self-explanatory.
+So how do we approach this sort of a problem?
+Data Preparation The main thing that I noticed is that the data preparation and feature generation aspect is by far the most important thing when we attempt to solve the time series problem using regression.
+1. Do Basic EDA and remove outliers sales = sales[sales[&amp;#39;item_price&amp;#39;]&amp;lt;100000] sales = sales[sales[&amp;#39;item_cnt_day&amp;#39;]&amp;lt;=1000] 2. Group data at a level you want your predictions to be: We start with creating a dataframe of distinct date_block_num, store and item combinations.
+This is important because in the months we don’t have a data for an item store combination, the machine learning algorithm needs to be told explicitly that the sales are zero.
+from itertools import product # Create &amp;#34;grid&amp;#34; with columns index_cols = [&amp;#39;shop_id&amp;#39;, &amp;#39;item_id&amp;#39;, &amp;#39;date_block_num&amp;#39;] # For every month we create a grid from all shops/items combinations from that month grid = [] for block_num in sales[&amp;#39;date_block_num&amp;#39;].unique(): cur_shops = sales.loc[sales[&amp;#39;date_block_num&amp;#39;] == block_num, &amp;#39;shop_id&amp;#39;].unique() cur_items = sales.loc[sales[&amp;#39;date_block_num&amp;#39;] == block_num, &amp;#39;item_id&amp;#39;].unique() grid.append(np.array(list(product(*[cur_shops, cur_items, [block_num]])),dtype=&amp;#39;int32&amp;#39;)) grid = pd.DataFrame(np.vstack(grid), columns = index_cols,dtype=np.int32) grid.head() The grid dataFrame contains all the shop, items and month combinations.
+We then merge the Grid with Sales to get the monthly sales DataFrame. We also replace all the NA’s with zero for months that didn’t have any sales.
+sales_m = sales.groupby([&amp;#39;date_block_num&amp;#39;,&amp;#39;shop_id&amp;#39;,&amp;#39;item_id&amp;#39;]).agg({&amp;#39;item_cnt_day&amp;#39;: &amp;#39;sum&amp;#39;,&amp;#39;item_price&amp;#39;: np.mean}).reset_index() # Merging sales numbers with the grid dataframe sales_m = pd.merge(grid,sales_m,on=[&amp;#39;date_block_num&amp;#39;,&amp;#39;shop_id&amp;#39;,&amp;#39;item_id&amp;#39;],how=&amp;#39;left&amp;#39;).fillna(0) # adding the category id too from the items table. sales_m = pd.merge(sales_m,items,on=[&amp;#39;item_id&amp;#39;],how=&amp;#39;left&amp;#39;) 3. Create Target Encodings To create target encodings, we group by a particular column and take the mean/min/sum etc. of the target column on it. These features are the first features we create in our model.
+Please note that these features may induce a lot of leakage/overfitting in our system and thus we don’t use them directly in our models. We will use the lag based version of these features in our models which we will create next.
+groupcollist = [&amp;#39;item_id&amp;#39;,&amp;#39;shop_id&amp;#39;,&amp;#39;item_category_id&amp;#39;] aggregationlist = [(&amp;#39;item_price&amp;#39;,np.mean,&amp;#39;avg&amp;#39;),(&amp;#39;item_cnt_day&amp;#39;,np.sum,&amp;#39;sum&amp;#39;),(&amp;#39;item_cnt_day&amp;#39;,np.mean,&amp;#39;avg&amp;#39;)] for type_id in groupcollist: for column_id,aggregator,aggtype in aggregationlist: # get numbers from sales data and set column names mean_df = sales_m.groupby([type_id,&amp;#39;date_block_num&amp;#39;]).aggregate(aggregator).reset_index()[[column_id,type_id,&amp;#39;date_block_num&amp;#39;]] mean_df.columns = [type_id&#43;&amp;#39;_&amp;#39;&#43;aggtype&#43;&amp;#39;_&amp;#39;&#43;column_id,type_id,&amp;#39;date_block_num&amp;#39;] # merge new columns on sales_m data sales_m = pd.merge(sales_m,mean_df,on=[&amp;#39;date_block_num&amp;#39;,type_id],how=&amp;#39;left&amp;#39;) We group by item_id, shop_id, and item_category_id and aggregate on the item_price and item_cnt_day column to create the following new features:
+We could also have used featuretools for this. Featuretools is a framework to perform automated feature engineering. It excels at transforming temporal and relational datasets into feature matrices for machine learning.
+4. Create Lag Features The next set of features our model needs are the lag based Features.
+When we create regular classification models, we treat training examples as fairly independent of each other. But in case of time series problems, at any point in time, the model needs information on what happened in the past.
+We can’t do this for all the past days, but we can provide the models with the most recent information nonetheless using our target encoded features.
+lag_variables = [&amp;#39;item_id_avg_item_price&amp;#39;,&amp;#39;item_id_sum_item_cnt_day&amp;#39;,&amp;#39;item_id_avg_item_cnt_day&amp;#39;,&amp;#39;shop_id_avg_item_price&amp;#39;,&amp;#39;shop_id_sum_item_cnt_day&amp;#39;,&amp;#39;shop_id_avg_item_cnt_day&amp;#39;,&amp;#39;item_category_id_avg_item_price&amp;#39;,&amp;#39;item_category_id_sum_item_cnt_day&amp;#39;,&amp;#39;item_category_id_avg_item_cnt_day&amp;#39;,&amp;#39;item_cnt_day&amp;#39;] lags = [1 ,2 ,3 ,4, 5, 12] # we will keep the results in thsi dataframe sales_means = sales_m.copy() for lag in lags: sales_new_df = sales_m.copy() sales_new_df.date_block_num&#43;=lag # subset only the lag variables we want sales_new_df = sales_new_df[[&amp;#39;date_block_num&amp;#39;,&amp;#39;shop_id&amp;#39;,&amp;#39;item_id&amp;#39;]&#43;lag_variables] sales_new_df.columns = [&amp;#39;date_block_num&amp;#39;,&amp;#39;shop_id&amp;#39;,&amp;#39;item_id&amp;#39;]&#43; [lag_feat&#43;&amp;#39;_lag_&amp;#39;&#43;str(lag) for lag_feat in lag_variables] # join with date_block_num,shop_id and item_id sales_means = pd.merge(sales_means, sales_new_df,on=[&amp;#39;date_block_num&amp;#39;,&amp;#39;shop_id&amp;#39;,&amp;#39;item_id&amp;#39;] ,how=&amp;#39;left&amp;#39;) So we aim to add past information for a few features in our data. We do it for all the new features we created and the item_cnt_day feature.
+We fill the NA’s with zeros once we have the lag features.
+for feat in sales_means.columns: if &amp;#39;item_cnt&amp;#39; in feat: sales_means[feat]=sales_means[feat].fillna(0) elif &amp;#39;item_price&amp;#39; in feat: sales_means[feat]=sales_means[feat].fillna(sales_means[feat].median()) We end up creating a lot of lag features with different lags:
+&#39;item_id_avg_item_price_lag_1&#39;,&#39;item_id_sum_item_cnt_day_lag_1&#39;, &#39;item_id_avg_item_cnt_day_lag_1&#39;,&#39;shop_id_avg_item_price_lag_1&#39;, &#39;shop_id_sum_item_cnt_day_lag_1&#39;,&#39;shop_id_avg_item_cnt_day_lag_1&#39;,&#39;item_category_id_avg_item_price_lag_1&#39;,&#39;item_category_id_sum_item_cnt_day_lag_1&#39;,&#39;item_category_id_avg_item_cnt_day_lag_1&#39;, &#39;item_cnt_day_lag_1&#39;, &#39;item_id_avg_item_price_lag_2&#39;, &#39;item_id_sum_item_cnt_day_lag_2&#39;,&#39;item_id_avg_item_cnt_day_lag_2&#39;, &#39;shop_id_avg_item_price_lag_2&#39;,&#39;shop_id_sum_item_cnt_day_lag_2&#39;, &#39;shop_id_avg_item_cnt_day_lag_2&#39;,&#39;item_category_id_avg_item_price_lag_2&#39;,&#39;item_category_id_sum_item_cnt_day_lag_2&#39;,&#39;item_category_id_avg_item_cnt_day_lag_2&#39;, &#39;item_cnt_day_lag_2&#39;, ...  Modelling 1. Drop the unrequired columns As previously said, we are going to drop the target encoded features as they might induce a lot of overfitting in the model. We also lose the item_name and item_price feature.
+cols_to_drop = lag_variables[:-1] &#43; [&amp;#39;item_name&amp;#39;,&amp;#39;item_price&amp;#39;] for col in cols_to_drop: del sales_means[col] 2. Take a recent bit of data only When we created the lag variables, we induced a lot of zeroes in the system. We used the maximum lag as 12. To counter that we remove the first 12 months indexes.
+sales_means = sales_means[sales_means[&amp;#39;date_block_num&amp;#39;]&amp;gt;11] 3. Train and CV Split When we do a time series split, we usually don’t take a cross-sectional split as the data is time-dependent. We want to create a model that sees till now and can predict the next month well.
+X_train = sales_means[sales_means[&amp;#39;date_block_num&amp;#39;]&amp;lt;33] X_cv = sales_means[sales_means[&amp;#39;date_block_num&amp;#39;]==33] Y_train = X_train[&amp;#39;item_cnt_day&amp;#39;] Y_cv = X_cv[&amp;#39;item_cnt_day&amp;#39;] del X_train[&amp;#39;item_cnt_day&amp;#39;] del X_cv[&amp;#39;item_cnt_day&amp;#39;] 4. Create Baseline Before we proceed with modelling steps, lets check the RMSE of a naive model, as we want to have an RMSE to compare to. We assume that we are going to predict the last month sales as current month sale for our baseline model. We can quantify the performance of our model using this baseline RMSE.
+from sklearn.metrics import mean_squared_error sales_m_test = sales_m[sales_m[&amp;#39;date_block_num&amp;#39;]==33] preds = sales_m.copy() preds[&amp;#39;date_block_num&amp;#39;]=preds[&amp;#39;date_block_num&amp;#39;]&#43;1 preds = preds[preds[&amp;#39;date_block_num&amp;#39;]==33] preds = preds.rename(columns={&amp;#39;item_cnt_day&amp;#39;:&amp;#39;preds_item_cnt_day&amp;#39;}) preds = pd.merge(sales_m_test,preds,on = [&amp;#39;shop_id&amp;#39;,&amp;#39;item_id&amp;#39;],how=&amp;#39;left&amp;#39;)[[&amp;#39;shop_id&amp;#39;,&amp;#39;item_id&amp;#39;,&amp;#39;preds_item_cnt_day&amp;#39;,&amp;#39;item_cnt_day&amp;#39;]].fillna(0) # We want our predictions clipped at (0,20). Competition Specific preds[&amp;#39;item_cnt_day&amp;#39;] = preds[&amp;#39;item_cnt_day&amp;#39;].clip(0,20) preds[&amp;#39;preds_item_cnt_day&amp;#39;] = preds[&amp;#39;preds_item_cnt_day&amp;#39;].clip(0,20) baseline_rmse = np.sqrt(mean_squared_error(preds[&amp;#39;item_cnt_day&amp;#39;],preds[&amp;#39;preds_item_cnt_day&amp;#39;])) print(baseline_rmse) 1.1358170090812756  5. Train XGB We use the XGBRegressor object from the xgboost scikit API to build our model. Parameters are taken from this kaggle kernel. If you have time, you can use hyperopt to automatically find out the hyperparameters yourself.
+from xgboost import XGBRegressor model = XGBRegressor( max_depth=8, n_estimators=1000, min_child_weight=300, colsample_bytree=0.8, subsample=0.8, eta=0.3, seed=42) model.fit( X_train, Y_train, eval_metric=&amp;#34;rmse&amp;#34;, eval_set=[(X_train, Y_train), (X_cv, Y_cv)], verbose=True, early_stopping_rounds = 10) After running this, we can see RMSE in ranges of 0.93 on the CV set. And that is pretty impressive based on our baseline validation RMSE of 1.13. And so we work on deploying this model as part of our continuous integration effort.
+5. Plot Feature Importance We can also see the important features that come from XGB.
+feature_importances = pd.DataFrame({&amp;#39;col&amp;#39;: columns,&amp;#39;imp&amp;#39;:model.feature_importances_}) feature_importances = feature_importances.sort_values(by=&amp;#39;imp&amp;#39;,ascending=False) px.bar(feature_importances,x=&amp;#39;col&amp;#39;,y=&amp;#39;imp&amp;#39;) Conclusion In this post, we talked about how we can use trees for even time series modelling. The purpose was not to get perfect scores on the kaggle leaderboard but to gain an understanding of how such models work.
+When I took part in this competition as part of the course, a couple of years back, using trees I reached near the top of the leaderboard.
+Over time people have worked a lot on tweaking the model, hyperparameter tuning and creating even more informative features. But the basic approach has remained the same.
+You can find the whole running code on GitHub.
+Take a look at the How to Win a Data Science Competition: Learn from Top Kagglers course in the Advanced machine learning specialization by Kazanova. This course talks about a lot of ways to improve your models using feature engineering and hyperparameter tuning.
+I am going to be writing more beginner-friendly posts in the future too. Let me know what you think about the series. Follow me up at Medium or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz.
+Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
     
 
     <item>
