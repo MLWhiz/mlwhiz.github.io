@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Dynamic Programming for Data Scientists</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="This post is about fast-tracking this study and explaining linked list concepts for the data scientists in an easy to understand way">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="Dynamic Programming for Data Scientists" />
+<meta property="og:description" content="This post is about fast-tracking this study and explaining linked list concepts for the data scientists in an easy to understand way" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2020/01/28/dp/" />
+<meta property="og:image" content="https://mlwhiz.com/images/dp/main.png" />
+<meta property="article:published_time" content="2020-01-28T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-01-28T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/dp/main.png"/>
+
+<meta name="twitter:title" content="Dynamic Programming for Data Scientists"/>
+<meta name="twitter:description" content="This post is about fast-tracking this study and explaining linked list concepts for the data scientists in an easy to understand way"/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Dynamic Programming for Data Scientists</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2020-01-28T00:00:00">January 28, 2020</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/dp/main.png" alt="" /></p>
+
+<p>Algorithms and data structures are an integral part of data science. While most of us data scientists don’t take a proper algorithms course while studying, they are important all the same.</p>
+
+<p>Many companies ask data structures and algorithms as part of their interview process for hiring data scientists.</p>
+
+<p>Now the question that many people ask here is what is the use of asking a data scientist such questions. <strong><em>The way I like to describe it is that a data structure question may be thought of as a coding aptitude test.</em></strong></p>
+
+<p><em>We all have given aptitude tests at various stages of our life, and while they are not a perfect proxy to judge someone, almost nothing ever really is.</em> So, why not a standard algorithm test to judge people’s coding ability.</p>
+
+<p>But let’s not kid ourselves, they will require the same zeal to crack as your Data Science interviews, and thus, you might want to give some time for the study of algorithms and Data structure and algorithms questions.</p>
+
+<p><strong><em>This post is about fast-tracking this study and explaining Dynamic Programming concepts for the data scientists in an easy to understand way.</em></strong></p>
+
+<hr />
+
+<h2 id="how-dynamic-programming-works">How Dynamic Programming Works?</h2>
+
+<p>Let’s say that we need to find the nth Fibonacci Number.</p>
+
+<p>Fibonacci series is a series of numbers in which each number ( <em>Fibonacci number</em> ) is the sum of the two preceding numbers. The simplest is the series 1, 1, 2, 3, 5, 8, etc. The answer is:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">fib</span>(n):
+    <span style="color:#66d9ef">if</span> n<span style="color:#f92672">&lt;=</span><span style="color:#ae81ff">1</span>:
+        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>
+    <span style="color:#66d9ef">return</span> fib(n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">+</span> fib(n<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>)</code></pre></div>
+<p>This problem relates well to a recursive approach. But can you spot the problem here?</p>
+
+<p>If you try to calculate fib(n=7) it runs fib(5) twice, fib(4) thrice, fib(3) five times. As n becomes larger, a lot of calls are made for the same number, and our recursive function calculates it again and again.</p>
+
+<p><img src="/images/dp/0.png" alt="[Source](https://www.rubyguides.com/2015/08/ruby-recursion-and-memoization/)" /></p>
+
+<p><em><a href="https://www.rubyguides.com/2015/08/ruby-recursion-and-memoization/" rel="nofollow" target="_blank">Source</a></em></p>
+
+<p>Now, Recursion is essentially a top-down approach. As in when calculating Fibonacci number n we start from n and then do recursive calls for n-2 and n-1 and so on.</p>
+
+<p>In <strong><em>Dynamic programming</em></strong>, we take a bottom-up approach. It is essentially a way to write recursion iteratively. We start by calculating fib(0) and fib(1) and then use previous results to generate new results.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">fib_dp</span>(n):
+    dp_sols <span style="color:#f92672">=</span> {<span style="color:#ae81ff">0</span>:<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>:<span style="color:#ae81ff">1</span>}
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">2</span>,n<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>):
+        dp_sols[i] <span style="color:#f92672">=</span> dp_sols[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> dp_sols[i<span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>] 
+    <span style="color:#66d9ef">return</span> dp_sols[n]</code></pre></div>
+<hr />
+
+<h2 id="why-dynamic-programming-is-hard">Why Dynamic Programming is Hard?</h2>
+
+<p>Recursion is a mathematical concept and it comes naturally to us. We try to find a solution to a bigger problem by breaking it into smaller ones.</p>
+
+<p>Now Dynamic Programming entails exactly the same idea but in the case of Dynamic programming, we precompute all the subproblems that might need to be calculated in a bottom-up manner.</p>
+
+<p>We human beings are essentially hard-wired to work in a top-down manner. Be it our learning where most people try to go into the breadth of things before going in-depth. Or be it the way we think.</p>
+
+<p>So how does one start thinking in a bottom-up way?</p>
+
+<p><strong><em>I found out that solving the below problem gives a lot of intuition in how DP works.</em></strong> I myself got highly comfortable with DP once I was able to solve this one and hope it helps you too.</p>
+
+<p>Basically the idea is if you can derive/solve a bigger subproblem if you know the solution to a smaller one?</p>
+
+<hr />
+
+<h2 id="maximum-path-sum">Maximum Path Sum</h2>
+
+<p>Given a <em>m</em> x <em>n</em> grid filled with gold, find a path from top left to bottom right which <em>maximizes</em> the sum of gold along its path. We can only move down or right starting from (0,0)</p>
+
+<p>Now there can be decidedly many paths. We can go all the way to the right and then the bottom. Or we can take a zigzag path?</p>
+
+<p><img src="/images/dp/1.png" alt="" /></p>
+
+<p>But only one/few paths are going to make you rich.</p>
+
+<p>So how do you even start thinking about such a problem?</p>
+
+<p>When we think of Dynamic Programming questions, we take a bottom-up approach. So we start by thinking about the simplest of problems. In our case, the simplest of problems to solve is the base case. What is the maximum value of Gold we can acquire if we just had to reach cell (0,0)?</p>
+
+<p>And the answer to that is pretty simple — It is the cell value itself.</p>
+
+<p><img src="/images/dp/2.png" alt="" /></p>
+
+<p>So we move on to a little harder problem.</p>
+
+<p><img src="/images/dp/3.png" alt="" /></p>
+
+<p>What about cell (0,1) and cell (1,0)?</p>
+
+<p>These are also pretty simple. We can reach (0,1)and (1,0) through only (0,0) and hence the maximum gold we can obtain is the value in cell (0,1)/(1,0) plus the maximum gold we can have when we reach cell(0,0)</p>
+
+<p>What about cell(0,2)? Again only one path. So if we know the solution to (0,1) we can just add the value of cell (0,2) to get the solution for (0,2)</p>
+
+<p>Let’s now try to do the same for an arbitrary cell. We want to derive a relation here.</p>
+
+<p><img src="/images/dp/4.png" alt="" /></p>
+
+<p><strong><em>So in the case of an arbitrary cell, we can reach it from the top or from the left.</em></strong>If we know the solutions to the top and left of the cell, we can definitely compute the solution to the arbitrary current target cell.</p>
+
+<hr />
+
+<h3 id="coding">Coding</h3>
+
+<p>Once we have the intuition the coding exercise is pretty straightforward. We start by calculating the solutions for the first row and first column. And then we continue to calculate the other values in the grid using the relation we got previously.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">maxPathSum</span>(grid):
+    m <span style="color:#f92672">=</span> len(grid)
+    n <span style="color:#f92672">=</span> len(grid[<span style="color:#ae81ff">0</span>])
+    <span style="color:#75715e"># sol keeps the solutions for each point in the grid.</span>
+    sol <span style="color:#f92672">=</span> list(grid)
+    <span style="color:#75715e"># we start by calculating solutions for the first row</span>
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>,n):
+        sol[<span style="color:#ae81ff">0</span>][i] <span style="color:#f92672">+=</span> sol[<span style="color:#ae81ff">0</span>][i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+    <span style="color:#75715e"># we then calculate solutions for the first column</span>
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>,m):
+        sol[i][<span style="color:#ae81ff">0</span>] <span style="color:#f92672">+=</span> sol[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">0</span>]
+    <span style="color:#75715e"># we then calculate all the solutions in the grid</span>
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>,m):
+        <span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>,n):
+            sol[i][j] <span style="color:#f92672">+=</span> max(sol[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>][j],sol[i][j<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
+    <span style="color:#75715e"># return the last element</span>
+    <span style="color:#66d9ef">return</span> sol[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>][<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]</code></pre></div>
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p><strong><em>In this post, I talked about how I think about Dynamic Programming questions.</em></strong></p>
+
+<p><strong><em>I start by asking myself the simplest problem I could solve and if I can solve the bigger problem by using the solutions to the simpler problem.</em></strong></p>
+
+<p>Dynamic Programming forms the basis of some of the most asked questions in Data Science/Machine Learning job interviews, and a good understanding of these might help you land your dream job.</p>
+
+<p>So go out there and do some problems with Leetcode/HackerRank. The problems are surely interesting.</p>
+
+<p>Also take a look at my other posts in the <a href="https://towardsdatascience.com/tagged/algorithms-interview" rel="nofollow" target="_blank">series</a>, if you want to learn about algorithms and Data structures.</p>
+
+<h2 id="continue-learning">Continue Learning</h2>
+
+<p>If you want to read up more on Algorithms and Data structures, here is an <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdata-structures-algorithms" rel="nofollow" target="_blank"><strong>Algorithm Specialization on Coursera by UCSanDiego</strong></a>, which I highly recommend.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
+<p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2020/01/28/imbal/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">The 5 most useful Techniques to Handle Imbalanced datasets</p></a>
+	</div>
+	<div class="post-nav__item post-nav__item--next">
+		<a class="post-nav__link" href="/blog/2020/01/28/ll/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">A simple introduction to Linked Lists for Data Scientists</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<style type="text/css">
+
+  .btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-session {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+</style>
+
+
+<aside class="sidebar">
+  <div style="text-align:center">    
+    
+    <a class="btn btn-session" href="https://www.patreon.com/bePatron?u=28135435" role="button">1:1 Session</a>
+	     
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/01/28/ll/">A simple introduction to Linked Lists for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/01/28/dp/">Dynamic Programming for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/01/28/imbal/">The 5 most useful Techniques to Handle Imbalanced datasets</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/01/15/ind/">3 Industries That Benefit from Data Science</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/12/28/timeseries/">Using Gradient Boosting for Time Series prediction tasks</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/12/25/prod/">Take your Machine Learning Models to Production with these 5 simple steps</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/12/24/mistakes/">3 Mistakes you should not make in a Data Science Interview</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/12/09/pc/">3 Programming concepts for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/12/07/streamlit/">How to write Web apps using simple Python for Data Scientists?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2019/12/06/weapons/">Implementing Object Detection and Instance Segmentation for Data Scientists</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;}
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}
+   
+</style>
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2020 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
