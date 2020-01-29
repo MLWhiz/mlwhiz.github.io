@@ -4,9 +4,9 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>A simple introduction to Linked Lists for Data Scientists</title>
+	<title>Handling Trees in Data Science Algorithmic Interview</title>
 	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="This post is about fast-tracking this study and explaining linked list concepts for the data scientists in an easy to understand way">
+	<meta name="description" content="This post is about fast-tracking this study and explaining tree concepts for the data scientists so that you breeze through the next time you get asked these in an interview.">
 	
 
 	
@@ -15,19 +15,19 @@
 	
 	
 	<meta name="generator" content="Hugo 0.53" />
-	<meta property="og:title" content="A simple introduction to Linked Lists for Data Scientists" />
-<meta property="og:description" content="This post is about fast-tracking this study and explaining linked list concepts for the data scientists in an easy to understand way" />
+	<meta property="og:title" content="Handling Trees in Data Science Algorithmic Interview" />
+<meta property="og:description" content="This post is about fast-tracking this study and explaining tree concepts for the data scientists so that you breeze through the next time you get asked these in an interview." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://mlwhiz.com/blog/2020/01/28/ll/" />
-<meta property="og:image" content="https://mlwhiz.com/images/ll/main.png" />
-<meta property="article:published_time" content="2020-01-28T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2020-01-28T00:00:00&#43;00:00"/>
+<meta property="og:url" content="https://mlwhiz.com/blog/2020/01/29/altr/" />
+<meta property="og:image" content="https://mlwhiz.com/images/altr/main.png" />
+<meta property="article:published_time" content="2020-01-29T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-01-29T00:00:00&#43;00:00"/>
 
 	<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://mlwhiz.com/images/ll/main.png"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/altr/main.png"/>
 
-<meta name="twitter:title" content="A simple introduction to Linked Lists for Data Scientists"/>
-<meta name="twitter:description" content="This post is about fast-tracking this study and explaining linked list concepts for the data scientists in an easy to understand way"/>
+<meta name="twitter:title" content="Handling Trees in Data Science Algorithmic Interview"/>
+<meta name="twitter:description" content="This post is about fast-tracking this study and explaining tree concepts for the data scientists so that you breeze through the next time you get asked these in an interview."/>
 
 
 	<link rel="dns-prefetch" href="//fonts.googleapis.com">
@@ -160,20 +160,20 @@ if (!doNotTrack) {
 <main class="main" role="main">
 	<article class="post">
 		<header class="post__header">
-			<h1 class="post__title">A simple introduction to Linked Lists for Data Scientists</h1>
+			<h1 class="post__title">Handling Trees in Data Science Algorithmic Interview</h1>
 			<div class="post__meta meta">
 <div class="meta__item-datetime meta__item">
 	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
-	<time class="meta__text" datetime="2020-01-28T00:00:00">January 28, 2020</time>
+	<time class="meta__text" datetime="2020-01-29T00:00:00">January 29, 2020</time>
 </div>
 </div>
 		</header>
 		<div class="content post__content clearfix">
 			
 
-<p><img src="/images/ll/main.png" alt="" /></p>
+<p><img src="/images/altr/main.png" alt="" /></p>
 
-<p>Algorithms and data structures are an integral part of data science. While most of us data scientists don’t take a proper algorithms course while studying, they are important all the same.</p>
+<p>Algorithms and data structures are an integral part of data science. While most of us data scientists don’t take a proper algorithms course while studying, they are crucial all the same.</p>
 
 <p>Many companies ask data structures and algorithms as part of their interview process for hiring data scientists.</p>
 
@@ -183,109 +183,163 @@ if (!doNotTrack) {
 
 <p>But let’s not kid ourselves, they will require the same zeal to crack as your Data Science interviews, and thus, you might want to give some time for the study of algorithms and Data structure questions.</p>
 
-<p><strong><em>This post is about fast-tracking this study and explaining linked list concepts for the data scientists in an easy to understand way.</em></strong></p>
+<p><strong><em>This post is about fast-tracking this study and explaining tree concepts for the data scientists so that you breeze through the next time you get asked these in an interview.</em></strong></p>
 
 <hr />
 
-<h2 id="what-are-linked-lists">What are Linked Lists?</h2>
+<h2 id="but-first-why-are-trees-important-for-data-science">But First, Why are Trees important for Data Science?</h2>
 
-<p>The linked list is just a very simple data structure that represents a sequence of nodes.</p>
+<p>To data scientists, Trees mean a different thing than they mean for a Software Engineer.</p>
 
-<p><img src="/images/ll/0.png" alt="" /></p>
+<p>For a software engineer, a tree is just a simple Data Structure they can use to manage hierarchical relationships while for a Data Scientists trees form the basis of some of the most useful classification and regression algorithms.</p>
 
-<p>Each node is just an object that contains a value and a pointer to the next node. For example, In the example here we have a node that contains the data 12 and points to the next node 99. Then 99 points to node 37 and so on until we encounter a NULL Node.</p>
+<p>So where do these two meet?</p>
 
-<p><img src="/images/ll/1.png" alt="" /></p>
+<p>They are necessarily the same thing. Don’t be surprised. Below is how data scientists and software engineer’s look at trees.</p>
 
-<p>There are also doubly linked lists in which each node contains the address of the next as well as the previous node.</p>
+<p><img src="/images/altr/0.png" alt="They are essentially the same" /></p>
 
-<h2 id="but-why-would-we-ever-need-linked-lists">But why would we ever need Linked Lists?</h2>
+<p>The only difference is that Data science tree nodes keep much more information that helps us in identifying how to traverse the tree. For example, in the case of Data science tree for prediction, we will look at the feature in the node and determine which way we want to move based on the split value.</p>
 
-<p><img src="/images/ll/2.png" alt="" /></p>
-
-<p>We all have worked with Lists in Python.<strong><em>But have you ever thought of the insertion time for the list data structure?</em></strong></p>
-
-<p>Lets say we need to insert an element at the start of a list. Inserting or removing elements at the start in a python list requires an <em>O(n)</em> copy operation.</p>
-
-<p><strong><em>What if we are faced with the problem in which there are a lot of such inserts and we need a data structure that actually does inserts in constant O(1) time?</em></strong></p>
-
-<p>There are many practical applications of a linked list that you can think about. <strong><em>One can use a doubly-linked list to implement a system where only the location of previous and next nodes are needed.</em></strong> For example, the previous page and next page functionality in the chrome browser. Or the previous and next photo in a photo editor.</p>
-
-<p><strong><em>Another benefit of using a linked list is that we don’t need to have contiguous space requirements for a linked list i.e. the nodes can reside anywhere in the memory while for a data structure like an array the nodes need to be allocated a sequence of memory.</em></strong></p>
+<p>If you want to write your decision tree from scratch, you might need to understand how trees work from a software engineering perspective too.</p>
 
 <hr />
 
-<h2 id="how-do-we-create-a-linked-list-in-python">How do we create a Linked list in Python?</h2>
+<h2 id="types-of-trees">Types of Trees:</h2>
 
-<p>We first start by defining a class that can be used to create a single node.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Node</span>:
+<p>In this post, I will only be talking about two kinds of trees that get asked a lot in Data Science interview questions. Binary Trees(BT) and an extension of Binary Trees called Binary Search Trees(BST).</p>
+
+<h3 id="1-binary-trees">1. Binary Trees:</h3>
+
+<p>A binary tree is simply a tree in which each node has up to two children. A decision tree is an example we see in our day to day lives.</p>
+
+<p><img src="/images/altr/1.png" alt="Binary Tree: Each Node has up to 2 children" /></p>
+
+<h3 id="2-binary-search-tree-bst">2. Binary Search Tree(BST):</h3>
+
+<p>A binary search tree is a binary tree in which:</p>
+
+<ul>
+<li><p>All left descendants of a node are less than or equal to the node, and</p></li>
+
+<li><p>All right descendants of the node are greater than the node.</p></li>
+</ul>
+
+<p>There are variations to this definition when it comes to equalities. Sometimes the equalities are on the right-hand side or either side. Sometimes only distinct values are allowed in the tree.</p>
+
+<p><img src="/images/altr/2.png" alt="[Source](https://www.freecodecamp.org/news/data-structures-101-binary-search-tree-398267b6bff0/)" /></p>
+
+<p><em><a href="https://www.freecodecamp.org/news/data-structures-101-binary-search-tree-398267b6bff0/" rel="nofollow" target="_blank">Source</a></em></p>
+
+<p>8 is greater than all the elements in the left subtree and smaller than all elements in the right subtree. The same could be said for any node in the tree.</p>
+
+<hr />
+
+<h2 id="creating-a-simple-tree">Creating a Simple Tree:</h2>
+
+<p>So How do we construct a simple tree?</p>
+
+<p>By definition, a tree is made up of nodes. So we start by defining the node class which we will use to create nodes. Our node class is pretty simple as it holds value for a node, the location of the left child and the location of the right child.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">node</span>:
     <span style="color:#66d9ef">def</span> __init__(self,val):
         self<span style="color:#f92672">.</span>val <span style="color:#f92672">=</span> val
-        self<span style="color:#f92672">.</span>next <span style="color:#f92672">=</span> None</code></pre></div>
-<p>We then use this class object to create multiple nodes and stitch them together to form a linked list.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">head <span style="color:#f92672">=</span> Node(<span style="color:#ae81ff">12</span>)
-a <span style="color:#f92672">=</span> Node(<span style="color:#ae81ff">99</span>)
-b <span style="color:#f92672">=</span> Node(<span style="color:#ae81ff">37</span>)
+        self<span style="color:#f92672">.</span>left <span style="color:#f92672">=</span> None
+        self<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> None</code></pre></div>
+<p>We can create a simple tree now as:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">root <span style="color:#f92672">=</span> node(<span style="color:#ae81ff">1</span>)
+root<span style="color:#f92672">.</span>left <span style="color:#f92672">=</span> node(<span style="color:#ae81ff">2</span>)
+root<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> node(<span style="color:#ae81ff">3</span>)</code></pre></div>
+<p>Now I have noticed that we cannot really get the hang of Tree-based questions without doing some coding ourselves.</p>
 
-head<span style="color:#f92672">.</span>next <span style="color:#f92672">=</span> a
-a<span style="color:#f92672">.</span>next <span style="color:#f92672">=</span> b</code></pre></div>
-<p>And we have our linked list, starting at head. In most cases, we only keep the variable head to define our linked list as it contains all the information we require to access the whole list.</p>
+<p><strong><em>So let us get a little deeper into the coding part with some problems I found most interesting when it comes to trees.</em></strong></p>
+
+<h2 id="inorder-tree-traversal">Inorder Tree Traversal:</h2>
+
+<p>There are a variety of ways to traverse a tree, but I find the inorder traversal to be most intuitive.</p>
+
+<p>When we do an inorder traversal on the root node on a Binary Search tree, it visits/prints the node in ascending order.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">inorder</span>(node):
+    <span style="color:#66d9ef">if</span> node:
+        inorder(node<span style="color:#f92672">.</span>left)
+        <span style="color:#66d9ef">print</span>(node<span style="color:#f92672">.</span>val)
+        inorder(node<span style="color:#f92672">.</span>right)</code></pre></div>
+<p>This above method is pretty important as it allows us to visit all the nodes.</p>
+
+<p>So if we want to search for a node in any binary tree, we might try to use inorder tree traversal.</p>
 
 <hr />
 
-<h2 id="common-operations-or-interview-questions-with-the-linked-lists">Common Operations or Interview Questions with the Linked Lists</h2>
+<h2 id="creating-a-binary-search-tree-from-a-sorted-array">Creating a Binary Search Tree from a Sorted array</h2>
 
-<h3 id="1-insert-a-new-node">1. Insert a new Node</h3>
+<p>What kind of coders will we be if we need to create a tree piece by piece manually as we did above?</p>
 
-<p>In the start, we said that we can insert an element at the start of the linked list in a constant O(1) time. Let’s see how we can do that.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">insert</span>(head,val):
-    new_head <span style="color:#f92672">=</span> Node(val)
-    new_head<span style="color:#f92672">.</span>next <span style="color:#f92672">=</span> head
-    <span style="color:#66d9ef">return</span> new_head</code></pre></div>
-<p>So given the head of the node, we just create a new_head object and set its pointer to the previous head of the linked list. We just create a new node and just update a pointer.</p>
+<p><strong><em>So can we create a BST from a sorted array of unique elements?</em></strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create_bst</span>(array,min_index,max_index):
+    <span style="color:#66d9ef">if</span> max_index<span style="color:#f92672">&lt;</span>min_index:
+        <span style="color:#66d9ef">return</span> None
+    mid <span style="color:#f92672">=</span> int((min_index<span style="color:#f92672">+</span>max_index)<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>)
+    root <span style="color:#f92672">=</span> node(array[mid])
+    leftbst <span style="color:#f92672">=</span> create_bst(array,min_index,mid<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+    rightbst <span style="color:#f92672">=</span> create_bst(array,mid<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>,max_index)
+    root<span style="color:#f92672">.</span>left <span style="color:#f92672">=</span> leftbst
+    root<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> rightbst
+    <span style="color:#66d9ef">return</span> root
 
-<h3 id="2-print-traverse-the-linked-list">2. Print/Traverse the linked list</h3>
+a <span style="color:#f92672">=</span> [<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">7</span>]
+root <span style="color:#f92672">=</span> create_bst(a,<span style="color:#ae81ff">0</span>,len(a)<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)</code></pre></div>
+<p>Trees are inherently recursive, and so we use recursion here. We take the mid element of the array and assign it as the node. We then apply the create_bst function to the left part of the array and assign it to node.left and do the same with the right part of the array.</p>
 
-<p>Printing the elements of a linked list is pretty simple. We just go through the linked list in an iterative fashion till we encounter the None node(or the end).</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">print</span>(head):
-    <span style="color:#66d9ef">while</span> head:
-        <span style="color:#66d9ef">print</span>(head<span style="color:#f92672">.</span>val)
-        head <span style="color:#f92672">=</span> head<span style="color:#f92672">.</span>next</code></pre></div>
-<h3 id="3-reverse-a-singly-linked-list">3. Reverse a singly linked list</h3>
+<p>And we get our BST.</p>
 
-<p>This is more of a very common interview <a href="https://leetcode.com/problems/reverse-linked-list" rel="nofollow" target="_blank">question</a> on linked lists. If you are given a linked list, can you reverse that linked list in O(n) time?</p>
-
-<pre><code>For Example:
-Input: 1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;NULL
-Output: 5-&gt;4-&gt;3-&gt;2-&gt;1-&gt;NULL
+<p>Have we done it right? We can check it by creating the BST and then doing an inorder traversal.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">inorder(root)</code></pre></div>
+<pre><code>2
+4
+5
+6
+7
 </code></pre>
 
-<p><strong><em>So how do we deal with this?</em></strong></p>
+<p>Seems Right!</p>
 
-<p>We start by iterating through the linked list and reversing the pointer direction while moving the head to the next node until there is a next node.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">reverseList</span>(head):
-    newhead <span style="color:#f92672">=</span> None
-    <span style="color:#66d9ef">while</span> head:
-        tmp <span style="color:#f92672">=</span> head<span style="color:#f92672">.</span>next
-        head<span style="color:#f92672">.</span>next <span style="color:#f92672">=</span> newhead
-        newhead <span style="color:#f92672">=</span> head
-        head <span style="color:#f92672">=</span> tmp
-    <span style="color:#66d9ef">return</span> newhead</code></pre></div>
+<hr />
+
+<h2 id="let-s-check-if-our-tree-is-a-valid-bst">Let’s check if our tree is a Valid BST</h2>
+
+<p><img src="/images/altr/3.png" alt="Think Recursion!!!" /></p>
+
+<p>But again what sort of coders are we if we need to print all the elements and check manually for the BST property being satisfied?</p>
+
+<p>Here is a simple code to check if our BST is valid or not. We assume strict inequality in our Binary Search Tree.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">isValidBST</span>(node, minval, maxval):
+    <span style="color:#66d9ef">if</span> node:
+        <span style="color:#75715e"># Base case</span>
+        <span style="color:#66d9ef">if</span> node<span style="color:#f92672">.</span>val<span style="color:#f92672">&lt;=</span>minval <span style="color:#f92672">or</span> node<span style="color:#f92672">.</span>val<span style="color:#f92672">&gt;=</span>maxval:
+            <span style="color:#66d9ef">return</span> False
+        <span style="color:#75715e"># Check the subtrees changing the min and max values</span>
+        <span style="color:#66d9ef">return</span> isValidBST(node<span style="color:#f92672">.</span>left,minval,node<span style="color:#f92672">.</span>val) <span style="color:#f92672">&amp;</span>    isValidBST(node<span style="color:#f92672">.</span>right,node<span style="color:#f92672">.</span>val,maxval)
+    <span style="color:#66d9ef">return</span> True
+
+isValidBST(root,<span style="color:#f92672">-</span>float(<span style="color:#e6db74">&#39;inf&#39;</span>),float(<span style="color:#e6db74">&#39;inf&#39;</span>))</code></pre></div>
+<pre><code>True
+</code></pre>
+
+<p>We check the subtrees recursively if they satisfy the Binary Search tree property or not. At each recursive call, we change the minval or maxval for the call to provide the function with the range of allowed values for the subtree.</p>
+
 <hr />
 
 <h2 id="conclusion">Conclusion</h2>
 
-<p><strong><em>In this post, I talked about Linked List and its implementation.</em></strong></p>
+<p><strong><em>In this post, I talked about Trees from a software engineering perspective. If you want to see trees from a data science perspective, you might take a look at this post.</em></strong>
+<a href="https://towardsdatascience.com/the-simple-math-behind-3-decision-tree-splitting-criterions-85d4de2a75fe" rel="nofollow" target="_blank"><strong>The Simple Math behind 3 Decision Tree Splitting criterions</strong></a></p>
 
-<p>Linked lists form the basis of some of the most asked questions in Data Science interviews, and a good understanding of these might help you land your dream job.</p>
+<p>Trees form the basis of some of the most asked questions in Data Science algorithmic interviews. I used to despair such tree-based questions in the past, but now I have grown to like the mental exercise involved in them. And I love the recursive structure involved in such problems.</p>
 
 <p>And while you can go a fair bit in data science without learning them, you can learn them just for a little bit of fun and maybe to improve your programming skills.</p>
 
-<p>Here is a small <a href="https://www.kaggle.com/mlwhiz/linked-list-code-sample" rel="nofollow" target="_blank">notebook</a> for you where I have put all these small concepts.</p>
+<p>Here is a small <a href="https://www.kaggle.com/mlwhiz/tree-data-structure-and-algorithms" rel="nofollow" target="_blank">notebook</a> for you where I have put all these small concepts for you to try and run.</p>
 
-<p>I will leave you with solving this problem by yourself — <strong><em>Implement a function to check if a linked list is a palindrome.</em></strong></p>
-
-<p>Also take a look at my other posts in the <a href="https://towardsdatascience.com/tagged/algorithms-interview" rel="nofollow" target="_blank">series</a>, if you want to learn about algorithms and Data structures.</p>
+<p>Take a look at my other posts in the <a href="https://towardsdatascience.com/tagged/algorithms-interview" rel="nofollow" target="_blank">Algorithmic Interviews Series</a>, if you want to learn about <a href="https://towardsdatascience.com/three-programming-concepts-for-data-scientists-c264fc3b1de8" rel="nofollow" target="_blank">Recursion</a>, <a href="https://towardsdatascience.com/dynamic-programming-for-data-scientists-bb7154b4298b" rel="nofollow" target="_blank">Dynamic Programming</a> or <a href="https://towardsdatascience.com/a-simple-introduction-of-linked-lists-for-data-scientists-a71f0eb31d87" rel="nofollow" target="_blank">Linked Lists</a>.</p>
 
 <h2 id="continue-learning">Continue Learning</h2>
 
@@ -344,10 +398,7 @@ Output: 5-&gt;4-&gt;3-&gt;2-&gt;1-&gt;NULL
 
 <nav class="post-nav flex">
 	<div class="post-nav__item post-nav__item--prev">
-		<a class="post-nav__link" href="/blog/2020/01/28/dp/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Dynamic Programming for Data Scientists</p></a>
-	</div>
-	<div class="post-nav__item post-nav__item--next">
-		<a class="post-nav__link" href="/blog/2020/01/29/altr/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">Handling Trees in Data Science Algorithmic Interview</p></a>
+		<a class="post-nav__link" href="/blog/2020/01/28/ll/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">A simple introduction to Linked Lists for Data Scientists</p></a>
 	</div>
 </nav>
 
