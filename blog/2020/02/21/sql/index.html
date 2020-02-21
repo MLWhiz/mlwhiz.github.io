@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Learning SQL the Hard Way</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="This post is about installing SQL, explaining SQL and running SQL.">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="Learning SQL the Hard Way" />
+<meta property="og:description" content="This post is about installing SQL, explaining SQL and running SQL." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2020/02/21/sql/" />
+<meta property="og:image" content="https://mlwhiz.com/images/sql/main.png" />
+<meta property="article:published_time" content="2020-02-21T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-02-21T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/sql/main.png"/>
+
+<meta name="twitter:title" content="Learning SQL the Hard Way"/>
+<meta name="twitter:description" content="This post is about installing SQL, explaining SQL and running SQL."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Learning SQL the Hard Way</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2020-02-21T00:00:00">February 21, 2020</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/sql/main.png" alt="" /></p>
+
+<p><strong><em>A Data Scientist who doesn’t know SQL is not worth his salt</em></strong></p>
+
+<p>And that seems correct to me in every sense of the world. While we feel much more accomplished creating models and coming up with the different hypotheses, the role of data munging can’t be understated.</p>
+
+<p>And with the ubiquitousness of SQL when it comes to ETL and data preparation tasks, everyone should know a little bit of it to at least be useful.</p>
+
+<p>I still remember the first time I got my hands on SQL. It was the first language (if you can call it that) I learned. And it made an impact on me. I was able to automate things, and that was something I hadn’t thought of before.</p>
+
+<p>Before SQL, I used to work with Excel — VLOOKUPs and pivots. I was creating reporting systems, doing the same work again and again. SQL made it all go away. Now I could write a big script, and everything would be automated — all the crosstabs and analysis generated on the fly.</p>
+
+<p>That is the power of SQL. And though you could do anything that you do with SQL using <a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientists-6355059629ae" rel="nofollow" target="_blank">Pandas</a>, you still need to learn SQL to deal with systems like HIVE, Teradata and sometimes <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" rel="nofollow" target="_blank">Spark</a> too.</p>
+
+<p><strong><em>This post is about installing SQL, explaining SQL and running SQL.</em></strong></p>
+
+<hr />
+
+<h2 id="setting-up-the-sql-environment">Setting up the SQL Environment</h2>
+
+<p>Now the best way to learn SQL is to get your hands dirty with it(Same I can say for any other thing you want to learn)</p>
+
+<p>I will advise against using the web-based recipes like w3schools/tutorialspoint for SQL since you cannot use your data with those.</p>
+
+<p>Also, I will advise you to go with learning the MySQL flavour of SQL as it is Open Source, easy to set up in your laptop and has a great client named MySQL Workbench to make your life easier.</p>
+
+<p>As we have gotten these points out of the way, here is a step by step to get set up with MySQL:</p>
+
+<ul>
+<li>You can download MySQL for your particular system (MACOSX, Linux, Windows) from <a href="http://dev.mysql.com/downloads/mysql/" rel="nofollow" target="_blank">Download MySQL Community Server</a>. In my case, I downloaded the DMG Archive. After that, double click and install the file. <strong><em>You might need to set up a password. Remember this password as it would be required to connect to the MySQL instance later.</em></strong></li>
+</ul>
+
+<p><img src="/images/sql/0.png" alt="" /></p>
+
+<ul>
+<li>Create a file named my.cnf and put the following in it. This is needed to give Local file read permissions to your SQL database.</li>
+</ul>
+
+<pre><code>    [client]
+    port= 3306
+    [mysqld]
+    port= 3306
+    secure_file_priv=''
+    local-infile=1
+</code></pre>
+
+<ul>
+<li>Open up System Preferences&gt;MySQL. Go to Configuration and browse to the my.cnf file using the select button.</li>
+</ul>
+
+<p><img src="/images/sql/1.png" alt="" /></p>
+
+<ul>
+<li>Restart the server from Instances tab by clicking stop and start.</li>
+</ul>
+
+<p><img src="/images/sql/2.png" alt="" /></p>
+
+<ul>
+<li>Once you get that server running, download and install the MySQL Workbench: <a href="https://dev.mysql.com/downloads/workbench/" rel="nofollow" target="_blank">Download MySQL Workbench</a>. The workbench gives you an editor to write your SQL Queries and get the results in a structured way.</li>
+</ul>
+
+<p><img src="/images/sql/3.png" alt="" /></p>
+
+<ul>
+<li>Open up the MySQL workbench now and connect to SQL through it. You will see something like below.</li>
+</ul>
+
+<p><img src="/images/sql/4.png" alt="" /></p>
+
+<ul>
+<li>You can see that the Local Instance connection has been set up for you beforehand. Now, you just need to click on that connection and get started using the password that we set up before for the MySQL server(You can also create a connection to an existing SQL server that might not be on your machine if you have the address, port number, username and password).</li>
+</ul>
+
+<p><img src="/images/sql/5.png" alt="" /></p>
+
+<ul>
+<li>And you get an editor to write your queries on the particular database.</li>
+</ul>
+
+<p><img src="/images/sql/6.png" alt="" /></p>
+
+<ul>
+<li><p>Check the Schemas tab on the top left to see the tables that are present. There is just a sys schema present with the table sys_config. Not an interesting data source to learn SQL. So let’s install some data to practice.</p></li>
+
+<li><p>If you have your own data to work. Then good and fine. You can create a new schema(database) and upload it into tables using these following commands. (You can run the commands by using Cmd+Enter or by clicking the ⚡️lightning button)</p></li>
+</ul>
+
+<p><img src="/images/sql/7.png" alt="" /></p>
+
+<p>In this tutorial, however, I am going to use the Sakila Movie database which you can install using the following steps:</p>
+
+<ul>
+<li><p>Go to <a href="https://dev.mysql.com/doc/index-other.html" rel="nofollow" target="_blank">MySQL Documentation</a> and download the Sakila ZIP file.</p></li>
+
+<li><p>Unzip the file.</p></li>
+
+<li><p>Now go to MySQL Workbench and select File&gt;Run SQL Script&gt;select location sakila-db/sakila-schema.sql</p></li>
+
+<li><p>Go to MySQL Workbench and select File &gt;Run SQL Script &gt;select location sakila-db/sakila-data.sql</p></li>
+</ul>
+
+<p>Once you do that, you will see a new database added in the SCHEMA list.</p>
+
+<p><img src="/images/sql/8.png" alt="" /></p>
+
+<hr />
+
+<h2 id="playing-with-data">Playing with Data</h2>
+
+<p>Now we have some data with us. Finally.</p>
+
+<p>Let’s start with writing some queries.</p>
+
+<p>You can try to understand the Schema of the Sakila Database in detail using the <a href="https://dev.mysql.com/doc/sakila/en/sakila-structure.html" rel="nofollow" target="_blank">Sakila Sample Database</a> document.</p>
+
+<p><img src="/images/sql/9.png" alt="Schema Diagram" /><em>Schema Diagram</em></p>
+
+<p>Now the basic syntax of any SQL query is:</p>
+
+<pre><code>SELECT col1, SUM(col2) as col2sum, AVG(col3) as col3avg FROM table_name WHERE col4 = 'some_value' GROUP BY col1 ORDER BY col2sum DESC;
+</code></pre>
+
+<p>There are four elements in this query:</p>
+
+<ol>
+<li><p><strong>SELECT</strong>: Which Columns to select? Here we choose col1 and do SUM aggregation on col2 and AVG aggregation on col3. We also give a new name to SUM(col2) by using the as keyword. This is known as aliasing.</p></li>
+
+<li><p><strong>FROM</strong>: From which table should we SELECT?</p></li>
+
+<li><p><strong>WHERE</strong>: We can filter data using WHERE statements.</p></li>
+
+<li><p><strong>GROUP BY</strong>: All selected columns that are not in aggregation should be in GROUP BY.</p></li>
+
+<li><p><strong>ORDER BY</strong>: Sort on col2sum</p></li>
+</ol>
+
+<p>The above query will help you with most of the simple things you want to find in a database.</p>
+
+<p>For example, we can find out how differently censored rated movies are timed differently using:</p>
+
+<pre><code>SELECT rating, avg(length) as length_avg FROM sakila.film group by rating order by length_avg desc;
+</code></pre>
+
+<p><img src="/images/sql/10.png" alt="" /></p>
+
+<h3 id="exercise-frame-a-question">Exercise: Frame a Question</h3>
+
+<p>You should now come up with some questions of your own.</p>
+
+<p>For Example, you can try to find out all the movies released in the year 2006. Or try to find all of the movies which have a rating of PG and length greater than 50 minutes.</p>
+
+<p>You can do this by running the following on MySQL Workbench:</p>
+
+<pre><code>select * from sakila.film where release_year = 2006; 
+select * from sakila.film where length&gt;50 and rating=&quot;PG&quot;;
+</code></pre>
+
+<hr />
+
+<h2 id="joins-in-sql">Joins in SQL</h2>
+
+<p>Till now, we have learned how we can work with single tables. But in reality, we need to work with multiple tables.</p>
+
+<p>So, the next thing we would want to learn is how to do joins.</p>
+
+<p>Now joins are an integral and an essential part of a MySQL Database and understanding them is necessary. The below visual talks about most of the joins that exist in SQL. I usually end up using just the LEFT JOIN, and INNER JOIN, so I will start with LEFT JOIN.</p>
+
+<p><img src="/images/sql/11.png" alt="" /></p>
+
+<p>The LEFT JOIN is used when you want to keep all the records in the left table(A) and merge B on the matching records. The records of A where B is not merged are kept as NULL in the resulting table. The MySQL Syntax is:</p>
+
+<pre><code>SELECT A.col1, A.col2, B.col3, B.col4 from A LEFT JOIN B on A.col2=B.col3
+</code></pre>
+
+<p>Here we select col1 and col2 from table A and col3 and col4 from table B. We also specify which common columns to join on using the ON statement.</p>
+
+<p>The INNER JOIN is used when you want to merge A and B and only to keep the common records in A and B.</p>
+
+<h3 id="example">Example:</h3>
+
+<p>To give you a use case lets go back to our Sakila database. Suppose we wanted to find out how many copies of each movie we do have in our inventory. You can get that by using:</p>
+
+<pre><code>SELECT film_id,count(film_id) as num_copies FROM sakila.inventory group by film_id order by num_copies desc;
+</code></pre>
+
+<p><img src="/images/sql/12.png" alt="" /></p>
+
+<p>Does this result look interesting? Not really. IDs don’t make sense to us humans, and if we can get the names of the movies, we would be able to process the information better. So we snoop around and see that the table film has got film_id as well as the title of the film.</p>
+
+<p>So we have all the data, but how do we get it in a single view?</p>
+
+<p>Come Joins to the rescue. We need to add the title to our inventory table information. We can do this using —</p>
+
+<pre><code>SELECT A.*, B.title from sakila.inventory A left join sakila.film B on A.film_id = B.film_id
+</code></pre>
+
+<p><img src="/images/sql/13.png" alt="" /></p>
+
+<p>This will add another column to your inventory table information. As you might notice some films are in the film table that we don’t have in the inventory. We used a left join since we wanted to keep whatever is in the inventory table and join it with its corresponding counterpart in the film table and not everything in the film table.</p>
+
+<p>So now we have got the title as another field in the data. This is just what we wanted, but we haven’t solved the whole puzzle yet. We want title and num_copies of the title in the inventory.</p>
+
+<p>But before we can go any further, we should understand the concept of inner queries first.</p>
+
+<hr />
+
+<h2 id="inner-query">Inner Query:</h2>
+
+<p>Now you have a query that can give you the above result. One thing you can do is create a new table using</p>
+
+<pre><code>create table sakila.temp_table as SELECT A.*, B.title from sakila.inventory A left join sakila.film B on A.film_id = B.film_id;
+</code></pre>
+
+<p>And then use a simple group by operation using:</p>
+
+<pre><code>select title, count(title) as num_copies from sakila.temp_table group by title order by num_copies desc;
+</code></pre>
+
+<p><img src="/images/sql/14.png" alt="" /></p>
+
+<p>But this is one step too many. And we have to create a temporary table that ends up taking space on the system.</p>
+
+<p>SQL provides us with the concept of the inner query just for these sort of issues. You can instead write all this in a single query using:</p>
+
+<pre><code>select temp.title, count(temp.title) as num_copies from (SELECT A.*, B.title from sakila.inventory A left join sakila.film B on A.film_id = B.film_id) temp group by title order by num_copies desc;
+</code></pre>
+
+<p><img src="/images/sql/15.png" alt="" /></p>
+
+<p>What we did here was sandwich our first query in parenthesis and gave that table an alias temp. We then did the group by operations considering temp just as we would consider any table. It is because of the inner query concept that we can write SQL queries that span multiple pages at some times.</p>
+
+<hr />
+
+<h2 id="the-having-clause">The HAVING Clause</h2>
+
+<p>HAVING is yet another SQL construct that is useful to understand. So we have got the results, and now we want to get the films whose number of copies are less than or equal to 2.</p>
+
+<p>We can do this by using the inner query concept and the WHERE clause. Here we nest one inner query inside another. Pretty neat.</p>
+
+<p><img src="/images/sql/16.png" alt="" /></p>
+
+<p>Or, we can use the HAVING Clause.</p>
+
+<p><img src="/images/sql/17.png" alt="" /></p>
+
+<p>The HAVING clause is used to filter on the final aggregated result. It is different from WHERE as where is used to filter the table that is used in the FROM statement. HAVING filters the final result after the GROUP BY happens.</p>
+
+<p>There are a lot of ways to do the same thing with SQL as you have already seen in the above example. We need to try to come up with the least verbose and thus HAVING makes sense in many cases.</p>
+
+<p>If you can follow this far, you already know more SQL than most people.</p>
+
+<p>Next thing to do: <strong><em>Practice</em></strong>.</p>
+
+<p>Try to come up with your questions on your dataset and try to find out the answers you have using SQL.</p>
+
+<p>Some questions I could provide for a start:</p>
+
+<ol>
+<li><p><strong><em>Which Actor has the most distinct films in our inventory?</em></strong></p></li>
+
+<li><p><strong><em>Which Genre films are the most rented in our inventory?</em></strong></p></li>
+</ol>
+
+<hr />
+
+<h2 id="continue-learning">Continue Learning</h2>
+
+<p>This was just a simple tutorial on how to use SQL. If you want to learn more about SQL, I would like to call out an excellent course on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11605513096&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fsql-for-data-science" rel="nofollow" target="_blank">SQL for Data Science</a> from the University of California. Do check it out as it talks about other SQL concepts like UNION, String Manipulation, functions, Date Handling, etc.</p>
+
+<p>I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
+<p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2020/02/23/streamlitrec/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Share your Projects even more easily with this New Streamlit Feature</p></a>
+	</div>
+	<div class="post-nav__item post-nav__item--next">
+		<a class="post-nav__link" href="/blog/2020/02/21/ci/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">Confidence Intervals Explained Simply for Data Scientists</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<style type="text/css">
+
+  .btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-session {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+</style>
+
+
+<aside class="sidebar">
+  <div style="text-align:center">    
+    
+    <a class="btn btn-session" href="https://www.patreon.com/bePatron?u=28135435" role="button">1:1 Session</a>
+	     
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/21/ds2020/">Become a Data Scientist in 2020 with these 10 resources</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/21/ci/">Confidence Intervals Explained Simply for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/21/sql/">Learning SQL the Hard Way</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/23/streamlitrec/">Share your Projects even more easily with this New Streamlit Feature</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/20/swifter/">Add this single word to make your Pandas Apply faster</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/01/29/altr/">Handling Trees in Data Science Algorithmic Interview</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/01/28/ll/">A simple introduction to Linked Lists for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/01/28/dp/">Dynamic Programming for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/01/28/imbal/">The 5 most useful Techniques to Handle Imbalanced datasets</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/01/15/ind/">3 Industries That Benefit from Data Science</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;}
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}
+   
+</style>
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2020 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
