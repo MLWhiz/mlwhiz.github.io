@@ -8,11 +8,251 @@
     <description>Recent content on MLWhiz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 21 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 22 Feb 2020 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="https://mlwhiz.com/atom.xml" rel="self" type="application/rss+xml" />
     
 
+    
+
+    <item>
+      <title>100x faster Hyperparameter Search Framework with Pyspark</title>
+      <link>https://mlwhiz.com/blog/2020/02/22/hyperspark/</link>
+      <pubDate>Sat, 22 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2020/02/22/hyperspark/</guid>
+      
+      
+      <media:content type="image/png" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/hyperspark/main.png"></media:content>
+      
+
+      
+      <description>Recently I was working on tuning hyperparameters for a huge Machine Learning model.
+Manual tuning was not an option since I had to tweak a lot of parameters. Hyperopt was also not an option as it works serially i.e. at a time, only a single model is being built. So it was taking up a lot of time to train each model and I was pretty short on time.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  Recently I was working on tuning hyperparameters for a huge Machine Learning model.
+Manual tuning was not an option since I had to tweak a lot of parameters. Hyperopt was also not an option as it works serially i.e. at a time, only a single model is being built. So it was taking up a lot of time to train each model and I was pretty short on time.
+I had to come up with a better more efficient approach if I were to meet the deadline. So I thought of the one thing that helps us data scientists in many such scenarios — Parallelization.
+Can I parallelize my model hyperparameter search process?
+As you would have guessed, the answer is Yes.
+This post is about setting up a hyperparameter tuning framework for Data Science using scikit-learn/xgboost/lightgbm and pySpark.
+Grid vs Randomized? Before we get to implementing the hyperparameter search, we have two options to set up the hyperparameter search — Grid Search or Random search.
+Starting with a 3×3 grid of parameters, we can see that Random search ends up doing more searches for the important parameter.
+The figure above gives a definitive answer as to why Random search is better.
+Let’s say we have to tune two hyperparameters for our Machine Learning model. One is not important, and one is very important. In a grid search, we look at three settings for the important parameter. While in a randomized search, we search through 9 settings for the important parameter. And the amount of time we spent is the same.
+Since, Randomized search, searches more thoroughly through the whole space and provides us with better hyperparameters, we will go with it in our example.
+Setting Up Our Example At my workplace, I have access to a pretty darn big cluster with 100s of nodes. It is a data Scientist’s dream. But in this post, I am going to be using the Databricks Community Edition Free server with a toy example. If you want to set up this small server for yourself for practice, check out my post on Spark.
+You can choose to load your data using Spark, but here I start by creating our own classification data to set up a minimal example which we can work with.
+X,y = datasets.make_classification(n_samples=10000, n_features=4, n_informative=2, n_classes=2, random_state=1,shuffle=True) train = pd.DataFrame(X) train[&#39;target&#39;] = y # Convert this pandas Data to spark Dataframe. train_sp = spark.createDataFrame(train) # Change the column names. train_sp = train_sp.toDF(*[&#39;c0&#39;, &#39;c1&#39;, &#39;c2&#39;, &#39;c3&#39;, &#39;target&#39;])  The train_sp spark dataset looks like:
+The Idea — Replicate and Apply Photo by Frank Vessia on Unsplash
+So now we have got our training dataset in Spark. And we want to run multiple models on this DataFrame.
+Spark is inherently good with Key-Value pairs. That is all data with a particular key could be sent to a single machine. And we can apply functions to that data.
+But we want all our data on every machine. How do we do that?
+We replicate our data n times and add a replication_id to our data so that each key has all the data.
+Ok, now we can send the whole data to multiple machines using groupby on replication_id. But how do we use pandas and scikit learn on that data?
+The answer is: we use pandas_udf. This functionality was introduced in the Spark version 2.3.1. And this allows you to utilise pandas functionality with Spark.
+If you don’t understand this yet, do look at the code as sometimes it is easier to understand the code.
+The Code We first replicate our train dataframe 100 times here by using cross_join with a data frame that contains a column with 1–100 replication_id.
+# replicate the spark dataframe into multiple copies replication_df = spark.createDataFrame(pd.DataFrame(list(range(1,100)),columns=[&#39;replication_id&#39;])) replicated_train_df = train_sp.crossJoin(replication_df)  We also define a function that takes as input a pandas dataframe, gets random hyperparameters using the python random module, runs a model on data(Here I am training a scikit model, but you can replace it with any model like XGBoost or Lightgbm as well) and returns the result in the form of a Pandas Dataframe. Do take a look at the function and the comments.
+# 0. Declare the schema for the output of our function outSchema = StructType([StructField(&amp;#39;replication_id&amp;#39;,IntegerType(),True),StructField(&amp;#39;Accuracy&amp;#39;,DoubleType(),True),StructField(&amp;#39;num_trees&amp;#39;,IntegerType(),True),StructField(&amp;#39;depth&amp;#39;,IntegerType(),True),StructField(&amp;#39;criterion&amp;#39;,StringType(),True)]) # decorate our function with pandas_udf decorator @F.pandas_udf(outSchema, F.PandasUDFType.GROUPED_MAP) def run_model(pdf): # 1. Get randomized hyperparam values num_trees = random.choice(list(range(50,500))) depth = random.choice(list(range(2,10))) criterion = random.choice([&amp;#39;gini&amp;#39;,&amp;#39;entropy&amp;#39;]) replication_id = pdf.replication_id.values[0] # 2. Train test split X = pdf[[&amp;#39;c0&amp;#39;, &amp;#39;c1&amp;#39;, &amp;#39;c2&amp;#39;, &amp;#39;c3&amp;#39;]] y = pdf[&amp;#39;target&amp;#39;] Xtrain,Xcv,ytrain,ycv = train_test_split(X, y, test_size=0.33, random_state=42) # 3. Create model using the pandas dataframe clf = RandomForestClassifier(n_estimators=num_trees, max_depth = depth, criterion =criterion) clf.fit(Xtrain,ytrain) # 4. Evaluate the model accuracy = accuracy_score(clf.predict(Xcv),ycv) # 5. return results as pandas DF res =pd.DataFrame({&amp;#39;replication_id&amp;#39;:replication_id,&amp;#39;Accuracy&amp;#39;:accuracy, &amp;#39;num_trees&amp;#39;:num_trees,&amp;#39;depth&amp;#39;:depth,&amp;#39;criterion&amp;#39;:criterion}, index=[0]) return res We can now apply this pandas_udf function to our replicated dataframe using:
+results = replicated_train_df.groupby(&amp;quot;replication_id&amp;quot;).apply(run_model)  What the above code does is that it sends all the data with the same replication id to a single machine and applies the function run_model to the data. The above call happens lazily so you won’t be able to see the results till you run the below action call.
+results.sort(F.desc(&amp;quot;Accuracy&amp;quot;)).show()  For this toy example, the accuracy results may look pretty close to one another, but they will differ in the case of noisy real-world datasets. Since all of these 100 models run in parallel on different nodes, we can save a lot of time when doing random hyperparameter search.
+The speedup factor certainly depends on how many nodes you have in your cluster. For me, I had 100 machines at my disposal, so I got ~ 100x speedup.
+You can get the full code in this Databricks Notebook or get it from my GitHub repository where I keep codes for all my posts.
+Continue Learning If you want to learn more about practical data science, do take a look at the “How to win a data science competition” Coursera course. I learned a lot of new things from this course taught by one of the most prolific Kaggler.
+Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at Medium or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz.
+Also, a small disclaimer — There might be some affiliate links in this post to relevant resources as sharing knowledge is never a bad idea.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
+    
+
+    <item>
+      <title>How to Deploy a Streamlit App using an Amazon Free ec2 instance?</title>
+      <link>https://mlwhiz.com/blog/2020/02/22/streamlitec2/</link>
+      <pubDate>Sat, 22 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2020/02/22/streamlitec2/</guid>
+      
+      
+      <media:content type="image/png" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/streamlitec2/main.png"></media:content>
+      
+
+      
+      <description>A Machine Learning project is never really complete if we don’t have a good way to showcase it.
+While in the past, a well-made visualization or a small PPT used to be enough for showcasing a data science project, with the advent of dashboarding tools like RShiny and Dash, a good data scientist needs to have a fair bit of knowledge of web frameworks to get along.
+And Web frameworks are hard to learn.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  A Machine Learning project is never really complete if we don’t have a good way to showcase it.
+While in the past, a well-made visualization or a small PPT used to be enough for showcasing a data science project, with the advent of dashboarding tools like RShiny and Dash, a good data scientist needs to have a fair bit of knowledge of web frameworks to get along.
+And Web frameworks are hard to learn. I still get confused in all that HTML, CSS, and Javascript with all the hit and trials, for something seemingly simple to do.
+Not to mention the many ways to do the same thing, making it confusing for us data science folks for whom web development is a secondary skill.
+This is where StreamLit comes in and delivers on its promise to create web apps just using Python.
+In my last post on Streamlit, I talked about how to write Web apps using simple Python for Data Scientists.
+But still, a major complaint, if you would check out the comment section of that post, was regarding the inability to deploy Streamlit apps over the web.
+And it was a valid complaint.
+ A developer can’t show up with his laptop every time the client wanted to use the app. What is the use of such an app?
+ So in this post, we will go one step further deploy our Streamlit app over the Web using an Amazon Free ec2 instance.
+Setting up the Amazon Instance Before we start with using the amazon ec2 instance, we need to set one up. You might need to sign up with your email ID and set up the payment information on the AWS website. Works just like a simple sign-on. From here, I will assume that you have an AWS account and so I am going to explain the next essential parts so you can follow through.
+ Go to AWS Management Console using https://us-west-2.console.aws.amazon.com/console.
+ On the AWS Management Console, you can select “Launch a Virtual Machine”. Here we are trying to set up the machine where we will deploy our Streamlit app.
+ In the first step, you need to choose the AMI template for the machine. I select the 18.04 Ubuntu Server since it is applicable for the Free Tier. And Ubuntu.
+   In the second step, I select the t2.micro instance as again it is the one which is eligible for the free tier. As you can see t2.micro is just a single CPU instance with 512 MB RAM. You can opt for a bigger machine if you are dealing with a powerful model or are willing to pay.   Keep pressing Next until you reach the “6. Configure Security Group” tab. You will need to add a rule with Type: “Custom TCP Rule”, Port Range:8501, and Source: Anywhere. We use the port 8501 here since it is the custom port used by Streamlit.   You can click on “Review and Launch” and finally on the “Launch” button to launch the instance. Once you click on Launch you might need to create a new key pair. Here I am creating a new key pair named streamlit and downloading that using the “Download Key Pair” button. Keep this key safe as it would be required every time you need to login to this particular machine. Click on “Launch Instance” after downloading the key pair   You can now go to your instances to see if your instance has started. Hint: See the Instance state, it should be showing “Running”   Select your instance, and copy the Public DNS(IPv4) Address from the description. It should be something starting with ec2.
+ Once you have that run the following commands in the folder you saved the streamlit.pem file. I have masked some of the information here.
+   chmod 400 streamlit.pem ssh -i &amp;quot;streamlit.pem&amp;quot; ubuntu@&amp;lt;Your Public DNS(IPv4) Address&amp;gt;  Installing Required Libraries Whoa, that was a handful. After all the above steps you should be able to see the ubuntu prompt for the virtual machine. We will need to set up this machine to run our app. I am going to be using the same streamlit_football_demo app that I used in my previous post.
+We start by installing miniconda and adding its path to the environment variable.
+sudo apt-get update wget [https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh](https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh) -O ~/miniconda.sh bash ~/miniconda.sh -b -p ~/miniconda echo &amp;quot;PATH=$PATH:$HOME/miniconda/bin&amp;quot; &amp;gt;&amp;gt; ~/.bashrc source ~/.bashrc  We then install additional dependencies for our app to run. That means I install streamlit and plotly_express.
+pip install streamlit pip install plotly_express  And our machine is now prepped and ready to run.
+Running Streamlit on Amazon ec2 As I am set up with the instance, I can get the code for my demo app from Github. Or you can choose to create or copy another app as you wish.
+git clone [https://github.com/MLWhiz/streamlit_football_demo.git](https://github.com/MLWhiz/streamlit_football_demo.git) cd streamlit_football_demo streamlit run helloworld.py  Now you can go to a browser and type the external URL to access your app. In my case the address is http://35.167.158.251:8501. Here is the output. This app will be up right now if you want to play with it.
+A Very Small Problem Though We are up and running with our app for the world to see. But whenever you are going to close the SSH terminal window the process will stop and so will your app.
+So what do we do?
+TMUX to the rescue. TMUX allows us to keep running our sessions even after we leave the terminal window. It also helps with a lot of other things but I will just go through the steps we need.
+First, we stop our app using Ctrl&#43;C and install tmux
+sudo apt-get install tmux  We start a new tmux session using the below command. We keep the name of our session as StreamSession. You could use any name here.
+tmux new -s StreamSession  You can see that the session name is “StreamSession” at the bottom of the screen. You can now start running streamlit in the tmux session.
+streamlit run helloworld.py  You will be able to see your app at the External URL. The next step is to detach our TMUX session so that it continues running in the background when you leave the SSH shell. To do this just press Ctrl&#43;B and then D (Don’t press Ctrl when pressing D)
+You can now close your SSH session and the app will continue running at the External URL.
+And Voila! We are up and running.
+Pro TMUX Tip: You can reattach to the same session by using the attach command below. The best part is that you can close your SSH shell and then maybe come back after some hours and reattach to a session and keep working from wherever you were when you closed the SSH shell.
+tmux attach -t StreamSession  Simple Troubleshooting: If your app is not hosting at 8501, it means that an instance of streamlit app is already running on your system and you will need to stop that. You can do so by first finding the process ID
+ps aux | grep streamlit  You will see something like:
+ubuntu 20927 2.4 18.8 713780 189580 pts/3 Sl&#43; 19:55 0:26 /home/ubuntu/miniconda/bin/python /home/ubuntu/miniconda/bin/streamlit run helloworld.py  You will need to kill this process. You can do this simply by
+kill -9 20947  Conclusion Streamlit has democratized the whole process to create apps, and I couldn’t recommend it more. If you want to learn more about how to create awesome web apps with Streamlit then read up my last post.
+In this post, we deployed a simple web app on AWS using amazon ec2.
+In the process of doing this, we created our own Amazon ec2 instance, logged into the SSH shell, installed miniconda and dependencies, ran our Streamlit application and learned about TMUX. Enough learning for a day?
+So go and show on these Mad skills. To end on a lighter note, as Sten Sootla says in his satire piece which I thoroughly enjoyed:
+ The secret: it’s not what you know, it’s what you show.
+ If you want to learn more about how to structure a Machine Learning project and the best practices, I would like to call out his excellent third course named Structuring Machine learning projects in the Coursera Deep Learning Specialization. Do check it out.
+Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at Medium or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz
+Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
+    
+
+    <item>
+      <title>Minimal Pandas Subset for Data Scientists on GPU</title>
+      <link>https://mlwhiz.com/blog/2020/02/22/pandas_gpu/</link>
+      <pubDate>Sat, 22 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2020/02/22/pandas_gpu/</guid>
+      
+      
+      <media:content type="image/png" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/pandas_gpu/main.png"></media:content>
+      
+
+      
+      <description>Data manipulation is a breeze with pandas, and it has become such a standard for it that a lot of parallelization libraries like Rapids and Dask are being created in line with Pandas syntax.
+Sometimes back, I wrote about the subset of Pandas functionality I end up using often. In this post, I will talk about handling most of those data manipulation cases in Python on a GPU using cuDF.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  Data manipulation is a breeze with pandas, and it has become such a standard for it that a lot of parallelization libraries like Rapids and Dask are being created in line with Pandas syntax.
+Sometimes back, I wrote about the subset of Pandas functionality I end up using often. In this post, I will talk about handling most of those data manipulation cases in Python on a GPU using cuDF.
+With a sprinkling of some recommendations throughout.
+PS: for benchmarking, all the experiments below are done on a Machine with 128 GB RAM and a Titan RTX GPU with 24 GB RAM.
+What is Rapids CuDF, and why to use it?  Built based on the Apache Arrow columnar memory format, cuDF is a GPU DataFrame library for loading, joining, aggregating, filtering, and otherwise manipulating data.
+ Simply, Rapids CuDF is a library that aims to bring pandas functionality to GPU. Apart from CuDF, Rapids also provides access to cuML and cuGraph as well, which are used to work with Machine Learning algorithms and graphs on GPU, respectively.
+Now, what is the advantage of this?
+A typical GPU has over 2000 CUDA cores. Pandas, when parallelized using Dask or multiprocessing, can use eight cores or 16 CPU cores that your machine has. Now, these CPU cores are different in their power, but the CUDA cores can do easy calculations fast and thus can provide us with significant speedups.
+My GPU Titan RTX has around 4600 cores. That means I should be able to parallelize my computations using GPU.
+But the problem is that writing code to run for GPU is hard. And Rapids CuDF solves this problem.
+Before we go any further, here is a simple example of how cuDF could help you. Here I try to get means of all columns in my random data frame having 100 million rows and five columns.
+That is a ~350x speedup using cuDF!!! And the code remains essentially the same. And remember, I am using a system with 128 GB RAM.
+Installation — RAPIDS cuDF So now we are convinced that cuDF is beneficial, the simplest way to install RAPIDS is by just going to the site and check what you need using the release selector tool.
+For me, the installation command was:
+conda install -c rapidsai -c nvidia -c conda-forge -c defaults rapids=0.11 python=3.7 cudatoolkit=10.1  For starting up or learning, you could also get started with the Google Colab notebook, which comes pre-installed with the required RAPIDS environment.
+I will use the US Accidents dataset in this post to show the capability of CuDF Dataframes.
+Reading Data with CuDF The first thing we do is reading the data source. We can read data in cudf from the local file system
+import cudf gdf = cudf.read_csv(&#39;US_Accidents_May19.csv&#39;)  This command took around 1 second compared to 13 seconds when I read using pd.read_csv function
+We could also have read from pandas Dataframes using:
+pdf = pd.read_csv(&#39;US_Accidents_May19.csv&#39;) gdf = cudf.DataFrame.from_pandas(pdf)  On that note, we can reconvert a cuDF dataframe back to a Pandas Dataframe to take advantage of the much more mature Pandas ecosystem whenever needed.
+pdf = gdf.to_pandas()  Data Snapshot Always useful to see some of the data. First, let us try the simple Head and Tail commands:
+You can use simple head and tail commands with an option to specify the number of rows.
+# top 5 rows gdf.head() # top 50 rows gdf.head(50) # last 5 rows gdf.tail() # last 50 rows gdf.tail(50)  You can also see simple dataframe statistics with the following commands.
+# To get statistics of numerical columns gdf.describe()  You can also use normal functions like:
+print(gdf[&#39;TMC&#39;].mean()) # no of rows in dataframe print(len(gdf)) # Shape of Dataframe print(gdf.shape) --------------------------------------------------------------- 207.35274265463238 2243939 (2243939, 49)  Recommendation: Generally working with Jupyter notebook, I make it a point of having the first few cells in my notebook containing these snapshots of the data. This helps me see the structure of the data whenever I want to. If I don’t follow this practice, I notice that I end up repeating the .head() command a lot of times in my code.
+Handling Columns in DataFrames a. Selecting a column As with Pandas, CuDF lets you choose columns in two ways. Using the dot operator like df.Title and using square brackets like df[&#39;Title&#39;]
+I prefer the second version, mostly. Why?
+There are a couple of reasons you would be better off with the square bracket version in the longer run.
+ If your column name contains spaces, then the dot version won’t work. For example, df.Revenue (Millions) won’t work while df[&#39;Revenue (Millions&#39;)] will.
+ It also won’t work if your column name is count or mean or any of the predefined functions.
+ Sometimes you might need to create a for loop over your column names in which your column name might be in a variable. In that case, the dot notation will not work. For Example, This works:
+  colname = &#39;height&#39; df[colname]  While this doesn’t:
+colname = &#39;height&#39; df.colname  Trust me. Saving a few characters is not worth it.
+Recommendation: Stop using the dot operator.
+b. Getting Column Names in a list It also works just like pandas.
+columnnames = cuda_df.columns  c. Specifying user-defined Column Names: Sometimes you want to change the column names as per your taste. I don’t like spaces or brackets in my column names, so I change them as such.
+gdf.columns = [&#39;ID&#39;, &#39;Source&#39;, &#39;TMC&#39;, &#39;Severity&#39;, &#39;Start_Time&#39;, &#39;End_Time&#39;, &#39;Start_Lat&#39;, &#39;Start_Lng&#39;, &#39;End_Lat&#39;, &#39;End_Lng&#39;, &#39;Distance_mi&#39;, &#39;Description&#39;, &#39;Number&#39;, &#39;Street&#39;, &#39;Side&#39;, &#39;City&#39;, &#39;County&#39;, &#39;State&#39;, &#39;Zipcode&#39;, &#39;Country&#39;, &#39;Timezone&#39;, &#39;Airport_Code&#39;, &#39;Weather_Timestamp&#39;, &#39;Temperature_F&#39;, &#39;Wind_Chill_F&#39;, &#39;Humidity_%&#39;, &#39;Pressure_in&#39;, &#39;Visibility_mi&#39;, &#39;Wind_Direction&#39;, &#39;Wind_Speed_mph&#39;, &#39;Precipitation_in&#39;, &#39;Weather_Condition&#39;, &#39;Amenity&#39;, &#39;Bump&#39;, &#39;Crossing&#39;, &#39;Give_Way&#39;, &#39;Junction&#39;, &#39;No_Exit&#39;, &#39;Railway&#39;, &#39;Roundabout&#39;, &#39;Station&#39;, &#39;Stop&#39;, &#39;Traffic_Calming&#39;, &#39;Traffic_Signal&#39;, &#39;Turning_Loop&#39;, &#39;Sunrise_Sunset&#39;, &#39;Civil_Twilight&#39;, &#39;Nautical_Twilight&#39;, &#39;Astronomical_Twilight&#39;]  d. Subsetting specific columns: Sometimes you only need to work with particular columns in a dataframe. e.g., to separate numerical and categorical columns, or remove unnecessary columns. Let’s say in our example, we only need a few columns
+gdf = gdf[[&#39;ID&#39;, &#39;Source&#39;, &#39;TMC&#39;, &#39;Severity&#39;, &#39;Start_Time&#39;, &#39;End_Time&#39;,&#39;Start_Lat&#39;, &#39;Start_Lng&#39;, &#39;End_Lat&#39;, &#39;End_Lng&#39;]]  e. Seeing column types: Very useful while debugging. If your code throws an error that you cannot add a str and int, you will like to run this command.
+gdf.dtypes  Apply and Lambda in CuDF apply and lambda are some of the best things I have learned to use with pandas. I use apply and lambda anytime I get stuck while building a complex logic for a new column or filter. Let&amp;rsquo;s see if we can use them in CuDF also.
+a. Creating a Column You can create a new column in many ways.
+If you want a column that is a sum or difference of columns, you can pretty much use simple basic arithmetic.
+gdf[&#39;Somecol&#39;] = (gdf[&#39;TMC&#39;] &#43; gdf[&#39;Severity&#39;]/10)/2  You can also use simple apply over a series using applymap:
+def somefunc(x): return x&#43;2 gdf[&#39;Somecol&#39;] = gdf[&#39;TMC&#39;].applymap(somefunc)  But sometimes we may need to build complex logic around the creation of new columns using multiple columns.
+To give you an example, let’s say that we want to calculate the Haversine distance based on Lats and Longs.
+How do we do that?
+Whenever I get a hold of such problems, I use apply/lambda. Let me first show you how I will do this with pandas. A lot of the code here is taken from this post.
+from math import cos, sin, asin, sqrt, pi def haversine_distance(lat1, lon1, lat2, lon2): &amp;#34;&amp;#34;&amp;#34;Haversine distance formula taken from Michael Dunn&amp;#39;s StackOverflow post: https://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points &amp;#34;&amp;#34;&amp;#34; x_1 = pi/180 * lat1 y_1 = pi/180 * lon1 x_2 = pi/180 * lat2 y_2 = pi/180 * lon2 dlon = y_2 - y_1 dlat = x_2 - x_1 a = sin(dlat/2)**2 &#43; cos(x_1) * cos(x_2) * sin(dlon/2)**2 c = 2 * asin(sqrt(a)) r = 6371 # Radius of earth in kilometers return c * r pdf[&amp;#39;hDistance&amp;#39;] = pdf.apply(lambda x: haversine_distance(x[&amp;#39;Start_Lat&amp;#39;],x[&amp;#39;Start_Lng&amp;#39;],x[&amp;#39;End_Lat&amp;#39;],x[&amp;#39;End_Lng&amp;#39;]),axis=1) To do the same thing in CuDF, we have to use apply_rows for applying a function to multiple rows.
+def haversine_distance_kernel(lat1, lon1, lat2, lon2, hDistance): &amp;#34;&amp;#34;&amp;#34;Haversine distance formula taken from Michael Dunn&amp;#39;s StackOverflow post: https://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points &amp;#34;&amp;#34;&amp;#34; for i, (x_1, y_1, x_2, y_2) in enumerate(zip(lat1, lon1, lat2, lon2)): x_1 = pi/180 * x_1 y_1 = pi/180 * y_1 x_2 = pi/180 * x_2 y_2 = pi/180 * y_2 dlon = y_2 - y_1 dlat = x_2 - x_1 a = sin(dlat/2)**2 &#43; cos(x_1) * cos(x_2) * sin(dlon/2)**2 c = 2 * asin(sqrt(a)) r = 6371 # Radius of earth in kilometers hDistance[i] = c * r gdf = gdf.apply_rows(haversine_distance_kernel, incols = {&amp;#39;Start_Lat&amp;#39;:&amp;#39;lat1&amp;#39;,&amp;#39;Start_Lng&amp;#39;:&amp;#39;lon1&amp;#39;,&amp;#39;End_Lat&amp;#39;:&amp;#39;lat2&amp;#39;,&amp;#39;End_Lng&amp;#39;:&amp;#39;lon2&amp;#39;}, outcols = dict(hDistance=np.float64), kwargs=dict()) See how the structure of the haversine_distance function changes and also how we call it a little bit differently. Note that this function takes hDistance as a parameter, so we even specify the output in the function call.
+In the backend, it uses Numba for the calculations.
+Now this is all well and good, but it has a few caveats:
+ It doesn’t take as input strings, so if you wanted to use a string column, you couldn’t. This is something that CuDF has in its features list.
+ Only a few functions supported by CUDA python could be used, and not all python functions. The full list of supported functions is here.
+  So why do we use it? In this particular case, it took 48 Seconds for Pandas while only 295ms for CuDF. That is a 160x Speedup.
+b. Filtering a dataframe Pandas make filtering and subsetting dataframes pretty easy. You can filter and subset dataframes using standard operators and &amp;amp;,|,~ operators. You can do pretty much the same with cuDF.
+# Single condition df_dis_gt_2 = gdf[gdf[&#39;hDistance&#39;]&amp;gt;2] # Multiple conditions: AND And_df = gdf[(gdf[&#39;hDistance&#39;]&amp;gt;8) &amp;amp; (gdf[&#39;TMC&#39;]&amp;gt;200)] # Multiple conditions: OR Or_df = gdf[(gdf[&#39;hDistance&#39;]&amp;gt;8) | (gdf[&#39;TMC&#39;]&amp;gt;200)] # Multiple conditions: NOT Not_df = gdf[~((gdf[&#39;hDistance&#39;]&amp;gt;8) | (gdf[&#39;TMC&#39;]&amp;gt;200))]  Pretty simple stuff.
+Aggregation on Dataframes: groupby groupby will come up a lot of times whenever you want to aggregate your data. Pandas lets you do this efficiently with the groupby function like:
+df.groupby(list of columns to groupby on).aggregate({&amp;lsquo;colname&amp;rsquo;:func1, &amp;lsquo;colname2&amp;rsquo;:func2}).reset_index()
+You have to worry about supplying two primary pieces of information.
+ List of columns to groupby on, and
+ A dictionary of columns and functions you want to apply to those columns
+  reset_index() is a function that resets the index of a dataframe. I use this function ALWAYS whenever I do a groupby, and you might think of it as a default syntax for groupby operations.
+Helpfully the syntax remains the same for cuDF.
+gdf_gby = gdf.groupby([&#39;Traffic_Calming&#39;,&#39;Sunrise_Sunset&#39;]).agg({&#39;TMC&#39;:&#39;mean&#39;,&#39;Severity&#39;:&#39;mean&#39;}).reset_index()  Caveat:I tried the function np.mean first, which didn’t work. It provides only elementary functions sum,mean,min and max only.
+Dealing with Multiple DataFrames: Concat and Merge: a. Concat Sometimes we get data from different sources. Or someone comes to you with multiple files with each file having data for a particular year.
+How do we create a single dataframe from these multiple dataframes?
+Here we will create our use case artificially since we have a single file. We are creating two dataframes first using the basic filter operations we already know.
+severity_lt_3 = gdf[gdf[&#39;Severity&#39;]&amp;lt;3] severity_gte_3 = gdf[gdf[&#39;Severity&#39;]&amp;gt;=3]  Here we start with two dataframes: severity_lt_3 containing info for accidents with a severity less than 3 and severity_gte_3 providing info for accidents with severity greater than or equal to 3. We want to create a single dataframe that includes both sorts of accidents.
+fullseverity = cudf.concat([severity_lt_3,severity_gte_3])  b. Merge Most of the data that you will encounter will never come in a single file. One of the files might contain ratings for a particular movie, and another might provide the number of votes for a movie.
+In such a case, we have two dataframes that need to be merged so that we can have all the information in a single view.
+Here we will create our use case artificially since we have a single file. We are creating two dataframes first using the basic column subset operations we already know.
+accident_times_dataframe = gdf[[&#39;ID&#39;,&#39;Start_Time&#39;,&#39;End_Time&#39;]] accident_locations_dataframe = gdf[[&#39;ID&#39;,&#39;Start_Lat&#39;,&#39;Start_Lng&#39;,&#39;End_Lat&#39;,&#39;End_Lng&#39;]]  We need to have all this information in a single dataframe. How do we do this? This syntax is also the same as Pandas.
+information_df = cudf.merge(accident_times_dataframe,accident_locations_dataframe,on=&#39;ID&#39;,how=&#39;left&#39;)  We provide this merge function with four attributes- 1st DF, 2nd DF, join on which column and the joining criteria:[&amp;lsquo;left&amp;rsquo;,&amp;lsquo;right&amp;rsquo;,&amp;lsquo;inner&amp;rsquo;,&amp;lsquo;outer&amp;rsquo;]
+As far as timing is concerned, we again get a 10x speedup while doing Joins when we use cudf.
+Recommendation: I usually always end up using left join. You will rarely need to join using outer or right. Actually whenever you need to do a right join you actually just really need a left join with the order of dataframes reversed in the merge function.
+Conclusion CuDF is a step in the right direction as it provides GPU for Data Processing, which takes up a lot of time in the data science pipeline.
+Here I tried to talk about some functionality in cuDF I use often. There is quite a bit more the folks at NVIDIA are trying to implement, so do take a look at the documentation.
+Although some of the pandas’ functionality is not yet implemented, that shouldn’t stop us from making use of the functions already implemented for time-critical applications and Kaggle.
+I, for myself, switch between cudf and pandas dataframes multiple times in my data preparation notebooks.
+It does help a lot whenever I am a little tied up on time.
+I hope you found this post useful and worth your time. I tried to make this as simple as possible, but you may always ask me or see the documentation for doubts.
+The whole code is posted in my Github Repo, where I keep codes for all my posts. You can find the data at Kaggle.
+Also, if you want to learn more about Python 3, I would like to call out an excellent course on Learn Intermediate level Python from the University of Michigan. Do check it out.
+I am going to be writing more of such posts in the future too. Let me know what you think about them. Follow me up at Medium or Subscribe to my blog) to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
     
 
     <item>

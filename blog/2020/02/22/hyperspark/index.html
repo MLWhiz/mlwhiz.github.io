@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>100x faster Hyperparameter Search Framework with Pyspark</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="This post is about setting up a hyperparameter tuning framework for Data Science using scikit-learn/xgboost/lightgbm and pySpark">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="100x faster Hyperparameter Search Framework with Pyspark" />
+<meta property="og:description" content="This post is about setting up a hyperparameter tuning framework for Data Science using scikit-learn/xgboost/lightgbm and pySpark" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2020/02/22/hyperspark/" />
+<meta property="og:image" content="https://mlwhiz.com/images/hyperspark/main.png" />
+<meta property="article:published_time" content="2020-02-22T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-02-22T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/hyperspark/main.png"/>
+
+<meta name="twitter:title" content="100x faster Hyperparameter Search Framework with Pyspark"/>
+<meta name="twitter:description" content="This post is about setting up a hyperparameter tuning framework for Data Science using scikit-learn/xgboost/lightgbm and pySpark"/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">100x faster Hyperparameter Search Framework with Pyspark</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2020-02-22T00:00:00">February 22, 2020</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/hyperspark/main.png" alt="" /></p>
+
+<p>Recently I was working on tuning hyperparameters for a huge Machine Learning model.</p>
+
+<p>Manual tuning was not an option since I had to tweak a lot of parameters. <a href="https://towardsdatascience.com/automate-hyperparameter-tuning-for-your-models-71b18f819604" rel="nofollow" target="_blank">Hyperopt</a> was also not an option as it works serially i.e. at a time, only a single model is being built. So it was taking up a lot of time to train each model and I was pretty short on time.</p>
+
+<p>I had to come up with a better more efficient approach if I were to meet the deadline. So I thought of the one thing that helps us data scientists in many such scenarios — <strong><em>Parallelization.</em></strong></p>
+
+<p><strong><em>Can I parallelize my model hyperparameter search process?</em></strong></p>
+
+<p>As you would have guessed, the answer is Yes.</p>
+
+<p><strong><em>This post is about setting up a hyperparameter tuning framework for Data Science using scikit-learn/xgboost/lightgbm and pySpark.</em></strong></p>
+
+<hr />
+
+<h2 id="grid-vs-randomized">Grid vs Randomized?</h2>
+
+<p>Before we get to implementing the hyperparameter search, we have two options to set up the hyperparameter search — Grid Search or Random search.</p>
+
+<p><img src="/images/hyperspark/0.png" alt="Starting with a 3×3 grid of parameters, we can see that Random search ends up doing more searches for the important parameter." /><em>Starting with a 3×3 grid of parameters, we can see that Random search ends up doing more searches for the important parameter.</em></p>
+
+<p>The figure above gives a definitive answer as to why Random search is better.</p>
+
+<p>Let’s say we have to tune two hyperparameters for our Machine Learning model. One is not important, and one is very important. In a grid search, we look at three settings for the important parameter. While in a randomized search, we search through 9 settings for the important parameter. And the amount of time we spent is the same.</p>
+
+<p>Since, Randomized search, searches more thoroughly through the whole space and provides us with better hyperparameters, we will go with it in our example.</p>
+
+<hr />
+
+<h2 id="setting-up-our-example">Setting Up Our Example</h2>
+
+<p>At my workplace, I have access to a pretty darn big cluster with 100s of nodes. It is a data Scientist’s dream. But in this post, I am going to be using the Databricks Community Edition Free server with a toy example. If you want to set up this small server for yourself for practice, check out my <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" rel="nofollow" target="_blank">post</a> on Spark.</p>
+
+<p>You can choose to load your data using Spark, but here I start by creating our own classification data to set up a minimal example which we can work with.</p>
+
+<pre><code>X,y = datasets.make_classification(n_samples=10000, n_features=4, n_informative=2, n_classes=2, random_state=1,shuffle=True)
+
+train = pd.DataFrame(X)
+train['target'] = y
+
+# Convert this pandas Data to spark Dataframe. 
+train_sp = spark.createDataFrame(train)
+
+# Change the column names.
+train_sp = train_sp.toDF(*['c0', 'c1', 'c2', 'c3', 'target'])
+</code></pre>
+
+<p>The train_sp spark dataset looks like:</p>
+
+<p><img src="/images/hyperspark/1.png" alt="" /></p>
+
+<hr />
+
+<h2 id="the-idea-replicate-and-apply">The Idea — Replicate and Apply</h2>
+
+<p><img src="/images/hyperspark/2.png" alt="Photo by [Frank Vessia](https://unsplash.com/@frankvex?utm_source=medium&amp;utm_medium=referral) on [Unsplash](https://unsplash.com?utm_source=medium&amp;utm_medium=referral)" /><em>Photo by <a href="https://unsplash.com/@frankvex?utm_source=medium&amp;utm_medium=referral" rel="nofollow" target="_blank">Frank Vessia</a> on <a href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" rel="nofollow" target="_blank">Unsplash</a></em></p>
+
+<p>So now we have got our training dataset in Spark. And we want to run multiple models on this DataFrame.</p>
+
+<p>Spark is inherently good with Key-Value pairs. That is all data with a particular key could be sent to a single machine. And we can apply functions to that data.</p>
+
+<p>But we want all our data on every machine. How do we do that?</p>
+
+<p><strong><em>We replicate our data n times and add a replication_id to our data so that each key has all the data.</em></strong></p>
+
+<p>Ok, now we can send the whole data to multiple machines using groupby on replication_id. But how do we use pandas and scikit learn on that data?</p>
+
+<p><strong><em>The answer is: we use pandas_udf.</em></strong> This functionality was introduced in the Spark version 2.3.1. And this allows you to utilise pandas functionality with Spark.</p>
+
+<p>If you don’t understand this yet, do look at the code as sometimes it is easier to understand the code.</p>
+
+<hr />
+
+<h2 id="the-code">The Code</h2>
+
+<p>We first replicate our train dataframe 100 times here by using cross_join with a data frame that contains a column with 1–100 replication_id.</p>
+
+<pre><code># replicate the spark dataframe into multiple copies
+
+replication_df = spark.createDataFrame(pd.DataFrame(list(range(1,100)),columns=['replication_id']))
+
+replicated_train_df = train_sp.crossJoin(replication_df)
+</code></pre>
+
+<p><img src="/images/hyperspark/3.png" alt="Every row is replicated 100 times with different replication_id" /></p>
+
+<p>We also define a function that takes as input a pandas dataframe, gets random hyperparameters using the python random module, runs a model on data(Here I am training a scikit model, but you can replace it with any model like XGBoost or Lightgbm as well) and returns the result in the form of a Pandas Dataframe. Do take a look at the function and the comments.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># 0. Declare the schema for the output of our function</span>
+outSchema <span style="color:#f92672">=</span> StructType([StructField(<span style="color:#e6db74">&#39;replication_id&#39;</span>,IntegerType(),True),StructField(<span style="color:#e6db74">&#39;Accuracy&#39;</span>,DoubleType(),True),StructField(<span style="color:#e6db74">&#39;num_trees&#39;</span>,IntegerType(),True),StructField(<span style="color:#e6db74">&#39;depth&#39;</span>,IntegerType(),True),StructField(<span style="color:#e6db74">&#39;criterion&#39;</span>,StringType(),True)])
+
+<span style="color:#75715e"># decorate our function with pandas_udf decorator</span>
+<span style="color:#a6e22e">@F.pandas_udf</span>(outSchema, F<span style="color:#f92672">.</span>PandasUDFType<span style="color:#f92672">.</span>GROUPED_MAP)
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">run_model</span>(pdf):
+    
+    <span style="color:#75715e"># 1. Get randomized hyperparam values</span>
+    num_trees <span style="color:#f92672">=</span>  random<span style="color:#f92672">.</span>choice(list(range(<span style="color:#ae81ff">50</span>,<span style="color:#ae81ff">500</span>)))
+    depth <span style="color:#f92672">=</span> random<span style="color:#f92672">.</span>choice(list(range(<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">10</span>)))
+    criterion <span style="color:#f92672">=</span> random<span style="color:#f92672">.</span>choice([<span style="color:#e6db74">&#39;gini&#39;</span>,<span style="color:#e6db74">&#39;entropy&#39;</span>])
+    replication_id <span style="color:#f92672">=</span> pdf<span style="color:#f92672">.</span>replication_id<span style="color:#f92672">.</span>values[<span style="color:#ae81ff">0</span>]
+    
+    <span style="color:#75715e"># 2. Train test split</span>
+    X <span style="color:#f92672">=</span> pdf[[<span style="color:#e6db74">&#39;c0&#39;</span>, <span style="color:#e6db74">&#39;c1&#39;</span>, <span style="color:#e6db74">&#39;c2&#39;</span>, <span style="color:#e6db74">&#39;c3&#39;</span>]]
+    y <span style="color:#f92672">=</span> pdf[<span style="color:#e6db74">&#39;target&#39;</span>]
+    Xtrain,Xcv,ytrain,ycv <span style="color:#f92672">=</span> train_test_split(X, y, test_size<span style="color:#f92672">=</span><span style="color:#ae81ff">0.33</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">42</span>)
+    
+    <span style="color:#75715e"># 3. Create model using the pandas dataframe</span>
+    clf <span style="color:#f92672">=</span> RandomForestClassifier(n_estimators<span style="color:#f92672">=</span>num_trees, max_depth <span style="color:#f92672">=</span> depth, criterion <span style="color:#f92672">=</span>criterion)
+    clf<span style="color:#f92672">.</span>fit(Xtrain,ytrain)
+    
+    <span style="color:#75715e"># 4. Evaluate the model</span>
+    accuracy <span style="color:#f92672">=</span> accuracy_score(clf<span style="color:#f92672">.</span>predict(Xcv),ycv)
+    
+    <span style="color:#75715e"># 5. return results as pandas DF</span>
+    res <span style="color:#f92672">=</span>pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74">&#39;replication_id&#39;</span>:replication_id,<span style="color:#e6db74">&#39;Accuracy&#39;</span>:accuracy, <span style="color:#e6db74">&#39;num_trees&#39;</span>:num_trees,<span style="color:#e6db74">&#39;depth&#39;</span>:depth,<span style="color:#e6db74">&#39;criterion&#39;</span>:criterion}, index<span style="color:#f92672">=</span>[<span style="color:#ae81ff">0</span>])
+    <span style="color:#66d9ef">return</span> res</code></pre></div>
+<p>We can now apply this pandas_udf function to our replicated dataframe using:</p>
+
+<pre><code>results = replicated_train_df.groupby(&quot;replication_id&quot;).apply(run_model)
+</code></pre>
+
+<p>What the above code does is that it sends all the data with the same replication id to a single machine and applies the function run_model to the data. The above call happens lazily so you won’t be able to see the results till you run the below action call.</p>
+
+<pre><code>results.sort(F.desc(&quot;Accuracy&quot;)).show()
+</code></pre>
+
+<p><img src="/images/hyperspark/4.png" alt="Results of our Hyperparameter search" /></p>
+
+<p>For this toy example, the accuracy results may look pretty close to one another, but they will differ in the case of noisy real-world datasets. Since all of these 100 models run in parallel on different nodes, we can save a lot of time when doing random hyperparameter search.</p>
+
+<p>The speedup factor certainly depends on how many nodes you have in your cluster. For me, I had 100 machines at my disposal, so I got ~ 100x speedup.</p>
+
+<p>You can get the full code in this Databricks <a href="https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/7664398068420572/3438177909678058/3797400441762013/latest.html" rel="nofollow" target="_blank">Notebook</a> or get it from my <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/spark_hyperparams_tuning" rel="nofollow" target="_blank">GitHub</a> repository where I keep codes for all my posts.</p>
+
+<hr />
+
+<h2 id="continue-learning">Continue Learning</h2>
+
+<p>If you want to learn more about practical data science, do take a look at the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">“How to win a data science competition”</a> Coursera course. I learned a lot of new things from this course taught by one of the most prolific Kaggler.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
+<p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources as sharing knowledge is never a bad idea.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2020/02/22/streamlitec2/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">How to Deploy a Streamlit App using an Amazon Free ec2 instance?</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<style type="text/css">
+
+  .btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-session {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+</style>
+
+
+<aside class="sidebar">
+  <div style="text-align:center">    
+    
+    <a class="btn btn-session" href="https://www.patreon.com/bePatron?u=28135435" role="button">1:1 Session</a>
+	     
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/22/hyperspark/">100x faster Hyperparameter Search Framework with Pyspark</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/22/streamlitec2/">How to Deploy a Streamlit App using an Amazon Free ec2 instance?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/22/pandas_gpu/">Minimal Pandas Subset for Data Scientists on GPU</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/21/ds2020/">Become a Data Scientist in 2020 with these 10 resources</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/21/ci/">Confidence Intervals Explained Simply for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/21/sql/">Learning SQL the Hard Way</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/20/swifter/">Add this single word to make your Pandas Apply faster</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/01/29/altr/">Handling Trees in Data Science Algorithmic Interview</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/01/28/ll/">A simple introduction to Linked Lists for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/01/28/dp/">Dynamic Programming for Data Scientists</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;}
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}
+   
+</style>
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2020 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
