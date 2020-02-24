@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Lightning Fast XGBoost on Multiple GPUs</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="This post is about running XGBoost on Multi-GPU machines.">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="Lightning Fast XGBoost on Multiple GPUs" />
+<meta property="og:description" content="This post is about running XGBoost on Multi-GPU machines." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2020/02/23/xgbparallel/" />
+<meta property="og:image" content="https://mlwhiz.com/images/xgbparallel/main.png" />
+<meta property="article:published_time" content="2020-02-23T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-02-23T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/xgbparallel/main.png"/>
+
+<meta name="twitter:title" content="Lightning Fast XGBoost on Multiple GPUs"/>
+<meta name="twitter:description" content="This post is about running XGBoost on Multi-GPU machines."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Lightning Fast XGBoost on Multiple GPUs</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2020-02-23T00:00:00">February 23, 2020</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/xgbparallel/main.png" alt="" /></p>
+
+<p>XGBoost is one of the most used libraries fora data science.</p>
+
+<p>At the time XGBoost came into existence, it was lightning fast compared to its nearest rival Python’s Scikit-learn GBM. But as the times have progressed, it has been rivaled by some awesome libraries like LightGBM and Catboost, both on speed as well as accuracy.</p>
+
+<p>I, for one, use LightGBM for most of the use cases where I have just got CPU for training. But when I have a GPU or multiple GPUs at my disposal, I still love to train with XGBoost.</p>
+
+<p>Why?</p>
+
+<p>So I could make use of the excellent GPU Capabilities provided by XGBoost in conjunction with Dask to use XGBoost in both single and multi-GPU mode.</p>
+
+<p>How?</p>
+
+<p><strong><em>This post is about running XGBoost on Multi-GPU machines.</em></strong></p>
+
+<hr />
+
+<h2 id="dataset">Dataset:</h2>
+
+<p><img src="/images/xgbparallel/0.png" alt="UCI Higgs" /></p>
+
+<p>We are going to be using the <a href="https://archive.ics.uci.edu/ml/datasets/HIGGS" rel="nofollow" target="_blank">UCI Higgs dataset</a>. This is a binary classification problem with 11M rows and 29 columns and can take a considerable time to solve.</p>
+
+<p>From the UCI Site:</p>
+
+<blockquote>
+<p>The data has been produced using Monte Carlo simulations. The first 21 features (columns 2–22) are kinematic properties measured by the particle detectors in the accelerator. The last seven features are functions of the first 21 features; these are high-level features derived by physicists to help discriminate between the two classes. There is an interest in using deep learning methods to obviate the need for physicists to manually develop such features. Benchmark results using Bayesian Decision Trees from a standard physics package and 5-layer neural networks are presented in the original paper. The last 500,000 examples are used as a test set.</p>
+</blockquote>
+
+<p>We can load this dataset into memory by using the nifty function that I borrow from <a href="https://devblogs.nvidia.com/gradient-boosting-decision-trees-xgboost-cuda/" rel="nofollow" target="_blank">this NVidia post</a>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">if</span> sys<span style="color:#f92672">.</span>version_info[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">3</span>:
+    <span style="color:#f92672">from</span> urllib.request <span style="color:#f92672">import</span> urlretrieve
+<span style="color:#66d9ef">else</span>:
+    <span style="color:#f92672">from</span> urllib <span style="color:#f92672">import</span> urlretrieve
+
+data_url <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;https://archive.ics.uci.edu/ml/machine-learning-databases/00280/HIGGS.csv.gz&#34;</span>
+dmatrix_train_filename <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;higgs_train.dmatrix&#34;</span>
+dmatrix_test_filename <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;higgs_test.dmatrix&#34;</span>
+csv_filename <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;HIGGS.csv.gz&#34;</span>
+train_rows <span style="color:#f92672">=</span> <span style="color:#ae81ff">10500000</span>
+test_rows <span style="color:#f92672">=</span> <span style="color:#ae81ff">500000</span>
+num_round <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
+
+plot <span style="color:#f92672">=</span> True
+
+<span style="color:#75715e"># return xgboost dmatrix</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">load_higgs</span>():
+    <span style="color:#66d9ef">if</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>isfile(dmatrix_train_filename) <span style="color:#f92672">and</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>isfile(dmatrix_test_filename):           
+        dtrain <span style="color:#f92672">=</span> xgb<span style="color:#f92672">.</span>DMatrix(dmatrix_train_filename)
+        dtest <span style="color:#f92672">=</span> xgb<span style="color:#f92672">.</span>DMatrix(dmatrix_test_filename)
+        <span style="color:#66d9ef">if</span> dtrain<span style="color:#f92672">.</span>num_row() <span style="color:#f92672">==</span> train_rows <span style="color:#f92672">and</span> dtest<span style="color:#f92672">.</span>num_row() <span style="color:#f92672">==</span> test_rows:
+            <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Loading cached dmatrix...&#34;</span>)
+            <span style="color:#66d9ef">return</span> dtrain, dtest
+
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>isfile(csv_filename):
+        <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Downloading higgs file...&#34;</span>)
+        urlretrieve(data_url, csv_filename)
+
+    df_higgs_train <span style="color:#f92672">=</span> pandas<span style="color:#f92672">.</span>read_csv(csv_filename, dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>float32, 
+                                     nrows<span style="color:#f92672">=</span>train_rows, header<span style="color:#f92672">=</span>None)
+    dtrain <span style="color:#f92672">=</span> xgb<span style="color:#f92672">.</span>DMatrix(df_higgs_train<span style="color:#f92672">.</span>ix[:, <span style="color:#ae81ff">1</span>:<span style="color:#ae81ff">29</span>], df_higgs_train[<span style="color:#ae81ff">0</span>])
+    dtrain<span style="color:#f92672">.</span>save_binary(dmatrix_train_filename)
+    df_higgs_test <span style="color:#f92672">=</span> pandas<span style="color:#f92672">.</span>read_csv(csv_filename, dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>float32, 
+                                    skiprows<span style="color:#f92672">=</span>train_rows, nrows<span style="color:#f92672">=</span>test_rows, 
+                                    header<span style="color:#f92672">=</span>None)
+    dtest <span style="color:#f92672">=</span> xgb<span style="color:#f92672">.</span>DMatrix(df_higgs_test<span style="color:#f92672">.</span>ix[:, <span style="color:#ae81ff">1</span>:<span style="color:#ae81ff">29</span>], df_higgs_test[<span style="color:#ae81ff">0</span>])
+    dtest<span style="color:#f92672">.</span>save_binary(dmatrix_test_filename)
+
+    <span style="color:#66d9ef">return</span> dtrain, dtest
+    
+dtrain, dtest <span style="color:#f92672">=</span> load_higgs()</code></pre></div>
+<p>This function downloads the Higgs dataset and creates Dmatrix objects for later XGBoost use.</p>
+
+<hr />
+
+<h2 id="xgboost-the-cpu-method">XGBoost: The CPU Method</h2>
+
+<p><img src="/images/xgbparallel/1.png" alt="[Source](https://pixabay.com/illustrations/processor-cpu-computer-chip-board-2217771/)" /></p>
+
+<p>As we have the data loaded, we can train the XGBoost model with CPU for benchmarking purposes.</p>
+
+<pre><code>print(&quot;Training with CPU ...&quot;)
+param = {}
+param['objective'] = 'binary:logitraw'
+param['eval_metric'] = 'error'
+param['silent'] = 1
+param['tree_method'] = 'hist'
+
+tmp = time.time()
+cpu_res = {}
+xgb.train(param, dtrain, num_round, evals=[(dtest, &quot;test&quot;)], 
+          evals_result=cpu_res)
+cpu_time = time.time() - tmp
+print(&quot;CPU Training Time: %s seconds&quot; % (str(cpu_time)))
+
+---------------------------------------------------------------
+
+CPU Training Time: 717.6483490467072 seconds
+</code></pre>
+
+<p>This code takes 717 seconds, which is around 12 minutes to finish. That is great and commendable, but can we do better?</p>
+
+<hr />
+
+<h2 id="xgboost-the-single-gpu-method">XGBoost: The Single GPU Method</h2>
+
+<p><img src="/images/xgbparallel/2.png" alt="[Source](https://www.google.com/url?sa=i&amp;rct=j&amp;q=&amp;esrc=s&amp;source=images&amp;cd=&amp;cad=rja&amp;uact=8&amp;ved=2ahUKEwiKwMPphI3nAhXtzzgGHeLNB1QQjhx6BAgBEAI&amp;url=https%3A%2F%2Fwww.nvidia.com%2Fen-us%2Fdeep-learning-ai%2Fproducts%2Ftitan-rtx%2F&amp;psig=AOvVaw3QFPz_lTQrqraHJQz_ewwh&amp;ust=1579433051897517)" /></p>
+
+<p>What is great is that we don’t have to change a lot in the above code to be able to use a single GPU for our model building.</p>
+
+<blockquote>
+<p>Why use CPU when we can use GPU?</p>
+</blockquote>
+
+<p>We change the tree_method to gpu_hist</p>
+
+<pre><code>print(&quot;Training with Single GPU ...&quot;)
+
+param = {}
+param['objective'] = 'binary:logitraw'
+param['eval_metric'] = 'error'
+param['silent'] = 1
+param['tree_method'] = 'gpu_hist'
+tmp = time.time()
+gpu_res = {}
+
+xgb.train(param, dtrain, num_round, evals=[(dtest, &quot;test&quot;)], 
+          evals_result=gpu_res)
+gpu_time = time.time() - tmp
+print(&quot;GPU Training Time: %s seconds&quot; % (str(gpu_time)))
+
+----------------------------------------------------------------
+GPU Training Time: 78.2187008857727 seconds
+</code></pre>
+
+<p>And <strong><em>we achieve a 10x speedup</em></strong> with our model now finishing in 1.3 minutes. That is great, but can we do even better if we have multiple GPUs?</p>
+
+<hr />
+
+<h2 id="xgboost-the-multi-gpu-method">XGBoost: The Multi GPU Method</h2>
+
+<p><img src="/images/xgbparallel/3.png" alt="[Source](https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.nvidia.com%2Fcontent%2Fdam%2Fen-zz%2FSolutions%2Ftitan%2Ftitan-rtx%2Fnvidia-titan-rtx-nvlink-300-t%402x.jpg&amp;imgrefurl=https%3A%2F%2Fwww.nvidia.com%2Fen-us%2Fdeep-learning-ai%2Fproducts%2Ftitan-rtx%2F&amp;docid=LXUW4PiXbaOvoM&amp;tbnid=2aobaeCTl1m0CM%3A&amp;vet=10ahUKEwi2uovhhI3nAhXVcn0KHf9pB_YQMwhLKAIwAg..i&amp;w=600&amp;h=408&amp;client=ubuntu&amp;bih=2025&amp;biw=1879&amp;q=gpu%20titan%20rtx%20dual&amp;ved=0ahUKEwi2uovhhI3nAhXVcn0KHf9pB_YQMwhLKAIwAg&amp;iact=mrc&amp;uact=8)" /></p>
+
+<p>I have, for example, 2 GPUs in my machine while the above code utilizes only 1 GPU. With GPU’s getting a lot cheaper now, it is not unusual for clusters to have more than 4 GPUs. So can we use multiple GPUs simultaneously?</p>
+
+<blockquote>
+<p>Two GPUs are always better than one</p>
+</blockquote>
+
+<p>To use MultiGPUs, the process is not so simple as to add a little argument as above, and there are a few steps involved.</p>
+
+<p>The first is the difference in Data loading:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">load_higgs_for_dask</span>(client):
+    <span style="color:#75715e"># 1. read the CSV File using Pandas</span>
+    df_higgs_train <span style="color:#f92672">=</span> pandas<span style="color:#f92672">.</span>read_csv(csv_filename, dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>float32, 
+                                     nrows<span style="color:#f92672">=</span>train_rows, header<span style="color:#f92672">=</span>None)<span style="color:#f92672">.</span>ix[:, <span style="color:#ae81ff">0</span>:<span style="color:#ae81ff">30</span>]
+    df_higgs_test <span style="color:#f92672">=</span> pandas<span style="color:#f92672">.</span>read_csv(csv_filename, dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>float32, 
+                                    skiprows<span style="color:#f92672">=</span>train_rows, nrows<span style="color:#f92672">=</span>test_rows, 
+                                    header<span style="color:#f92672">=</span>None)<span style="color:#f92672">.</span>ix[:, <span style="color:#ae81ff">0</span>:<span style="color:#ae81ff">30</span>]
+
+    <span style="color:#75715e"># 2. Create a Dask Dataframe from Pandas Dataframe.</span>
+    ddf_higgs_train <span style="color:#f92672">=</span> dask<span style="color:#f92672">.</span>dataframe<span style="color:#f92672">.</span>from_pandas(df_higgs_train, npartitions<span style="color:#f92672">=</span><span style="color:#ae81ff">8</span>)
+    ddf_higgs_test <span style="color:#f92672">=</span> dask<span style="color:#f92672">.</span>dataframe<span style="color:#f92672">.</span>from_pandas(df_higgs_test, npartitions<span style="color:#f92672">=</span><span style="color:#ae81ff">8</span>)
+    ddf_y_train <span style="color:#f92672">=</span> ddf_higgs_train[<span style="color:#ae81ff">0</span>]
+    <span style="color:#66d9ef">del</span> ddf_higgs_train[<span style="color:#ae81ff">0</span>]
+    ddf_y_test <span style="color:#f92672">=</span> ddf_higgs_test[<span style="color:#ae81ff">0</span>]
+    <span style="color:#66d9ef">del</span> ddf_higgs_test[<span style="color:#ae81ff">0</span>]
+    
+    <span style="color:#75715e">#3. Create Dask DMatrix Object using dask dataframes</span>
+    ddtrain <span style="color:#f92672">=</span> DaskDMatrix(client, ddf_higgs_train ,ddf_y_train)
+    ddtest <span style="color:#f92672">=</span> DaskDMatrix(client, ddf_higgs_test ,ddf_y_test)
+    
+    <span style="color:#66d9ef">return</span> ddtrain, ddtest</code></pre></div>
+<p>There are multiple steps in data load as we need dask DMatrix objects to train XGBoost with multiple GPUs.</p>
+
+<ol>
+<li><p>Read the CSV File using Pandas.</p></li>
+
+<li><p>Create a Dask Dataframe from Pandas Dataframe, and</p></li>
+
+<li><p>Create Dask DMatrix Object using dask data frames.</p></li>
+</ol>
+
+<p>To use Multi-GPU for training XGBoost, we need to use Dask to create a GPU Cluster. This command creates a cluster of our GPUs that could be used by dask by using the client object later.</p>
+
+<pre><code>cluster = LocalCUDACluster()
+client = Client(cluster)
+</code></pre>
+
+<p>We can now load our Dask Dmatrix Objects and define the training parameters. Note nthread beings set to one and tree_method set to gpu_hist</p>
+
+<pre><code>ddtrain, ddtest = load_higgs_for_dask(client)
+
+param = {}
+param['objective'] = 'binary:logitraw'
+param['eval_metric'] = 'error'
+param['silence'] = 1
+param['tree_method'] = 'gpu_hist'
+param['nthread'] = 1
+</code></pre>
+
+<p>We can now train on Multiple GPUs using:</p>
+
+<pre><code>print(&quot;Training with Multiple GPUs ...&quot;)
+tmp = time.time()
+output = xgb.dask.train(client, param, ddtrain, num_boost_round=1000, evals=[(ddtest, 'test')])
+multigpu_time = time.time() - tmp
+bst = output['booster']
+multigpu_res = output['history']
+print(&quot;Multi GPU Training Time: %s seconds&quot; % (str(multigpu_time)))
+---------------------------------------------------------------
+Multi GPU Training Time: 50.08211898803711 seconds
+</code></pre>
+
+<p>Please note how the call to xgb.train changes to xgb.dask.train and how it also needs the dask client to work.</p>
+
+<p>This took around 0.8 Minutes that is a 1.5x Speedup from Single GPU. I only had 2 GPUs at my disposal, so I can’t test it, but I believe that it increases linearly, i.e. more GPU and more reduction in time.</p>
+
+<hr />
+
+<h2 id="results">Results</h2>
+
+<p>Here are the results of all three setups:</p>
+
+<p><img src="/images/xgbparallel/4.png" alt="" /></p>
+
+<p>Although the difference between Multi and Single CPU looks redundant right now, it will be pretty considerable while running <a href="https://towardsdatascience.com/automate-hyperparameter-tuning-for-your-models-71b18f819604" rel="nofollow" target="_blank">multiple hyperparameter tuning tasks</a> at hand where one might need to run multiple GBM Models with different Hyperparams.</p>
+
+<p>Also, this result can change when we scale it to many GPUs.</p>
+
+<p>So keep scaling.</p>
+
+<p>You can find the complete code for this post on <a href="https://github.com/MLWhiz/data_science_blogs/blob/master/xgb_dask/XGB%20with%20Dask%2BGPU.ipynb" rel="nofollow" target="_blank">Github</a>.</p>
+
+<hr />
+
+<h2 id="continue-learning">Continue Learning</h2>
+
+<p>If you are interested in Deep Learning and want to use your GPU for that, I would like to recommend this excellent course on <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">Deep Learning in Computer Vision</a> in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">Advanced machine learning specialization</a>.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>@mlwhiz</strong></a></p>
+
+<p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2020/02/23/streamlitrec/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Share your Projects even more easily with this New Streamlit Feature</p></a>
+	</div>
+	<div class="post-nav__item post-nav__item--next">
+		<a class="post-nav__link" href="/blog/2020/02/23/bamboo/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">Bamboolib — Learn and use Pandas without Coding</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<style type="text/css">
+
+  .btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-session {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+</style>
+
+
+<aside class="sidebar">
+  <div style="text-align:center">    
+    
+    <a class="btn btn-session" href="https://www.patreon.com/bePatron?u=28135435" role="button">1:1 Session</a>
+	     
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/23/bamboo/">Bamboolib — Learn and use Pandas without Coding</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/23/xgbparallel/">Lightning Fast XGBoost on Multiple GPUs</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/23/streamlitrec/">Share your Projects even more easily with this New Streamlit Feature</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/22/hyperspark/">100x faster Hyperparameter Search Framework with Pyspark</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/22/streamlitec2/">How to Deploy a Streamlit App using an Amazon Free ec2 instance?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/22/pandas_gpu/">Minimal Pandas Subset for Data Scientists on GPU</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/21/ds2020/">Become a Data Scientist in 2020 with these 10 resources</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/21/ci/">Confidence Intervals Explained Simply for Data Scientists</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;}
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}
+   
+</style>
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2020 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>

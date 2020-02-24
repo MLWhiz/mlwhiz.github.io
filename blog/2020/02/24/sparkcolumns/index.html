@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>5 Ways to add a new column in a PySpark Dataframe</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="This post is going to be about Multiple ways to create a new column in Pyspark Dataframe">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="5 Ways to add a new column in a PySpark Dataframe" />
+<meta property="og:description" content="This post is going to be about Multiple ways to create a new column in Pyspark Dataframe" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2020/02/24/sparkcolumns/" />
+<meta property="og:image" content="https://mlwhiz.com/images/sparkcolumns/main.png" />
+<meta property="article:published_time" content="2020-02-24T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-02-24T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/sparkcolumns/main.png"/>
+
+<meta name="twitter:title" content="5 Ways to add a new column in a PySpark Dataframe"/>
+<meta name="twitter:description" content="This post is going to be about Multiple ways to create a new column in Pyspark Dataframe"/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/atom.xml">RSS</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">5 Ways to add a new column in a PySpark Dataframe</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2020-02-24T00:00:00">February 24, 2020</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/sparkcolumns/main.png" alt="" /></p>
+
+<p><strong><em>Too much data is getting generated day by day.</em></strong></p>
+
+<p>Although sometimes we can manage our big data using tools like <a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientist-on-gpu-d9a6c7759c7f?source=---------5------------------" rel="nofollow" target="_blank">Rapids</a> or <a href="https://towardsdatascience.com/add-this-single-word-to-make-your-pandas-apply-faster-90ee2fffe9e8?source=---------11------------------" rel="nofollow" target="_blank">Parallelization</a>, Spark is an excellent tool to have in your repertoire if you are working with Terabytes of data.</p>
+
+<p>In my <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" rel="nofollow" target="_blank">last post</a> on Spark, I explained how to work with PySpark RDDs and Dataframes.</p>
+
+<p>Although this post explains a lot on how to work with RDDs and basic Dataframe operations, I missed quite a lot when it comes to working with PySpark Dataframes.</p>
+
+<p>And it is only when I required more functionality that I read up and came up with multiple solutions to do one single thing.</p>
+
+<p><strong><em>How to create a new column in spark?</em></strong></p>
+
+<p>Now, this might sound trivial, but believe me, it isn’t. With so much you might want to do with your data, I am pretty sure you will end up using most of these column creation processes in your workflow. Sometimes to utilize Pandas functionality, or occasionally to use RDDs based partitioning or sometimes to make use of the mature python ecosystem.</p>
+
+<p><strong>This post is going to be about — “Multiple ways to create a new column in Pyspark Dataframe.”</strong></p>
+
+<p>If you have PySpark installed, you can skip the Getting Started section below.</p>
+
+<hr />
+
+<h2 id="getting-started-with-spark">Getting Started with Spark</h2>
+
+<p>I know that a lot of you won’t have spark installed in your system to try and learn. But installing Spark is a headache of its own.</p>
+
+<p>Since we want to understand how it works and work with it, I would suggest that you use Spark on Databricks <a href="https://databricks.com/try-databricks?utm_source=databricks&amp;utm_medium=homev2tiletest" rel="nofollow" target="_blank"><strong>here</strong></a> online with the community edition. Don’t worry, it is free, albeit fewer resources, but that works for us right now for learning purposes.</p>
+
+<p><img src="/images/sparkcolumns/0.png" alt="" /></p>
+
+<p>Once you register and login will be presented with the following screen.</p>
+
+<p><img src="/images/sparkcolumns/1.png" alt="" /></p>
+
+<p>You can start a new notebook here.</p>
+
+<p>Select the Python notebook and give any name to your notebook.</p>
+
+<p>Once you start a new notebook and try to execute any command, the notebook will ask you if you want to start a new cluster. Do it.</p>
+
+<p>The next step will be to check if the sparkcontext is present. To check if the sparkcontext is present, you have to run this command:</p>
+
+<pre><code>sc
+</code></pre>
+
+<p><img src="/images/sparkcolumns/2.png" alt="" /></p>
+
+<p>This means that we are set up with a notebook where we can run Spark.</p>
+
+<hr />
+
+<h2 id="data">Data</h2>
+
+<p>Here, I will work on the Movielens <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/spark_post" rel="nofollow" target="_blank"><strong>ml-100k.zip</strong></a> dataset. 100,000 ratings from 1000 users on 1700 movies. In this zipped folder, the file we will specifically work with is the rating file. This filename is kept as “u.data”</p>
+
+<p>If you want to upload this data or any data, you can click on the Data tab in the left and then Add Data by using the GUI provided.</p>
+
+<p><img src="/images/sparkcolumns/3.png" alt="" /></p>
+
+<p>We can then load the data using the following commands:</p>
+
+<pre><code>ratings = spark.read.load(&quot;/FileStore/tables/u.data&quot;,format=&quot;csv&quot;, sep=&quot;\t&quot;, inferSchema=&quot;true&quot;, header=&quot;false&quot;)
+
+ratings = ratings.toDF(*['user_id', 'movie_id', 'rating', 'unix_timestamp'])
+</code></pre>
+
+<p>Here is how it looks:</p>
+
+<pre><code>ratings.show()
+</code></pre>
+
+<p><img src="/images/sparkcolumns/4.png" alt="" /></p>
+
+<p>Ok, so now we are set up to begin the part we are interested in finally. How to create a new column in PySpark Dataframe?</p>
+
+<hr />
+
+<h2 id="1-using-spark-native-functions">1. Using Spark Native Functions</h2>
+
+<p><img src="/images/sparkcolumns/5.png" alt="Photo by [Andrew James](https://unsplash.com/@andrewjamesphoto?utm_source=medium&amp;utm_medium=referral) on [Unsplash](https://unsplash.com?utm_source=medium&amp;utm_medium=referral)" /></p>
+
+<p>The most pysparkish way to create a new column in a PySpark DataFrame is by using built-in functions. This is the most performant programmatical way to create a new column, so this is the first place I go whenever I want to do some column manipulation.</p>
+
+<p>We can use .withcolumn along with PySpark SQL functions to create a new column. In essence, you can find String functions, Date functions, and Math functions already implemented using Spark functions. We can import spark functions as:</p>
+
+<pre><code>import pyspark.sql.functions as F
+</code></pre>
+
+<p>Our first function, the F.col function gives us access to the column. So if we wanted to multiply a column by 2, we could use F.col as:</p>
+
+<pre><code>ratings_with_scale10 = ratings.withColumn(&quot;ScaledRating&quot;, 2*F.col(&quot;rating&quot;))
+
+ratings_with_scale10.show()
+</code></pre>
+
+<p><img src="/images/sparkcolumns/6.png" alt="" /></p>
+
+<p>We can also use math functions like F.exp function:</p>
+
+<pre><code>ratings_with_exp = ratings.withColumn(&quot;expRating&quot;, 2*F.exp(&quot;rating&quot;))
+
+ratings_with_exp.show()
+</code></pre>
+
+<p><img src="/images/sparkcolumns/7.png" alt="" /></p>
+
+<p>There are a lot of other functions provided in this module, which are enough for most simple use cases. You can check out the functions list <a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#module-pyspark.sql.functions" rel="nofollow" target="_blank">here</a>.</p>
+
+<hr />
+
+<h2 id="2-spark-udfs">2. Spark UDFs</h2>
+
+<p><img src="/images/sparkcolumns/8.png" alt="Photo by [Divide By Zero](https://unsplash.com/@divide_by_zero?utm_source=medium&amp;utm_medium=referral) on [Unsplash](https://unsplash.com?utm_source=medium&amp;utm_medium=referral)" /></p>
+
+<p>Sometimes we want to do complicated things to a column or multiple columns. This could be thought of as a map operation on a PySpark Dataframe to a single column or multiple columns. While Spark SQL functions do solve many use cases when it comes to column creation, I use Spark UDF whenever I want to use the more matured Python functionality.</p>
+
+<p>To use Spark UDFs, we need to use the F.udf function to convert a regular python function to a Spark UDF. We also need to specify the return type of the function. In this example the return type is StringType()</p>
+
+<pre><code>import pyspark.sql.functions as F
+from pyspark.sql.types import *
+
+def somefunc(value):
+  if   value &lt; 3: 
+      return 'low'
+  else:
+      return 'high'
+
+#convert to a UDF Function by passing in the function and return type of function
+
+udfsomefunc = F.udf(somefunc, StringType())
+
+ratings_with_high_low = ratings.withColumn(&quot;high_low&quot;, udfsomefunc(&quot;rating&quot;))
+
+ratings_with_high_low.show()
+</code></pre>
+
+<p><img src="/images/sparkcolumns/9.png" alt="" /></p>
+
+<hr />
+
+<h2 id="3-using-rdds">3. Using RDDs</h2>
+
+<p><img src="/images/sparkcolumns/10.png" alt="Photo by [Ryan Quintal](https://unsplash.com/@ryanquintal?utm_source=medium&amp;utm_medium=referral) on [Unsplash](https://unsplash.com?utm_source=medium&amp;utm_medium=referral)" /></p>
+
+<p>Sometimes both the spark UDFs and SQL Functions are not enough for a particular use-case. You might want to utilize the better partitioning that you get with spark RDDs. Or you may want to use group functions in Spark RDDs. You can use this one, mainly when you need access to all the columns in the spark data frame inside a python function.</p>
+
+<p>Whatever the case be, I find this way of using RDD to create new columns pretty useful for people who have experience working with RDDs that is the basic building block in the Spark ecosystem.</p>
+
+<p>The process below makes use of the functionality to convert between Row and pythondict objects. We convert a row object to a dictionary. Work with the dictionary as we are used to and convert that dictionary back to row again.</p>
+
+<pre><code>import math
+from pyspark.sql import Row
+
+def rowwise_function(row):
+  # convert row to dict:
+  row_dict = row.asDict()
+  # Add a new key in the dictionary with the new column name and value. 
+  row_dict['Newcol'] = math.exp(row_dict['rating'])
+  # convert dict to row:
+  newrow = Row(**row_dict)
+  # return new row
+  return newrow
+
+# convert ratings dataframe to RDD
+ratings_rdd = ratings.rdd
+# apply our function to RDD
+ratings_rdd_new = ratings_rdd.map(lambda row: rowwise_function(row))
+# Convert RDD Back to DataFrame
+ratings_new_df = sqlContext.createDataFrame(ratings_rdd_new)
+
+ratings_new_df.show()
+</code></pre>
+
+<p><img src="/images/sparkcolumns/11.png" alt="" /></p>
+
+<hr />
+
+<h2 id="4-pandas-udf">4. Pandas UDF</h2>
+
+<p><img src="/images/sparkcolumns/12.png" alt="Photo by [Pascal Bernardon](https://unsplash.com/@pbernardon?utm_source=medium&amp;utm_medium=referral) on [Unsplash](https://unsplash.com?utm_source=medium&amp;utm_medium=referral)" /></p>
+
+<p>This functionality was introduced in the Spark version 2.3.1. And this allows you to use pandas functionality with Spark. I generally use it when I have to run a groupby operation on a Spark dataframe or whenever I need to create rolling features and want to use Pandas rolling functions/window functions.</p>
+
+<p>The way we use it is by using the F.pandas_udf decorator. We assume here that the input to the function will be a pandas data frame. And we need to return a pandas dataframe in turn from this function.</p>
+
+<p>The only complexity here is that we have to provide a schema for the output Dataframe. We can make that using the format below.</p>
+
+<pre><code># Declare the schema for the output of our function
+outSchema = StructType([StructField('user_id',IntegerType(),True),StructField('movie_id',IntegerType(),True),StructField('rating',IntegerType(),True),StructField('unix_timestamp',IntegerType(),True),StructField('normalized_rating',DoubleType(),True)])
+
+# decorate our function with pandas_udf decorator
+[@F](http://twitter.com/F).pandas_udf(outSchema, F.PandasUDFType.GROUPED_MAP)
+def subtract_mean(pdf):
+    # pdf is a pandas.DataFrame
+    v = pdf.rating
+    v = v - v.mean()
+    pdf['normalized_rating'] =v
+    return pdf
+
+rating_groupwise_normalization = ratings.groupby(&quot;movie_id&quot;).apply(subtract_mean)
+
+rating_groupwise_normalization.show()
+</code></pre>
+
+<p><img src="/images/sparkcolumns/13.png" alt="" /></p>
+
+<p>We can also make use of this to <strong><em>train multiple individual models on each spark node.</em></strong> For that, we replicate our data and give each replication a key and some training params like max_depth, etc. Our function then takes the pandas Dataframe, runs the required model, and returns the result. The structure would look something like below.</p>
+
+<pre><code># 0. Declare the schema for the output of our function
+outSchema = StructType([StructField('replication_id',IntegerType(),True),StructField('RMSE',DoubleType(),True)])
+
+# decorate our function with pandas_udf decorator
+[@F](http://twitter.com/F).pandas_udf(outSchema, F.PandasUDFType.GROUPED_MAP)
+def run_model(pdf):
+    # 1. Get hyperparam values
+    num_trees = pdf.num_trees.values[0]
+    depth = pdf.depth.values[0]
+    replication_id = pdf.replication_id.values[0]
+    # 2. Train test split
+    Xtrain,Xcv,ytrain,ycv = train_test_split.....
+    # 3. Create model using the pandas dataframe
+    clf = RandomForestRegressor(max_depth = depth, num_trees=num_trees,....)
+    clf.fit(Xtrain,ytrain)
+    # 4. Evaluate the model
+    rmse = RMSE(clf.predict(Xcv,ycv)
+    # 5. return results as pandas DF
+    res =pd.DataFrame({'replication_id':replication_id,'RMSE':rmse})
+    return res
+
+results = replicated_data.groupby(&quot;replication_id&quot;).apply(run_model)
+</code></pre>
+
+<p>Above is just an idea and not a working code. Though it should work with minor modifications.</p>
+
+<hr />
+
+<h2 id="5-using-sql">5. Using SQL</h2>
+
+<p>For people who like <a href="https://towardsdatascience.com/learning-sql-the-hard-way-4173f11b26f1?source=---------10------------------" rel="nofollow" target="_blank">SQL</a>, there is a way even to create columns using SQL. For this, we need to register a temporary SQL table and then use simple select queries with an additional column. One might also use it to do joins.</p>
+
+<pre><code>ratings.registerTempTable('ratings_table')
+newDF = sqlContext.sql('select *, 2*rating as newCol from ratings_table')
+newDF.show()
+</code></pre>
+
+<p><img src="/images/sparkcolumns/14.png" alt="" /></p>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p><img src="/images/sparkcolumns/15.png" alt="Photo by [Kelly Sikkema](https://unsplash.com/@kellysikkema?utm_source=medium&amp;utm_medium=referral) on [Unsplash](https://unsplash.com?utm_source=medium&amp;utm_medium=referral)" /></p>
+
+<p>And that is the end of this column(pun intended)</p>
+
+<p>Hopefully, I’ve covered the column creation process well to help you with your Spark problems. If you need to learn more of spark basics, take a look at:</p>
+
+<p><a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" rel="nofollow" target="_blank"><strong>The Hitchhikers guide to handle Big Data using Spark</strong></a></p>
+
+<p><strong><em>You can find all the code for this post at the <a href="https://github.com/MLWhiz/data_science_blogs/blob/master/spark_columns/Columns.ipynb" rel="nofollow" target="_blank">GitHub repository</a> or the <a href="https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/7664398068420572/312750581110937/3797400441762013/latest.html" rel="nofollow" target="_blank">published notebook</a> on databricks.</em></strong></p>
+
+<p>Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out an excellent course on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293556&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-essentials" rel="nofollow" target="_blank"><strong>Big Data Essentials</strong></a>, which is part of the <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293466&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fbig-data-engineering" rel="nofollow" target="_blank">Big Data Specialization</a> provided by Yandex.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a></p>
+
+<p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2020/02/24/job/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">5 tips for getting your first Data Science job in 2020</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<style type="text/css">
+
+  .btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-session {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+</style>
+
+
+<aside class="sidebar">
+  <div style="text-align:center">    
+    
+    <a class="btn btn-session" href="https://www.patreon.com/bePatron?u=28135435" role="button">1:1 Session</a>
+	     
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/23/bamboo/">Bamboolib — Learn and use Pandas without Coding</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/23/xgbparallel/">Lightning Fast XGBoost on Multiple GPUs</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/23/streamlitrec/">Share your Projects even more easily with this New Streamlit Feature</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/22/hyperspark/">100x faster Hyperparameter Search Framework with Pyspark</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/22/streamlitec2/">How to Deploy a Streamlit App using an Amazon Free ec2 instance?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/22/pandas_gpu/">Minimal Pandas Subset for Data Scientists on GPU</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/21/ds2020/">Become a Data Scientist in 2020 with these 10 resources</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/21/ci/">Confidence Intervals Explained Simply for Data Scientists</a></li>
+		</ul>
+	</div>
+</div>
+
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;}
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}
+   
+</style>
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2020 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>

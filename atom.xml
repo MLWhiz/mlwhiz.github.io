@@ -8,11 +8,347 @@
     <description>Recent content on MLWhiz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 22 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 24 Feb 2020 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="https://mlwhiz.com/atom.xml" rel="self" type="application/rss+xml" />
     
 
+    
+
+    <item>
+      <title>5 Ways to add a new column in a PySpark Dataframe</title>
+      <link>https://mlwhiz.com/blog/2020/02/24/sparkcolumns/</link>
+      <pubDate>Mon, 24 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2020/02/24/sparkcolumns/</guid>
+      
+      
+      <media:content type="image/png" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/sparkcolumns/main.png"></media:content>
+      
+
+      
+      <description>Too much data is getting generated day by day.
+Although sometimes we can manage our big data using tools like Rapids or Parallelization, Spark is an excellent tool to have in your repertoire if you are working with Terabytes of data.
+In my last post on Spark, I explained how to work with PySpark RDDs and Dataframes.
+Although this post explains a lot on how to work with RDDs and basic Dataframe operations, I missed quite a lot when it comes to working with PySpark Dataframes.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  Too much data is getting generated day by day.
+Although sometimes we can manage our big data using tools like Rapids or Parallelization, Spark is an excellent tool to have in your repertoire if you are working with Terabytes of data.
+In my last post on Spark, I explained how to work with PySpark RDDs and Dataframes.
+Although this post explains a lot on how to work with RDDs and basic Dataframe operations, I missed quite a lot when it comes to working with PySpark Dataframes.
+And it is only when I required more functionality that I read up and came up with multiple solutions to do one single thing.
+How to create a new column in spark?
+Now, this might sound trivial, but believe me, it isn’t. With so much you might want to do with your data, I am pretty sure you will end up using most of these column creation processes in your workflow. Sometimes to utilize Pandas functionality, or occasionally to use RDDs based partitioning or sometimes to make use of the mature python ecosystem.
+This post is going to be about — “Multiple ways to create a new column in Pyspark Dataframe.”
+If you have PySpark installed, you can skip the Getting Started section below.
+Getting Started with Spark I know that a lot of you won’t have spark installed in your system to try and learn. But installing Spark is a headache of its own.
+Since we want to understand how it works and work with it, I would suggest that you use Spark on Databricks here online with the community edition. Don’t worry, it is free, albeit fewer resources, but that works for us right now for learning purposes.
+Once you register and login will be presented with the following screen.
+You can start a new notebook here.
+Select the Python notebook and give any name to your notebook.
+Once you start a new notebook and try to execute any command, the notebook will ask you if you want to start a new cluster. Do it.
+The next step will be to check if the sparkcontext is present. To check if the sparkcontext is present, you have to run this command:
+sc  This means that we are set up with a notebook where we can run Spark.
+Data Here, I will work on the Movielens ml-100k.zip dataset. 100,000 ratings from 1000 users on 1700 movies. In this zipped folder, the file we will specifically work with is the rating file. This filename is kept as “u.data”
+If you want to upload this data or any data, you can click on the Data tab in the left and then Add Data by using the GUI provided.
+We can then load the data using the following commands:
+ratings = spark.read.load(&amp;quot;/FileStore/tables/u.data&amp;quot;,format=&amp;quot;csv&amp;quot;, sep=&amp;quot;\t&amp;quot;, inferSchema=&amp;quot;true&amp;quot;, header=&amp;quot;false&amp;quot;) ratings = ratings.toDF(*[&#39;user_id&#39;, &#39;movie_id&#39;, &#39;rating&#39;, &#39;unix_timestamp&#39;])  Here is how it looks:
+ratings.show()  Ok, so now we are set up to begin the part we are interested in finally. How to create a new column in PySpark Dataframe?
+1. Using Spark Native Functions The most pysparkish way to create a new column in a PySpark DataFrame is by using built-in functions. This is the most performant programmatical way to create a new column, so this is the first place I go whenever I want to do some column manipulation.
+We can use .withcolumn along with PySpark SQL functions to create a new column. In essence, you can find String functions, Date functions, and Math functions already implemented using Spark functions. We can import spark functions as:
+import pyspark.sql.functions as F  Our first function, the F.col function gives us access to the column. So if we wanted to multiply a column by 2, we could use F.col as:
+ratings_with_scale10 = ratings.withColumn(&amp;quot;ScaledRating&amp;quot;, 2*F.col(&amp;quot;rating&amp;quot;)) ratings_with_scale10.show()  We can also use math functions like F.exp function:
+ratings_with_exp = ratings.withColumn(&amp;quot;expRating&amp;quot;, 2*F.exp(&amp;quot;rating&amp;quot;)) ratings_with_exp.show()  There are a lot of other functions provided in this module, which are enough for most simple use cases. You can check out the functions list here.
+2. Spark UDFs Sometimes we want to do complicated things to a column or multiple columns. This could be thought of as a map operation on a PySpark Dataframe to a single column or multiple columns. While Spark SQL functions do solve many use cases when it comes to column creation, I use Spark UDF whenever I want to use the more matured Python functionality.
+To use Spark UDFs, we need to use the F.udf function to convert a regular python function to a Spark UDF. We also need to specify the return type of the function. In this example the return type is StringType()
+import pyspark.sql.functions as F from pyspark.sql.types import * def somefunc(value): if value &amp;lt; 3: return &#39;low&#39; else: return &#39;high&#39; #convert to a UDF Function by passing in the function and return type of function udfsomefunc = F.udf(somefunc, StringType()) ratings_with_high_low = ratings.withColumn(&amp;quot;high_low&amp;quot;, udfsomefunc(&amp;quot;rating&amp;quot;)) ratings_with_high_low.show()  3. Using RDDs Sometimes both the spark UDFs and SQL Functions are not enough for a particular use-case. You might want to utilize the better partitioning that you get with spark RDDs. Or you may want to use group functions in Spark RDDs. You can use this one, mainly when you need access to all the columns in the spark data frame inside a python function.
+Whatever the case be, I find this way of using RDD to create new columns pretty useful for people who have experience working with RDDs that is the basic building block in the Spark ecosystem.
+The process below makes use of the functionality to convert between Row and pythondict objects. We convert a row object to a dictionary. Work with the dictionary as we are used to and convert that dictionary back to row again.
+import math from pyspark.sql import Row def rowwise_function(row): # convert row to dict: row_dict = row.asDict() # Add a new key in the dictionary with the new column name and value. row_dict[&#39;Newcol&#39;] = math.exp(row_dict[&#39;rating&#39;]) # convert dict to row: newrow = Row(**row_dict) # return new row return newrow # convert ratings dataframe to RDD ratings_rdd = ratings.rdd # apply our function to RDD ratings_rdd_new = ratings_rdd.map(lambda row: rowwise_function(row)) # Convert RDD Back to DataFrame ratings_new_df = sqlContext.createDataFrame(ratings_rdd_new) ratings_new_df.show()  4. Pandas UDF This functionality was introduced in the Spark version 2.3.1. And this allows you to use pandas functionality with Spark. I generally use it when I have to run a groupby operation on a Spark dataframe or whenever I need to create rolling features and want to use Pandas rolling functions/window functions.
+The way we use it is by using the F.pandas_udf decorator. We assume here that the input to the function will be a pandas data frame. And we need to return a pandas dataframe in turn from this function.
+The only complexity here is that we have to provide a schema for the output Dataframe. We can make that using the format below.
+# Declare the schema for the output of our function outSchema = StructType([StructField(&#39;user_id&#39;,IntegerType(),True),StructField(&#39;movie_id&#39;,IntegerType(),True),StructField(&#39;rating&#39;,IntegerType(),True),StructField(&#39;unix_timestamp&#39;,IntegerType(),True),StructField(&#39;normalized_rating&#39;,DoubleType(),True)]) # decorate our function with pandas_udf decorator [@F](http://twitter.com/F).pandas_udf(outSchema, F.PandasUDFType.GROUPED_MAP) def subtract_mean(pdf): # pdf is a pandas.DataFrame v = pdf.rating v = v - v.mean() pdf[&#39;normalized_rating&#39;] =v return pdf rating_groupwise_normalization = ratings.groupby(&amp;quot;movie_id&amp;quot;).apply(subtract_mean) rating_groupwise_normalization.show()  We can also make use of this to train multiple individual models on each spark node. For that, we replicate our data and give each replication a key and some training params like max_depth, etc. Our function then takes the pandas Dataframe, runs the required model, and returns the result. The structure would look something like below.
+# 0. Declare the schema for the output of our function outSchema = StructType([StructField(&#39;replication_id&#39;,IntegerType(),True),StructField(&#39;RMSE&#39;,DoubleType(),True)]) # decorate our function with pandas_udf decorator [@F](http://twitter.com/F).pandas_udf(outSchema, F.PandasUDFType.GROUPED_MAP) def run_model(pdf): # 1. Get hyperparam values num_trees = pdf.num_trees.values[0] depth = pdf.depth.values[0] replication_id = pdf.replication_id.values[0] # 2. Train test split Xtrain,Xcv,ytrain,ycv = train_test_split..... # 3. Create model using the pandas dataframe clf = RandomForestRegressor(max_depth = depth, num_trees=num_trees,....) clf.fit(Xtrain,ytrain) # 4. Evaluate the model rmse = RMSE(clf.predict(Xcv,ycv) # 5. return results as pandas DF res =pd.DataFrame({&#39;replication_id&#39;:replication_id,&#39;RMSE&#39;:rmse}) return res results = replicated_data.groupby(&amp;quot;replication_id&amp;quot;).apply(run_model)  Above is just an idea and not a working code. Though it should work with minor modifications.
+5. Using SQL For people who like SQL, there is a way even to create columns using SQL. For this, we need to register a temporary SQL table and then use simple select queries with an additional column. One might also use it to do joins.
+ratings.registerTempTable(&#39;ratings_table&#39;) newDF = sqlContext.sql(&#39;select *, 2*rating as newCol from ratings_table&#39;) newDF.show()  Conclusion And that is the end of this column(pun intended)
+Hopefully, I’ve covered the column creation process well to help you with your Spark problems. If you need to learn more of spark basics, take a look at:
+The Hitchhikers guide to handle Big Data using Spark
+You can find all the code for this post at the GitHub repository or the published notebook on databricks.
+Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out an excellent course on Big Data Essentials, which is part of the Big Data Specialization provided by Yandex.
+Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at Medium or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz
+Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
+    
+
+    <item>
+      <title>5 tips for getting your first Data Science job in 2020</title>
+      <link>https://mlwhiz.com/blog/2020/02/24/job/</link>
+      <pubDate>Mon, 24 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2020/02/24/job/</guid>
+      
+      
+      <media:content type="image/png" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/job/main.png"></media:content>
+      
+
+      
+      <description>Many of my followers ask me — How difficult is it to get a job in the Data Science field? Or what should they study? Or what path they should take?
+Now the answer is not one everyone would like — Getting into Data Science is pretty difficult, and you have to toil hard.
+I mean you have to devote time to learn data science, understand algorithms, upgrade your skills as the market progresses, keep track of old conventional skills, and, of course, search for a job in the meantime and prepare for interviews.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  Many of my followers ask me — How difficult is it to get a job in the Data Science field? Or what should they study? Or what path they should take?
+Now the answer is not one everyone would like — Getting into Data Science is pretty difficult, and you have to toil hard.
+I mean you have to devote time to learn data science, understand algorithms, upgrade your skills as the market progresses, keep track of old conventional skills, and, of course, search for a job in the meantime and prepare for interviews.
+You also have to understand business problems and develop the acumen to frame business problems as data science problems. Remember, there are no fixed algorithms.
+It gets really exerting for some and almost impossible for others.
+To tell you about myself, I get bored quickly if I am not learning new things. I like Data Science as it gives me that opportunity.
+So first of all, I would like to ask if you are like that?
+If you are, and you are interested in solving new problems almost every day, then you would love data science as a field to make your career in.
+And here are some tips for you brave ones.
+1. Start Small  It is better to take many small steps in the right direction than to make a great leap forward only to stumble backward — Old Chinese Proverb
+ Now, as far as beginning a career in Data Science goes, the above fits pretty nicely. More so if you are coming from a different stream(read not Computer Science, Statistics) or if you want to make a lateral switch.
+I would advise against targeting big companies like Amazon, Google, etc. This is not to discourage you; it is more on the lines of practical thinking. I have observed their interview process, and I can assure you that it’s pretty rare, if not impossible, to get these jobs without some experience.
+But, let me also tell you that there is no shortage of opportunities. You could easily get into a startup if you know your stuff. That is how I started myself.
+2. Keep Learning I made it my goal to move into the data science space somewhere around in 2013. From then on, it has taken me a lot of failures and a lot of effort to shift jobs. Here is my story if you are interested.
+In college, I spent a lot of my time gaming. From 2013 onwards, I spent whatever time I could find to study new technologies and learning about data science.
+ Nothing will work unless You do — Maya Angelou
+ Here is the way that I took to learn about data science, and any aspiring person could choose to become a self-trained data scientist.
+How did I learn Data Science?
+I hope that you don’t lose hope after seeing the long list. I already told you it wouldn’t be easy.
+You have to start with one or two courses. The rest will follow with time. Just remember that time is a luxury you can afford.
+3. Create your Portfolio Having a grasp of the theory is excellent, but you really don’t add value as a data scientist if you can’t write code.
+So work on creating stuff. Try out new toy projects. Go to kaggle for inspiration. Participate in the discussion forums. But don’t stop there.
+ Think creatively. Build your GitHub profile. Try to solve different problems.
+ For example, in the starting phase, I created a simple graph visualization to discover interesting posts in DataScience Subreddit using d3.js and deployed it using Flask, and Heroku. I also created a Blackjack Simulator apart from solving the usual data science problems. I also implemented a code-breaking solution using MCMC.
+I also took part in various kaggle competitions, and though I don’t have much of a rank to show for it, but I ended up learning a lot.
+4. Blogging? This is something that comes from a personal bias of mine.
+ When you blog, you end up creating high quality content for others to learn, document your learnings, understand concepts better by explaining them and maybe gain some extra recognition. What else would you want?
+ Honestly, I love to write, and this is not a pure requirement to become a data scientist, but it helps a lot. I noticed that I understood data science concepts much better when I explained them. And Blogging is a perfect tool for this.
+Also, Data Science is pretty vast, and I tend to forget whatever I learned some time ago. Blogging solves this problem too. It was in 2013 that I started my blog and tried to update it with whatever I learned. And thus, I ended up documenting everything. I still consult my blogs whenever I feel stuck on some problem.
+I feel that blogging also helped me with my communication skills as it forced me to explain difficult concepts in simpler words.
+Anyway, if you don’t like to blog, you can achieve something similar by taking notes.
+As I said, Blogging is a personal preference. And if you are interested and want to know how I started writing on medium, here is my story.
+My Data Science Blogging Journey on Medium till now
+5. Don’t be too choosy You have an offer from an analytics company, and you are thinking if, by joining it, you are saying goodbye to data science.
+It is a reasonably good situation to be in. While it is relatively hard to get a data science job, it might be easier to get a job as a business analyst or data analyst in an analytics company.
+I would suggest taking any job relating to analysis or reporting or something related to data. I started the same way as I began to work with analytics and switched tracks when the data science opportunity presented itself.
+ Being in the vicinity of data itself will open you to such opportunities inevitably. Treat your first job just as a stepping stone.
+ Once you get such a job, you will have two options:
+ Make an internal shift in the same company in the Data Science teams by creating good relationships and by showing interest, or
+ Continue your learning in your spare time, and keep giving interviews.
+  With time you would succeed. Good luck to you.
+Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at Medium or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
+    
+
+    <item>
+      <title>Bamboolib — Learn and use Pandas without Coding</title>
+      <link>https://mlwhiz.com/blog/2020/02/23/bamboo/</link>
+      <pubDate>Sun, 23 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2020/02/23/bamboo/</guid>
+      
+      
+      <media:content type="image/jpeg" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/bamboo/main.gif"></media:content>
+      
+
+      
+      <description>Have you ever been frustrated by doing data exploration and manipulation with Pandas?
+With so many ways to do the same thing, I get spoiled by choice and end up doing absolutely nothing.
+And then for a beginner, the problem is just the opposite as in how to do even a simple thing is not appropriately documented. Understanding Pandas syntax can be a hard thing for the uninitiated.
+So what should one do?</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  Have you ever been frustrated by doing data exploration and manipulation with Pandas?
+With so many ways to do the same thing, I get spoiled by choice and end up doing absolutely nothing.
+And then for a beginner, the problem is just the opposite as in how to do even a simple thing is not appropriately documented. Understanding Pandas syntax can be a hard thing for the uninitiated.
+So what should one do?
+The creators of Bamboolib had an idea that solved this problem — Why not add a GUI to pandas?
+The idea is to “Learn and use pandas without coding.” Now the idea may have started simple, but I found Bamboolib to be so much more when it comes to data exploration and data cleaning.
+This post is about setting up and using Bamboolib for your data.
+Installing Bamboolib Installation is pretty simple with:
+pip install bamboolib  To get bamboolib to work with Jupyter and Jupyterlab, I will need to install some additional extensions. Since I like working with Jupyter Notebook, I installed the Jupyter Notebook extensions via the following command:
+jupyter nbextension enable --py qgrid --sys-prefix jupyter nbextension enable --py widgetsnbextension --sys-prefix jupyter nbextension install --py bamboolib --sys-prefix jupyter nbextension enable --py bamboolib --sys-prefix  If you want the process to install for Jupyterlab, here is the process.
+Verifying Bamboolib Installation To check if everything works as intended, you can open up a Jupyter notebook, and execute the following commands:
+import bamboolib as bam import pandas as pd data = pd.read_csv(bam.titanic_csv) bam.show(data)  The first time you run this command, you will be asked to provide a Licence key. The key is needed if you want to use bamboolib over your own data. Since I wanted to use bamboolib for my own project, I got the key from one of Bamboolib founder Tobias Krabel who was gracious enough to provide it to me to review. You can, however, buy your own from https://bamboolib.8080labs.com/pricing/. If you want to see the library in action before purchasing the key, you can try out the live demo.
+Once bamboolib is activated, the fun part starts. You can see the output of Bamboolib like this. You can choose to play with the options it provides.
+So let’s try Bamboolib with our exciting data source, we all have seen Titanic data aplenty.
+To do this, I will be using the Mobile Price Classification data from Kaggle. In this problem, we have to create a classifier that predicts the price range of mobile phones based on the features of a mobile phone. So lets start this up with Bamboolib.
+train = pd.read_csv(&amp;quot;../Downloads/mobile-price-classification/train.csv&amp;quot;) bam.show(train)  We need to do a simple call to bam.show(train) to start Bamboolib.
+Easy Data Exploration Bamboolib helps a great bit for Exploratory Data analysis. Now, Data exploration is an integral part of any data science pipeline. And writing the whole code for data exploration and creating all the charts is complicated and needs a lot of patience and effort to get right. I will admit sometimes I do slack off and am not able to give enough time for it.
+Bamboolib makes the whole Data Exploration exercise a breeze.
+For example. Here is a glimpse of your data, once you click on Visualize Dataframe.
+You get to see the missing values in each column, as well as the number of unique values and a few instances.
+But that’s not all. We can get univariate column-level statistics and information, as well. So lets get some information about our target variable — Price Range.
+Here we deep-dive into the target column and can see univariate column statistics as well as the most important predictors for our target column. It looks like RAM and battery power are the most important predictors for the price range. Nice.
+Let’s take a look at how RAM influences the price range. We can use bivariate plots for this.
+Getting such beautiful plots with standard Python libraries like seaborn or plotly usually takes some amount of code. Although plotly_express helps a lot in this by giving simple functions for most charts, Bamboolib creates a lot of important charts for us automatically.
+Above, we can see that as RAM increases, the price range increases. We also see a weighted F1 Score of 0.676 for the RAM Variable. You can do this for every variable in your dataset and try to get a sense of your data.
+One can also export the code of these charts to use in some presentation/ export these charts as PNG.
+To do this just copy the code fragment that shows above each graph. For example, you can copy and run the code to see price_range vs ram, and you will see an option to download these graphs as PNG. In the backend, they are all plotly graphs.
+bam.plot(train, &#39;price_range&#39;, &#39;ram&#39;)  GUI Based Data Munging Have you ever faced the problem of forgetting pandas code to do something and going to stack overflow and getting lost in various threads? If yes, here is a Minimal Pandas refresher. Or you can use Bamboolib as per your preference.
+Bamboolib makes it so easy to do things and not get lost in the code. You can drop columns, filter, sort, join, groupby, pivot, melt (Mostly everything you would like to do with a dataset) all by using the simple GUI provided.
+For example, here I am dropping the missing values from the target column, if any. You can add multiple conditions, as well.
+The best part is that it also gives us the code. Here the code to drop the missing values gets populated in the cell automatically.
+train = train.loc[train[&#39;price_range&#39;].notna()] train.index = pd.RangeIndex(len(train))  It works just like Microsoft Excel for business users while providing all the code to slice and dice the data for the advanced ones. You can try to play with the other options to get familiar.
+Here is another example of how to use groupby. It is actually pretty intuitive.
+The code for this gets populated as:
+train = train.groupby([&#39;price_range&#39;]).agg({&#39;battery_power&#39;: [&#39;mean&#39;], &#39;clock_speed&#39;: [&#39;std&#39;]}) train.columns = [&#39;_&#39;.join(multi_index) for multi_index in train.columns.ravel()] train = train.reset_index()  You can see how it takes care of multi_index as well as ravel for us, which are a bit difficult to understand and deal with.
+Conclusion The GUI of Bamboolib is pretty intuitive, and I found it an absolute joy to work with. The project is still in its beginnings, but what a beginning it has been.
+I can surely say that this library is pretty useful for beginners who want to learn to code in Pandas as it provides them access to all the necessary functions without being bothersome.
+While I will still focus on understanding the basics of Pandas and would advise looking at the output of Bamboolib to learn Pandas as well, I would like to see how the adoption of Bamboolib happens in the future.
+Let me know your thoughts as well in the comments.
+If you want to learn more about Pandas, I would like to call out an excellent course on Introduction to Data Science in Python from the University of Michigan or check out my previous post on how to work with Pandas.
+I am going to be writing more of such posts in the future too. Let me know what you think about them. Follow me up at Medium or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
+    
+
+    <item>
+      <title>Lightning Fast XGBoost on Multiple GPUs</title>
+      <link>https://mlwhiz.com/blog/2020/02/23/xgbparallel/</link>
+      <pubDate>Sun, 23 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2020/02/23/xgbparallel/</guid>
+      
+      
+      <media:content type="image/png" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/xgbparallel/main.png"></media:content>
+      
+
+      
+      <description>XGBoost is one of the most used libraries fora data science.
+At the time XGBoost came into existence, it was lightning fast compared to its nearest rival Python’s Scikit-learn GBM. But as the times have progressed, it has been rivaled by some awesome libraries like LightGBM and Catboost, both on speed as well as accuracy.
+I, for one, use LightGBM for most of the use cases where I have just got CPU for training.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  XGBoost is one of the most used libraries fora data science.
+At the time XGBoost came into existence, it was lightning fast compared to its nearest rival Python’s Scikit-learn GBM. But as the times have progressed, it has been rivaled by some awesome libraries like LightGBM and Catboost, both on speed as well as accuracy.
+I, for one, use LightGBM for most of the use cases where I have just got CPU for training. But when I have a GPU or multiple GPUs at my disposal, I still love to train with XGBoost.
+Why?
+So I could make use of the excellent GPU Capabilities provided by XGBoost in conjunction with Dask to use XGBoost in both single and multi-GPU mode.
+How?
+This post is about running XGBoost on Multi-GPU machines.
+Dataset: We are going to be using the UCI Higgs dataset. This is a binary classification problem with 11M rows and 29 columns and can take a considerable time to solve.
+From the UCI Site:
+ The data has been produced using Monte Carlo simulations. The first 21 features (columns 2–22) are kinematic properties measured by the particle detectors in the accelerator. The last seven features are functions of the first 21 features; these are high-level features derived by physicists to help discriminate between the two classes. There is an interest in using deep learning methods to obviate the need for physicists to manually develop such features. Benchmark results using Bayesian Decision Trees from a standard physics package and 5-layer neural networks are presented in the original paper. The last 500,000 examples are used as a test set.
+ We can load this dataset into memory by using the nifty function that I borrow from this NVidia post.
+if sys.version_info[0] &amp;gt;= 3: from urllib.request import urlretrieve else: from urllib import urlretrieve data_url = &amp;#34;https://archive.ics.uci.edu/ml/machine-learning-databases/00280/HIGGS.csv.gz&amp;#34; dmatrix_train_filename = &amp;#34;higgs_train.dmatrix&amp;#34; dmatrix_test_filename = &amp;#34;higgs_test.dmatrix&amp;#34; csv_filename = &amp;#34;HIGGS.csv.gz&amp;#34; train_rows = 10500000 test_rows = 500000 num_round = 1000 plot = True # return xgboost dmatrix def load_higgs(): if os.path.isfile(dmatrix_train_filename) and os.path.isfile(dmatrix_test_filename): dtrain = xgb.DMatrix(dmatrix_train_filename) dtest = xgb.DMatrix(dmatrix_test_filename) if dtrain.num_row() == train_rows and dtest.num_row() == test_rows: print(&amp;#34;Loading cached dmatrix...&amp;#34;) return dtrain, dtest if not os.path.isfile(csv_filename): print(&amp;#34;Downloading higgs file...&amp;#34;) urlretrieve(data_url, csv_filename) df_higgs_train = pandas.read_csv(csv_filename, dtype=np.float32, nrows=train_rows, header=None) dtrain = xgb.DMatrix(df_higgs_train.ix[:, 1:29], df_higgs_train[0]) dtrain.save_binary(dmatrix_train_filename) df_higgs_test = pandas.read_csv(csv_filename, dtype=np.float32, skiprows=train_rows, nrows=test_rows, header=None) dtest = xgb.DMatrix(df_higgs_test.ix[:, 1:29], df_higgs_test[0]) dtest.save_binary(dmatrix_test_filename) return dtrain, dtest dtrain, dtest = load_higgs() This function downloads the Higgs dataset and creates Dmatrix objects for later XGBoost use.
+XGBoost: The CPU Method As we have the data loaded, we can train the XGBoost model with CPU for benchmarking purposes.
+print(&amp;quot;Training with CPU ...&amp;quot;) param = {} param[&#39;objective&#39;] = &#39;binary:logitraw&#39; param[&#39;eval_metric&#39;] = &#39;error&#39; param[&#39;silent&#39;] = 1 param[&#39;tree_method&#39;] = &#39;hist&#39; tmp = time.time() cpu_res = {} xgb.train(param, dtrain, num_round, evals=[(dtest, &amp;quot;test&amp;quot;)], evals_result=cpu_res) cpu_time = time.time() - tmp print(&amp;quot;CPU Training Time: %s seconds&amp;quot; % (str(cpu_time))) --------------------------------------------------------------- CPU Training Time: 717.6483490467072 seconds  This code takes 717 seconds, which is around 12 minutes to finish. That is great and commendable, but can we do better?
+XGBoost: The Single GPU Method What is great is that we don’t have to change a lot in the above code to be able to use a single GPU for our model building.
+ Why use CPU when we can use GPU?
+ We change the tree_method to gpu_hist
+print(&amp;quot;Training with Single GPU ...&amp;quot;) param = {} param[&#39;objective&#39;] = &#39;binary:logitraw&#39; param[&#39;eval_metric&#39;] = &#39;error&#39; param[&#39;silent&#39;] = 1 param[&#39;tree_method&#39;] = &#39;gpu_hist&#39; tmp = time.time() gpu_res = {} xgb.train(param, dtrain, num_round, evals=[(dtest, &amp;quot;test&amp;quot;)], evals_result=gpu_res) gpu_time = time.time() - tmp print(&amp;quot;GPU Training Time: %s seconds&amp;quot; % (str(gpu_time))) ---------------------------------------------------------------- GPU Training Time: 78.2187008857727 seconds  And we achieve a 10x speedup with our model now finishing in 1.3 minutes. That is great, but can we do even better if we have multiple GPUs?
+XGBoost: The Multi GPU Method I have, for example, 2 GPUs in my machine while the above code utilizes only 1 GPU. With GPU’s getting a lot cheaper now, it is not unusual for clusters to have more than 4 GPUs. So can we use multiple GPUs simultaneously?
+ Two GPUs are always better than one
+ To use MultiGPUs, the process is not so simple as to add a little argument as above, and there are a few steps involved.
+The first is the difference in Data loading:
+def load_higgs_for_dask(client): # 1. read the CSV File using Pandas df_higgs_train = pandas.read_csv(csv_filename, dtype=np.float32, nrows=train_rows, header=None).ix[:, 0:30] df_higgs_test = pandas.read_csv(csv_filename, dtype=np.float32, skiprows=train_rows, nrows=test_rows, header=None).ix[:, 0:30] # 2. Create a Dask Dataframe from Pandas Dataframe. ddf_higgs_train = dask.dataframe.from_pandas(df_higgs_train, npartitions=8) ddf_higgs_test = dask.dataframe.from_pandas(df_higgs_test, npartitions=8) ddf_y_train = ddf_higgs_train[0] del ddf_higgs_train[0] ddf_y_test = ddf_higgs_test[0] del ddf_higgs_test[0] #3. Create Dask DMatrix Object using dask dataframes ddtrain = DaskDMatrix(client, ddf_higgs_train ,ddf_y_train) ddtest = DaskDMatrix(client, ddf_higgs_test ,ddf_y_test) return ddtrain, ddtest There are multiple steps in data load as we need dask DMatrix objects to train XGBoost with multiple GPUs.
+ Read the CSV File using Pandas.
+ Create a Dask Dataframe from Pandas Dataframe, and
+ Create Dask DMatrix Object using dask data frames.
+  To use Multi-GPU for training XGBoost, we need to use Dask to create a GPU Cluster. This command creates a cluster of our GPUs that could be used by dask by using the client object later.
+cluster = LocalCUDACluster() client = Client(cluster)  We can now load our Dask Dmatrix Objects and define the training parameters. Note nthread beings set to one and tree_method set to gpu_hist
+ddtrain, ddtest = load_higgs_for_dask(client) param = {} param[&#39;objective&#39;] = &#39;binary:logitraw&#39; param[&#39;eval_metric&#39;] = &#39;error&#39; param[&#39;silence&#39;] = 1 param[&#39;tree_method&#39;] = &#39;gpu_hist&#39; param[&#39;nthread&#39;] = 1  We can now train on Multiple GPUs using:
+print(&amp;quot;Training with Multiple GPUs ...&amp;quot;) tmp = time.time() output = xgb.dask.train(client, param, ddtrain, num_boost_round=1000, evals=[(ddtest, &#39;test&#39;)]) multigpu_time = time.time() - tmp bst = output[&#39;booster&#39;] multigpu_res = output[&#39;history&#39;] print(&amp;quot;Multi GPU Training Time: %s seconds&amp;quot; % (str(multigpu_time))) --------------------------------------------------------------- Multi GPU Training Time: 50.08211898803711 seconds  Please note how the call to xgb.train changes to xgb.dask.train and how it also needs the dask client to work.
+This took around 0.8 Minutes that is a 1.5x Speedup from Single GPU. I only had 2 GPUs at my disposal, so I can’t test it, but I believe that it increases linearly, i.e. more GPU and more reduction in time.
+Results Here are the results of all three setups:
+Although the difference between Multi and Single CPU looks redundant right now, it will be pretty considerable while running multiple hyperparameter tuning tasks at hand where one might need to run multiple GBM Models with different Hyperparams.
+Also, this result can change when we scale it to many GPUs.
+So keep scaling.
+You can find the complete code for this post on Github.
+Continue Learning If you are interested in Deep Learning and want to use your GPU for that, I would like to recommend this excellent course on Deep Learning in Computer Vision in the Advanced machine learning specialization.
+Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at Medium or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz
+Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
+    
+
+    <item>
+      <title>Share your Projects even more easily with this New Streamlit Feature</title>
+      <link>https://mlwhiz.com/blog/2020/02/23/streamlitrec/</link>
+      <pubDate>Sun, 23 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2020/02/23/streamlitrec/</guid>
+      
+      
+      <media:content type="image/png" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/streamlitrec/main.png"></media:content>
+      
+
+      
+      <description>A Machine Learning project is never really complete if we don’t have a good way to showcase it.
+While in the past, a well-made visualization or a small PPT used to be enough for showcasing a data science project, with the advent of dashboarding tools like RShiny and Dash, a good data scientist needs to have a fair bit of knowledge of web frameworks to get along.
+As Sten Sootla says in his satire piece which I thoroughly enjoyed:</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  A Machine Learning project is never really complete if we don’t have a good way to showcase it.
+While in the past, a well-made visualization or a small PPT used to be enough for showcasing a data science project, with the advent of dashboarding tools like RShiny and Dash, a good data scientist needs to have a fair bit of knowledge of web frameworks to get along.
+As Sten Sootla says in his satire piece which I thoroughly enjoyed:
+ The secret: it’s not what you know, it’s what you show.
+ This is where StreamLit comes in and provides a way to create web apps just using Python. I have been keeping close tabs on this excellent product for the past few months. In my last few posts, I talked about Working with Streamlit and how to Deploy the streamlit app using ec2. I have also been in constant touch with the Streamlit team while they have been working continuously to make the user experience even better by releasing additional features.
+So, have you ever had a problem with explaining how the app works to the stakeholders/business partners? Having to set up multiple calls with different stakeholders in different countries and explaining the whole process again and again?
+Or have you worked on a project that you want to share on social media? LinkedIn, Youtube, and the like?
+With their new version, Streamlit has released a new feature called “Record a Screencast” which will solve this problem for you.
+How? Read on.
+Setting up So to check this new feature out, which is a part of Streamlit’s version 0.55.0 offering, we need to first install or upgrade streamlit. Do this by using this command:
+pip install --upgrade streamlit  We also need to run Streamlit. Here I will use the demo app. You can also use any of your own apps.
+streamlit hello  You should see something like below:
+A tab also opens up in your browser, where you can try their demo. If that doesn’t open up in the browser, you can manually go to the Local URL http://localhost:8501/ too.
+Recording the Screencast Now the time has come to record our screencast to share with the world. You can find the option to record the screencast using the top-right menu in Streamlit.
+Once you click on that, you will get the option to record audio, and you can select the aptly named “Start Recording” button to start recording.
+You can then choose what you want to share — just your streamlit app or your entire desktop. One can choose to share the whole desktop if they need to go forth between different programs like Excel sheets, powerpoints, and the streamlit app, for example. Here I choose to show just the “Streamlit” App and click share.
+Your screencast has now started, and you can record the explanation session for your shareholders now. Once you are done with the recording, you can click on the top-right menu again and select stop recording. Or conveniently press escape to end the recording session.
+You will be able to preview and save the session video you recorded as a .webm file, which you can aim to send to your shareholders and even share on LinkedIn/twitter/youtube for your personal projects.
+And that’s it. The process is pretty simple and doesn’t need any additional software installation from our side.
+Endnotes Streamlit has democratized the whole process of creating apps.
+I honestly like the way Streamlit is working on developing its product, keeping in mind all the pain points of its users. With this iteration, they have resolved one more pain point where users struggle to showcase their work in a meaningful way on social media sites or to explain the workings of an app multiple times to the shareholders.
+On top of that, Streamlit is a free and open-source rather than a proprietary web app that works out of the box. I couldn’t recommend it more.
+Also, do let me know if you want to request any additional features in Streamlit in the comments section. I will make sure to pass it on to the Streamlit team.
+If you want to learn more about using Streamlit to create and deploy apps, take a look at my other posts:
+ How to write Web apps using simple Python for Data Scientists? How to Deploy a Streamlit App using an Amazon Free ec2 instance?  If you want to learn about the best strategies for creating Visualizations, I would like to call out an excellent course about Data Visualization and applied plotting from the University of Michigan, which is a part of a pretty good Data Science Specialization with Python in itself. Do check it out.
+Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at Medium or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz.
+Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
     
 
     <item>
