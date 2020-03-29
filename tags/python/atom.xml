@@ -8,11 +8,273 @@
     <description>Recent content in Python on MLWhiz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 24 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 29 Mar 2020 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="https://mlwhiz.com/tags/python/atom.xml" rel="self" type="application/rss+xml" />
     
 
+    
+
+    <item>
+      <title>A Newspaper for COVID-19 — The CoronaTimes</title>
+      <link>https://mlwhiz.com/blog/2020/03/29/coronatimes/</link>
+      <pubDate>Sun, 29 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2020/03/29/coronatimes/</guid>
+      
+      
+      <media:content type="image/jpeg" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/coronatimes/main.gif"></media:content>
+      
+
+      
+      <description>It seems that the way that I consume information has changed a lot. I have become quite a news junkie recently. One thing, in particular, is that I have been reading quite a lot of international news to determine the stages of Covid-19 in my country.
+To do this, I generally visit a lot of news media sites in various countries to read up on the news. This gave me an idea.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  It seems that the way that I consume information has changed a lot. I have become quite a news junkie recently. One thing, in particular, is that I have been reading quite a lot of international news to determine the stages of Covid-19 in my country.
+To do this, I generally visit a lot of news media sites in various countries to read up on the news. This gave me an idea. Why not create an international news dashboard for Corona? And here it is.
+This post is about how I created the news dashboard using Streamlit and data from NewsApi and European CDC.
+TLDR; Link to the App here.
+Getting The Data The most important thing while creating this Dashboard was acquiring the data. I am using two data sources:
+1. Data from the European Centre for Disease Prevention and Control. The downloadable data file is updated daily and contains the latest available public data on COVID-19. Here is a snapshot of this data.
+def get_data(date): os.system(&amp;quot;rm cases.csv&amp;quot;) url = &amp;quot;[https://opendata.ecdc.europa.eu/covid19/casedistribution/csv](https://opendata.ecdc.europa.eu/covid19/casedistribution/csv)&amp;quot; filename = wget.download(url,&amp;quot;cases.csv&amp;quot;) casedata = pd.read_csv(filename, encoding=&#39;latin-1&#39;) return casedata  2. News API The second source of data comes from the News API, which lets me access articles from leading news outlets from various countries for free. The only caveat is that I could only hit the API 500 times a day, and there is a result limit of 100 results for a particular query for free accounts.
+I tried to get around those limit barriers by using streamlit caching(So I don’t hit the API a lot). I also tried to get news data from last month using multiple filters to get a lot of data.
+from newsapi import NewsApiClient newsapi = NewsApiClient(api_key=&#39;aedb6aa9bebb4011a4eb5447019dd592&#39;)  The primary way the API works is by giving us access to 3 functions.
+a) A function to get Recent News from a country:
+json_data = newsapi.get_top_headlines(q=q,language=&#39;en&#39;, country=&#39;us&#39;) data = pd.DataFrame(json_data[&#39;articles&#39;]) data.head()  b) A function to get “Everything” related to a query from the country. You can see the descriptions of API parameters here:
+json_data = newsapi.get_everything(q=&#39;corona&#39;, language=&#39;en&#39;, from_param=str(date.today() -timedelta(days=29)), to= str(date.today()), sources = &#39;usa-today&#39;, page_size=100, page = 1, sort_by=&#39;relevancy&#39; ) data = pd.DataFrame(json_data[&#39;articles&#39;]) data.head()  c) A function to get a list of sources from a Country programmatically. We can then use these sources to pull data from the “everything” API
+def get_sources(country): sources = newsapi.get_sources(country=country) sources = [x[&#39;id&#39;] for x in sources[&#39;sources&#39;]] return sources sources = get_sources(country=&#39;us&#39;) print(sources[:5]) ------------------------------------------------------------------- [&#39;abc-news&#39;, &#39;al-jazeera-english&#39;, &#39;ars-technica&#39;, &#39;associated-press&#39;, &#39;axios&#39;]  I used all the functions above to get data that refreshes at a particular cadence. You can see how I use these API functions in a loop to download the data by looking at my code at GitHub.
+Creating the Dashboard I wanted to have a few important information in the Dashboard that I was interested in. So I started by creating various widgets.
+1. Current World Snapshot: The first information was regarding the whole world situation. The Number of Cases and Deaths. The case and death curve in various countries? What are the fatality rates in various countries? Below is the current world situation on 28 Mar 2020.
+Observations: We can see the deaths in Italy are still on the rise, while we are seeing the deaths shooting up in Spain, France, and the United States as well. The death rates in some countries are worrying with death rates of 10.56% in Italy and 8.7% in Iraq. I suspect that the death rate statistic of 2% in the starting days of CoronaVirus was misinformed if not wrong.
+Technical Details — To create this part of the Dashboard, I used the ECDC data. I also used a lot of HTML hacks with Streamlit, where I used bootstrap widgets as well as custom HTML to get data in the way I wanted to display it. Here are a few of the hacks:
+ Using Bootstrap Cards: You can use bootstrap or, in that case, any HTML element in Streamlit if you change the parameter unsafe_allow_html to True. Do note that I am also using python f string formatting here.  st.sidebar.markdown(f&amp;#39;&amp;#39;&amp;#39;&amp;lt;div class=&amp;#34;card text-white bg-info mb-3&amp;#34; style=&amp;#34;width: 18rem&amp;#34;&amp;gt; &amp;lt;div class=&amp;#34;card-body&amp;#34;&amp;gt; &amp;lt;h5 class=&amp;#34;card-title&amp;#34;&amp;gt;Total Cases&amp;lt;/h5&amp;gt; &amp;lt;p class=&amp;#34;card-text&amp;#34;&amp;gt;{sum(casedata[&amp;#39;cases&amp;#39;]):,d}&amp;lt;/p&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt;&amp;#39;&amp;#39;&amp;#39;, unsafe_allow_html=True) The above code is behind the Dashboard styled cards in the streamlit app sidebar.
+ Changed the width of the streamlit main page:  Again, there was no parameter given by streamlit to do this, and I was finding the page width a little too small for my use case. Adding the above code at the start of the app solved the issue.
+st.markdown( f&amp;#34;&amp;#34;&amp;#34; &amp;lt;style&amp;gt; .reportview-container .main .block-container{{ max-width: 1000px; }} &amp;lt;/style&amp;gt; &amp;#34;&amp;#34;&amp;#34;, unsafe_allow_html=True, ) 2. Most Recent News from Country The primary purpose of creating this Dashboard was to get news from various outlets from top media outlets in the country.
+Observations: As here you can see, here we have the top recent news from the United Kingdom concerning cases in Ireland and Boris Johnson’s corona woes.
+Technical Details: As said before, I am using the News API to get this data. And here is how I am using a mashup of HTML and markdown to display the news results.
+def create_most_recent_markdown(df,width=700): if len(df)&amp;gt;0: # img url img_path = df[&#39;urlToImage&#39;].iloc[0] if not img_path: images = [x for x in df.urlToImage.values if x is not None] if len(images)!=0: img_path = random.choice(images) else: img_path = &#39;[https://www.nfid.org/wp-content/uploads/2020/02/Coronavirus-400x267.png&#39;](https://www.nfid.org/wp-content/uploads/2020/02/Coronavirus-400x267.png&#39;) img_alt = df[&#39;title&#39;].iloc[0] df = df[:5] **markdown_str = f&amp;quot;&amp;lt;img src=&#39;{img_path}&#39; width=&#39;{width}&#39;/&amp;gt; &amp;lt;br&amp;gt; &amp;lt;br&amp;gt;&amp;quot;** for index, row in df.iterrows(): **markdown_str &#43;= f&amp;quot;[{row[&#39;title&#39;]}]({row[&#39;url&#39;]}) by {row[&#39;author&#39;]}&amp;lt;br&amp;gt; &amp;quot;** return markdown_str else: return &#39;&#39;  Few things to note here:
+ The image width cannot be set using markdown so using custom HTML
+ The usage of python f strings to create the article titles and URLs.
+ If no image is found, we are defaulting to a custom image.
+  3. News Sentiment Another thing that has been bothering me in these trying times is so much negativity everywhere. I wanted to see the news covered from a positive angle if it could be in any way. So I did some simple sentiment analysis using the custom sentiment analyzer from Textblob to do this.
+I found out sentiments by news outlets as well as some of the most positive and negative news related to Coronavirus in the past 30 days. (Past 30 days because I cannot go more back with the free API).
+Observations: As you can see that one of the most positive news is Trump changing his coronavirus stance on March 17th, and I agree. The second positive report seems to be regarding some sort of solution to the problem. While the first Negative news is regarding Cardi B slamming celebrities for sowing confusion about the Coronavirus. I won’t comment on this :)
+Technical Details: To get the sentiment scores of an article I used TextBlob. Getting the sentiment scores that range from -1 to 1 is as simple as using the below function. I used a concatenation of title and description to find the sentiment as the content from the News API was truncated.
+def textblob_sentiment(title,description): blob = TextBlob(str(title)&#43;&amp;quot; &amp;quot;&#43;str(description)) return blob.sentiment.polarity  The main difficulty here was to have a two-column layout to give both positive and negative news. For that again, I had to use a mashup of HTML and markdown. I used the HTML table to do this. Also, note how I used markdown to convert markdown to HTML using Python f strings.
+import markdown md = markdown.Markdown() positive_results_markdown = create_most_recent_markdown(positivedata,400) negative_results_markdown = create_most_recent_markdown(negativedata,400) html = f&#39;&#39;&#39;&amp;lt;table style=&amp;quot;width:100%&amp;quot;&amp;gt; &amp;lt;tr&amp;gt; &amp;lt;th&amp;gt;&amp;lt;center&amp;gt;Most Positive News&amp;lt;/center&amp;gt;&amp;lt;/th&amp;gt; &amp;lt;th&amp;gt;&amp;lt;center&amp;gt;Most Negative News&amp;lt;/center&amp;gt;&amp;lt;/th&amp;gt; &amp;lt;/tr&amp;gt; &amp;lt;tr&amp;gt; &amp;lt;td&amp;gt;&amp;lt;center&amp;gt;**{md.convert(positive_results_markdown)}**&amp;lt;/center&amp;gt;&amp;lt;/td&amp;gt; &amp;lt;td&amp;gt;&amp;lt;center&amp;gt;**{md.convert(negative_results_markdown)}**&amp;lt;/center&amp;gt;&amp;lt;/td&amp;gt; &amp;lt;/tr&amp;gt; &amp;lt;/table&amp;gt;&#39;&#39;&#39; #print md.convert(&amp;quot;# sample heading text&amp;quot;) st.markdown(html,unsafe_allow_html=True)  4. News Source WordCloud A visualization dashboard that works with text is never really complete without a word cloud, so I thought of adding a word cloud to understand the word usage from a particular source.
+Observations: We can see Vice news using words like “New” and “Tested” a lot of times. While Business Insider used “China” a lot.
+      Technical Details:Here is what I used to create this masked word cloud:
+import cv2 def create_mask(): mask = np.array(Image.open(&amp;quot;coronavirus.png&amp;quot;)) im_gray = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY) _, mask = cv2.threshold(im_gray, thresh=20, maxval=255, type=cv2.THRESH_BINARY) mask = 255 - mask return mask mask = create_mask() def create_wc_by(source): data = fulldf[fulldf[&#39;source&#39;]==source] text = &amp;quot; &amp;quot;.join([x for x in data.content.values if x is not None]) stopwords = set(STOPWORDS) stopwords.add(&#39;chars&#39;) stopwords.add(&#39;coronavirus&#39;) stopwords.add(&#39;corona&#39;) stopwords.add(&#39;chars&#39;) wc = WordCloud(background_color=&amp;quot;white&amp;quot;, max_words=1000, mask=mask, stopwords=stopwords, max_font_size=90, random_state=42, contour_width=3, contour_color=&#39;steelblue&#39;) wc.generate(text) plt.figure(figsize=[30,30]) plt.imshow(wc, interpolation=&#39;bilinear&#39;) plt.axis(&amp;quot;off&amp;quot;) return plt st.pyplot(create_wc_by(source),use_container_width=True)  Other Technical Considerations 1. Advanced Caching: In new streamlit release notes for 0.57.0 which just came out yesterday, streamlit has made updates to st.cache. One notable change to this release is the “ability to set expiration options for cached functions by setting the max_entries and ttl arguments”. From the documentation:
+ max_entries (int or None) — The maximum number of entries to keep in the cache, or None for an unbounded cache. (When a new entry is added to a full cache, the oldest cached entry will be removed.) The default is None.
+ ttl (float or None) — The maximum number of seconds to keep an entry in the cache, or None if cache entries should not expire. The default is None.
+  Two use cases where this might help would be:
+ If you’re serving your app and don’t want the cache to grow forever.
+ If you have a cached function that reads live data from a URL and should clear every few hours to fetch the latest data
+  So this is what is being used in a lot of functions to avoid hitting APIs multiple times and to prevent them from getting stale at the same time.
+For Example, Top results from a country are fetched at a period of 360 seconds i.e., 6 minutes.
+st.cache(ttl=360,max_entries=20) def create_dataframe_top(queries,country): #Hits API Here  While full results from the everything API are fetched at a period of one day.
+[@st](http://twitter.com/st).cache(ttl = 60*60*24,max_entries=20) def create_dataframe_last_30d(queries, sources): # hits API  2. Deployment: I used the amazon free ec2 instance to deploy this app at http://54.149.204.138:8501/. If you want to know the steps,read my post on How to Deploy a Streamlit App using an Amazon Free ec2 instance?
+There are also a few caveats:
+ Since it is a free server, it might not take too much load.
+ I have not thoroughly tested the caching routine. I just hope that there are no memory errors with the limited memory on the server.
+ The News API is also free. There might be rate limits that might kick in even after I have tried to handle that.
+  3. Learning For folks who are lost, you might like to start with the basics first. Here is my introductory posts on Streamlit and Plotly express.
+ How to write Web apps using simple Python for Data Scientists? Python’s One Liner graph creation library with animations Hans Rosling Style  Conclusion Here I have tried creating a dashboard for news on Coronavirus, but it is still in a nascent stage, and a lot needs to be done.
+For one, it needs a large server. For another, a lot of time to improve the visualization and layouts. And also a lot of testing.
+Also, we have done a few things in a roundabout way using HTML and few hacks. There are still a lot of things that I will love to have in Streamlit. I have been in talks with the Streamlit team over the new functionality that they are going to introduce, and I will try to keep you updated on the same. The good news is that Layout options are a part of the new functionality that Streamlit is working on.
+You can find the full code for the final app here at my Github repo. And here is the full app on the web.
+If you want to learn about the best strategies for creating Visualizations, I would like to call out an excellent course about Data Visualization and applied plotting from the University of Michigan, which is a part of a pretty good Data Science Specialization with Python in itself. Do check it out.
+Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at Medium or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz.
+Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
+    
+
+    <item>
+      <title>5 Online Courses you can take for free during COVID-19 Epidemic</title>
+      <link>https://mlwhiz.com/blog/2020/03/27/covidcourses/</link>
+      <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2020/03/27/covidcourses/</guid>
+      
+      
+      <media:content type="image/jpeg" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/covidcourses/main.jpeg"></media:content>
+      
+
+      
+      <description>With Coronavirus on the prowl, there has been a huge demand across the world for MOOCs as schools and universities continue to shut down.
+So, I find it great that providers like Coursera are hosting a lot of excellent courses on their site for free, but they are a little hard to find among all the paid courses.
+While these courses are not providing verified certificates if you take them for free, in my view, it is the knowledge that matters than having a few certifications.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  With Coronavirus on the prowl, there has been a huge demand across the world for MOOCs as schools and universities continue to shut down.
+So, I find it great that providers like Coursera are hosting a lot of excellent courses on their site for free, but they are a little hard to find among all the paid courses.
+While these courses are not providing verified certificates if you take them for free, in my view, it is the knowledge that matters than having a few certifications.
+TLDR; With thousands of individuals laid off from this crisis, I believe it is crucial to get learning resources out now to people. So here is a list of courses that are great and free to learn.
+1. Machine Learning Yes, you heard it right, Coursera is providing the Game Changer Machine Learning course by Andrew Ng for free right now.
+As for my review, I think this is the one course that should be done by everyone interested in Machine Learning. For one, it contains the maths behind many of the Machine Learning algorithms and secondly Andrew Ng is a great instructor. Believe it or not, Andrew Ng not only taught but also motivated me to learn data science when I first started.
+As for the curriculum, this course has a little of everything — Regression, Classification, Anomaly Detection, Recommender systems, Neural networks, plus a lot of great advice.
+You might also want to go through a few of my posts while going through this course:
+ The Hitchhiker’s Guide to Feature Extraction
+ The 5 Classification Evaluation metrics every Data Scientist must know
+ The 5 Feature Selection Algorithms every Data Scientist should know
+ The Simple Math behind 3 Decision Tree Splitting criterions
+  2. Algorithms Algorithms and data structures are an integral part of data science. While most of us data scientists don’t take a proper algorithms course while studying, they are essential all the same.
+Many companies ask data structures and algorithms as part of their interview process for hiring data scientists.
+They will require the same zeal to crack as your Data Science interviews, and thus, you might want to give some time for the study of algorithms and Data structure and algorithms questions.
+This series of two courses offered by Robert Sedgewick covers all the essential algorithms and data structures. The first part of this course covers the elementary data structures, sorting, and searching algorithms, while the second part focuses on the graph and string-processing algorithms.
+You might also like to look at a few of my posts while trying to understand some of the material in these courses.
+ 3 Programming concepts for Data Scientists A simple introduction to Linked Lists for Data Scientists Dynamic Programming for Data Scientists  3. Bayesian Statistics: From Concept to Data Analysis  “Facts are stubborn things, but statistics are pliable.” ― Mark Twain
+ The war between a frequentist and bayesian is never over.
+In this course, you will learn about MLE, priors, posteriors, conjugate priors, and a whole lot of other practical scenarios where we can use Bayesian Statistics. All in all, a well-packaged course which explains both frequentist and bayesian approach to statistics.
+From the course website:
+ This course introduces the Bayesian approach to statistics, starting with the concept of probability and moving to the analysis of data. We will compare the Bayesian approach to the more commonly-taught Frequentist approach, and see some of the benefits of the Bayesian approach.
+ 4. Practical Time Series Analysis Have you heard about ARIMA models, Stationarity in time series, etc. and have been boggled by these terms? This course aims to teach Time series from a fairly mathematical perspective. I was not able to find such a course for a fairly long time. And now it is free for all.
+From the course website:
+ In practical Time Series Analysis we look at data sets that represent sequential information, such as stock prices, annual rainfall, sunspot activity, the price of agricultural products, and more. We look at several mathematical models that might be used to describe the processes which generate these types of data
+ If you want to use XGBoost or Tree-based models for time series analysis, do take a look at one of my previous post here:
+ Using Gradient Boosting for Time Series prediction tasks  5. Getting Started with AWS for Machine Learning  The secret: it’s not what you know, it’s what you show.
+ There are a lot of things to consider while building a great machine learning system. But often it happens that we, as data scientists, only worry about certain parts of the project.
+But do we ever think about how we will deploy our models once we have them?
+I have seen a lot of ML projects, and a lot of them are doomed to fail as they don’t have a set plan for production from the onset.
+Having a good platform and understanding how that platform deploys machine Learning apps will make all the difference in the real world. This course on AWS for implementing Machine Learning applications promises just that.
+ This course will teach you:
+1. How to build, train and deploy a model using Amazon SageMaker with built-in algorithms and Jupyter Notebook instance.
+2. How to build intelligent applications using Amazon AI services like Amazon Comprehend, Amazon Rekognition, Amazon Translate and others.
+ You might also look at this post of mine, where I try to talk about apps and explain how to plan for Production.
+ How to write Web apps using simple Python for Data Scientists? How to Deploy a Streamlit App using an Amazon Free ec2 instance? Take your Machine Learning Models to Production with these 5 simple steps  More Free Courses Also, don’t worry if you don’t want to learn the above ones. I have collected a list of some highly-rated courses that are free to audit before writing this post. You can download the excel file here. So have a stab at whatever you want to learn.
+Continue Learning I am going to be writing more beginner-friendly posts in the future too. Follow me up at Medium or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz.
+Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
+    
+
+    <item>
+      <title>Can AI help in fighting against Corona?</title>
+      <link>https://mlwhiz.com/blog/2020/03/24/coronaai/</link>
+      <pubDate>Wed, 25 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2020/03/24/coronaai/</guid>
+      
+      
+      <media:content type="image/png" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/coronaai/main.png"></media:content>
+      
+
+      
+      <description>Feeling Helpless? I know I am.
+With the whole shutdown situation, what I thought was once a paradise for my introvert self doesn’t look so good when it is actually happening.
+I really cannot fathom being at home much longer. And this feeling of helplessness at not being able to do anything doesn’t help.
+Honestly, I would like to help with so much more in this dire situation, but here are some small ideas around which we as AI practitioners and Data Scientists can be of use.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  Feeling Helpless? I know I am.
+With the whole shutdown situation, what I thought was once a paradise for my introvert self doesn’t look so good when it is actually happening.
+I really cannot fathom being at home much longer. And this feeling of helplessness at not being able to do anything doesn’t help.
+Honestly, I would like to help with so much more in this dire situation, but here are some small ideas around which we as AI practitioners and Data Scientists can be of use.
+Donate your Computing Power NVIDIA is asking Gamers to donate their computing power to support folding@home.
+I would say that we data scientists surely have the infrastructure at hand to help in this regard.
+And we can do pretty much with a few clicks. It sort of feels like instant gratification, but it still is better than doing nothing.
+You just need to download and install their software here. I downloaded the fah-installer_7.5.1_x86.exe file for my windows system. You can download it for MAC and Linux too. And you can help with CPU resources also if you don’t have GPUs.
+When asked for “Custom Install” or “Express Install”, I went for the recommended option that is “Express Install”. You may want to give Team “PC Master Race — PCMR” number 225605. You can leave the passkey empty or you can get a passkey if you want to keep track of work done by you.
+You can also control the system resources donated to the cause. I recommend using full if you are not using any considerable compute. I am donating my two GPUs along with CPU. Till now I have been able to donate around 3 work units.
+Come up with Novel Approaches to help One thing that is causing a lot of concern is the lack of proper testing procedures. In the UK, for instance, the current advisory is to self isolate at minor symptoms of cold due to a shortage of tests. Also, due to this shortage of tests, a lot of numbers are not entirely reliable and may be false.
+So I was just pleasantly surprised when I saw the blog from Adrian Rosebrock, where he tried to create an automatic COVID-19 detector using the COVID-19 X-ray image dataset (curated by Dr. Joseph Cohen) along with normal X-Ray Images from the Kaggle’s Chest X-Ray Images (Pneumonia) dataset.
+As for the results, they seem promising:
+ As you can see from the results above, our automatic COVID-19 detector is obtaining ~90–92% accuracy on our sample dataset based solely on X-ray images — no other data, including geographical location, population density, etc. was used to train this model. We are also obtaining 100% sensitivity and 80% specificity
+ These results are awesome. A 100% sensitivity means to be able to capture all the Positives. And it could be used as a preliminary test for Corona.But, I am not sure at what stage these X-rays were taken as that will also play a major role. You can check out the detailed post on pyimagesearch. A caveat he mentions is the lack of data, which is quite understandable at this point in time. But if this approach works and is worked upon with other variables at hand, it might help to detect corona.
+ Can we come up with other novel ways of helping those in need?
+ Spread Awareness and Mitigate Rumors through data One good thing about working with data is that we get in the habit of understanding various biases. Another essential thing that a lot of fellow data scientists have been doing is creating awareness and calling out different biases.
+I particularly liked this post, which provides a data science perspective on Coronavirus by fast.ai founder Jeremy Howard and Rachel Thomas.
+Also, read up on this post by Cassie Kozyrkov, which talks about the various biases around Corona and tries to take a hypothesis testing approach to the whole situation. I particularly liked this part in her post on Smarter COVID-19 Decision-Making
+ If no relevant information comes in, keep doing what you were planning to do. When a different action is triggered, do it.
+ It’s not enough, but … I understand that it is still not enough and honestly very less.
+A lot needs to be done on the ground to tackle this whole situation. But these are a few things that come to my mind apart from washing our hands.
+Also, we can discuss any ideas in which the data science community can help to tackle this enormous challenge. I would like to do so much more.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
+    
+
+    <item>
+      <title>Practical Spark Tips for Data Scientists</title>
+      <link>https://mlwhiz.com/blog/2020/03/20/practicalspark/</link>
+      <pubDate>Fri, 20 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2020/03/20/practicalspark/</guid>
+      
+      
+      <media:content type="image/png" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/practicalspark/main.png"></media:content>
+      
+
+      
+      <description>I know — Spark is sometimes frustrating to work with.
+Although sometimes we can manage our big data using tools like Rapids or Parallelization, there is no way around using Spark if you are working with Terabytes of data.
+In my last few posts on Spark, I explained how to work with PySpark RDDs and Dataframes. Although these posts explain a lot on how to work with RDDs and Dataframe operations, they still are not quite enough.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  I know — Spark is sometimes frustrating to work with.
+Although sometimes we can manage our big data using tools like Rapids or Parallelization, there is no way around using Spark if you are working with Terabytes of data.
+In my last few posts on Spark, I explained how to work with PySpark RDDs and Dataframes. Although these posts explain a lot on how to work with RDDs and Dataframe operations, they still are not quite enough.
+Why? Because Spark gives memory errors a lot of times, and it is only when you genuinely work on big datasets with spark, would you be able to truly work with Spark.
+This post is going to be about — “Practical Spark and memory management tips for Data Scientists.”
+1. Map Side Joins The syntax of joins in Spark is pretty similar to pandas:
+df3 = df1.join(df2, df1.column == df2.column,how=&#39;left&#39;)  But I faced a problem. The df1 had around 1Billion rows while df2 had around 100 Rows. When I tried the above join, it didn’t work and failed with memory exhausted errors after running for 20 minutes.
+I was writing this code on a pretty big cluster with more than 400 executors with each executor having more than 4GB RAM. I was stumped as I tried to repartition my data frames using multiple schemes, but nothing seemed to work.
+So what should I do? Is Spark not able to work with a mere billion rows? Not Really. I just needed to use Map-side joins or broadcasting in Spark terminology.
+from pyspark.sql.functions import broadcast df3 = df1.join(broadcast(df2), df1.column == df2.column,how=&#39;left&#39;)  Using the simple broadcasting code above, I was able to send the smaller df2 to all the nodes, and this didn’t take a lot of time or memory. What happens in the backend is that a copy of df2 is sent to all the partitions and each partition uses that copy to do the join. That means that there is no data movement when it comes to df1, which is a lot bigger than df2.
+2. Spark Cluster Configurations Set the Parallelism and worker nodes based on your task size
+What also made my life difficult while I was starting work with Spark was the way the Spark cluster needs to be configured. Your spark cluster might need a lot of custom configuration ad tuning based on the job you want to run.
+Some of the most important configurations and options are as follows:
+a. spark.sql.shuffle.partitions and spark.default.parallelism: spark.sql.shuffle.partitions configures the number of partitions to use when shuffling data for joins or aggregations. The spark.default.parallelism is the default number of partitions in RDDs returned by transformations like join, reduceByKey, and parallelize when not set by the user. The default value for these is 200.
+In simple words, these set the degree of parallelism you want to have in your cluster.
+If you don’t have a lot of data, the value of 200 is fine, but if you have huge data, you might want to increase these numbers. It also depends on the number of executors you have. My cluster was pretty big with 400 executors, so I kept this at 1200. A rule of thumb is to keep it as a multiple of the number of executors so that each executor ends up with multiple jobs.
+sqlContext.setConf( &amp;quot;spark.sql.shuffle.partitions&amp;quot;, 800) sqlContext.setConf( &amp;quot;spark.default.parallelism&amp;quot;, 800)  b. spark.sql.parquet.binaryAsString I was working with .parquet files in Spark, and most of my data columns were strings. But somehow whenever I loaded the data in Spark, the string columns got converted into binary format on which I was not able to use any string manipulation functions. The way I solved this was by using:
+sqlContext.setConf(&amp;quot;spark.sql.parquet.binaryAsString&amp;quot;,&amp;quot;true&amp;quot;)  The above configuration converts the binary format to string while loading parquet files. Now it is a default configuration I set whenever I work with Spark.
+c. Yarn Configurations: There are other configurations that you might need to tune that define your cluster. But these need to be set up when the cluster is starting and are not as dynamic as the above ones. The few I want to put down here are for managing memory spills on the executor nodes. Sometimes the executor core gets a lot of work.
+ spark.yarn.executor.memoryOverhead: 8192
+ yarn.nodemanager.vmem-check-enabled: False
+  There are a lot of configurations that you might want to tune while setting up your spark cluster. You can take a look at them in the official docs.
+3. Repartitioning Keeping the workers happy by having them handle an equal amount of data
+You might want to repartition your data if you feel your data has been skewed while working with all the transformations and joins. The simplest way to do it is by using:
+df = df.repartition(1000)  Sometimes you might also want to repartition by a known scheme as this scheme might be used by a certain join or aggregation operation later on. You can use multiple columns to repartition using:
+df = df.repartition(&#39;cola&#39;, &#39;colb&#39;,&#39;colc&#39;,&#39;cold&#39;)  You can get the number of partitions in a data frame using:
+df.rdd.getNumPartitions()  You can also check out the distribution of records in a partition by using the glom function. This helps in understanding the skew in the data that happens while working with various transformations.
+df.glom().map(len).collect()  Conclusion There are a lot of things we don’t know, we don’t know. These are called unknown unknowns. It is only by multiple code failures and reading up on multiple stack overflow threads that we understand what we need.
+Here I have tried to summarize a few of the problems that I faced around memory issues and configurations while working with Spark and how to solve them. There are a lot of other configuration options in Spark, which I have not covered, but I hope this post gave you some clarity on how to set these and use them.
+Now, if you need to learn Spark basics, take a look at my previous post: The Hitchhikers guide to handle Big Data using Spark *Not just an Introduction*towardsdatascience.com
+Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out these excellent courses on Big Data Essentials: HDFS, MapReduce and Spark RDD and Big Data Analysis: Hive, Spark SQL, DataFrames and GraphFrames by Yandex on Coursera.
+Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at Medium or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz
+Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
     
 
     <item>
