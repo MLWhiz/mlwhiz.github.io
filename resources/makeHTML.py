@@ -7,6 +7,12 @@ head = '''
 <head>
 
 <link href="style.css" media="all" rel="stylesheet"/>
+<!-- BEGIN SHAREAHOLIC CODE -->
+  <link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+  <script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+  
+  <!-- END SHAREAHOLIC CODE -->
+
 </head>
 '''
 
@@ -114,11 +120,14 @@ body += '''
   As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz.
   </p>
 </div>
+
+
 '''
 
 mcembed = '''
 <!-- Begin Mailchimp Signup Form -->
 <div id="mailchimp">
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div><br>
 <form action="https://mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
     <div id="mc_embed_signup_scroll">
 <div class="mc-field-group">
@@ -132,7 +141,9 @@ mcembed = '''
     <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
     </div>
 </form>
+
 </div>
+
 <!--End mc_embed_signup-->
 '''
 
