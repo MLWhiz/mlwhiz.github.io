@@ -21,8 +21,8 @@ body = '''
 </div>
 
 <div class="header">
-  Learning Data science is nothing less than taking an arduous and hard journey. So much to learn and so many paths to choose that it leaves us confused at times. 
-  I get many questions regarding how I learned Data Science. Or which books I find good. So I thought of adding the resources I like to this page. 
+  Learning Data science is a journey in itself. And a mighty hard one at that. So much to learn and so many paths to choose that it leaves us confused at times. 
+  I get many questions regarding how I learned Data Science? Or which books I find good? So I thought of adding the resources I found useful to this page. 
   As you may understand, this is an ever increasing list so it might help to bookmark this page.
   
   <h2>Books For Data Science</h2>
