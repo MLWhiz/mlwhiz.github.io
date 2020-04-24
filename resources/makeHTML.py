@@ -18,7 +18,7 @@ head = '''
 
 body = '''
 <body>
-
+<section>
 <div class="container">
 <img src="https://cdn.pixabay.com/photo/2015/09/02/13/08/way-918900_1280.jpg" style="width:100%;height:50%">
 <div class="text-block">
@@ -54,6 +54,7 @@ body += '<div class="row"> ' + buckets + '</div>'
 # Degrees
 body += '''
 <br>
+
 <hr class="rounded">
 <div class="header">
   <h2>Online Data Science Masters</h2>
@@ -117,7 +118,8 @@ body += '''
 
   As you all know I write beginner friendly Data Science posts. 
   Follow me up at <a href="https://medium.com/@rahul_agarwal" style="color:red">Medium</a> or Subscribe to my blog below to be informed about them. 
-  As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz.
+  As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz. 
+  Also do share this page on your social as sharing is caring.
   </p>
 </div>
 
