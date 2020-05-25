@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Stop Worrying and Create your Deep Learning Server in 30 minutes</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="In this blog, I will try to set up a deep learning server on EC2 with minimal effort so that I could focus on more important things">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="Stop Worrying and Create your Deep Learning Server in 30 minutes" />
+<meta property="og:description" content="In this blog, I will try to set up a deep learning server on EC2 with minimal effort so that I could focus on more important things" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2020/05/25/dls/" />
+<meta property="og:image" content="https://mlwhiz.com/images/dls/main.png" />
+<meta property="article:published_time" content="2020-05-25T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-05-25T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/dls/main.png"/>
+
+<meta name="twitter:title" content="Stop Worrying and Create your Deep Learning Server in 30 minutes"/>
+<meta name="twitter:description" content="In this blog, I will try to set up a deep learning server on EC2 with minimal effort so that I could focus on more important things"/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/resources/index.html">Learning Resources</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Stop Worrying and Create your Deep Learning Server in 30 minutes</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2020-05-25T00:00:00">May 25, 2020</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/dls/main.png" alt="" /></p>
+
+<p>I have found myself creating a Deep Learning Machine time and time again whenever I start a new project.</p>
+
+<p>You start with installing Anaconda and end up creating different environments for Pytorch and Tensorflow, so they don’t interfere. And in the middle of it, you inevitably end up messing up and starting from scratch. And this often happens multiple times.</p>
+
+<p>It is not just a massive waste of time; it is also mighty(trying to avoid profanity here) irritating. Going through all those Stack Overflow threads. Often wondering what has gone wrong.</p>
+
+<p>So is there a way to do this more efficiently?</p>
+
+<p>It turns out there is. <strong><em>In this blog, I will try to set up a deep learning server on EC2 with minimal effort so that I could focus on more important things.</em></strong></p>
+
+<p><em>This blog consists explicitly of two parts:</em></p>
+
+<ol>
+<li><p><em>Setting up an Amazon EC2 Machine with preinstalled deep learning libraries.</em></p></li>
+
+<li><p><em>Setting Up Jupyter Notebook using TMUX and SSH tunneling.</em></p></li>
+</ol>
+
+<p><em>Don’t worry; it’s not as difficult as it sounds. Just follow the steps and click Next.</em></p>
+
+<hr />
+
+<h2 id="setting-up-amazon-ec2-machine">Setting up Amazon EC2 Machine</h2>
+
+<p>I am assuming that you have an AWS account, and you have access to the <a href="https://aws.amazon.com/console/" rel="nofollow" target="_blank">AWS Console</a>. If not, you might need to sign up for an Amazon AWS account.</p>
+
+<ul>
+<li>First of all, we need to go to the Services tab to access the EC2 dashboard.</li>
+</ul>
+
+<p><img src="/images/dls/1.png" alt="" /></p>
+
+<ul>
+<li>On the EC2 Dashboard, you can start by creating your instance.</li>
+</ul>
+
+<p><img src="/images/dls/2.png" alt="" /></p>
+
+<ul>
+<li>Amazon provides Community AMIs(Amazon Machine Image) with Deep Learning software preinstalled. To access these AMIs, you need to look in the community AMIs and search for “Ubuntu Deep Learning” in the Search Tab. You can choose any other Linux flavor, but I have found Ubuntu to be most useful for my Deep Learning needs. In the present setup, I will use The Deep Learning AMI (Ubuntu 18.04) Version 27.0</li>
+</ul>
+
+<p><img src="/images/dls/3.png" alt="" /></p>
+
+<ul>
+<li>Once you select an AMI, you can select the Instance Type. It is here you specify the number of CPUs, Memory, and GPUs you will require in your system. Amazon provides a lot of options to choose from based on one’s individual needs. You can filter for GPU instances using the “Filter by” filter.</li>
+</ul>
+
+<p>In this tutorial, I have gone with p2.xlarge instance, which provides NVIDIA K80 GPU with 2,496 parallel processing cores and 12GiB of GPU memory. To know about different instance types, you can look at the <a href="https://aws.amazon.com/ec2/instance-types/" rel="nofollow" target="_blank">documentation</a> here and the pricing <a href="https://aws.amazon.com/emr/pricing/" rel="nofollow" target="_blank">here</a>.</p>
+
+<p><img src="/images/dls/4.png" alt="" /></p>
+
+<ul>
+<li>You can change the storage that is attached to the machine in the 4th step. It is okay if you don’t add storage upfront, as you can also do this later. I change the storage from 90 GB to 500 GB as most of the deep learning needs will require proper storage.</li>
+</ul>
+
+<p><img src="/images/dls/5.png" alt="" /></p>
+
+<ul>
+<li>That’s all, and you can Launch the Instance after going to the Final Review instance settings Screen. Once you click on Launch, you will see this screen. Just type in any key name in the Key Pair Name and click on “Download key pair”. Your key will be downloaded to your machine by the name you provided. For me, it got saved as “aws_key.pem”. Once you do that, you can click on “Launch Instances”.</li>
+</ul>
+
+<p><img src="/images/dls/6.png" alt="" /></p>
+
+<p>Keep this key pair safe as this will be required whenever you want to login to your instance.</p>
+
+<ul>
+<li>You can now click on “View Instances” on the next page to see your instance. This is how your instance will look like:</li>
+</ul>
+
+<p><img src="/images/dls/7.png" alt="" /></p>
+
+<ul>
+<li><p>To connect to your instance, Just open a terminal window in your Local machine and browse to the folder where you have kept your key pair file and modify some permissions.</p>
+
+<p>chmod 400 aws_key.pem</p></li>
+</ul>
+
+<p>Once you do that, you will be able to connect to your instance by SSHing. The SSH command will be of the form:</p>
+
+<pre><code>ssh -i &quot;aws_key.pem&quot; ubuntu@&lt;Your PublicDNS(IPv4)&gt;
+</code></pre>
+
+<p>For me, the command was:</p>
+
+<pre><code>ssh -i &quot;aws_key.pem&quot; ubuntu@ec2-54-202-223-197.us-west-2.compute.amazonaws.com
+</code></pre>
+
+<p><img src="/images/dls/8.png" alt="" /></p>
+
+<p>Also, keep in mind that the Public DNS might change once you shut down your instance.</p>
+
+<ul>
+<li>You have already got your machine up and ready. This machine contains different environments that have various libraries you might need. This particular machine has MXNet, Tensorflow, and Pytorch with different versions of python. And the best thing is that we get all this preinstalled, so it just works out of the box.</li>
+</ul>
+
+<p><img src="/images/dls/9.png" alt="" /></p>
+
+<hr />
+
+<h2 id="setting-up-jupyter-notebook">Setting Up Jupyter Notebook</h2>
+
+<p>But there are still a few things you will require to use your machine fully. One of them being Jupyter Notebooks. To set up Jupyter Notebooks with your Machine, I recommend using TMUX and tunneling. Let us go through setting up the Jupyter notebook step by step.</p>
+
+<h3 id="1-using-tmux-to-run-jupyter-notebook">1. Using TMUX to run Jupyter Notebook</h3>
+
+<p>We will first use TMUX to run the Jupyter notebook on our instance. We mainly use this so that our notebook still runs even if the terminal connection gets lost.</p>
+
+<p>To do this, you will need to create a new TMUX session using:</p>
+
+<pre><code>tmux new -s StreamSession
+</code></pre>
+
+<p>Once you do that, you will see a new screen with a green border at the bottom. You can start your Jupyter Notebook in this machine using the usual jupyter notebook command. You will see something like:</p>
+
+<p><img src="/images/dls/10.png" alt="" /></p>
+
+<p>It will be beneficial to copy the login URL so that we will be able to get the token later when we try to login to our jupyter notebook later. In my case, it is:</p>
+
+<pre><code>[http://localhost:8888/?token=5ccd01f60971d9fc97fd79f64a5bb4ce79f4d96823ab7872](http://localhost:8888/?token=5ccd01f60971d9fc97fd79f64a5bb4ce79f4d96823ab7872&amp;token=5ccd01f60971d9fc97fd79f64a5bb4ce79f4d96823ab7872)
+</code></pre>
+
+<p>The <strong><em>next step is to detach our TMUX session</em></strong> so that it continues running in the background even when you leave the SSH shell. To do this just press Ctrl+B and then D (Don’t press Ctrl when pressing D)You will come back to the initial screen with the message that you have detached from your TMUX session.</p>
+
+<p><img src="/images/dls/11.png" alt="" /></p>
+
+<p>If you want, you can reattach to the session again using:</p>
+
+<pre><code>tmux attach -t StreamSession
+</code></pre>
+
+<h3 id="2-ssh-tunneling-to-access-the-notebook-on-your-local-browser">2. SSH Tunneling to access the notebook on your Local Browser</h3>
+
+<p>The second step is to tunnel into the Amazon instance to be able to get the Jupyter notebook on your Local Browser. As we can see, the Jupyter Notebook is actually running on the localhost on the Cloud instance. How do we access it? We use SSH tunneling. Worry not, it is straightforward fill in the blanks. Just use this command on your local machine terminal window:</p>
+
+<pre><code>ssh -i &quot;aws_key.pem&quot; -L &lt;Local Machine Port&gt;:localhost:8888 [ubuntu@](mailto:ubuntu@ec2-34-212-131-240.us-west-2.compute.amazonaws.com)&lt;Your PublicDNS(IPv4)&gt;
+</code></pre>
+
+<p>For this case, I have used:</p>
+
+<pre><code>ssh -i &quot;aws_key.pem&quot; -L 8001:localhost:8888 [ubuntu@](mailto:ubuntu@ec2-34-212-131-240.us-west-2.compute.amazonaws.com)ec2-54-202-223-197.us-west-2.compute.amazonaws.com
+</code></pre>
+
+<p>This means that I will be able to use the Jupyter Notebook If I open the localhost:8001 in my local machine browser. And I surely can. We can now just input the token that we already have saved in one of our previous steps to access the notebook. For me the token is <a href="http://localhost:8888/?token=5ccd01f60971d9fc97fd79f64a5bb4ce79f4d96823ab7872&amp;token=5ccd01f60971d9fc97fd79f64a5bb4ce79f4d96823ab7872" rel="nofollow" target="_blank">5ccd01f60971d9fc97fd79f64a5bb4ce79f4d96823ab7872</a></p>
+
+<p><img src="/images/dls/12.png" alt="" /></p>
+
+<p>You can just login using your token and voila we get the notebook in all its glory.</p>
+
+<p><img src="/images/dls/13.png" alt="" /></p>
+
+<p>You can now choose to work on a new project by selecting any of the different environments you want. You can come from Tensorflow or Pytorch or might be willing to get the best of both worlds. This notebook will not disappoint you.</p>
+
+<p><img src="/images/dls/14.png" alt="" /></p>
+
+<hr />
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+
+<p>It might happen that once the machine is restarted, you face some problems with the NVIDIA graphics card. Specifically, in my case, the nvidia-smi command stopped working. If you encounter this problem, the solution is to download the graphics driver from the NVIDIA <a href="https://www.nvidia.in/Download/index.aspx?lang=en-in" rel="nofollow" target="_blank">website</a>.</p>
+
+<p><img src="/images/dls/15.png" alt="" /></p>
+
+<p>Above are the settings for the particular AMI I selected. Once you click on Search you will be able to see the next page:</p>
+
+<p><img src="/images/dls/16.png" alt="" /></p>
+
+<p>Just copy the download link by right-clicking and copying the link address. And run the following commands on your machine. You might need to change the link address and the file name in this.</p>
+
+<pre><code># When nvidia-smi doesnt work:
+
+wget [https://www.nvidia.in/content/DriverDownload-March2009/confirmation.php?url=/tesla/410.129/NVIDIA-Linux-x86_64-410.129-diagnostic.run&amp;lang=in&amp;type=Tesla](https://www.nvidia.in/content/DriverDownload-March2009/confirmation.php?url=/tesla/410.129/NVIDIA-Linux-x86_64-410.129-diagnostic.run&amp;lang=in&amp;type=Tesla)
+
+sudo sh NVIDIA-Linux-x86_64-410.129-diagnostic.run --no-drm --disable-nouveau --dkms --silent --install-libglvnd
+
+modinfo nvidia | head -7
+
+sudo modprobe nvidia
+</code></pre>
+
+<hr />
+
+<h2 id="stop-your-instance">Stop Your Instance</h2>
+
+<p>And that’s it. You have got and up and running Deep Learning machine at your disposal, and you can work with it as much as you want. Just keep in mind to stop the instance whenever you stop working, so you won’t need to pay Amazon when you are not working on your instance. You can do it on the instances page by right-clicking on your instance. Just note that when you need to log in again to this machine, you will need to get the Public DNS (IPv4) address from the instance page back as it might have changed.</p>
+
+<p><img src="/images/dls/17.png" alt="" /></p>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>I have always found it a big chore to set up a deep learning environment.</p>
+
+<p>In this blog, we set up a new Deep Learning server on EC2 in minimal time by using Deep Learning Community AMI, TMUX, and Tunneling for the Jupyter Notebooks. This server comes preinstalled with all the deep learning libraries you might need at your work, and it just works out of the box.</p>
+
+<p>So what are you waiting for? Just get started with Deep Learning with your own server.</p>
+
+<p>If you want to learn more about AWS and how to use it in production settings and deploying models, I would like to call out an excellent <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.14884356434&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Faws-machine-learning" rel="nofollow" target="_blank">course on AWS</a>. Do check it out.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a></p>
+
+<p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2020/05/24/ocr/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">End to End Text OCR using Deep-Learning</p></a>
+	</div>
+	<div class="post-nav__item post-nav__item--next">
+		<a class="post-nav__link" href="/blog/2020/05/25/cogbias/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">Five Cognitive Biases In Data Science (And how to avoid them)</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<style type="text/css">
+
+  .btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-session {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+</style>
+
+
+<aside class="sidebar">
+  <div style="text-align:center">     
+    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/democratize/">Don’t Democratize Data Science</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/cogbias/">Five Cognitive Biases In Data Science (And how to avoid them)</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/dls/">Stop Worrying and Create your Deep Learning Server in 30 minutes</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/24/ocr/">End to End Text OCR using Deep-Learning</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/24/fstring/">How and Why to use f strings in Python3?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/24/multitextclass/">Using Deep Learning for End to End Multiclass Text Classification</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/29/coronatimes/">A Newspaper for COVID-19 — The CoronaTimes</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
+		</ul>
+	</div>
+</div>
+
+<div style="text-align:center">     
+    
+    <a class="btn btn-session" href="https://www.patreon.com/bePatron?u=28135435" role="button">1:1 Session</a>
+  </div>
+
+<br>
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;
+  }
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}  
+   
+</style>
+
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2020 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>

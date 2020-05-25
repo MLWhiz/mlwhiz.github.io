@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Five Cognitive Biases In Data Science (And how to avoid them)</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="In this piece, I want to point out five of the most common types of cognitive biases. I will also offer some suggestions on how data scientists can work to avoid them and make better, more reasoned decisions.">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="Five Cognitive Biases In Data Science (And how to avoid them)" />
+<meta property="og:description" content="In this piece, I want to point out five of the most common types of cognitive biases. I will also offer some suggestions on how data scientists can work to avoid them and make better, more reasoned decisions." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2020/05/25/cogbias/" />
+<meta property="og:image" content="https://mlwhiz.com/images/cogbias/main.png" />
+<meta property="article:published_time" content="2020-05-25T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-05-25T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/cogbias/main.png"/>
+
+<meta name="twitter:title" content="Five Cognitive Biases In Data Science (And how to avoid them)"/>
+<meta name="twitter:description" content="In this piece, I want to point out five of the most common types of cognitive biases. I will also offer some suggestions on how data scientists can work to avoid them and make better, more reasoned decisions."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/resources/index.html">Learning Resources</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Five Cognitive Biases In Data Science (And how to avoid them)</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2020-05-25T00:00:00">May 25, 2020</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/cogbias/main.png" alt="" /></p>
+
+<p>Recently, I was reading Rolf Dobell’s <em>The Art of Thinking Clearly</em>, which made me think about cognitive biases in a way I never had before. I realized how deeply seated some cognitive biases are. In fact, we often don’t even consciously realize when our thinking is being affected by one. For data scientists, these biases can really change the way we work with data and make our day-to-day decisions, and generally not for the better.</p>
+
+<blockquote>
+<p>Data science is, despite the seeming objectivity of all the facts we work with, surprisingly subjective in its processes.</p>
+</blockquote>
+
+<p>As data scientists, our job is to make sense of the facts. In carrying out this analysis, we have to make subjective decisions though. So even though we work with hard facts and data, there’s a strong interpretive component to data science.</p>
+
+<p>As a result, we data scientists need to be extremely careful, because all humans are very much susceptible to cognitive biases. We’re no exception. In fact, I have seen many instances where data scientists ended up making decisions based on pre-existing beliefs, limited data or just irrational preferences.</p>
+
+<p><strong><em>In this piece, I want to point out five of the most common types of cognitive biases.</em></strong> I will also offer some suggestions on how data scientists can work to avoid them and make better, more reasoned decisions.</p>
+
+<hr />
+
+<h2 id="1-survivorship-bias">1. Survivorship Bias</h2>
+
+<p><img src="/images/cogbias/0.png" alt="" /></p>
+
+<p>During World War II, researchers from the non-profit research group the Center for Naval Analyses were tasked with a problem. They needed to reinforce the military’s fighter planes at their weakest spots. To accomplish this, they turned to data. They examined every plane that came back from a combat mission and made note of where bullets had hit the aircraft. Based on that information, they recommended that the planes be reinforced at those precise spots.</p>
+
+<p><strong><em>Do you see any problems with this approach?</em></strong></p>
+
+<p>The problem, of course, was that they only looked at the planes that returned and not at the planes that didn’t. Of course, data from the planes that had been shot down would almost certainly have been much more useful in determining where fatal damage to a plane was likely to have occurred, as those were the ones that suffered catastrophic damage.</p>
+
+<p>The research team suffered from survivorship bias: they just looked at the data that was available to them without analyzing the larger situation. This is a form of selection bias in which we implicitly filter data based on some arbitrary criteria and then try to make sense out of it without realizing or acknowledging that we’re working with incomplete data.</p>
+
+<p>Let’s think about how this might apply to our work in data science. Say you begin working on a data set. You have created your features and reached a decent accuracy on your modelling task. But maybe you should ask yourself if that is the best result you can achieve. Have you tried looking for more data? Maybe adding weather forecast data to the regular sales variables that you use in your ARIMA models would help you to forecast your sales better. Or perhaps some features around holidays can tell your model why your buyers are behaving in a particular fashion around Thanksgiving or Christmas.</p>
+
+<p><strong><em>Recommendation to Overcome:</em></strong> One way to mitigate this bias is by thinking in a rigorous, scientific way about the problem at hand and then brainstorming about any type of data that could help to solve it (rather than just starting with the data). These approaches may seem similar, but the second method restricts your vision because you don’t know what’s missing from your work. By using the first approach, you will know what data you were not able to get, and you will end up factoring that into your conclusions.</p>
+
+<hr />
+
+<h2 id="2-sunk-cost-fallacy">2. Sunk Cost Fallacy</h2>
+
+<p><img src="/images/cogbias/1.png" alt="Source:[Pixabay](https://pixabay.com/photos/down-the-drain-money-waste-sink-4708734/)" /></p>
+
+<p>We all have seen the sunk cost fallacy in action at some point, whether it be sitting through that bad movie because we have already paid for it or finishing that awful book because we were already halfway through. Everyone has been in a situation where they ended up wasting more time because they were trying to salvage the time they had already invested.</p>
+
+<p>A sunk cost, also known as a retrospective cost<strong>,</strong> is one that has already been incurred and cannot be recovered by any additional action. The sunk cost fallacy refers to the tendency of human beings to make decisions based on how much of an investment they have already made, which leads to even more investment but no returns whatsoever.</p>
+
+<blockquote>
+<p>Sometimes, hard as it is, the best thing to do is to let go.</p>
+</blockquote>
+
+<p>This happens often with data science projects. A project might run for more than two years without results but an investigator continues running it because so much time, money and effort have already been invested. Or a data scientist might defend her project wholeheartedly because she has invested so much in it, failing to realize that putting in more work won’t help her or the company in the long run and that it is best if the project is scrapped.</p>
+
+<p><strong><em>Recommendation to Overcome:</em></strong> A way to save yourself from this cognitive bias is by focusing on future benefits and costs rather than the already lost past costs. You have to develop the habit, hard as it is, of ignoring the previous cost information. Of course, it is never easy for us data scientists to just disregard data. For myself, I have found that a methodical way works best in this case. I take a pen and paper to get away from all the distractions and try to come up with all the additional costs required to do a project along with the benefits I might get in the future. If the cost part of the task seems overly significant, then it is time to move on.</p>
+
+<hr />
+
+<h2 id="3-false-causality">3. False Causality</h2>
+
+<p><img src="/images/cogbias/2.png" alt="[Source](https://xkcd.com/925/)" /></p>
+
+<p>As data scientists, we are always in search of patterns. The tendency means that sometimes we even find patterns where none really even exist. Our brains are so trained in this way that we will even make sense of chaos to the extent that we can.</p>
+
+<p>Because our training wires us to seek out patterns, it’s crucial to remember the simple maxim that correlation does not imply causation. Those five words are like the hammer of the data science toolbox without which you can’t accomplish anything. Just because two variables move in tandem doesn’t necessarily mean that one causes the other.</p>
+
+<p>This principle has been hilariously demonstrated by numerous examples. For instance,</p>
+
+<ul>
+<li><p>by looking at fire department data, you notice that, as more firemen are dispatched to a fire, the more damage is ultimately done to a property. Thus, you might infer that more firemen are causing more damage.</p></li>
+
+<li><p>In another famous example, an academic who was investigating the cause of crime in New York City in the 1980s found a strong correlation between the number of serious crimes committed and the amount of ice cream sold by street vendors. But should we conclude that eating ice cream drives people to crime? Since this makes little sense, we should obviously suspect that there was an unobserved variable causing both. During the summer, crime rates are the highest, and this is also when most ice cream is sold. Ice cream sales don’t cause crime, nor does crime increase ice cream sales.</p></li>
+</ul>
+
+<p>In both of these instances, looking at the data too superficially leads to incorrect assumptions.</p>
+
+<p><strong><em>Recommendation to Overcome:</em></strong> As data scientists, we need to be mindful of this bias when we present findings. Often, variables that might seem causal might not be on closer inspection. We should also take special care to avoid this type of mistake when creating variables of our models. At each step of the process, it’s important to ask ourselves if our independent variable is possibly just correlated to the dependent variable.</p>
+
+<hr />
+
+<h2 id="4-availability-bias">4. Availability Bias</h2>
+
+<p>Have you ever said something like, “I know that [insert a generic statement here] because [insert one single example].” For example, someone might say, “You can’t get fat from drinking beer, because Bob drinks a lot of it, and he’s thin.” If you have, then you’ve suffered from availability bias. You are trying to make sense of the world with limited data.</p>
+
+<p><strong><em>People naturally tend to base decisions on information that is already available to us or things we hear about often without looking at alternatives that might be useful.</em></strong>As a result, we limit ourselves to a very specific subset of information.</p>
+
+<p>This happens often in the data science world. Data scientists tend to get and work on data that’s easier to obtain rather than looking for data that is harder to gather but might be more useful. We make do with models that we understand and that are available to us in a neat package rather than something more suitable for the problem at hand but much more difficult to come by.</p>
+
+<p><strong><em>Recommendation to Overcome:</em></strong> A way to overcome availability bias in data science is to broaden our horizons. Commit to lifelong learning. Read. A lot. About everything. Then read some more. Meet new people. Discuss your work with other data scientists at work or in online forums. Be more open to suggestions about changes that you may have to take in your approach. By opening yourself up to new information and ideas, you can make sure that you’re less likely to work with incomplete information.</p>
+
+<hr />
+
+<h2 id="5-confirmation-bias">5. Confirmation Bias</h2>
+
+<p>An old joke says that if you torture the data long enough, it will confess. With enough work, you can distort data to make it say what you want it to say.</p>
+
+<p>We all hold some beliefs, and that’s fine. It’s all part of being human. What’s not OK, though, is when we let those beliefs inadvertently come into the way we form our hypotheses.</p>
+
+<p>We can see this tendency in our everyday lives. <strong><em>We often interpret new information in such a way that it becomes compatible with our own beliefs.</em></strong> We read the news on the site that conforms most closely to our beliefs. We talk to people who are like us and hold similar views. We don’t want to get disconcerting evidence because that might lead us to change our worldview, which we might be afraid to do.</p>
+
+<p>For example, I have seen confirmation bias in action in data science during the cost-benefit analysis stage of a project. I’ve seen people clinging to the data that confirms their hypothesis while ignoring all the contradictory evidence. Obviously, doing this could have a negative impact on the benefits section of the project.</p>
+
+<p><strong><em>Recommendation to Overcome:</em></strong> One way to fight this bias is to critically examine all your beliefs and try to find disconcerting evidence about each of your theories. By that, I mean actively seeking out evidence by going to places where you don’t normally go, talking to people you don’t normally talk to, and generally keeping an open mind.</p>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<blockquote>
+<p>In our age of information overload, we are surrounded by so much data that our brains try desperately to make sense of the noise.</p>
+</blockquote>
+
+<p>Sometimes it is useful to be able to make some sense out of the world based on limited information. In fact, we make most of our decisions without thinking much, going with our gut feelings. The potential harm of most of our day-to-day actions is pretty small. Allowing our biases to influence our work, though, can leave us in an unfortunate situation. We may end up losing money or credibility if we make a vital decision that turns out to be wrong.</p>
+
+<p>Knowing how our brain works will help us avoid these mistakes.</p>
+
+<p>If you want to learn more about Data Science, I would like to call out this <a href="https://www.coursera.org/learn/machine-learning?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;siteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">excellent course</a> by Andrew Ng. This was the one that got me started. Do check it out.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX" rel="nofollow" target="_blank">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
+<p><em>This story was first published <a href="https://builtin.com/data-science/cognitive-biases-data-science" rel="nofollow" target="_blank">here</a>.</em></p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2020/05/25/dls/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Stop Worrying and Create your Deep Learning Server in 30 minutes</p></a>
+	</div>
+	<div class="post-nav__item post-nav__item--next">
+		<a class="post-nav__link" href="/blog/2020/05/25/democratize/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">Don’t Democratize Data Science</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<style type="text/css">
+
+  .btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-session {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+</style>
+
+
+<aside class="sidebar">
+  <div style="text-align:center">     
+    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/democratize/">Don’t Democratize Data Science</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/cogbias/">Five Cognitive Biases In Data Science (And how to avoid them)</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/dls/">Stop Worrying and Create your Deep Learning Server in 30 minutes</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/24/ocr/">End to End Text OCR using Deep-Learning</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/24/fstring/">How and Why to use f strings in Python3?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/24/multitextclass/">Using Deep Learning for End to End Multiclass Text Classification</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/29/coronatimes/">A Newspaper for COVID-19 — The CoronaTimes</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
+		</ul>
+	</div>
+</div>
+
+<div style="text-align:center">     
+    
+    <a class="btn btn-session" href="https://www.patreon.com/bePatron?u=28135435" role="button">1:1 Session</a>
+  </div>
+
+<br>
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;
+  }
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}  
+   
+</style>
+
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2020 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>

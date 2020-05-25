@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>How and Why to use f strings in Python3?</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="This post is specifically about using f strings in Python that was introduced in Python 3.6">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="How and Why to use f strings in Python3?" />
+<meta property="og:description" content="This post is specifically about using f strings in Python that was introduced in Python 3.6" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2020/05/24/fstring/" />
+<meta property="og:image" content="https://mlwhiz.com/images/fstring/main.png" />
+<meta property="article:published_time" content="2020-05-24T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-05-24T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/fstring/main.png"/>
+
+<meta name="twitter:title" content="How and Why to use f strings in Python3?"/>
+<meta name="twitter:description" content="This post is specifically about using f strings in Python that was introduced in Python 3.6"/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/resources/index.html">Learning Resources</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">How and Why to use f strings in Python3?</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2020-05-24T00:00:00">May 24, 2020</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/fstring/main.png" alt="" /></p>
+
+<p><a href="https://amzn.to/2XPSiiG" rel="nofollow" target="_blank">Python</a> provides us with many styles of coding.</p>
+
+<p>And with time, Python has regularly come up with new coding standards and tools that adhere even more to the coding standards in the Zen of Python.</p>
+
+<blockquote>
+<p>Beautiful is better than ugly.</p>
+</blockquote>
+
+<p>In this series of posts named <a href="https://towardsdatascience.com/tagged/python-shorts" rel="nofollow" target="_blank">Python Shorts</a>, I will explain some simple but very useful constructs provided by Python, some essential tips, and some use cases I come up with regularly in my Data Science work.</p>
+
+<p>This post is specifically <strong><em>about using f strings in Python that was introduced in Python 3.6.</em></strong></p>
+
+<hr />
+
+<h2 id="3-common-ways-of-printing">3 Common Ways of Printing:</h2>
+
+<p>Let me explain this with a simple example. Suppose you have some variables, and you want to print them within a statement.</p>
+
+<pre><code>name = 'Andy'
+age = 20
+print(?)
+----------------------------------------------------------------
+Output: I am Andy. I am 20 years old
+</code></pre>
+
+<p>You can do this in various ways:</p>
+
+<p><strong>a) Concatenate:</strong> A very naive way to do is to simply use + for concatenation within the print function. But that is clumsy. We would need to convert our numeric variables to string and keep care of the spaces while concatenating. And it doesn’t look good as the code readability suffers a little when we use it.</p>
+
+<pre><code>name = 'Andy'
+age = 20
+print(&quot;I am &quot; + name + &quot;. I am &quot; + str(age) + &quot; years old&quot;)
+----------------------------------------------------------------
+I am Andy. I am 20 years old
+</code></pre>
+
+<p><img src="/images/fstring/0.png" alt="" /></p>
+
+<p><strong>b) % Format:</strong> The second option is to use % formatting. But it also has its problems. For one, it is not readable. You would need to look at the first %s and try to find the corresponding variable in the list at the end. And imagine if you have a long list of variables that you may want to print.</p>
+
+<pre><code>print(&quot;I am %s. I am %s years old&quot; % (name, age))
+</code></pre>
+
+<p><strong>c) str.format():</strong> Next comes the way that has been used in most Python 3 codes and has become the standard of printing in Python. Using str.format()</p>
+
+<pre><code>print(&quot;I am {}. I am {} years old&quot;.format(name, age))
+</code></pre>
+
+<p>Here we use {} to denote the placeholder of the object in the list. It still has the same problem of readability, but we can also use str.format :</p>
+
+<pre><code>print(&quot;I am {name}. I am {age} years old&quot;.format(name = name, age = age))
+</code></pre>
+
+<p>If this seems a little too repetitive, we can use dictionaries too:</p>
+
+<pre><code>data = {'name':'Andy','age':20}
+print(&quot;I am {name}. I am {age} years old&quot;.format(**data))
+</code></pre>
+
+<hr />
+
+<h2 id="the-fourth-way-with-f">The Fourth Way with f</h2>
+
+<p><img src="/images/fstring/1.png" alt="" /></p>
+
+<p>Since Python 3.6, we have a new formatting option, which makes it even more trivial. We could simply use:</p>
+
+<pre><code>print(f&quot;I am {name}. I am {age} years old&quot;)
+</code></pre>
+
+<p>We just append f at the start of the string and use {} to include our variable name, and we get the required results.</p>
+
+<p>An added functionality that f string provides is that <strong>we can put expressions</strong> in the {} brackets. For Example:</p>
+
+<pre><code>num1 = 4
+num2 = 5
+print(f&quot;The sum of {num1} and {num2} is {num1+num2}.&quot;)
+---------------------------------------------------------------
+The sum of 4 and 5 is 9.
+</code></pre>
+
+<p>This is quite useful as you can use any sort of expression inside these brackets. <strong><em>The expression can contain dictionaries or functions.</em></strong> A simple example:</p>
+
+<pre><code>def totalFruits(apples,oranges):
+    return apples+oranges
+
+data = {'name':'Andy','age':20}
+
+apples = 20
+oranges = 30
+
+print(f&quot;{data['name']} has {totalFruits(apples,oranges)} fruits&quot;)
+----------------------------------------------------------------
+Andy has 50 fruits
+</code></pre>
+
+<p>Also, you can use <code>’’’</code> to use <strong><em>multiline strings</em></strong>.</p>
+
+<pre><code>num1 = 4
+num2 = 5
+print(f'''The sum of 
+{num1} and 
+{num2} is 
+{num1+num2}.''')
+
+---------------------------------------------------------------
+The sum of 
+4 and 
+5 is 
+9.
+</code></pre>
+
+<p>An everyday use case while formatting strings is to <strong>format floats</strong>. You can do that using f string as following</p>
+
+<pre><code>numFloat = 10.23456678
+print(f'Printing Float with 2 decimals: {numFloat:.2f}')
+
+-----------------------------------------------------------------
+Printing Float with 2 decimals: 10.23
+</code></pre>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Until recently, I had been using Python 2 for all my work, and so was not able to check out this new feature.</p>
+
+<p>But now, as I am shifting to Python 3, f strings has become my go-to syntax to format strings. It is easy to write and read with the ability to incorporate arbitrary expressions as well. In a way, this new function adheres to at least 3 <a href="https://www.python.org/dev/peps/pep-0020/" rel="nofollow" target="_blank">PEP</a> concepts —</p>
+
+<blockquote>
+<p>Beautiful is better than ugly, Simple is better than complex and Readability counts.</p>
+</blockquote>
+
+<p>If you want to learn more about <a href="https://amzn.to/2XPSiiG" rel="nofollow" target="_blank">Python</a> 3, I would like to call out an excellent course on Learn <a href="https://bit.ly/2XshreA" rel="nofollow" target="_blank">Intermediate level Python</a> from the University of Michigan. Do check it out.</p>
+
+<p>I am going to be writing more of such posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX" rel="nofollow" target="_blank">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
+<p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2020/05/24/multitextclass/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Using Deep Learning for End to End Multiclass Text Classification</p></a>
+	</div>
+	<div class="post-nav__item post-nav__item--next">
+		<a class="post-nav__link" href="/blog/2020/05/24/ocr/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">End to End Text OCR using Deep-Learning</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<style type="text/css">
+
+  .btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-session {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+</style>
+
+
+<aside class="sidebar">
+  <div style="text-align:center">     
+    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/democratize/">Don’t Democratize Data Science</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/cogbias/">Five Cognitive Biases In Data Science (And how to avoid them)</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/dls/">Stop Worrying and Create your Deep Learning Server in 30 minutes</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/24/ocr/">End to End Text OCR using Deep-Learning</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/24/fstring/">How and Why to use f strings in Python3?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/24/multitextclass/">Using Deep Learning for End to End Multiclass Text Classification</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/29/coronatimes/">A Newspaper for COVID-19 — The CoronaTimes</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
+		</ul>
+	</div>
+</div>
+
+<div style="text-align:center">     
+    
+    <a class="btn btn-session" href="https://www.patreon.com/bePatron?u=28135435" role="button">1:1 Session</a>
+  </div>
+
+<br>
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;
+  }
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: center;
+    padding: 10px -5px 10px 3%;}  
+   
+</style>
+
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2020 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
