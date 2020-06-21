@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.72.0" />
+	<meta name="generator" content="Hugo 0.53" />
 	<meta property="og:title" content="Chatbots  aren&#39;t as difficult to make as You Think" />
 <meta property="og:description" content="Chatbots are the in thing now. Every website must implement it. Every Data Scientist must know about them. Anytime we talk about AI; Chatbots must be discussed. But they look intimidating to someone very new to the field. We struggle with a lot of questions before we even begin to start working on them. Are they hard to create? What technologies should I know before attempting to work on them? In the end, we end up discouraged reading through many posts on the internet and effectively accomplishing nothing." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2019/04/15/chatbot/" />
 <meta property="og:image" content="https://mlwhiz.com/images/chatbot/dvader.jpeg" />
-<meta property="article:published_time" content="2019-04-15T00:00:00+00:00" />
-<meta property="article:modified_time" content="2019-04-15T00:00:00+00:00" />
+<meta property="article:published_time" content="2019-04-15T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-04-15T00:00:00&#43;00:00"/>
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/chatbot/dvader.jpeg"/>
@@ -169,67 +169,101 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			<p>Chatbots are the in thing now. Every website must implement it. Every Data Scientist must know about them. Anytime we talk about AI; Chatbots must be discussed. But they look intimidating to someone very new to the field. We struggle with a lot of questions before we even begin to start working on them.
+			
+
+<p>Chatbots are the in thing now. Every website must implement it. Every Data Scientist must know about them. Anytime we talk about AI; Chatbots must be discussed. But they look intimidating to someone very new to the field. We struggle with a lot of questions before we even begin to start working on them.
 Are they hard to create? What technologies should I know before attempting to work on them? In the end, we end up discouraged reading through many posts on the internet and effectively accomplishing nothing.</p>
-<!-- raw HTML omitted -->
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/chatbot/dvader.jpeg"  style="height:60%;width:60%"></center>
+</div>
+
 <p>Let me assure you this is not going to be <em>&ldquo;that kind of a post&rdquo;</em>.</p>
-<p>I will try to distill some of the knowledge I acquired while working through a project in the <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing">Natural Language Processing</a> course in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a>.</p>
-<p>So before I start, let me first say it for once that don&rsquo;t be intimidated by the hype and the enigma surrounding Chatbots. They are pretty much using pretty simple NLP techniques which most of us already know. If you don&rsquo;t, you are welcome to check out my <a href="https://towardsdatascience.com/tagged/nlp-learning-series">NLP Learning Series</a>, where I go through the problem of text classification in fair detail using <a href="/blog/2019/02/08/deeplearning_nlp_conventional_methods/">Conventional</a>, <a href="/blog/2019/03/09/deeplearning_architectures_text_classification/">Deep Learning</a> and <a href="/blog/2019/03/30/transfer_learning_text_classification/">Transfer Learning</a> methods.</p>
+
+<p>I will try to distill some of the knowledge I acquired while working through a project in the <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" rel="nofollow" target="_blank">Natural Language Processing</a> course in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">Advanced machine learning specialization</a>.</p>
+
+<p>So before I start, let me first say it for once that don&rsquo;t be intimidated by the hype and the enigma surrounding Chatbots. They are pretty much using pretty simple NLP techniques which most of us already know. If you don&rsquo;t, you are welcome to check out my <a href="https://towardsdatascience.com/tagged/nlp-learning-series" rel="nofollow" target="_blank">NLP Learning Series</a>, where I go through the problem of text classification in fair detail using <a href="/blog/2019/02/08/deeplearning_nlp_conventional_methods/">Conventional</a>, <a href="/blog/2019/03/09/deeplearning_architectures_text_classification/">Deep Learning</a> and <a href="/blog/2019/03/30/transfer_learning_text_classification/">Transfer Learning</a> methods.</p>
+
 <h2 id="a-very-brief-intro-to-chatbots">A Very brief Intro to Chatbots</h2>
+
 <p>We can logically divide of Chatbots in the following two categories.</p>
+
 <ul>
-<li>
-<p><strong>Database/FAQ based</strong> - We have a database with some questions and answers, and we would like that a user can query that using Natural Language. This is the sort of Chatbots you find at most of the Banking websites for answering FAQs.</p>
-</li>
-<li>
-<p><strong>Chit-Chat Based</strong> - Simulate dialogue with the user. These are the kind of chatbots that bring the cool in chatbots. We can use Seq-2-Seq models to create such bots.</p>
-</li>
+<li><p><strong>Database/FAQ based</strong> - We have a database with some questions and answers, and we would like that a user can query that using Natural Language. This is the sort of Chatbots you find at most of the Banking websites for answering FAQs.</p></li>
+
+<li><p><strong>Chit-Chat Based</strong> - Simulate dialogue with the user. These are the kind of chatbots that bring the cool in chatbots. We can use Seq-2-Seq models to create such bots.</p></li>
 </ul>
-<hr>
+
+<hr />
+
 <h2 id="the-chatbot-we-will-be-creating">The Chatbot we will be creating</h2>
+
 <p>We will be creating a <strong>dialogue chat bot</strong>, which will be able to:</p>
+
 <ul>
 <li><strong>Answer programming-related questions</strong> (using StackOverflow dataset)</li>
 <li><strong>Chit-Chat</strong> and simulate dialogue on all non-programming related questions</li>
 </ul>
+
 <p>Once we will have it up and running our final chatbot should look like this.</p>
-<!-- raw HTML omitted -->
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/chatbot/telegram_final.png"  style="height:60%;width:60%"></center>
+</div>
+
 <p>Seems quite fun.</p>
+
 <p>We will be taking help of resources like Telegram and Chatterbot to build our Chatbot. So before we start, I think I should get you up and running with these two tools.</p>
-<hr>
+
+<hr />
+
 <h2 id="1-telegram">1. Telegram:</h2>
-<p>From the <a href="https://telegram.org/faq#q-what-is-telegram-what-do-i-do-here">website</a>:</p>
+
+<p>From the <a href="https://telegram.org/faq#q-what-is-telegram-what-do-i-do-here" rel="nofollow" target="_blank">website</a>:</p>
+
 <blockquote>
 <p>Telegram is a messaging app with a focus on speed and security, it’s super-fast, simple and free. You can use Telegram on all your devices at the same time — your messages sync seamlessly across any number of your phones, tablets or computers.</p>
 </blockquote>
+
 <p>For us, Telegram provides us with an easy way to create a Chatbot UI. It provides us with an access token which we will use to connect to the Telegram App backend and run our chatbot logic. Naturally, we need to have a window where we will write our questions to the chatbot, for us that is provided by Telegram. Also, telegram powers the chatbot by communicating with our chatbot logic. The above screenshot is taken from the telegram app only.</p>
+
 <h3 id="set-up-telegram">Set up Telegram:</h3>
+
 <p>Don&rsquo;t worry if you don&rsquo;t understand how it works yet; I will try to give step by step instructions as we go forward.</p>
+
 <ul>
-<li>
-<p>Step 1: <a href="https://macos.telegram.org/">Download and Install</a> Telegram App on your Laptop.</p>
-</li>
-<li>
-<p>Step 2: Talk with BotFather by opening this <a href="https://telegram.me/BotFather">link</a> in Chrome and subsequently your Telegram App.</p>
-</li>
-<li>
-<p>Step 3: The above steps will take you to a Chatbot called Botfather which can help you create a new bot. Inception Anyone? It will look something like this.</p>
+<li><p>Step 1: <a href="https://macos.telegram.org/" rel="nofollow" target="_blank">Download and Install</a> Telegram App on your Laptop.</p></li>
+
+<li><p>Step 2: Talk with BotFather by opening this <a href="https://telegram.me/BotFather" rel="nofollow" target="_blank">link</a> in Chrome and subsequently your Telegram App.</p></li>
+
+<li><p>Step 3: The above steps will take you to a Chatbot called Botfather which can help you create a new bot. Inception Anyone? It will look something like this.</p>
+
 <ul>
 <li>Set up a new bot using command &ldquo;/newbot&rdquo;</li>
 <li>Create a name for Your bot.</li>
 <li>Create a username for your bot.</li>
+</ul></li>
 </ul>
-</li>
-</ul>
-<!-- raw HTML omitted -->
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/chatbot/telegram_botfather.png"  style="height:70%;width:70%"></center>
+</div>
+
 <ul>
 <li>Step 4: You will get an access token for the bot. Copy the Token at a safe place.</li>
 <li>Step 5: Click on the &ldquo;t.me/MLWhizbot&rdquo; link to open Chat with your chatbot in a new window.</li>
 </ul>
+
 <p>Right now if you try to communicate with the chatbot, you won&rsquo;t receive any answers. And that is how it should be.</p>
-<!-- raw HTML omitted -->
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/chatbot/telegram_unresponsive.png"  style="height:20%;width:20%"></center>
+</div>
+
 <p>But that&rsquo;s not at all fun. Is it? Let&rsquo;s do some python magic to make it responsive.</p>
+
 <h3 id="making-our-telegram-chatbot-responsive">Making our Telegram Chatbot responsive</h3>
+
 <p>Create a file <code>main.py</code> and put the following code in it. Don&rsquo;t worry most of the code here is Boilerplate code to make our Chatbot communicate with Telegram using the Access token. We need to worry about implementing the class <code>SimpleDialogueManager</code>. This class contains a function called <code>generate_answer</code> which is where we will write our bot logic.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e">#!/usr/bin/env python3</span>
 
@@ -320,25 +354,39 @@ Are they hard to create? What technologies should I know before attempting to wo
         time<span style="color:#f92672">.</span>sleep(<span style="color:#ae81ff">1</span>)
 
 <span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
-    main()
-</code></pre></div><p>You can run the file <code>main.py</code> in the terminal window to make your bot responsive.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ python main.py
-</code></pre></div><!-- raw HTML omitted -->
+    main()</code></pre></div>
+<p>You can run the file <code>main.py</code> in the terminal window to make your bot responsive.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ python main.py</code></pre></div>
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/chatbot/telegram_naive.png"  style="height:100%;width:100%"></center>
+</div>
+
 <p>Nice. It is following simple logic. But the good thing is that our bot now does something.</p>
+
 <p>Also, take a look at the terminal window where we have run our <code>main.py</code> File. Whenever a user asks a question, we get the sort of dictionary below containing Unique Chat ID, Chat Text, User Information, etc.</p>
+
 <pre><code>Update content: {'update_id': 484689748, 'message': {'message_id': 115, 'from': {'id': 844474950, 'is_bot': False, 'first_name': 'Rahul', 'last_name': 'Agarwal', 'language_code': 'en'}, 'chat': {'id': 844474950, 'first_name': 'Rahul', 'last_name': 'Agarwal', 'type': 'private'}, 'date': 1555266010, 'text': 'What is 2+2'}}
-</code></pre><p>Until now whatever we had done was sort of setting up and engineering sort of work.</p>
+</code></pre>
+
+<p>Until now whatever we had done was sort of setting up and engineering sort of work.</p>
+
 <p>Only if we can write some sound Data Science logic in the <code>generate_answer</code> function in our <code>main.py</code> we should have a decent chatbot.</p>
-<hr>
+
+<hr />
+
 <h2 id="2-chatterbot">2. ChatterBot</h2>
+
 <p>From the Documentation:</p>
+
 <blockquote>
 <p>ChatterBot is a Python library that makes it easy to generate automated responses to a user’s input. ChatterBot uses a selection of machine learning algorithms to produce different types of reactions. This makes it easy for developers to create chat bots and automate conversations with users.</p>
 </blockquote>
+
 <p>Simply. It is a Blackbox system which can provide us with responses for Chitchat type questions for our Chatbot. And the best part about it is that it is pretty easy to integrate with our current flow. We could also have trained a SeqtoSeq model to do the same thing. Might be I will do it in a later post. I digress.</p>
+
 <p>So, install it with:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ pip install chatterbot
-</code></pre></div><p>And change the <code>SimpleDialogueManager</code> Class in main.py to the following. We can have a bot that can talk to the user and answer random queries.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ pip install chatterbot</code></pre></div>
+<p>And change the <code>SimpleDialogueManager</code> Class in main.py to the following. We can have a bot that can talk to the user and answer random queries.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SimpleDialogueManager</span>(object):
     <span style="color:#e6db74">&#34;&#34;&#34;
 </span><span style="color:#e6db74">    This is a simple dialogue manager to test the telegram bot.
@@ -354,60 +402,161 @@ Are they hard to create? What technologies should I know before attempting to wo
 
     <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generate_answer</span>(self, question): 
         response <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>chitchat_bot<span style="color:#f92672">.</span>get_response(question)
-        <span style="color:#66d9ef">return</span> response
-</code></pre></div><p>The code in <code>init</code> instantiates a chatbot using chatterbot and trains it on the <a href="https://github.com/gunthercox/chatterbot-corpus/tree/master/chatterbot_corpus/data/english">provided english corpus</a> data. The data is pretty small, but you can always train it on your dataset too. Just see the <a href="https://chatterbot.readthedocs.io/en/stable/training.html">documentation</a>. We can then give our responses using the Chatterbot chatbot in the <code>generate_answer</code> function.</p>
-<!-- raw HTML omitted -->
+        <span style="color:#66d9ef">return</span> response</code></pre></div>
+<p>The code in <code>init</code> instantiates a chatbot using chatterbot and trains it on the <a href="https://github.com/gunthercox/chatterbot-corpus/tree/master/chatterbot_corpus/data/english" rel="nofollow" target="_blank">provided english corpus</a> data. The data is pretty small, but you can always train it on your dataset too. Just see the <a href="https://chatterbot.readthedocs.io/en/stable/training.html" rel="nofollow" target="_blank">documentation</a>. We can then give our responses using the Chatterbot chatbot in the <code>generate_answer</code> function.</p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/chatbot/telegram_chatterbot.png"  style="height:80%;width:80%"></center>
+</div>
+
 <p>Not too &ldquo;ba a a a a a d&rdquo; , I must say.</p>
-<hr>
+
+<hr />
+
 <h2 id="creating-our-stackoverflow-chatbot">Creating our StackOverFlow ChatBot</h2>
+
 <p>Ok, so finally we are at a stage where we can do something we love. Use Data Science to power our Application/Chatbot. Let us start with creating a rough architecture of what we are going to do next.</p>
-<!-- raw HTML omitted -->
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/chatbot/chatbot_architecture.png"  style="height:80%;width:80%"></center>
+</div>
+
 <p>We will need to create two classifiers and save them as <code>.pkl</code> files.</p>
+
 <ol>
-<li>
-<p><strong>Intent-Classifier</strong>: This classifier will predict if it a question is a Stack-Overflow question or not. If it is not a Stack-overflow question, we let Chatterbot handle it.</p>
-</li>
-<li>
-<p><strong>Programming-Language(Tag) Classifier</strong>: This classifier will predict which language a question belongs to if the question is a Stack-Overflow question. We do this so that we can search for those language questions in our database only.</p>
-</li>
+<li><p><strong>Intent-Classifier</strong>: This classifier will predict if it a question is a Stack-Overflow question or not. If it is not a Stack-overflow question, we let Chatterbot handle it.</p></li>
+
+<li><p><strong>Programming-Language(Tag) Classifier</strong>: This classifier will predict which language a question belongs to if the question is a Stack-Overflow question. We do this so that we can search for those language questions in our database only.</p></li>
 </ol>
+
 <p>To keep it simple we will create simple TFIDF models. We will need to save these TFIDF vectorizers.</p>
+
 <p>We will also need to store word vectors for every question for similarity calculations later.</p>
-<p>Let us go through the process step by step. You can get the full code in this <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/chatbot/Model%20Creation.ipynb">jupyter notebook</a> in my <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/chatbot">project repository</a>.</p>
+
+<p>Let us go through the process step by step. You can get the full code in this <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/chatbot/Model%20Creation.ipynb" rel="nofollow" target="_blank">jupyter notebook</a> in my <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/chatbot" rel="nofollow" target="_blank">project repository</a>.</p>
+
 <h4 id="step-1-reading-and-visualizing-the-data">Step 1. Reading and Visualizing the Data</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">dialogues <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;data/dialogues.tsv&#34;</span>,sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">&#34;</span>)
-posts <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;data/tagged_posts.tsv&#34;</span>,sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">&#34;</span>)
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">dialogues<span style="color:#f92672">.</span>head()
-</code></pre></div><!-- raw HTML omitted -->
-<pre><code>.dataframe tbody tr th {
-    vertical-align: top;
-}
+posts <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;data/tagged_posts.tsv&#34;</span>,sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">&#34;</span>)</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">dialogues<span style="color:#f92672">.</span>head()</code></pre></div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-.dataframe thead th {
-    text-align: left;
-}
-</code></pre>
-<p><!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">posts<span style="color:#f92672">.</span>head()
-</code></pre></div><!-- raw HTML omitted -->
-<pre><code>.dataframe tbody tr th {
-    vertical-align: top;
-}
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
 
-.dataframe thead th {
-    text-align: right;
-}
-</code></pre>
-<p><!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
+    .dataframe thead th {
+        text-align: left;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>text</th>
+      <th>tag</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Okay -- you're gonna need to learn how to lie.</td>
+      <td>dialogue</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>I'm kidding.  You know how sometimes you just ...</td>
+      <td>dialogue</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Like my fear of wearing pastels?</td>
+      <td>dialogue</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>I figured you'd get to the good stuff eventually.</td>
+      <td>dialogue</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Thank God!  If I had to hear one more story ab...</td>
+      <td>dialogue</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">posts<span style="color:#f92672">.</span>head()</code></pre></div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>post_id</th>
+      <th>title</th>
+      <th>tag</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>9</td>
+      <td>Calculate age in C#</td>
+      <td>c#</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>16</td>
+      <td>Filling a DataSet or DataTable from a LINQ que...</td>
+      <td>c#</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>39</td>
+      <td>Reliable timer in a console application</td>
+      <td>c#</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>42</td>
+      <td>Best way to allow plugins for a PHP application</td>
+      <td>php</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>59</td>
+      <td>How do I get a distinct, ordered list of names...</td>
+      <td>c#</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Num Posts:&#34;</span>,len(posts))
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Num Dialogues:&#34;</span>,len(dialogues))
-</code></pre></div><pre><code>Num Posts: 2171575
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Num Dialogues:&#34;</span>,len(dialogues))</code></pre></div>
+<pre><code>Num Posts: 2171575
 Num Dialogues: 218609
 </code></pre>
-<h4 id="step-2-create-training-data-for-intent-classifier---chitchatstackoverflow-question">Step 2: Create training data for intent classifier - Chitchat/StackOverflow Question</h4>
+
+<h4 id="step-2-create-training-data-for-intent-classifier-chitchat-stackoverflow-question">Step 2: Create training data for intent classifier - Chitchat/StackOverflow Question</h4>
+
 <p>We will be creating a TFIDF model with Logistic regression to do this. If you want to know about the TFIDF model you can read it here.</p>
+
 <p>We could also have used one of the Deep Learning models or transfer learning approaches to do this, but since the main objective of this post is to get a chatbot up and running and not worry too much about the accuracy we sort of work with the TFIDF based model only.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">texts  <span style="color:#f92672">=</span>  list(dialogues[:<span style="color:#ae81ff">200000</span>]<span style="color:#f92672">.</span>text<span style="color:#f92672">.</span>values) <span style="color:#f92672">+</span> list(posts[:<span style="color:#ae81ff">200000</span>]<span style="color:#f92672">.</span>title<span style="color:#f92672">.</span>values)
 labels <span style="color:#f92672">=</span>  [<span style="color:#e6db74">&#39;dialogue&#39;</span>]<span style="color:#f92672">*</span><span style="color:#ae81ff">200000</span> <span style="color:#f92672">+</span> [<span style="color:#e6db74">&#39;stackoverflow&#39;</span>]<span style="color:#f92672">*</span><span style="color:#ae81ff">200000</span>
@@ -432,11 +581,12 @@ data[<span style="color:#e6db74">&#39;text&#39;</span>] <span style="color:#f926
 
 X_train, X_test, y_train, y_test <span style="color:#f92672">=</span> train_test_split(data[<span style="color:#e6db74">&#39;text&#39;</span>],data[<span style="color:#e6db74">&#39;target&#39;</span>],test_size <span style="color:#f92672">=</span> <span style="color:#f92672">.</span><span style="color:#ae81ff">1</span> , random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
 
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Train size = {}, test size = {}&#39;</span><span style="color:#f92672">.</span>format(len(X_train), len(X_test)))
-
-</code></pre></div><pre><code>Train size = 360000, test size = 40000
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Train size = {}, test size = {}&#39;</span><span style="color:#f92672">.</span>format(len(X_train), len(X_test)))</code></pre></div>
+<pre><code>Train size = 360000, test size = 40000
 </code></pre>
+
 <h4 id="step-3-create-intent-classifier">Step 3. Create Intent classifier</h4>
+
 <p>Here we Create a TFIDF Vectorizer to create features and also train a Logistic regression model to create the intent_classifier. Please note how we are saving TFIDF Vectorizer to <code>resources/tfidf.pkl</code> and intent_classifier to <code>resources/intent_clf.pkl</code>. We will need these files once we are going to write the <code>SimpleDialogueManager</code> class for our final Chatbot.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># We will keep our models and vectorizers in this folder</span>
 <span style="color:#960050;background-color:#1e0010">!</span>mkdir resources
@@ -463,19 +613,22 @@ pickle<span style="color:#f92672">.</span>dump(intent_recognizer, open(<span sty
 <span style="color:#75715e"># Check test accuracy.</span>
 y_test_pred <span style="color:#f92672">=</span> intent_recognizer<span style="color:#f92672">.</span>predict(X_test_tfidf)
 test_accuracy <span style="color:#f92672">=</span> accuracy_score(y_test, y_test_pred)
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Test accuracy = {}&#39;</span><span style="color:#f92672">.</span>format(test_accuracy))
-</code></pre></div><pre><code>Test accuracy = 0.989825
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Test accuracy = {}&#39;</span><span style="color:#f92672">.</span>format(test_accuracy))</code></pre></div>
+<pre><code>Test accuracy = 0.989825
 </code></pre>
+
 <p>The Intent Classifier has a pretty good test accuracy of 98%. TFIDF is not so bad.</p>
+
 <h4 id="step-4-create-programming-language-classifier">Step 4: Create Programming Language classifier</h4>
+
 <p>Let us first create the data for Programming Language classifier and then train a Logistic Regression model using TFIDF features. We save this tag Classifier at the location <code>resources/tag_clf.pkl</code>. We do this step mostly because we don&rsquo;t want to do similarity calculations over the whole database of questions but only on the subset of questions by the language tag.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># creating the data for Programming Language classifier </span>
 X <span style="color:#f92672">=</span> posts[<span style="color:#e6db74">&#39;title&#39;</span>]<span style="color:#f92672">.</span>values
 y <span style="color:#f92672">=</span> posts[<span style="color:#e6db74">&#39;tag&#39;</span>]<span style="color:#f92672">.</span>values
 
 X_train, X_test, y_train, y_test <span style="color:#f92672">=</span> train_test_split(X, y, test_size<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Train size = {}, test size = {}&#39;</span><span style="color:#f92672">.</span>format(len(X_train), len(X_test)))
-</code></pre></div><pre><code>Train size = 1737260, test size = 434315
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Train size = {}, test size = {}&#39;</span><span style="color:#f92672">.</span>format(len(X_train), len(X_test)))</code></pre></div>
+<pre><code>Train size = 1737260, test size = 434315
 </code></pre>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">vectorizer <span style="color:#f92672">=</span> pickle<span style="color:#f92672">.</span>load(open(<span style="color:#e6db74">&#34;resources/tfidf.pkl&#34;</span>, <span style="color:#e6db74">&#39;rb&#39;</span>))
 X_train_tfidf, X_test_tfidf <span style="color:#f92672">=</span> vectorizer<span style="color:#f92672">.</span>transform(X_train), vectorizer<span style="color:#f92672">.</span>transform(X_test)
@@ -486,15 +639,18 @@ pickle<span style="color:#f92672">.</span>dump(tag_classifier, open(<span style=
 <span style="color:#75715e"># Check test accuracy.</span>
 y_test_pred <span style="color:#f92672">=</span> tag_classifier<span style="color:#f92672">.</span>predict(X_test_tfidf)
 test_accuracy <span style="color:#f92672">=</span> accuracy_score(y_test, y_test_pred)
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Test accuracy = {}&#39;</span><span style="color:#f92672">.</span>format(test_accuracy))
-</code></pre></div><pre><code>Test accuracy = 0.8043816124241622
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#39;Test accuracy = {}&#39;</span><span style="color:#f92672">.</span>format(test_accuracy))</code></pre></div>
+<pre><code>Test accuracy = 0.8043816124241622
 </code></pre>
+
 <p>Not Bad again.</p>
+
 <h4 id="step-5-store-question-database-embeddings">Step 5: Store Question database Embeddings</h4>
-<p>One can use <a href="https://code.google.com/archive/p/word2vec/">pre-trained word vectors</a> from Google or get a better result by training their embeddings using their data. Since again accuracy and precision is not the primary goal of this post, we will use pretrained vectors.</p>
+
+<p>One can use <a href="https://code.google.com/archive/p/word2vec/" rel="nofollow" target="_blank">pre-trained word vectors</a> from Google or get a better result by training their embeddings using their data. Since again accuracy and precision is not the primary goal of this post, we will use pretrained vectors.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Load Google&#39;s pre-trained Word2Vec model.</span>
-model <span style="color:#f92672">=</span> gensim<span style="color:#f92672">.</span>models<span style="color:#f92672">.</span>KeyedVectors<span style="color:#f92672">.</span>load_word2vec_format(<span style="color:#e6db74">&#39;GoogleNews-vectors-negative300.bin&#39;</span>, binary<span style="color:#f92672">=</span>True) 
-</code></pre></div><p>We want to convert every question to an embedding and store them so that we don&rsquo;t calculate the embeddings for the whole dataset every time. In essence, whenever the user asks a Stack Overflow question, we want to use some distance similarity measure to get the most similar question.</p>
+model <span style="color:#f92672">=</span> gensim<span style="color:#f92672">.</span>models<span style="color:#f92672">.</span>KeyedVectors<span style="color:#f92672">.</span>load_word2vec_format(<span style="color:#e6db74">&#39;GoogleNews-vectors-negative300.bin&#39;</span>, binary<span style="color:#f92672">=</span>True) </code></pre></div>
+<p>We want to convert every question to an embedding and store them so that we don&rsquo;t calculate the embeddings for the whole dataset every time. In essence, whenever the user asks a Stack Overflow question, we want to use some distance similarity measure to get the most similar question.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">question_to_vec</span>(question, embeddings, dim<span style="color:#f92672">=</span><span style="color:#ae81ff">300</span>):
     <span style="color:#e6db74">&#34;&#34;&#34;
 </span><span style="color:#e6db74">        question: a string
@@ -524,9 +680,10 @@ model <span style="color:#f92672">=</span> gensim<span style="color:#f92672">.</
 
 counts_by_tag <span style="color:#f92672">=</span> posts<span style="color:#f92672">.</span>groupby(by<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;tag&#39;</span>])[<span style="color:#e6db74">&#34;tag&#34;</span>]<span style="color:#f92672">.</span>count()<span style="color:#f92672">.</span>reset_index(name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;count&#39;</span>)<span style="color:#f92672">.</span>sort_values([<span style="color:#e6db74">&#39;count&#39;</span>], ascending <span style="color:#f92672">=</span> False)
 counts_by_tag <span style="color:#f92672">=</span> list(zip(counts_by_tag[<span style="color:#e6db74">&#39;tag&#39;</span>],counts_by_tag[<span style="color:#e6db74">&#39;count&#39;</span>]))
-<span style="color:#66d9ef">print</span>(counts_by_tag)
-</code></pre></div><pre><code>[('c#', 394451), ('java', 383456), ('javascript', 375867), ('php', 321752), ('c_cpp', 281300), ('python', 208607), ('ruby', 99930), ('r', 36359), ('vb', 35044), ('swift', 34809)]
+<span style="color:#66d9ef">print</span>(counts_by_tag)</code></pre></div>
+<pre><code>[('c#', 394451), ('java', 383456), ('javascript', 375867), ('php', 321752), ('c_cpp', 281300), ('python', 208607), ('ruby', 99930), ('r', 36359), ('vb', 35044), ('swift', 34809)]
 </code></pre>
+
 <p>We save the embeddings in a folder aptly named <code>resources/embeddings_folder</code>. This folder will contain a .pkl file for every tag. For example one of the files will be <code>python.pkl</code>.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#960050;background-color:#1e0010">!</span> mkdir resources<span style="color:#f92672">/</span>embeddings_folder
 
@@ -538,10 +695,9 @@ counts_by_tag <span style="color:#f92672">=</span> list(zip(counts_by_tag[<span 
         tag_vectors[i, :] <span style="color:#f92672">=</span> question_to_vec(title, model, <span style="color:#ae81ff">300</span>)
     <span style="color:#75715e"># Dump post ids and vectors to a file.</span>
     filename <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;resources/embeddings_folder/&#39;</span><span style="color:#f92672">+</span> tag <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;.pkl&#39;</span>
-    pickle<span style="color:#f92672">.</span>dump((tag_post_ids, tag_vectors), open(filename, <span style="color:#e6db74">&#39;wb&#39;</span>))
-</code></pre></div><p>We are nearing the end now. We need to have a function to get most similar question&rsquo;s <em>post id</em> in the dataset given we know the programming Language of the question. Here it is:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_similar_question</span>(question,tag):
+    pickle<span style="color:#f92672">.</span>dump((tag_post_ids, tag_vectors), open(filename, <span style="color:#e6db74">&#39;wb&#39;</span>))</code></pre></div>
+<p>We are nearing the end now. We need to have a function to get most similar question&rsquo;s <em>post id</em> in the dataset given we know the programming Language of the question. Here it is:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_similar_question</span>(question,tag):
     <span style="color:#75715e"># get the path where all question embeddings are kept and load the post_ids and post_embeddings</span>
     embeddings_path <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;resources/embeddings_folder/&#39;</span> <span style="color:#f92672">+</span> tag <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;.pkl&#34;</span>
     post_ids, post_embeddings <span style="color:#f92672">=</span> pickle<span style="color:#f92672">.</span>load(open(embeddings_path, <span style="color:#e6db74">&#39;rb&#39;</span>))
@@ -553,14 +709,20 @@ counts_by_tag <span style="color:#f92672">=</span> list(zip(counts_by_tag[<span 
     <span style="color:#75715e"># return best post id</span>
     <span style="color:#66d9ef">return</span> post_ids[best_post_index]
 
-get_similar_question(<span style="color:#e6db74">&#34;how to use list comprehension in python?&#34;</span>,<span style="color:#e6db74">&#39;python&#39;</span>)
-</code></pre></div><pre><code>array([5947137])
+get_similar_question(<span style="color:#e6db74">&#34;how to use list comprehension in python?&#34;</span>,<span style="color:#e6db74">&#39;python&#39;</span>)</code></pre></div>
+<pre><code>array([5947137])
 </code></pre>
-<p>we can use this post ID and find this question at <a href="https://stackoverflow.com/questions/5947137">https://stackoverflow.com/questions/5947137</a></p>
+
+<p>we can use this post ID and find this question at <a href="https://stackoverflow.com/questions/5947137" rel="nofollow" target="_blank">https://stackoverflow.com/questions/5947137</a></p>
+
 <p>The question the similarity checker suggested has the actual text: &ldquo;How can I use a list comprehension to extend a list in python? [duplicate]&rdquo;</p>
-<p>Not too bad. It could have been better if we train our embeddings or use <a href="https://github.com/facebookresearch/StarSpace">starspace</a> embeddings.</p>
-<h2 id="assemble-the-puzzle---simpledialoguemanager-class">Assemble the Puzzle - SimpleDialogueManager Class</h2>
+
+<p>Not too bad. It could have been better if we train our embeddings or use <a href="https://github.com/facebookresearch/StarSpace" rel="nofollow" target="_blank">starspace</a> embeddings.</p>
+
+<h2 id="assemble-the-puzzle-simpledialoguemanager-class">Assemble the Puzzle - SimpleDialogueManager Class</h2>
+
 <p>Finally, we have reached the end of the whole exercise, and we have to fit all the pieces in the puzzle in our <code>SimpleDialogueManager</code> Class. Here is the code for that. Go in the <code>main.py</code> file again to paste this code and see if it works or not.</p>
+
 <p>Go through the comments to understand how the pieces are fitting together to build one wholesome logic.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> gensim
 <span style="color:#f92672">import</span> pickle
@@ -669,33 +831,39 @@ get_similar_question(<span style="color:#e6db74">&#34;how to use list comprehens
             post_id <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>get_similar_question(question,tag)[<span style="color:#ae81ff">0</span>]
             <span style="color:#75715e"># respond with </span>
             response <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;I think its about </span><span style="color:#e6db74">%s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">This thread might help you: https://stackoverflow.com/questions/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (tag, post_id)
-        <span style="color:#66d9ef">return</span> response
+        <span style="color:#66d9ef">return</span> response</code></pre></div>
+<p>Here is the code for the whole <a href="https://github.com/MLWhiz/data_science_blogs/blob/master/chatbot/main.py" rel="nofollow" target="_blank"><code>main.py</code></a> for you to use and see. Just run the whole <code>main.py</code> using</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ python main.py</code></pre></div>
+<p>And we will have our bot up and running.</p>
 
-</code></pre></div><p>Here is the code for the whole <a href="https://github.com/MLWhiz/data_science_blogs/blob/master/chatbot/main.py"><code>main.py</code></a> for you to use and see. Just run the whole <code>main.py</code> using</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ python main.py
-</code></pre></div><p>And we will have our bot up and running.</p>
-<p>Again, here is the link to the github <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/chatbot">repository</a></p>
+<p>Again, here is the link to the github <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/chatbot" rel="nofollow" target="_blank">repository</a></p>
+
 <h2 id="the-possibilities-are-really-endless">The possibilities are really endless</h2>
+
 <p>This is just a small demo project of what you can do with the chatbots. You can do a whole lot more once you recognize that the backend is just python.</p>
+
 <ul>
-<li>
-<p>One idea is to run a chatbot script on all the servers I have to run system commands straight from telegram. We can use <code>os.system</code> to run any system command. Bye Bye SSH.</p>
-</li>
-<li>
-<p>You can <strong>make chatbots to do some daily tasks by using simple keyword-based intents</strong>. It is just simple logic. Find out the weather, find out cricket scores or maybe newly released movies. Whatever floats your boat.</p>
-</li>
-<li>
-<p>Or maybe try to integrate Telegram based Chatbot in your website. See <a href="https://livechatbot.net/#">livechatbot</a></p>
-</li>
-<li>
-<p>Or maybe just try to have fun with it.</p>
-</li>
+<li><p>One idea is to run a chatbot script on all the servers I have to run system commands straight from telegram. We can use <code>os.system</code> to run any system command. Bye Bye SSH.</p></li>
+
+<li><p>You can <strong>make chatbots to do some daily tasks by using simple keyword-based intents</strong>. It is just simple logic. Find out the weather, find out cricket scores or maybe newly released movies. Whatever floats your boat.</p></li>
+
+<li><p>Or maybe try to integrate Telegram based Chatbot in your website. See <a href="https://livechatbot.net/#" rel="nofollow" target="_blank">livechatbot</a></p></li>
+
+<li><p>Or maybe just try to have fun with it.</p></li>
 </ul>
-<!-- raw HTML omitted -->
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/chatbot/dilbert_chatbot.jpg"  style="height:80%;width:80%"></center>
+</div>
+
 <h2 id="conclusion">Conclusion</h2>
+
 <p>Here we learned how to create a simple chatbot. And it works well. We can improve a whole lot on this present chatbot by increasing classifier accuracy, handling edge cases, making it respond faster or maybe adding more logic to handle more use cases. But the fact remains the same. The AI in chatbots is just simple human logic and nothing magic.</p>
-<p>In this post, I closely followed one of the projects from this <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing">course</a> to create this chatbot. Do check out this course if you get confused, or tell me your problems in the comments I will certainly try to help.</p>
-<p>Follow me up at <a href="https://medium.com/@rahul_agarwal">Medium</a> or Subscribe to my <a href="https://mlwhiz.com">blog</a> to be informed about my next posts.</p>
+
+<p>In this post, I closely followed one of the projects from this <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" rel="nofollow" target="_blank">course</a> to create this chatbot. Do check out this course if you get confused, or tell me your problems in the comments I will certainly try to help.</p>
+
+<p>Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="https://mlwhiz.com" rel="nofollow" target="_blank">blog</a> to be informed about my next posts.</p>
+
 <p>Till then Ciao!!</p>
 
 		</div>
@@ -834,7 +1002,7 @@ get_similar_question(<span style="color:#e6db74">&#34;how to use list comprehens
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
 		</ul>
 	</div>
 </div>

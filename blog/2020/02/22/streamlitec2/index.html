@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.72.0" />
+	<meta name="generator" content="Hugo 0.53" />
 	<meta property="og:title" content="How to Deploy a Streamlit App using an Amazon Free ec2 instance?" />
 <meta property="og:description" content="This post we will go one step further deploy our Streamlit app over the Web using an Amazon Free ec2 instance" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2020/02/22/streamlitec2/" />
 <meta property="og:image" content="https://mlwhiz.com/images/streamlitec2/main.png" />
-<meta property="article:published_time" content="2020-02-22T00:00:00+00:00" />
-<meta property="article:modified_time" content="2020-02-22T00:00:00+00:00" />
+<meta property="article:published_time" content="2020-02-22T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-02-22T00:00:00&#43;00:00"/>
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/streamlitec2/main.png"/>
@@ -169,66 +169,93 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			<p><img src="/images/streamlitec2/main.png" alt=""></p>
+			
+
+<p><img src="/images/streamlitec2/main.png" alt="" /></p>
+
 <p>A Machine Learning project is never really complete if we don’t have a good way to showcase it.</p>
-<p><em><strong>While in the past, a well-made visualization or a small PPT used to be enough for showcasing a data science project, with the advent of dashboarding tools like RShiny and Dash, a good data scientist needs to have a fair bit of knowledge of web frameworks to get along.</strong></em></p>
+
+<p><strong><em>While in the past, a well-made visualization or a small PPT used to be enough for showcasing a data science project, with the advent of dashboarding tools like RShiny and Dash, a good data scientist needs to have a fair bit of knowledge of web frameworks to get along.</em></strong></p>
+
 <p>And Web frameworks are hard to learn. I still get confused in all that HTML, CSS, and Javascript with all the hit and trials, for something seemingly simple to do.</p>
+
 <p>Not to mention the many ways to do the same thing, making it confusing for us data science folks for whom web development is a secondary skill.</p>
-<p>This is where <em><strong>StreamLit</strong></em> comes in and delivers on its promise to create web apps just using Python.</p>
-<p>In my <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582">last post on Streamlit</a>, I talked about how to write Web apps using simple Python for Data Scientists.</p>
-<p><em><strong>But still, a major complaint, if you would check out the comment section of that post, was regarding the inability to deploy Streamlit apps over the web.</strong></em></p>
+
+<p>This is where <strong><em>StreamLit</em></strong> comes in and delivers on its promise to create web apps just using Python.</p>
+
+<p>In my <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582" rel="nofollow" target="_blank">last post on Streamlit</a>, I talked about how to write Web apps using simple Python for Data Scientists.</p>
+
+<p><strong><em>But still, a major complaint, if you would check out the comment section of that post, was regarding the inability to deploy Streamlit apps over the web.</em></strong></p>
+
 <p>And it was a valid complaint.</p>
+
 <blockquote>
 <p>A developer can’t show up with his laptop every time the client wanted to use the app. What is the use of such an app?</p>
 </blockquote>
-<p><em><strong>So in this post, we will go one step further deploy our Streamlit app over the Web using an Amazon Free ec2 instance.</strong></em></p>
-<hr>
+
+<p><strong><em>So in this post, we will go one step further deploy our Streamlit app over the Web using an Amazon Free ec2 instance.</em></strong></p>
+
+<hr />
+
 <h2 id="setting-up-the-amazon-instance">Setting up the Amazon Instance</h2>
-<p>Before we start with using the amazon ec2 instance, we need to set one up. You might need to sign up with your email ID and set up the payment information on the <a href="https://aws.amazon.com">AWS website</a>. Works just like a simple sign-on. From here, I will assume that you have an AWS account and so I am going to explain the next essential parts so you can follow through.</p>
+
+<p>Before we start with using the amazon ec2 instance, we need to set one up. You might need to sign up with your email ID and set up the payment information on the <a href="https://aws.amazon.com" rel="nofollow" target="_blank">AWS website</a>. Works just like a simple sign-on. From here, I will assume that you have an AWS account and so I am going to explain the next essential parts so you can follow through.</p>
+
 <ul>
-<li>
-<p>Go to AWS Management Console using <a href="https://us-west-2.console.aws.amazon.com/console">https://us-west-2.console.aws.amazon.com/console</a>.</p>
-</li>
-<li>
-<p>On the AWS Management Console, you can select “Launch a Virtual Machine”. Here we are trying to set up the machine where we will deploy our Streamlit app.</p>
-</li>
-<li>
-<p>In the first step, you need to choose the AMI template for the machine. I select the 18.04 Ubuntu Server since it is applicable for the Free Tier. And Ubuntu.</p>
-</li>
+<li><p>Go to AWS Management Console using <a href="https://us-west-2.console.aws.amazon.com/console" rel="nofollow" target="_blank">https://us-west-2.console.aws.amazon.com/console</a>.</p></li>
+
+<li><p>On the AWS Management Console, you can select “Launch a Virtual Machine”. Here we are trying to set up the machine where we will deploy our Streamlit app.</p></li>
+
+<li><p>In the first step, you need to choose the AMI template for the machine. I select the 18.04 Ubuntu Server since it is applicable for the Free Tier. And Ubuntu.</p></li>
 </ul>
-<p><img src="/images/streamlitec2/0.png" alt=""></p>
+
+<p><img src="/images/streamlitec2/0.png" alt="" /></p>
+
 <ul>
 <li>In the second step, I select the t2.micro instance as again it is the one which is eligible for the free tier. As you can see t2.micro is just a single CPU instance with 512 MB RAM. You can opt for a bigger machine if you are dealing with a powerful model or are willing to pay.</li>
 </ul>
-<p><img src="/images/streamlitec2/1.png" alt=""></p>
+
+<p><img src="/images/streamlitec2/1.png" alt="" /></p>
+
 <ul>
 <li>Keep pressing Next until you reach the “6. Configure Security Group” tab. You will need to add a rule with Type: “Custom TCP Rule”, Port Range:8501, and Source: Anywhere. We use the port 8501 here since it is the custom port used by Streamlit.</li>
 </ul>
-<p><img src="/images/streamlitec2/2.png" alt=""></p>
+
+<p><img src="/images/streamlitec2/2.png" alt="" /></p>
+
 <ul>
 <li>You can click on “Review and Launch” and finally on the “Launch” button to launch the instance. Once you click on Launch you might need to create a new key pair. Here I am creating a new key pair named streamlit and downloading that using the “Download Key Pair” button. Keep this key safe as it would be required every time you need to login to this particular machine. Click on “Launch Instance” after downloading the key pair</li>
 </ul>
-<p><img src="/images/streamlitec2/3.png" alt=""></p>
+
+<p><img src="/images/streamlitec2/3.png" alt="" /></p>
+
 <ul>
 <li>You can now go to your instances to see if your instance has started. Hint: See the Instance state, it should be showing “Running”</li>
 </ul>
-<p><img src="/images/streamlitec2/4.png" alt=""></p>
+
+<p><img src="/images/streamlitec2/4.png" alt="" /></p>
+
 <ul>
-<li>
-<p>Select your instance, and copy the <em><strong>Public DNS(IPv4) Address</strong></em> from the description. It should be something starting with ec2.</p>
-</li>
-<li>
-<p>Once you have that run the following commands in the folder you saved the streamlit.pem file. I have masked some of the information here.</p>
-</li>
+<li><p>Select your instance, and copy the <strong><em>Public DNS(IPv4) Address</em></strong> from the description. It should be something starting with ec2.</p></li>
+
+<li><p>Once you have that run the following commands in the folder you saved the streamlit.pem file. I have masked some of the information here.</p></li>
 </ul>
+
 <pre><code>    chmod 400 streamlit.pem
 
     ssh -i &quot;streamlit.pem&quot; ubuntu@&lt;Your Public DNS(IPv4) Address&gt;
-</code></pre><p><img src="/images/streamlitec2/5.png" alt=""></p>
-<hr>
+</code></pre>
+
+<p><img src="/images/streamlitec2/5.png" alt="" /></p>
+
+<hr />
+
 <h2 id="installing-required-libraries">Installing Required Libraries</h2>
-<p>Whoa, that was a handful. After all the above steps you should be able to see the ubuntu prompt for the virtual machine. We will need to set up this machine to run our app. I am going to be using the same streamlit_football_demo app that I used in my <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582">previous post</a>.</p>
+
+<p>Whoa, that was a handful. After all the above steps you should be able to see the ubuntu prompt for the virtual machine. We will need to set up this machine to run our app. I am going to be using the same streamlit_football_demo app that I used in my <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582" rel="nofollow" target="_blank">previous post</a>.</p>
+
 <p>We start by installing miniconda and adding its path to the environment variable.</p>
+
 <pre><code>sudo apt-get update
 
 wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh
@@ -239,68 +266,116 @@ echo &quot;PATH=$PATH:$HOME/miniconda/bin&quot; &gt;&gt; ~/.bashrc
 
 source ~/.bashrc
 </code></pre>
-<p>We then install additional dependencies for our app to run. That means I install streamlit and <a href="https://towardsdatascience.com/pythons-one-liner-graph-creation-library-with-animations-hans-rosling-style-f2cb50490396">plotly_express</a>.</p>
+
+<p>We then install additional dependencies for our app to run. That means I install streamlit and <a href="https://towardsdatascience.com/pythons-one-liner-graph-creation-library-with-animations-hans-rosling-style-f2cb50490396" rel="nofollow" target="_blank">plotly_express</a>.</p>
+
 <pre><code>pip install streamlit
 pip install plotly_express
 </code></pre>
+
 <p>And our machine is now prepped and ready to run.</p>
-<hr>
+
+<hr />
+
 <h2 id="running-streamlit-on-amazon-ec2">Running Streamlit on Amazon ec2</h2>
-<p>As I am set up with the instance, I can get the code for my demo app from <a href="https://github.com/MLWhiz/streamlit_football_demo.git">Github</a>. Or you can choose to create or copy another app as you wish.</p>
+
+<p>As I am set up with the instance, I can get the code for my demo app from <a href="https://github.com/MLWhiz/streamlit_football_demo.git" rel="nofollow" target="_blank">Github</a>. Or you can choose to create or copy another app as you wish.</p>
+
 <pre><code>git clone https://github.com/MLWhiz/streamlit_football_demo.git
 
 cd streamlit_football_demo
 streamlit run helloworld.py
 </code></pre>
-<p><img src="/images/streamlitec2/6.png" alt=""></p>
-<p>Now you can go to a browser and type the external URL to access your app. In my case the address is <a href="http://35.167.158.251:8501">http://35.167.158.251:8501</a>. Here is the output. This app will be up right now if you want to play with it.</p>
-<p><img src="/images/streamlitec2/7.png" alt=""></p>
-<hr>
+
+<p><img src="/images/streamlitec2/6.png" alt="" /></p>
+
+<p>Now you can go to a browser and type the external URL to access your app. In my case the address is <a href="http://35.167.158.251:8501" rel="nofollow" target="_blank">http://35.167.158.251:8501</a>. Here is the output. This app will be up right now if you want to play with it.</p>
+
+<p><img src="/images/streamlitec2/7.png" alt="" /></p>
+
+<hr />
+
 <h2 id="a-very-small-problem-though">A Very Small Problem Though</h2>
-<p>We are up and running with our app for the world to see. <em><strong>But whenever you are going to close the SSH terminal window the process will stop and so will your app.</strong></em></p>
-<p><em><strong>So what do we do?</strong></em></p>
+
+<p>We are up and running with our app for the world to see. <strong><em>But whenever you are going to close the SSH terminal window the process will stop and so will your app.</em></strong></p>
+
+<p><strong><em>So what do we do?</em></strong></p>
+
 <p>TMUX to the rescue. TMUX allows us to keep running our sessions even after we leave the terminal window. It also helps with a lot of other things but I will just go through the steps we need.</p>
+
 <p>First, we stop our app using Ctrl+C and install tmux</p>
+
 <pre><code>sudo apt-get install tmux
 </code></pre>
+
 <p>We start a new tmux session using the below command. We keep the name of our session as StreamSession. You could use any name here.</p>
+
 <pre><code>tmux new -s StreamSession
 </code></pre>
-<p><img src="/images/streamlitec2/8.png" alt=""></p>
+
+<p><img src="/images/streamlitec2/8.png" alt="" /></p>
+
 <p>You can see that the session name is “StreamSession” at the bottom of the screen. You can now start running streamlit in the tmux session.</p>
+
 <pre><code>streamlit run helloworld.py
 </code></pre>
-<p><img src="/images/streamlitec2/9.png" alt=""></p>
-<p>You will be able to see your app at the <a href="http://35.167.158.251:8501/">External URL</a>. The <em><strong>next step is to detach our TMUX session</strong></em> so that it continues running in the background when you leave the SSH shell. To do this just press Ctrl+B and then D (Don’t press Ctrl when pressing D)</p>
-<p><img src="/images/streamlitec2/10.png" alt=""></p>
-<p><em><strong>You can now close your SSH session and the app will continue running at the External URL.</strong></em></p>
+
+<p><img src="/images/streamlitec2/9.png" alt="" /></p>
+
+<p>You will be able to see your app at the <a href="http://35.167.158.251:8501/" rel="nofollow" target="_blank">External URL</a>. The <strong><em>next step is to detach our TMUX session</em></strong> so that it continues running in the background when you leave the SSH shell. To do this just press Ctrl+B and then D (Don’t press Ctrl when pressing D)</p>
+
+<p><img src="/images/streamlitec2/10.png" alt="" /></p>
+
+<p><strong><em>You can now close your SSH session and the app will continue running at the External URL.</em></strong></p>
+
 <p>And Voila! We are up and running.</p>
-<p><em><strong>Pro TMUX Tip:</strong></em> You can reattach to the same session by using the attach command below. The best part is that you can close your SSH shell and then maybe come back after some hours and reattach to a session and keep working from wherever you were when you closed the SSH shell.</p>
+
+<p><strong><em>Pro TMUX Tip:</em></strong> You can reattach to the same session by using the attach command below. The best part is that you can close your SSH shell and then maybe come back after some hours and reattach to a session and keep working from wherever you were when you closed the SSH shell.</p>
+
 <pre><code>tmux attach -t StreamSession
 </code></pre>
-<hr>
+
+<hr />
+
 <h2 id="simple-troubleshooting">Simple Troubleshooting:</h2>
-<p><em><strong>If your app is not hosting at 8501,</strong></em> it means that an instance of streamlit app is already running on your system and you will need to stop that. You can do so by first finding the process ID</p>
+
+<p><strong><em>If your app is not hosting at 8501,</em></strong> it means that an instance of streamlit app is already running on your system and you will need to stop that. You can do so by first finding the process ID</p>
+
 <pre><code>ps aux | grep streamlit
 </code></pre>
+
 <p>You will see something like:</p>
+
 <pre><code>ubuntu   20927  2.4 18.8 713780 189580 pts/3   Sl+  19:55   0:26 /home/ubuntu/miniconda/bin/python /home/ubuntu/miniconda/bin/streamlit run helloworld.py
 </code></pre>
-<p>You will need to <em><strong>kill this process.</strong></em> You can do this simply by</p>
+
+<p>You will need to <strong><em>kill this process.</em></strong> You can do this simply by</p>
+
 <pre><code>kill -9 20947
 </code></pre>
-<hr>
+
+<hr />
+
 <h2 id="conclusion">Conclusion</h2>
-<p><img src="/images/streamlitec2/11.gif" alt="Our Final App"></p>
-<p>Streamlit has democratized the whole process to create apps, and I couldn’t recommend it more. If you want to learn more about how to create awesome web apps with Streamlit then read up my <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582">last</a> post.</p>
-<p><em><strong>In this post, we <a href="https://towardsdatascience.com/take-your-machine-learning-models-to-production-with-these-5-simple-steps-35aa55e3a43c">deployed</a> a simple web app on AWS using amazon ec2.</strong></em></p>
+
+<p><img src="/images/streamlitec2/11.gif" alt="Our Final App" /></p>
+
+<p>Streamlit has democratized the whole process to create apps, and I couldn’t recommend it more. If you want to learn more about how to create awesome web apps with Streamlit then read up my <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582" rel="nofollow" target="_blank">last</a> post.</p>
+
+<p><strong><em>In this post, we <a href="https://towardsdatascience.com/take-your-machine-learning-models-to-production-with-these-5-simple-steps-35aa55e3a43c" rel="nofollow" target="_blank">deployed</a> a simple web app on AWS using amazon ec2.</em></strong></p>
+
 <p>In the process of doing this, we created our own Amazon ec2 instance, logged into the SSH shell, installed miniconda and dependencies, ran our Streamlit application and learned about TMUX. Enough learning for a day?</p>
-<p>So go and show on these Mad skills. To end on a lighter note, as Sten Sootla says in his <a href="https://towardsdatascience.com/how-to-fake-being-a-good-programmer-cbef2c39764c">satire piece</a> which I thoroughly enjoyed:</p>
+
+<p>So go and show on these Mad skills. To end on a lighter note, as Sten Sootla says in his <a href="https://towardsdatascience.com/how-to-fake-being-a-good-programmer-cbef2c39764c" rel="nofollow" target="_blank">satire piece</a> which I thoroughly enjoyed:</p>
+
 <blockquote>
 <p>The secret: it’s not what you know, it’s what you show.</p>
 </blockquote>
-<p>If you want to learn more about how to structure a Machine Learning project and the best practices, I would like to call out his excellent <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11421702016&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fmachine-learning-projects">third course</a> named Structuring Machine learning projects in the Coursera <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdeep-learning">Deep Learning Specialization</a>. Do check it out.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------">@mlwhiz</a></p>
+
+<p>If you want to learn more about how to structure a Machine Learning project and the best practices, I would like to call out his excellent <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11421702016&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fmachine-learning-projects" rel="nofollow" target="_blank">third course</a> named Structuring Machine learning projects in the Coursera <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdeep-learning" rel="nofollow" target="_blank">Deep Learning Specialization</a>. Do check it out.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a></p>
+
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 		</div>
@@ -439,7 +514,7 @@ streamlit run helloworld.py
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
 		</ul>
 	</div>
 </div>

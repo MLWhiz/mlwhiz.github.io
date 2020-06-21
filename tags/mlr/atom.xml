@@ -1,10 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1" xmlns:content="http://purl.org/rss/1.0/modules/content" xmlns:media="http://search.yahoo.com/mrss/" >
 
   
   <channel>
-    <title>MLR on MLWhiz</title>
+    <title>Mlr on MLWhiz</title>
     <link>https://mlwhiz.com/tags/mlr/</link>
-    <description>Recent content in MLR on MLWhiz</description>
+    <description>Recent content in Mlr on MLWhiz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 23 Mar 2017 00:00:00 +0000</lastBuildDate>
@@ -26,38 +27,37 @@
       
       <description>Today we will look into the basics of linear regression. Here we go :
 Contents  Simple Linear Regression (SLR) Multiple Linear Regression (MLR) Assumptions  1. Simple Linear Regression Regression is the process of building a relationship between a dependent variable and set of independent variables. Linear Regression restricts this relationship to be linear in terms of coefficients. In SLR, we consider only one independent variable.
-Example: The Waist Circumference – Adipose Tissue data   Studies have shown that individuals with excess Adipose tissue (AT) in the abdominal region have a higher risk of cardio-vascular diseases</description>
+Example: The Waist Circumference – Adipose Tissue data  Studies have shown that individuals with excess Adipose tissue (AT) in the abdominal region have a higher risk of cardio-vascular diseases</description>
 
       <content:encoded>  
         
-        <![CDATA[ Today we will look into the basics of linear regression. Here we go :
+        <![CDATA[  Today we will look into the basics of linear regression. Here we go :
 Contents  Simple Linear Regression (SLR) Multiple Linear Regression (MLR) Assumptions  1. Simple Linear Regression Regression is the process of building a relationship between a dependent variable and set of independent variables. Linear Regression restricts this relationship to be linear in terms of coefficients. In SLR, we consider only one independent variable.
-Example: The Waist Circumference – Adipose Tissue data   Studies have shown that individuals with excess Adipose tissue (AT) in the abdominal region have a higher risk of cardio-vascular diseases
-  Computed Tomography, commonly called the CT Scan is the only technique that allows for the precise and reliable measurement of the AT (at any site in the body)
-  The problems with using the CT scan are:
- Many physicians do not have access to this technology Irradiation of the patient (suppresses the immune system) Expensive    Is there a simpler yet reasonably accurate way to predict the AT area? i.e.
- Easily available Risk free Inexpensive    A group of researchers conducted a study with the aim of predicting abdominal AT area using simple anthropometric measurements i.e. measurements on the human body
-  The Waist Circumference – Adipose Tissue data is a part of this study wherein the aim is to study how well waist circumference(WC) predicts the AT area
-  # Setting working directory filepath &amp;lt;- c(&amp;#34;/Users/nkaveti/Documents/Work_Material/Statistics Learning/&amp;#34;) setwd(filepath) # Reading data Waist_AT &amp;lt;- read.csv(&amp;#34;adipose_tissue.csv&amp;#34;) cat(&amp;#34;Number of rows: &amp;#34;, nrow(Waist_AT), &amp;#34;\n&amp;#34;) head(Waist_AT) Number of rows: 109  Let&amp;rsquo;s start with a scatter plot of Waist Vs AT, to understand the relationship between these two variables.
-plot(AT ~ Waist, data = Waist_AT) Any observations from above plot?
+Example: The Waist Circumference – Adipose Tissue data  Studies have shown that individuals with excess Adipose tissue (AT) in the abdominal region have a higher risk of cardio-vascular diseases
+ Computed Tomography, commonly called the CT Scan is the only technique that allows for the precise and reliable measurement of the AT (at any site in the body)
+ The problems with using the CT scan are:
+ Many physicians do not have access to this technology Irradiation of the patient (suppresses the immune system) Expensive  Is there a simpler yet reasonably accurate way to predict the AT area? i.e.
+ Easily available Risk free Inexpensive  A group of researchers conducted a study with the aim of predicting abdominal AT area using simple anthropometric measurements i.e. measurements on the human body
+ The Waist Circumference – Adipose Tissue data is a part of this study wherein the aim is to study how well waist circumference(WC) predicts the AT area
+  # Setting working directory filepath &amp;lt;- c(&amp;#34;/Users/nkaveti/Documents/Work_Material/Statistics Learning/&amp;#34;) setwd(filepath) # Reading data Waist_AT &amp;lt;- read.csv(&amp;#34;adipose_tissue.csv&amp;#34;) cat(&amp;#34;Number of rows: &amp;#34;, nrow(Waist_AT), &amp;#34;\n&amp;#34;) head(Waist_AT) Number of rows: 109   WaistAT  74.7525.72 72.6025.89 81.8042.60 83.9542.80 74.6529.84 71.8521.68   Let&amp;rsquo;s start with a scatter plot of Waist Vs AT, to understand the relationship between these two variables.
+plot(AT ~ Waist, data = Waist_AT)   Any observations from above plot?
 Now the objective is to find a linear relation between Waist and AT. In otherwords, finding the amount of change in AT per one unit change (increment/decrement) in Waist.
 In SLR, it is equivalent to finding an optimal straight line equation such that the sum of squares of differences between straight line and the points will be minimum. This method of estimation is called as Ordiany Least Squares (OLS).
 $$AT = \beta_0 &#43; \beta_1 \ Waist &#43; \epsilon$$
-Where, $\beta_1$ represents the amount of change in AT per one unit change in Waist.
+$$Min_{\beta_0 , \beta_1} \ \ \epsilon^\intercal \epsilon \implies Min_{\beta_0 , \beta_1} \ \ (AT - \beta_0 - \beta_1 \ Waist)^\intercal (AT - \beta_0 - \beta_1 \ Waist)$$ Where, $\beta_1$ represents the amount of change in AT per one unit change in Waist.
 Now our problem becomes an unconstrained optimization problem. We can find optimal values for $\beta_0$ and $\beta_1$ using basic calculus.
 Lets re-write above regression equation in matrix form
 $$ AT = X \beta &#43; \epsilon$$
 Where, $ X = [1 \ \ Waist]$ 1 is a vector of ones and $\beta = (\beta_0, \ \beta_1)$
-$$ \begin{equation} \begin{split} \epsilon^\intercal \epsilon &amp;amp; = {(AT - X \beta)}^\intercal {(AT - X \beta)} \
-&amp;amp; = AT^\intercal AT - AT^\intercal X \beta - {(X \beta)}^\intercal AT &#43; {(X \beta)}^\intercal (X \beta) \end{split} \end{equation} $$
+$$ \begin{equation} \begin{split} \epsilon^\intercal \epsilon &amp;amp; = {(AT - X \beta)}^\intercal {(AT - X \beta)} &amp;amp; = AT^\intercal AT - AT^\intercal X \beta - {(X \beta)}^\intercal AT &#43; {(X \beta)}^\intercal (X \beta) \end{split} \end{equation} $$
 Now differentiate this w.r.t to $\beta$ and equate it to zero. Then we have, $$\hat{\beta} = (X^\intercal X)^{-1} X^\intercal AT $$
 Now we can find the fitted values of model by substituting $\hat{\beta}$ in above regression equation $$\hat{AT} = X \hat{\beta}=X(X^\intercal X)^{-1} X^\intercal AT$$
 Note: We are arriving to above equation through an assumption$^1$ of $E(\epsilon)=0$. What happens if this assumption violates?
 Let, $X(X^\intercal X)^{-1} X^\intercal = H$ $$\hat{AT} = H \ AT$$
 We call H as an hat matrix, because it transforms $AT$ into $\hat{AT}$ :D
 # Lets compute the hat matrix X = cbind(1, Waist_AT$Waist) temp = solve(t(X) %*% X) %*% t(X) betahat = temp %*% Waist_AT$AT # Estimated coefficients cat(&amp;#34;Let&amp;#39;s compare the computed values with lm() output: \n \n&amp;#34;) cat(&amp;#34;Computed Coefficients: \n \n&amp;#34;) print(data.frame(Intercept = betahat[1], Waist = betahat[2])) cat(&amp;#34;======================================================================= \n&amp;#34;) #cat(&amp;#34;Optimal value for beta_0 is: &amp;#34;, betahat[1], &amp;#34;and for beta_1 is: &amp;#34;, betahat[2], &amp;#34;\n \n&amp;#34;) fit_lm = lm(AT ~ Waist, data = Waist_AT) #cat(&amp;#34;Compare our computed estimates with lm() estimates&amp;#34;, &amp;#34;\n&amp;#34;) print(fit_lm) cat(&amp;#34;======================================================================= \n \n&amp;#34;) H = X %*% temp # Computing hat matrix AThat = H %*% Waist_AT$AT # Computing predicted values cat(&amp;#34;Therefore, there is a&amp;#34;, betahat[2], &amp;#34;increment in AT per one unit change in Waist \n&amp;#34; ) Let&#39;s compare the computed values with lm() output: Computed Coefficients: Intercept Waist 1 -215.9815 3.458859 ======================================================================= Call: lm(formula = AT ~ Waist, data = Waist_AT) Coefficients: (Intercept) Waist -215.981 3.459 ======================================================================= Therefore, there is a 3.458859 increment in AT per one unit change in Waist  What&amp;rsquo;s next? We succesfully computed estimates for regression coefficients and fitted values.
-  We are working on only one sample, how can we generalise these results to population?
-  How to measure model&amp;rsquo;s performance quantitatively?
+ We are working on only one sample, how can we generalise these results to population?
+ How to measure model&amp;rsquo;s performance quantitatively?
   ** We are working on only one sample, how can we generalise these results to population? **
 Let&amp;rsquo;s focus on question 1. Our regression coefficients are computed using only one sample and these values will change, if we change the sample. But how much they vary? We need to estimate the variation for each beta coefficient to check whether the corresponding regressor is consistently explaining the same behaviour even if we change the sample.
 Now the big problem is collecting multiple samples to check the above hypothesis. Hence, we use distributions to check statistical significance of regressors.
@@ -67,19 +67,16 @@ $$ Alternative \ Hypothesis: \beta_{0} \neq 0$$
 $$ Null \ Hypothesis: \beta_{1} = 0 $$
 $$ Alternative \ Hypothesis: \beta_{1} \neq 0$$
 Test Statistic for these hypotheses is,
-$$t = \frac{\hat{\beta_{i}}}{\sqrt{Var(\hat{\beta_{i}})}}$$
+$$t = \frac{\hat{\beta{i}}}{\sqrt{Var(\hat{\beta{i}})}}$$
 Test statistic t follows t-distribution, assuming$^2$ dependent variable follows normal distribution
 Suggestion: If your not aware of testing of hypothesis, probability distributions and p-values please browse through the Google.
 Let&amp;rsquo;s recall that, $\hat{\beta} = (X^\intercal X)^{-1} X^\intercal AT$
-$$\begin{equation} \begin{split} Var(\hat{\beta}) &amp;amp; = Var((X^\intercal X)^{-1} X^\intercal AT) \
-&amp;amp; = (X^\intercal X)^{-1} X^\intercal \ Var(AT) \ X(X^\intercal X)^{-1} \
-&amp;amp; = (X^\intercal X)^{-1} X^\intercal \ X(X^\intercal X)^{-1} \ \sigma^2 \
-&amp;amp; = (X^\intercal X)^{-1} \sigma^2 \end{split} \end{equation} $$
+$$\begin{equation} \begin{split} Var(\hat{\beta}) &amp;amp; = Var((X^\intercal X)^{-1} X^\intercal AT) &amp;amp; = (X^\intercal X)^{-1} X^\intercal \ Var(AT) \ X(X^\intercal X)^{-1} &amp;amp; = (X^\intercal X)^{-1} X^\intercal \ X(X^\intercal X)^{-1} \ \sigma^2 &amp;amp; = (X^\intercal X)^{-1} \sigma^2 \end{split} \end{equation} $$
 Note: In the above calculations we assumed$^3$ $Var(AT) = \sigma^2$ (Constant). Where, $\sigma^2$ is variation in population AT.
 Suggestion: Try solving $(X^\intercal X)^{-1}$ with $X = [1, \ x]$ where $x = (x_1, x_2, x_3 &amp;hellip; x_n)$. You will get the following expression.
-Diagonal elements of above matrix are varinaces of $\beta_0$ and $\beta_1$ respectively. Off-diagonal element is covariance between $\beta_0$ and $\beta_1$.
+$$ \ Var(\hat{\beta}) = \frac{1}{n \sum x_i^2 - (\sum x_i)^2} \begin{bmatrix} \sum_{i=1}^n x_i^2 &amp; -\sum x_i \\ -\sum x_i &amp; n \end{bmatrix} \sigma^2 \ $$ Diagonal elements of above matrix are varinaces of $\beta_0$ and $\beta_1$ respectively. Off-diagonal element is covariance between $\beta_0$ and $\beta_1$.
 Hence,
-One important observation from $Var(\hat{\beta})$ expressions is, $Var(x)$ is inversely proportional to $Var(\hat{\beta})$. That is, we will get more consistent estimators if there is high variation in corresponding predictors.
+ $$Var(\hat{\beta_0}) = \frac{\sigma^2 \sum_{i = 1}^n x_i^2}{n \sum_{i = 1}^n (x_i - \bar{x})^2}$$   $$Var(\hat{\beta_1}) = \frac{\sigma^2}{\sum_{i = 1}^n (x_i - \bar{x})^2}$$  One important observation from $Var(\hat{\beta})$ expressions is, $Var(x)$ is inversely proportional to $Var(\hat{\beta})$. That is, we will get more consistent estimators if there is high variation in corresponding predictors.
 Recall that, $\sigma^2$ in above expression is the population variance, not the sample. Hence, we need to estimate this using the sample that we have.
 $$\hat{\sigma^2} = \frac{1}{n-2} \sum_{i = 1}^n e_i^2$$
 Where, $e_i = AT_i - \hat{AT}_i$
@@ -87,10 +84,10 @@ Where, $e_i = AT_i - \hat{AT}_i$
 How to measure model&amp;rsquo;s performance quantitatively?
 Let&amp;rsquo;s focus on question 2 (How to measure model&amp;rsquo;s performance quantitatively?). Recall that, our objective of building model is to explain the variation in AT using the variation in Waist.
 Total variation in AT is, $\sum_{i=1}^n (AT - mean(AT))^2$ this can be splitted into two parts as follows:
-Where, $\sum_{i=1}^n (AT_i - \bar{AT})^2$ is the total variation in AT, $\sum_{i = 1}^n (\hat{AT_i} - \bar{AT})^2$ is the explained variation in AT, this is also called as Regression Sum of Squares and $\sum_{i=1}^n (AT_i - \hat{AT_i})^2$ is the unexplained variation in AT, this is also called as Error Sum of Squares
+ $$ \begin{equation} \begin{split} \sum_{i=1}^n (AT_i - \bar{AT})^2 &amp; = \sum_{i=1}^n (AT - \hat{AT_i} &#43; \hat{AT_i} - \bar{AT})^2 \\ &amp; = \sum_{i = 1}^n (\hat{AT_i} - \bar{AT})^2 &#43; \sum_{i=1}^n (AT_i - \hat{AT_i})^2 \end{split} \end{equation} $$  Where, $\sum_{i=1}^n (AT_i - \bar{AT})^2$ is the total variation in AT, $\sum_{i = 1}^n (\hat{AT_i} - \bar{AT})^2$ is the explained variation in AT, this is also called as Regression Sum of Squares and $\sum_{i=1}^n (AT_i - \hat{AT_i})^2$ is the unexplained variation in AT, this is also called as Error Sum of Squares
 We can measure our model using the proportion of total variation explained by independent variable(s). That is, $\frac{Regression \ Sum \ of \ Squares}{Total \ Sum \ of \ Squares}$
 The above measure is called as Multiple R-squared:
-Interesting facts: Multiple R-squared value in SLR is equals to $r^2$ and (1 - Multiple R-squared) is equals to the variance in residuals.
+ $$Multiple \ R-squared = \frac{\sum_{i = 1}^n (\hat{AT_i} - \bar{AT})^2}{\sum_{i=1}^n (AT_i - \bar{AT})^2}$$  Interesting facts: Multiple R-squared value in SLR is equals to $r^2$ and (1 - Multiple R-squared) is equals to the variance in residuals.
 Where, r is pearson&amp;rsquo;s correlation coefficient between dependent and independent variable.
 # Let&amp;#39;s compute Multiple R-squared measure for our example SSR = sum((AThat - mean(Waist_AT$AT))^2) SST = sum((Waist_AT$AT - mean(Waist_AT$AT))^2) MulRSq = SSR/SST cat(&amp;#34;Compute Multiple R-squared: &amp;#34;, MulRSq, &amp;#34;\n \n&amp;#34;) cat(&amp;#34;Note that computed R squared value is matching with lm() Multiple R-squared value in above output \n \n&amp;#34;) cat(&amp;#34;======================================================================= \n \n&amp;#34;) Compute Multiple R-squared: 0.6700369 Note that computed R squared value is matching with lm() Multiple R-squared value in above output =======================================================================  What happens to the Multiple R-squared value when you add an irrelevant variable to the model?
 In the below model, I am generating a random sample of uniform numbers between 1 to 100 and considering this as one of indepedent variable.
@@ -102,11 +99,11 @@ Adding a new independent variable will increase $\frac{n-1}{n-p-1}$ and $R^2$. I
 In fit_lm2 model Adjusted R-squared decreases when we add randomly generated variable into the model.
 # Let&amp;#39;s compute adjusted R-squared for our example TDF = nrow(Waist_AT[-1, ]) # Total degrees of freedom EDF = nrow(Waist_AT[-1, ]) - 1 # Error degrees of freedom, where 1 is the number of predictors AdjRSq = 1 - (1 - MulRSq) * (TDF/EDF) # Adjusted R square cat(&amp;#34;Compute Multiple R-squared: &amp;#34;, AdjRSq, &amp;#34;\n \n&amp;#34;) cat(&amp;#34;Note that computed Adjusted R-squared value is matching with lm() Adjusted R-squared value in the above output \n \n&amp;#34;) cat(&amp;#34;Note: We are comparing with fit_lm model, not fit_lm2 \n&amp;#34;) cat(&amp;#34;======================================================================= \n&amp;#34;) Compute Multiple R-squared: 0.6669531 Note that computed Adjusted R-squared value is matching with lm() Adjusted R-squared value in the above output Note: We are comparing with fit_lm model, not fit_lm2 =======================================================================  Aforementioned measures (Multiple R-squared &amp;amp; Adjusted R-squared) for Goodness of fit are functions of sample and these will vary as sample changes. Similar to t-test for regression coefficeints we need some statistical test to test model&amp;rsquo;s performance for population.
 Objective is to compare the Mean sum of squares due to regression and Mean sum of squares due to error. F-test is very helpful to compare the variations.
-Note: Above expression follows F distribution only if, AT follows Normal Distribution
+$$ F-test = \frac{\frac{1}{p-1}\sum_{i=1}^n (\hat{AT_i} - \bar{AT})^2}{\frac{1}{n-p-1} \sum_{i=1}^n (\hat{AT_i} - AT_i)^2}$$  Note: Above expression follows F distribution only if, AT follows Normal Distribution
 RDF = TDF - EDF SSE = SST - SSR MSR = (1/RDF)*SSR MSE = (1/EDF)*SSE F_value = MSR/MSE cat(&amp;#34;Compute F statistic: &amp;#34;, F_value, &amp;#34;\n \n&amp;#34;) cat(&amp;#34;Note that computed F-statistic is matching with lm() F-statistic value in the above output \n \n&amp;#34;) cat(&amp;#34;Note: We are comparing with fit_lm model, not fit_lm2 \n&amp;#34;) cat(&amp;#34;======================================================================= \n&amp;#34;) Compute F statistic: 217.2787 Note that computed F-statistic is matching with lm() F-statistic value in the above output Note: We are comparing with fit_lm model, not fit_lm2 =======================================================================  2. Multiple Linear Regression (MLR) In multiple linear regression we consider more than one predictor and one dependent variable. Most of the above explanation is valid for MLR too.
 Example: Car&amp;rsquo;s MPG (Miles Per Gallon) prediction Our interest is to model the MPG of a car based on the other variables.
 Variable Description:
- VOL = cubic feet of cab space HP = engine horsepower MPG = average miles per gallon SP = top speed, miles per hour WT = vehicle weight, hundreds of pounds  # Reading Boston housing prices data car = read.csv(&amp;#34;Cars.csv&amp;#34;) cat(&amp;#34;Number of rows: &amp;#34;, nrow(car), &amp;#34;\n&amp;#34;, &amp;#34;Number of variables: &amp;#34;, ncol(car), &amp;#34;\n&amp;#34;) head(car) Number of rows: 81 Number of variables: 5  Our objective is to model the variation in MPG using other independent variables. That is,
+ VOL = cubic feet of cab space HP = engine horsepower MPG = average miles per gallon SP = top speed, miles per hour WT = vehicle weight, hundreds of pounds  # Reading Boston housing prices data car = read.csv(&amp;#34;Cars.csv&amp;#34;) cat(&amp;#34;Number of rows: &amp;#34;, nrow(car), &amp;#34;\n&amp;#34;, &amp;#34;Number of variables: &amp;#34;, ncol(car), &amp;#34;\n&amp;#34;) head(car) Number of rows: 81 Number of variables: 5   HPMPGVOLSPWT  49 53.7006889 104.185428.76206 55 50.0134092 105.461330.46683 55 50.0134092 105.461330.19360 70 45.6963292 113.461330.63211 53 50.5042392 104.461329.88915 70 45.6963289 113.185429.59177   Our objective is to model the variation in MPG using other independent variables. That is,
 $$MPG = \beta_0 &#43; \beta_1 VOL &#43; \beta_2 HP &#43; \beta_3 SP &#43; \beta_4 WT &#43; \epsilon$$
 Where, $\beta_1$ represents the amount of change in MPG per one unit change in VOL provided other variables are fixed. Let&amp;rsquo;s consider below two cases,
 Case1: HP = 49; VOL = 89; SP = 104.1854; WT = 28.76206 =&amp;gt; MPG = 104.1854
@@ -117,13 +114,14 @@ But in real world it is very difficult to collect records in above manner. That&
 # Let&amp;#39;s build MLR model to predict MPG based using other variables fit_mlr_actual = lm(MPG ~ ., data = car) summary(fit_mlr_actual) Call: lm(formula = MPG ~ ., data = car) Residuals: Min 1Q Median 3Q Max -0.94530 -0.32792 -0.04058 0.24256 1.71034 Coefficients: Estimate Std. Error t value Pr(&amp;gt;|t|) (Intercept) 7.100e-17 5.461e-02 0.000 1.0000 HP -1.285e&#43;00 2.453e-01 -5.239 1.4e-06 *** VOL -8.207e-01 1.389e&#43;00 -0.591 0.5563 SP 6.144e-01 2.458e-01 2.500 0.0146 * WT 3.287e-01 1.390e&#43;00 0.237 0.8136 --- Signif. codes: 0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 Residual standard error: 0.4915 on 76 degrees of freedom Multiple R-squared: 0.7705, Adjusted R-squared: 0.7585 F-statistic: 63.8 on 4 and 76 DF, p-value: &amp;lt; 2.2e-16  One key observation from above output is, Std. Error for VOL and WT is very huge comparing to others and this inflates t values and p value. Hence, these two variables becomes very insignificant for the model.
 Let&amp;rsquo;s go into deep, what happened to $Var(\hat{\beta_{VOL}})$ and $Var(\hat{\beta_{WT}})$?
 Analogy for $Var(\hat{\beta})$ in MLR is as follows:
-Where, $R_{VOL}^2$ = Multiple R-squared value obtained by regressing VOL on all other independent variables
+ $$Var(\hat{\beta_{VOL}}) = \frac{\sigma^2}{n\sum_{i=1}^n (VOL_i - \bar{VOL})^2 (1 - R_{VOL}^2)}$$  Where, $R_{VOL}^2$ = Multiple R-squared value obtained by regressing VOL on all other independent variables
 Task: To understand it more clearly, take few random samples from cars data and run the MLR model and observe the variation in $\hat{\beta_{VOL}}$ and $\hat{\beta_{WT}}$.
 # Let&amp;#39;s regress VOL on all other independent variables&amp;#39; fit_mlr = lm(VOL ~ HP &#43; SP &#43; WT, data = car) summary(fit_mlr) Call: lm(formula = VOL ~ HP &#43; SP &#43; WT, data = car) Residuals: Min 1Q Median 3Q Max -0.068938 -0.031641 -0.008794 0.032018 0.077931 Coefficients: Estimate Std. Error t value Pr(&amp;gt;|t|) (Intercept) -6.155e-18 4.481e-03 0.000 1.000 HP 2.331e-02 1.995e-02 1.168 0.246 SP -2.294e-02 2.000e-02 -1.147 0.255 WT 9.998e-01 4.557e-03 219.396 &amp;lt;2e-16 *** --- Signif. codes: 0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 Residual standard error: 0.04033 on 77 degrees of freedom Multiple R-squared: 0.9984, Adjusted R-squared: 0.9984 F-statistic: 1.637e&#43;04 on 3 and 77 DF, p-value: &amp;lt; 2.2e-16  It&amp;rsquo;s surprising that, $R_{VOL}^2$ is 0.9984 and also only WT is significant. That is, these two predictors (VOL and WT) are highly correlated. This inflates $Var(\hat{\beta_{VOL}})$ and thus t value. We might be missing some of the important information because of high correlation between predictors. This problem is called as Multicollinearity.
 One quick solution for this problem is to remove either VOL or WT from the model. Let&amp;rsquo;s compute partial correlation coeficient between MPG and VOL by removing the effect of WT (say, $r_{MV.W}$) and partial correlation coeficient between MPG and WT by removing the effect of VOL (say, $r_{MW.V}$).
 To compute $r_{MV.W}$ we need to compute the correlation between (a) part of VOL which cannot be explained by WT (regress VOL on WT and take the residuals) and (b) the part of MPG which cannot be explained by WT (regress MPG on WT and take the residuals)
 fit_partial = lm(VOL ~ WT, data = car) fit_partial2 = lm(MPG ~ WT, data = car) res1 = fit_partial$residual res2 = fit_partial2$residual cat(&amp;#34;Partial correlation coefficient between MPG and VOL by removing the effect of WT is: &amp;#34;, cor(res1, res2)) Partial correlation coefficient between MPG and VOL by removing the effect of WT is: -0.08008873  fit_partial3 = lm(WT ~ VOL, data = car) fit_partial4 = lm(MPG ~ VOL, data = car) res1 = fit_partia3$residual res2 = fit_partial4$residual cat(&amp;#34;Partial correlation coefficient between MPG and WT by removing the effect of VOL is: &amp;#34;, cor(res1, res2)) Partial correlation coefficient between MPG and WT by removing the effect of VOL is: 0.05538241  Since, $abs(r_{MV.W}) &amp;gt;= abs(r_{MW.V})$ we may remove WT from the model.
 # Remove WT and rerun the model fit_mlr_actual2 = lm(MPG ~ .-WT, data = car) summary(fit_mlr_actual2) Call: lm(formula = MPG ~ . - WT, data = car) Residuals: Min 1Q Median 3Q Max -0.94036 -0.31695 -0.03457 0.23316 1.71570 Coefficients: Estimate Std. Error t value Pr(&amp;gt;|t|) (Intercept) 7.910e-17 5.427e-02 0.000 1.0000 HP -1.293e&#43;00 2.415e-01 -5.353 8.64e-07 *** VOL -4.925e-01 5.516e-02 -8.928 1.65e-13 *** SP 6.222e-01 2.421e-01 2.571 0.0121 * --- Signif. codes: 0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 Residual standard error: 0.4884 on 77 degrees of freedom Multiple R-squared: 0.7704, Adjusted R-squared: 0.7614 F-statistic: 86.11 on 3 and 77 DF, p-value: &amp;lt; 2.2e-16  After eliminating WT from the model there is an increment of ~0.3% in Adjusted R-squared and more importantly, VOL becomes significant at 0 los (level of significance)
+
 3. Assumptions Linear in Parameters: We assume that there is a linear relation between dependent and set of independent variables
 Zero conditional mean: $E(\epsilon \mid X) = 0$
 Homoskedasticity: $Var(\epsilon \mid X) = \sigma^2$ (Constant)

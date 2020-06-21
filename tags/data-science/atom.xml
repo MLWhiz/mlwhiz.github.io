@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1" xmlns:content="http://purl.org/rss/1.0/modules/content" xmlns:media="http://search.yahoo.com/mrss/" >
 
   
@@ -29,18 +30,17 @@
       
       <description>Creating a great machine learning system is an art.
 There are a lot of things to consider while building a great machine learning system. But often it happens that we as data scientists only worry about certain parts of the project.
-Most of the time that happens to be modeling, but in reality, the success or failure of a Machine Learning project depends on a lot of other factors.
- A machine learning pipeline is more than just creating Models</description>
+Most of the time that happens to be modeling, but in reality, the success or failure of a Machine Learning project depends on a lot of other factors.</description>
 
       <content:encoded>  
         
-        <![CDATA[ Creating a great machine learning system is an art.
+        <![CDATA[  Creating a great machine learning system is an art.
 There are a lot of things to consider while building a great machine learning system. But often it happens that we as data scientists only worry about certain parts of the project.
 Most of the time that happens to be modeling, but in reality, the success or failure of a Machine Learning project depends on a lot of other factors.
  A machine learning pipeline is more than just creating Models
  It is essential to understand what happens before training a model and after training the model and deploying it in production.
 This post is about explaining what is involved in an end to end data project pipeline. Something I did learn very late in my career.
- 1. Problem Definition This one is obvious — Define a problem.
+1. Problem Definition This one is obvious — Define a problem.
 And, this may be the most crucial part of the whole exercise.
 So, how to define a problem for Machine learning?
 Well, that depends on a lot of factors. Amongst all the elements that we consider, the first one should be to understand how it will benefit the business.
@@ -52,7 +52,7 @@ Well, I may be happy with a 70% prediction accuracy since an average human won�
 Beware,this is not the time to set lofty targets; it is the time to be logical and sensible about how every 1 percent accuracy change could affect success.
 For example: For a click prediction problem/Fraud application, a 1% accuracy increase will boost the business bottom line compared to a 1% accuracy increase in review sentiment prediction.
  Not all accuracy increases are created equal
-  2. Data There are several questions you will need to answer at the time of data acquisition and data creation for your machine learning model.
+ 2. Data There are several questions you will need to answer at the time of data acquisition and data creation for your machine learning model.
 The most important question to answer here is: Does your model need to work in realtime?
 If that is the case, you can’t use a system like Hive/Hadoop for data storage as such systems could introduce a lot of latency and are suitable for offline batch processing.
 Does your model need to be trained in Realtime?
@@ -61,7 +61,7 @@ Is there an inconsistency between test and train data?
 Or in simple words — do you suspect that the production data comes from a different distribution from training data?
 For example: In a realtime training for a click prediction problem, you show the user the ad, and he doesn’t click. Is it a failure example? Maybe the user clicks typically after 10 minutes. But you have already created the data and trained your model on that.
 There are a lot of factors you should consider while preparing data for your models. You need to ask questions and think about the process end to end to be successful at this stage.
- 3. Evaluation How will we evaluate the performance of our Model?
+3. Evaluation How will we evaluate the performance of our Model?
 The gold standard here is the train-test-validation split.
 Frequently making a train-validation-test set, by sampling, we forgot about an implicit assumption — Data is rarely ever IID(independently and identically distributed).
 In simple terms, our assumption that each data point is independent of each other and comes from the same distribution is faulty at best if not downright incorrect.
@@ -76,32 +76,31 @@ You should also think about how you will be breaking evaluation in multiple grou
 Last year, Amazon was in the news for a secret AI recruiting tool that showed bias against women. To save our Machine Learning model from such inconsistencies, we need to evaluate our model on different groups. Maybe our model is not so accurate for women as it is for men because there is far less number of women in training data.
 Or maybe a model predicting if a product is going to be bought or not given a view works pretty well for a specific product category and not for other product categories.
 Keeping such things in mind beforehand and thinking precisely about what could go wrong with a particular evaluation approach is something that could definitely help us in designing a good ML system.
- 4. Features Good Features are the backbone of any machine learning model. And often the part where you would spend the most time. I have seen that this is the part which you can tune for maximum model performance.
+4. Features Good Features are the backbone of any machine learning model. And often the part where you would spend the most time. I have seen that this is the part which you can tune for maximum model performance.
  Good feature creation often needs domain knowledge, creativity, and lots of time.
  On top of that, the feature creation exercise might change for different models. For example, feature creation is very different for Neural networks vs. XGboost.
 Understanding various methods for Feature creation is a pretty big topic in itself. I have written a post here on feature creation. Do take a look:
 The Hitchhiker’s Guide to Feature Extraction
 Once you create a lot of features, the next thing you might want to do is to remove redundant features. Here are some methods to do that
 The 5 Feature Selection Algorithms every Data Scientist should know
- 5. Modeling Now comes the part we mostly tend to care about. And why not? It is the piece that we end up delivering at the end of the project. And this is the part for which we have spent all those hours on data acquisition and cleaning, feature creation and whatnot.
+5. Modeling Now comes the part we mostly tend to care about. And why not? It is the piece that we end up delivering at the end of the project. And this is the part for which we have spent all those hours on data acquisition and cleaning, feature creation and whatnot.
 So what do we need to think while creating a model?
 The first question that you may need to ask ourselves is that if your model needs to be interpretable?
 There are quite a lot of use cases where the business may want an interpretable model. One such use case is when we want to do attribution modeling. Here we define the effect of various advertising streams(TV, radio, newspaper, etc.) on the revenue. In such cases, understanding the response from each advertisement stream becomes essential.
 If we need to maximize the accuracy or any other metric, we will still want to go for black-box models like NeuralNets or XGBoost.
 Apart from model selection, there should be other things on your mind too:
-  Model Architecture: How many layers for NNs, or how many trees for GBT or how you need to create feature interactions for Linear models.
-  How to tune hyperparameters?: You should try to automate this part. There are a lot of tools in the market for this. I tend to use hyperopt.
-   6. Experimentation Now you have created your model.
+ Model Architecture: How many layers for NNs, or how many trees for GBT or how you need to create feature interactions for Linear models.
+ How to tune hyperparameters?: You should try to automate this part. There are a lot of tools in the market for this. I tend to use hyperopt.
+  6. Experimentation Now you have created your model.
 It performs better than the baseline/your current model. How should we go forward?
 We have two choices-
-  Go into an endless loop in improving our model further.
-  Test our model in production settings, get more insights about what could go wrong and then continue improving our model with continuous integration.
-  I am a fan of the latter approach. In his awesome third course named Structuring Machine learning projects in the Coursera Deep Learning Specialization, Andrew Ng says —
- “Don’t start off trying to design and build the perfect system. Instead, build and train a basic system quickly — perhaps in just a few days. Even if the basic system is far from the “best” system you can build, it is valuable to examine how the basic system functions: you will quickly find clues that show you the most promising directions in which to invest your time.”
- One thing I would also like to stress is continuous integration. If your current model performs better than the existing model, why not deploy it in production rather than running after incremental gains?
+ Go into an endless loop in improving our model further.
+ Test our model in production settings, get more insights about what could go wrong and then continue improving our model with continuous integration.
+  I am a fan of the latter approach. In his awesome third course named Structuring Machine learning projects in the Coursera Deep Learning Specialization, Andrew Ng says — &amp;gt; “Don’t start off trying to design and build the perfect system. Instead, build and train a basic system quickly — perhaps in just a few days. Even if the basic system is far from the “best” system you can build, it is valuable to examine how the basic system functions: you will quickly find clues that show you the most promising directions in which to invest your time.”
+One thing I would also like to stress is continuous integration. If your current model performs better than the existing model, why not deploy it in production rather than running after incremental gains?
 To test the validity of your assumption that your model being better than the existing model, you can set up an A/B test. Some users(Test group)see your model while some users(Control) see the predictions from the previous model.
 You should always aim to minimize the time to first online experiment for your model. This not only generated value but also lets you understand the shortcomings of your model with realtime feedback which you can then work on.
- Conclusion  Nothing is simple in Machine learning. And nothing should be assumed.
+Conclusion  Nothing is simple in Machine learning. And nothing should be assumed.
  You should always remain critical of any decisions you have taken while building an ML pipeline.
 A simple looking decision could be the difference between the success or failure of your machine learning project.
 So think wisely and think a lot.
@@ -135,16 +134,16 @@ I end up reading it again and again, yet somehow it eludes me.
 So I thought of writing a post on it to improve my understanding.
 This post is about understanding Generative Models and how they differ from Discriminative models.
 In the end, we will create a simple generative model ourselves.
- Discriminative vs. Generative Classifiers Problem Statement: Having some input data, X we want to classify the data into labels y.</description>
+Discriminative vs. Generative Classifiers Problem Statement: Having some input data, X we want to classify the data into labels y.</description>
 
       <content:encoded>  
         
-        <![CDATA[ I always get confused whenever someone talks about generative vs. discriminative classification models.
+        <![CDATA[  I always get confused whenever someone talks about generative vs. discriminative classification models.
 I end up reading it again and again, yet somehow it eludes me.
 So I thought of writing a post on it to improve my understanding.
 This post is about understanding Generative Models and how they differ from Discriminative models.
 In the end, we will create a simple generative model ourselves.
- Discriminative vs. Generative Classifiers Problem Statement: Having some input data, X we want to classify the data into labels y.
+Discriminative vs. Generative Classifiers Problem Statement: Having some input data, X we want to classify the data into labels y.
 A generative model learns the joint probability distribution p(x,y) while a discriminative model learns the conditional probability distribution p(y|x)
 So really, what is the difference? They both look pretty much the same.
 Suppose we have a small sample of data:
@@ -154,10 +153,10 @@ While p(y|x) is
 As you can see, they model different probabilities.
 The discriminative distribution p(y|x) could be used straightforward to classify an example x into a class y. An example of a discriminative classification model is Logistic regression, where we try to model P(y|X).
 Generative algorithms model p(x,y). An example is the Naive Bayes model in which we try to model P(X,y) and then use the Bayes equation to predict.
- The Central Idea Behind Generative Classification   Fit each class separately with a probability distribution.
-  To classify a new point, find out which distribution is it most probable to come from.
+The Central Idea Behind Generative Classification  Fit each class separately with a probability distribution.
+ To classify a new point, find out which distribution is it most probable to come from.
   Don’t worry if you don’t understand yet. You will surely get it by the end of this post.
- A Small Example Let us work with the iris dataset.
+A Small Example Let us work with the iris dataset.
 For our simple example, we will work with a single x variable SepalLength and our target variable Species.
 Let us see the distribution of sepal length with Species. I am using plotly_express for this.
 import plotly_express as px px.histogram(iris, x = &amp;#39;SepalLengthCm&amp;#39;,color = &amp;#39;Species&amp;#39;,nbins=20) To create generative models, we need to find out two sets of values:
@@ -177,7 +176,7 @@ import numpy as np import seaborn as sns from scipy import stats import matplotl
 Now the rest of the calculations remains the same.
 Just the normal gets replaced by Bivariate normal in the above equations. And as you can see, we get a pretty better separation amongst the classes by using the bivariate normal.
 As an extension to this case for multiple variables(more than 2), we can use the multivariate normal distribution.
- Conclusion Generative models are good at generating data. But at the same time, creating such models that capture the underlying distribution of data is extremely hard.
+Conclusion Generative models are good at generating data. But at the same time, creating such models that capture the underlying distribution of data is extremely hard.
 Generative modeling involves a lot of assumptions, and thus, these models don’t perform as well as discriminative models in the classification setting. In the above example also we assumed that the distribution is normal, which might not be correct and hence may induce a bias.
 But understanding how they work is helpful all the same. One class of such models is called generative adversarial networks which are pretty useful for generating new images and are pretty interesting too.
 Here is the kernel with all the code along with the visualizations.
@@ -211,13 +210,13 @@ In a connected world, users cannot be considered as independent entities. They h
 
       <content:encoded>  
         
-        <![CDATA[ We as data scientists have gotten quite comfortable with Pandas or SQL or any other relational database.
+        <![CDATA[  We as data scientists have gotten quite comfortable with Pandas or SQL or any other relational database.
 We are used to seeing our users in rows with their attributes as columns. But does the real world really behave like that?
 In a connected world, users cannot be considered as independent entities. They have got certain relationships between each other and we would sometimes like to include such relationships while building our machine learning models.
 Now while in a relational database, we cannot use such relations between different rows(users), in a graph database it is fairly trivial to do that.
 In this post, I am going to be talking about some of the most important graph algorithms you should know and how to implement them using Python.
 Also, here is a Graph Analytics for Big Data course on Coursera by UCSanDiego which I highly recommend to learn the basics of graph theory.
- 1. Connected Components We all know how clustering works?
+1. Connected Components We all know how clustering works?
 You can think of Connected Components in very layman’s terms as a sort of a hard clustering algorithm which finds clusters/islands in related/connected data.
 As a concrete example: Say you have data about roads joining any two cities in the world. And you need to find out all the continents in the world and which city they contain.*
 How will you achieve that? Come on give some thought.
@@ -234,25 +233,25 @@ edgelist = [[&amp;#39;Mannheim&amp;#39;, &amp;#39;Frankfurt&amp;#39;, 85], [&amp
 g = nx.Graph() for edge in edgelist: g.add_edge(edge[0],edge[1], weight = edge[2]) Now we want to find out distinct continents and their cities from this graph.
 We can now do this using the connected components algorithm as:
 for i, x in enumerate(nx.connected_components(g)): print(&amp;#34;cc&amp;#34;&#43;str(i)&#43;&amp;#34;:&amp;#34;,x) cc0: {&#39;Frankfurt&#39;, &#39;Kassel&#39;, &#39;Munchen&#39;, &#39;Numberg&#39;, &#39;Erfurt&#39;, &#39;Stuttgart&#39;, &#39;Karlsruhe&#39;, &#39;Wurzburg&#39;, &#39;Mannheim&#39;, &#39;Augsburg&#39;} cc1: {&#39;Kolkata&#39;, &#39;Bangalore&#39;, &#39;Mumbai&#39;, &#39;Delhi&#39;} cc2: {&#39;ALB&#39;, &#39;NY&#39;, &#39;TX&#39;}  As you can see we are able to find distinct components in our data. Just by using Edges and Vertices. This algorithm could be run on different data to satisfy any use case that I presented above.
- 2. Shortest Path Continuing with the above example only, we are given a graph with the cities of Germany and the respective distance between them.
+2. Shortest Path Continuing with the above example only, we are given a graph with the cities of Germany and the respective distance between them.
 You want to find out how to go from Frankfurt (The starting node) to Munchen by covering the shortest distance.
 The algorithm that we use for this problem is called Dijkstra. In Dijkstra’s own words:
  What is the shortest way to travel from Rotterdam to Groningen, in general: from given city to given city. It is the algorithm for the shortest path, which I designed in about twenty minutes. One morning I was shopping in Amsterdam with my young fiancée, and tired, we sat down on the café terrace to drink a cup of coffee and I was just thinking about whether I could do this, and I then designed the algorithm for the shortest path. As I said, it was a twenty-minute invention. In fact, it was published in ’59, three years later. The publication is still readable, it is, in fact, quite nice. One of the reasons that it is so nice was that I designed it without pencil and paper. I learned later that one of the advantages of designing without pencil and paper is that you are almost forced to avoid all avoidable complexities. Eventually that algorithm became, to my great amazement, one of the cornerstones of my fame. — Edsger Dijkstra, in an interview with Philip L. Frana, Communications of the ACM, 2001[3]
- Applications   Variations of the Dijkstra algorithm is used extensively in Google Maps to find the shortest routes.
-  You are in a Walmart Store. You have different Aisles and distance between all the aisles. You want to provide the shortest pathway to the customer from Aisle A to Aisle D.
+ Applications  Variations of the Dijkstra algorithm is used extensively in Google Maps to find the shortest routes.
+ You are in a Walmart Store. You have different Aisles and distance between all the aisles. You want to provide the shortest pathway to the customer from Aisle A to Aisle D.
    You have seen how LinkedIn shows up 1st-degree connections, 2nd-degree connections. What goes on behind the scenes?  Code print(nx.shortest_path(g, &amp;#39;Stuttgart&amp;#39;,&amp;#39;Frankfurt&amp;#39;,weight=&amp;#39;weight&amp;#39;)) print(nx.shortest_path_length(g, &amp;#39;Stuttgart&amp;#39;,&amp;#39;Frankfurt&amp;#39;,weight=&amp;#39;weight&amp;#39;)) [&#39;Stuttgart&#39;, &#39;Numberg&#39;, &#39;Wurzburg&#39;, &#39;Frankfurt&#39;] 503  You can also find Shortest paths between all pairs using:
-for x in nx.all_pairs_dijkstra_path(g,weight=&amp;#39;weight&amp;#39;): print(x) (&#39;Mannheim&#39;, {&#39;Mannheim&#39;: [&#39;Mannheim&#39;], &#39;Frankfurt&#39;: [&#39;Mannheim&#39;, &#39;Frankfurt&#39;], &#39;Karlsruhe&#39;: [&#39;Mannheim&#39;, &#39;Karlsruhe&#39;], &#39;Augsburg&#39;: [&#39;Mannheim&#39;, &#39;Karlsruhe&#39;, &#39;Augsburg&#39;], &#39;Kassel&#39;: [&#39;Mannheim&#39;, &#39;Frankfurt&#39;, &#39;Kassel&#39;], &#39;Wurzburg&#39;: [&#39;Mannheim&#39;, &#39;Frankfurt&#39;, &#39;Wurzburg&#39;], &#39;Munchen&#39;: [&#39;Mannheim&#39;, &#39;Karlsruhe&#39;, &#39;Augsburg&#39;, &#39;Munchen&#39;], &#39;Erfurt&#39;: [&#39;Mannheim&#39;, &#39;Frankfurt&#39;, &#39;Wurzburg&#39;, &#39;Erfurt&#39;], &#39;Numberg&#39;: [&#39;Mannheim&#39;, &#39;Frankfurt&#39;, &#39;Wurzburg&#39;, &#39;Numberg&#39;], &#39;Stuttgart&#39;: [&#39;Mannheim&#39;, &#39;Frankfurt&#39;, &#39;Wurzburg&#39;, &#39;Numberg&#39;, &#39;Stuttgart&#39;]}) (&#39;Frankfurt&#39;, {&#39;Frankfurt&#39;: [&#39;Frankfurt&#39;], &#39;Mannheim&#39;: [&#39;Frankfurt&#39;, &#39;Mannheim&#39;], &#39;Kassel&#39;: [&#39;Frankfurt&#39;, &#39;Kassel&#39;], &#39;Wurzburg&#39;: [&#39;Frankfurt&#39;, &#39;Wurzburg&#39;], &#39;Karlsruhe&#39;: [&#39;Frankfurt&#39;, &#39;Mannheim&#39;, &#39;Karlsruhe&#39;], &#39;Augsburg&#39;: [&#39;Frankfurt&#39;, &#39;Mannheim&#39;, &#39;Karlsruhe&#39;, &#39;Augsburg&#39;], &#39;Munchen&#39;: [&#39;Frankfurt&#39;, &#39;Wurzburg&#39;, &#39;Numberg&#39;, &#39;Munchen&#39;], &#39;Erfurt&#39;: [&#39;Frankfurt&#39;, &#39;Wurzburg&#39;, &#39;Erfurt&#39;], &#39;Numberg&#39;: [&#39;Frankfurt&#39;, &#39;Wurzburg&#39;, &#39;Numberg&#39;], &#39;Stuttgart&#39;: [&#39;Frankfurt&#39;, &#39;Wurzburg&#39;, &#39;Numberg&#39;, &#39;Stuttgart&#39;]}) ....   3. Minimum Spanning Tree Now we have another problem. We work for a water pipe laying company or an internet fiber company. We need to connect all the cities in the graph we have using the minimum amount of wire/pipe. How do we do this?
-Applications   Minimum spanning trees have direct applications in the design of networks, including computer networks, telecommunications networks, transportation networks, water supply networks, and electrical grids (which they were first invented for)
-  MST is used for approximating the traveling salesman problem
-  Clustering — First construct MST and then determine a threshold value for breaking some edges in the MST using Intercluster distances and Intracluster distances.
-  Image Segmentation — It was used for Image segmentation where we first construct an MST on a graph where pixels are nodes and distances between pixels are based on some similarity measure(color, intensity, etc.)
+for x in nx.all_pairs_dijkstra_path(g,weight=&amp;#39;weight&amp;#39;): print(x) (&#39;Mannheim&#39;, {&#39;Mannheim&#39;: [&#39;Mannheim&#39;], &#39;Frankfurt&#39;: [&#39;Mannheim&#39;, &#39;Frankfurt&#39;], &#39;Karlsruhe&#39;: [&#39;Mannheim&#39;, &#39;Karlsruhe&#39;], &#39;Augsburg&#39;: [&#39;Mannheim&#39;, &#39;Karlsruhe&#39;, &#39;Augsburg&#39;], &#39;Kassel&#39;: [&#39;Mannheim&#39;, &#39;Frankfurt&#39;, &#39;Kassel&#39;], &#39;Wurzburg&#39;: [&#39;Mannheim&#39;, &#39;Frankfurt&#39;, &#39;Wurzburg&#39;], &#39;Munchen&#39;: [&#39;Mannheim&#39;, &#39;Karlsruhe&#39;, &#39;Augsburg&#39;, &#39;Munchen&#39;], &#39;Erfurt&#39;: [&#39;Mannheim&#39;, &#39;Frankfurt&#39;, &#39;Wurzburg&#39;, &#39;Erfurt&#39;], &#39;Numberg&#39;: [&#39;Mannheim&#39;, &#39;Frankfurt&#39;, &#39;Wurzburg&#39;, &#39;Numberg&#39;], &#39;Stuttgart&#39;: [&#39;Mannheim&#39;, &#39;Frankfurt&#39;, &#39;Wurzburg&#39;, &#39;Numberg&#39;, &#39;Stuttgart&#39;]}) (&#39;Frankfurt&#39;, {&#39;Frankfurt&#39;: [&#39;Frankfurt&#39;], &#39;Mannheim&#39;: [&#39;Frankfurt&#39;, &#39;Mannheim&#39;], &#39;Kassel&#39;: [&#39;Frankfurt&#39;, &#39;Kassel&#39;], &#39;Wurzburg&#39;: [&#39;Frankfurt&#39;, &#39;Wurzburg&#39;], &#39;Karlsruhe&#39;: [&#39;Frankfurt&#39;, &#39;Mannheim&#39;, &#39;Karlsruhe&#39;], &#39;Augsburg&#39;: [&#39;Frankfurt&#39;, &#39;Mannheim&#39;, &#39;Karlsruhe&#39;, &#39;Augsburg&#39;], &#39;Munchen&#39;: [&#39;Frankfurt&#39;, &#39;Wurzburg&#39;, &#39;Numberg&#39;, &#39;Munchen&#39;], &#39;Erfurt&#39;: [&#39;Frankfurt&#39;, &#39;Wurzburg&#39;, &#39;Erfurt&#39;], &#39;Numberg&#39;: [&#39;Frankfurt&#39;, &#39;Wurzburg&#39;, &#39;Numberg&#39;], &#39;Stuttgart&#39;: [&#39;Frankfurt&#39;, &#39;Wurzburg&#39;, &#39;Numberg&#39;, &#39;Stuttgart&#39;]}) ....  3. Minimum Spanning Tree Now we have another problem. We work for a water pipe laying company or an internet fiber company. We need to connect all the cities in the graph we have using the minimum amount of wire/pipe. How do we do this?
+Applications  Minimum spanning trees have direct applications in the design of networks, including computer networks, telecommunications networks, transportation networks, water supply networks, and electrical grids (which they were first invented for)
+ MST is used for approximating the traveling salesman problem
+ Clustering — First construct MST and then determine a threshold value for breaking some edges in the MST using Intercluster distances and Intracluster distances.
+ Image Segmentation — It was used for Image segmentation where we first construct an MST on a graph where pixels are nodes and distances between pixels are based on some similarity measure(color, intensity, etc.)
   Code # nx.minimum_spanning_tree(g) returns a instance of type graph nx.draw_networkx(nx.minimum_spanning_tree(g)) As you can see the above is the wire we gotta lay.
- 4. Pagerank This is the page sorting algorithm that powered google for a long time. It assigns scores to pages based on the number and quality of incoming and outgoing links.
+4. Pagerank This is the page sorting algorithm that powered google for a long time. It assigns scores to pages based on the number and quality of incoming and outgoing links.
 Applications Pagerank can be used anywhere where we want to estimate node importance in any network.
-  It has been used for finding the most influential papers using citations.
-  Has been used by Google to rank pages
-  It can be used to rank tweets- User and Tweets as nodes. Create Link between user if user A follows user B and Link between user and Tweets if user tweets/retweets a tweet.
-  Recommendation engines
+ It has been used for finding the most influential papers using citations.
+ Has been used by Google to rank pages
+ It can be used to rank tweets- User and Tweets as nodes. Create Link between user if user A follows user B and Link between user and Tweets if user tweets/retweets a tweet.
+ Recommendation engines
   Code For this exercise, we are going to be using Facebook data. We have a file of edges/links between facebook users. We first create the FB graph using:
 # reading the dataset fb = nx.read_edgelist(&amp;#39;../input/facebook-combined.txt&amp;#39;, create_using = nx.Graph(), nodetype = int) This is how it looks:
 pos = nx.spring_layout(fb) import warnings warnings.filterwarnings(&amp;#39;ignore&amp;#39;) plt.style.use(&amp;#39;fivethirtyeight&amp;#39;) plt.rcParams[&amp;#39;figure.figsize&amp;#39;] = (20, 15) plt.axis(&amp;#39;off&amp;#39;) nx.draw_networkx(fb, pos, with_labels = False, node_size = 35) plt.show() Now we want to find the users having high influence capability.
@@ -260,13 +259,13 @@ Intuitively, the Pagerank algorithm will give a higher score to a user who has a
 pageranks = nx.pagerank(fb) print(pageranks) {0: 0.006289602618466542, 1: 0.00023590202311540972, 2: 0.00020310565091694562, 3: 0.00022552359869430617, 4: 0.00023849264701222462, ........}  We can get the sorted PageRank or most influential users using:
 import operator sorted_pagerank = sorted(pagerank.items(), key=operator.itemgetter(1),reverse = True) print(sorted_pagerank) [(3437, 0.007614586844749603), (107, 0.006936420955866114), (1684, 0.0063671621383068295), (0, 0.006289602618466542), (1912, 0.0038769716008844974), (348, 0.0023480969727805783), (686, 0.0022193592598000193), (3980, 0.002170323579009993), (414, 0.0018002990470702262), (698, 0.0013171153138368807), (483, 0.0012974283300616082), (3830, 0.0011844348977671688), (376, 0.0009014073664792464), (2047, 0.000841029154597401), (56, 0.0008039024292749443), (25, 0.000800412660519768), (828, 0.0007886905420662135), (322, 0.0007867992190291396),......]  The above IDs are for the most influential users.
 We can see the subgraph for the most influential user:
-first_degree_connected_nodes = list(fb.neighbors(3437)) second_degree_connected_nodes = [] for x in first_degree_connected_nodes: second_degree_connected_nodes&#43;=list(fb.neighbors(x)) second_degree_connected_nodes.remove(3437) second_degree_connected_nodes = list(set(second_degree_connected_nodes)) subgraph_3437 = nx.subgraph(fb,first_degree_connected_nodes&#43;second_degree_connected_nodes) pos = nx.spring_layout(subgraph_3437) node_color = [&amp;#39;yellow&amp;#39; if v == 3437 else &amp;#39;red&amp;#39; for v in subgraph_3437] node_size = [1000 if v == 3437 else 35 for v in subgraph_3437] plt.style.use(&amp;#39;fivethirtyeight&amp;#39;) plt.rcParams[&amp;#39;figure.figsize&amp;#39;] = (20, 15) plt.axis(&amp;#39;off&amp;#39;) nx.draw_networkx(subgraph_3437, pos, with_labels = False, node_color=node_color,node_size=node_size ) plt.show()  5. Centrality Measures There are a lot of centrality measures which you can use as features to your machine learning models. I will talk about two of them. You can look at other measures here.
+first_degree_connected_nodes = list(fb.neighbors(3437)) second_degree_connected_nodes = [] for x in first_degree_connected_nodes: second_degree_connected_nodes&#43;=list(fb.neighbors(x)) second_degree_connected_nodes.remove(3437) second_degree_connected_nodes = list(set(second_degree_connected_nodes)) subgraph_3437 = nx.subgraph(fb,first_degree_connected_nodes&#43;second_degree_connected_nodes) pos = nx.spring_layout(subgraph_3437) node_color = [&amp;#39;yellow&amp;#39; if v == 3437 else &amp;#39;red&amp;#39; for v in subgraph_3437] node_size = [1000 if v == 3437 else 35 for v in subgraph_3437] plt.style.use(&amp;#39;fivethirtyeight&amp;#39;) plt.rcParams[&amp;#39;figure.figsize&amp;#39;] = (20, 15) plt.axis(&amp;#39;off&amp;#39;) nx.draw_networkx(subgraph_3437, pos, with_labels = False, node_color=node_color,node_size=node_size ) plt.show() 5. Centrality Measures There are a lot of centrality measures which you can use as features to your machine learning models. I will talk about two of them. You can look at other measures here.
 Betweenness Centrality: It is not only the users who have the most friends that are important, the users who connect one geography to another are also important as that lets users see content from diverse geographies. Betweenness centrality quantifies how many times a particular node comes in the shortest chosen path between two other nodes.
 Degree Centrality: It is simply the number of connections for a node.
 Applications Centrality measures can be used as a feature in any machine learning model.
 Code Here is the code for finding the Betweenness centrality for the subgraph.
 pos = nx.spring_layout(subgraph_3437) betweennessCentrality = **nx.betweenness_centrality(**subgraph_3437**,normalized=True, endpoints=True)** node_size = [v * 10000 for v in betweennessCentrality.values()] plt.figure(figsize=(20,20)) nx.draw_networkx(subgraph_3437, pos=pos, with_labels=False, node_size=node_size ) plt.axis(&amp;#39;off&amp;#39;) You can see the nodes sized by their betweenness centrality values here. They can be thought of as information passers. Breaking any of the nodes with a high betweenness Centrality will break the graph into many parts.
- Conclusion In this post, I talked about some of the most influential graph algorithms that have changed the way we live.
+Conclusion In this post, I talked about some of the most influential graph algorithms that have changed the way we live.
 With the advent of so much social data, network analysis could help a lot in improving our models and generating value.
 And even understanding a little more about the world.
 There are a lot of graph algorithms out there, but these are the ones I like the most. Do look into the algorithms in more detail if you like. In this post, I just wanted to get the required breadth into the area.
@@ -301,23 +300,23 @@ For a practitioner in any field, they turn out as good as the tools they use. Da
 
       <content:encoded>  
         
-        <![CDATA[ Just Kidding, Nothing is hotter than Jennifer Lawrence. But as you are here, let&amp;rsquo;s proceed.
+        <![CDATA[    Just Kidding, Nothing is hotter than Jennifer Lawrence. But as you are here, let&amp;rsquo;s proceed.
 For a practitioner in any field, they turn out as good as the tools they use. Data Scientists are no different. But sometimes we don&amp;rsquo;t even know which tools we need and also if we need them. We are not able to fathom if there could be a more natural way to solve the problem we face. We could learn about Data Science using awesome MOOCs like Machine Learning by Andrew Ng but no one teaches the spanky tools of the trade. This motivated me to write about the tools and skills that one is not taught in any course in my new series of short posts - Tools For Data Science. As it is rightly said:
  We shape our tools and afterward our tools shape us.
  In this post, I will try to talk about the Sublime Text Editor in the context of Data Science.
 Sublime Text is such a lifesaver, and we as data scientists don&amp;rsquo;t even realize that we need it. We are generally so happy with our Jupyter Notebooks and R studio that we never try to use another editor.
 So, let me try to sway you a little bit from your Jupyter notebooks into integrating another editor in your workflow. I will try to provide some use cases below. On that note, these use cases are not at all exhaustive and are here just to demonstrate the functionality and Sublime power.
- 1. Create A Dictionary/List or Whatever: How many times does it happen that we want to make a list or dictionary for our Python code from a list we got in an email text? I bet numerous times. How do we do this? We haggle in Excel by loading that Text in Excel and then trying out concatenating operations. For those of us on a Mac, it is even more troublesome since Mac&amp;rsquo;s Excel is not as good as windows(to put it mildly)
+1. Create A Dictionary/List or Whatever: How many times does it happen that we want to make a list or dictionary for our Python code from a list we got in an email text? I bet numerous times. How do we do this? We haggle in Excel by loading that Text in Excel and then trying out concatenating operations. For those of us on a Mac, it is even more troublesome since Mac&amp;rsquo;s Excel is not as good as windows(to put it mildly)
 So, for example, if you had information about State Name and State Short Name and you had to create a dictionary for Python, you would end up doing something like this in Excel. Or maybe you will load the CSV in pandas and then play with it in Python itself.
-Here is how you would do the same in Sublime. And see just how wonderful it looks. We ended up getting the Dictionary in one single line. It took me around 27 seconds to do. I still remember the first time I saw one of my developer friends doing this, and I was amazed. On that note, We should always learn from other domains
-So how I did this?
+  Here is how you would do the same in Sublime. And see just how wonderful it looks. We ended up getting the Dictionary in one single line. It took me around 27 seconds to do. I still remember the first time I saw one of my developer friends doing this, and I was amazed. On that note, We should always learn from other domains
+  So how I did this?
 Here is a step by step idea. You might want to get some data in Sublime and try it out yourself. The command that you will be using most frequently is Cmd&#43;Shift&#43;L
- Select all the text in the sublime window using Cmd&#43;A Cmd&#43;Shift&#43;L to get the cursor on all lines Use Cmd and Opt with arrow keys to move these cursors to required locations. Cmd takes to beginning and end. Opt takes you token by token Do your Magic and write. Press Delete key to getting everything in one line Press Esc to get out from Multiple cursor mode Enjoy!   2. Select Selectively and Look Good while doing it: Another functionality in Sublime that I love. We all have used Replace functionality in many text editors. This functionality is Find and Replace with a twist.
+ Select all the text in the sublime window using Cmd&#43;A Cmd&#43;Shift&#43;L to get the cursor on all lines Use Cmd and Opt with arrow keys to move these cursors to required locations. Cmd takes to beginning and end. Opt takes you token by token Do your Magic and write. Press Delete key to getting everything in one line Press Esc to get out from Multiple cursor mode Enjoy!  2. Select Selectively and Look Good while doing it: Another functionality in Sublime that I love. We all have used Replace functionality in many text editors. This functionality is Find and Replace with a twist.
 So, without further ado, let me demonstrate it with an example. Let&amp;rsquo;s say we have a code snippet written in Python and we want to replace some word. We can very well do it with Find and Replace Functionality. We will find and replace each word and would end up clicking a lot of times. Sublime makes it so much easier. And it looks impressive too. You look like you know what you are doing, which will get a few brownie points in my book.
-So how I did this?
- Select the word you want to replace Press Cmd&#43;D multiple times to only select instances of the word you want to remove. When all words are selected, write the new word And that&amp;rsquo;s all  This concludes my post about one of the most efficient editors I have ever known. You can try to do a lot of things with Sublime but the above use cases are the ones which I find most useful. These simple commands will make your work much more efficient and remove the manual drudgery which is sometimes a big part of our jobs. Hope you end up using this in your Workflow. Trust me you will end up loving it.
- Let me know if you liked this post. I will continue writing such Tips and Tricks in a series of posts. Also, do follow me on Medium to get notified about my future posts.
- PS1: All the things above will also work with Atom text editor using the exact same commands on Mac.
+  So how I did this?
+ Select the word you want to replace Press Cmd&#43;D multiple times to only select instances of the word you want to remove. When all words are selected, write the new word And that&amp;rsquo;s all    This concludes my post about one of the most efficient editors I have ever known. You can try to do a lot of things with Sublime but the above use cases are the ones which I find most useful. These simple commands will make your work much more efficient and remove the manual drudgery which is sometimes a big part of our jobs. Hope you end up using this in your Workflow. Trust me you will end up loving it.
+Let me know if you liked this post. I will continue writing such Tips and Tricks in a series of posts. Also, do follow me on Medium to get notified about my future posts.
+PS1: All the things above will also work with Atom text editor using the exact same commands on Mac.
 PS2: For Window Users, Replace Cmd by Ctrl and Opt with Alt to get the same functionality.
 ]]>
         
@@ -344,7 +343,7 @@ Problem Statement: In a room full of N people, what is the probability that 2 or
 
       <content:encoded>  
         
-        <![CDATA[ Newton once said that &amp;ldquo;God does not play dice with the universe&amp;rdquo;. But actually he does. Everything happening around us could be explained in terms of probabilities. We repeatedly watch things around us happen due to chances, yet we never learn. We always get dumbfounded by the playfulness of nature.
+        <![CDATA[  Newton once said that &amp;ldquo;God does not play dice with the universe&amp;rdquo;. But actually he does. Everything happening around us could be explained in terms of probabilities. We repeatedly watch things around us happen due to chances, yet we never learn. We always get dumbfounded by the playfulness of nature.
 One of such ways intuition plays with us is with the Birthday problem.
 Problem Statement: In a room full of N people, what is the probability that 2 or more people share the same birthday(Assumption: 365 days in year)?
 By the pigeonhole principle, the probability reaches 100% when the number of people reaches 366 (since there are only 365 possible birthdays).
@@ -352,7 +351,7 @@ However, the paradox is that 99.9% probability is reached with just 70 people, a
 Mathematical Proof: Sometimes a good strategy when trying to find out probability of an event is to look at the probability of the complement event.Here it is easier to find the probability of the complement event. We just need to count the number of cases in which no person has the same birthday.(Sampling without replacement) Since there are k ways in which birthdays can be chosen with replacement.
 $P(birthday Match) = 1 - \dfrac{(365).364&amp;hellip;(365−k&#43;1)}{365^k}$
 Simulation: Lets try to build around this result some more by trying to simulate this result:
-%matplotlib inline import matplotlib import numpy as np import matplotlib.pyplot as plt import matplotlib.pyplot as plt #sets up plotting under plt import seaborn as sns #sets up styles and gives us more plotting options import pandas as pd #lets us handle data as dataframes import random def sim_bithday_problem(num_people_room, trials =1000): &amp;#39;&amp;#39;&amp;#39;This function takes as input the number of people in the room. Runs 1000 trials by default and returns (number of times same brthday found)/(no of trials) &amp;#39;&amp;#39;&amp;#39; same_birthdays_found = 0 for i in range(trials): # randomly sample from the birthday space which could be any of a number from 1 to 365 birthdays = [random.randint(1,365) for x in range(num_people_room)] if len(birthdays) - len(set(birthdays))&amp;gt;0: same_birthdays_found&#43;=1 return same_birthdays_found/float(trials) num_people = range(2,100) probs = [sim_bithday_problem(i) for i in num_people] data = pd.DataFrame() data[&amp;#39;num_peeps&amp;#39;] = num_people data[&amp;#39;probs&amp;#39;] = probs sns.set(style=&amp;#34;ticks&amp;#34;) g = sns.regplot(x=&amp;#34;num_peeps&amp;#34;, y=&amp;#34;probs&amp;#34;, data=data, ci = False, scatter_kws={&amp;#34;color&amp;#34;:&amp;#34;darkred&amp;#34;,&amp;#34;alpha&amp;#34;:0.3,&amp;#34;s&amp;#34;:90}, marker=&amp;#34;x&amp;#34;,fit_reg=False) sns.despine() g.figure.set_size_inches(10,6) g.axes.set_title(&amp;#39;As the Number of people in room reaches 23 the probability reaches ~0.5\nAt more than 50 people the probability is reaching 1&amp;#39;, fontsize=15,color=&amp;#34;g&amp;#34;,alpha=0.5) g.set_xlabel(&amp;#34;# of people in room&amp;#34;,size = 30,color=&amp;#34;r&amp;#34;,alpha=0.5) g.set_ylabel(&amp;#34;Probability&amp;#34;,size = 30,color=&amp;#34;r&amp;#34;,alpha=0.5) g.tick_params(labelsize=14,labelcolor=&amp;#34;black&amp;#34;) We can see from the graph that as the Number of people in room reaches 23 the probability reaches ~ 0.5. So we have proved this fact Mathematically as well as with simulation.
+%matplotlib inline import matplotlib import numpy as np import matplotlib.pyplot as plt import matplotlib.pyplot as plt #sets up plotting under plt import seaborn as sns #sets up styles and gives us more plotting options import pandas as pd #lets us handle data as dataframes import random def sim_bithday_problem(num_people_room, trials =1000): &amp;#39;&amp;#39;&amp;#39;This function takes as input the number of people in the room. Runs 1000 trials by default and returns (number of times same brthday found)/(no of trials) &amp;#39;&amp;#39;&amp;#39; same_birthdays_found = 0 for i in range(trials): # randomly sample from the birthday space which could be any of a number from 1 to 365 birthdays = [random.randint(1,365) for x in range(num_people_room)] if len(birthdays) - len(set(birthdays))&amp;gt;0: same_birthdays_found&#43;=1 return same_birthdays_found/float(trials) num_people = range(2,100) probs = [sim_bithday_problem(i) for i in num_people] data = pd.DataFrame() data[&amp;#39;num_peeps&amp;#39;] = num_people data[&amp;#39;probs&amp;#39;] = probs sns.set(style=&amp;#34;ticks&amp;#34;) g = sns.regplot(x=&amp;#34;num_peeps&amp;#34;, y=&amp;#34;probs&amp;#34;, data=data, ci = False, scatter_kws={&amp;#34;color&amp;#34;:&amp;#34;darkred&amp;#34;,&amp;#34;alpha&amp;#34;:0.3,&amp;#34;s&amp;#34;:90}, marker=&amp;#34;x&amp;#34;,fit_reg=False) sns.despine() g.figure.set_size_inches(10,6) g.axes.set_title(&amp;#39;As the Number of people in room reaches 23 the probability reaches ~0.5\nAt more than 50 people the probability is reaching 1&amp;#39;, fontsize=15,color=&amp;#34;g&amp;#34;,alpha=0.5) g.set_xlabel(&amp;#34;# of people in room&amp;#34;,size = 30,color=&amp;#34;r&amp;#34;,alpha=0.5) g.set_ylabel(&amp;#34;Probability&amp;#34;,size = 30,color=&amp;#34;r&amp;#34;,alpha=0.5) g.tick_params(labelsize=14,labelcolor=&amp;#34;black&amp;#34;)   We can see from the graph that as the Number of people in room reaches 23 the probability reaches ~ 0.5. So we have proved this fact Mathematically as well as with simulation.
 Intuition: To understand it we need to think of this problem in terms of pairs. There are ${{23}\choose{2}} = 253$ pairs of people in the room when only 23 people are present. Now with that big number you should not find the probability of 0.5 too much. In the case of 70 people we are looking at ${{70}\choose{2}} = 2450$ pairs.
 So thats it for now. To learn more about this go to Wikipedia which has an awesome page on this topic.
 References:  Introduction to Probability by Joseph K. Blitzstein Birthday Problem on Wikipedia  ]]>
@@ -380,7 +379,7 @@ For those who don&amp;amp;rsquo;t know bag of words: If we have a series of sent
 
       <content:encoded>  
         
-        <![CDATA[ Recently Quora put out a Question similarity competition on Kaggle. This is the first time I was attempting an NLP problem so a lot to learn. The one thing that blew my mind away was the word2vec embeddings.
+        <![CDATA[  Recently Quora put out a Question similarity competition on Kaggle. This is the first time I was attempting an NLP problem so a lot to learn. The one thing that blew my mind away was the word2vec embeddings.
 Till now whenever I heard the term word2vec I visualized it as a way to create a bag of words vector for a sentence.
 For those who don&amp;rsquo;t know bag of words: If we have a series of sentences(documents)
  This is good - [1,1,1,0,0] This is bad - [1,1,0,1,0] This is awesome - [1,1,0,0,1]  Bag of words would encode it using 0:This 1:is 2:good 3:bad 4:awesome
@@ -389,7 +388,7 @@ What word2vec does is that it creates vectors for words. What I mean by that is 
 How does that help? We can use this for multiple scenarios but the most common are:
 A. Using word2vec embeddings we can find out similarity between words. Assume you have to answer if these two statements signify the same thing:
  President greets press in Chicago Obama speaks to media in Illinois.  If we do a sentence similarity metric or a bag of words approach to compare these two sentences we will get a pretty low score.
-But with a word encoding we can say that
+  But with a word encoding we can say that
  President is similar to Obama greets is similar to speaks press is similar to media Chicago is similar to Illinois  B. Encode Sentences: I read a post from Abhishek Thakur a prominent kaggler.(Must Read). What he did was he used these word embeddings to create a 300 dimensional vector for every sentence.
 His Approach: Lets say the sentence is &amp;ldquo;What is this&amp;rdquo; And lets say the embedding for every word is given in 4 dimension(normally 300 dimensional encoding is given)
  what : [.25 ,.25 ,.25 ,.25] is : [ 1 , 0 , 0 , 0] this : [ .5 , 0 , 0 , .5]  Then the vector for the sentence is normalized elementwise addition of the vectors. i.e.
@@ -399,12 +398,56 @@ Guess what it comes out to be : Queen
 Application/Coding: Now lets get down to the coding part as we know a little bit of fundamentals.
 First of all we download a custom word embedding from Google. There are many other embeddings too.
 wget https://s3.amazonaws.com/dl4j-distribution/GoogleNews-vectors-negative300.bin.gz The above file is pretty big. Might take some time. Then moving on to coding.
-from gensim.models import word2vec model = gensim.models.KeyedVectors.load_word2vec_format(&amp;#39;data/GoogleNews-vectors-negative300.bin.gz&amp;#39;, binary=True) 1. Starting simple, lets find out similar words. Want to find similar words to python? model.most_similar(&amp;#39;python&amp;#39;) 2. Now we can use this model to find the solution to the equation: What is king - man &#43; woman?
-model.most_similar(positive = [&amp;#39;king&amp;#39;,&amp;#39;woman&amp;#39;],negative = [&amp;#39;man&amp;#39;]) You can do plenty of freaky/cool things using this:
-3. Lets say you wanted a girl and had a girl name like emma in mind but you got a boy. So what is the male version for emma? model.most_similar(positive = [&amp;#39;emma&amp;#39;,&amp;#39;he&amp;#39;,&amp;#39;male&amp;#39;,&amp;#39;mr&amp;#39;],negative = [&amp;#39;she&amp;#39;,&amp;#39;mrs&amp;#39;,&amp;#39;female&amp;#39;]) 4. Find which word doesn&amp;rsquo;t belong to a list? model.doesnt_match(&amp;#34;math shopping reading science&amp;#34;.split(&amp;#34; &amp;#34;)) I think staple doesn&amp;rsquo;t belong in this list!
-Other Cool Things 1. Recommendations: In this paper, the authors have shown that itembased CF can be cast in the same framework of word embedding.
-2. Some other examples that people have seen after using their own embeddings: Library - Books = HallObama &#43; Russia - USA = PutinIraq - Violence = JordanPresident - Power = Prime Minister (Not in India Though)3.Seeing the above I started playing with it a little. Is this model sexist?
-model.most_similar(positive = [&amp;#34;donald_trump&amp;#34;],negative = [&amp;#39;brain&amp;#39;]) Whatever it is doing it surely feels like magic. Next time I will try to write more on how it works once I understand it fully.
+from gensim.models import word2vec model = gensim.models.KeyedVectors.load_word2vec_format(&amp;#39;data/GoogleNews-vectors-negative300.bin.gz&amp;#39;, binary=True) 1. Starting simple, lets find out similar words. Want to find similar words to python? model.most_similar(&amp;#39;python&amp;#39;) [(u&#39;pythons&#39;, 0.6688377261161804),
+(u&#39;Burmese_python&#39;, 0.6680364608764648),
+(u&#39;snake&#39;, 0.6606293320655823),
+(u&#39;crocodile&#39;, 0.6591362953186035),
+(u&#39;boa_constrictor&#39;, 0.6443519592285156),
+(u&#39;alligator&#39;, 0.6421656608581543),
+(u&#39;reptile&#39;, 0.6387745141983032),
+(u&#39;albino_python&#39;, 0.6158879995346069),
+(u&#39;croc&#39;, 0.6083582639694214),
+(u&#39;lizard&#39;, 0.601341724395752)]
+ 2. Now we can use this model to find the solution to the equation: What is king - man &#43; woman?
+model.most_similar(positive = [&amp;#39;king&amp;#39;,&amp;#39;woman&amp;#39;],negative = [&amp;#39;man&amp;#39;]) [(u&#39;queen&#39;, 0.7118192315101624),
+(u&#39;monarch&#39;, 0.6189674139022827),
+(u&#39;princess&#39;, 0.5902431011199951),
+(u&#39;crown_prince&#39;, 0.5499460697174072),
+(u&#39;prince&#39;, 0.5377321839332581),
+(u&#39;kings&#39;, 0.5236844420433044),
+(u&#39;Queen_Consort&#39;, 0.5235946178436279),
+(u&#39;queens&#39;, 0.5181134343147278),
+(u&#39;sultan&#39;, 0.5098593235015869),
+(u&#39;monarchy&#39;, 0.5087412595748901)]
+ You can do plenty of freaky/cool things using this:
+3. Lets say you wanted a girl and had a girl name like emma in mind but you got a boy. So what is the male version for emma? model.most_similar(positive = [&amp;#39;emma&amp;#39;,&amp;#39;he&amp;#39;,&amp;#39;male&amp;#39;,&amp;#39;mr&amp;#39;],negative = [&amp;#39;she&amp;#39;,&amp;#39;mrs&amp;#39;,&amp;#39;female&amp;#39;]) [(u&#39;sanchez&#39;, 0.4920658469200134),
+(u&#39;kenny&#39;, 0.48300960659980774),
+(u&#39;alves&#39;, 0.4684845209121704),
+(u&#39;gareth&#39;, 0.4530612826347351),
+(u&#39;bellamy&#39;, 0.44884198904037476),
+(u&#39;gibbs&#39;, 0.445194810628891),
+(u&#39;dos_santos&#39;, 0.44508373737335205),
+(u&#39;gasol&#39;, 0.44387346506118774),
+(u&#39;silva&#39;, 0.4424275755882263),
+(u&#39;shaun&#39;, 0.44144102931022644)]
+ 4. Find which word doesn&amp;rsquo;t belong to a list? model.doesnt_match(&amp;#34;math shopping reading science&amp;#34;.split(&amp;#34; &amp;#34;)) I think staple doesn&amp;rsquo;t belong in this list!
+Other Cool Things 1. Recommendations:   In this paper, the authors have shown that itembased CF can be cast in the same framework of word embedding.
+2. Some other examples that people have seen after using their own embeddings: Library - Books = Hall
+Obama &#43; Russia - USA = Putin
+Iraq - Violence = Jordan
+President - Power = Prime Minister (Not in India Though)
+3.Seeing the above I started playing with it a little. Is this model sexist?
+model.most_similar(positive = [&amp;#34;donald_trump&amp;#34;],negative = [&amp;#39;brain&amp;#39;]) [(u&#39;novak&#39;, 0.40405112504959106),
+(u&#39;ozzie&#39;, 0.39440611004829407),
+(u&#39;democrate&#39;, 0.39187556505203247),
+(u&#39;clinton&#39;, 0.390536367893219),
+(u&#39;hillary_clinton&#39;, 0.3862358033657074),
+(u&#39;bnp&#39;, 0.38295692205429077),
+(u&#39;klaar&#39;, 0.38228923082351685),
+(u&#39;geithner&#39;, 0.380607008934021),
+(u&#39;bafana_bafana&#39;, 0.3801495432853699),
+(u&#39;whitman&#39;, 0.3790769875049591)]
+ Whatever it is doing it surely feels like magic. Next time I will try to write more on how it works once I understand it fully.
 ]]>
         
       </content:encoded>
@@ -429,7 +472,7 @@ To be frank, when I first started learning it all looked very utopian and out of
 
       <content:encoded>  
         
-        <![CDATA[ I have been looking to create this list for a while now. There are many people on quora who ask me how I started in the data science field. And so I wanted to create this reference.
+        <![CDATA[  I have been looking to create this list for a while now. There are many people on quora who ask me how I started in the data science field. And so I wanted to create this reference.
 To be frank, when I first started learning it all looked very utopian and out of the world. The Andrew Ng course felt like black magic. And it still doesn&amp;rsquo;t cease to amaze me. After all, we are predicting the future. Take the case of Nate Silver - What else can you call his success if not Black Magic?
 But it is not magic. And this is a way an aspiring guy could take to become a self-trained data scientist. Follow in order. I have tried to include everything that comes to my mind. So here goes:
 1. Stat 110: Introduction to Probability: Joe Blitzstein - Harvard University The one stat course you gotta take. If not for the content then for Prof. Blitzstein sense of humor. I took this course to enhance my understanding of probability distributions and statistics, but this course taught me a lot more than that. Apart from Learning to think conditionally, this also taught me how to explain difficult concepts with a story.
@@ -437,8 +480,8 @@ This was a Hard Class but most definitely fun. The focus was not only on getting
 One of the things I liked most about this course is the focus on concrete examples while explaining abstract concepts. The inclusion of ** Gambler’s Ruin Problem, Matching Problem, Birthday Problem, Monty Hall, Simpsons Paradox, St. Petersberg Paradox ** etc. made this course much much more exciting than a normal Statistics Course.
 It will help you understand Discrete (Bernoulli, Binomial, Hypergeometric, Geometric, Negative Binomial, FS, Poisson) and Continuous (Uniform, Normal, expo, Beta, Gamma) Distributions and the stories behind them. Something that I was always afraid of.
 He got a textbook out based on this course which is clearly a great text:
-2. Data Science CS109: - Again by Professor Blitzstein. Again an awesome course. Watch it after Stat110 as you will be able to understand everything much better with a thorough grinding in Stat110 concepts. You will learn about Python Libraries like Numpy,Pandas for data science, along with a thorough intuitive grinding for various Machine learning Algorithms. Course description from Website:
-3. CS229: Andrew Ng After doing these two above courses you will gain the status of what I would like to call a &amp;ldquo;Beginner&amp;rdquo;. Congrats!!!. You know stuff, you know how to implement stuff. Yet you do not fully understand all the math and grind that goes behind all this.
+ 2. Data Science CS109: - Again by Professor Blitzstein. Again an awesome course. Watch it after Stat110 as you will be able to understand everything much better with a thorough grinding in Stat110 concepts. You will learn about Python Libraries like Numpy,Pandas for data science, along with a thorough intuitive grinding for various Machine learning Algorithms. Course description from Website:
+Learning from data in order to gain useful predictions and insights. This course introduces methods for five key facets of an investigation: data wrangling, cleaning, and sampling to get a suitable data set; data management to be able to access big data quickly and reliably; exploratory data analysis to generate hypotheses and intuition; prediction based on statistical methods such as regression and classification; and communication of results through visualization, stories, and interpretable summaries.  3. CS229: Andrew Ng After doing these two above courses you will gain the status of what I would like to call a &amp;ldquo;Beginner&amp;rdquo;. Congrats!!!. You know stuff, you know how to implement stuff. Yet you do not fully understand all the math and grind that goes behind all this.
 Here comes the Game Changer machine learning course. Contains the maths behind many of the Machine Learning algorithms. I will put this course as the one course you gotta take as this course motivated me into getting in this field and Andrew Ng is a great instructor. Also this was the first course that I took.
 Also recently Andrew Ng Released a new Book. You can get the Draft chapters by subcribing on his website here.
 You are done with the three musketeers of the trade. You know Python, you understand Statistics and you have gotten the taste of the math behind ML approaches. Now it is time for the new kid on the block. D&amp;rsquo;artagnan. This kid has skills. While the three musketeers are masters in their trade, this guy brings qualities that adds a new freshness to our data science journey. Here comes Big Data for you.
@@ -449,26 +492,28 @@ A. First, grab the file word_list.txt from here. This contains a list of six-let
 B. For the next problem, download the file baseball_friends.csv. Each row of this csv file contains the following:
  A person&amp;rsquo;s name The team that person is rooting for &amp;ndash; either &amp;ldquo;Cardinals&amp;rdquo; or &amp;ldquo;Red Sox&amp;rdquo; A list of that person&amp;rsquo;s friends, which could have arbitrary length  For example: The first line tells us that Aaden is a Red Sox friend and he has 65 friends, who are all listed here. For this problem, it&amp;rsquo;s safe to assume that all of the names are unique and that the friendship structure is symmetric (i.e. if Alannah shows up in Aaden&amp;rsquo;s friends list, then Aaden will show up in Alannah&amp;rsquo;s friends list). Write an mr job that lists each person&amp;rsquo;s name, their favorite team, the number of Red Sox fans they are friends with, and the number of Cardinals fans they are friends with.
 Try to do this yourself. Don&amp;rsquo;t use the mrjob (pronounced Mr. Job) way that they use in the CS109 2013 class. Use the proper Hadoop Streaming way as taught in the Udacity class as it is much more customizable in the long run.
-If you are done with these, you can safely call yourself as someone who could &amp;ldquo;think in Mapreduce&amp;rdquo; as how people like to call it.Try to do groupby, filter and joins using Hadoop. You can read up some good tricks from my blog:Hadoop Mapreduce Streaming Tricks and Techniques
-If you are someone who likes learning from a book you can get:
+If you are done with these, you can safely call yourself as someone who could &amp;ldquo;think in Mapreduce&amp;rdquo; as how people like to call it.Try to do groupby, filter and joins using Hadoop. You can read up some good tricks from my blog:
+Hadoop Mapreduce Streaming Tricks and Techniques
+If you are someone who likes learning from a book you can get: 
 5. Spark - In memory Big Data tool. Now comes the next part of your learning process. This should be undertaken after a little bit of experience with Hadoop. Spark will provide you with the speed and tools that Hadoop couldn&amp;rsquo;t.
 Now Spark is used for data preparation as well as Machine learning purposes. I would encourage you to take a look at the series of courses on edX provided by Berkeley instructors. This course delivers on what it says. It teaches Spark. Total beginners will have difficulty following the course as the course progresses very fast. That said anyone with a decent understanding of how big data works will be OK.
 Data Science and Engineering with Apache® Spark™
 I have written a little bit about Basic data processing with Spark here. Take a look: Learning Spark using Python: Basics and Applications
 Also take a look at some of the projects I did as part of course at github
-If you would like a book to read:
+If you would like a book to read: 
 If you don&amp;rsquo;t go through the courses, try solving the same two problems above that you solved by Hadoop using Spark too. Otherwise the problem sets in the courses are more than enough.
 6. Understand Linux Shell: Shell is a big friend for data scientists. It allows you to do simple data related tasks in the terminal itself. I couldn&amp;rsquo;t emphasize how much time shell saves for me everyday.
-Read these tutorials by me for doing that:Shell Basics every Data Scientist Should know -Part I Shell Basics every Data Scientist Should know - Part II(AWK)
+Read these tutorials by me for doing that:
+Shell Basics every Data Scientist Should know -Part I Shell Basics every Data Scientist Should know - Part II(AWK)
 If you would like a course you can go for this course on edX.
 If you want a book, go for:
-Congrats you are an &amp;ldquo;Hacker&amp;rdquo; now. You have got all the main tools in your belt to be a data scientist. On to more advanced topics. From here it depends on you what you want to learn. You may want to take a totally different approach than what I took going from here. There is no particular order. &amp;ldquo;All Roads lead to Rome&amp;rdquo; as long as you are running.
+ Congrats you are an &amp;ldquo;Hacker&amp;rdquo; now. You have got all the main tools in your belt to be a data scientist. On to more advanced topics. From here it depends on you what you want to learn. You may want to take a totally different approach than what I took going from here. There is no particular order. &amp;ldquo;All Roads lead to Rome&amp;rdquo; as long as you are running.
 7. Learn Statistical Inference and Bayesian Statistics I took the previous version of the specialization which was a single course taught by Mine Çetinkaya-Rundel. She is a great instrucor and explains the fundamentals of Statistical inference nicely. A must take course. You will learn about hypothesis testing, confidence intervals, and statistical inference methods for numerical and categorical data. You can also use these books:
-8. Deep Learning Intro - Making neural nets uncool again. An awesome Deep learning class from Kaggle Master Jeremy Howard. Entertaining and enlightening at the same time.
+  8. Deep Learning Intro - Making neural nets uncool again. An awesome Deep learning class from Kaggle Master Jeremy Howard. Entertaining and enlightening at the same time.
 Advanced - A series of notes from the Stanford CS class CS231n: Convolutional Neural Networks for Visual Recognition.
 Bonus - A free online book by Michael Nielsen.
 Advanced Math Book - A math intensive book by Yoshua Bengio &amp;amp; Ian Goodfellow
-9. Algorithms, Graph Algorithms, Recommendation Systems, Pagerank and More This course used to be there on Coursera but now only video links on youtube available. You can learn from this book too:
+9. Algorithms, Graph Algorithms, Recommendation Systems, Pagerank and More This course used to be there on Coursera but now only video links on youtube available. You can learn from this book too: 
 Apart from that if you want to learn about Python and the basic intricacies of the language you can take the Computer Science Mini Specialization from RICE university too. This is a series of 6 short but good courses. I worked on these courses as Data science will require you to do a lot of programming. And the best way to learn programming is by doing programming. The lectures are good but the problems and assignments are awesome. If you work on this you will learn Object Oriented Programming,Graph algorithms and games in Python. Pretty cool stuff.
 10. Advanced Maths: Couldn&amp;rsquo;t write enough of the importance of Math. But here are a few awesome resources that you can go for.
 Linear Algebra By Gilbert Strang - A Great Class by a great Teacher. I Would definitely recommend this class to anyone who wants to learn LA.
@@ -501,23 +546,23 @@ Till then. Ciao!!!
 
       <content:encoded>  
         
-        <![CDATA[ A data scientist needs to be Critical and always on a lookout of something that misses others. So here are some advices that one can include in day to day data science work to be better at their work:
+        <![CDATA[    A data scientist needs to be Critical and always on a lookout of something that misses others. So here are some advices that one can include in day to day data science work to be better at their work:
 1. Beware of the Clean Data Syndrome You need to ask yourself questions even before you start working on the data. Does this data make sense? Falsely assuming that the data is clean could lead you towards wrong Hypotheses. Apart from that, you can discern a lot of important patterns by looking at discrepancies in the data. For example, if you notice that a particular column has more than 50% values missing, you might think about not using the column. Or you may think that some of the data collection instrument has some error.
 Or let&amp;rsquo;s say you have a distribution of Male vs Female as 90:10 in a Female Cosmetic business. You may assume clean data and show the results as it is or you can use common sense and ask if the labels are switched.
 2. Manage Outliers wisely Outliers can help you understand more about the people who are using your website/product 24 hours a day. But including them while building models will skew the models a lot.
 3. Keep an eye out for the Abnormal Be on the lookout for something out of the obvious. If you find something you may have hit gold.
 For example, Flickr started up as a Multiplayer game. Only when the founders noticed that people were using it as a photo upload service, did they pivot.
 Another example: fab.com started up as fabulis.com, a site to help gay men meet people. One of the site&amp;rsquo;s popular features was the &amp;ldquo;Gay deal of the Day&amp;rdquo;. One day the deal was for Hamburgers - and half of the buyers were women. This caused the team to realize that there was a market for selling goods to women. So Fabulis pivoted to fab as a flash sale site for designer products.
-4. Start Focussing on the right metrics  Beware of Vanity metrics For example, # of active users by itself doesn&amp;rsquo;t divulge a lot of information. I would rather say &amp;ldquo;5% MoM increase in active users&amp;rdquo; rather than saying &amp;quot; 10000 active users&amp;rdquo;. Even that is a vanity metric as active users would always increase. I would rather keep a track of percentage of users that are active to know how my product is performing. Try to find out a metric that ties with the business goal. For example, Average Sales/User for a particular month.  5. Statistics may lie too Be critical of everything that gets quoted to you. Statistics has been used to lie in advertisements, in workplaces and a lot of other marketing venues in the past. People will do anything to get sales or promotions.
+4. Start Focussing on the right metrics  Beware of Vanity metrics For example, # of active users by itself doesn&amp;rsquo;t divulge a lot of information. I would rather say &amp;ldquo;5% MoM increase in active users&amp;rdquo; rather than saying &amp;ldquo; 10000 active users&amp;rdquo;. Even that is a vanity metric as active users would always increase. I would rather keep a track of percentage of users that are active to know how my product is performing. Try to find out a metric that ties with the business goal. For example, Average Sales/User for a particular month.   5. Statistics may lie too Be critical of everything that gets quoted to you. Statistics has been used to lie in advertisements, in workplaces and a lot of other marketing venues in the past. People will do anything to get sales or promotions.
 For example: Do you remember Colgate’s claim that 80% of dentists recommended their brand?
 This statistic seems pretty good at first. It turns out that at the time of surveying the dentists, they could choose several brands — not just one. So other brands could be just as popular as Colgate.
 Another Example: &amp;ldquo;99 percent Accurate&amp;rdquo; doesn&amp;rsquo;t mean shit. Ask me to create a cancer prediction model and I could give you a 99 percent accurate model in a single line of code. How? Just predict &amp;ldquo;No Cancer&amp;rdquo; for each one. I will be accurate may be more than 99% of the time as Cancer is a pretty rare disease. Yet I have achieved nothing.
 6. Understand how probability works It happened during the summer of 1913 in a Casino in Monaco. Gamblers watched in amazement as a casino&amp;rsquo;s roulette wheel landed on black 26 times in a row. And since the probability of a Red vs Black is exactly half, they were certain that red was &amp;ldquo;due&amp;rdquo;. It was a field day for the Casino. A perfect example of Gambler&amp;rsquo;s fallacy, aka the Monte Carlo fallacy.
 And This happens in real life. People tend to avoid long strings of the same answer. Sometimes sacrificing accuracy of judgment for the sake of getting a pattern of decisions that looks fairer or probable.
 For example, An admissions officer may reject the next application if he has approved three applications in a row, even if the application should have been accepted on merit.
-7. Correlation Does Not Equal Causation The Holy Grail of a Data scientist toolbox. To see something for what it is. Just because two variables move together in tandem doesn&amp;rsquo;t necessarily mean that one causes the another. There have been hilarious examples for this in the past. Some of my favorites are:
-  Looking at the firehouse department data you infer that the more firemen are sent to a fire, the more damage is done.
-  When investigating the cause of crime in New York City in the 80s, an academic found a strong correlation between the amount of serious crime committed and the amount of ice cream sold by street vendors! Obviously, there was an unobserved variable causing both. Summers are when the crime is the greatest and when the most ice cream is sold. So Ice cream sales don&amp;rsquo;t cause crime. Neither crime increases ice cream sales.
+7. Correlation Does Not Equal Causation   The Holy Grail of a Data scientist toolbox. To see something for what it is. Just because two variables move together in tandem doesn&amp;rsquo;t necessarily mean that one causes the another. There have been hilarious examples for this in the past. Some of my favorites are:
+ Looking at the firehouse department data you infer that the more firemen are sent to a fire, the more damage is done.
+ When investigating the cause of crime in New York City in the 80s, an academic found a strong correlation between the amount of serious crime committed and the amount of ice cream sold by street vendors! Obviously, there was an unobserved variable causing both. Summers are when the crime is the greatest and when the most ice cream is sold. So Ice cream sales don&amp;rsquo;t cause crime. Neither crime increases ice cream sales.
   8. More data may help Sometimes getting extra data may work wonders. You might be able to model the real world more closely by looking at the problem from all angles. Look for extra data sources.
 For example, Crime data in a city might help banks provide a better credit line to a person living in a troubled neighborhood and in turn increase the bottom line.
 ]]>
@@ -540,23 +585,22 @@ For example, Crime data in a city might help banks provide a better credit line 
 
       
       <description>Yesterday I got introduced to awk programming on the shell and is it cool. It lets you do stuff on the command line which you never imagined. As a matter of fact, it&amp;amp;rsquo;s a whole data analytics software in itself when you think about it. You can do selections, groupby, mean, median, sum, duplication, append. You just ask. There is no limit actually.
-And it is easy to learn.
-In this post, I will try to give you a brief intro about how you could add awk to your daily work-flow.</description>
+And it is easy to learn.</description>
 
       <content:encoded>  
         
-        <![CDATA[ Yesterday I got introduced to awk programming on the shell and is it cool. It lets you do stuff on the command line which you never imagined. As a matter of fact, it&amp;rsquo;s a whole data analytics software in itself when you think about it. You can do selections, groupby, mean, median, sum, duplication, append. You just ask. There is no limit actually.
+        <![CDATA[  Yesterday I got introduced to awk programming on the shell and is it cool. It lets you do stuff on the command line which you never imagined. As a matter of fact, it&amp;rsquo;s a whole data analytics software in itself when you think about it. You can do selections, groupby, mean, median, sum, duplication, append. You just ask. There is no limit actually.
 And it is easy to learn.
 In this post, I will try to give you a brief intro about how you could add awk to your daily work-flow.
-Please see my previous postif you want some background or some basic to intermediate understanding of shell commands.
+Please see my previous post if you want some background or some basic to intermediate understanding of shell commands.
 Basics/ Fundamentals So let me start with an example first. Say you wanted to sum a column in a comma delimited file. How would you do that in shell?
 Here is the command. The great thing about awk is that it took me nearly 5 sec to write this command. I did not have to open any text editor to write a python script.
 It lets you do adhoc work quickly.
-awk &amp;#39;BEGIN{ sum=0; FS=&amp;#34;,&amp;#34;} { sum &#43;= $5 } END { print sum }&amp;#39; data.txt See the command one more time. There is a basic structure to the awk command
-An awk program consists of:
-  An optional BEGIN segment : In the begin part we initialize our variables before we even start reading from the file or the standard input.
-  pattern - action pairs: In the middle part we Process the input data. You put multiple pattern action pairs when you want to do multiple things with the same line.
-  An optional END segment: In the end part we do something we want to do when we have reached the end of file.
+awk &amp;#39;BEGIN{ sum=0; FS=&amp;#34;,&amp;#34;} { sum &#43;= $5 } END { print sum }&amp;#39; data.txt 44662539172  See the command one more time. There is a basic structure to the awk command
+BEGIN {action} pattern {action} pattern {action} . . pattern { action} END {action}   An awk program consists of:
+ An optional BEGIN segment : In the begin part we initialize our variables before we even start reading from the file or the standard input.
+ pattern - action pairs: In the middle part we Process the input data. You put multiple pattern action pairs when you want to do multiple things with the same line.
+ An optional END segment: In the end part we do something we want to do when we have reached the end of file.
   An awk command is called on a file using:
 awk &amp;#39;BEGIN{SOMETHING HERE} {SOMETHING HERE: could put Multiple Blocks Like this} END {SOMETHING HERE}&amp;#39; file.txt You also need to know about these preinitialized variables that awk keeps track of.:
  FS : field separator. Default is whitespace (1 or more spaces or tabs). If you are using any other seperator in the file you should specify it in the Begin Part. RS : record separator. Default record separator is newline. Can be changed in BEGIN action. NR : NR is the variable whose value is the number of the current record. You normally use it in the action blocks in the middle. NF : The Number of Fields after the single line has been split up using FS. Dollar variables : awk splits up the line which is coming to it by using the given FS and keeps the split parts in the $ variables. For example column 1 is in $1, column 2 is in $2. $0 is the string representation of the whole line. Note that if you want to access last column you don&amp;rsquo;t have to count. You can just use $NF. For second last column you can use $(NF-1). Pretty handy. Right.  So If you are with me till here, the hard part is done. Now the fun part starts. Lets look at the first awk command again and try to understand it.
@@ -566,30 +610,30 @@ Note that there is no pattern specified here so awk will do the action for every
 When awk has completed reading the file it prints out the sum.
 What if you wanted mean?
 We could create a cnt Variable:
-awk &amp;#39;BEGIN{ sum=0;cnt=0; FS=&amp;#34;,&amp;#34;} { sum &#43;= $5; cnt&#43;=1 } END { print sum/cnt }&amp;#39; data.txt or better yet, use our friend NR which bash is already keeping track of:
-awk &amp;#39;BEGIN{ sum=0; FS=&amp;#34;,&amp;#34;} { sum &#43;= $5 } END { print sum/NR }&amp;#39; data.txt Filter a file In the mean and sum awk commands we did not put any pattern in our middle commands. Let us use a simple pattern now. Suppose we have a file Salaries.csv which contains:
-head salaries.txt I want to filter records for players who who earn more than 22 M in 2013 just because I want to. You just do:
-awk &amp;#39;BEGIN{FS=&amp;#34;,&amp;#34;} $5&amp;gt;=22000000 &amp;amp;&amp;amp; $1==2013{print $0}&amp;#39; Salaries.csv Cool right. Now let me explain it a little bit. The part in the command &amp;ldquo;$5&amp;gt;=22000000 &amp;amp;&amp;amp; $1==2013&amp;rdquo; is called a pattern. It says that print this line($0) if and only if the Salary($5) is more than 22M and(&amp;amp;&amp;amp;) year($1) is equal to 2013. If the incoming record(line) does not satisfy this pattern it never reaches the inner block.
+awk &amp;#39;BEGIN{ sum=0;cnt=0; FS=&amp;#34;,&amp;#34;} { sum &#43;= $5; cnt&#43;=1 } END { print sum/cnt }&amp;#39; data.txt 1.86436e&#43;06  or better yet, use our friend NR which bash is already keeping track of:
+awk &amp;#39;BEGIN{ sum=0; FS=&amp;#34;,&amp;#34;} { sum &#43;= $5 } END { print sum/NR }&amp;#39; data.txt 1.86436e&#43;06  Filter a file In the mean and sum awk commands we did not put any pattern in our middle commands. Let us use a simple pattern now. Suppose we have a file Salaries.csv which contains:
+head salaries.txt yearID,teamID,lgID,playerID,salary 1985,BAL,AL,murraed02,1472819 1985,BAL,AL,lynnfr01,1090000 1985,BAL,AL,ripkeca01,800000 1985,BAL,AL,lacyle01,725000 1985,BAL,AL,flanami01,641667 1985,BAL,AL,boddimi01,625000 1985,BAL,AL,stewasa01,581250 1985,BAL,AL,martide01,560000 1985,BAL,AL,roeniga01,558333  I want to filter records for players who who earn more than 22 M in 2013 just because I want to. You just do:
+awk &amp;#39;BEGIN{FS=&amp;#34;,&amp;#34;} $5&amp;gt;=22000000 &amp;amp;&amp;amp; $1==2013{print $0}&amp;#39; Salaries.csv 2013,DET,AL,fieldpr01,23000000 2013,MIN,AL,mauerjo01,23000000 2013,NYA,AL,rodrial01,29000000 2013,NYA,AL,wellsve01,24642857 2013,NYA,AL,sabatcc01,24285714 2013,NYA,AL,teixema01,23125000 2013,PHI,NL,leecl02,25000000 2013,SFN,NL,linceti01,22250000  Cool right. Now let me explain it a little bit. The part in the command &amp;ldquo;$5&amp;gt;=22000000 &amp;amp;&amp;amp; $1==2013&amp;rdquo; is called a pattern. It says that print this line($0) if and only if the Salary($5) is more than 22M and(&amp;amp;&amp;amp;) year($1) is equal to 2013. If the incoming record(line) does not satisfy this pattern it never reaches the inner block.
 So Now you could do basic Select SQL at the command line only if you had:
 The logic Operators:
-  == equality operator; returns TRUE is both sides are equal
-  != inverse equality operator
-  &amp;amp;&amp;amp; logical AND
-  || logical OR
-  ! logical NOT
-  &amp;lt;, &amp;gt;, &amp;lt;=, &amp;gt;= relational operators
+ == equality operator; returns TRUE is both sides are equal
+ != inverse equality operator
+ &amp;amp;&amp;amp; logical AND
+ || logical OR
+ ! logical NOT
+ &amp;lt;, &amp;gt;, &amp;lt;=, &amp;gt;= relational operators
   Normal Arithmetic Operators: &#43;, -, /, *, %, ^
 Some String Functions: length, substr, split
 GroupBy Now you will say: &amp;ldquo;Hey Dude SQL without groupby is incomplete&amp;rdquo;. You are right and for that we can use the associative array. Lets just see the command first and then I will explain. So lets create another useless use case(or may be something useful to someone :)) We want to find out the number of records for each year in the file. i.e we want to find the distribution of years in the file. Here is the command:
-awk &amp;#39;BEGIN{FS=&amp;#34;,&amp;#34;} {my_array[$1]=my_array[$1]&#43;1} END{ for (k in my_array){if(k!=&amp;#34;yearID&amp;#34;)print k&amp;#34;|&amp;#34;my_array[k]}; }&amp;#39; Salaries.csv Now I would like to tell you a secret. You don&amp;rsquo;t really need to declare the variables you want to use in awk. So you did not really needed to define sum, cnt variables before. I only did that because it is good practice. If you don&amp;rsquo;t declare a user defined variable in awk, awk assumes it to be null or zero depending on the context. So in the command above we don&amp;rsquo;t declare our myarray in the begin block and that is fine.
+awk &amp;#39;BEGIN{FS=&amp;#34;,&amp;#34;} {my_array[$1]=my_array[$1]&#43;1} END{ for (k in my_array){if(k!=&amp;#34;yearID&amp;#34;)print k&amp;#34;|&amp;#34;my_array[k]}; }&amp;#39; Salaries.csv 1990|867 1991|685 1996|931 1997|925 ...  Now I would like to tell you a secret. You don&amp;rsquo;t really need to declare the variables you want to use in awk. So you did not really needed to define sum, cnt variables before. I only did that because it is good practice. If you don&amp;rsquo;t declare a user defined variable in awk, awk assumes it to be null or zero depending on the context. So in the command above we don&amp;rsquo;t declare our myarray in the begin block and that is fine.
 Associative Array: The variable myarray is actually an associative array. i.e. It stores data in a key value format.(Python dictionaries anyone). The same array could keep integer keys and String keys. For example, I can do this in a single code.
-For Loop for associative arrays: I could use a for loop to read associative array
-If Statement:Uses a syntax like C for the if statement. the else block is optional:
-So lets dissect the above command now.
+myarray[1]=&#34;key&#34; myarray[&#39;mlwhiz&#39;] = 1   For Loop for associative arrays: I could use a for loop to read associative array
+for (k in array) { DO SOMETHING } # Assigns to k each Key of array (unordered) # Element is array[k]   If Statement:Uses a syntax like C for the if statement. the else block is optional:
+if (n  0){ DO SOMETHING } else{ DO SOMETHING }   So lets dissect the above command now.
 I set the File separator to &amp;ldquo;,&amp;rdquo; in the beginning. I use the first column as the key of myarray. If the key exists I increment the value by 1.
 At the end, I loop through all the keys and print out key value pairs separated by &amp;ldquo;|&amp;rdquo;
 I know that the header line in my file contains &amp;ldquo;yearID&amp;rdquo; in column 1 and I don&amp;rsquo;t want &amp;lsquo;yearID|1&amp;rsquo; in the output. So I only print when Key is not equal to &amp;lsquo;yearID&amp;rsquo;.
-GroupBy with case statement: cat Salaries.csv | awk &amp;#39;BEGIN{FS=&amp;#34;,&amp;#34;} $5&amp;lt;100000{array5[&amp;#34;[0-100000)&amp;#34;]&#43;=1} $5&amp;gt;=100000&amp;amp;&amp;amp;$5&amp;lt;250000{array5[&amp;#34;[100000,250000)&amp;#34;]=array5[&amp;#34;[100000,250000)&amp;#34;]&#43;1} $5&amp;gt;=250000&amp;amp;&amp;amp;$5&amp;lt;500000{array5[&amp;#34;[250000-500000)&amp;#34;]=array5[&amp;#34;[250000-500000)&amp;#34;]&#43;1} $5&amp;gt;=500000&amp;amp;&amp;amp;$5&amp;lt;1000000{array5[&amp;#34;[500000-1000000)&amp;#34;]=array5[&amp;#34;[500000-1000000)&amp;#34;]&#43;1} $5&amp;gt;=1000000{array5[&amp;#34;[1000000)&amp;#34;]=array5[&amp;#34;[1000000)&amp;#34;]&#43;1} END{ print &amp;#34;VAR Distrib:&amp;#34;; for (v in array5){print v&amp;#34;|&amp;#34;array5[v]} }&amp;#39; Here we used multiple pattern-action blocks to create a case statement.
+GroupBy with case statement: cat Salaries.csv | awk &amp;#39;BEGIN{FS=&amp;#34;,&amp;#34;} $5&amp;lt;100000{array5[&amp;#34;[0-100000)&amp;#34;]&#43;=1} $5&amp;gt;=100000&amp;amp;&amp;amp;$5&amp;lt;250000{array5[&amp;#34;[100000,250000)&amp;#34;]=array5[&amp;#34;[100000,250000)&amp;#34;]&#43;1} $5&amp;gt;=250000&amp;amp;&amp;amp;$5&amp;lt;500000{array5[&amp;#34;[250000-500000)&amp;#34;]=array5[&amp;#34;[250000-500000)&amp;#34;]&#43;1} $5&amp;gt;=500000&amp;amp;&amp;amp;$5&amp;lt;1000000{array5[&amp;#34;[500000-1000000)&amp;#34;]=array5[&amp;#34;[500000-1000000)&amp;#34;]&#43;1} $5&amp;gt;=1000000{array5[&amp;#34;[1000000)&amp;#34;]=array5[&amp;#34;[1000000)&amp;#34;]&#43;1} END{ print &amp;#34;VAR Distrib:&amp;#34;; for (v in array5){print v&amp;#34;|&amp;#34;array5[v]} }&amp;#39; VAR Distrib: [250000-500000)|8326 [0-100000)|2 [1000000)|23661 [100000,250000)|9480  Here we used multiple pattern-action blocks to create a case statement.
 For The Brave: This is a awk code that I wrote to calculate the Mean,Median,min,max and sum of a column simultaneously. Try to go through the code and understand it.I have added comments too. Think of this as an exercise. Try to run this code and play with it. You may learn some new tricks in the process. If you don&amp;rsquo;t understand it do not worry. Just get started writing your own awk codes, you will be able to understand it in very little time.
 # Create a New file named A.txt to keep only the salary column. cat Salaries.csv | cut -d &amp;#34;,&amp;#34; -f 5 &amp;gt; A.txt FILENAME=&amp;#34;A.txt&amp;#34; # The first awk counts the number of lines which are numeric. We use a regex here to check if the column is numeric or not. # &amp;#39;;&amp;#39; stands for Synchronous execution i.e sort only runs after the awk is over. # The output of both commands are given to awk command which does the whole work. # So Now the first line going to the second awk is the number of lines in the file which are numeric. # and from the second to the end line the file is sorted. (awk &amp;#39;BEGIN {c=0} $1 ~ /^[-0-9]*(\.[0-9]*)?$/ {c=c&#43;1;} END {print c;}&amp;#39; &amp;#34;$FILENAME&amp;#34;; \  sort -n &amp;#34;$FILENAME&amp;#34;) | awk &amp;#39; BEGIN { c = 0; sum = 0; med1_loc = 0; med2_loc = 0; med1_val = 0; med2_val = 0; min = 0; max = 0; } NR==1 { LINES = $1 # We check whether numlines is even or odd so that we keep only # the locations in the array where the median might be. if (LINES%2==0) {med1_loc = LINES/2-1; med2_loc = med1_loc&#43;1;} if (LINES%2!=0) {med1_loc = med2_loc = (LINES-1)/2;} } $1 ~ /^[-0-9]*(\.[0-9]*)?$/ &amp;amp;&amp;amp; NR!=1 { # setting min value if (c==0) {min = $1;} # middle two values in array if (c==med1_loc) {med1_val = $1;} if (c==med2_loc) {med2_val = $1;} c&#43;&#43; sum &#43;= $1 max = $1 } END { ave = sum / c median = (med1_val &#43; med2_val ) / 2 print &amp;#34;sum:&amp;#34; sum print &amp;#34;count:&amp;#34; c print &amp;#34;mean:&amp;#34; ave print &amp;#34;median:&amp;#34; median print &amp;#34;min:&amp;#34; min print &amp;#34;max:&amp;#34; max } &amp;#39; &amp;lt;pre style=&amp;#34;font-size:50%; padding:7px; margin:0em; background-color:#FFF112&amp;#34;&amp;gt;sum:44662539172 count:23956 mean:1.86436e&#43;06 median:507950 min:0 max:33000000 &amp;lt;/pre&amp;gt; Endnote: awk is an awesome tool and there are a lot of use-cases where it can make your life simple. There is a sort of a learning curve, but I think that it would be worth it in the long term. I have tried to give you a taste of awk and I have covered a lot of ground here in this post. To tell you a bit more there, awk is a full programming language. There are for loops, while loops, conditionals, booleans, functions and everything else that you would expect from a programming language. So you could look more still.
 To learn more about awk you can use this book. This book is a free resource and you could learn more about awk and use cases.
@@ -620,54 +664,55 @@ Consider a case when you have a 6 GB pipe-delimited file sitting on your laptop 
 
       <content:encoded>  
         
-        <![CDATA[ Shell Commands are powerful. And life would be like hell without shell is how I like to say it(And that is probably the reason that I dislike windows).
+        <![CDATA[  Shell Commands are powerful. And life would be like hell without shell is how I like to say it(And that is probably the reason that I dislike windows).
 Consider a case when you have a 6 GB pipe-delimited file sitting on your laptop and you want to find out the count of distinct values in one particular column. You can probably do this in more than one way. You could put that file in a database and run SQL Commands, or you could write a python/perl script.
 Probably whatever you do it won&amp;rsquo;t be simpler/less time consuming than this
-cat data.txt | cut -d &amp;#34;|&amp;#34; -f 1 | sort | uniq | wc -l And this will run way faster than whatever you do with perl/python script.
+cat data.txt | cut -d &amp;#34;|&amp;#34; -f 1 | sort | uniq | wc -l 30  And this will run way faster than whatever you do with perl/python script.
 Now this command says
  Use the cat command to print/stream the contents of the file to stdout. Pipe the streaming contents from our cat command to the next command cut. The cut commands specifies the delimiter by the argument -d and the column by the argument -f and streams the output to stdout. Pipe the streaming content to the sort command which sorts the input and streams only the distinct values to the stdout. It takes the argument -u that specifies that we only need unique values. Pipe the output to the wc -l command which counts the number of lines in the input.  There is a lot going on here and I will try my best to ensure that you will be able to understand most of it by the end of this Blog post.Although I will also try to explain more advanced concepts than the above command in this post.
 Now, I use shell commands extensively at my job. I will try to explain the usage of each of the commands based on use cases that I counter nearly daily at may day job as a data scientist.
 Some Basic Commands in Shell: There are a lot of times when you just need to know a little bit about the data. You just want to see may be a couple of lines to inspect a file. One way of doing this is opening the txt/csv file in the notepad. And that is probably the best way for small files. But you could also do it in the shell using:
-1. cat cat data.txt Now the cat command prints the whole file in the terminal window for you.I have not shown the whole file here.
+1. cat cat data.txt yearID|teamID|lgID|playerID|salary 1985|BAL|AL|murraed02|1472819 1985|BAL|AL|lynnfr01|1090000 1985|BAL|AL|ripkeca01|800000 1985|BAL|AL|lacyle01|725000 1985|BAL|AL|flanami01|641667 1985|BAL|AL|boddimi01|625000 1985|BAL|AL|stewasa01|581250 1985|BAL|AL|martide01|560000 1985|BAL|AL|roeniga01|558333  Now the cat command prints the whole file in the terminal window for you.I have not shown the whole file here.
 But sometimes the files will be so big that you wont be able to open them up in notepad&#43;&#43; or any other software utility and there the cat command will shine.
 2. Head and Tail Now you might ask me why would you print the whole file in the terminal itself? Generally I won&amp;rsquo;t. But I just wanted to tell you about the cat command. For the use case when you want only the top/bottom n lines of your data you will generally use the head/tail commands. You can use them as below.
-head data.txt head -n 3 data.txt tail data.txt tail -n 2 data.txt Notice the structure of the shell command here.
-3. Piping Now we could have also written the same command as:
-cat data.txt | head This brings me to one of the most important concepts of Shell usage - piping. You won&amp;rsquo;t be able to utilize the full power the shell provides without using this concept. And the concept is actually simple.
+head data.txt yearID|teamID|lgID|playerID|salary 1985|BAL|AL|murraed02|1472819 1985|BAL|AL|lynnfr01|1090000 1985|BAL|AL|ripkeca01|800000 1985|BAL|AL|lacyle01|725000 1985|BAL|AL|flanami01|641667 1985|BAL|AL|boddimi01|625000 1985|BAL|AL|stewasa01|581250 1985|BAL|AL|martide01|560000 1985|BAL|AL|roeniga01|558333  head -n 3 data.txt yearID|teamID|lgID|playerID|salary 1985|BAL|AL|murraed02|1472819 1985|BAL|AL|lynnfr01|1090000  tail data.txt 2013|WAS|NL|bernaro01|1212500 2013|WAS|NL|tracych01|1000000 2013|WAS|NL|stammcr01|875000 2013|WAS|NL|dukeza01|700000 2013|WAS|NL|espinda01|526250 2013|WAS|NL|matthry01|504500 2013|WAS|NL|lombast02|501250 2013|WAS|NL|ramoswi01|501250 2013|WAS|NL|rodrihe03|501000 2013|WAS|NL|moorety01|493000  tail -n 2 data.txt 2013|WAS|NL|rodrihe03|501000 2013|WAS|NL|moorety01|493000  Notice the structure of the shell command here.
+CommandName [-arg1name] [arg1value] [-arg2name] [arg2value] filename   3. Piping Now we could have also written the same command as:
+cat data.txt | head yearID|teamID|lgID|playerID|salary 1985|BAL|AL|murraed02|1472819 1985|BAL|AL|lynnfr01|1090000 1985|BAL|AL|ripkeca01|800000 1985|BAL|AL|lacyle01|725000 1985|BAL|AL|flanami01|641667 1985|BAL|AL|boddimi01|625000 1985|BAL|AL|stewasa01|581250 1985|BAL|AL|martide01|560000 1985|BAL|AL|roeniga01|558333  This brings me to one of the most important concepts of Shell usage - piping. You won&amp;rsquo;t be able to utilize the full power the shell provides without using this concept. And the concept is actually simple.
 Just read the &amp;ldquo;|&amp;rdquo; in the command as &amp;ldquo;pass the data on to&amp;rdquo;
 So I would read the above command as:
 cat(print) the whole data to stream, pass the data on to head so that it can just give me the first few lines only.
 So did you understood what piping did? It is providing us a way to use our basic commands in a consecutive manner. There are a lot of commands that are fairly basic and it lets us use these basic commands in sequence to do some fairly non trivial things.
 Now let me tell you about a couple of more commands before I show you how we can chain them to do fairly advanced tasks.
 4. wc wc is a fairly useful shell utility/command that lets us count the number of lines(-l), words(-w) or characters(-c) in a given file
-wc -l data.txt 5. grep You may want to print all the lines in your file which have a particular word. Or as a Data case you might like to see the salaries for the team BAL in 2000. In this case we have printed all the lines in the file which contain &amp;ldquo;2000|BAL&amp;rdquo;. grep is your friend.
-grep &amp;#34;2000|BAL&amp;#34; data.txt | head you could also use regular expressions with grep.
+wc -l data.txt 23957 data.txt  5. grep You may want to print all the lines in your file which have a particular word. Or as a Data case you might like to see the salaries for the team BAL in 2000. In this case we have printed all the lines in the file which contain &amp;ldquo;2000|BAL&amp;rdquo;. grep is your friend.
+grep &amp;#34;2000|BAL&amp;#34; data.txt | head 2000|BAL|AL|belleal01|12868670 2000|BAL|AL|anderbr01|7127199 2000|BAL|AL|mussimi01|6786032 2000|BAL|AL|ericksc01|6620921 2000|BAL|AL|ripkeca01|6300000 2000|BAL|AL|clarkwi02|6000000 2000|BAL|AL|johnsch04|4600000 2000|BAL|AL|timlimi01|4250000 2000|BAL|AL|deshide01|4209324 2000|BAL|AL|surhobj01|4146789  you could also use regular expressions with grep.
 6. sort You may want to sort your dataset on a particular column.Sort is your friend. Say you want to find out the top 10 maximum salaries given to any player in your dataset.
-sort -t &amp;#34;|&amp;#34; -k 5 -r -n data.txt | head -10 So there are certainly a lot of options in this command. Lets go through them one by one.
+sort -t &amp;#34;|&amp;#34; -k 5 -r -n data.txt | head -10 2010|NYA|AL|rodrial01|33000000 2009|NYA|AL|rodrial01|33000000 2011|NYA|AL|rodrial01|32000000 2012|NYA|AL|rodrial01|30000000 2013|NYA|AL|rodrial01|29000000 2008|NYA|AL|rodrial01|28000000 2011|LAA|AL|wellsve01|26187500 2005|NYA|AL|rodrial01|26000000 2013|PHI|NL|leecl02|25000000 2013|NYA|AL|wellsve01|24642857  So there are certainly a lot of options in this command. Lets go through them one by one.
  -t: Which delimiter to use? -k: Which column to sort on? -n: If you want Numerical Sorting. Dont use this option if you want Lexographical sorting. -r: I want to sort Descending. Sorts Ascending by Default.  7. cut This command lets you select certain columns from your data. Sometimes you may want to look at just some of the columns in your data. As in you may want to look only at the year, team and salary and not the other columns. cut is the command to use.
-cut -d &amp;#34;|&amp;#34; -f 1,2,5 data.txt | head The options are:
+cut -d &amp;#34;|&amp;#34; -f 1,2,5 data.txt | head yearID|teamID|salary 1985|BAL|1472819 1985|BAL|1090000 1985|BAL|800000 1985|BAL|725000 1985|BAL|641667 1985|BAL|625000 1985|BAL|581250 1985|BAL|560000 1985|BAL|558333  The options are:
  -d: Which delimiter to use? -f: Which column/columns to cut?  8. uniq uniq is a little bit tricky as in you will want to use this command in sequence with sort. This command removes sequential duplicates. So in conjunction with sort it can be used to get the distinct values in the data. For example if I wanted to find out 10 distinct teamIDs in data, I would use:
-cat data.txt | cut -d &amp;#34;|&amp;#34; -f 2 | sort | uniq | head This command could be used with argument -c to count the occurrence of these distinct values. Something akin to count distinct.
-cat data.txt | cut -d &amp;#34;|&amp;#34; -f 2 | sort | uniq -c | head Some Other Utility Commands for Other Operations Some Other command line tools that you could use without going in the specifics as the specifics are pretty hard.
+cat data.txt | cut -d &amp;#34;|&amp;#34; -f 2 | sort | uniq | head ANA ARI ATL BAL BOS CAL CHA CHN CIN CLE  This command could be used with argument -c to count the occurrence of these distinct values. Something akin to count distinct.
+cat data.txt | cut -d &amp;#34;|&amp;#34; -f 2 | sort | uniq -c | head 247 ANA 458 ARI 838 ATL 855 BAL 852 BOS 368 CAL 812 CHA 821 CHN 46 CIN 867 CLE  Some Other Utility Commands for Other Operations Some Other command line tools that you could use without going in the specifics as the specifics are pretty hard.
 1. Change delimiter in a file Find and Replace Magic.: You may want to replace certain characters in file with something else using the tr command.
-cat data.txt | tr &amp;#39;|&amp;#39; &amp;#39;,&amp;#39; | head -4 or the sed command
-cat data.txt | sed -e &amp;#39;s/|/,/g&amp;#39; | head -4 2. Sum of a column in a file Using the awk command you could find the sum of column in file. Divide it by the number of lines and you can get the mean.
-cat data.txt | awk -F &amp;#34;|&amp;#34; &amp;#39;{ sum &#43;= $5 } END { printf sum }&amp;#39; awk is a powerful command which is sort of a whole language in itself. Do see the wiki page for awk for a lot of great usecases of awk. I also wrote a post on awk as a second part in this series. Check it HERE
+cat data.txt | tr &amp;#39;|&amp;#39; &amp;#39;,&amp;#39; | head -4 yearID,teamID,lgID,playerID,salary 1985,BAL,AL,murraed02,1472819 1985,BAL,AL,lynnfr01,1090000 1985,BAL,AL,ripkeca01,800000  or the sed command
+cat data.txt | sed -e &amp;#39;s/|/,/g&amp;#39; | head -4 yearID,teamID,lgID,playerID,salary 1985,BAL,AL,murraed02,1472819 1985,BAL,AL,lynnfr01,1090000 1985,BAL,AL,ripkeca01,800000  2. Sum of a column in a file Using the awk command you could find the sum of column in file. Divide it by the number of lines and you can get the mean.
+cat data.txt | awk -F &amp;#34;|&amp;#34; &amp;#39;{ sum &#43;= $5 } END { printf sum }&amp;#39; 44662539172  awk is a powerful command which is sort of a whole language in itself. Do see the wiki page for awk for a lot of great usecases of awk. I also wrote a post on awk as a second part in this series. Check it HERE
 3. Find the files in a directory that satisfy a certain condition You can do this by using the find command. Lets say you want to find all the .txt files in the current working dir that start with lowercase h.
-find . -name &amp;#34;h*.txt&amp;#34; To find all .txt files starting with h regarless of case we could use regex.
-find . -name &amp;#34;[Hh]*.txt&amp;#34; 4. Passing file list as Argument. xargs was suggested by Gaurav in the comments, so I read about it and it is actually a very nice command which you could use in a variety of use cases.
+find . -name &amp;#34;h*.txt&amp;#34; ./hamlet.txt  To find all .txt files starting with h regarless of case we could use regex.
+find . -name &amp;#34;[Hh]*.txt&amp;#34; ./hamlet.txt ./Hamlet1.txt  4. Passing file list as Argument. xargs was suggested by Gaurav in the comments, so I read about it and it is actually a very nice command which you could use in a variety of use cases.
 So if you just use a pipe, any command/utility receives data on STDIN (the standard input stream) as a raw pile of data that it can sort through one line at a time. However some programs don&amp;rsquo;t accept their commands on standard in. For example the rm command(which is used to remove files), touch command(used to create file with a given name) or a certain python script you wrote(which takes command line arguments). They expect it to be spelled out in the arguments to the command.
 For example: rm takes a file name as a parameter on the command line like so: rm file1.txt. If I wanted to delete all &amp;lsquo;.txt&amp;rsquo; files starting with &amp;ldquo;h/H&amp;rdquo; from my working directory, the below command won&amp;rsquo;t work because rm expects a file as an input.
-find . -name &amp;#34;[hH]*.txt&amp;#34; | rm To get around it we can use the xargs command which reads the STDIN stream data and converts each line into space separated arguments to the command.
-find . -name &amp;#34;[hH]*.txt&amp;#34; | xargs Now you could use rm to remove all .txt files that start with h/H. A word of advice: Always see the output of xargs first before using rm.
+find . -name &amp;#34;[hH]*.txt&amp;#34; | rm usage: rm [-f | -i] [-dPRrvW] file ... unlink file  To get around it we can use the xargs command which reads the STDIN stream data and converts each line into space separated arguments to the command.
+find . -name &amp;#34;[hH]*.txt&amp;#34; | xargs ./hamlet.txt ./Hamlet1.txt  Now you could use rm to remove all .txt files that start with h/H. A word of advice: Always see the output of xargs first before using rm.
 find . -name &amp;#34;[hH]*.txt&amp;#34; | xargs rm Another usage of xargs could be in conjunction with grep to find all files that contain a given string.
-find . -name &amp;#34;*.txt&amp;#34; | xargs grep &amp;#39;honest soldier&amp;#39; Hopefully You could come up with varied uses building up on these examples. One other use case could be to use this for passing arguments to a python script.
-Other Cool Tricks Sometimes you want your data that you got by some command line utility(Shell commands/ Python scripts) not to be shown on stdout but stored in a textfile. You can use the &amp;ldquo;&amp;gt;&amp;rdquo; operator for that. For Example: You could have stored the file after replacing the delimiters in the previous example into anther file called newdata.txt as follows:
-cat data.txt | tr &amp;#39;|&amp;#39; &amp;#39;,&amp;#39; &amp;gt; newdata.txt I really got confused between &amp;ldquo;|&amp;rdquo; (piping) and &amp;ldquo;&amp;gt;&amp;rdquo; (to_file) operations a lot in the beginning. One way to remember is that you should only use &amp;ldquo;&amp;gt;&amp;rdquo; when you want to write something to a file. &amp;ldquo;|&amp;rdquo; cannot be used to write to a file. Another operation you should know about is the &amp;ldquo;&amp;raquo;&amp;rdquo; operation. It is analogous to &amp;ldquo;&amp;gt;&amp;rdquo; but it appends to an existing file rather that replacing the file and writing over.
+find . -name &amp;#34;*.txt&amp;#34; | xargs grep &amp;#39;honest soldier&amp;#39; ./Data1.txt:O, farewell, honest soldier; ./Data2.txt:O, farewell, honest soldier; ./Data3.txt:O, farewell, honest soldier;  Hopefully You could come up with varied uses building up on these examples. One other use case could be to use this for passing arguments to a python script.
+Other Cool Tricks Sometimes you want your data that you got by some command line utility(Shell commands/ Python scripts) not to be shown on stdout but stored in a textfile. You can use the &amp;rdquo;&amp;gt;&amp;rdquo; operator for that. For Example: You could have stored the file after replacing the delimiters in the previous example into anther file called newdata.txt as follows:
+cat data.txt | tr &amp;#39;|&amp;#39; &amp;#39;,&amp;#39; &amp;gt; newdata.txt I really got confused between &amp;rdquo;|&amp;rdquo; (piping) and &amp;rdquo;&amp;gt;&amp;rdquo; (to_file) operations a lot in the beginning. One way to remember is that you should only use &amp;rdquo;&amp;gt;&amp;rdquo; when you want to write something to a file. &amp;rdquo;|&amp;rdquo; cannot be used to write to a file. Another operation you should know about is the &amp;rdquo;&amp;gt;&amp;gt;&amp;rdquo; operation. It is analogous to &amp;rdquo;&amp;gt;&amp;rdquo; but it appends to an existing file rather that replacing the file and writing over.
 If you would like to know more about commandline, which I guess you would, here are some books that I would recommend for a beginner:
 The first book is more of a fun read at leisure type of book. THe second book is a little more serious. Whatever suits you.
 So, this is just the tip of the iceberg. Although I am not an expert in shell usage, these commands reduced my workload to a large extent. If there are some shell commands you use on a regular basis or some shell command that are cool, do tell in the comments. I would love to include it in the blogpost.
-I wrote a blogpost on awk as a second part of this post. Check it Here]]>
+I wrote a blogpost on awk as a second part of this post. Check it Here
+]]>
         
       </content:encoded>
       

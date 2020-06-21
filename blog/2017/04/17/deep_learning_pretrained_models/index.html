@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.72.0" />
+	<meta name="generator" content="Hugo 0.53" />
 	<meta property="og:title" content="Today I Learned This Part 2: Pretrained Neural Networks What are they?" />
 <meta property="og:description" content="Your Daily dose of data science.This is a series of post in which I write about the things I learn almost everyday. This post particularly provides a way to use pretrained neural nets for classifying images." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2017/04/17/deep_learning_pretrained_models/" />
 <meta property="og:image" content="https://image.slidesharecdn.com/practicaldeeplearning-160329181459/95/practical-deep-learning-16-638.jpg" />
-<meta property="article:published_time" content="2017-04-17T00:00:00+00:00" />
-<meta property="article:modified_time" content="2017-04-17T00:00:00+00:00" />
+<meta property="article:published_time" content="2017-04-17T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2017-04-17T00:00:00&#43;00:00"/>
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://image.slidesharecdn.com/practicaldeeplearning-160329181459/95/practical-deep-learning-16-638.jpg"/>
@@ -169,18 +169,31 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			<p>Deeplearning is the buzz word right now. I was working on the <a href="http://www.fast.ai/">course</a> for deep learning by Jeremy Howard and one thing I noticed were pretrained deep Neural Networks. In the first lesson he used the pretrained NN to predict on the <a href="https://www.kaggle.com/c/dogs-vs-cats">Dogs vs Cats</a> competition on Kaggle to achieve very good results.</p>
+			
+
+<p>Deeplearning is the buzz word right now. I was working on the <a href="http://www.fast.ai/" rel="nofollow" target="_blank">course</a> for deep learning by Jeremy Howard and one thing I noticed were pretrained deep Neural Networks. In the first lesson he used the pretrained NN to predict on the <a href="https://www.kaggle.com/c/dogs-vs-cats" rel="nofollow" target="_blank">Dogs vs Cats</a> competition on Kaggle to achieve very good results.</p>
+
 <h2 id="what-are-pretrained-neural-networks">What are pretrained Neural Networks?</h2>
+
 <p>So let me tell you about the background a little bit. There is a challenge that happens every year in the visual recognition community - The Imagenet Challenge. The task there is to classify the images in 1000 categories using Image training data. People train big convolutional deep learning models for this challenge.</p>
+
 <p>Now what does training a neural model actually mean? It just means that they learn the weights for a NN. What if we can get the weights they learn? We can use those weights to load them into our own NN model and predict on the test dataset. Right?</p>
+
 <p>But actually we can go further than that. We can add an extra layer on top of the NN they have prepared to classify our own dataset.</p>
+
 <p>In a way you can think of the intermediate features created by the Pretrained neural networks to be the features for the next layer.</p>
+
 <h2 id="why-it-works">Why it works?</h2>
+
 <p>We are essentially doing the image classification task only. We need to find out edges, shapes, intensities and other features from the images that are given to us. The pretrained model is already pretty good at finding these sort of features. Forget neural nets, if we plug these features into a machine learning algorithm we should be good.</p>
+
 <p>What we actually do here is replace the last layer of the neural network with a new prediction/output layer and train while keeping the weights for all the layers before the second last layer constant.</p>
+
 <h2 id="code">Code:</h2>
+
 <p>I assume that you understand Keras a little. If not you can look at the docs.
 Let us get into coding now. First of all we will create the architecture of the neural network the VGG Team created in 2014. Then we will load the weights.</p>
+
 <p>Import some stuff</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
 <span style="color:#f92672">from</span> numpy.random <span style="color:#f92672">import</span> random, permutation
@@ -194,8 +207,8 @@ Let us get into coding now. First of all we will create the architecture of the 
 <span style="color:#f92672">from</span> keras.layers <span style="color:#f92672">import</span> Input
 <span style="color:#f92672">from</span> keras.layers.convolutional <span style="color:#f92672">import</span> Convolution2D, MaxPooling2D, ZeroPadding2D
 <span style="color:#f92672">from</span> keras.optimizers <span style="color:#f92672">import</span> SGD, RMSprop, Adam
-<span style="color:#f92672">from</span> keras.preprocessing <span style="color:#f92672">import</span> image
-</code></pre></div><p>VGG has just one type of convolutional block, and one type of fully connected (&lsquo;dense&rsquo;) block. We start by defining the building blocks of our Deep learning model.</p>
+<span style="color:#f92672">from</span> keras.preprocessing <span style="color:#f92672">import</span> image</code></pre></div>
+<p>VGG has just one type of convolutional block, and one type of fully connected (&lsquo;dense&rsquo;) block. We start by defining the building blocks of our Deep learning model.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ConvBlock</span>(layers, model, filters):
     <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(layers):
         model<span style="color:#f92672">.</span>add(ZeroPadding2D((<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>)))
@@ -204,8 +217,9 @@ Let us get into coding now. First of all we will create the architecture of the 
 
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">FCBlock</span>(model):
     model<span style="color:#f92672">.</span>add(Dense(<span style="color:#ae81ff">4096</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>))
-    model<span style="color:#f92672">.</span>add(Dropout(<span style="color:#ae81ff">0.5</span>))
-</code></pre></div><!-- raw HTML omitted -->
+    model<span style="color:#f92672">.</span>add(Dropout(<span style="color:#ae81ff">0.5</span>))</code></pre></div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script>
+
 <p>Now the input of the VGG Model was images. When the VGG model was trained in 2014, the creators subtracted the average of each of the three (R,G,B) channels first, so that the data for each channel had a mean of zero. Furthermore, their software that expected the channels to be in B,G,R order, whereas Python by default uses R,G,B. We need to preprocess our data to make these two changes, so that it is compatible with the VGG model. We also add some helper functions.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e">#Mean of each channel as provided by VGG researchers</span>
 vgg_mean <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">123.68</span>, <span style="color:#ae81ff">116.779</span>, <span style="color:#ae81ff">103.939</span>])<span style="color:#f92672">.</span>reshape((<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>))
@@ -245,14 +259,17 @@ vgg_mean <span style="color:#f92672">=</span> np<span style="color:#f92672">.</s
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_batches</span>(path, dirname, gen<span style="color:#f92672">=</span>image<span style="color:#f92672">.</span>ImageDataGenerator(), shuffle<span style="color:#f92672">=</span>True,
                 batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span>, class_mode<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;categorical&#39;</span>):
     <span style="color:#66d9ef">return</span> gen<span style="color:#f92672">.</span>flow_from_directory(path<span style="color:#f92672">+</span>dirname, target_size<span style="color:#f92672">=</span>(<span style="color:#ae81ff">224</span>,<span style="color:#ae81ff">224</span>),
-                class_mode<span style="color:#f92672">=</span>class_mode, shuffle<span style="color:#f92672">=</span>shuffle, batch_size<span style="color:#f92672">=</span>batch_size)
-</code></pre></div><p>The hard part is done now. Just create a VGG object and load the weights.We will need to load pretrained weights into the model too. You can download the &ldquo;VGG16_weights.h5&rdquo; file <a href="https://drive.google.com/file/d/0Bz7KyqmuGsilT0J5dmRCM0ROVHc/view">here</a></p>
+                class_mode<span style="color:#f92672">=</span>class_mode, shuffle<span style="color:#f92672">=</span>shuffle, batch_size<span style="color:#f92672">=</span>batch_size)</code></pre></div>
+<p>The hard part is done now. Just create a VGG object and load the weights.We will need to load pretrained weights into the model too. You can download the &ldquo;VGG16_weights.h5&rdquo; file <a href="https://drive.google.com/file/d/0Bz7KyqmuGsilT0J5dmRCM0ROVHc/view" rel="nofollow" target="_blank">here</a></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">model <span style="color:#f92672">=</span> VGG_16()
 model<span style="color:#f92672">.</span>load_weights(<span style="color:#e6db74">&#39;VGG16_weights.h5&#39;</span>)
 <span style="color:#75715e"># Since our dogs vs cat dataset is binary classification model</span>
 ftmodel <span style="color:#f92672">=</span> finetune(model,<span style="color:#ae81ff">2</span>)
-<span style="color:#66d9ef">print</span> ftmodel<span style="color:#f92672">.</span>summary()
-</code></pre></div><!-- raw HTML omitted -->
+<span style="color:#66d9ef">print</span> ftmodel<span style="color:#f92672">.</span>summary()</code></pre></div>
+<p><div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/keras_net.png"  height="400" width="500" ></center>
+</div>
+Showing a little bit of output here. This is how the last layers of our Neural net look after training. Now we have got a architecture which we got to train. Here we are only training to get the last layer weights. As you can see from the trainable params.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">path <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;dogscats/&#34;</span>
 batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span>
 
@@ -279,8 +296,8 @@ preds <span style="color:#f92672">=</span> ftmodel<span style="color:#f92672">.<
 
 isdog <span style="color:#f92672">=</span> preds[:,<span style="color:#ae81ff">1</span>]
 image_id <span style="color:#f92672">=</span> batches<span style="color:#f92672">.</span>filenames
-final_submission <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>stack([ids,isdog], axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
-</code></pre></div><p>And we are done!</p>
+final_submission <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>stack([ids,isdog], axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)</code></pre></div>
+<p>And we are done!</p>
 
 		</div>
 		
@@ -418,7 +435,7 @@ final_submission <span style="color:#f92672">=</span> np<span style="color:#f926
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
 		</ul>
 	</div>
 </div>

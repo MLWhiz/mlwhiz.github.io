@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.72.0" />
+	<meta name="generator" content="Hugo 0.53" />
 	<meta property="og:title" content="Share your Projects even more easily with this New Streamlit Feature" />
 <meta property="og:description" content="So, have you ever had a problem with explaining how the app works to the stakeholders/business partners? Having to set up multiple calls with different stakeholders in different countries and explaining the whole process again and again?" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2020/02/23/streamlitrec/" />
 <meta property="og:image" content="https://mlwhiz.com/images/streamlitrec/main.png" />
-<meta property="article:published_time" content="2020-02-23T00:00:00+00:00" />
-<meta property="article:modified_time" content="2020-02-23T00:00:00+00:00" />
+<meta property="article:published_time" content="2020-02-23T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-02-23T00:00:00&#43;00:00"/>
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/streamlitrec/main.png"/>
@@ -169,56 +169,101 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			<p><img src="/images/streamlitrec/main.png" alt=""></p>
+			
+
+<p><img src="/images/streamlitrec/main.png" alt="" /></p>
+
 <p>A Machine Learning project is never really complete if we don’t have a good way to showcase it.</p>
+
 <p>While in the past, a well-made visualization or a small PPT used to be enough for showcasing a data science project, with the advent of dashboarding tools like RShiny and Dash, a good data scientist needs to have a fair bit of knowledge of web frameworks to get along.</p>
-<p>As Sten Sootla says in his <a href="https://towardsdatascience.com/how-to-fake-being-a-good-programmer-cbef2c39764c">satire piece</a> which I thoroughly enjoyed:</p>
+
+<p>As Sten Sootla says in his <a href="https://towardsdatascience.com/how-to-fake-being-a-good-programmer-cbef2c39764c" rel="nofollow" target="_blank">satire piece</a> which I thoroughly enjoyed:</p>
+
 <blockquote>
 <p>The secret: it’s not what you know, it’s what you show.</p>
 </blockquote>
-<p>This is where StreamLit comes in and provides a way to create web apps just using Python. I have been keeping close tabs on this excellent product for the past few months. In my last few posts, I talked about <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582">Working with Streamlit</a> and how to <a href="https://towardsdatascience.com/how-to-deploy-a-streamlit-app-using-an-amazon-free-ec2-instance-416a41f69dc3">Deploy the streamlit app using ec2</a>. I have also been in constant touch with the Streamlit team while they have been working continuously to make the user experience even better by releasing additional features.</p>
-<p><em><strong>So, have you ever had a problem with explaining how the app works to the stakeholders/business partners? Having to set up multiple calls with different stakeholders in different countries and explaining the whole process again and again?</strong></em></p>
-<p><em><strong>Or have you worked on a project that you want to share on social media? LinkedIn, Youtube, and the like?</strong></em></p>
-<p>With their new version, Streamlit has released a new feature called “<em><strong>Record a Screencast</strong></em>” which will solve this problem for you.</p>
+
+<p>This is where StreamLit comes in and provides a way to create web apps just using Python. I have been keeping close tabs on this excellent product for the past few months. In my last few posts, I talked about <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582" rel="nofollow" target="_blank">Working with Streamlit</a> and how to <a href="https://towardsdatascience.com/how-to-deploy-a-streamlit-app-using-an-amazon-free-ec2-instance-416a41f69dc3" rel="nofollow" target="_blank">Deploy the streamlit app using ec2</a>. I have also been in constant touch with the Streamlit team while they have been working continuously to make the user experience even better by releasing additional features.</p>
+
+<p><strong><em>So, have you ever had a problem with explaining how the app works to the stakeholders/business partners? Having to set up multiple calls with different stakeholders in different countries and explaining the whole process again and again?</em></strong></p>
+
+<p><strong><em>Or have you worked on a project that you want to share on social media? LinkedIn, Youtube, and the like?</em></strong></p>
+
+<p>With their new version, Streamlit has released a new feature called “<strong><em>Record a Screencast</em></strong>” which will solve this problem for you.</p>
+
 <p>How? Read on.</p>
-<hr>
+
+<hr />
+
 <h2 id="setting-up">Setting up</h2>
+
 <p>So to check this new feature out, which is a part of Streamlit’s version 0.55.0 offering, we need to first install or upgrade streamlit. Do this by using this command:</p>
+
 <pre><code>pip install --upgrade streamlit
 </code></pre>
-<p>We also need to run Streamlit. Here I will use the demo app. You can also use any of your <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582">own apps</a>.</p>
+
+<p>We also need to run Streamlit. Here I will use the demo app. You can also use any of your <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582" rel="nofollow" target="_blank">own apps</a>.</p>
+
 <pre><code>streamlit hello
 </code></pre>
+
 <p>You should see something like below:</p>
-<p><img src="/images/streamlitrec/0.png" alt=""></p>
-<p>A tab also opens up in your browser, where you can try their demo. If that doesn’t open up in the browser, you can manually go to the Local URL <a href="http://localhost:8501/">http://localhost:8501/</a> too.</p>
-<p><img src="/images/streamlitrec/1.png" alt=""></p>
-<hr>
+
+<p><img src="/images/streamlitrec/0.png" alt="" /></p>
+
+<p>A tab also opens up in your browser, where you can try their demo. If that doesn’t open up in the browser, you can manually go to the Local URL <a href="http://localhost:8501/" rel="nofollow" target="_blank">http://localhost:8501/</a> too.</p>
+
+<p><img src="/images/streamlitrec/1.png" alt="" /></p>
+
+<hr />
+
 <h2 id="recording-the-screencast">Recording the Screencast</h2>
+
 <p>Now the time has come to record our screencast to share with the world. You can find the option to record the screencast using the top-right menu in Streamlit.</p>
-<p><img src="/images/streamlitrec/2.png" alt=""></p>
+
+<p><img src="/images/streamlitrec/2.png" alt="" /></p>
+
 <p>Once you click on that, you will get the option to record audio, and you can select the aptly named “Start Recording” button to start recording.</p>
-<p><img src="/images/streamlitrec/3.png" alt=""></p>
-<p>You can then choose what you want to share — just your streamlit app or your entire desktop. <em><strong>One can choose to share the whole desktop if they need to go forth between different programs like Excel sheets, powerpoints, and the streamlit app, for example.</strong></em> Here I choose to show just the “Streamlit” App and click share.</p>
-<p><img src="/images/streamlitrec/4.png" alt=""></p>
+
+<p><img src="/images/streamlitrec/3.png" alt="" /></p>
+
+<p>You can then choose what you want to share — just your streamlit app or your entire desktop. <strong><em>One can choose to share the whole desktop if they need to go forth between different programs like Excel sheets, powerpoints, and the streamlit app, for example.</em></strong> Here I choose to show just the “Streamlit” App and click share.</p>
+
+<p><img src="/images/streamlitrec/4.png" alt="" /></p>
+
 <p>Your screencast has now started, and you can record the explanation session for your shareholders now. Once you are done with the recording, you can click on the top-right menu again and select stop recording. Or conveniently press escape to end the recording session.</p>
-<p><img src="/images/streamlitrec/5.png" alt=""></p>
+
+<p><img src="/images/streamlitrec/5.png" alt="" /></p>
+
 <p>You will be able to preview and <strong>save the session video</strong> you recorded as a .webm file, which you can aim to send to your shareholders and even share on LinkedIn/twitter/youtube for your personal projects.</p>
-<p><img src="/images/streamlitrec/6.png" alt=""></p>
+
+<p><img src="/images/streamlitrec/6.png" alt="" /></p>
+
 <p>And that’s it. The process is pretty simple and doesn’t need any additional software installation from our side.</p>
-<hr>
+
+<hr />
+
 <h2 id="endnotes">Endnotes</h2>
+
 <p>Streamlit has democratized the whole process of creating apps.</p>
+
 <p>I honestly like the way Streamlit is working on developing its product, keeping in mind all the pain points of its users. With this iteration, they have resolved one more pain point where users struggle to showcase their work in a meaningful way on social media sites or to explain the workings of an app multiple times to the shareholders.</p>
+
 <p><strong>On top of that, Streamlit is a free and open-source rather than a proprietary web app that works out of the box.</strong> I couldn’t recommend it more.</p>
-<p><em><strong>Also, do let me know if you want to request any additional features in Streamlit in the comments section</strong></em>. I will make sure to pass it on to the Streamlit team.</p>
+
+<p><strong><em>Also, do let me know if you want to request any additional features in Streamlit in the comments section</em></strong>. I will make sure to pass it on to the Streamlit team.</p>
+
 <p>If you want to learn more about using Streamlit to create and deploy apps, take a look at my other posts:</p>
+
 <ul>
-<li><a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582"><strong>How to write Web apps using simple Python for Data Scientists?</strong></a></li>
-<li><a href="https://towardsdatascience.com/how-to-deploy-a-streamlit-app-using-an-amazon-free-ec2-instance-416a41f69dc3"><strong>How to Deploy a Streamlit App using an Amazon Free ec2 instance?</strong></a></li>
+<li><a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582" rel="nofollow" target="_blank"><strong>How to write Web apps using simple Python for Data Scientists?</strong></a></li>
+<li><a href="https://towardsdatascience.com/how-to-deploy-a-streamlit-app-using-an-amazon-free-ec2-instance-416a41f69dc3" rel="nofollow" target="_blank"><strong>How to Deploy a Streamlit App using an Amazon Free ec2 instance?</strong></a></li>
 </ul>
-<p>If you want to learn about the best strategies for creating Visualizations, I would like to call out an excellent course about <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Data Visualization and applied plotting</a> from the University of Michigan, which is a part of a pretty good <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Data Science Specialization with Python</a> in itself. Do check it out.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz">@mlwhiz</a>.</p>
+
+<p>If you want to learn about the best strategies for creating Visualizations, I would like to call out an excellent course about <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">Data Visualization and applied plotting</a> from the University of Michigan, which is a part of a pretty good <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">Data Science Specialization with Python</a> in itself. Do check it out.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX" rel="nofollow" target="_blank">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 		</div>
@@ -357,7 +402,7 @@ if (!doNotTrack) {
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
 		</ul>
 	</div>
 </div>

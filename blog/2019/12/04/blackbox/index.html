@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.72.0" />
+	<meta name="generator" content="Hugo 0.53" />
 	<meta property="og:title" content="How to find Feature importances for BlackBox Models?" />
 <meta property="og:description" content="this post is explaining how permutation importance works and how we can code it using ELI5" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2019/12/04/blackbox/" />
 <meta property="og:image" content="https://mlwhiz.com/images/blackbox/main.png" />
-<meta property="article:published_time" content="2019-12-04T00:00:00+00:00" />
-<meta property="article:modified_time" content="2019-12-04T00:00:00+00:00" />
+<meta property="article:published_time" content="2019-12-04T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-12-04T00:00:00&#43;00:00"/>
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/blackbox/main.png"/>
@@ -169,50 +169,85 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			<p><img src="/images/blackbox/main.png" alt=""></p>
+			
+
+<p><img src="/images/blackbox/main.png" alt="" /></p>
+
 <p>Data Science is the study of algorithms.</p>
-<p>I grapple through with many algorithms on a day to day basis, so I thought of listing some of the most common and most used algorithms one will end up using in this new <a href="https://towardsdatascience.com/tagged/ds-algorithms">DS Algorithm series</a>.</p>
+
+<p>I grapple through with many algorithms on a day to day basis, so I thought of listing some of the most common and most used algorithms one will end up using in this new <a href="https://towardsdatascience.com/tagged/ds-algorithms" rel="nofollow" target="_blank">DS Algorithm series</a>.</p>
+
 <p>How many times it has happened when you create a lot of features and then you need to come up with ways to reduce the number of features?</p>
-<p>Last time I wrote a post titled “<a href="https://towardsdatascience.com/the-5-feature-selection-algorithms-every-data-scientist-need-to-know-3a6b566efd2">The 5 Feature Selection Algorithms every Data Scientist should know</a>” in which I talked about using correlation or tree-based methods and adding some structure to the process of feature selection.</p>
-<p>Recently I got introduced to another novel way of feature selection called <em><strong>Permutation Importance</strong></em> and really liked it.</p>
-<p><em><strong>So, this post is explaining how permutation importance works and how we can code it using ELI5.</strong></em></p>
-<hr>
+
+<p>Last time I wrote a post titled “<a href="https://towardsdatascience.com/the-5-feature-selection-algorithms-every-data-scientist-need-to-know-3a6b566efd2" rel="nofollow" target="_blank">The 5 Feature Selection Algorithms every Data Scientist should know</a>” in which I talked about using correlation or tree-based methods and adding some structure to the process of feature selection.</p>
+
+<p>Recently I got introduced to another novel way of feature selection called <strong><em>Permutation Importance</em></strong> and really liked it.</p>
+
+<p><strong><em>So, this post is explaining how permutation importance works and how we can code it using ELI5.</em></strong></p>
+
+<hr />
+
 <h2 id="what-is-permutation-importance">What is Permutation Importance?</h2>
+
 <p>Simply speaking, we can attribute importance to a feature based on how our evaluation metric(F1, Accuracy AUC, etc.) changes if we remove a particular feature from our dataset.</p>
+
 <p>It could be pretty straightforward — We remove a feature from our dataset and train the classifier and see how the evaluation metric changes. And we do it for all features.</p>
-<p>So we fit our model at least n times, where n is the number of features in the model. It is so much work and computation. <em><strong>Can we do better?</strong></em></p>
-<p><img src="/images/blackbox/0.png" alt="Source: We permute a feature and predict using the updated dataset. Intuitively, if our accuracy or any evaluation metric doesn’t take a hit, we can say that the feature is not important. If our accuracy does take a hit, we consider this feature important."><em><a href="https://www.kaggle.com/dansbecker/permutation-importance">Source</a>: We permute a feature and predict using the updated dataset. Intuitively, if our accuracy or any evaluation metric doesn’t take a hit, we can say that the feature is not important. If our accuracy does take a hit, we consider this feature important.</em></p>
+
+<p>So we fit our model at least n times, where n is the number of features in the model. It is so much work and computation. <strong><em>Can we do better?</em></strong></p>
+
+<p><img src="/images/blackbox/0.png" alt="[Source](https://www.kaggle.com/dansbecker/permutation-importance): We permute a feature and predict using the updated dataset. Intuitively, if our accuracy or any evaluation metric doesn’t take a hit, we can say that the feature is not important. If our accuracy does take a hit, we consider this feature important." /><em><a href="https://www.kaggle.com/dansbecker/permutation-importance" rel="nofollow" target="_blank">Source</a>: We permute a feature and predict using the updated dataset. Intuitively, if our accuracy or any evaluation metric doesn’t take a hit, we can say that the feature is not important. If our accuracy does take a hit, we consider this feature important.</em></p>
+
 <p>Yes, we can. To calculate permutation importance, we shuffle/permute the values for a single feature and make predictions using the resulting dataset.</p>
+
 <p>The predictions are then used to calculate our evaluation metric. Intuitively, if our accuracy or any evaluation metric doesn’t take a hit, we can say that the feature is not important. If our accuracy does take a hit, we consider this feature important.</p>
-<hr>
+
+<hr />
+
 <h2 id="data">Data</h2>
+
 <p>We will try to do this using a dataset to understand it better.</p>
+
 <p>I am going to be using a football player dataset and try to find out the most important features using it.</p>
-<p><img src="/images/blackbox/1.png" alt=""></p>
+
+<p><img src="/images/blackbox/1.png" alt="" /></p>
+
 <p>Don’t worry if you don’t understand football terminologies. I will try to keep it at a minimum.</p>
-<p>You can see the full code here in this <a href="https://www.kaggle.com/mlwhiz/permutation-feature-selection-using-football-data">Kaggle Kernel</a>.</p>
+
+<p>You can see the full code here in this <a href="https://www.kaggle.com/mlwhiz/permutation-feature-selection-using-football-data" rel="nofollow" target="_blank">Kaggle Kernel</a>.</p>
+
 <h3 id="some-simple-data-preprocessing">Some simple Data Preprocessing</h3>
+
 <p>We have done some basic preprocessing such as removing nulls and one hot encoding. We also convert the problem to a classification problem using:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">y <span style="color:#f92672">=</span> traindf[<span style="color:#e6db74">&#39;Overall&#39;</span>]<span style="color:#f92672">&gt;=</span><span style="color:#ae81ff">80</span>
-</code></pre></div><p>Here we use High Overall as a proxy for a great player. Our dataset(X) looks like below and has 223 columns.</p>
-<p><img src="/images/blackbox/2.png" alt="train Data X"></p>
-<hr>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">y <span style="color:#f92672">=</span> traindf[<span style="color:#e6db74">&#39;Overall&#39;</span>]<span style="color:#f92672">&gt;=</span><span style="color:#ae81ff">80</span></code></pre></div>
+<p>Here we use High Overall as a proxy for a great player. Our dataset(X) looks like below and has 223 columns.</p>
+
+<p><img src="/images/blackbox/2.png" alt="train Data X" /></p>
+
+<hr />
+
 <h2 id="implementation">Implementation</h2>
+
 <h3 id="1-for-sklearn-models">1. For sklearn Models</h3>
+
 <p>ELI5 library makes it quite easy for us to use permutation importance for sklearn models. First, we train our model.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.ensemble <span style="color:#f92672">import</span> RandomForestClassifier
 my_model <span style="color:#f92672">=</span> RandomForestClassifier(n_estimators<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>,
-                                  random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)<span style="color:#f92672">.</span>fit(X, y)
-</code></pre></div><p>Then we use the function PermutationImportance from the eli5.sklearn module.</p>
+                                  random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)<span style="color:#f92672">.</span>fit(X, y)</code></pre></div>
+<p>Then we use the function PermutationImportance from the eli5.sklearn module.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> eli5.sklearn <span style="color:#f92672">import</span> PermutationImportance
 <span style="color:#f92672">import</span> eli5
 perm <span style="color:#f92672">=</span> PermutationImportance(my_model,n_iter<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)<span style="color:#f92672">.</span>fit(X, y)
-eli5<span style="color:#f92672">.</span>show_weights(perm, feature_names <span style="color:#f92672">=</span> X<span style="color:#f92672">.</span>columns<span style="color:#f92672">.</span>tolist())
-</code></pre></div><p>The results look like:</p>
-<p><img src="/images/blackbox/3.png" alt=""></p>
+eli5<span style="color:#f92672">.</span>show_weights(perm, feature_names <span style="color:#f92672">=</span> X<span style="color:#f92672">.</span>columns<span style="color:#f92672">.</span>tolist())</code></pre></div>
+<p>The results look like:</p>
+
+<p><img src="/images/blackbox/3.png" alt="" /></p>
+
 <p>Here we note that Reactions, Interceptions and BallControl are the most important features to access a player’s quality.</p>
+
 <h3 id="2-for-blackbox-models-or-non-sklearn-models">2. For BlackBox Models or Non-sklearn models</h3>
-<p><img src="/images/blackbox/4.png" alt=""></p>
+
+<p><img src="/images/blackbox/4.png" alt="" /></p>
+
 <p>We can also use eli5 to calculate feature importance for non scikit-learn models also. Here we train a LightGBM model.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
 
@@ -221,40 +256,47 @@ eli5<span style="color:#f92672">.</span>show_weights(perm, feature_names <span s
 lgbc<span style="color:#f92672">=</span>LGBMClassifier(n_estimators<span style="color:#f92672">=</span><span style="color:#ae81ff">500</span>, learning_rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.05</span>, num_leaves<span style="color:#f92672">=</span><span style="color:#ae81ff">32</span>, colsample_bytree<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>,
             reg_alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, reg_lambda<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, min_split_gain<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, min_child_weight<span style="color:#f92672">=</span><span style="color:#ae81ff">40</span>)
 
-lgbc<span style="color:#f92672">.</span>fit(X,y)
-</code></pre></div><p>We will need to create a wrapper for our score function to calculate our evaluation metric.</p>
+lgbc<span style="color:#f92672">.</span>fit(X,y)</code></pre></div>
+<p>We will need to create a wrapper for our score function to calculate our evaluation metric.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> accuracy_score
 
 <span style="color:#75715e">#define a score function. In this case I use accuracy</span>
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">score</span>(X, y):
     y_pred <span style="color:#f92672">=</span> lgbc<span style="color:#f92672">.</span>predict(X)
-    <span style="color:#66d9ef">return</span> accuracy_score(y, y_pred)
-</code></pre></div><p>We can now use get_score_importances function from eli5.permutation_importance to get the final feature importances.</p>
+    <span style="color:#66d9ef">return</span> accuracy_score(y, y_pred)</code></pre></div>
+<p>We can now use get_score_importances function from eli5.permutation_importance to get the final feature importances.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> eli5.permutation_importance <span style="color:#f92672">import</span> get_score_importances
 
 <span style="color:#75715e"># This function takes only numpy arrays as inputs</span>
 base_score, score_decreases <span style="color:#f92672">=</span> get_score_importances(score, np<span style="color:#f92672">.</span>array(X), y)
 
-feature_importances <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>mean(score_decreases, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
-</code></pre></div><p>We can see the top 5 features using:</p>
+feature_importances <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>mean(score_decreases, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)</code></pre></div>
+<p>We can see the top 5 features using:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">feature_importance_dict <span style="color:#f92672">=</span> {}
 <span style="color:#66d9ef">for</span> i, feature_name <span style="color:#f92672">in</span> enumerate(X<span style="color:#f92672">.</span>columns):
     feature_importance_dict[feature_name]<span style="color:#f92672">=</span>feature_importances[i]
 
-<span style="color:#66d9ef">print</span>(dict(sorted(feature_importance_dict<span style="color:#f92672">.</span>items(), key<span style="color:#f92672">=</span><span style="color:#66d9ef">lambda</span> x: x[<span style="color:#ae81ff">1</span>], reverse<span style="color:#f92672">=</span>True)[:<span style="color:#ae81ff">5</span>]))
-</code></pre></div><pre><code>{'Reactions': 0.019626631422435127,
+<span style="color:#66d9ef">print</span>(dict(sorted(feature_importance_dict<span style="color:#f92672">.</span>items(), key<span style="color:#f92672">=</span><span style="color:#66d9ef">lambda</span> x: x[<span style="color:#ae81ff">1</span>], reverse<span style="color:#f92672">=</span>True)[:<span style="color:#ae81ff">5</span>]))</code></pre></div>
+<pre><code>{'Reactions': 0.019626631422435127,
  'Interceptions': 0.004075114268406832,
  'BallControl': 0.0025001376727793235,
  'ShortPassing': 0.0012996310369513431,
  'Strength': 0.0009251610771518149}
 </code></pre>
-<hr>
+
+<hr />
+
 <h2 id="conclusion">Conclusion</h2>
-<p><a href="https://towardsdatascience.com/the-hitchhikers-guide-to-feature-extraction-b4c157e96631">Feature engineering</a> and feature selection are critical parts of any machine learning pipeline.</p>
+
+<p><a href="https://towardsdatascience.com/the-hitchhikers-guide-to-feature-extraction-b4c157e96631" rel="nofollow" target="_blank">Feature engineering</a> and feature selection are critical parts of any machine learning pipeline.</p>
+
 <p>We strive for accuracy in our models, and one cannot get to a good accuracy without revisiting these pieces again and again.</p>
-<p>In this post, I tried to explain Permutation importance as a feature selection method. It helps us find feature importance for any BlackBox model, unlike the techniques in my previous <a href="https://towardsdatascience.com/the-5-feature-selection-algorithms-every-data-scientist-need-to-know-3a6b566efd2">post</a> on feature selection.</p>
-<p>If you want to learn more about feature engineering/selection, I would like to call out the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">How to Win a Data Science Competition: Learn from Top Kagglers</a> course in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a> by Kazanova. This course talks about a lot of intuitive ways to improve your model using useful feature engineering/selection techniques. Definitely recommended.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------">@mlwhiz</a>.</p>
+
+<p>In this post, I tried to explain Permutation importance as a feature selection method. It helps us find feature importance for any BlackBox model, unlike the techniques in my previous <a href="https://towardsdatascience.com/the-5-feature-selection-algorithms-every-data-scientist-need-to-know-3a6b566efd2" rel="nofollow" target="_blank">post</a> on feature selection.</p>
+
+<p>If you want to learn more about feature engineering/selection, I would like to call out the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">How to Win a Data Science Competition: Learn from Top Kagglers</a> course in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">Advanced machine learning specialization</a> by Kazanova. This course talks about a lot of intuitive ways to improve your model using useful feature engineering/selection techniques. Definitely recommended.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
 
 		</div>
 		
@@ -393,7 +435,7 @@ feature_importances <span style="color:#f92672">=</span> np<span style="color:#f
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
 		</ul>
 	</div>
 </div>

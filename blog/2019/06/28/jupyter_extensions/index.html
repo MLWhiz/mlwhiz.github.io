@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.72.0" />
+	<meta name="generator" content="Hugo 0.53" />
 	<meta property="og:title" content="3 Great Additions for your Jupyter Notebooks" />
 <meta property="og:description" content="I love Jupyter notebooks and the power they provide.They can be used to present findings as well as share code in the most effective manner which was not easy with the previous IDEs.Yet there is something still amiss.There are a few functionalities I aspire in my text editor which don’t come by default in Jupyter.But fret not. Just like everything in Python, Jupyter too has third-party extensions. This post is about some of the most useful extensions I found." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2019/06/28/jupyter_extensions/" />
 <meta property="og:image" content="https://mlwhiz.com/images/extensions/nbext_snippets.gif" />
-<meta property="article:published_time" content="2019-06-28T00:00:00+00:00" />
-<meta property="article:modified_time" content="2019-06-28T00:00:00+00:00" />
+<meta property="article:published_time" content="2019-06-28T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-06-28T00:00:00&#43;00:00"/>
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/extensions/nbext_snippets.gif"/>
@@ -169,46 +169,82 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			<!-- raw HTML omitted -->
+			
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/start.png""></center>
+</div>
+
 <p>I love Jupyter notebooks and the power they provide.</p>
+
 <p>They can be used to present findings as well as share code in the most effective manner which was not easy with the previous IDEs.</p>
+
 <p>Yet there is something still amiss.</p>
+
 <p>There are a few functionalities I aspire in my text editor which don’t come by default in Jupyter.</p>
+
 <p>But fret not. Just like everything in Python, Jupyter too has third-party extensions.</p>
-<p><em><strong>This post is about some of the most useful extensions I found.</strong></em></p>
-<hr>
+
+<p><strong><em>This post is about some of the most useful extensions I found.</em></strong></p>
+
+<hr />
+
 <h2 id="1-collapsible-headings">1. Collapsible Headings</h2>
+
 <p>The one extension, I like most is collapsible headings.</p>
+
 <p>It makes the flow of the notebook easier to comprehend and also helps in creating presentable notebooks.</p>
+
 <p>To get this one, install the <code>jupyter_contrib_nbextensions</code> package with this command on the terminal window:</p>
+
 <pre><code>conda install -c conda-forge jupyter_contrib_nbextensions
 </code></pre>
+
 <p>Once the package is installed, we can start jupyter notebook using:</p>
+
 <pre><code>jupyter notebook
 </code></pre>
+
 <p>Once you go to the home page of your jupyter notebook, you can see that a new tab for NBExtensions is created.</p>
-<!-- raw HTML omitted -->
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/jupyter.png""></center>
+</div>
+
 <p>And we can get a lot of extensions using this package.</p>
-<!-- raw HTML omitted -->
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/nbext.png""></center>
+</div>
+
 <p>This is how it looks:</p>
-<!-- raw HTML omitted -->
-<hr>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/nbextension_collapsible.gif""></center>
+</div>
+
+<hr />
+
 <h2 id="2-automatic-imports">2. Automatic Imports</h2>
-<!-- raw HTML omitted -->
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/auto.jpeg""></center>
+</div>  
+
 <p>Automation is the future.</p>
+
 <p>One thing that bugs me is that whenever I open a new Jupyter notebook in any of my data science projects, I need to copy paste a lot of libraries and default options for some of them.</p>
+
 <p>To tell you about some of the usual imports I use:</p>
+
 <ul>
-<li>
-<p>Pandas and numpy — In my view, Python must make these two as a default import.</p>
-</li>
-<li>
-<p>Seaborn, matplotlib, plotly_express</p>
-</li>
-<li>
-<p>change some pandas and seaborn default options.</p>
-</li>
+<li><p>Pandas and numpy — In my view, Python must make these two as a default import.</p></li>
+
+<li><p>Seaborn, matplotlib, plotly_express</p></li>
+
+<li><p>change some pandas and seaborn default options.</p></li>
 </ul>
+
 <p>Here is the script that I end up pasting over and over again.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
 <span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
@@ -223,9 +259,11 @@ sns<span style="color:#f92672">.</span>set(style<span style="color:#f92672">=</s
 
 <span style="color:#75715e"># pandas defaults</span>
 pd<span style="color:#f92672">.</span>options<span style="color:#f92672">.</span>display<span style="color:#f92672">.</span>max_columns <span style="color:#f92672">=</span> <span style="color:#ae81ff">500</span>
-pd<span style="color:#f92672">.</span>options<span style="color:#f92672">.</span>display<span style="color:#f92672">.</span>max_rows <span style="color:#f92672">=</span> <span style="color:#ae81ff">500</span>
-</code></pre></div><p><em><strong>Is there a way I can automate this?</strong></em></p>
+pd<span style="color:#f92672">.</span>options<span style="color:#f92672">.</span>display<span style="color:#f92672">.</span>max_rows <span style="color:#f92672">=</span> <span style="color:#ae81ff">500</span></code></pre></div>
+<p><strong><em>Is there a way I can automate this?</em></strong></p>
+
 <p>Just go to the nbextensions tab and select the snippets extension.</p>
+
 <p>You will need to make the following changes to the snippets.json file. You can find this file at <code>/miniconda3/envs/py36/share/jupyter/nbextensions/snippets</code> location. The py36 in this location here is my conda virtualenv. It took me some time to find this location for me. Yours might be different. Please note that you don’t have to change at the site-packages location.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
     <span style="color:#f92672">&#34;snippets&#34;</span> : [
@@ -258,41 +296,72 @@ pd<span style="color:#f92672">.</span>options<span style="color:#f92672">.</span
             ]
         }
     ]
-}
-</code></pre></div><p>You can see this extension in action below.</p>
-<!-- raw HTML omitted -->
+}</code></pre></div>
+<p>You can see this extension in action below.</p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/nbext_snippets.gif""></center>
+</div>  
+
 <p>Pretty cool. Right? I also use this to create basic snippets for my deep learning notebooks and NLP based notebooks.</p>
-<hr>
+
+<hr />
+
 <h2 id="3-execution-time">3. Execution Time</h2>
+
 <p>We have used <code>%time</code> as well as decorator based timer functions to measure time for our functions. You can also use this excellent extension to do that.</p>
+
 <p>Plus it looks great.</p>
+
 <p>Just select the ExecutionTime extension from the NBextensions list and you will have an execution result at the bottom of the cell after every cell execution as well as the time when the cell was executed.</p>
-<!-- raw HTML omitted -->
-<hr>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/time.png""></center>
+</div>  
+
+<hr />
+
 <h2 id="other-extensions">Other Extensions</h2>
-<!-- raw HTML omitted -->
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/others.jpeg""></center>
+</div>  
+
 <p>NBExtensions has a lot of extensions. Some other extensions from NBExtensions I like and you might want to look at:</p>
+
 <ul>
-<li>
-<p><strong>Limit Output:</strong> Ever had your notebook hang since you printed a lot of text in your notebook. This extension limits the number of characters that can be printed below a code cell</p>
-</li>
-<li>
-<p><strong>2to3Convertor:</strong> Having problems with your old python2 notebooks. Tired of changing the print statements. This one is a good one.</p>
-</li>
+<li><p><strong>Limit Output:</strong> Ever had your notebook hang since you printed a lot of text in your notebook. This extension limits the number of characters that can be printed below a code cell</p></li>
+
+<li><p><strong>2to3Convertor:</strong> Having problems with your old python2 notebooks. Tired of changing the print statements. This one is a good one.</p></li>
 </ul>
-<!-- raw HTML omitted -->
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/demo_2to3.gif""></center>
+</div>  
+
 <ul>
 <li><strong>Live Markdown Preview:</strong> Some of us like writing our blogs using Markdown in a jupyter notebook. Sometimes it can be hectic as you make errors in writing. Now you can see Live-preview of the rendered output of markdown cells while editing their source.</li>
 </ul>
-<!-- raw HTML omitted -->
-<hr>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/extensions/markdownpreview.gif""></center>
+</div>  
+
+<hr />
+
 <h2 id="conclusion">Conclusion</h2>
+
 <p>I love how there is a package for everything with Python. And that holds good with the Jupyter notebook too.</p>
+
 <p>The <code>jupyter_contrib_nbextensions</code> package works great out of the box.</p>
+
 <p>It has made my life a lot easier when it comes to checking execution times, scrolling through the notebook, and repetitive tasks.</p>
+
 <p>There are many other extensions this package does provide. Do take a look at them and try to see which ones you find useful.</p>
-<p>Also, if you want to learn more about Python 3, I would like to call out an excellent course on Learn <a href="https://bit.ly/2XshreA">Intermediate level Python</a> from the University of Michigan. Do check it out.</p>
-<p>I am going to be writing more of such posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz">@mlwhiz</a>.</p>
+
+<p>Also, if you want to learn more about Python 3, I would like to call out an excellent course on Learn <a href="https://bit.ly/2XshreA" rel="nofollow" target="_blank">Intermediate level Python</a> from the University of Michigan. Do check it out.</p>
+
+<p>I am going to be writing more of such posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
 
 		</div>
 		
@@ -429,7 +498,7 @@ pd<span style="color:#f92672">.</span>options<span style="color:#f92672">.</span
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
 		</ul>
 	</div>
 </div>

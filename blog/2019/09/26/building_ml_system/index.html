@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.72.0" />
+	<meta name="generator" content="Hugo 0.53" />
 	<meta property="og:title" content="6 Important Steps to build  a Machine Learning System" />
 <meta property="og:description" content="This post is about explaining what is involved in an end to end data project pipeline. Something I did learn very late in my career" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2019/09/26/building_ml_system/" />
 <meta property="og:image" content="https://mlwhiz.com/images/mlsystem/1.png" />
-<meta property="article:published_time" content="2019-09-26T00:00:00+00:00" />
-<meta property="article:modified_time" content="2019-09-26T00:00:00+00:00" />
+<meta property="article:published_time" content="2019-09-26T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-09-26T00:00:00&#43;00:00"/>
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/mlsystem/1.png"/>
@@ -169,124 +169,210 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			<p>Creating a great machine learning system is an art.</p>
+			
+
+<p>Creating a great machine learning system is an art.</p>
+
 <p>There are a lot of things to consider while building a great machine learning system. But often it happens that we as data scientists only worry about certain parts of the project.</p>
+
 <p>Most of the time that happens to be modeling, but in reality, the success or failure of a Machine Learning project depends on a lot of other factors.</p>
+
 <blockquote>
 <p>A machine learning pipeline is more than just creating Models</p>
 </blockquote>
+
 <p>It is essential to understand what happens before training a model and after training the model and deploying it in production.</p>
-<p><em><strong>This post is about explaining what is involved in an end to end data project pipeline. Something I did learn very late in my career.</strong></em></p>
-<hr>
+
+<p><strong><em>This post is about explaining what is involved in an end to end data project pipeline. Something I did learn very late in my career.</em></strong></p>
+
+<hr />
+
 <h2 id="1-problem-definition">1. Problem Definition</h2>
-<p><img src="/images/mlsystem/2.jpg" alt=""></p>
-<p>This one is obvious — <em><strong>Define a problem.</strong></em></p>
+
+<p><img src="/images/mlsystem/2.jpg" alt="" /></p>
+
+<p>This one is obvious — <strong><em>Define a problem.</em></strong></p>
+
 <p>And, this may be the most crucial part of the whole exercise.</p>
-<p><em><strong>So, how to define a problem for Machine learning?</strong></em></p>
-<p>Well, that depends on a lot of factors. Amongst all the elements that we consider, the first one should be to understand <em><strong>how it will benefit the business</strong></em>.</p>
+
+<p><strong><em>So, how to define a problem for Machine learning?</em></strong></p>
+
+<p>Well, that depends on a lot of factors. Amongst all the elements that we consider, the first one should be to understand <strong><em>how it will benefit the business</em></strong>.</p>
+
 <p>That is the holy grail of any data science project. If your project does not help business, it won’t get deployed. Period.</p>
-<p>Once you get an idea and you determine business compatibility, you need to <em><strong>define a success metric</strong></em>.</p>
-<p><em><strong>Now, what does success look like?</strong></em></p>
+
+<p>Once you get an idea and you determine business compatibility, you need to <strong><em>define a success metric</em></strong>.</p>
+
+<p><strong><em>Now, what does success look like?</em></strong></p>
+
 <p>Is it 90% accuracy or 95% accuracy or 99% accuracy.</p>
+
 <p>Well, I may be happy with a 70% prediction accuracy since an average human won’t surpass that accuracy ever and in the meantime, you get to automate the process.</p>
-<p>Beware,<em><strong>this is not the time to set lofty targets</strong></em>; it is the time to be logical and sensible about how every 1 percent accuracy change could affect success.</p>
+
+<p>Beware,<strong><em>this is not the time to set lofty targets</em></strong>; it is the time to be logical and sensible about how every 1 percent accuracy change could affect success.</p>
+
 <p>For example: For a click prediction problem/Fraud application, a 1% accuracy increase will boost the business bottom line compared to a 1% accuracy increase in review sentiment prediction.</p>
+
 <blockquote>
 <p>Not all accuracy increases are created equal</p>
 </blockquote>
-<hr>
+
+<hr />
+
 <h2 id="2-data">2. Data</h2>
-<p><img src="/images/mlsystem/3.jpg" alt=""></p>
+
+<p><img src="/images/mlsystem/3.jpg" alt="" /></p>
+
 <p>There are several questions you will need to answer at the time of data acquisition and data creation for your machine learning model.</p>
-<p>The most important question to answer here is: <em><strong>Does your model need to work in realtime?</strong></em></p>
+
+<p>The most important question to answer here is: <strong><em>Does your model need to work in realtime?</em></strong></p>
+
 <p>If that is the case, you can’t use a system like Hive/Hadoop for data storage as such systems could introduce a lot of latency and are suitable for offline batch processing.</p>
-<p><em><strong>Does your model need to be trained in Realtime?</strong></em></p>
-<p><img src="/images/mlsystem/4.png" alt=""></p>
+
+<p><strong><em>Does your model need to be trained in Realtime?</em></strong></p>
+
+<p><img src="/images/mlsystem/4.png" alt="" /></p>
+
 <p>If the performance of your ML model decreases with time as in the above figure, you might want to consider Real-time training. RT training might be beneficial for most of the click prediction systems as internet trends change rather quickly.</p>
-<p><em><strong>Is there an inconsistency between test and train data?</strong></em></p>
-<p>Or in simple words — <em><strong>do you suspect that the production data comes from a different distribution from training data?</strong></em></p>
+
+<p><strong><em>Is there an inconsistency between test and train data?</em></strong></p>
+
+<p>Or in simple words — <strong><em>do you suspect that the production data comes from a different distribution from training data?</em></strong></p>
+
 <p>For example: In a realtime training for a click prediction problem, you show the user the ad, and he doesn’t click. Is it a failure example? Maybe the user clicks typically after 10 minutes. But you have already created the data and trained your model on that.</p>
+
 <p>There are a lot of factors you should consider while preparing data for your models. You need to ask questions and think about the process end to end to be successful at this stage.</p>
-<hr>
+
+<hr />
+
 <h2 id="3-evaluation">3. Evaluation</h2>
-<p><img src="/images/mlsystem/5.png" alt=""></p>
+
+<p><img src="/images/mlsystem/5.png" alt="" /></p>
+
 <p>How will we evaluate the performance of our Model?</p>
-<p><em><strong>The gold standard here is the train-test-validation split.</strong></em></p>
+
+<p><strong><em>The gold standard here is the train-test-validation split.</em></strong></p>
+
 <p>Frequently making a train-validation-test set, by sampling, we forgot about an implicit assumption — Data is rarely ever IID(independently and identically distributed).</p>
-<p><em><strong>In simple terms, our assumption that each data point is independent of each other and comes from the same distribution is faulty at best if not downright incorrect.</strong></em></p>
+
+<p><strong><em>In simple terms, our assumption that each data point is independent of each other and comes from the same distribution is faulty at best if not downright incorrect.</em></strong></p>
+
 <p>For an internet company, a data point from 2007 is very different from a data point that comes in 2019. They don’t come from the same distribution because of a lot of factors- internet speed being the foremost.</p>
+
 <p>If you have a cat vs. dog prediction problem, you are pretty much good with Random sampling. But, in most of the machine learning models, the task is to predict the future.</p>
+
 <p>You can think about splitting your data using the time variable rather than sampling randomly from the data. For example: for the click prediction problem you can have all your past data till last month as training data and data for last month as validation.</p>
-<p><em><strong>The next thing you will need to think about is the baseline model.</strong></em></p>
+
+<p><strong><em>The next thing you will need to think about is the baseline model.</em></strong></p>
+
 <p>Let us say we use RMSE as an evaluation metric for our time series models. We evaluated the model on the test set, and the RMSE came out to be 4.8.</p>
+
 <p>Is that a good RMSE? How do we know? We need a baseline RMSE. This could come from a currently employed model for the same task. Or by using some simple model. For Time series model, a baseline to defeat is last day prediction. i.e., predict the number on the previous day.</p>
+
 <p>For NLP classification models, I usually set the baseline to be the evaluation metric(Accuracy, F1, log loss) of Logistic regression models on Countvectorizer(Bag of words).</p>
-<p><em><strong>You should also think about how you will be breaking evaluation in multiple groups so that your model doesn’t induce unnecessary biases.</strong></em></p>
-<p><img src="/images/mlsystem/6.jpg" alt=""></p>
-<p>Last year, Amazon was in the <a href="https://www.wellesley.edu/albright/about/blog/4766-ai-sexist">news</a> for a secret AI recruiting tool that showed bias against women. To save our Machine Learning model from such inconsistencies, we need to evaluate our model on different groups. Maybe our model is not so accurate for women as it is for men because there is far less number of women in training data.</p>
+
+<p><strong><em>You should also think about how you will be breaking evaluation in multiple groups so that your model doesn’t induce unnecessary biases.</em></strong></p>
+
+<p><img src="/images/mlsystem/6.jpg" alt="" /></p>
+
+<p>Last year, Amazon was in the <a href="https://www.wellesley.edu/albright/about/blog/4766-ai-sexist" rel="nofollow" target="_blank">news</a> for a secret AI recruiting tool that showed bias against women. To save our Machine Learning model from such inconsistencies, we need to evaluate our model on different groups. Maybe our model is not so accurate for women as it is for men because there is far less number of women in training data.</p>
+
 <p>Or maybe a model predicting if a product is going to be bought or not given a view works pretty well for a specific product category and not for other product categories.</p>
+
 <p>Keeping such things in mind beforehand and thinking precisely about what could go wrong with a particular evaluation approach is something that could definitely help us in designing a good ML system.</p>
-<hr>
+
+<hr />
+
 <h2 id="4-features">4. Features</h2>
-<p><img src="/images/mlsystem/7.jpg" alt=""></p>
+
+<p><img src="/images/mlsystem/7.jpg" alt="" /></p>
+
 <p>Good Features are the backbone of any machine learning model. And often the part where you would spend the most time. I have seen that this is the part which you can tune for maximum model performance.</p>
+
 <blockquote>
 <p>Good feature creation often needs domain knowledge, creativity, and lots of time.</p>
 </blockquote>
+
 <p>On top of that, the feature creation exercise might change for different models. For example, feature creation is very different for Neural networks vs. XGboost.</p>
+
 <p>Understanding various methods for Feature creation is a pretty big topic in itself. I have written a post here on feature creation. Do take a look:</p>
-<p><a href="https://towardsdatascience.com/the-hitchhikers-guide-to-feature-extraction-b4c157e96631"><strong>The Hitchhiker’s Guide to Feature Extraction</strong></a></p>
+
+<p><a href="https://towardsdatascience.com/the-hitchhikers-guide-to-feature-extraction-b4c157e96631" rel="nofollow" target="_blank"><strong>The Hitchhiker’s Guide to Feature Extraction</strong></a></p>
+
 <p>Once you create a lot of features, the next thing you might want to do is to remove redundant features. Here are some methods to do that</p>
-<p><a href="https://towardsdatascience.com/the-5-feature-selection-algorithms-every-data-scientist-need-to-know-3a6b566efd2"><strong>The 5 Feature Selection Algorithms every Data Scientist should know</strong></a></p>
-<hr>
+
+<p><a href="https://towardsdatascience.com/the-5-feature-selection-algorithms-every-data-scientist-need-to-know-3a6b566efd2" rel="nofollow" target="_blank"><strong>The 5 Feature Selection Algorithms every Data Scientist should know</strong></a></p>
+
+<hr />
+
 <h2 id="5-modeling">5. Modeling</h2>
-<p><img src="/images/mlsystem/8.png" alt=""></p>
+
+<p><img src="/images/mlsystem/8.png" alt="" /></p>
+
 <p>Now comes the part we mostly tend to care about. And why not? It is the piece that we end up delivering at the end of the project. And this is the part for which we have spent all those hours on data acquisition and cleaning, feature creation and whatnot.</p>
+
 <p>So what do we need to think while creating a model?</p>
-<p>The first question that you may need to ask ourselves is that <em><strong>if your model needs to be interpretable?</strong></em></p>
+
+<p>The first question that you may need to ask ourselves is that <strong><em>if your model needs to be interpretable?</em></strong></p>
+
 <p>There are quite a lot of use cases where the business may want an interpretable model. One such use case is when we want to do attribution modeling. Here we define the effect of various advertising streams(TV, radio, newspaper, etc.) on the revenue. In such cases, understanding the response from each advertisement stream becomes essential.</p>
-<p><em><strong>If we need to maximize the accuracy or any other metric, we will still want to go for black-box models like NeuralNets or XGBoost.</strong></em></p>
+
+<p><strong><em>If we need to maximize the accuracy or any other metric, we will still want to go for black-box models like NeuralNets or XGBoost.</em></strong></p>
+
 <p>Apart from model selection, there should be other things on your mind too:</p>
+
 <ul>
-<li>
-<p><em><strong>Model Architecture:</strong></em> How many layers for NNs, or how many trees for GBT or how you need to create feature interactions for Linear models.</p>
-</li>
-<li>
-<p><em><strong>How to tune hyperparameters?:</strong></em> You should try to automate this part. There are a lot of tools in the market for this. I tend to use hyperopt.</p>
-</li>
+<li><p><strong><em>Model Architecture:</em></strong> How many layers for NNs, or how many trees for GBT or how you need to create feature interactions for Linear models.</p></li>
+
+<li><p><strong><em>How to tune hyperparameters?:</em></strong> You should try to automate this part. There are a lot of tools in the market for this. I tend to use hyperopt.</p></li>
 </ul>
-<hr>
+
+<hr />
+
 <h2 id="6-experimentation">6. Experimentation</h2>
-<p><img src="/images/mlsystem/9.jpg" alt=""></p>
+
+<p><img src="/images/mlsystem/9.jpg" alt="" /></p>
+
 <p>Now you have created your model.</p>
+
 <p>It performs better than the baseline/your current model. How should we go forward?</p>
+
 <p>We have two choices-</p>
+
 <ol>
-<li>
-<p>Go into an endless loop in improving our model further.</p>
-</li>
-<li>
-<p>Test our model in production settings, get more insights about what could go wrong and then continue improving our model with <em><strong>continuous integration.</strong></em></p>
-</li>
+<li><p>Go into an endless loop in improving our model further.</p></li>
+
+<li><p>Test our model in production settings, get more insights about what could go wrong and then continue improving our model with <strong><em>continuous integration.</em></strong></p></li>
 </ol>
-<p>I am a fan of the latter approach. In his awesome <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11421702016&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fmachine-learning-projects">third course</a> named Structuring Machine learning projects in the Coursera <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdeep-learning">Deep Learning Specialization</a>, Andrew Ng says —</p>
-<blockquote>
-<p>“Don’t start off trying to design and build the perfect system. Instead, build and train a basic system quickly — perhaps in just a few days. Even if the basic system is far from the “best” system you can build, it is valuable to examine how the basic system functions: you will quickly find clues that show you the most promising directions in which to invest your time.”</p>
-</blockquote>
-<p>One thing I would also like to stress is <em><strong>continuous integration</strong></em>. If your current model performs better than the existing model, why not deploy it in production rather than running after incremental gains?</p>
+
+<p>I am a fan of the latter approach. In his awesome <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11421702016&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fmachine-learning-projects" rel="nofollow" target="_blank">third course</a> named Structuring Machine learning projects in the Coursera <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdeep-learning" rel="nofollow" target="_blank">Deep Learning Specialization</a>, Andrew Ng says —
+&gt; “Don’t start off trying to design and build the perfect system. Instead, build and train a basic system quickly — perhaps in just a few days. Even if the basic system is far from the “best” system you can build, it is valuable to examine how the basic system functions: you will quickly find clues that show you the most promising directions in which to invest your time.”</p>
+
+<p>One thing I would also like to stress is <strong><em>continuous integration</em></strong>. If your current model performs better than the existing model, why not deploy it in production rather than running after incremental gains?</p>
+
 <p>To test the validity of your assumption that your model being better than the existing model, you can set up an A/B test. Some users(Test group)see your model while some users(Control) see the predictions from the previous model.</p>
+
 <p>You should always aim to minimize the time to first online experiment for your model. This not only generated value but also lets you understand the shortcomings of your model with realtime feedback which you can then work on.</p>
-<hr>
+
+<hr />
+
 <h2 id="conclusion">Conclusion</h2>
+
 <blockquote>
 <p>Nothing is simple in Machine learning. And nothing should be assumed.</p>
 </blockquote>
+
 <p>You should always remain critical of any decisions you have taken while building an ML pipeline.</p>
+
 <p>A simple looking decision could be the difference between the success or failure of your machine learning project.</p>
-<p><em><strong>So think wisely and think a lot.</strong></em></p>
-<p>This post was part of increasing my understanding of the Machine Learning ecosystem and is inspired by a great <a href="https://research.fb.com/videos/?cat=3">set of videos</a> by the Facebook engineering team.</p>
-<p>If you want to learn more about how to structure a Machine Learning project and the best practices, I would like to call out his awesome <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11421702016&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fmachine-learning-projects">third course</a> named Structuring Machine learning projects in the Coursera <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdeep-learning">Deep Learning Specialization</a>. Do check it out.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------">@mlwhiz</a>.</p>
+
+<p><strong><em>So think wisely and think a lot.</em></strong></p>
+
+<p>This post was part of increasing my understanding of the Machine Learning ecosystem and is inspired by a great <a href="https://research.fb.com/videos/?cat=3" rel="nofollow" target="_blank">set of videos</a> by the Facebook engineering team.</p>
+
+<p>If you want to learn more about how to structure a Machine Learning project and the best practices, I would like to call out his awesome <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11421702016&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fmachine-learning-projects" rel="nofollow" target="_blank">third course</a> named Structuring Machine learning projects in the Coursera <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdeep-learning" rel="nofollow" target="_blank">Deep Learning Specialization</a>. Do check it out.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
 
 		</div>
 		
@@ -424,7 +510,7 @@ if (!doNotTrack) {
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
 		</ul>
 	</div>
 </div>

@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.72.0" />
+	<meta name="generator" content="Hugo 0.53" />
 	<meta property="og:title" content="Five Cognitive Biases In Data Science (And how to avoid them)" />
 <meta property="og:description" content="In this piece, I want to point out five of the most common types of cognitive biases. I will also offer some suggestions on how data scientists can work to avoid them and make better, more reasoned decisions." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2020/05/25/cogbias/" />
 <meta property="og:image" content="https://mlwhiz.com/images/cogbias/main.png" />
-<meta property="article:published_time" content="2020-05-25T00:00:00+00:00" />
-<meta property="article:modified_time" content="2020-05-25T00:00:00+00:00" />
+<meta property="article:published_time" content="2020-05-25T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-05-25T00:00:00&#43;00:00"/>
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/cogbias/main.png"/>
@@ -169,72 +169,123 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			<p><img src="/images/cogbias/main.png" alt=""></p>
+			
+
+<p><img src="/images/cogbias/main.png" alt="" /></p>
+
 <p>Recently, I was reading Rolf Dobell’s <em>The Art of Thinking Clearly</em>, which made me think about cognitive biases in a way I never had before. I realized how deeply seated some cognitive biases are. In fact, we often don’t even consciously realize when our thinking is being affected by one. For data scientists, these biases can really change the way we work with data and make our day-to-day decisions, and generally not for the better.</p>
+
 <blockquote>
 <p>Data science is, despite the seeming objectivity of all the facts we work with, surprisingly subjective in its processes.</p>
 </blockquote>
+
 <p>As data scientists, our job is to make sense of the facts. In carrying out this analysis, we have to make subjective decisions though. So even though we work with hard facts and data, there’s a strong interpretive component to data science.</p>
+
 <p>As a result, we data scientists need to be extremely careful, because all humans are very much susceptible to cognitive biases. We’re no exception. In fact, I have seen many instances where data scientists ended up making decisions based on pre-existing beliefs, limited data or just irrational preferences.</p>
-<p><em><strong>In this piece, I want to point out five of the most common types of cognitive biases.</strong></em> I will also offer some suggestions on how data scientists can work to avoid them and make better, more reasoned decisions.</p>
-<hr>
+
+<p><strong><em>In this piece, I want to point out five of the most common types of cognitive biases.</em></strong> I will also offer some suggestions on how data scientists can work to avoid them and make better, more reasoned decisions.</p>
+
+<hr />
+
 <h2 id="1-survivorship-bias">1. Survivorship Bias</h2>
-<p><img src="/images/cogbias/0.png" alt=""></p>
+
+<p><img src="/images/cogbias/0.png" alt="" /></p>
+
 <p>During World War II, researchers from the non-profit research group the Center for Naval Analyses were tasked with a problem. They needed to reinforce the military’s fighter planes at their weakest spots. To accomplish this, they turned to data. They examined every plane that came back from a combat mission and made note of where bullets had hit the aircraft. Based on that information, they recommended that the planes be reinforced at those precise spots.</p>
-<p><em><strong>Do you see any problems with this approach?</strong></em></p>
+
+<p><strong><em>Do you see any problems with this approach?</em></strong></p>
+
 <p>The problem, of course, was that they only looked at the planes that returned and not at the planes that didn’t. Of course, data from the planes that had been shot down would almost certainly have been much more useful in determining where fatal damage to a plane was likely to have occurred, as those were the ones that suffered catastrophic damage.</p>
+
 <p>The research team suffered from survivorship bias: they just looked at the data that was available to them without analyzing the larger situation. This is a form of selection bias in which we implicitly filter data based on some arbitrary criteria and then try to make sense out of it without realizing or acknowledging that we’re working with incomplete data.</p>
+
 <p>Let’s think about how this might apply to our work in data science. Say you begin working on a data set. You have created your features and reached a decent accuracy on your modelling task. But maybe you should ask yourself if that is the best result you can achieve. Have you tried looking for more data? Maybe adding weather forecast data to the regular sales variables that you use in your ARIMA models would help you to forecast your sales better. Or perhaps some features around holidays can tell your model why your buyers are behaving in a particular fashion around Thanksgiving or Christmas.</p>
-<p><em><strong>Recommendation to Overcome:</strong></em> One way to mitigate this bias is by thinking in a rigorous, scientific way about the problem at hand and then brainstorming about any type of data that could help to solve it (rather than just starting with the data). These approaches may seem similar, but the second method restricts your vision because you don’t know what’s missing from your work. By using the first approach, you will know what data you were not able to get, and you will end up factoring that into your conclusions.</p>
-<hr>
+
+<p><strong><em>Recommendation to Overcome:</em></strong> One way to mitigate this bias is by thinking in a rigorous, scientific way about the problem at hand and then brainstorming about any type of data that could help to solve it (rather than just starting with the data). These approaches may seem similar, but the second method restricts your vision because you don’t know what’s missing from your work. By using the first approach, you will know what data you were not able to get, and you will end up factoring that into your conclusions.</p>
+
+<hr />
+
 <h2 id="2-sunk-cost-fallacy">2. Sunk Cost Fallacy</h2>
-<p><img src="/images/cogbias/1.png" alt="Source:Pixabay"></p>
+
+<p><img src="/images/cogbias/1.png" alt="Source:[Pixabay](https://pixabay.com/photos/down-the-drain-money-waste-sink-4708734/)" /></p>
+
 <p>We all have seen the sunk cost fallacy in action at some point, whether it be sitting through that bad movie because we have already paid for it or finishing that awful book because we were already halfway through. Everyone has been in a situation where they ended up wasting more time because they were trying to salvage the time they had already invested.</p>
-<p>A sunk cost, also known as a retrospective cost**,** is one that has already been incurred and cannot be recovered by any additional action. The sunk cost fallacy refers to the tendency of human beings to make decisions based on how much of an investment they have already made, which leads to even more investment but no returns whatsoever.</p>
+
+<p>A sunk cost, also known as a retrospective cost<strong>,</strong> is one that has already been incurred and cannot be recovered by any additional action. The sunk cost fallacy refers to the tendency of human beings to make decisions based on how much of an investment they have already made, which leads to even more investment but no returns whatsoever.</p>
+
 <blockquote>
 <p>Sometimes, hard as it is, the best thing to do is to let go.</p>
 </blockquote>
+
 <p>This happens often with data science projects. A project might run for more than two years without results but an investigator continues running it because so much time, money and effort have already been invested. Or a data scientist might defend her project wholeheartedly because she has invested so much in it, failing to realize that putting in more work won’t help her or the company in the long run and that it is best if the project is scrapped.</p>
-<p><em><strong>Recommendation to Overcome:</strong></em> A way to save yourself from this cognitive bias is by focusing on future benefits and costs rather than the already lost past costs. You have to develop the habit, hard as it is, of ignoring the previous cost information. Of course, it is never easy for us data scientists to just disregard data. For myself, I have found that a methodical way works best in this case. I take a pen and paper to get away from all the distractions and try to come up with all the additional costs required to do a project along with the benefits I might get in the future. If the cost part of the task seems overly significant, then it is time to move on.</p>
-<hr>
+
+<p><strong><em>Recommendation to Overcome:</em></strong> A way to save yourself from this cognitive bias is by focusing on future benefits and costs rather than the already lost past costs. You have to develop the habit, hard as it is, of ignoring the previous cost information. Of course, it is never easy for us data scientists to just disregard data. For myself, I have found that a methodical way works best in this case. I take a pen and paper to get away from all the distractions and try to come up with all the additional costs required to do a project along with the benefits I might get in the future. If the cost part of the task seems overly significant, then it is time to move on.</p>
+
+<hr />
+
 <h2 id="3-false-causality">3. False Causality</h2>
-<p><img src="/images/cogbias/2.png" alt="Source"></p>
+
+<p><img src="/images/cogbias/2.png" alt="[Source](https://xkcd.com/925/)" /></p>
+
 <p>As data scientists, we are always in search of patterns. The tendency means that sometimes we even find patterns where none really even exist. Our brains are so trained in this way that we will even make sense of chaos to the extent that we can.</p>
+
 <p>Because our training wires us to seek out patterns, it’s crucial to remember the simple maxim that correlation does not imply causation. Those five words are like the hammer of the data science toolbox without which you can’t accomplish anything. Just because two variables move in tandem doesn’t necessarily mean that one causes the other.</p>
+
 <p>This principle has been hilariously demonstrated by numerous examples. For instance,</p>
+
 <ul>
-<li>
-<p>by looking at fire department data, you notice that, as more firemen are dispatched to a fire, the more damage is ultimately done to a property. Thus, you might infer that more firemen are causing more damage.</p>
-</li>
-<li>
-<p>In another famous example, an academic who was investigating the cause of crime in New York City in the 1980s found a strong correlation between the number of serious crimes committed and the amount of ice cream sold by street vendors. But should we conclude that eating ice cream drives people to crime? Since this makes little sense, we should obviously suspect that there was an unobserved variable causing both. During the summer, crime rates are the highest, and this is also when most ice cream is sold. Ice cream sales don’t cause crime, nor does crime increase ice cream sales.</p>
-</li>
+<li><p>by looking at fire department data, you notice that, as more firemen are dispatched to a fire, the more damage is ultimately done to a property. Thus, you might infer that more firemen are causing more damage.</p></li>
+
+<li><p>In another famous example, an academic who was investigating the cause of crime in New York City in the 1980s found a strong correlation between the number of serious crimes committed and the amount of ice cream sold by street vendors. But should we conclude that eating ice cream drives people to crime? Since this makes little sense, we should obviously suspect that there was an unobserved variable causing both. During the summer, crime rates are the highest, and this is also when most ice cream is sold. Ice cream sales don’t cause crime, nor does crime increase ice cream sales.</p></li>
 </ul>
+
 <p>In both of these instances, looking at the data too superficially leads to incorrect assumptions.</p>
-<p><em><strong>Recommendation to Overcome:</strong></em> As data scientists, we need to be mindful of this bias when we present findings. Often, variables that might seem causal might not be on closer inspection. We should also take special care to avoid this type of mistake when creating variables of our models. At each step of the process, it’s important to ask ourselves if our independent variable is possibly just correlated to the dependent variable.</p>
-<hr>
+
+<p><strong><em>Recommendation to Overcome:</em></strong> As data scientists, we need to be mindful of this bias when we present findings. Often, variables that might seem causal might not be on closer inspection. We should also take special care to avoid this type of mistake when creating variables of our models. At each step of the process, it’s important to ask ourselves if our independent variable is possibly just correlated to the dependent variable.</p>
+
+<hr />
+
 <h2 id="4-availability-bias">4. Availability Bias</h2>
+
 <p>Have you ever said something like, “I know that [insert a generic statement here] because [insert one single example].” For example, someone might say, “You can’t get fat from drinking beer, because Bob drinks a lot of it, and he’s thin.” If you have, then you’ve suffered from availability bias. You are trying to make sense of the world with limited data.</p>
-<p>***People naturally tend to base decisions on information that is already available to us or things we hear about often without looking at alternatives that might be useful.***As a result, we limit ourselves to a very specific subset of information.</p>
+
+<p><strong><em>People naturally tend to base decisions on information that is already available to us or things we hear about often without looking at alternatives that might be useful.</em></strong>As a result, we limit ourselves to a very specific subset of information.</p>
+
 <p>This happens often in the data science world. Data scientists tend to get and work on data that’s easier to obtain rather than looking for data that is harder to gather but might be more useful. We make do with models that we understand and that are available to us in a neat package rather than something more suitable for the problem at hand but much more difficult to come by.</p>
-<p><em><strong>Recommendation to Overcome:</strong></em> A way to overcome availability bias in data science is to broaden our horizons. Commit to lifelong learning. Read. A lot. About everything. Then read some more. Meet new people. Discuss your work with other data scientists at work or in online forums. Be more open to suggestions about changes that you may have to take in your approach. By opening yourself up to new information and ideas, you can make sure that you’re less likely to work with incomplete information.</p>
-<hr>
+
+<p><strong><em>Recommendation to Overcome:</em></strong> A way to overcome availability bias in data science is to broaden our horizons. Commit to lifelong learning. Read. A lot. About everything. Then read some more. Meet new people. Discuss your work with other data scientists at work or in online forums. Be more open to suggestions about changes that you may have to take in your approach. By opening yourself up to new information and ideas, you can make sure that you’re less likely to work with incomplete information.</p>
+
+<hr />
+
 <h2 id="5-confirmation-bias">5. Confirmation Bias</h2>
+
 <p>An old joke says that if you torture the data long enough, it will confess. With enough work, you can distort data to make it say what you want it to say.</p>
+
 <p>We all hold some beliefs, and that’s fine. It’s all part of being human. What’s not OK, though, is when we let those beliefs inadvertently come into the way we form our hypotheses.</p>
-<p>We can see this tendency in our everyday lives. <em><strong>We often interpret new information in such a way that it becomes compatible with our own beliefs.</strong></em> We read the news on the site that conforms most closely to our beliefs. We talk to people who are like us and hold similar views. We don’t want to get disconcerting evidence because that might lead us to change our worldview, which we might be afraid to do.</p>
+
+<p>We can see this tendency in our everyday lives. <strong><em>We often interpret new information in such a way that it becomes compatible with our own beliefs.</em></strong> We read the news on the site that conforms most closely to our beliefs. We talk to people who are like us and hold similar views. We don’t want to get disconcerting evidence because that might lead us to change our worldview, which we might be afraid to do.</p>
+
 <p>For example, I have seen confirmation bias in action in data science during the cost-benefit analysis stage of a project. I’ve seen people clinging to the data that confirms their hypothesis while ignoring all the contradictory evidence. Obviously, doing this could have a negative impact on the benefits section of the project.</p>
-<p><em><strong>Recommendation to Overcome:</strong></em> One way to fight this bias is to critically examine all your beliefs and try to find disconcerting evidence about each of your theories. By that, I mean actively seeking out evidence by going to places where you don’t normally go, talking to people you don’t normally talk to, and generally keeping an open mind.</p>
-<hr>
+
+<p><strong><em>Recommendation to Overcome:</em></strong> One way to fight this bias is to critically examine all your beliefs and try to find disconcerting evidence about each of your theories. By that, I mean actively seeking out evidence by going to places where you don’t normally go, talking to people you don’t normally talk to, and generally keeping an open mind.</p>
+
+<hr />
+
 <h2 id="conclusion">Conclusion</h2>
+
 <blockquote>
 <p>In our age of information overload, we are surrounded by so much data that our brains try desperately to make sense of the noise.</p>
 </blockquote>
+
 <p>Sometimes it is useful to be able to make some sense out of the world based on limited information. In fact, we make most of our decisions without thinking much, going with our gut feelings. The potential harm of most of our day-to-day actions is pretty small. Allowing our biases to influence our work, though, can leave us in an unfortunate situation. We may end up losing money or credibility if we make a vital decision that turns out to be wrong.</p>
+
 <p>Knowing how our brain works will help us avoid these mistakes.</p>
-<p>If you want to learn more about Data Science, I would like to call out this <a href="https://www.coursera.org/learn/machine-learning?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;siteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">excellent course</a> by Andrew Ng. This was the one that got me started. Do check it out.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz">@mlwhiz</a>.</p>
-<p><em>This story was first published <a href="https://builtin.com/data-science/cognitive-biases-data-science">here</a>.</em></p>
+
+<p>If you want to learn more about Data Science, I would like to call out this <a href="https://www.coursera.org/learn/machine-learning?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;siteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">excellent course</a> by Andrew Ng. This was the one that got me started. Do check it out.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX" rel="nofollow" target="_blank">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
+<p><em>This story was first published <a href="https://builtin.com/data-science/cognitive-biases-data-science" rel="nofollow" target="_blank">here</a>.</em></p>
 
 		</div>
 		
@@ -372,7 +423,7 @@ if (!doNotTrack) {
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
 		</ul>
 	</div>
 </div>

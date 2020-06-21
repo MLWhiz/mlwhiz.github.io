@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.72.0" />
+	<meta name="generator" content="Hugo 0.53" />
 	<meta property="og:title" content="Bayesian Bandits explained simply" />
 <meta property="og:description" content="There are multiple ways to doing the same thing in Pandas, and that might make it troublesome for the beginner user.This post is about handling most of the data manipulation cases in Python using a straightforward, simple, and matter of fact way." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2019/07/21/bandits/" />
 <meta property="og:image" content="https://mlwhiz.com/images/bandits/1.png" />
-<meta property="article:published_time" content="2019-07-21T00:00:00+00:00" />
-<meta property="article:modified_time" content="2019-07-21T00:00:00+00:00" />
+<meta property="article:published_time" content="2019-07-21T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-07-21T00:00:00&#43;00:00"/>
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/bandits/1.png"/>
@@ -169,101 +169,154 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			<p><img src="/images/bandits/1.png" alt=""></p>
+			
+
+<p><img src="/images/bandits/1.png" alt="" /></p>
+
 <p>Exploration and Exploitation play a key role in any business.</p>
+
 <p>And any good business will try to “explore” various opportunities where it can make a profit.</p>
+
 <p>Any good business at the same time also tries to focus on a particular opportunity it has found already and tries to “exploits” it.</p>
+
 <p>Let me explain this further with a thought experiment.</p>
-<p><em><strong>Thought Experiment:</strong></em> Assume that we have infinite slot machines. Every slot machine has some win probability. But we don’t know these probability values.</p>
+
+<p><strong><em>Thought Experiment:</em></strong> Assume that we have infinite slot machines. Every slot machine has some win probability. But we don’t know these probability values.</p>
+
 <p>You have to operate these slot machines one by one. How do you come up with a strategy to maximize your outcome from these slot machines in minimum time.</p>
-<p><img src="/images/bandits/2.png" alt=""></p>
+
+<p><img src="/images/bandits/2.png" alt="" /></p>
+
 <p>You will most probably start by trying out some machines.</p>
+
 <p>Would you stick to a particular machine that has an okayish probability(exploitation) or would you keep searching for better machines(exploration)?</p>
+
 <p>It is the exploration-exploitation tradeoff.</p>
-<p><em><strong>And the question is how do we balance this tradeoff such that we get maximum profits?</strong></em></p>
+
+<p><strong><em>And the question is how do we balance this tradeoff such that we get maximum profits?</em></strong></p>
+
 <p><strong>The answer is Bayesian Bandits.</strong></p>
-<hr>
+
+<hr />
+
 <h2 id="why-business-use-cases">Why? Business Use-cases:</h2>
+
 <p>There are a lot of places where such a thought experiment could fit.</p>
+
 <ul>
-<li>
-<p>AB Testing: You have a variety of assets that you can show at the website. Each asset has a particular probability of success(getting clicked by the user).</p>
-</li>
-<li>
-<p>Ad Clicks: You have a variety of ads that you can show to the user. Each advert has a particular probability of clickthrough</p>
-</li>
-<li>
-<p>Finance: which stock pick gives the highest return.</p>
-</li>
-<li>
-<p>We as human beings are faced with the exact same problem — Explore or exploit and we handle it quite brilliantly mostly. Should we go find a new job or should we earn money doing the thing we know would give us money?</p>
-</li>
+<li><p>AB Testing: You have a variety of assets that you can show at the website. Each asset has a particular probability of success(getting clicked by the user).</p></li>
+
+<li><p>Ad Clicks: You have a variety of ads that you can show to the user. Each advert has a particular probability of clickthrough</p></li>
+
+<li><p>Finance: which stock pick gives the highest return.</p></li>
+
+<li><p>We as human beings are faced with the exact same problem — Explore or exploit and we handle it quite brilliantly mostly. Should we go find a new job or should we earn money doing the thing we know would give us money?</p></li>
 </ul>
+
 <p>In this post, we will focus on AB Testing but this experiment will work for any of the above problems.</p>
-<hr>
+
+<hr />
+
 <h2 id="problem-statement">Problem Statement:</h2>
-<p><img src="/images/bandits/3.jpg" alt=""></p>
+
+<p><img src="/images/bandits/3.jpg" alt="" /></p>
+
 <p>The problem we have is that we have different assets which we want to show on our awesome website but we really don’t know which one to show.</p>
-<p>One asset is blue(B), another red(R) and the third one green(G).</p>
+
+<p>One asset is blue(B), another red&reg; and the third one green(G).</p>
+
 <p>Our UX team say they like the blue one. But you like the green one.</p>
+
 <p>Which one to show on our website?</p>
-<hr>
+
+<hr />
+
 <h2 id="bayes-everywhere">Bayes Everywhere:</h2>
+
 <p>Before we delve down into the algorithm we will use to solve this, let us revisit the Bayes theorem.</p>
-<p><img src="/images/bandits/4.png" alt=""></p>
+
+<p><img src="/images/bandits/4.png" alt="" /></p>
+
 <p>Just remember that Bayes theorem says that Posterior ~ likelihood*Prior</p>
-<hr>
+
+<hr />
+
 <h2 id="beta-distribution">Beta Distribution</h2>
+
 <p>The <strong>beta distribution</strong> is a continuous probability distribution defined on the interval [0, 1] parametrized by two positive shape parameters, denoted by <em>α</em> and <em>β</em>.The PDF of the beta distribution is:</p>
-<p><img src="/images/bandits/5.png" alt=""></p>
+
+<p><img src="/images/bandits/5.png" alt="" /></p>
+
 <p>And, the pdf looks like below for different values of <em>α</em> and <em>β</em>:</p>
-<p><img src="/images/bandits/6.png" alt=""></p>
-<p><em><strong>The beta distribution is frequently applied to model the behavior of probabilities as it lies in the range [0,1]. The beta distribution is a suitable model for the random behavior of percentages and proportions too.</strong></em></p>
-<hr>
+
+<p><img src="/images/bandits/6.png" alt="" /></p>
+
+<p><strong><em>The beta distribution is frequently applied to model the behavior of probabilities as it lies in the range [0,1]. The beta distribution is a suitable model for the random behavior of percentages and proportions too.</em></strong></p>
+
+<hr />
+
 <h2 id="bayesian-bandits">Bayesian Bandits</h2>
+
 <p>So after knowing the above concepts let us come back to our present problem.</p>
+
 <p>We have three assets.</p>
-<p><img src="/images/bandits/7.jpg" alt=""></p>
+
+<p><img src="/images/bandits/7.jpg" alt="" /></p>
+
 <p>For the sake of this problem, let&rsquo;s assume that we know the click probabilities of these assets also.</p>
+
 <p>The win probability of blue is 0.3, red is 0.8 and green is 0.4. Please note that in real life, we won’t know this.</p>
+
 <p>These probabilities are going to be hidden from our algorithm and we will see how our algorithm will still converge to these real probabilities.</p>
-<p><em><strong>So, what are our priors(beliefs) about the probability of each of these assets?</strong></em></p>
+
+<p><strong><em>So, what are our priors(beliefs) about the probability of each of these assets?</em></strong></p>
+
 <p>Since we have not observed any data we cannot have prior beliefs about any of our three assets.</p>
-<p><em><strong>We need to model our prior probabilities and we will use beta distribution to do that.</strong></em> See the curve for beta distribution above for α = 1 and β=1.</p>
+
+<p><strong><em>We need to model our prior probabilities and we will use beta distribution to do that.</em></strong> See the curve for beta distribution above for α = 1 and β=1.</p>
+
 <p>It is actually just a uniform distribution over the range [0,1]. And that is what we want for our prior probabilities for our assets. We don’t have any information yet so we start with a uniform probability distribution over our probability values.</p>
-<p><em><strong>So we can denote the prior probabilities of each of our asset using a beta distribution.</strong></em></p>
-<h3 id="strategy"><em><strong>Strategy:</strong></em></h3>
+
+<p><strong><em>So we can denote the prior probabilities of each of our asset using a beta distribution.</em></strong></p>
+
+<h3 id="strategy"><strong><em>Strategy:</em></strong></h3>
+
 <ol>
-<li>
-<p>We will sample a random variable from each of the 3 distributions for assets.</p>
-</li>
-<li>
-<p>We will find out which random variable is maximum and will show the one asset which gave the maximum random variable.</p>
-</li>
-<li>
-<p>We will get to know if that asset is clicked or not.</p>
-</li>
-<li>
-<p>We will update the prior for the asset using the information in step 3.</p>
-</li>
-<li>
-<p>Repeat.</p>
-</li>
+<li><p>We will sample a random variable from each of the 3 distributions for assets.</p></li>
+
+<li><p>We will find out which random variable is maximum and will show the one asset which gave the maximum random variable.</p></li>
+
+<li><p>We will get to know if that asset is clicked or not.</p></li>
+
+<li><p>We will update the prior for the asset using the information in step 3.</p></li>
+
+<li><p>Repeat.</p></li>
 </ol>
+
 <h3 id="updating-the-prior">Updating the Prior:</h3>
+
 <p>The reason we took beta distribution to model our probabilities is because of its great mathematical properties.</p>
-<p><img src="/images/bandits/8.png" alt=""></p>
+
+<p><img src="/images/bandits/8.png" alt="" /></p>
+
 <p>If the prior is f(α,β), then the posterior distribution is again beta, given by f(α+#success, β+#failures)</p>
+
 <p>where #success is the number of clicks and #failures are the number of views minus the number of clicks.</p>
-<hr>
+
+<hr />
+
 <h2 id="let-us-code">Let us Code</h2>
-<p><img src="/images/bandits/9.jpg" alt=""></p>
+
+<p><img src="/images/bandits/9.jpg" alt="" /></p>
+
 <p>We have every bit of knowledge we require for writing some code now. I will be using pretty much simple and standard Python functionality to do this but there exist tools like pyMC and such for this sort of problem formulations.</p>
+
 <p>Let us work through this problem step by step.</p>
+
 <p>We have three assets with different probabilities.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">real_probs_dict <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;R&#39;</span>:<span style="color:#ae81ff">0.8</span>,<span style="color:#e6db74">&#39;G&#39;</span>:<span style="color:#ae81ff">0.4</span>,<span style="color:#e6db74">&#39;B&#39;</span>:<span style="color:#ae81ff">0.3</span>}
-assets <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;R&#39;</span>,<span style="color:#e6db74">&#39;G&#39;</span>,<span style="color:#e6db74">&#39;B&#39;</span>]
-</code></pre></div><p>We will be trying to see if our strategy given above works or not.</p>
+assets <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;R&#39;</span>,<span style="color:#e6db74">&#39;G&#39;</span>,<span style="color:#e6db74">&#39;B&#39;</span>]</code></pre></div>
+<p>We will be trying to see if our strategy given above works or not.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#e6db74">&#39;&#39;&#39;
 </span><span style="color:#e6db74">This function takes as input three tuples for alpha,beta that specify priorR,priorG,priorB 
 </span><span style="color:#e6db74">And returns R,G,B along with the maximum value sampled from these three distributions.
@@ -310,28 +363,39 @@ assets <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;R&
     outcome <span style="color:#f92672">=</span> simulate_real_website(asset, real_probs_dict)
     <span style="color:#75715e"># 3. update prior based on outcome</span>
     priorR,priorG,priorB <span style="color:#f92672">=</span> update_posterior(asset,priorR,priorG,priorB,outcome)
-    <span style="color:#66d9ef">return</span> asset,priorR,priorG,priorB
-
-</code></pre></div><p>Let us run this strategy multiple times and collect the data.</p>
+    <span style="color:#66d9ef">return</span> asset,priorR,priorG,priorB</code></pre></div>
+<p>Let us run this strategy multiple times and collect the data.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">priorR,priorG,priorB <span style="color:#f92672">=</span> (<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>),(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>),(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>)
 data <span style="color:#f92672">=</span> [(<span style="color:#e6db74">&#34;_&#34;</span>,priorR,priorG,priorB)]
 <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">50</span>):
     asset,priorR,priorG,priorB <span style="color:#f92672">=</span> run_strategy_once(priorR,priorG,priorB)
-    data<span style="color:#f92672">.</span>append((asset,priorR,priorG,priorB))
-</code></pre></div><p>This is the result of our runs. You can see the functions I used to visualize the posterior distributions here at <a href="https://www.kaggle.com/mlwhiz/bayesian-bandits?scriptVersionId=17478592">kaggle</a>. As you can see below, we have pretty much converged to the best asset by the end of 20 runs. And the probabilities are also estimated roughly what they should be.</p>
-<p><em><strong>At the start, we have a uniform prior.</strong></em> As we go through with the runs we see that the “red” asset’s posterior distribution converges towards a higher mean and as such a higher probability of pick. But remember that doesn’t mean that the green asset and blue asset are not going to be picked ever.</p>
-<p><img src="/images/bandits/10.png" alt=""></p>
+    data<span style="color:#f92672">.</span>append((asset,priorR,priorG,priorB))</code></pre></div>
+<p>This is the result of our runs. You can see the functions I used to visualize the posterior distributions here at <a href="https://www.kaggle.com/mlwhiz/bayesian-bandits?scriptVersionId=17478592" rel="nofollow" target="_blank">kaggle</a>. As you can see below, we have pretty much converged to the best asset by the end of 20 runs. And the probabilities are also estimated roughly what they should be.</p>
+
+<p><strong><em>At the start, we have a uniform prior.</em></strong> As we go through with the runs we see that the “red” asset’s posterior distribution converges towards a higher mean and as such a higher probability of pick. But remember that doesn’t mean that the green asset and blue asset are not going to be picked ever.</p>
+
+<p><img src="/images/bandits/10.png" alt="" /></p>
+
 <p>Let us also see how many times each asset is picked in the 50 runs we did.</p>
+
 <pre><code>Pick 1 : G ,Pick 2 : R ,Pick 3 : R ,Pick 4 : B ,Pick 5 : R ,Pick 6 : R ,Pick 7 : R ,Pick 8 : R ,Pick 9 : R ,Pick 10 : R ,Pick 11 : R ,Pick 12 : R ,Pick 13 : R ,Pick 14 : R ,Pick 15 : R ,Pick 16 : R ,Pick 17 : R ,Pick 18 : R ,Pick 19 : R ,Pick 20 : R ,Pick 21 : R ,Pick 22 : G ,Pick 23 : R ,Pick 24 : R ,Pick 25 : G ,Pick 26 : G ,Pick 27 : R ,Pick 28 : R ,Pick 29 : R ,Pick 30 : R ,Pick 31 : R ,Pick 32 : R ,Pick 33 : R ,Pick 34 : R ,Pick 35 : R ,Pick 36 : R ,Pick 37 : R ,Pick 38 : R ,Pick 39 : G ,Pick 40 : B ,Pick 41 : R ,Pick 42 : R ,Pick 43 : R ,Pick 44 : R ,Pick 45 : B ,Pick 46 : R ,Pick 47 : R ,Pick 48 : R ,Pick 49 : R ,Pick 50 : R
 </code></pre>
+
 <p>We can see that although we are mostly picking R we still end up sometimes picking B(Pick 45) and G(Pick 44) in the later runs too. Overall we can see that in the first few runs, we are focussing on exploration and as we go towards later runs we focus on exploitation.</p>
-<p><img src="/images/bandits/11.png" alt=""></p>
+
+<p><img src="/images/bandits/11.png" alt="" /></p>
+
 <h2 id="end-notes">End Notes:</h2>
+
 <p>We saw how solving this problem using the Bayesian approach could help us converge to a good solution while maximizing our profit and not discarding any asset.</p>
+
 <p>An added advantage of such an approach is that it is self-learning and could self-correct by itself if the probability of click on the red decreases and blue asset increases. This case might happen when the user preferences change for example.</p>
-<p>The whole code is posted in the <a href="https://www.kaggle.com/mlwhiz/bayesian-bandits?scriptVersionId=17478592">Kaggle Kernel</a>.</p>
-<p>Also, if you want to learn more about Bayesian Statistics, one of the newest and best resources that you can keep an eye on is the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&amp;source=post_page---------------------------"><strong>Bayesian Methods for Machine Learning</strong></a> course in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&amp;source=post_page---------------------------"><strong>Advanced machine learning specialization</strong></a></p>
-<p>I am going to be writing more of such posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------">@mlwhiz</a>.</p>
+
+<p>The whole code is posted in the <a href="https://www.kaggle.com/mlwhiz/bayesian-bandits?scriptVersionId=17478592" rel="nofollow" target="_blank">Kaggle Kernel</a>.</p>
+
+<p>Also, if you want to learn more about Bayesian Statistics, one of the newest and best resources that you can keep an eye on is the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&amp;source=post_page---------------------------" rel="nofollow" target="_blank"><strong>Bayesian Methods for Machine Learning</strong></a> course in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&amp;source=post_page---------------------------" rel="nofollow" target="_blank"><strong>Advanced machine learning specialization</strong></a></p>
+
+<p>I am going to be writing more of such posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
 
 		</div>
 		
@@ -469,7 +533,7 @@ data <span style="color:#f92672">=</span> [(<span style="color:#e6db74">&#34;_&#
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
 		</ul>
 	</div>
 </div>

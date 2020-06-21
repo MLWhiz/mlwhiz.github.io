@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.72.0" />
+	<meta name="generator" content="Hugo 0.53" />
 	<meta property="og:title" content="Good Feature Building Techniques - Tricks for Kaggle -  My Kaggle Code Repository" />
 <meta property="og:description" content="Here is the list of ideas I gather in day to day life, where people have used creativity to get great results on Kaggle" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2017/09/14/kaggle_tricks/" />
 <meta property="og:image" content="https://storage.googleapis.com/kaggle-organizations/4/thumbnail.png" />
-<meta property="article:published_time" content="2017-09-14T00:00:00+00:00" />
-<meta property="article:modified_time" content="2017-09-14T00:00:00+00:00" />
+<meta property="article:published_time" content="2017-09-14T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2017-09-14T00:00:00&#43;00:00"/>
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://storage.googleapis.com/kaggle-organizations/4/thumbnail.png"/>
@@ -169,21 +169,35 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			<p>Often times it happens that we fall short of creativity. And creativity is one of the basic ingredients of what we do. Creating features needs creativity. So here is the list of ideas I gather in day to day life, where people have used creativity to get great results on Kaggle leaderboards.</p>
-<p>Take a look at the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">How to Win a Data Science Competition: Learn from Top Kagglers</a> course in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a> by Kazanova(Number 3 Kaggler at the time of writing). You can start for free with the 7-day Free Trial.</p>
-<p>This post is inspired by a <a href="https://www.kaggle.com/gaborfodor/from-eda-to-the-top-lb-0-368">Kernel</a> on Kaggle written by Beluga, one of the top Kagglers, for a knowledge based <a href="https://www.kaggle.com/c/nyc-taxi-trip-duration">competition</a>.</p>
+			
+
+<p>Often times it happens that we fall short of creativity. And creativity is one of the basic ingredients of what we do. Creating features needs creativity. So here is the list of ideas I gather in day to day life, where people have used creativity to get great results on Kaggle leaderboards.</p>
+
+<p>Take a look at the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">How to Win a Data Science Competition: Learn from Top Kagglers</a> course in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">Advanced machine learning specialization</a> by Kazanova(Number 3 Kaggler at the time of writing). You can start for free with the 7-day Free Trial.</p>
+
+<p>This post is inspired by a <a href="https://www.kaggle.com/gaborfodor/from-eda-to-the-top-lb-0-368" rel="nofollow" target="_blank">Kernel</a> on Kaggle written by Beluga, one of the top Kagglers, for a knowledge based <a href="https://www.kaggle.com/c/nyc-taxi-trip-duration" rel="nofollow" target="_blank">competition</a>.</p>
+
 <p>Some of the techniques/tricks I am sharing have been taken directly from that kernel so you could take a look yourself.
 Otherwise stay here and read on.</p>
-<h2 id="1-dont-try-predicting-the-future-when-you-dont-have-to">1. Don&rsquo;t try predicting the future when you don&rsquo;t have to:</h2>
+
+<h2 id="1-don-t-try-predicting-the-future-when-you-don-t-have-to">1. Don&rsquo;t try predicting the future when you don&rsquo;t have to:</h2>
+
 <p>If both training/test comes from the same timeline, we can get really crafty with features. Although this is a case with Kaggle only, we can use this to our advantage. For example: In the Taxi Trip duration challenge the test data is randomly sampled from the train data. In this case we can use the target variable averaged over different categorical variable as a feature. Like in this case Beluga actually used the averaged the target variable over different weekdays. He then mapped the same averaged value as a variable by mapping it to test data too.</p>
+
 <h2 id="2-logloss-clipping-technique">2. logloss clipping Technique:</h2>
+
 <p>Something that I learned in the Neural Network course by Jeremy Howard. Its based on a very simple Idea. Logloss penalises a lot if we are very confident and wrong. So in case of Classification problems where we have to predict probabilities, it would be much better to clip our probabilities between 0.05-0.95 so that we are never very sure about our prediction.</p>
+
 <h2 id="3-kaggle-submission-in-gzip-format">3. kaggle submission in gzip format:</h2>
+
 <p>A small piece of code that will help you save countless hours of uploading. Enjoy.
-df.to_csv(&lsquo;submission.csv.gz&rsquo;, index=False, compression='gzip&rsquo;)</p>
-<h2 id="4-how-best-to-use-latitude-and-longitude-features---part-1">4. How best to use Latitude and Longitude features - Part 1:</h2>
+df.to_csv(&lsquo;submission.csv.gz&rsquo;, index=False, compression=&lsquo;gzip&rsquo;)</p>
+
+<h2 id="4-how-best-to-use-latitude-and-longitude-features-part-1">4. How best to use Latitude and Longitude features - Part 1:</h2>
+
 <p>One of the best things that I liked about the Beluga Kernel is how he used the Lat/Lon Data. So in the example we had pickup Lat/Lon and Dropoff Lat/Lon. We created features like:</p>
-<h4 id="a-haversine-distance-between-the-two-latlons">A. Haversine Distance Between the Two Lat/Lons:</h4>
+
+<h4 id="a-haversine-distance-between-the-two-lat-lons">A. Haversine Distance Between the Two Lat/Lons:</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">haversine_array</span>(lat1, lng1, lat2, lng2):
     lat1, lng1, lat2, lng2 <span style="color:#f92672">=</span> map(np<span style="color:#f92672">.</span>radians, (lat1, lng1, lat2, lng2))
     AVG_EARTH_RADIUS <span style="color:#f92672">=</span> <span style="color:#ae81ff">6371</span>  <span style="color:#75715e"># in km</span>
@@ -191,24 +205,25 @@ df.to_csv(&lsquo;submission.csv.gz&rsquo;, index=False, compression='gzip&rsquo;
     lng <span style="color:#f92672">=</span> lng2 <span style="color:#f92672">-</span> lng1
     d <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>sin(lat <span style="color:#f92672">*</span> <span style="color:#ae81ff">0.5</span>) <span style="color:#f92672">**</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">+</span> np<span style="color:#f92672">.</span>cos(lat1) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>cos(lat2) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>sin(lng <span style="color:#f92672">*</span> <span style="color:#ae81ff">0.5</span>) <span style="color:#f92672">**</span> <span style="color:#ae81ff">2</span>
     h <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> AVG_EARTH_RADIUS <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>arcsin(np<span style="color:#f92672">.</span>sqrt(d))
-    <span style="color:#66d9ef">return</span> h
-</code></pre></div><h4 id="b-manhattan-distance-between-the-two-latlons">B. Manhattan Distance Between the two Lat/Lons:</h4>
+    <span style="color:#66d9ef">return</span> h</code></pre></div>
+<h4 id="b-manhattan-distance-between-the-two-lat-lons">B. Manhattan Distance Between the two Lat/Lons:</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">dummy_manhattan_distance</span>(lat1, lng1, lat2, lng2):
     a <span style="color:#f92672">=</span> haversine_array(lat1, lng1, lat1, lng2)
     b <span style="color:#f92672">=</span> haversine_array(lat1, lng1, lat2, lng1)
-    <span style="color:#66d9ef">return</span> a <span style="color:#f92672">+</span> b
-</code></pre></div><h4 id="c-bearing-between-the-two-latlons">C. Bearing Between the two Lat/Lons:</h4>
+    <span style="color:#66d9ef">return</span> a <span style="color:#f92672">+</span> b</code></pre></div>
+<h4 id="c-bearing-between-the-two-lat-lons">C. Bearing Between the two Lat/Lons:</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">bearing_array</span>(lat1, lng1, lat2, lng2):
     AVG_EARTH_RADIUS <span style="color:#f92672">=</span> <span style="color:#ae81ff">6371</span>  <span style="color:#75715e"># in km</span>
     lng_delta_rad <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>radians(lng2 <span style="color:#f92672">-</span> lng1)
     lat1, lng1, lat2, lng2 <span style="color:#f92672">=</span> map(np<span style="color:#f92672">.</span>radians, (lat1, lng1, lat2, lng2))
     y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>sin(lng_delta_rad) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>cos(lat2)
     x <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>cos(lat1) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>sin(lat2) <span style="color:#f92672">-</span> np<span style="color:#f92672">.</span>sin(lat1) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>cos(lat2) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>cos(lng_delta_rad)
-    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>degrees(np<span style="color:#f92672">.</span>arctan2(y, x))
-</code></pre></div><h4 id="d-center-latitude-and-longitude-between-pickup-and-dropoff">D. Center Latitude and Longitude between Pickup and Dropoff:</h4>
+    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>degrees(np<span style="color:#f92672">.</span>arctan2(y, x))</code></pre></div>
+<h4 id="d-center-latitude-and-longitude-between-pickup-and-dropoff">D. Center Latitude and Longitude between Pickup and Dropoff:</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">train<span style="color:#f92672">.</span>loc[:, <span style="color:#e6db74">&#39;center_latitude&#39;</span>] <span style="color:#f92672">=</span> (train[<span style="color:#e6db74">&#39;pickup_latitude&#39;</span>]<span style="color:#f92672">.</span>values <span style="color:#f92672">+</span> train[<span style="color:#e6db74">&#39;dropoff_latitude&#39;</span>]<span style="color:#f92672">.</span>values) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>
-train<span style="color:#f92672">.</span>loc[:, <span style="color:#e6db74">&#39;center_longitude&#39;</span>] <span style="color:#f92672">=</span> (train[<span style="color:#e6db74">&#39;pickup_longitude&#39;</span>]<span style="color:#f92672">.</span>values <span style="color:#f92672">+</span> train[<span style="color:#e6db74">&#39;dropoff_longitude&#39;</span>]<span style="color:#f92672">.</span>values) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>
-</code></pre></div><h2 id="5-how-best-to-use-latitude-and-longitude-features---part-2">5. How best to use Latitude and Longitude features - Part 2:</h2>
+train<span style="color:#f92672">.</span>loc[:, <span style="color:#e6db74">&#39;center_longitude&#39;</span>] <span style="color:#f92672">=</span> (train[<span style="color:#e6db74">&#39;pickup_longitude&#39;</span>]<span style="color:#f92672">.</span>values <span style="color:#f92672">+</span> train[<span style="color:#e6db74">&#39;dropoff_longitude&#39;</span>]<span style="color:#f92672">.</span>values) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span></code></pre></div>
+<h2 id="5-how-best-to-use-latitude-and-longitude-features-part-2">5. How best to use Latitude and Longitude features - Part 2:</h2>
+
 <p>The Second way he used the Lat/Lon Feats was to create clusters for Pickup and Dropoff Lat/Lons. The way it worked was it created sort of Boroughs in the data by design.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.cluster <span style="color:#f92672">import</span> MiniBatchKMeans
 coords <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>vstack((train[[<span style="color:#e6db74">&#39;pickup_latitude&#39;</span>, <span style="color:#e6db74">&#39;pickup_longitude&#39;</span>]]<span style="color:#f92672">.</span>values,
@@ -222,9 +237,11 @@ kmeans <span style="color:#f92672">=</span> MiniBatchKMeans(n_clusters<span styl
 train<span style="color:#f92672">.</span>loc[:, <span style="color:#e6db74">&#39;pickup_cluster&#39;</span>] <span style="color:#f92672">=</span> kmeans<span style="color:#f92672">.</span>predict(train[[<span style="color:#e6db74">&#39;pickup_latitude&#39;</span>, <span style="color:#e6db74">&#39;pickup_longitude&#39;</span>]])
 train<span style="color:#f92672">.</span>loc[:, <span style="color:#e6db74">&#39;dropoff_cluster&#39;</span>] <span style="color:#f92672">=</span> kmeans<span style="color:#f92672">.</span>predict(train[[<span style="color:#e6db74">&#39;dropoff_latitude&#39;</span>, <span style="color:#e6db74">&#39;dropoff_longitude&#39;</span>]])
 test<span style="color:#f92672">.</span>loc[:, <span style="color:#e6db74">&#39;pickup_cluster&#39;</span>] <span style="color:#f92672">=</span> kmeans<span style="color:#f92672">.</span>predict(test[[<span style="color:#e6db74">&#39;pickup_latitude&#39;</span>, <span style="color:#e6db74">&#39;pickup_longitude&#39;</span>]])
-test<span style="color:#f92672">.</span>loc[:, <span style="color:#e6db74">&#39;dropoff_cluster&#39;</span>] <span style="color:#f92672">=</span> kmeans<span style="color:#f92672">.</span>predict(test[[<span style="color:#e6db74">&#39;dropoff_latitude&#39;</span>, <span style="color:#e6db74">&#39;dropoff_longitude&#39;</span>]])
-</code></pre></div><p>He then used these Clusters to create features like counting no of trips going out and coming in on a particular day.</p>
-<h2 id="6-how-best-to-use-latitude-and-longitude-features---part-3">6. How best to use Latitude and Longitude features - Part 3</h2>
+test<span style="color:#f92672">.</span>loc[:, <span style="color:#e6db74">&#39;dropoff_cluster&#39;</span>] <span style="color:#f92672">=</span> kmeans<span style="color:#f92672">.</span>predict(test[[<span style="color:#e6db74">&#39;dropoff_latitude&#39;</span>, <span style="color:#e6db74">&#39;dropoff_longitude&#39;</span>]])</code></pre></div>
+<p>He then used these Clusters to create features like counting no of trips going out and coming in on a particular day.</p>
+
+<h2 id="6-how-best-to-use-latitude-and-longitude-features-part-3">6. How best to use Latitude and Longitude features - Part 3</h2>
+
 <p>He used PCA to transform longitude and latitude coordinates. In this case it is not about dimension reduction since he transformed 2D-&gt; 2D. The rotation could help for decision tree splits, and it did actually.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">pca <span style="color:#f92672">=</span> PCA()<span style="color:#f92672">.</span>fit(coords)
 train[<span style="color:#e6db74">&#39;pickup_pca0&#39;</span>] <span style="color:#f92672">=</span> pca<span style="color:#f92672">.</span>transform(train[[<span style="color:#e6db74">&#39;pickup_latitude&#39;</span>, <span style="color:#e6db74">&#39;pickup_longitude&#39;</span>]])[:, <span style="color:#ae81ff">0</span>]
@@ -234,23 +251,34 @@ train[<span style="color:#e6db74">&#39;dropoff_pca1&#39;</span>] <span style="co
 test[<span style="color:#e6db74">&#39;pickup_pca0&#39;</span>] <span style="color:#f92672">=</span> pca<span style="color:#f92672">.</span>transform(test[[<span style="color:#e6db74">&#39;pickup_latitude&#39;</span>, <span style="color:#e6db74">&#39;pickup_longitude&#39;</span>]])[:, <span style="color:#ae81ff">0</span>]
 test[<span style="color:#e6db74">&#39;pickup_pca1&#39;</span>] <span style="color:#f92672">=</span> pca<span style="color:#f92672">.</span>transform(test[[<span style="color:#e6db74">&#39;pickup_latitude&#39;</span>, <span style="color:#e6db74">&#39;pickup_longitude&#39;</span>]])[:, <span style="color:#ae81ff">1</span>]
 test[<span style="color:#e6db74">&#39;dropoff_pca0&#39;</span>] <span style="color:#f92672">=</span> pca<span style="color:#f92672">.</span>transform(test[[<span style="color:#e6db74">&#39;dropoff_latitude&#39;</span>, <span style="color:#e6db74">&#39;dropoff_longitude&#39;</span>]])[:, <span style="color:#ae81ff">0</span>]
-test[<span style="color:#e6db74">&#39;dropoff_pca1&#39;</span>] <span style="color:#f92672">=</span> pca<span style="color:#f92672">.</span>transform(test[[<span style="color:#e6db74">&#39;dropoff_latitude&#39;</span>, <span style="color:#e6db74">&#39;dropoff_longitude&#39;</span>]])[:, <span style="color:#ae81ff">1</span>]
-</code></pre></div><h2 id="7-lets-not-forget-the-normal-things-you-can-do-with-your-features">7. Lets not forget the Normal Things you can do with your features:</h2>
+test[<span style="color:#e6db74">&#39;dropoff_pca1&#39;</span>] <span style="color:#f92672">=</span> pca<span style="color:#f92672">.</span>transform(test[[<span style="color:#e6db74">&#39;dropoff_latitude&#39;</span>, <span style="color:#e6db74">&#39;dropoff_longitude&#39;</span>]])[:, <span style="color:#ae81ff">1</span>]</code></pre></div>
+<h2 id="7-lets-not-forget-the-normal-things-you-can-do-with-your-features">7. Lets not forget the Normal Things you can do with your features:</h2>
+
 <ul>
 <li>Scaling by Max-Min</li>
 <li>Normalization using Standard Deviation</li>
 <li>Log based feature/Target: use log based features or log based target function.</li>
 <li>One Hot Encoding</li>
 </ul>
+
 <h2 id="8-creating-intuitive-additional-features">8. Creating Intuitive Additional Features:</h2>
+
 <p>A) Date time Features: Time based Features like &ldquo;Evening&rdquo;, &ldquo;Noon&rdquo;, &ldquo;Night&rdquo;, &ldquo;Purchases_last_month&rdquo;, &ldquo;Purchases_last_week&rdquo; etc.</p>
-<p>B) Thought Features: Suppose you have shopping cart data and you want to categorize TripType (See Walmart Recruiting: Trip Type Classification on <a href="https://www.kaggle.com/c/walmart-recruiting-trip-type-classification/">Kaggle</a> for some background).</p>
+
+<p>B) Thought Features: Suppose you have shopping cart data and you want to categorize TripType (See Walmart Recruiting: Trip Type Classification on <a href="https://www.kaggle.com/c/walmart-recruiting-trip-type-classification/" rel="nofollow" target="_blank">Kaggle</a> for some background).</p>
+
 <p>You could think of creating a feature like &ldquo;Stylish&rdquo; where you create this variable by adding together number of items that belong to category Men&rsquo;s Fashion, Women&rsquo;s Fashion, Teens Fashion.</p>
+
 <p>You could create a feature like &ldquo;Rare&rdquo; which is created by tagging some items as rare, based on the data we have and then counting the number of those rare items in the shopping cart. Such features might work or might not work. From what I have observed they normally provide a lot of value.</p>
+
 <p>I feel this is the way that Target&rsquo;s &ldquo;Pregnant Teen model&rdquo; was made. They would have had a variable in which they kept all the items that a pregnant teen could buy and put it into a classification algorithm.</p>
-<h2 id="9--the-not-so-normal-things-which-people-do">9 . The not so Normal Things which people do:</h2>
+
+<h2 id="9-the-not-so-normal-things-which-people-do">9 . The not so Normal Things which people do:</h2>
+
 <p>These features are highly unintuitive and should not be created where the machine learning model needs to be interpretable.</p>
+
 <p>A) Interaction Features: If you have features A and B create features A*B, A+B, A/B, A-B. This explodes the feature space. If you have 10 features and you are creating two variable interactions you will be adding 10C2 * 4  features = 180 features to your model. And most of us have a lot more than 10 features.</p>
+
 <p>B) Bucket Feature Using Hashing: Suppose you have a lot of features. In the order of Thousands but you don&rsquo;t want to use all the thousand features because of the training times of algorithms involved. People bucket their features using some hashing algorithm to achieve this.Mostly done for text classification tasks.
 For example:
 If we have 6 features A,B,C,D,E,F.
@@ -261,6 +289,7 @@ After processing my data might look like:
 Bucket1:2,Bucket2:2,Bucket3:0
 Which happened because A and B fell in bucket1, C and E fell in bucket2 and D and F fell in bucket 3. I summed up the observations here, but you could substitute addition with any math function you like.
 Now i would use Bucket1,Bucket2,Bucket3 as my variables for machine learning.</p>
+
 <p>Will try to keep on expanding. Wait for more&hellip;.</p>
 
 		</div>
@@ -401,7 +430,7 @@ Now i would use Bucket1,Bucket2,Bucket3 as my variables for machine learning.</p
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
 		</ul>
 	</div>
 </div>

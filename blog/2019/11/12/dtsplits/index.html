@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.72.0" />
+	<meta name="generator" content="Hugo 0.53" />
 	<meta property="og:title" content="The Simple Math behind 3 Decision Tree Splitting criterions" />
 <meta property="og:description" content="This post is about various evaluation metrics and how and when to use them." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2019/11/12/dtsplits/" />
 <meta property="og:image" content="https://mlwhiz.com/images/dtsplits/main.png" />
-<meta property="article:published_time" content="2019-11-12T00:00:00+00:00" />
-<meta property="article:modified_time" content="2019-11-12T00:00:00+00:00" />
+<meta property="article:published_time" content="2019-11-12T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-11-12T00:00:00&#43;00:00"/>
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/dtsplits/main.png"/>
@@ -169,149 +169,236 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			<p>Decision Trees are great and are useful for a variety of tasks. They form the backbone of most of the best performing models in the industry like XGboost and Lightgbm.</p>
+			
+
+<p>Decision Trees are great and are useful for a variety of tasks. They form the backbone of most of the best performing models in the industry like XGboost and Lightgbm.</p>
+
 <p>But how do they work exactly? In fact, this is one of the most asked questions in ML/DS interviews.</p>
+
 <p>We generally know they work in a stepwise manner and have a tree structure where we split a node using some feature on some criterion.</p>
-<p><em><strong>But how do these features get selected and how a particular threshold or value gets chosen for a feature?</strong></em></p>
-<p><em><strong>In this post, I will talk about three of the main splitting criteria used in Decision trees and why they work.</strong></em> This is something that has been written about repeatedly but never really well enough.</p>
+
+<p><strong><em>But how do these features get selected and how a particular threshold or value gets chosen for a feature?</em></strong></p>
+
+<p><strong><em>In this post, I will talk about three of the main splitting criteria used in Decision trees and why they work.</em></strong> This is something that has been written about repeatedly but never really well enough.</p>
+
 <h2 id="1-gini-impurity">1. Gini Impurity</h2>
+
 <p>According to Wikipedia,</p>
+
 <blockquote>
 <p>Gini impurity is a measure of how often a randomly chosen element from the set would be incorrectly labeled if it was randomly labeled according to the distribution of labels in the subset.</p>
 </blockquote>
-<p>In simple terms, Gini impurity is the <em><strong>measure of impurity in a node</strong></em>. Its formula is:</p>
-<p><img src="/images/dtsplits/0.png" alt=""></p>
+
+<p>In simple terms, Gini impurity is the <strong><em>measure of impurity in a node</em></strong>. Its formula is:</p>
+
+<p><img src="/images/dtsplits/0.png" alt="" /></p>
+
 <p>where J is the number of classes present in the node and p is the distribution of the class in the node.</p>
+
 <p>So to understand the formula a little better, let us talk specifically about the binary case where we have nodes with only two classes.</p>
+
 <p>So in the below five examples of candidate nodes labelled A-E and with the distribution of positive and negative class shown, which is the ideal condition to be in?</p>
+
 <p>I reckon you would say A or E and you are right. What is the worst situation to be in? C, I suppose as the data is precisely 50:50 in that node.</p>
-<p><img src="/images/dtsplits/1.png" alt=""></p>
+
+<p><img src="/images/dtsplits/1.png" alt="" /></p>
+
 <p>Now, this all looks good, intuitively. Gini Impurity gives us a way to quantify it.</p>
+
 <p>Let us calculate the Gini impurity for all five nodes separately and check the values.</p>
-<p><img src="/images/dtsplits/2.png" alt=""></p>
+
+<p><img src="/images/dtsplits/2.png" alt="" /></p>
+
 <p>✅ Gini Impurity works as expected. Maximum for Node C and the minimum for both A and E. We need to choose the node with Minimum Gini Impurity.</p>
+
 <p>We could also see the plot of Gini Impurity for the binary case to verify the above.</p>
-<p><img src="/images/dtsplits/3.png" alt="Gini Impurity"></p>
+
+<p><img src="/images/dtsplits/3.png" alt="Gini Impurity" /></p>
+
 <p>❓So how do we exactly use it in a Decision Tree?</p>
+
 <p>Suppose, we have the UCI Heart Disease data. The “target” field refers to the presence of heart disease in the patient. It is 0 (no presence) or 1.</p>
-<p><img src="/images/dtsplits/4.png" alt=""></p>
+
+<p><img src="/images/dtsplits/4.png" alt="" /></p>
+
 <p>We now already have a measure in place(Gini Impurity) using which we can evaluate a split on a particular variable with a certain threshold(continuous) or value(categorical).</p>
+
 <h3 id="categorical-variable-splits">Categorical Variable Splits</h3>
+
 <p>For simplicity, let us start with a categorical variable — sex.</p>
+
 <p>If we split by Sex, our tree will look like below:</p>
-<p><img src="/images/dtsplits/11.png" alt="If we split on Gender"></p>
+
+<p><img src="/images/dtsplits/11.png" alt="If we split on Gender" /></p>
+
 <p>Notice that we use Sex=0 and Sex!=0 so that this generalises well to categories with multiple levels. Our root node has 165 +ve examples and 138 -ve examples. And we get two child nodes when we split by sex.</p>
+
 <p>We already know how to calculate the impurity for a node. So we calculate the impurity of the left child as well as the right child.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">I_Left <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> (<span style="color:#ae81ff">72</span><span style="color:#f92672">/</span><span style="color:#ae81ff">96</span>)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span> <span style="color:#f92672">-</span> (<span style="color:#ae81ff">24</span><span style="color:#f92672">/</span><span style="color:#ae81ff">96</span>)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>
 I_Right <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> (<span style="color:#ae81ff">93</span><span style="color:#f92672">/</span><span style="color:#ae81ff">207</span>)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span> <span style="color:#f92672">-</span> (<span style="color:#ae81ff">114</span><span style="color:#f92672">/</span><span style="color:#ae81ff">207</span>)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>
 
 <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Left Node Impurity:&#34;</span>,I_Left)
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Right Node Impurity:&#34;</span>,I_Right)
-</code></pre></div><pre><code>Left Node Impurity: 0.375
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Right Node Impurity:&#34;</span>,I_Right)</code></pre></div>
+<pre><code>Left Node Impurity: 0.375
 Right Node Impurity: 0.4948540222642302
 </code></pre>
+
 <p>We get two numbers here. We need to get a single number which provides the impurity of a single split. So what do we do? Should, we take an average? We can take an average, but what will happen if one node gets only one example and another node has all other examples?</p>
+
 <p>To mitigate the above, we take a weighted average of the two impurities weighted by the number of examples in the individual node. In code:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">gender_split_impurity <span style="color:#f92672">=</span> <span style="color:#ae81ff">96</span><span style="color:#f92672">/</span>(<span style="color:#ae81ff">96</span><span style="color:#f92672">+</span><span style="color:#ae81ff">207</span>)<span style="color:#f92672">*</span>I_Left <span style="color:#f92672">+</span> <span style="color:#ae81ff">207</span><span style="color:#f92672">/</span>(<span style="color:#ae81ff">96</span><span style="color:#f92672">+</span><span style="color:#ae81ff">207</span>)<span style="color:#f92672">*</span>I_Right
-<span style="color:#66d9ef">print</span>(gender_split_impurity)
-</code></pre></div><pre><code>0.45688047065576126
+<span style="color:#66d9ef">print</span>(gender_split_impurity)</code></pre></div>
+<pre><code>0.45688047065576126
 </code></pre>
+
 <h3 id="continuous-variable-splits">Continuous Variable Splits</h3>
+
 <p>We can split by a continuous variable too. Let us try to split using cholesterol feature in the dataset. We chose a threshold of 250 and created a tree.</p>
-<p><img src="/images/dtsplits/12.png" alt=""></p>
+
+<p><img src="/images/dtsplits/12.png" alt="" /></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">I_Left <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> (<span style="color:#ae81ff">58</span><span style="color:#f92672">/</span><span style="color:#ae81ff">126</span>)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span> <span style="color:#f92672">-</span> (<span style="color:#ae81ff">68</span><span style="color:#f92672">/</span><span style="color:#ae81ff">126</span>)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>
 I_Right <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> (<span style="color:#ae81ff">107</span><span style="color:#f92672">/</span><span style="color:#ae81ff">177</span>)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span> <span style="color:#f92672">-</span> (<span style="color:#ae81ff">70</span><span style="color:#f92672">/</span><span style="color:#ae81ff">177</span>)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>
 
 <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Left Node Impurity:&#34;</span>,I_Left)
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Right Node Impurity:&#34;</span>,I_Right)
-</code></pre></div><pre><code>Left Node Impurity: 0.49685059208868737
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Right Node Impurity:&#34;</span>,I_Right)</code></pre></div>
+<pre><code>Left Node Impurity: 0.49685059208868737
 Right Node Impurity: 0.47815123368125373
 </code></pre>
+
 <p>Just by looking at both the impurities close to 0.5, we can infer that it is not a good split. Still, we calculate our weighted Gini impurity as before:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">chol_split_impurity <span style="color:#f92672">=</span> <span style="color:#ae81ff">126</span><span style="color:#f92672">/</span>(<span style="color:#ae81ff">126</span><span style="color:#f92672">+</span><span style="color:#ae81ff">177</span>)<span style="color:#f92672">*</span>I_Left <span style="color:#f92672">+</span> <span style="color:#ae81ff">177</span><span style="color:#f92672">/</span>(<span style="color:#ae81ff">126</span><span style="color:#f92672">+</span><span style="color:#ae81ff">177</span>)<span style="color:#f92672">*</span>I_Right
-<span style="color:#66d9ef">print</span>(chol_split_impurity)
-</code></pre></div><pre><code>0.48592720450414695
+<span style="color:#66d9ef">print</span>(chol_split_impurity)</code></pre></div>
+<pre><code>0.48592720450414695
 </code></pre>
+
 <p>Since the chol_split_impurity&gt;gender_split_impurity, we split based on Gender.</p>
+
 <p>In reality, we evaluate a lot of different splits. With different threshold values for a continuous variable. And all the levels for categorical variables. And then choose the split which provides us with the lowest weighted impurity in the child nodes.</p>
-<hr>
+
+<hr />
+
 <h2 id="2-entropy">2. Entropy</h2>
-<p><img src="/images/dtsplits/7.png" alt="Entropy == Randomness"></p>
+
+<p><img src="/images/dtsplits/7.png" alt="Entropy == Randomness" /></p>
+
 <p>Another very popular way to split nodes in the decision tree is Entropy. Entropy is the measure of Randomness in the system. The formula for Entropy is:</p>
-<p><img src="/images/dtsplits/8.png" alt=""></p>
+
+<p><img src="/images/dtsplits/8.png" alt="" /></p>
+
 <p>where C is the number of classes present in the node and p is the distribution of the class in the node.</p>
+
 <p>So again talking about the binary case we talked about before. What is the value of Entropy for all the 5 cases from A-E?</p>
-<p><img src="/images/dtsplits/9.png" alt=""></p>
+
+<p><img src="/images/dtsplits/9.png" alt="" /></p>
+
 <p>Entropy values work as expected. Maximum for Node C and the minimum for both A and E. We need to choose the node with Minimum Entropy.</p>
+
 <p>We could also see the plot of Entropy for the binary case to verify the above.</p>
-<p><img src="/images/dtsplits/10.png" alt="Entropy"></p>
+
+<p><img src="/images/dtsplits/10.png" alt="Entropy" /></p>
+
 <p>So how do we exactly use Entropy in a Decision Tree?</p>
+
 <p>We are using the Heartrate example as before. We now already have a measure in place(Entropy) using which we can evaluate a split on an individual variable with a certain threshold(continuous) or value(categorical).</p>
+
 <h3 id="categorical-variable-splits-1">Categorical Variable Splits</h3>
+
 <p>For simplicity, let us start with a categorical variable — sex.</p>
+
 <p>If we split by Sex, our tree will look like below:</p>
-<p><img src="/images/dtsplits/11.png" alt="If we split on Gender"><em>If we split on Gender</em></p>
+
+<p><img src="/images/dtsplits/11.png" alt="If we split on Gender" /><em>If we split on Gender</em></p>
+
 <p>We already know how to calculate the randomness for a node. So we calculate the randomness of the left child as well as the right child.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">E_Left <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>(<span style="color:#ae81ff">72</span><span style="color:#f92672">/</span><span style="color:#ae81ff">96</span>)<span style="color:#f92672">*</span>np<span style="color:#f92672">.</span>log2(<span style="color:#ae81ff">72</span><span style="color:#f92672">/</span><span style="color:#ae81ff">96</span>) <span style="color:#f92672">-</span> (<span style="color:#ae81ff">24</span><span style="color:#f92672">/</span><span style="color:#ae81ff">96</span>)<span style="color:#f92672">*</span>np<span style="color:#f92672">.</span>log2(<span style="color:#ae81ff">24</span><span style="color:#f92672">/</span><span style="color:#ae81ff">96</span>)
 E_Right <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>(<span style="color:#ae81ff">93</span><span style="color:#f92672">/</span><span style="color:#ae81ff">207</span>)<span style="color:#f92672">*</span>np<span style="color:#f92672">.</span>log2(<span style="color:#ae81ff">93</span><span style="color:#f92672">/</span><span style="color:#ae81ff">207</span>) <span style="color:#f92672">-</span> (<span style="color:#ae81ff">114</span><span style="color:#f92672">/</span><span style="color:#ae81ff">207</span>)<span style="color:#f92672">*</span>np<span style="color:#f92672">.</span>log2(<span style="color:#ae81ff">114</span><span style="color:#f92672">/</span><span style="color:#ae81ff">207</span>)
 
 <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Left Node Randomness:&#34;</span>,E_Left)
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Right Node Randomness:&#34;</span>,E_Right)
-</code></pre></div><pre><code>Left Node Randomness: 0.8112781244591328
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Right Node Randomness:&#34;</span>,E_Right)</code></pre></div>
+<pre><code>Left Node Randomness: 0.8112781244591328
 Right Node Randomness: 0.992563136012236
 </code></pre>
+
 <p>We get two numbers here. We need to get a single number which provides the Randomness of a single split. So what do we do? We again take a weighted average where we weight by the number of examples in the individual node. In code:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">gender_split_randomness <span style="color:#f92672">=</span> <span style="color:#ae81ff">96</span><span style="color:#f92672">/</span>(<span style="color:#ae81ff">96</span><span style="color:#f92672">+</span><span style="color:#ae81ff">207</span>)<span style="color:#f92672">*</span>E_Left <span style="color:#f92672">+</span> <span style="color:#ae81ff">207</span><span style="color:#f92672">/</span>(<span style="color:#ae81ff">96</span><span style="color:#f92672">+</span><span style="color:#ae81ff">207</span>)<span style="color:#f92672">*</span>E_Right
-<span style="color:#66d9ef">print</span>(gender_split_randomness)
-</code></pre></div><pre><code>0.9351263006686785
+<span style="color:#66d9ef">print</span>(gender_split_randomness)</code></pre></div>
+<pre><code>0.9351263006686785
 </code></pre>
+
 <h3 id="continuous-variable-splits-1">Continuous Variable Splits</h3>
+
 <p>Again as before, we can split by a continuous variable too. Let us try to split using cholesterol feature in the dataset. We chose a threshold of 250 and create a tree.</p>
-<p><img src="/images/dtsplits/12.png" alt=""></p>
+
+<p><img src="/images/dtsplits/12.png" alt="" /></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">E_Left <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>(<span style="color:#ae81ff">58</span><span style="color:#f92672">/</span><span style="color:#ae81ff">126</span>)<span style="color:#f92672">*</span>np<span style="color:#f92672">.</span>log2(<span style="color:#ae81ff">58</span><span style="color:#f92672">/</span><span style="color:#ae81ff">126</span>) <span style="color:#f92672">-</span> (<span style="color:#ae81ff">68</span><span style="color:#f92672">/</span><span style="color:#ae81ff">126</span>)<span style="color:#f92672">*</span>np<span style="color:#f92672">.</span>log2(<span style="color:#ae81ff">68</span><span style="color:#f92672">/</span><span style="color:#ae81ff">126</span>)
 E_Right <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>(<span style="color:#ae81ff">107</span><span style="color:#f92672">/</span><span style="color:#ae81ff">177</span>)<span style="color:#f92672">*</span>np<span style="color:#f92672">.</span>log2(<span style="color:#ae81ff">107</span><span style="color:#f92672">/</span><span style="color:#ae81ff">177</span>) <span style="color:#f92672">-</span> (<span style="color:#ae81ff">70</span><span style="color:#f92672">/</span><span style="color:#ae81ff">177</span>)<span style="color:#f92672">*</span>np<span style="color:#f92672">.</span>log2(<span style="color:#ae81ff">70</span><span style="color:#f92672">/</span><span style="color:#ae81ff">177</span>)
 
 <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Left Node Randomness:&#34;</span>,E_Left)
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Right Node Randomness:&#34;</span>,E_Right)
-</code></pre></div><pre><code>Left Node Randomness: 0.9954515828457715
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Right Node Randomness:&#34;</span>,E_Right)</code></pre></div>
+<pre><code>Left Node Randomness: 0.9954515828457715
 Right Node Randomness: 0.9682452182690404
 </code></pre>
+
 <p>Just by looking at both the randomness close to 1, we can infer that it is not a good split. Still, we calculate our weighted Entropy as before:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">chol_split_randomness <span style="color:#f92672">=</span> <span style="color:#ae81ff">126</span><span style="color:#f92672">/</span>(<span style="color:#ae81ff">126</span><span style="color:#f92672">+</span><span style="color:#ae81ff">177</span>)<span style="color:#f92672">*</span>E_Left <span style="color:#f92672">+</span> <span style="color:#ae81ff">177</span><span style="color:#f92672">/</span>(<span style="color:#ae81ff">126</span><span style="color:#f92672">+</span><span style="color:#ae81ff">177</span>)<span style="color:#f92672">*</span>E_Right
-<span style="color:#66d9ef">print</span>(chol_split_randomness)
-</code></pre></div><pre><code>0.9795587560138196
+<span style="color:#66d9ef">print</span>(chol_split_randomness)</code></pre></div>
+<pre><code>0.9795587560138196
 </code></pre>
+
 <p>Since the chol_split_randomness&gt;gender_split_randomness, we split based on Gender. Precisely the same results we got from Gini.</p>
-<hr>
+
+<hr />
+
 <h2 id="3-variance">3. Variance</h2>
+
 <p>Gini Impurity and Entropy work pretty well for the classification scenario.</p>
+
 <p>But what about regression?</p>
+
 <p>In the case of regression, the most common split measure used is just the weighted variance of the nodes. It makes sense too: We want minimum variation in the nodes after the split.</p>
-<p><img src="/images/dtsplits/13.png" alt=""></p>
+
+<p><img src="/images/dtsplits/13.png" alt="" /></p>
+
 <p>We want a regression task for this. So, we have the data for 50 startups, and we want to predict Profit.</p>
-<p><img src="/images/dtsplits/14.png" alt=""></p>
+
+<p><img src="/images/dtsplits/14.png" alt="" /></p>
+
 <h3 id="categorical-variable-splits-2">Categorical Variable Splits</h3>
+
 <p>Let us try a split by a categorical variable ⇒State=Florida.</p>
+
 <p>If we split by State=FL, our tree will look like below:</p>
-<p><img src="/images/dtsplits/15.png" alt=""></p>
+
+<p><img src="/images/dtsplits/15.png" alt="" /></p>
+
 <p>Overall Variance then is just the weighted sums of individual variances:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">overall_variance <span style="color:#f92672">=</span> <span style="color:#ae81ff">16</span><span style="color:#f92672">/</span>(<span style="color:#ae81ff">16</span><span style="color:#f92672">+</span><span style="color:#ae81ff">34</span>)<span style="color:#f92672">*</span>Var_Left <span style="color:#f92672">+</span> <span style="color:#ae81ff">34</span><span style="color:#f92672">/</span>(<span style="color:#ae81ff">16</span><span style="color:#f92672">+</span><span style="color:#ae81ff">34</span>)<span style="color:#f92672">*</span>Var_Right
-<span style="color:#66d9ef">print</span>(overall_variance)
-</code></pre></div><pre><code>1570582843
+<span style="color:#66d9ef">print</span>(overall_variance)</code></pre></div>
+<pre><code>1570582843
 </code></pre>
+
 <h3 id="continuous-variable-splits-2">Continuous Variable Splits</h3>
+
 <p>Again as before, we can split by a continuous variable too. Let us try to split using R&amp;D spend feature in the dataset. We chose a threshold of 100000 and create a tree.</p>
-<p><img src="/images/dtsplits/16.png" alt="Splitting on R&D"><em>Splitting on R&amp;D</em></p>
+
+<p><img src="/images/dtsplits/16.png" alt="Splitting on R&amp;D" /><em>Splitting on R&amp;D</em></p>
+
 <p>Just by looking at this, we can see it is better than our previous split. So, we find the overall variance in this case:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">overall_variance <span style="color:#f92672">=</span> <span style="color:#ae81ff">14</span><span style="color:#f92672">/</span>(<span style="color:#ae81ff">14</span><span style="color:#f92672">+</span><span style="color:#ae81ff">36</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">419828105</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">36</span><span style="color:#f92672">/</span>(<span style="color:#ae81ff">14</span><span style="color:#f92672">+</span><span style="color:#ae81ff">36</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">774641406</span>
-<span style="color:#66d9ef">print</span>(overall_variance)
-</code></pre></div><pre><code>675293681.7199999
+<span style="color:#66d9ef">print</span>(overall_variance)</code></pre></div>
+<pre><code>675293681.7199999
 </code></pre>
+
 <p>Since the overall_variance(R&amp;D&gt;=100000)&lt; overall_variance(State==FL), we prefer a split based on R&amp;D.</p>
+
 <h2 id="continue-learning">Continue Learning</h2>
-<p><img src="/images/dtsplits/17.png" alt=""></p>
-<p>If you want to learn more about Data Science, I would like to call out this <a href="https://www.coursera.org/learn/machine-learning?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;siteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0"><em><strong>excellent course</strong></em></a> by Andrew Ng. This was the one that got me started. Do check it out.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz">@mlwhiz</a>.</p>
+
+<p><img src="/images/dtsplits/17.png" alt="" /></p>
+
+<p>If you want to learn more about Data Science, I would like to call out this <a href="https://www.coursera.org/learn/machine-learning?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;siteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank"><strong><em>excellent course</em></strong></a> by Andrew Ng. This was the one that got me started. Do check it out.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources as sharing knowledge is never a bad idea.</p>
 
 		</div>
@@ -450,7 +537,7 @@ Right Node Randomness: 0.9682452182690404
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
 		</ul>
 	</div>
 </div>

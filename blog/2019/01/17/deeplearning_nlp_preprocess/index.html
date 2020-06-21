@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.72.0" />
+	<meta name="generator" content="Hugo 0.53" />
 	<meta property="og:title" content="NLP  Learning Series: Part 1 - Text Preprocessing Methods for Deep Learning" />
 <meta property="og:description" content="Recently, I started up with an NLP competition on Kaggle called Quora Question insincerity challenge. It is an NLP Challenge on text classification and as the problem has become more clear after working through the competition as well as by going through the invaluable kernels put up by the kaggle experts, I thought of sharing the knowledge." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2019/01/17/deeplearning_nlp_preprocess/" />
 <meta property="og:image" content="https://mlwhiz.com/images/text_processing_flow_1.png" />
-<meta property="article:published_time" content="2019-01-17T00:00:00+00:00" />
-<meta property="article:modified_time" content="2019-01-17T00:00:00+00:00" />
+<meta property="article:published_time" content="2019-01-17T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-01-17T00:00:00&#43;00:00"/>
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/text_processing_flow_1.png"/>
@@ -173,32 +173,50 @@ if (!doNotTrack) {
 	<div class="toc__title">Page content</div>
 	<div class="toc__menu">
 		<nav id="TableOfContents">
-  <ul>
-    <li><a href="#a-primer-on-word2vec-embeddings">A Primer on word2vec embeddings:</a></li>
-    <li><a href="#basic-preprocessing-techniques-for-text-data">Basic Preprocessing Techniques for text data:</a>
-      <ul>
-        <li></li>
-      </ul>
-    </li>
-    <li><a href="#representation-sequence-creation">Representation: Sequence Creation</a>
-      <ul>
-        <li></li>
-      </ul>
-    </li>
-    <li><a href="#embedding-enrichment">Embedding Enrichment:</a></li>
-    <li><a href="#more-engineered-features">More Engineered Features</a></li>
-    <li><a href="#conclusion">Conclusion:</a></li>
-    <li><a href="#endnotes-and-references">Endnotes and References</a></li>
-  </ul>
+<ul>
+<li>
+<ul>
+<li><a href="#a-primer-on-word2vec-embeddings">A Primer on word2vec embeddings:</a></li>
+<li><a href="#basic-preprocessing-techniques-for-text-data">Basic Preprocessing Techniques for text data:</a>
+<ul>
+<li>
+<ul>
+<li><a href="#a-cleaning-special-characters-and-removing-punctuations">a) Cleaning Special Characters and Removing Punctuations:</a></li>
+<li><a href="#b-cleaning-numbers">b) Cleaning Numbers:</a></li>
+<li><a href="#c-removing-misspells">c) Removing Misspells:</a></li>
+<li><a href="#d-removing-contractions">d) Removing Contractions:</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#representation-sequence-creation">Representation: Sequence Creation</a>
+<ul>
+<li>
+<ul>
+<li><a href="#a-tokenizer">a) Tokenizer:</a></li>
+<li><a href="#b-pad-sequence">b) Pad Sequence:</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#embedding-enrichment">Embedding Enrichment:</a></li>
+<li><a href="#more-engineered-features">More Engineered Features</a></li>
+<li><a href="#conclusion">Conclusion:</a></li>
+<li><a href="#endnotes-and-references">Endnotes and References</a></li>
+</ul></li>
+</ul>
 </nav>
 	</div>
 </div>
 <div class="content post__content clearfix">
-			<p>Recently, I started up with an NLP competition on Kaggle called Quora Question insincerity challenge. It is an NLP Challenge on text classification and as the problem has become more clear after working through the competition as well as by going through the invaluable kernels put up by the kaggle experts, I thought of sharing the knowledge.</p>
+			
+
+<p>Recently, I started up with an NLP competition on Kaggle called Quora Question insincerity challenge. It is an NLP Challenge on text classification and as the problem has become more clear after working through the competition as well as by going through the invaluable kernels put up by the kaggle experts, I thought of sharing the knowledge.</p>
+
 <p>Since we have a large amount of material to cover, I am splitting this post into a series of posts. The first post i.e. this one will be based on <strong>preprocessing techniques that work with Deep learning models</strong> and we will also talk about <strong>increasing embeddings coverage</strong>. In the <a href="/blog/2019/02/08/deeplearning_nlp_conventional_methods/">second post</a>, I will try to take you through some <strong>basic conventional models</strong> like TFIDF, Count Vectorizer, Hashing etc. that have been used in text classification and try to access their performance to create a baseline. We will delve deeper into <strong>Deep learning models</strong> in the third post which will focus on different architectures for solving the text classification problem. We will try to use various other models which we were not able to use in this competition like <strong>ULMFit transfer learning</strong> approaches in the fourth post in the series.</p>
-<p><strong>As a side note</strong>: if you want to know more about NLP, I would like to recommend this awesome course on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing">Natural Language Processing</a> in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a>. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few. You can start for free with the 7-day Free Trial.</p>
+
+<p><strong>As a side note</strong>: if you want to know more about NLP, I would like to recommend this awesome course on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" rel="nofollow" target="_blank">Natural Language Processing</a> in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">Advanced machine learning specialization</a>. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few. You can start for free with the 7-day Free Trial.</p>
+
 <p>It might take me a little time to write the whole series. Till then you can take a look at my other posts: <a href="/blog/2018/12/17/text_classification/">What Kagglers are using for Text Classification</a>, which talks about various deep learning models in use in NLP and <a href="/blog/2019/01/06/pytorch_keras_conversion/">how to switch from Keras to Pytorch</a>.</p>
+
 <p>So first let me start with explaining a little more about the text classification problem. <strong>Text classification</strong> is a common task in natural language processing, which transforms a sequence of a text of indefinite length into a category of text. How could you use that?</p>
+
 <ul>
 <li>To find the sentiment of a review.</li>
 <li>Find toxic comments on a platform like Facebook</li>
@@ -206,23 +224,45 @@ if (!doNotTrack) {
 <li>Find fake reviews on websites</li>
 <li>Will a text advert get clicked or not?</li>
 </ul>
+
 <p>Now each of these problems has something in common. From a Machine Learning perspective, these are essentially the same problem with just the target labels changing and nothing else. With that said, the addition of business knowledge can help make these models more robust and that is what we want to incorporate while preprocessing the data for test classification. While the preprocessing pipeline I am focussing on in this post is mainly centered around Deep Learning but most of it will also be applicable to conventional machine learning models too.</p>
+
 <p>But let me first go through the flow of a deep learning pipeline for text data before going through all the steps to get a higher level perspective about the whole process.</p>
-<!-- raw HTML omitted -->
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/text_processing_flow_1.png"  style="height:90%;width:90%"></center>
+</div>
+
 <p>We normally start with cleaning up the text data and performing basic EDA. Here we try to improve our data quality by cleaning up the data. We also try to improve the quality of our word2vec embeddings by removing OOV(Out-of-Vocabulary) words. These first two steps normally don&rsquo;t have much order between them and I generally go back and forth between these two steps. Next, we create a representation for text that could be fed into a deep learning model. We then start with creating our models and training them. Finally, we evaluate the models using appropriate metrics and get approval from respective shareholders to deploy our models. Don&rsquo;t worry if these terms don&rsquo;t make much sense now. I will try to explain them through the course of this article.</p>
+
 <p>Here at this junction, let us take a little detour to talk a little about word embeddings. We will have to think about them while preprocessing data for our Deep Learning models.</p>
+
 <h2 id="a-primer-on-word2vec-embeddings">A Primer on word2vec embeddings:</h2>
+
 <p>We need to have a way to represent words in a vocab. One way to do that could be to use One hot encoding of word vectors but that is not really a good choice. One of the major reasons is that the one-hot word vectors cannot accurately express the similarity between different words, such as the cosine similarity.</p>
+
 <p>$$\frac{\boldsymbol{x}^\top \boldsymbol{y}}{|\boldsymbol{x}| |\boldsymbol{y}|} \in [-1, 1].$$</p>
+
 <p>Given the structure of one hot encoded vectors, the similarity is always going to come as 0 between different words. Another reason is that as the size of vocabulary increases these one hot encoded vectors become very large.</p>
+
 <p>Word2Vec overcomes the above difficulties by providing us with a fixed length vector representation of words and by capturing the similarity and analogy relationships between different words.</p>
-<!-- raw HTML omitted -->
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/word2vec.png" style="height:80%;width:80%" ></center>
+</div>
+
 <p>Word2vec vectors of words are learned in such a way that they allow us to learn different analogies. It enables us to do algebraic manipulations on words which were not possible before. For example: What is king - man + woman? It comes out to be Queen.</p>
+
 <p>Word2Vec vectors also help us to find out the similarity between words. If we try to find similar words to &ldquo;good&rdquo;, we will find awesome, great etc. It is this property of word2vec that makes it invaluable for text classification. Now our deep learning network understands that &ldquo;good&rdquo; and &ldquo;great&rdquo; are essentially words with similar meaning.</p>
+
 <p><strong>Thus in very simple terms, word2vec creates vectors for words. Thus we have a <code>d</code> dimensional vector for every word(common bigrams too) in a dictionary.</strong> We normally use pretrained word vectors which are provided to us by others after training on large corpora of texts like Wikipedia, twitter etc. The most commonly used pretrained word vectors are Glove and Fasttext with 300-dimensional word vectors. We are going to use Glove in this post.</p>
+
 <h2 id="basic-preprocessing-techniques-for-text-data">Basic Preprocessing Techniques for text data:</h2>
+
 <p>In most of the cases, we observe that text data is not entirely clean. Data coming from different sources have different characteristics and that makes Text Preprocessing as one of the most important steps in the classification pipeline. For example, Text data from Twitter is totally different from text data on Quora, or some news/blogging platform, and thus would need to be treated differently. Helpfully, the techniques I am going to talk about in this post are generic enough for any kind of data you might encounter in the jungles of NLP.</p>
+
 <h4 id="a-cleaning-special-characters-and-removing-punctuations">a) Cleaning Special Characters and Removing Punctuations:</h4>
+
 <p>Our preprocessing pipeline depends a lot on the word2vec embeddings we are going to use for our classification task. <em>In principle our preprocessing should match the preprocessing that was used before training the word embedding</em>. Since most of the embeddings don&rsquo;t provide vector values for punctuations and other special chars, the first thing you want to do is to get rid of is the special characters in your text data. These are some of the special chars that were there in the Quora Question data and we use <code>replace</code> function to get rid of these special chars.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Some preprocesssing that will be common to all the text classification methods you will see. </span>
 
@@ -237,14 +277,16 @@ puncts <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;,&
     <span style="color:#66d9ef">for</span> punct <span style="color:#f92672">in</span> puncts:
         <span style="color:#66d9ef">if</span> punct <span style="color:#f92672">in</span> x:
             x <span style="color:#f92672">=</span> x<span style="color:#f92672">.</span>replace(punct, f<span style="color:#e6db74">&#39; {punct} &#39;</span>)
-    <span style="color:#66d9ef">return</span> x
-</code></pre></div><p>This could also have been done with the help of a simple regex. But I normally like the above way of doing things as it helps to understand the sort of characters we are removing from our data.</p>
+    <span style="color:#66d9ef">return</span> x</code></pre></div>
+<p>This could also have been done with the help of a simple regex. But I normally like the above way of doing things as it helps to understand the sort of characters we are removing from our data.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">clean_text</span>(x):
     pattern <span style="color:#f92672">=</span> <span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;[^a-zA-z0-9\s]&#39;</span>
     text <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>sub(pattern, <span style="color:#e6db74">&#39;&#39;</span>, x)
-    <span style="color:#66d9ef">return</span> x
-</code></pre></div><h4 id="b-cleaning-numbers">b) Cleaning Numbers:</h4>
+    <span style="color:#66d9ef">return</span> x</code></pre></div>
+<h4 id="b-cleaning-numbers">b) Cleaning Numbers:</h4>
+
 <p>Why do we want to replace numbers with <code>#</code>s? Because most embeddings have preprocessed their text like this.</p>
+
 <p><strong>Small Python Trick:</strong> We use an <code>if</code> statement in the code below to check beforehand if a number exists in a text. It is as an <code>if</code> is always fast than a <code>re.sub</code> command and most of our text doesn&rsquo;t contain numbers.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">clean_numbers</span>(x):
     <span style="color:#66d9ef">if</span> bool(re<span style="color:#f92672">.</span>search(<span style="color:#e6db74">r</span><span style="color:#e6db74">&#39;\d&#39;</span>, x)):
@@ -252,8 +294,9 @@ puncts <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;,&
         x <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>sub(<span style="color:#e6db74">&#39;[0-9]{4}&#39;</span>, <span style="color:#e6db74">&#39;####&#39;</span>, x)
         x <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>sub(<span style="color:#e6db74">&#39;[0-9]{3}&#39;</span>, <span style="color:#e6db74">&#39;###&#39;</span>, x)
         x <span style="color:#f92672">=</span> re<span style="color:#f92672">.</span>sub(<span style="color:#e6db74">&#39;[0-9]{2}&#39;</span>, <span style="color:#e6db74">&#39;##&#39;</span>, x)
-    <span style="color:#66d9ef">return</span> x
-</code></pre></div><h4 id="c-removing-misspells">c) Removing Misspells:</h4>
+    <span style="color:#66d9ef">return</span> x</code></pre></div>
+<h4 id="c-removing-misspells">c) Removing Misspells:</h4>
+
 <p>It always helps to find out misspells in the data. As those word embeddings are not present in the word2vec, we should replace words with their correct spellings to get better embedding coverage. The following code artifact is an adaptation of Peter Norvig&rsquo;s spell checker. It uses word2vec ordering of words to approximate word probabilities. As Google word2vec apparently orders words in decreasing order of frequency in the training corpus. You can use this to find out some misspelled words in the data you have.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># This comes from CPMP script in the Quora questions similarity challenge. </span>
 <span style="color:#f92672">import</span> re
@@ -327,9 +370,8 @@ corrected_words <span style="color:#f92672">=</span> pool<span style="color:#f92
 
 <span style="color:#66d9ef">for</span> word,corrected_word <span style="color:#f92672">in</span> zip(top_90k_words,corrected_words):
     <span style="color:#66d9ef">if</span> word<span style="color:#f92672">!=</span>corrected_word:
-        <span style="color:#66d9ef">print</span>(word,<span style="color:#e6db74">&#34;:&#34;</span>,corrected_word)
-
-</code></pre></div><p>Once we are through with finding misspelled data, the next thing remains to replace them using a misspell mapping and regex functions.</p>
+        <span style="color:#66d9ef">print</span>(word,<span style="color:#e6db74">&#34;:&#34;</span>,corrected_word)</code></pre></div>
+<p>Once we are through with finding misspelled data, the next thing remains to replace them using a misspell mapping and regex functions.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">mispell_dict <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;colour&#39;</span>: <span style="color:#e6db74">&#39;color&#39;</span>, <span style="color:#e6db74">&#39;centre&#39;</span>: <span style="color:#e6db74">&#39;center&#39;</span>, <span style="color:#e6db74">&#39;favourite&#39;</span>: <span style="color:#e6db74">&#39;favorite&#39;</span>, <span style="color:#e6db74">&#39;travelling&#39;</span>: <span style="color:#e6db74">&#39;traveling&#39;</span>, <span style="color:#e6db74">&#39;counselling&#39;</span>: <span style="color:#e6db74">&#39;counseling&#39;</span>, <span style="color:#e6db74">&#39;theatre&#39;</span>: <span style="color:#e6db74">&#39;theater&#39;</span>, <span style="color:#e6db74">&#39;cancelled&#39;</span>: <span style="color:#e6db74">&#39;canceled&#39;</span>, <span style="color:#e6db74">&#39;labour&#39;</span>: <span style="color:#e6db74">&#39;labor&#39;</span>, <span style="color:#e6db74">&#39;organisation&#39;</span>: <span style="color:#e6db74">&#39;organization&#39;</span>, <span style="color:#e6db74">&#39;wwii&#39;</span>: <span style="color:#e6db74">&#39;world war 2&#39;</span>, <span style="color:#e6db74">&#39;citicise&#39;</span>: <span style="color:#e6db74">&#39;criticize&#39;</span>, <span style="color:#e6db74">&#39;youtu &#39;</span>: <span style="color:#e6db74">&#39;youtube &#39;</span>, <span style="color:#e6db74">&#39;Qoura&#39;</span>: <span style="color:#e6db74">&#39;Quora&#39;</span>, <span style="color:#e6db74">&#39;sallary&#39;</span>: <span style="color:#e6db74">&#39;salary&#39;</span>, <span style="color:#e6db74">&#39;Whta&#39;</span>: <span style="color:#e6db74">&#39;What&#39;</span>, <span style="color:#e6db74">&#39;narcisist&#39;</span>: <span style="color:#e6db74">&#39;narcissist&#39;</span>, <span style="color:#e6db74">&#39;howdo&#39;</span>: <span style="color:#e6db74">&#39;how do&#39;</span>, <span style="color:#e6db74">&#39;whatare&#39;</span>: <span style="color:#e6db74">&#39;what are&#39;</span>, <span style="color:#e6db74">&#39;howcan&#39;</span>: <span style="color:#e6db74">&#39;how can&#39;</span>, <span style="color:#e6db74">&#39;howmuch&#39;</span>: <span style="color:#e6db74">&#39;how much&#39;</span>, <span style="color:#e6db74">&#39;howmany&#39;</span>: <span style="color:#e6db74">&#39;how many&#39;</span>, <span style="color:#e6db74">&#39;whydo&#39;</span>: <span style="color:#e6db74">&#39;why do&#39;</span>, <span style="color:#e6db74">&#39;doI&#39;</span>: <span style="color:#e6db74">&#39;do I&#39;</span>, <span style="color:#e6db74">&#39;theBest&#39;</span>: <span style="color:#e6db74">&#39;the best&#39;</span>, <span style="color:#e6db74">&#39;howdoes&#39;</span>: <span style="color:#e6db74">&#39;how does&#39;</span>, <span style="color:#e6db74">&#39;mastrubation&#39;</span>: <span style="color:#e6db74">&#39;masturbation&#39;</span>, <span style="color:#e6db74">&#39;mastrubate&#39;</span>: <span style="color:#e6db74">&#39;masturbate&#39;</span>, <span style="color:#e6db74">&#34;mastrubating&#34;</span>: <span style="color:#e6db74">&#39;masturbating&#39;</span>, <span style="color:#e6db74">&#39;pennis&#39;</span>: <span style="color:#e6db74">&#39;penis&#39;</span>, <span style="color:#e6db74">&#39;Etherium&#39;</span>: <span style="color:#e6db74">&#39;Ethereum&#39;</span>, <span style="color:#e6db74">&#39;narcissit&#39;</span>: <span style="color:#e6db74">&#39;narcissist&#39;</span>, <span style="color:#e6db74">&#39;bigdata&#39;</span>: <span style="color:#e6db74">&#39;big data&#39;</span>, <span style="color:#e6db74">&#39;2k17&#39;</span>: <span style="color:#e6db74">&#39;2017&#39;</span>, <span style="color:#e6db74">&#39;2k18&#39;</span>: <span style="color:#e6db74">&#39;2018&#39;</span>, <span style="color:#e6db74">&#39;qouta&#39;</span>: <span style="color:#e6db74">&#39;quota&#39;</span>, <span style="color:#e6db74">&#39;exboyfriend&#39;</span>: <span style="color:#e6db74">&#39;ex boyfriend&#39;</span>, <span style="color:#e6db74">&#39;airhostess&#39;</span>: <span style="color:#e6db74">&#39;air hostess&#39;</span>, <span style="color:#e6db74">&#34;whst&#34;</span>: <span style="color:#e6db74">&#39;what&#39;</span>, <span style="color:#e6db74">&#39;watsapp&#39;</span>: <span style="color:#e6db74">&#39;whatsapp&#39;</span>, <span style="color:#e6db74">&#39;demonitisation&#39;</span>: <span style="color:#e6db74">&#39;demonetization&#39;</span>, <span style="color:#e6db74">&#39;demonitization&#39;</span>: <span style="color:#e6db74">&#39;demonetization&#39;</span>, <span style="color:#e6db74">&#39;demonetisation&#39;</span>: <span style="color:#e6db74">&#39;demonetization&#39;</span>}
 
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_get_mispell</span>(mispell_dict):
@@ -343,9 +385,9 @@ mispellings, mispellings_re <span style="color:#f92672">=</span> _get_mispell(mi
     <span style="color:#66d9ef">return</span> mispellings_re<span style="color:#f92672">.</span>sub(replace, text)
 
 <span style="color:#75715e"># Usage</span>
-replace_typical_misspell(<span style="color:#e6db74">&#34;Whta is demonitisation&#34;</span>)
+replace_typical_misspell(<span style="color:#e6db74">&#34;Whta is demonitisation&#34;</span>)</code></pre></div>
+<h4 id="d-removing-contractions">d) Removing Contractions:</h4>
 
-</code></pre></div><h4 id="d-removing-contractions">d) Removing Contractions:</h4>
 <p>Contractions are words that we write with an apostrophe. Examples of contractions are words like &ldquo;ain&rsquo;t&rdquo; or &ldquo;aren&rsquo;t&rdquo;. Since we want to standardize our text, it makes sense to expand these contractions. Below we have done this using a contraction mapping and regex functions.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">contraction_dict <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;ain&#39;t&#34;</span>: <span style="color:#e6db74">&#34;is not&#34;</span>, <span style="color:#e6db74">&#34;aren&#39;t&#34;</span>: <span style="color:#e6db74">&#34;are not&#34;</span>,<span style="color:#e6db74">&#34;can&#39;t&#34;</span>: <span style="color:#e6db74">&#34;cannot&#34;</span>, <span style="color:#e6db74">&#34;&#39;cause&#34;</span>: <span style="color:#e6db74">&#34;because&#34;</span>, <span style="color:#e6db74">&#34;could&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;could have&#34;</span>, <span style="color:#e6db74">&#34;couldn&#39;t&#34;</span>: <span style="color:#e6db74">&#34;could not&#34;</span>, <span style="color:#e6db74">&#34;didn&#39;t&#34;</span>: <span style="color:#e6db74">&#34;did not&#34;</span>,  <span style="color:#e6db74">&#34;doesn&#39;t&#34;</span>: <span style="color:#e6db74">&#34;does not&#34;</span>, <span style="color:#e6db74">&#34;don&#39;t&#34;</span>: <span style="color:#e6db74">&#34;do not&#34;</span>, <span style="color:#e6db74">&#34;hadn&#39;t&#34;</span>: <span style="color:#e6db74">&#34;had not&#34;</span>, <span style="color:#e6db74">&#34;hasn&#39;t&#34;</span>: <span style="color:#e6db74">&#34;has not&#34;</span>, <span style="color:#e6db74">&#34;haven&#39;t&#34;</span>: <span style="color:#e6db74">&#34;have not&#34;</span>, <span style="color:#e6db74">&#34;he&#39;d&#34;</span>: <span style="color:#e6db74">&#34;he would&#34;</span>,<span style="color:#e6db74">&#34;he&#39;ll&#34;</span>: <span style="color:#e6db74">&#34;he will&#34;</span>, <span style="color:#e6db74">&#34;he&#39;s&#34;</span>: <span style="color:#e6db74">&#34;he is&#34;</span>, <span style="color:#e6db74">&#34;how&#39;d&#34;</span>: <span style="color:#e6db74">&#34;how did&#34;</span>, <span style="color:#e6db74">&#34;how&#39;d&#39;y&#34;</span>: <span style="color:#e6db74">&#34;how do you&#34;</span>, <span style="color:#e6db74">&#34;how&#39;ll&#34;</span>: <span style="color:#e6db74">&#34;how will&#34;</span>, <span style="color:#e6db74">&#34;how&#39;s&#34;</span>: <span style="color:#e6db74">&#34;how is&#34;</span>,  <span style="color:#e6db74">&#34;I&#39;d&#34;</span>: <span style="color:#e6db74">&#34;I would&#34;</span>, <span style="color:#e6db74">&#34;I&#39;d&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;I would have&#34;</span>, <span style="color:#e6db74">&#34;I&#39;ll&#34;</span>: <span style="color:#e6db74">&#34;I will&#34;</span>, <span style="color:#e6db74">&#34;I&#39;ll&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;I will have&#34;</span>,<span style="color:#e6db74">&#34;I&#39;m&#34;</span>: <span style="color:#e6db74">&#34;I am&#34;</span>, <span style="color:#e6db74">&#34;I&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;I have&#34;</span>, <span style="color:#e6db74">&#34;i&#39;d&#34;</span>: <span style="color:#e6db74">&#34;i would&#34;</span>, <span style="color:#e6db74">&#34;i&#39;d&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;i would have&#34;</span>, <span style="color:#e6db74">&#34;i&#39;ll&#34;</span>: <span style="color:#e6db74">&#34;i will&#34;</span>,  <span style="color:#e6db74">&#34;i&#39;ll&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;i will have&#34;</span>,<span style="color:#e6db74">&#34;i&#39;m&#34;</span>: <span style="color:#e6db74">&#34;i am&#34;</span>, <span style="color:#e6db74">&#34;i&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;i have&#34;</span>, <span style="color:#e6db74">&#34;isn&#39;t&#34;</span>: <span style="color:#e6db74">&#34;is not&#34;</span>, <span style="color:#e6db74">&#34;it&#39;d&#34;</span>: <span style="color:#e6db74">&#34;it would&#34;</span>, <span style="color:#e6db74">&#34;it&#39;d&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;it would have&#34;</span>, <span style="color:#e6db74">&#34;it&#39;ll&#34;</span>: <span style="color:#e6db74">&#34;it will&#34;</span>, <span style="color:#e6db74">&#34;it&#39;ll&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;it will have&#34;</span>,<span style="color:#e6db74">&#34;it&#39;s&#34;</span>: <span style="color:#e6db74">&#34;it is&#34;</span>, <span style="color:#e6db74">&#34;let&#39;s&#34;</span>: <span style="color:#e6db74">&#34;let us&#34;</span>, <span style="color:#e6db74">&#34;ma&#39;am&#34;</span>: <span style="color:#e6db74">&#34;madam&#34;</span>, <span style="color:#e6db74">&#34;mayn&#39;t&#34;</span>: <span style="color:#e6db74">&#34;may not&#34;</span>, <span style="color:#e6db74">&#34;might&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;might have&#34;</span>,<span style="color:#e6db74">&#34;mightn&#39;t&#34;</span>: <span style="color:#e6db74">&#34;might not&#34;</span>,<span style="color:#e6db74">&#34;mightn&#39;t&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;might not have&#34;</span>, <span style="color:#e6db74">&#34;must&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;must have&#34;</span>, <span style="color:#e6db74">&#34;mustn&#39;t&#34;</span>: <span style="color:#e6db74">&#34;must not&#34;</span>, <span style="color:#e6db74">&#34;mustn&#39;t&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;must not have&#34;</span>, <span style="color:#e6db74">&#34;needn&#39;t&#34;</span>: <span style="color:#e6db74">&#34;need not&#34;</span>, <span style="color:#e6db74">&#34;needn&#39;t&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;need not have&#34;</span>,<span style="color:#e6db74">&#34;o&#39;clock&#34;</span>: <span style="color:#e6db74">&#34;of the clock&#34;</span>, <span style="color:#e6db74">&#34;oughtn&#39;t&#34;</span>: <span style="color:#e6db74">&#34;ought not&#34;</span>, <span style="color:#e6db74">&#34;oughtn&#39;t&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;ought not have&#34;</span>, <span style="color:#e6db74">&#34;shan&#39;t&#34;</span>: <span style="color:#e6db74">&#34;shall not&#34;</span>, <span style="color:#e6db74">&#34;sha&#39;n&#39;t&#34;</span>: <span style="color:#e6db74">&#34;shall not&#34;</span>, <span style="color:#e6db74">&#34;shan&#39;t&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;shall not have&#34;</span>, <span style="color:#e6db74">&#34;she&#39;d&#34;</span>: <span style="color:#e6db74">&#34;she would&#34;</span>, <span style="color:#e6db74">&#34;she&#39;d&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;she would have&#34;</span>, <span style="color:#e6db74">&#34;she&#39;ll&#34;</span>: <span style="color:#e6db74">&#34;she will&#34;</span>, <span style="color:#e6db74">&#34;she&#39;ll&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;she will have&#34;</span>, <span style="color:#e6db74">&#34;she&#39;s&#34;</span>: <span style="color:#e6db74">&#34;she is&#34;</span>, <span style="color:#e6db74">&#34;should&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;should have&#34;</span>, <span style="color:#e6db74">&#34;shouldn&#39;t&#34;</span>: <span style="color:#e6db74">&#34;should not&#34;</span>, <span style="color:#e6db74">&#34;shouldn&#39;t&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;should not have&#34;</span>, <span style="color:#e6db74">&#34;so&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;so have&#34;</span>,<span style="color:#e6db74">&#34;so&#39;s&#34;</span>: <span style="color:#e6db74">&#34;so as&#34;</span>, <span style="color:#e6db74">&#34;this&#39;s&#34;</span>: <span style="color:#e6db74">&#34;this is&#34;</span>,<span style="color:#e6db74">&#34;that&#39;d&#34;</span>: <span style="color:#e6db74">&#34;that would&#34;</span>, <span style="color:#e6db74">&#34;that&#39;d&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;that would have&#34;</span>, <span style="color:#e6db74">&#34;that&#39;s&#34;</span>: <span style="color:#e6db74">&#34;that is&#34;</span>, <span style="color:#e6db74">&#34;there&#39;d&#34;</span>: <span style="color:#e6db74">&#34;there would&#34;</span>, <span style="color:#e6db74">&#34;there&#39;d&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;there would have&#34;</span>, <span style="color:#e6db74">&#34;there&#39;s&#34;</span>: <span style="color:#e6db74">&#34;there is&#34;</span>, <span style="color:#e6db74">&#34;here&#39;s&#34;</span>: <span style="color:#e6db74">&#34;here is&#34;</span>,<span style="color:#e6db74">&#34;they&#39;d&#34;</span>: <span style="color:#e6db74">&#34;they would&#34;</span>, <span style="color:#e6db74">&#34;they&#39;d&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;they would have&#34;</span>, <span style="color:#e6db74">&#34;they&#39;ll&#34;</span>: <span style="color:#e6db74">&#34;they will&#34;</span>, <span style="color:#e6db74">&#34;they&#39;ll&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;they will have&#34;</span>, <span style="color:#e6db74">&#34;they&#39;re&#34;</span>: <span style="color:#e6db74">&#34;they are&#34;</span>, <span style="color:#e6db74">&#34;they&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;they have&#34;</span>, <span style="color:#e6db74">&#34;to&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;to have&#34;</span>, <span style="color:#e6db74">&#34;wasn&#39;t&#34;</span>: <span style="color:#e6db74">&#34;was not&#34;</span>, <span style="color:#e6db74">&#34;we&#39;d&#34;</span>: <span style="color:#e6db74">&#34;we would&#34;</span>, <span style="color:#e6db74">&#34;we&#39;d&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;we would have&#34;</span>, <span style="color:#e6db74">&#34;we&#39;ll&#34;</span>: <span style="color:#e6db74">&#34;we will&#34;</span>, <span style="color:#e6db74">&#34;we&#39;ll&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;we will have&#34;</span>, <span style="color:#e6db74">&#34;we&#39;re&#34;</span>: <span style="color:#e6db74">&#34;we are&#34;</span>, <span style="color:#e6db74">&#34;we&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;we have&#34;</span>, <span style="color:#e6db74">&#34;weren&#39;t&#34;</span>: <span style="color:#e6db74">&#34;were not&#34;</span>, <span style="color:#e6db74">&#34;what&#39;ll&#34;</span>: <span style="color:#e6db74">&#34;what will&#34;</span>, <span style="color:#e6db74">&#34;what&#39;ll&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;what will have&#34;</span>, <span style="color:#e6db74">&#34;what&#39;re&#34;</span>: <span style="color:#e6db74">&#34;what are&#34;</span>,  <span style="color:#e6db74">&#34;what&#39;s&#34;</span>: <span style="color:#e6db74">&#34;what is&#34;</span>, <span style="color:#e6db74">&#34;what&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;what have&#34;</span>, <span style="color:#e6db74">&#34;when&#39;s&#34;</span>: <span style="color:#e6db74">&#34;when is&#34;</span>, <span style="color:#e6db74">&#34;when&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;when have&#34;</span>, <span style="color:#e6db74">&#34;where&#39;d&#34;</span>: <span style="color:#e6db74">&#34;where did&#34;</span>, <span style="color:#e6db74">&#34;where&#39;s&#34;</span>: <span style="color:#e6db74">&#34;where is&#34;</span>, <span style="color:#e6db74">&#34;where&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;where have&#34;</span>, <span style="color:#e6db74">&#34;who&#39;ll&#34;</span>: <span style="color:#e6db74">&#34;who will&#34;</span>, <span style="color:#e6db74">&#34;who&#39;ll&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;who will have&#34;</span>, <span style="color:#e6db74">&#34;who&#39;s&#34;</span>: <span style="color:#e6db74">&#34;who is&#34;</span>, <span style="color:#e6db74">&#34;who&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;who have&#34;</span>, <span style="color:#e6db74">&#34;why&#39;s&#34;</span>: <span style="color:#e6db74">&#34;why is&#34;</span>, <span style="color:#e6db74">&#34;why&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;why have&#34;</span>, <span style="color:#e6db74">&#34;will&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;will have&#34;</span>, <span style="color:#e6db74">&#34;won&#39;t&#34;</span>: <span style="color:#e6db74">&#34;will not&#34;</span>, <span style="color:#e6db74">&#34;won&#39;t&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;will not have&#34;</span>, <span style="color:#e6db74">&#34;would&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;would have&#34;</span>, <span style="color:#e6db74">&#34;wouldn&#39;t&#34;</span>: <span style="color:#e6db74">&#34;would not&#34;</span>, <span style="color:#e6db74">&#34;wouldn&#39;t&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;would not have&#34;</span>, <span style="color:#e6db74">&#34;y&#39;all&#34;</span>: <span style="color:#e6db74">&#34;you all&#34;</span>, <span style="color:#e6db74">&#34;y&#39;all&#39;d&#34;</span>: <span style="color:#e6db74">&#34;you all would&#34;</span>,<span style="color:#e6db74">&#34;y&#39;all&#39;d&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;you all would have&#34;</span>,<span style="color:#e6db74">&#34;y&#39;all&#39;re&#34;</span>: <span style="color:#e6db74">&#34;you all are&#34;</span>,<span style="color:#e6db74">&#34;y&#39;all&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;you all have&#34;</span>,<span style="color:#e6db74">&#34;you&#39;d&#34;</span>: <span style="color:#e6db74">&#34;you would&#34;</span>, <span style="color:#e6db74">&#34;you&#39;d&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;you would have&#34;</span>, <span style="color:#e6db74">&#34;you&#39;ll&#34;</span>: <span style="color:#e6db74">&#34;you will&#34;</span>, <span style="color:#e6db74">&#34;you&#39;ll&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;you will have&#34;</span>, <span style="color:#e6db74">&#34;you&#39;re&#34;</span>: <span style="color:#e6db74">&#34;you are&#34;</span>, <span style="color:#e6db74">&#34;you&#39;ve&#34;</span>: <span style="color:#e6db74">&#34;you have&#34;</span>}
 
@@ -361,45 +403,64 @@ contractions, contractions_re <span style="color:#f92672">=</span> _get_contract
     <span style="color:#66d9ef">return</span> contractions_re<span style="color:#f92672">.</span>sub(replace, text)
 
 <span style="color:#75715e"># Usage</span>
-replace_contractions(<span style="color:#e6db74">&#34;this&#39;s a text with contraction&#34;</span>)
-</code></pre></div><p>Apart from the above techniques, there are other preprocessing techniques of text like Stemming, Lemmatization and Stopword Removal. Since these techniques are not used along with Deep Learning NLP models, we won&rsquo;t talk about them.</p>
+replace_contractions(<span style="color:#e6db74">&#34;this&#39;s a text with contraction&#34;</span>)</code></pre></div>
+<p>Apart from the above techniques, there are other preprocessing techniques of text like Stemming, Lemmatization and Stopword Removal. Since these techniques are not used along with Deep Learning NLP models, we won&rsquo;t talk about them.</p>
+
 <h2 id="representation-sequence-creation">Representation: Sequence Creation</h2>
+
 <p>One of the things that have made Deep Learning the goto choice for NLP is the fact that we don&rsquo;t really have to hand-engineer features from the text data. The deep learning algorithms take as input a sequence of text to learn the structure of text just like a human does. Since Machine cannot understand words they expect their data in numerical form. So we would like to represent out text data as a series of numbers. To understand how this is done we need to understand a little about the Keras Tokenizer function. One can use any other tokenizer also but keras tokenizer seems like a good choice for me.</p>
+
 <h4 id="a-tokenizer">a) Tokenizer:</h4>
+
 <p>In simple words, a tokenizer is a utility function to split a sentence into words.
 <code>keras.preprocessing.text.Tokenizer</code> tokenizes(splits) the texts into tokens(words) while keeping only the most occurring words in the text corpus.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e">#Signature:</span>
 Tokenizer(num_words<span style="color:#f92672">=</span>None, filters<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;!&#34;#$%&amp;()*+,-./:;&lt;=&gt;?@[</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">]^_`{|}~</span><span style="color:#ae81ff">\t\n</span><span style="color:#e6db74">&#39;</span>, 
-lower<span style="color:#f92672">=</span>True, split<span style="color:#f92672">=</span><span style="color:#e6db74">&#39; &#39;</span>, char_level<span style="color:#f92672">=</span>False, oov_token<span style="color:#f92672">=</span>None, document_count<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, <span style="color:#f92672">**</span>kwargs)
-</code></pre></div><p>The num_words parameter keeps a prespecified number of words in the text only. This is helpful as we don&rsquo;t want our models to get a lot of noise by considering words that occur very infrequently. In real-world data, most of the words we leave using num_words param are normally misspells. The tokenizer also filters some non-wanted tokens by default and converts the text into lowercase.</p>
+lower<span style="color:#f92672">=</span>True, split<span style="color:#f92672">=</span><span style="color:#e6db74">&#39; &#39;</span>, char_level<span style="color:#f92672">=</span>False, oov_token<span style="color:#f92672">=</span>None, document_count<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, <span style="color:#f92672">**</span>kwargs)</code></pre></div>
+<p>The num_words parameter keeps a prespecified number of words in the text only. This is helpful as we don&rsquo;t want our models to get a lot of noise by considering words that occur very infrequently. In real-world data, most of the words we leave using num_words param are normally misspells. The tokenizer also filters some non-wanted tokens by default and converts the text into lowercase.</p>
+
 <p>The tokenizer once fitted to the data also keeps an index of words(dictionary of words which we can use to assign a unique number to a word) which can be accessed by tokenizer.word_index. The words in the indexed dictionary are ranked in order of frequencies.</p>
-<!-- raw HTML omitted -->
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/tokenizer_working.png" style="height:80%;width:80%" ></center>
+</div>
+
 <p>So the whole code to use tokenizer is as follows:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> keras.preprocessing.text <span style="color:#f92672">import</span> Tokenizer
 <span style="color:#75715e">## Tokenize the sentences</span>
 tokenizer <span style="color:#f92672">=</span> Tokenizer(num_words<span style="color:#f92672">=</span>max_features)
 tokenizer<span style="color:#f92672">.</span>fit_on_texts(list(train_X)<span style="color:#f92672">+</span>list(test_X))
 train_X <span style="color:#f92672">=</span> tokenizer<span style="color:#f92672">.</span>texts_to_sequences(train_X)
-test_X <span style="color:#f92672">=</span> tokenizer<span style="color:#f92672">.</span>texts_to_sequences(test_X)
-</code></pre></div><p>where <code>train_X</code> and <code>test_X</code> are lists of documents in the corpus.</p>
+test_X <span style="color:#f92672">=</span> tokenizer<span style="color:#f92672">.</span>texts_to_sequences(test_X)</code></pre></div>
+<p>where <code>train_X</code> and <code>test_X</code> are lists of documents in the corpus.</p>
+
 <h4 id="b-pad-sequence">b) Pad Sequence:</h4>
+
 <p>Normally our model expects that each sequence(each training example) will be of the same length(same number of words/tokens). We can control this using the <code>maxlen</code> parameter.</p>
-<p>For example:</p>
-<!-- raw HTML omitted -->
+
+<p>For example:
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/pad_seq.png" style="height:40%;width:40%" ></center>
+</div></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">train_X <span style="color:#f92672">=</span> pad_sequences(train_X, maxlen<span style="color:#f92672">=</span>maxlen)
-test_X <span style="color:#f92672">=</span> pad_sequences(test_X, maxlen<span style="color:#f92672">=</span>maxlen)
-</code></pre></div><p>Now our train data contains a list of list of numbers. Each list has the same length. And we also have the <code>word_index</code> which is a dictionary of most occuring words in the text corpus.</p>
+test_X <span style="color:#f92672">=</span> pad_sequences(test_X, maxlen<span style="color:#f92672">=</span>maxlen)</code></pre></div>
+<p>Now our train data contains a list of list of numbers. Each list has the same length. And we also have the <code>word_index</code> which is a dictionary of most occuring words in the text corpus.</p>
+
 <h2 id="embedding-enrichment">Embedding Enrichment:</h2>
-<p>As I said I will be using GLoVE Word2Vec embeddings to explain the enrichment. GLoVE pretrained vectors are trained on the Wikipedia corpus. (You can <a href="https://nlp.stanford.edu/projects/glove/">download them here</a>). That means some of the words that might be present in your data might not be present in the embeddings. How could we deal with that? Let&rsquo;s first load the Glove Embeddings first.</p>
+
+<p>As I said I will be using GLoVE Word2Vec embeddings to explain the enrichment. GLoVE pretrained vectors are trained on the Wikipedia corpus. (You can <a href="https://nlp.stanford.edu/projects/glove/" rel="nofollow" target="_blank">download them here</a>). That means some of the words that might be present in your data might not be present in the embeddings. How could we deal with that? Let&rsquo;s first load the Glove Embeddings first.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">load_glove_index</span>():
     EMBEDDING_FILE <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;../input/embeddings/glove.840B.300d/glove.840B.300d.txt&#39;</span>
     <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_coefs</span>(word,<span style="color:#f92672">*</span>arr): <span style="color:#66d9ef">return</span> word, np<span style="color:#f92672">.</span>asarray(arr, dtype<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;float32&#39;</span>)[:<span style="color:#ae81ff">300</span>]
     embeddings_index <span style="color:#f92672">=</span> dict(get_coefs(<span style="color:#f92672">*</span>o<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34; &#34;</span>)) <span style="color:#66d9ef">for</span> o <span style="color:#f92672">in</span> open(EMBEDDING_FILE))
     <span style="color:#66d9ef">return</span> embeddings_index
 
-glove_embedding_index <span style="color:#f92672">=</span> load_glove_index()
-</code></pre></div><p>Be sure to put the path of the folder where you download these GLoVE vectors. What does this <code>glove_embedding_index</code> contain? It is just a dictionary in which the key is the word and the value is the word vector, a <code>np.array</code> of length 300. The length of this dictionary is somewhere around a billion. Since we only want the embeddings of words that are in our <code>word_index</code>, we will create a matrix which just contains required embeddings.</p>
-<!-- raw HTML omitted -->
+glove_embedding_index <span style="color:#f92672">=</span> load_glove_index()</code></pre></div>
+<p>Be sure to put the path of the folder where you download these GLoVE vectors. What does this <code>glove_embedding_index</code> contain? It is just a dictionary in which the key is the word and the value is the word vector, a <code>np.array</code> of length 300. The length of this dictionary is somewhere around a billion. Since we only want the embeddings of words that are in our <code>word_index</code>, we will create a matrix which just contains required embeddings.</p>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/embedding_matrix_creation.png" style="height:100%;width:100%" ></center>
+</div>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create_glove</span>(word_index,embeddings_index):
     emb_mean,emb_std <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">0.005838499</span>,<span style="color:#ae81ff">0.48782197</span>
     all_embs <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>stack(embeddings_index<span style="color:#f92672">.</span>values())
@@ -415,8 +476,8 @@ glove_embedding_index <span style="color:#f92672">=</span> load_glove_index()
         <span style="color:#66d9ef">else</span>:
                 count_found<span style="color:#f92672">-=</span><span style="color:#ae81ff">1</span>
     <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Got embedding for &#34;</span>,count_found,<span style="color:#e6db74">&#34; words.&#34;</span>)
-    <span style="color:#66d9ef">return</span> embedding_matrix
-</code></pre></div><p>The above code works fine but is there a way that we can use the preprocessing in GLoVE to our advantage? Yes. When preprocessing was done for glove, the creators didn&rsquo;t convert the words to lowercase. That means that it contains multiple variations of a word like &lsquo;USA&rsquo;, &lsquo;usa&rsquo; and &lsquo;Usa&rsquo;. That also means that in some cases while a word like &lsquo;Word&rsquo; is present, its analog in lowercase i.e. &lsquo;word&rsquo; is not present. We can get through this situation by using the below code.</p>
+    <span style="color:#66d9ef">return</span> embedding_matrix</code></pre></div>
+<p>The above code works fine but is there a way that we can use the preprocessing in GLoVE to our advantage? Yes. When preprocessing was done for glove, the creators didn&rsquo;t convert the words to lowercase. That means that it contains multiple variations of a word like &lsquo;USA&rsquo;, &lsquo;usa&rsquo; and &lsquo;Usa&rsquo;. That also means that in some cases while a word like &lsquo;Word&rsquo; is present, its analog in lowercase i.e. &lsquo;word&rsquo; is not present. We can get through this situation by using the below code.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create_glove</span>(word_index,embeddings_index):
     emb_mean,emb_std <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">0.005838499</span>,<span style="color:#ae81ff">0.48782197</span>
     all_embs <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>stack(embeddings_index<span style="color:#f92672">.</span>values())
@@ -441,13 +502,13 @@ glove_embedding_index <span style="color:#f92672">=</span> load_glove_index()
             <span style="color:#66d9ef">else</span>:
                 count_found<span style="color:#f92672">-=</span><span style="color:#ae81ff">1</span>
     <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Got embedding for &#34;</span>,count_found,<span style="color:#e6db74">&#34; words.&#34;</span>)
-    <span style="color:#66d9ef">return</span> embedding_matrix
-</code></pre></div><p>The above was just an example of how we can use our knowledge of an embedding to get better coverage. Sometimes depending on the problem, one might also derive value by adding extra information to the embeddings using some domain knowledge and NLP skills. For example, we can add external knowledge to the embeddings themselves by adding polarity and subjectivity of a word from the TextBlob package in Python.</p>
+    <span style="color:#66d9ef">return</span> embedding_matrix</code></pre></div>
+<p>The above was just an example of how we can use our knowledge of an embedding to get better coverage. Sometimes depending on the problem, one might also derive value by adding extra information to the embeddings using some domain knowledge and NLP skills. For example, we can add external knowledge to the embeddings themselves by adding polarity and subjectivity of a word from the TextBlob package in Python.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> textblob <span style="color:#f92672">import</span> TextBlob
 word_sent <span style="color:#f92672">=</span> TextBlob(<span style="color:#e6db74">&#34;good&#34;</span>)<span style="color:#f92672">.</span>sentiment
 <span style="color:#66d9ef">print</span>(word_sent<span style="color:#f92672">.</span>polarity,word_sent<span style="color:#f92672">.</span>subjectivity)
-<span style="color:#75715e"># 0.7 0.6</span>
-</code></pre></div><p>We can get the polarity and subjectivity of any word using TextBlob. Pretty neat. So let us try to add this extra information to our embeddings.</p>
+<span style="color:#75715e"># 0.7 0.6</span></code></pre></div>
+<p>We can get the polarity and subjectivity of any word using TextBlob. Pretty neat. So let us try to add this extra information to our embeddings.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create_glove</span>(word_index,embeddings_index):
     emb_mean,emb_std <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">0.005838499</span>,<span style="color:#ae81ff">0.48782197</span>
     all_embs <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>stack(embeddings_index<span style="color:#f92672">.</span>values())
@@ -476,10 +537,15 @@ word_sent <span style="color:#f92672">=</span> TextBlob(<span style="color:#e6db
                 embedding_matrix[i,<span style="color:#ae81ff">300</span>:] <span style="color:#f92672">=</span> extra_embed
                 count_found<span style="color:#f92672">-=</span><span style="color:#ae81ff">1</span>
     <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Got embedding for &#34;</span>,count_found,<span style="color:#e6db74">&#34; words.&#34;</span>)
-    <span style="color:#66d9ef">return</span> embedding_matrix
-</code></pre></div><p>Engineering embeddings is an essential part of getting better performance from the Deep learning models at a later stage. Generally, I revisit this part of code multiple times during the stage of a project while trying to improve my models even further. You can show up a lot of creativity here to improve coverage over your <code>word_index</code> and to include extra features in your embedding.</p>
+    <span style="color:#66d9ef">return</span> embedding_matrix</code></pre></div>
+<p>Engineering embeddings is an essential part of getting better performance from the Deep learning models at a later stage. Generally, I revisit this part of code multiple times during the stage of a project while trying to improve my models even further. You can show up a lot of creativity here to improve coverage over your <code>word_index</code> and to include extra features in your embedding.</p>
+
 <h2 id="more-engineered-features">More Engineered Features</h2>
-<!-- raw HTML omitted -->
+
+<p><div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/example_nlp_network.png" style="height:100%;width:100%" ></center>
+</div>
+One can always add sentence specific features like sentence length, number of unique words etc. as another input layer to give extra information to the Deep Neural Network. For example: I created these extra features as part of a feature engineering pipeline for Quora Insincerity Classification Challenge.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add_features</span>(df):
     df[<span style="color:#e6db74">&#39;question_text&#39;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#39;question_text&#39;</span>]<span style="color:#f92672">.</span>progress_apply(<span style="color:#66d9ef">lambda</span> x:str(x))
     df[<span style="color:#e6db74">&#34;lower_question_text&#34;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#34;question_text&#34;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x: x<span style="color:#f92672">.</span>lower())
@@ -490,17 +556,20 @@ word_sent <span style="color:#f92672">=</span> TextBlob(<span style="color:#e6db
     df[<span style="color:#e6db74">&#39;num_words&#39;</span>] <span style="color:#f92672">=</span> df<span style="color:#f92672">.</span>question_text<span style="color:#f92672">.</span>str<span style="color:#f92672">.</span>count(<span style="color:#e6db74">&#39;\S+&#39;</span>)
     df[<span style="color:#e6db74">&#39;num_unique_words&#39;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#39;question_text&#39;</span>]<span style="color:#f92672">.</span>progress_apply(<span style="color:#66d9ef">lambda</span> comment: len(set(w <span style="color:#66d9ef">for</span> w <span style="color:#f92672">in</span> comment<span style="color:#f92672">.</span>split())))
     df[<span style="color:#e6db74">&#39;words_vs_unique&#39;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#39;num_unique_words&#39;</span>] <span style="color:#f92672">/</span> df[<span style="color:#e6db74">&#39;num_words&#39;</span>] 
-    <span style="color:#66d9ef">return</span> df
+    <span style="color:#66d9ef">return</span> df</code></pre></div>
+<h2 id="conclusion">Conclusion:</h2>
 
-</code></pre></div><h2 id="conclusion">Conclusion:</h2>
-<p>NLP is still a very interesting problem in Deep Learning space and thus I would encourage you to do a lot of experimentation to see what works and what doesn&rsquo;t. I have tried to provide a wholesome perspective of the preprocessing steps for a Deep Learning Neural network for any NLP problem. But that doesn&rsquo;t mean it is definitive. If you want to learn more about NLP <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing">here</a> is an awesome course. You can start for free with the 7-day Free Trial. If you think we can add something to the flow, do mention it in the comments.</p>
+<p>NLP is still a very interesting problem in Deep Learning space and thus I would encourage you to do a lot of experimentation to see what works and what doesn&rsquo;t. I have tried to provide a wholesome perspective of the preprocessing steps for a Deep Learning Neural network for any NLP problem. But that doesn&rsquo;t mean it is definitive. If you want to learn more about NLP <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" rel="nofollow" target="_blank">here</a> is an awesome course. You can start for free with the 7-day Free Trial. If you think we can add something to the flow, do mention it in the comments.</p>
+
 <h2 id="endnotes-and-references">Endnotes and References</h2>
+
 <p>This post is a result of an effort of a lot of excellent Kagglers and I will try to reference them in this section. If I leave out someone, do understand that it was not my intention to do so.</p>
+
 <ul>
-<li><a href="https://www.kaggle.com/christofhenkel/how-to-preprocessing-when-using-embeddings">How to: Preprocessing when using embeddings</a></li>
-<li><a href="https://www.kaggle.com/theoviel/improve-your-score-with-some-text-preprocessing">Improve your Score with some Text Preprocessing</a></li>
-<li><a href="https://www.kaggle.com/ziliwang/baseline-pytorch-bilstm">Pytorch baseline</a></li>
-<li><a href="https://www.kaggle.com/hengzheng/pytorch-starter">Pytorch starter</a></li>
+<li><a href="https://www.kaggle.com/christofhenkel/how-to-preprocessing-when-using-embeddings" rel="nofollow" target="_blank">How to: Preprocessing when using embeddings</a></li>
+<li><a href="https://www.kaggle.com/theoviel/improve-your-score-with-some-text-preprocessing" rel="nofollow" target="_blank">Improve your Score with some Text Preprocessing</a></li>
+<li><a href="https://www.kaggle.com/ziliwang/baseline-pytorch-bilstm" rel="nofollow" target="_blank">Pytorch baseline</a></li>
+<li><a href="https://www.kaggle.com/hengzheng/pytorch-starter" rel="nofollow" target="_blank">Pytorch starter</a></li>
 </ul>
 
 		</div>
@@ -640,7 +709,7 @@ word_sent <span style="color:#f92672">=</span> TextBlob(<span style="color:#e6db
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
 		</ul>
 	</div>
 </div>

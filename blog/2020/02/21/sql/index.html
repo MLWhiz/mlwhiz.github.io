@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.72.0" />
+	<meta name="generator" content="Hugo 0.53" />
 	<meta property="og:title" content="Learning SQL the Hard Way" />
 <meta property="og:description" content="This post is about installing SQL, explaining SQL and running SQL." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2020/02/21/sql/" />
 <meta property="og:image" content="https://mlwhiz.com/images/sql/main.png" />
-<meta property="article:published_time" content="2020-02-21T00:00:00+00:00" />
-<meta property="article:modified_time" content="2020-02-21T00:00:00+00:00" />
+<meta property="article:published_time" content="2020-02-21T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-02-21T00:00:00&#43;00:00"/>
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/sql/main.png"/>
@@ -169,187 +169,280 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			<p><img src="/images/sql/main.png" alt=""></p>
-<p><em><strong>A Data Scientist who doesn’t know SQL is not worth his salt</strong></em></p>
+			
+
+<p><img src="/images/sql/main.png" alt="" /></p>
+
+<p><strong><em>A Data Scientist who doesn’t know SQL is not worth his salt</em></strong></p>
+
 <p>And that seems correct to me in every sense of the world. While we feel much more accomplished creating models and coming up with the different hypotheses, the role of data munging can’t be understated.</p>
+
 <p>And with the ubiquitousness of SQL when it comes to ETL and data preparation tasks, everyone should know a little bit of it to at least be useful.</p>
+
 <p>I still remember the first time I got my hands on SQL. It was the first language (if you can call it that) I learned. And it made an impact on me. I was able to automate things, and that was something I hadn’t thought of before.</p>
+
 <p>Before SQL, I used to work with Excel — VLOOKUPs and pivots. I was creating reporting systems, doing the same work again and again. SQL made it all go away. Now I could write a big script, and everything would be automated — all the crosstabs and analysis generated on the fly.</p>
-<p>That is the power of SQL. And though you could do anything that you do with SQL using <a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientists-6355059629ae">Pandas</a>, you still need to learn SQL to deal with systems like HIVE, Teradata and sometimes <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a">Spark</a> too.</p>
-<p><em><strong>This post is about installing SQL, explaining SQL and running SQL.</strong></em></p>
-<hr>
+
+<p>That is the power of SQL. And though you could do anything that you do with SQL using <a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientists-6355059629ae" rel="nofollow" target="_blank">Pandas</a>, you still need to learn SQL to deal with systems like HIVE, Teradata and sometimes <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" rel="nofollow" target="_blank">Spark</a> too.</p>
+
+<p><strong><em>This post is about installing SQL, explaining SQL and running SQL.</em></strong></p>
+
+<hr />
+
 <h2 id="setting-up-the-sql-environment">Setting up the SQL Environment</h2>
+
 <p>Now the best way to learn SQL is to get your hands dirty with it(Same I can say for any other thing you want to learn)</p>
+
 <p>I will advise against using the web-based recipes like w3schools/tutorialspoint for SQL since you cannot use your data with those.</p>
+
 <p>Also, I will advise you to go with learning the MySQL flavour of SQL as it is Open Source, easy to set up in your laptop and has a great client named MySQL Workbench to make your life easier.</p>
+
 <p>As we have gotten these points out of the way, here is a step by step to get set up with MySQL:</p>
+
 <ul>
-<li>You can download MySQL for your particular system (MACOSX, Linux, Windows) from <a href="http://dev.mysql.com/downloads/mysql/">Download MySQL Community Server</a>. In my case, I downloaded the DMG Archive. After that, double click and install the file. <em><strong>You might need to set up a password. Remember this password as it would be required to connect to the MySQL instance later.</strong></em></li>
+<li>You can download MySQL for your particular system (MACOSX, Linux, Windows) from <a href="http://dev.mysql.com/downloads/mysql/" rel="nofollow" target="_blank">Download MySQL Community Server</a>. In my case, I downloaded the DMG Archive. After that, double click and install the file. <strong><em>You might need to set up a password. Remember this password as it would be required to connect to the MySQL instance later.</em></strong></li>
 </ul>
-<p><img src="/images/sql/0.png" alt=""></p>
+
+<p><img src="/images/sql/0.png" alt="" /></p>
+
 <ul>
 <li>Create a file named my.cnf and put the following in it. This is needed to give Local file read permissions to your SQL database.</li>
 </ul>
+
 <pre><code>    [client]
     port= 3306
     [mysqld]
     port= 3306
     secure_file_priv=''
     local-infile=1
-</code></pre><ul>
+</code></pre>
+
+<ul>
 <li>Open up System Preferences&gt;MySQL. Go to Configuration and browse to the my.cnf file using the select button.</li>
 </ul>
-<p><img src="/images/sql/1.png" alt=""></p>
+
+<p><img src="/images/sql/1.png" alt="" /></p>
+
 <ul>
 <li>Restart the server from Instances tab by clicking stop and start.</li>
 </ul>
-<p><img src="/images/sql/2.png" alt=""></p>
+
+<p><img src="/images/sql/2.png" alt="" /></p>
+
 <ul>
-<li>Once you get that server running, download and install the MySQL Workbench: <a href="https://dev.mysql.com/downloads/workbench/">Download MySQL Workbench</a>. The workbench gives you an editor to write your SQL Queries and get the results in a structured way.</li>
+<li>Once you get that server running, download and install the MySQL Workbench: <a href="https://dev.mysql.com/downloads/workbench/" rel="nofollow" target="_blank">Download MySQL Workbench</a>. The workbench gives you an editor to write your SQL Queries and get the results in a structured way.</li>
 </ul>
-<p><img src="/images/sql/3.png" alt=""></p>
+
+<p><img src="/images/sql/3.png" alt="" /></p>
+
 <ul>
 <li>Open up the MySQL workbench now and connect to SQL through it. You will see something like below.</li>
 </ul>
-<p><img src="/images/sql/4.png" alt=""></p>
+
+<p><img src="/images/sql/4.png" alt="" /></p>
+
 <ul>
 <li>You can see that the Local Instance connection has been set up for you beforehand. Now, you just need to click on that connection and get started using the password that we set up before for the MySQL server(You can also create a connection to an existing SQL server that might not be on your machine if you have the address, port number, username and password).</li>
 </ul>
-<p><img src="/images/sql/5.png" alt=""></p>
+
+<p><img src="/images/sql/5.png" alt="" /></p>
+
 <ul>
 <li>And you get an editor to write your queries on the particular database.</li>
 </ul>
-<p><img src="/images/sql/6.png" alt=""></p>
+
+<p><img src="/images/sql/6.png" alt="" /></p>
+
 <ul>
-<li>
-<p>Check the Schemas tab on the top left to see the tables that are present. There is just a sys schema present with the table sys_config. Not an interesting data source to learn SQL. So let’s install some data to practice.</p>
-</li>
-<li>
-<p>If you have your own data to work. Then good and fine. You can create a new schema(database) and upload it into tables using these following commands. (You can run the commands by using Cmd+Enter or by clicking the ⚡️lightning button)</p>
-</li>
+<li><p>Check the Schemas tab on the top left to see the tables that are present. There is just a sys schema present with the table sys_config. Not an interesting data source to learn SQL. So let’s install some data to practice.</p></li>
+
+<li><p>If you have your own data to work. Then good and fine. You can create a new schema(database) and upload it into tables using these following commands. (You can run the commands by using Cmd+Enter or by clicking the ⚡️lightning button)</p></li>
 </ul>
-<p><img src="/images/sql/7.png" alt=""></p>
+
+<p><img src="/images/sql/7.png" alt="" /></p>
+
 <p>In this tutorial, however, I am going to use the Sakila Movie database which you can install using the following steps:</p>
+
 <ul>
-<li>
-<p>Go to <a href="https://dev.mysql.com/doc/index-other.html">MySQL Documentation</a> and download the Sakila ZIP file.</p>
-</li>
-<li>
-<p>Unzip the file.</p>
-</li>
-<li>
-<p>Now go to MySQL Workbench and select File&gt;Run SQL Script&gt;select location sakila-db/sakila-schema.sql</p>
-</li>
-<li>
-<p>Go to MySQL Workbench and select File &gt;Run SQL Script &gt;select location sakila-db/sakila-data.sql</p>
-</li>
+<li><p>Go to <a href="https://dev.mysql.com/doc/index-other.html" rel="nofollow" target="_blank">MySQL Documentation</a> and download the Sakila ZIP file.</p></li>
+
+<li><p>Unzip the file.</p></li>
+
+<li><p>Now go to MySQL Workbench and select File&gt;Run SQL Script&gt;select location sakila-db/sakila-schema.sql</p></li>
+
+<li><p>Go to MySQL Workbench and select File &gt;Run SQL Script &gt;select location sakila-db/sakila-data.sql</p></li>
 </ul>
+
 <p>Once you do that, you will see a new database added in the SCHEMA list.</p>
-<p><img src="/images/sql/8.png" alt=""></p>
-<hr>
+
+<p><img src="/images/sql/8.png" alt="" /></p>
+
+<hr />
+
 <h2 id="playing-with-data">Playing with Data</h2>
+
 <p>Now we have some data with us. Finally.</p>
+
 <p>Let’s start with writing some queries.</p>
-<p>You can try to understand the Schema of the Sakila Database in detail using the <a href="https://dev.mysql.com/doc/sakila/en/sakila-structure.html">Sakila Sample Database</a> document.</p>
-<p><img src="/images/sql/9.png" alt="Schema Diagram"><em>Schema Diagram</em></p>
+
+<p>You can try to understand the Schema of the Sakila Database in detail using the <a href="https://dev.mysql.com/doc/sakila/en/sakila-structure.html" rel="nofollow" target="_blank">Sakila Sample Database</a> document.</p>
+
+<p><img src="/images/sql/9.png" alt="Schema Diagram" /><em>Schema Diagram</em></p>
+
 <p>Now the basic syntax of any SQL query is:</p>
+
 <pre><code>SELECT col1, SUM(col2) as col2sum, AVG(col3) as col3avg FROM table_name WHERE col4 = 'some_value' GROUP BY col1 ORDER BY col2sum DESC;
 </code></pre>
+
 <p>There are four elements in this query:</p>
+
 <ol>
-<li>
-<p><strong>SELECT</strong>: Which Columns to select? Here we choose col1 and do SUM aggregation on col2 and AVG aggregation on col3. We also give a new name to SUM(col2) by using the as keyword. This is known as aliasing.</p>
-</li>
-<li>
-<p><strong>FROM</strong>: From which table should we SELECT?</p>
-</li>
-<li>
-<p><strong>WHERE</strong>: We can filter data using WHERE statements.</p>
-</li>
-<li>
-<p><strong>GROUP BY</strong>: All selected columns that are not in aggregation should be in GROUP BY.</p>
-</li>
-<li>
-<p><strong>ORDER BY</strong>: Sort on col2sum</p>
-</li>
+<li><p><strong>SELECT</strong>: Which Columns to select? Here we choose col1 and do SUM aggregation on col2 and AVG aggregation on col3. We also give a new name to SUM(col2) by using the as keyword. This is known as aliasing.</p></li>
+
+<li><p><strong>FROM</strong>: From which table should we SELECT?</p></li>
+
+<li><p><strong>WHERE</strong>: We can filter data using WHERE statements.</p></li>
+
+<li><p><strong>GROUP BY</strong>: All selected columns that are not in aggregation should be in GROUP BY.</p></li>
+
+<li><p><strong>ORDER BY</strong>: Sort on col2sum</p></li>
 </ol>
+
 <p>The above query will help you with most of the simple things you want to find in a database.</p>
+
 <p>For example, we can find out how differently censored rated movies are timed differently using:</p>
+
 <pre><code>SELECT rating, avg(length) as length_avg FROM sakila.film group by rating order by length_avg desc;
 </code></pre>
-<p><img src="/images/sql/10.png" alt=""></p>
+
+<p><img src="/images/sql/10.png" alt="" /></p>
+
 <h3 id="exercise-frame-a-question">Exercise: Frame a Question</h3>
+
 <p>You should now come up with some questions of your own.</p>
+
 <p>For Example, you can try to find out all the movies released in the year 2006. Or try to find all of the movies which have a rating of PG and length greater than 50 minutes.</p>
+
 <p>You can do this by running the following on MySQL Workbench:</p>
+
 <pre><code>select * from sakila.film where release_year = 2006; 
 select * from sakila.film where length&gt;50 and rating=&quot;PG&quot;;
 </code></pre>
-<hr>
+
+<hr />
+
 <h2 id="joins-in-sql">Joins in SQL</h2>
+
 <p>Till now, we have learned how we can work with single tables. But in reality, we need to work with multiple tables.</p>
+
 <p>So, the next thing we would want to learn is how to do joins.</p>
+
 <p>Now joins are an integral and an essential part of a MySQL Database and understanding them is necessary. The below visual talks about most of the joins that exist in SQL. I usually end up using just the LEFT JOIN, and INNER JOIN, so I will start with LEFT JOIN.</p>
-<p><img src="/images/sql/11.png" alt=""></p>
+
+<p><img src="/images/sql/11.png" alt="" /></p>
+
 <p>The LEFT JOIN is used when you want to keep all the records in the left table(A) and merge B on the matching records. The records of A where B is not merged are kept as NULL in the resulting table. The MySQL Syntax is:</p>
+
 <pre><code>SELECT A.col1, A.col2, B.col3, B.col4 from A LEFT JOIN B on A.col2=B.col3
 </code></pre>
+
 <p>Here we select col1 and col2 from table A and col3 and col4 from table B. We also specify which common columns to join on using the ON statement.</p>
+
 <p>The INNER JOIN is used when you want to merge A and B and only to keep the common records in A and B.</p>
+
 <h3 id="example">Example:</h3>
+
 <p>To give you a use case lets go back to our Sakila database. Suppose we wanted to find out how many copies of each movie we do have in our inventory. You can get that by using:</p>
+
 <pre><code>SELECT film_id,count(film_id) as num_copies FROM sakila.inventory group by film_id order by num_copies desc;
 </code></pre>
-<p><img src="/images/sql/12.png" alt=""></p>
+
+<p><img src="/images/sql/12.png" alt="" /></p>
+
 <p>Does this result look interesting? Not really. IDs don’t make sense to us humans, and if we can get the names of the movies, we would be able to process the information better. So we snoop around and see that the table film has got film_id as well as the title of the film.</p>
+
 <p>So we have all the data, but how do we get it in a single view?</p>
+
 <p>Come Joins to the rescue. We need to add the title to our inventory table information. We can do this using —</p>
+
 <pre><code>SELECT A.*, B.title from sakila.inventory A left join sakila.film B on A.film_id = B.film_id
 </code></pre>
-<p><img src="/images/sql/13.png" alt=""></p>
+
+<p><img src="/images/sql/13.png" alt="" /></p>
+
 <p>This will add another column to your inventory table information. As you might notice some films are in the film table that we don’t have in the inventory. We used a left join since we wanted to keep whatever is in the inventory table and join it with its corresponding counterpart in the film table and not everything in the film table.</p>
+
 <p>So now we have got the title as another field in the data. This is just what we wanted, but we haven’t solved the whole puzzle yet. We want title and num_copies of the title in the inventory.</p>
+
 <p>But before we can go any further, we should understand the concept of inner queries first.</p>
-<hr>
+
+<hr />
+
 <h2 id="inner-query">Inner Query:</h2>
+
 <p>Now you have a query that can give you the above result. One thing you can do is create a new table using</p>
+
 <pre><code>create table sakila.temp_table as SELECT A.*, B.title from sakila.inventory A left join sakila.film B on A.film_id = B.film_id;
 </code></pre>
+
 <p>And then use a simple group by operation using:</p>
+
 <pre><code>select title, count(title) as num_copies from sakila.temp_table group by title order by num_copies desc;
 </code></pre>
-<p><img src="/images/sql/14.png" alt=""></p>
+
+<p><img src="/images/sql/14.png" alt="" /></p>
+
 <p>But this is one step too many. And we have to create a temporary table that ends up taking space on the system.</p>
+
 <p>SQL provides us with the concept of the inner query just for these sort of issues. You can instead write all this in a single query using:</p>
+
 <pre><code>select temp.title, count(temp.title) as num_copies from (SELECT A.*, B.title from sakila.inventory A left join sakila.film B on A.film_id = B.film_id) temp group by title order by num_copies desc;
 </code></pre>
-<p><img src="/images/sql/15.png" alt=""></p>
+
+<p><img src="/images/sql/15.png" alt="" /></p>
+
 <p>What we did here was sandwich our first query in parenthesis and gave that table an alias temp. We then did the group by operations considering temp just as we would consider any table. It is because of the inner query concept that we can write SQL queries that span multiple pages at some times.</p>
-<hr>
+
+<hr />
+
 <h2 id="the-having-clause">The HAVING Clause</h2>
+
 <p>HAVING is yet another SQL construct that is useful to understand. So we have got the results, and now we want to get the films whose number of copies are less than or equal to 2.</p>
+
 <p>We can do this by using the inner query concept and the WHERE clause. Here we nest one inner query inside another. Pretty neat.</p>
-<p><img src="/images/sql/16.png" alt=""></p>
+
+<p><img src="/images/sql/16.png" alt="" /></p>
+
 <p>Or, we can use the HAVING Clause.</p>
-<p><img src="/images/sql/17.png" alt=""></p>
+
+<p><img src="/images/sql/17.png" alt="" /></p>
+
 <p>The HAVING clause is used to filter on the final aggregated result. It is different from WHERE as where is used to filter the table that is used in the FROM statement. HAVING filters the final result after the GROUP BY happens.</p>
+
 <p>There are a lot of ways to do the same thing with SQL as you have already seen in the above example. We need to try to come up with the least verbose and thus HAVING makes sense in many cases.</p>
+
 <p>If you can follow this far, you already know more SQL than most people.</p>
-<p>Next thing to do: <em><strong>Practice</strong></em>.</p>
+
+<p>Next thing to do: <strong><em>Practice</em></strong>.</p>
+
 <p>Try to come up with your questions on your dataset and try to find out the answers you have using SQL.</p>
+
 <p>Some questions I could provide for a start:</p>
+
 <ol>
-<li>
-<p><em><strong>Which Actor has the most distinct films in our inventory?</strong></em></p>
-</li>
-<li>
-<p><em><strong>Which Genre films are the most rented in our inventory?</strong></em></p>
-</li>
+<li><p><strong><em>Which Actor has the most distinct films in our inventory?</em></strong></p></li>
+
+<li><p><strong><em>Which Genre films are the most rented in our inventory?</em></strong></p></li>
 </ol>
-<hr>
+
+<hr />
+
 <h2 id="continue-learning">Continue Learning</h2>
-<p>This was just a simple tutorial on how to use SQL. If you want to learn more about SQL, I would like to call out an excellent course on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11605513096&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fsql-for-data-science">SQL for Data Science</a> from the University of California. Do check it out as it talks about other SQL concepts like UNION, String Manipulation, functions, Date Handling, etc.</p>
-<p>I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz">@mlwhiz</a>.</p>
+
+<p>This was just a simple tutorial on how to use SQL. If you want to learn more about SQL, I would like to call out an excellent course on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11605513096&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fsql-for-data-science" rel="nofollow" target="_blank">SQL for Data Science</a> from the University of California. Do check it out as it talks about other SQL concepts like UNION, String Manipulation, functions, Date Handling, etc.</p>
+
+<p>I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 		</div>
@@ -488,7 +581,7 @@ select * from sakila.film where length&gt;50 and rating=&quot;PG&quot;;
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
 		</ul>
 	</div>
 </div>

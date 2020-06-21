@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.72.0" />
+	<meta name="generator" content="Hugo 0.53" />
 	<meta property="og:title" content="Take your Machine Learning Models to Production with these 5 simple steps" />
 <meta property="og:description" content="This post is about explaining some of the worst mistakes people do in a data science interview so that you don’t end up repeating them" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2019/12/25/prod/" />
 <meta property="og:image" content="https://mlwhiz.com/images/prod/main.png" />
-<meta property="article:published_time" content="2019-12-25T00:00:00+00:00" />
-<meta property="article:modified_time" content="2019-12-25T00:00:00+00:00" />
+<meta property="article:published_time" content="2019-12-25T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-12-25T00:00:00&#43;00:00"/>
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/prod/main.png"/>
@@ -169,101 +169,158 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			<p><img src="/images/prod/main.png" alt=""></p>
+			
+
+<p><img src="/images/prod/main.png" alt="" /></p>
+
 <blockquote>
 <p>Creating a great machine learning system is an art.</p>
 </blockquote>
+
 <p>There are a lot of things to consider while building a great machine learning system. But often it happens that we as data scientists only worry about certain parts of the project.</p>
-<p><em><strong>But do we ever think about how we will deploy our models once we have them?</strong></em></p>
+
+<p><strong><em>But do we ever think about how we will deploy our models once we have them?</em></strong></p>
+
 <p>I have seen a lot of ML projects, and a lot of them are doomed to fail as they don’t have a set plan for production from the onset.</p>
+
 <p>This post is about the process requirements for a successful ML project — One that goes to production.</p>
-<hr>
+
+<hr />
+
 <h2 id="1-establish-a-baseline-at-the-onset">1. Establish a Baseline at the onset</h2>
+
 <p>You don’t really have to have a model to get the baseline results.</p>
+
 <p>Let us say we will be using RMSE as an evaluation metric for our time series models. We evaluated the model on the test set, and the RMSE came out to be 3.64.</p>
+
 <p>Is 3.64 a good RMSE? How do we know? We need a baseline RMSE.</p>
+
 <p>This could come from a currently employed model for the same task. Or by using some very simple heuristic. For a Time series model, a baseline to defeat is last day prediction. i.e., predict the number on the previous day.</p>
+
 <p>Or how about Image classification task. Take 1000 labelled samples and get them classified by humans. And Human accuracy can be your Baseline. If a human is not able to get a 70% prediction accuracy on the task, you can always think of automating a process if your models reach a similar level.</p>
-<p><em><strong>Learning</strong></em>: Try to be aware of the results you are going to get before you create your models. Setting some out of the world expectations is only going to disappoint you and your client.</p>
-<hr>
+
+<p><strong><em>Learning</em></strong>: Try to be aware of the results you are going to get before you create your models. Setting some out of the world expectations is only going to disappoint you and your client.</p>
+
+<hr />
+
 <h2 id="2-continuous-integration-is-the-way-forward">2. Continuous Integration is the Way Forward</h2>
-<p><img src="/images/prod/0.png" alt=""></p>
+
+<p><img src="/images/prod/0.png" alt="" /></p>
+
 <p>You have created your model now. It performs better than the baseline/your current model on your local test dataset. Should we go forward?</p>
+
 <p>We have two choices-</p>
+
 <ol>
-<li>
-<p>Go into an endless loop in improving our model further.</p>
-</li>
-<li>
-<p>Test our model in production settings, get more insights about what could go wrong and then continue improving our model with <em><strong>continuous integration.</strong></em></p>
-</li>
+<li><p>Go into an endless loop in improving our model further.</p></li>
+
+<li><p>Test our model in production settings, get more insights about what could go wrong and then continue improving our model with <strong><em>continuous integration.</em></strong></p></li>
 </ol>
-<p>I am a fan of the second approach. In his awesome <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11421702016&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fmachine-learning-projects">third course</a> named Structuring Machine learning projects in the Coursera <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdeep-learning">Deep Learning Specialization</a>, Andrew Ng says —</p>
+
+<p>I am a fan of the second approach. In his awesome <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11421702016&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fmachine-learning-projects" rel="nofollow" target="_blank">third course</a> named Structuring Machine learning projects in the Coursera <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdeep-learning" rel="nofollow" target="_blank">Deep Learning Specialization</a>, Andrew Ng says —</p>
+
 <blockquote>
 <p>“Don’t start off trying to design and build the perfect system. Instead, build and train a basic system quickly — perhaps in just a few days. Even if the basic system is far from the “best” system you can build, it is valuable to examine how the basic system functions: you will quickly find clues that show you the most promising directions in which to invest your time.”</p>
 </blockquote>
+
 <p>Done is better than perfect.</p>
-<p><em><strong>Learning</strong></em>: If your new model is better than the current model in production or your new model is better than the baseline, it doesn’t make sense to wait to go to production.</p>
-<hr>
+
+<p><strong><em>Learning</em></strong>: If your new model is better than the current model in production or your new model is better than the baseline, it doesn’t make sense to wait to go to production.</p>
+
+<hr />
+
 <h2 id="3-your-model-might-break-into-production">3. Your model might break into Production</h2>
+
 <p>Is your model better than the Baseline? It performed better on the local test dataset, but will it really work well on the whole?</p>
-<p>To test the validity of your assumption that your model is better than the existing model, you can set up an <em><strong>A/B test</strong></em>. Some users(Test group)see predictions from your model while some users(Control) see the predictions from the previous model.</p>
+
+<p>To test the validity of your assumption that your model is better than the existing model, you can set up an <strong><em>A/B test</em></strong>. Some users(Test group)see predictions from your model while some users(Control) see the predictions from the previous model.</p>
+
 <p>In fact, this is the right way to deploy your model. And you might find that indeed your model is not as good as it seems.</p>
+
 <blockquote>
 <p>Being wrong is not wrong really, what’s wrong is to not anticipate that we could be wrong.</p>
 </blockquote>
+
 <p>It is hard to point out the real reason behind why your model performs poorly in production settings, but some causes could be:</p>
+
 <ul>
-<li>
-<p>You might see the data coming in real-time to be significantly different from the training data.</p>
-</li>
-<li>
-<p>Or you have not done the preprocessing pipeline correctly.</p>
-</li>
-<li>
-<p>Or you do not measure the performance correctly.</p>
-</li>
-<li>
-<p>Or maybe there is a bug in your implementation.</p>
-</li>
+<li><p>You might see the data coming in real-time to be significantly different from the training data.</p></li>
+
+<li><p>Or you have not done the preprocessing pipeline correctly.</p></li>
+
+<li><p>Or you do not measure the performance correctly.</p></li>
+
+<li><p>Or maybe there is a bug in your implementation.</p></li>
 </ul>
-<p><em><strong>Learning:</strong></em> <em><strong>Don’t go into production with a full scale.</strong></em> A/B test is always an excellent way to go forward. Have something ready to fall back upon(An older model perhaps). There might always be things that might break, which you couldn’t have anticipated.</p>
-<hr>
+
+<p><strong><em>Learning:</em></strong> <strong><em>Don’t go into production with a full scale.</em></strong> A/B test is always an excellent way to go forward. Have something ready to fall back upon(An older model perhaps). There might always be things that might break, which you couldn’t have anticipated.</p>
+
+<hr />
+
 <h2 id="4-your-model-might-not-even-go-to-production">4. Your model might not even go to Production</h2>
+
 <p>I have created this impressive ML model, it gives 90% accuracy, but it takes around 10 seconds to fetch a prediction.</p>
-<p><em><strong>Is that acceptable?</strong></em> For some use-cases maybe, but really no.</p>
+
+<p><strong><em>Is that acceptable?</em></strong> For some use-cases maybe, but really no.</p>
+
 <p>In the past, there have been many Kaggle competitions whose winners ended up creating monster ensembles to take the top spots on the leaderboard. Below is a particular mindblowing example model which was used to win Otto classification challenge on Kaggle:</p>
-<p><img src="/images/prod/1.png" alt=""></p>
-<p>Another example is the Netflix Million dollar Recommendation Engine Challenge. The Netflix team ended up <a href="https://www.wired.com/2012/04/netflix-prize-costs/">never</a> using the wining solution due to the engineering costs involved.</p>
-<p><em><strong>So how do you make your models accurate yet easy on the machine?</strong></em></p>
-<p><img src="/images/prod/2.png" alt=""></p>
-<p><em>Teacher — Student Model: <a href="https://towardsdatascience.com/knowledge-distillation-simplified-dd4973dbc764">Source</a></em></p>
-<p>Here comes the concept of Teacher-Student models or <em><strong>Knowledge distillation</strong></em>. In Knowledge distillation, we train a smaller student model on a bigger already trained teacher model.</p>
+
+<p><img src="/images/prod/1.png" alt="" /></p>
+
+<p>Another example is the Netflix Million dollar Recommendation Engine Challenge. The Netflix team ended up <a href="https://www.wired.com/2012/04/netflix-prize-costs/" rel="nofollow" target="_blank">never</a> using the wining solution due to the engineering costs involved.</p>
+
+<p><strong><em>So how do you make your models accurate yet easy on the machine?</em></strong></p>
+
+<p><img src="/images/prod/2.png" alt="" /></p>
+
+<p><em>Teacher — Student Model: <a href="https://towardsdatascience.com/knowledge-distillation-simplified-dd4973dbc764" rel="nofollow" target="_blank">Source</a></em></p>
+
+<p>Here comes the concept of Teacher-Student models or <strong><em>Knowledge distillation</em></strong>. In Knowledge distillation, we train a smaller student model on a bigger already trained teacher model.</p>
+
 <p>Here we use the soft labels/probabilities from the teacher model and use it as the training data for the Student model.</p>
+
 <blockquote>
-<p>The point is that the teacher is outputting class probabilities — “soft labels” rather than “hard labels”. For example, a fruit classifier might say “Apple 0.9, Pear 0.1” instead of “Apple 1.0, Pear 0.0” . Why bother? Because these “soft labels” are more informative than the original ones — telling the student that yes, a particular apple does very slightly resemble a pear. Student models can often come very close to teacher-level performance, even while using 1–2 orders of magnitude fewer parameters! — <a href="https://www.quora.com/What-is-a-teacher-student-model-in-a-Convolutional-neural-network">Source</a></p>
+<p>The point is that the teacher is outputting class probabilities — “soft labels” rather than “hard labels”. For example, a fruit classifier might say “Apple 0.9, Pear 0.1” instead of “Apple 1.0, Pear 0.0” . Why bother? Because these “soft labels” are more informative than the original ones — telling the student that yes, a particular apple does very slightly resemble a pear. Student models can often come very close to teacher-level performance, even while using 1–2 orders of magnitude fewer parameters! — <a href="https://www.quora.com/What-is-a-teacher-student-model-in-a-Convolutional-neural-network" rel="nofollow" target="_blank">Source</a></p>
 </blockquote>
-<p><em><strong>Learning:</strong></em> Sometimes, we don’t have a lot of compute available at prediction time, and so we want to have a lighter model. We can try to build simpler models or try using knowledge distillation for such use cases.</p>
-<hr>
+
+<p><strong><em>Learning:</em></strong> Sometimes, we don’t have a lot of compute available at prediction time, and so we want to have a lighter model. We can try to build simpler models or try using knowledge distillation for such use cases.</p>
+
+<hr />
+
 <h2 id="5-maintainance-and-feedback-loop">5. Maintainance and Feedback Loop</h2>
+
 <blockquote>
 <p>The world is not constant and so are your model weights</p>
 </blockquote>
+
 <p>The world around us is rapidly changing, and what might be applicable two months back might not be relevant now. In a way, the models we build are reflections of the world, and if the world is changing our models should be able to reflect this change.</p>
-<p><img src="/images/prod/3.png" alt=""></p>
+
+<p><img src="/images/prod/3.png" alt="" /></p>
+
 <p>Model performance deteriorates typically with time.</p>
-<p><em><strong>For this reason, we must think of ways to upgrade our models as part of the maintenance cycle at the onset itself.</strong></em></p>
+
+<p><strong><em>For this reason, we must think of ways to upgrade our models as part of the maintenance cycle at the onset itself.</em></strong></p>
+
 <p>The frequency of this cycle depends entirely on the business problem that you are trying to solve. In an Ad prediction system where the users tend to be fickle and buying patterns emerge continuously, the frequency needs to be pretty high. While in a review sentiment analysis system, the frequency need not be that high as language doesn’t change its structure quite so much.</p>
-<p><img src="/images/prod/4.png" alt="">
-<em>Feedback Loop: <a href="https://www.clarifai.com/blog/closing-the-loop-how-feedback-loops-help-to-maintain-quality-long-term-ai-results">Source</a></em></p>
-<p>I would also like to acknowledge <em><strong>the importance of the feedback loop in a machine learning system</strong></em>. Let’s say that you predicted that a particular image is a dog with low probability in a dog vs cat classifier. Can we learn something from these low confidence examples? You can send it to manual review to check if it could be used to retrain the model or not. In this way, we train our classifier on instances it is unsure about.</p>
-<p><em><strong>Learning:</strong></em> When thinking of production, come up with a plan to maintain and improve the model using feedback as well.</p>
-<hr>
+
+<p><img src="/images/prod/4.png" alt="" />
+<em>Feedback Loop: <a href="https://www.clarifai.com/blog/closing-the-loop-how-feedback-loops-help-to-maintain-quality-long-term-ai-results" rel="nofollow" target="_blank">Source</a></em></p>
+
+<p>I would also like to acknowledge <strong><em>the importance of the feedback loop in a machine learning system</em></strong>. Let’s say that you predicted that a particular image is a dog with low probability in a dog vs cat classifier. Can we learn something from these low confidence examples? You can send it to manual review to check if it could be used to retrain the model or not. In this way, we train our classifier on instances it is unsure about.</p>
+
+<p><strong><em>Learning:</em></strong> When thinking of production, come up with a plan to maintain and improve the model using feedback as well.</p>
+
+<hr />
+
 <h2 id="conclusion">Conclusion</h2>
+
 <p>These are some of the things I find important before thinking of putting a model into production.</p>
+
 <p>While this is not an exhaustive list of things that you need to think about and things that could go wrong, it might undoubtedly act as food for thought for the next time you create your machine learning system.</p>
-<p>If you want to learn more about how to structure a Machine Learning project and the best practices, I would like to call out his excellent <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11421702016&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fmachine-learning-projects">third course</a> named Structuring Machine learning projects in the Coursera <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdeep-learning">Deep Learning Specialization</a>. Do check it out.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------">@mlwhiz</a></p>
+
+<p>If you want to learn more about how to structure a Machine Learning project and the best practices, I would like to call out his excellent <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11421702016&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fmachine-learning-projects" rel="nofollow" target="_blank">third course</a> named Structuring Machine learning projects in the Coursera <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdeep-learning" rel="nofollow" target="_blank">Deep Learning Specialization</a>. Do check it out.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a></p>
 
 		</div>
 		
@@ -401,7 +458,7 @@ if (!doNotTrack) {
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
 		</ul>
 	</div>
 </div>

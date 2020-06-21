@@ -14,13 +14,12 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.72.0" />
+	<meta name="generator" content="Hugo 0.53" />
 	<meta property="og:title" content="Hadoop Mapreduce Streaming Tricks and Techniques" />
 <meta property="og:description" content="I have been using Hadoop a lot now a days and thought about writing some of the novel techniques that a user could use to get the most out of the Hadoop Ecosystem." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://mlwhiz.com/blog/2015/05/09/hadoop_mapreduce_streaming_tricks_and_technique/" />
-<meta property="article:published_time" content="2015-05-09T00:00:00+00:00" />
-<meta property="article:modified_time" content="2015-05-09T00:00:00+00:00" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2015/05/09/hadoop_mapreduce_streaming_tricks_and_technique/" /><meta property="article:published_time" content="2015-05-09T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2015-05-09T00:00:00&#43;00:00"/>
 
 	<meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Hadoop Mapreduce Streaming Tricks and Techniques"/>
@@ -166,10 +165,16 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			<p>I have been using Hadoop a lot now a days and thought about writing some of the novel techniques that a user could use to get the most out of the Hadoop Ecosystem.</p>
+			
+
+<p>I have been using Hadoop a lot now a days and thought about writing some of the novel techniques that a user could use to get the most out of the Hadoop Ecosystem.</p>
+
 <h2 id="using-shell-scripts-to-run-your-programs">Using Shell Scripts to run your Programs</h2>
-<p><!-- raw HTML omitted --></p>
-<p>I am not a fan of large bash commands. The ones where you have to specify the whole path of the jar files and the such. <!-- raw HTML omitted -->You can effectively organize your workflow by using shell scripts.<!-- raw HTML omitted --> Now Shell scripts are not as formidable as they sound. We wont be doing programming perse using these shell scripts(Though they are pretty good at that too), we will just use them to store commands that we need to use sequentially.</p>
+
+<p><img src="/images/I-love-bash-1024x220.png" ></p>
+
+<p>I am not a fan of large bash commands. The ones where you have to specify the whole path of the jar files and the such. <em>You can effectively organize your workflow by using shell scripts.</em> Now Shell scripts are not as formidable as they sound. We wont be doing programming perse using these shell scripts(Though they are pretty good at that too), we will just use them to store commands that we need to use sequentially.</p>
+
 <p>Below is a sample of the shell script I use to run my Mapreduce Codes.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash
 </span><span style="color:#75715e"></span><span style="color:#75715e">#Defining program variables</span>
@@ -183,27 +188,97 @@ hadoop fs -rmr -skipTrash&amp;nbsp;$OP
 hadoop jar&amp;nbsp;$HADOOP_JAR_PATH <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>-file&amp;nbsp;$MAPPER -mapper <span style="color:#e6db74">&#34;python test_m.py&#34;</span> <span style="color:#ae81ff">\
 </span><span style="color:#ae81ff"></span>-file&amp;nbsp;$REDUCER -reducer <span style="color:#e6db74">&#34;python test_r.py&#34;</span> <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>-input&amp;nbsp;$IP -output&amp;nbsp;$OP
-</code></pre></div><p>I generally save them as test_s.sh and whenever i need to run them i simply type <!-- raw HTML omitted -->sh test_s.sh<!-- raw HTML omitted -->. This helps in three ways.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+</span><span style="color:#ae81ff"></span>-input&amp;nbsp;$IP -output&amp;nbsp;$OP</code></pre></div>
+<p>I generally save them as test_s.sh and whenever i need to run them i simply type <code>sh test_s.sh</code>. This helps in three ways.
+<ul><li> It helps me to store hadoop commands in a manageable way. </li>
+<li> It is easy to run the mapreduce code using the shell script. </li>
+<li> <em><strong>If the code fails, I do not have to manually delete the output directory</strong></em></li>
+</ul></p>
+
+<blockquote>
+<em>
+The simplification of anything is always sensational.
+<br></em>
+<small>Gilbert K. Chesterton</small>
+</blockquote>
+
 <h2 id="using-distributed-cache-to-provide-mapper-with-a-dictionary">Using Distributed Cache to provide mapper with a dictionary</h2>
-<!-- raw HTML omitted -->
+
+<p><img src="/images/Game-Of-Thrones-Wallpaper-House-Sigils-1.png"></p>
+
 <p>Often times it happens that you want that your Hadoop Mapreduce program is able to access some static file. This static file could be a dictionary, could be parameters for the program or could be anything. What distributed cache does is that it provides this file to all the mapper nodes so that you can use that file in any way across all your mappers.
 Now this concept although simple would help you to think about Mapreduce in a whole new light.
 Lets start with an example.
-Supppose you have to create a sample Mapreduce program that reads a big file containing the information about all the characters in <!-- raw HTML omitted -->Game of Thrones<!-- raw HTML omitted --> stored as <!-- raw HTML omitted --><!-- raw HTML omitted -->&rdquo;/data/characters/&ldquo;<!-- raw HTML omitted --><!-- raw HTML omitted -->:</p>
-<!-- raw HTML omitted -->
-<p>But you dont want to use the dead characters in the file for the analysis you want to do. <!-- raw HTML omitted -->You want to count the number of living characters in Game of Thrones grouped by their House<!-- raw HTML omitted -->. (I know its easy!!!!!)
+Supppose you have to create a sample Mapreduce program that reads a big file containing the information about all the characters in <a href="http://www.hbo.com/game-of-thrones">Game of Thrones</a> stored as <strong><code>&rdquo;/data/characters/&rdquo;</code></strong>:
+<div style="width: 50%; margin: 0 auto;">
+<table class="table">
+<thead>
+<tr>
+<th>Cust_ID</th>
+<th>User_Name</th>
+<th>House</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Daenerys Targaryen</td>
+<td>Targaryen</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Tyrion Lannister</td>
+<td>Lannister</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Cersei Lannister</td>
+<td>Lannister</td>
+</tr>
+<tr >
+<td>4</td>
+<td>Robert Baratheon</td>
+<td>Baratheon</td>
+</tr>
+<tr >
+<td>5</td>
+<td>Robb Stark</td>
+<td>Stark</td>
+</tr>
+</tbody>
+</table>
+</div></p>
+
+<p>But you dont want to use the dead characters in the file for the analysis you want to do. <em>You want to count the number of living characters in Game of Thrones grouped by their House</em>. (I know its easy!!!!!)
 One thing you could do is include an if statement in your Mapper Code which checks if the persons ID is 4 then exclude it from the mapper and such.
 But the problem is that you would have to do it again and again for the same analysis as characters die like flies when it comes to George RR Martin.(Also where is the fun in that)
-So you create a file which contains the Ids of all the dead characters at <!-- raw HTML omitted --><!-- raw HTML omitted -->&rdquo;/data/dead_characters.txt&quot;<!-- raw HTML omitted --><!-- raw HTML omitted -->:</p>
-<!-- raw HTML omitted -->
+So you create a file which contains the Ids of all the dead characters at <strong><code>&rdquo;/data/dead_characters.txt&rdquo;</code></strong>:</p>
+
+<div style="width: 50%; margin: 0 auto;">
+<table class="table">
+<thead>
+<tr>
+<th>Died</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4</td>
+</tr>
+<tr>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+</div>
+
 <p>Whenever you have to run the analysis you can just add to this file and you wont have to change anything in the code.
 Also sometimes this file would be long and you would not want to clutter your code with IDs and such.</p>
+
 <p>So How Would we do it.
 Let&rsquo;s go in a step by step way around this.
 We will create a shell script, a mapper script and a reducer script for this task.</p>
+
 <h2 id="1-shell-script">1) Shell Script</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e">#!/bin/bash</span>
 <span style="color:#75715e">#Defining program variables</span>
@@ -218,9 +293,11 @@ hadoop jar<span style="color:#f92672">&amp;</span>nbsp;<span style="color:#96005
 <span style="color:#f92672">-</span>file<span style="color:#f92672">&amp;</span>nbsp;<span style="color:#960050;background-color:#1e0010">$</span>MAPPER <span style="color:#f92672">-</span>mapper <span style="color:#e6db74">&#34;python got_living_m.py&#34;</span> \
 <span style="color:#f92672">-</span>file<span style="color:#f92672">&amp;</span>nbsp;<span style="color:#960050;background-color:#1e0010">$</span>REDUCER <span style="color:#f92672">-</span>reducer <span style="color:#e6db74">&#34;python got_living_r.py&#34;</span> \
 <span style="color:#f92672">-</span>cacheFile<span style="color:#f92672">&amp;</span>nbsp;<span style="color:#960050;background-color:#1e0010">$</span>DC<span style="color:#75715e">#ref \</span>
-<span style="color:#f92672">-</span>input<span style="color:#f92672">&amp;</span>nbsp;<span style="color:#960050;background-color:#1e0010">$</span>IP <span style="color:#f92672">-</span>output<span style="color:#f92672">&amp;</span>nbsp;<span style="color:#960050;background-color:#1e0010">$</span>OP
-</code></pre></div><p>Note how we use the <!-- raw HTML omitted -->&rdquo;-cacheFile&quot;<!-- raw HTML omitted --> option here. We have specified that we will refer to the file that has been provided in the Distributed cache as <!-- raw HTML omitted -->#ref<!-- raw HTML omitted -->.</p>
+<span style="color:#f92672">-</span>input<span style="color:#f92672">&amp;</span>nbsp;<span style="color:#960050;background-color:#1e0010">$</span>IP <span style="color:#f92672">-</span>output<span style="color:#f92672">&amp;</span>nbsp;<span style="color:#960050;background-color:#1e0010">$</span>OP</code></pre></div>
+<p>Note how we use the <code>&rdquo;-cacheFile&rdquo;</code> option here. We have specified that we will refer to the file that has been provided in the Distributed cache as <code>#ref</code>.</p>
+
 <p>Next is our Mapper Script.</p>
+
 <h2 id="2-mapper-script">2) Mapper Script</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> sys
 dead_ids <span style="color:#f92672">=</span> set()
@@ -237,8 +314,9 @@ read_cache()
 	id <span style="color:#f92672">=</span> rec[<span style="color:#ae81ff">0</span>]
     house <span style="color:#f92672">=</span> rec[<span style="color:#ae81ff">2</span>]
     <span style="color:#66d9ef">if</span> id <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> dead_ids:
-    	<span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (house,<span style="color:#ae81ff">1</span>)
-</code></pre></div><p>And our Reducer Script.</p>
+    	<span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span> (house,<span style="color:#ae81ff">1</span>)</code></pre></div>
+<p>And our Reducer Script.</p>
+
 <h2 id="3-reducer-script">3) Reducer Script</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> sys
 current_key <span style="color:#f92672">=</span> None
@@ -260,19 +338,35 @@ count <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
 		count <span style="color:#f92672">=</span> value
 
 <span style="color:#66d9ef">if</span> current_key <span style="color:#f92672">==</span> key:
-    <span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">:</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span>(key,str(count))	
-</code></pre></div><p>This was a simple program and the output will be just what you expected and not very exciting. <!-- raw HTML omitted --><!-- raw HTML omitted -->But the Technique itself solves a variety of common problems. You can use it to pass any big dictionary to your Mapreduce Program<!-- raw HTML omitted --><!-- raw HTML omitted -->. Atleast thats what I use this feature mostly for.
+    <span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">:</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">%</span>(key,str(count))	</code></pre></div>
+<p>This was a simple program and the output will be just what you expected and not very exciting. <em><strong>But the Technique itself solves a variety of common problems. You can use it to pass any big dictionary to your Mapreduce Program</strong></em>. Atleast thats what I use this feature mostly for.
 Hope You liked it. Will try to expand this post with more tricks.</p>
-<p>The codes for this post are posted at github <!-- raw HTML omitted -->here<!-- raw HTML omitted -->.</p>
-<p>Other Great Learning Resources For Hadoop:</p>
-<!-- raw HTML omitted -->
+
+<p>The codes for this post are posted at github <a href="https://github.com/MLWhiz/Hadoop-Mapreduce-Tricks">here</a>.</p>
+
+<p>Other Great Learning Resources For Hadoop:
+<ul>
+<li>
+<a href="http://www.google.co.in/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0CB0QFjAA&url=http%3A%2F%2Fwww.michael-noll.com%2Ftutorials%2Fwriting-an-hadoop-mapreduce-program-in-python%2F&ei=8RRVVdP2IMe0uQShsYDYBg&usg=AFQjCNH3DqrlSIG8D-K8jgQWTALic1no5A&sig2=BivwTW6mdJs5c9w9VaSK2Q&bvm=bv.93112503,d.c2E">Michael Noll&rsquo;s Hadoop Mapreduce Tutorial</a>
+</li>
+<li>
+<a href="http://www.google.co.in/url?sa=t&rct=j&q=&esrc=s&source=web&cd=2&cad=rja&uact=8&ved=0CCMQFjAB&url=http%3A%2F%2Fhadoop.apache.org%2Fdocs%2Fr1.2.1%2Fstreaming.html&ei=8RRVVdP2IMe0uQShsYDYBg&usg=AFQjCNEIB4jmqcBs-GepHdn7DRxqTI9zXA&sig2=nYkAnDjjjaum5YVlYuMUJQ&bvm=bv.93112503,d.c2E">Apache&rsquo;s Hadoop Streaming Documentation</a>
+</li>
+</ul></p>
+
 <p>Also I like these books a lot. Must have for a Hadooper&hellip;.</p>
-<!-- raw HTML omitted -->
-<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
-<p><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+
+<div style="margin-left:1em ; text-align: center;">
+<a target="_blank"  href="https://www.amazon.com/gp/product/1785887211/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1785887211&linkCode=as2&tag=mlwhizcon-20&linkId=a0e7b4f0b2ea4a5146042890e1c04f7e"><img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&MarketPlace=US&ASIN=1785887211&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=_SL250_&tag=mlwhizcon-20" ></a><img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&l=am2&o=1&a=1785887211" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+
+</t></t>
+
+<a target="_blank"  href="https://www.amazon.com/gp/product/1491901632/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1491901632&linkCode=as2&tag=mlwhizcon-20&linkId=4122280e94f7bbd0ceebc9d13e60d103"><img border="0" src="//ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&MarketPlace=US&ASIN=1491901632&ServiceVersion=20070822&ID=AsinImage&WS=1&Format=_SL250_&tag=mlwhizcon-20" ></a><img src="//ir-na.amazon-adsystem.com/e/ir?t=mlwhizcon-20&l=am2&o=1&a=1491901632" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+</div>
+
+<p>The first book is a guide for using Hadoop as well as spark with Python. While the second one contains a detailed overview of all the things in Hadoop. Its the definitive guide.</p>
+
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script>
 
 		</div>
 		
@@ -411,7 +505,7 @@ Hope You liked it. Will try to expand this post with more tricks.</p>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
 		</ul>
 	</div>
 </div>

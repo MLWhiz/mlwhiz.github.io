@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.72.0" />
+	<meta name="generator" content="Hugo 0.53" />
 	<meta property="og:title" content="A simple introduction to Linked Lists for Data Scientists" />
 <meta property="og:description" content="This post is about fast-tracking this study and explaining linked list concepts for the data scientists in an easy to understand way" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2020/01/28/ll/" />
 <meta property="og:image" content="https://mlwhiz.com/images/ll/main.png" />
-<meta property="article:published_time" content="2020-01-28T00:00:00+00:00" />
-<meta property="article:modified_time" content="2020-01-28T00:00:00+00:00" />
+<meta property="article:published_time" content="2020-01-28T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-01-28T00:00:00&#43;00:00"/>
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/ll/main.png"/>
@@ -169,64 +169,99 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			<p><img src="/images/ll/main.png" alt=""></p>
+			
+
+<p><img src="/images/ll/main.png" alt="" /></p>
+
 <p>Algorithms and data structures are an integral part of data science. While most of us data scientists don’t take a proper algorithms course while studying, they are important all the same.</p>
+
 <p>Many companies ask data structures and algorithms as part of their interview process for hiring data scientists.</p>
-<p>Now the question that many people ask here is what is the use of asking a data scientist such questions. <em><strong>The way I like to describe it is that a data structure question may be thought of as a coding aptitude test.</strong></em></p>
+
+<p>Now the question that many people ask here is what is the use of asking a data scientist such questions. <strong><em>The way I like to describe it is that a data structure question may be thought of as a coding aptitude test.</em></strong></p>
+
 <p><em>We all have given aptitude tests at various stages of our life, and while they are not a perfect proxy to judge someone, almost nothing ever really is.</em> So, why not a standard algorithm test to judge people’s coding ability.</p>
+
 <p>But let’s not kid ourselves, they will require the same zeal to crack as your Data Science interviews, and thus, you might want to give some time for the study of algorithms and Data structure questions.</p>
-<p><em><strong>This post is about fast-tracking this study and explaining linked list concepts for the data scientists in an easy to understand way.</strong></em></p>
-<hr>
+
+<p><strong><em>This post is about fast-tracking this study and explaining linked list concepts for the data scientists in an easy to understand way.</em></strong></p>
+
+<hr />
+
 <h2 id="what-are-linked-lists">What are Linked Lists?</h2>
+
 <p>The linked list is just a very simple data structure that represents a sequence of nodes.</p>
-<p><img src="/images/ll/0.png" alt=""></p>
+
+<p><img src="/images/ll/0.png" alt="" /></p>
+
 <p>Each node is just an object that contains a value and a pointer to the next node. For example, In the example here we have a node that contains the data 12 and points to the next node 99. Then 99 points to node 37 and so on until we encounter a NULL Node.</p>
-<p><img src="/images/ll/1.png" alt=""></p>
+
+<p><img src="/images/ll/1.png" alt="" /></p>
+
 <p>There are also doubly linked lists in which each node contains the address of the next as well as the previous node.</p>
+
 <h2 id="but-why-would-we-ever-need-linked-lists">But why would we ever need Linked Lists?</h2>
-<p><img src="/images/ll/2.png" alt=""></p>
-<p>We all have worked with Lists in Python.<em><strong>But have you ever thought of the insertion time for the list data structure?</strong></em></p>
+
+<p><img src="/images/ll/2.png" alt="" /></p>
+
+<p>We all have worked with Lists in Python.<strong><em>But have you ever thought of the insertion time for the list data structure?</em></strong></p>
+
 <p>Lets say we need to insert an element at the start of a list. Inserting or removing elements at the start in a python list requires an <em>O(n)</em> copy operation.</p>
-<p><em><strong>What if we are faced with the problem in which there are a lot of such inserts and we need a data structure that actually does inserts in constant O(1) time?</strong></em></p>
-<p>There are many practical applications of a linked list that you can think about. <em><strong>One can use a doubly-linked list to implement a system where only the location of previous and next nodes are needed.</strong></em> For example, the previous page and next page functionality in the chrome browser. Or the previous and next photo in a photo editor.</p>
-<p><em><strong>Another benefit of using a linked list is that we don’t need to have contiguous space requirements for a linked list i.e. the nodes can reside anywhere in the memory while for a data structure like an array the nodes need to be allocated a sequence of memory.</strong></em></p>
-<hr>
+
+<p><strong><em>What if we are faced with the problem in which there are a lot of such inserts and we need a data structure that actually does inserts in constant O(1) time?</em></strong></p>
+
+<p>There are many practical applications of a linked list that you can think about. <strong><em>One can use a doubly-linked list to implement a system where only the location of previous and next nodes are needed.</em></strong> For example, the previous page and next page functionality in the chrome browser. Or the previous and next photo in a photo editor.</p>
+
+<p><strong><em>Another benefit of using a linked list is that we don’t need to have contiguous space requirements for a linked list i.e. the nodes can reside anywhere in the memory while for a data structure like an array the nodes need to be allocated a sequence of memory.</em></strong></p>
+
+<hr />
+
 <h2 id="how-do-we-create-a-linked-list-in-python">How do we create a Linked list in Python?</h2>
+
 <p>We first start by defining a class that can be used to create a single node.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Node</span>:
     <span style="color:#66d9ef">def</span> __init__(self,val):
         self<span style="color:#f92672">.</span>val <span style="color:#f92672">=</span> val
-        self<span style="color:#f92672">.</span>next <span style="color:#f92672">=</span> None
-</code></pre></div><p>We then use this class object to create multiple nodes and stitch them together to form a linked list.</p>
+        self<span style="color:#f92672">.</span>next <span style="color:#f92672">=</span> None</code></pre></div>
+<p>We then use this class object to create multiple nodes and stitch them together to form a linked list.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">head <span style="color:#f92672">=</span> Node(<span style="color:#ae81ff">12</span>)
 a <span style="color:#f92672">=</span> Node(<span style="color:#ae81ff">99</span>)
 b <span style="color:#f92672">=</span> Node(<span style="color:#ae81ff">37</span>)
 
 head<span style="color:#f92672">.</span>next <span style="color:#f92672">=</span> a
-a<span style="color:#f92672">.</span>next <span style="color:#f92672">=</span> b
-</code></pre></div><p>And we have our linked list, starting at head. In most cases, we only keep the variable head to define our linked list as it contains all the information we require to access the whole list.</p>
-<hr>
+a<span style="color:#f92672">.</span>next <span style="color:#f92672">=</span> b</code></pre></div>
+<p>And we have our linked list, starting at head. In most cases, we only keep the variable head to define our linked list as it contains all the information we require to access the whole list.</p>
+
+<hr />
+
 <h2 id="common-operations-or-interview-questions-with-the-linked-lists">Common Operations or Interview Questions with the Linked Lists</h2>
+
 <h3 id="1-insert-a-new-node">1. Insert a new Node</h3>
+
 <p>In the start, we said that we can insert an element at the start of the linked list in a constant O(1) time. Let’s see how we can do that.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">insert</span>(head,val):
     new_head <span style="color:#f92672">=</span> Node(val)
     new_head<span style="color:#f92672">.</span>next <span style="color:#f92672">=</span> head
-    <span style="color:#66d9ef">return</span> new_head
-</code></pre></div><p>So given the head of the node, we just create a new_head object and set its pointer to the previous head of the linked list. We just create a new node and just update a pointer.</p>
-<h3 id="2-printtraverse-the-linked-list">2. Print/Traverse the linked list</h3>
+    <span style="color:#66d9ef">return</span> new_head</code></pre></div>
+<p>So given the head of the node, we just create a new_head object and set its pointer to the previous head of the linked list. We just create a new node and just update a pointer.</p>
+
+<h3 id="2-print-traverse-the-linked-list">2. Print/Traverse the linked list</h3>
+
 <p>Printing the elements of a linked list is pretty simple. We just go through the linked list in an iterative fashion till we encounter the None node(or the end).</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">print</span>(head):
     <span style="color:#66d9ef">while</span> head:
         <span style="color:#66d9ef">print</span>(head<span style="color:#f92672">.</span>val)
-        head <span style="color:#f92672">=</span> head<span style="color:#f92672">.</span>next
-</code></pre></div><h3 id="3-reverse-a-singly-linked-list">3. Reverse a singly linked list</h3>
-<p>This is more of a very common interview <a href="https://leetcode.com/problems/reverse-linked-list">question</a> on linked lists. If you are given a linked list, can you reverse that linked list in O(n) time?</p>
+        head <span style="color:#f92672">=</span> head<span style="color:#f92672">.</span>next</code></pre></div>
+<h3 id="3-reverse-a-singly-linked-list">3. Reverse a singly linked list</h3>
+
+<p>This is more of a very common interview <a href="https://leetcode.com/problems/reverse-linked-list" rel="nofollow" target="_blank">question</a> on linked lists. If you are given a linked list, can you reverse that linked list in O(n) time?</p>
+
 <pre><code>For Example:
 Input: 1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;NULL
 Output: 5-&gt;4-&gt;3-&gt;2-&gt;1-&gt;NULL
 </code></pre>
-<p><em><strong>So how do we deal with this?</strong></em></p>
+
+<p><strong><em>So how do we deal with this?</em></strong></p>
+
 <p>We start by iterating through the linked list and reversing the pointer direction while moving the head to the next node until there is a next node.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">reverseList</span>(head):
     newhead <span style="color:#f92672">=</span> None
@@ -235,18 +270,29 @@ Output: 5-&gt;4-&gt;3-&gt;2-&gt;1-&gt;NULL
         head<span style="color:#f92672">.</span>next <span style="color:#f92672">=</span> newhead
         newhead <span style="color:#f92672">=</span> head
         head <span style="color:#f92672">=</span> tmp
-    <span style="color:#66d9ef">return</span> newhead
-</code></pre></div><hr>
+    <span style="color:#66d9ef">return</span> newhead</code></pre></div>
+<hr />
+
 <h2 id="conclusion">Conclusion</h2>
-<p><em><strong>In this post, I talked about Linked List and its implementation.</strong></em></p>
+
+<p><strong><em>In this post, I talked about Linked List and its implementation.</em></strong></p>
+
 <p>Linked lists form the basis of some of the most asked questions in Data Science interviews, and a good understanding of these might help you land your dream job.</p>
+
 <p>And while you can go a fair bit in data science without learning them, you can learn them just for a little bit of fun and maybe to improve your programming skills.</p>
-<p>Here is a small <a href="https://www.kaggle.com/mlwhiz/linked-list-code-sample">notebook</a> for you where I have put all these small concepts.</p>
-<p>I will leave you with solving this problem by yourself — <em><strong>Implement a function to check if a linked list is a palindrome.</strong></em></p>
-<p>Also take a look at my other posts in the <a href="https://towardsdatascience.com/tagged/algorithms-interview">series</a>, if you want to learn about algorithms and Data structures.</p>
+
+<p>Here is a small <a href="https://www.kaggle.com/mlwhiz/linked-list-code-sample" rel="nofollow" target="_blank">notebook</a> for you where I have put all these small concepts.</p>
+
+<p>I will leave you with solving this problem by yourself — <strong><em>Implement a function to check if a linked list is a palindrome.</em></strong></p>
+
+<p>Also take a look at my other posts in the <a href="https://towardsdatascience.com/tagged/algorithms-interview" rel="nofollow" target="_blank">series</a>, if you want to learn about algorithms and Data structures.</p>
+
 <h2 id="continue-learning">Continue Learning</h2>
-<p>If you want to read up more on Algorithms and Data structures, here is an <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdata-structures-algorithms"><strong>Algorithm Specialization on Coursera by UCSanDiego</strong></a>, which I highly recommend.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------">@mlwhiz</a>.</p>
+
+<p>If you want to read up more on Algorithms and Data structures, here is an <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdata-structures-algorithms" rel="nofollow" target="_blank"><strong>Algorithm Specialization on Coursera by UCSanDiego</strong></a>, which I highly recommend.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 		</div>
@@ -385,7 +431,7 @@ Output: 5-&gt;4-&gt;3-&gt;2-&gt;1-&gt;NULL
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
 		</ul>
 	</div>
 </div>

@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.72.0" />
+	<meta name="generator" content="Hugo 0.53" />
 	<meta property="og:title" content="Python Pro Tip: Start using Python defaultdict and Counter in place of dictionary" />
 <meta property="og:description" content="This post is a part of my series on Python Shorts. Some tips on how to use python. In this post I talk about defaultdict and Counter in Python and how they should be used in place of a dictionary whenever required." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2019/04/22/python_defaultdict/" />
 <meta property="og:image" content="https://mlwhiz.com/images/python1/likeaboss.jpeg" />
-<meta property="article:published_time" content="2019-04-22T00:00:00+00:00" />
-<meta property="article:modified_time" content="2019-04-22T00:00:00+00:00" />
+<meta property="article:published_time" content="2019-04-22T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-04-22T00:00:00&#43;00:00"/>
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/python1/likeaboss.jpeg"/>
@@ -169,42 +169,53 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			<!-- raw HTML omitted -->
-<p><em><strong>Learning a language is easy.</strong></em> Whenever I start with a new language, I focus on a few things in below order, and it is a breeze to get started with writing code in any language.</p>
+			
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/python1/likeaboss.jpeg" style="height:80%;width:80%"></center>
+</div>
+
+<p><strong><em>Learning a language is easy.</em></strong> Whenever I start with a new language, I focus on a few things in below order, and it is a breeze to get started with writing code in any language.</p>
+
 <ul>
-<li>
-<p>Operators and Data Types: +,-,int,float,str</p>
-</li>
-<li>
-<p>Conditional statements: if,else,case,switch</p>
-</li>
-<li>
-<p>Loops: For, while</p>
-</li>
-<li>
-<p>Data structures: List, Array, Dict, Hashmaps</p>
-</li>
-<li>
-<p>Define Function</p>
-</li>
+<li><p>Operators and Data Types: +,-,int,float,str</p></li>
+
+<li><p>Conditional statements: if,else,case,switch</p></li>
+
+<li><p>Loops: For, while</p></li>
+
+<li><p>Data structures: List, Array, Dict, Hashmaps</p></li>
+
+<li><p>Define Function</p></li>
 </ul>
-<p><em><strong>However, learning to write a language and writing a language in an optimized way are two different things.</strong></em></p>
+
+<p><strong><em>However, learning to write a language and writing a language in an optimized way are two different things.</em></strong></p>
+
 <p>Every Language has some ingredients which make it unique.</p>
-<p>Yet, <em><strong>a new programmer to any language will always do some forced overfitting.</strong></em> A Java programmer, new to python, for example, might write this code to add numbers in a list.</p>
+
+<p>Yet, <strong><em>a new programmer to any language will always do some forced overfitting.</em></strong> A Java programmer, new to python, for example, might write this code to add numbers in a list.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">x<span style="color:#f92672">=</span>[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>]
 
 sum_x <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
 <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(x)):
-    sum_x<span style="color:#f92672">+=</span>x[i]
-</code></pre></div><p>While a python programmer will naturally do this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">sum_x <span style="color:#f92672">=</span> sum(x)
-</code></pre></div><p>In this series of posts named <strong>‘Python Shorts’</strong>, I will explain some simple constructs that Python provides, some essential tips and some use cases I come up with regularly in my Data Science work.</p>
-<p><em><strong>This series is about efficient and readable code.</strong></em></p>
-<h2 id="counter-and-defaultdict--use-cases">Counter and defaultdict — Use Cases</h2>
-<!-- raw HTML omitted -->
+    sum_x<span style="color:#f92672">+=</span>x[i]</code></pre></div>
+<p>While a python programmer will naturally do this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">sum_x <span style="color:#f92672">=</span> sum(x)</code></pre></div>
+<p>In this series of posts named <strong>‘Python Shorts’</strong>, I will explain some simple constructs that Python provides, some essential tips and some use cases I come up with regularly in my Data Science work.</p>
+
+<p><strong><em>This series is about efficient and readable code.</em></strong></p>
+
+<h2 id="counter-and-defaultdict-use-cases">Counter and defaultdict — Use Cases</h2>
+
+<div style="margin-top: 9px; margin-bottom: 10px;">
+<center><img src="/images/python1/hamlet_img.jpg" style="height:80%;width:80%"></center>
+</div>
+
 <p><strong>Let’s say I need to count the number of word occurrences in a piece of text.</strong>  Maybe for a book like Hamlet. How could I do that?</p>
+
 <p>Python always provides us with multiple ways to do the same thing. But only one way that I find elegant.</p>
-<p>This is a <em><strong>Naive Python implementation</strong></em> using the dict object.</p>
+
+<p>This is a <strong><em>Naive Python implementation</em></strong> using the dict object.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">text <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;I need to count the number of word occurrences in a piece of text. How could I do that? Python provides us with multiple ways to do the same thing. But only one way I find beautiful.&#34;</span>
 
 word_count_dict <span style="color:#f92672">=</span> {}
@@ -212,22 +223,22 @@ word_count_dict <span style="color:#f92672">=</span> {}
     <span style="color:#66d9ef">if</span> w <span style="color:#f92672">in</span> word_count_dict:
         word_count_dict[w]<span style="color:#f92672">+=</span><span style="color:#ae81ff">1</span>
     <span style="color:#66d9ef">else</span>:
-        word_count_dict[w]<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
-</code></pre></div><p>We could use <em><strong>defaultdict</strong></em> to reduce the number of lines in the code.</p>
+        word_count_dict[w]<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span></code></pre></div>
+<p>We could use <strong><em>defaultdict</em></strong> to reduce the number of lines in the code.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> Collections <span style="color:#f92672">import</span> defaultdict
 word_count_dict <span style="color:#f92672">=</span> defaultdict(int)
 <span style="color:#66d9ef">for</span> w <span style="color:#f92672">in</span> text<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34; &#34;</span>):
-    word_count_dict[w]<span style="color:#f92672">+=</span><span style="color:#ae81ff">1</span>
-</code></pre></div><p>We could also have used <em><strong>Counter</strong></em> to do this.</p>
+    word_count_dict[w]<span style="color:#f92672">+=</span><span style="color:#ae81ff">1</span></code></pre></div>
+<p>We could also have used <strong><em>Counter</em></strong> to do this.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> Collections <span style="color:#f92672">import</span> Counter
 word_count_dict <span style="color:#f92672">=</span> Counter()
 <span style="color:#66d9ef">for</span> w <span style="color:#f92672">in</span> text<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34; &#34;</span>):
-    word_count_dict[w]<span style="color:#f92672">+=</span><span style="color:#ae81ff">1</span>
-</code></pre></div><p>If we use Counter, we can also get the most common words using a simple function.</p>
+    word_count_dict[w]<span style="color:#f92672">+=</span><span style="color:#ae81ff">1</span></code></pre></div>
+<p>If we use Counter, we can also get the most common words using a simple function.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">word_count_dict<span style="color:#f92672">.</span>most_common(<span style="color:#ae81ff">10</span>)
 <span style="color:#f92672">---------------------------------------------------------------</span>
-[(<span style="color:#e6db74">&#39;I&#39;</span>, <span style="color:#ae81ff">3</span>), (<span style="color:#e6db74">&#39;to&#39;</span>, <span style="color:#ae81ff">2</span>), (<span style="color:#e6db74">&#39;the&#39;</span>, <span style="color:#ae81ff">2</span>)]
-</code></pre></div><p>Other use cases of Counter:</p>
+[(<span style="color:#e6db74">&#39;I&#39;</span>, <span style="color:#ae81ff">3</span>), (<span style="color:#e6db74">&#39;to&#39;</span>, <span style="color:#ae81ff">2</span>), (<span style="color:#e6db74">&#39;the&#39;</span>, <span style="color:#ae81ff">2</span>)]</code></pre></div>
+<p>Other use cases of Counter:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Count Characters</span>
 Counter(<span style="color:#e6db74">&#39;abccccccddddd&#39;</span>)
 <span style="color:#f92672">---------------------------------------------------------------</span>
@@ -236,10 +247,13 @@ Counter({<span style="color:#e6db74">&#39;a&#39;</span>: <span style="color:#ae8
 <span style="color:#75715e"># Count List elements</span>
 Counter([<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>])
 <span style="color:#f92672">---------------------------------------------------------------</span>
-Counter({<span style="color:#ae81ff">1</span>: <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>: <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>: <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">4</span>: <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">5</span>: <span style="color:#ae81ff">1</span>})
-</code></pre></div><h2 id="so-why-ever-use-defaultdict-">So, why ever use defaultdict ?</h2>
+Counter({<span style="color:#ae81ff">1</span>: <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>: <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>: <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">4</span>: <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">5</span>: <span style="color:#ae81ff">1</span>})</code></pre></div>
+<h2 id="so-why-ever-use-defaultdict">So, why ever use defaultdict ?</h2>
+
 <p>Notice that in Counter, the value is always an integer.</p>
+
 <p>What if we wanted to parse through a list of tuples and wanted to create a dictionary of key and list of values.</p>
+
 <p>The main functionality provided by a defaultdict is that it defaults a key to empty/zero if it is not found in the defaultdict.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">s <span style="color:#f92672">=</span> [(<span style="color:#e6db74">&#39;color&#39;</span>, <span style="color:#e6db74">&#39;blue&#39;</span>), (<span style="color:#e6db74">&#39;color&#39;</span>, <span style="color:#e6db74">&#39;orange&#39;</span>), (<span style="color:#e6db74">&#39;color&#39;</span>, <span style="color:#e6db74">&#39;yellow&#39;</span>), (<span style="color:#e6db74">&#39;fruit&#39;</span>, <span style="color:#e6db74">&#39;banana&#39;</span>), (<span style="color:#e6db74">&#39;fruit&#39;</span>, <span style="color:#e6db74">&#39;orange&#39;</span>),(<span style="color:#e6db74">&#39;fruit&#39;</span>,<span style="color:#e6db74">&#39;banana&#39;</span>)]
 
@@ -250,8 +264,8 @@ d <span style="color:#f92672">=</span> defaultdict(list)
 
 <span style="color:#66d9ef">print</span>(d)
 <span style="color:#f92672">---------------------------------------------------------------</span>
-defaultdict(<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">list</span><span style="color:#e6db74">&#39;&gt;, {&#39;</span>color<span style="color:#e6db74">&#39;: [&#39;</span>blue<span style="color:#e6db74">&#39;, &#39;</span>orange<span style="color:#e6db74">&#39;, &#39;</span>yellow<span style="color:#e6db74">&#39;], &#39;</span>fruit<span style="color:#e6db74">&#39;: [&#39;</span>banana<span style="color:#e6db74">&#39;, &#39;</span>orange<span style="color:#e6db74">&#39;, &#39;</span>banana<span style="color:#e6db74">&#39;]})</span>
-</code></pre></div><p>banana comes two times in fruit, we could use set</p>
+defaultdict(<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">list</span><span style="color:#e6db74">&#39;&gt;, {&#39;</span>color<span style="color:#e6db74">&#39;: [&#39;</span>blue<span style="color:#e6db74">&#39;, &#39;</span>orange<span style="color:#e6db74">&#39;, &#39;</span>yellow<span style="color:#e6db74">&#39;], &#39;</span>fruit<span style="color:#e6db74">&#39;: [&#39;</span>banana<span style="color:#e6db74">&#39;, &#39;</span>orange<span style="color:#e6db74">&#39;, &#39;</span>banana<span style="color:#e6db74">&#39;]})</span></code></pre></div>
+<p>banana comes two times in fruit, we could use set</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">d <span style="color:#f92672">=</span> defaultdict(set)
 
 <span style="color:#66d9ef">for</span> k, v <span style="color:#f92672">in</span> s:
@@ -259,15 +273,20 @@ defaultdict(<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">c
 
 <span style="color:#66d9ef">print</span>(d)
 <span style="color:#f92672">---------------------------------------------------------------</span>
-defaultdict(<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">set</span><span style="color:#e6db74">&#39;&gt;, {&#39;</span>color<span style="color:#e6db74">&#39;: {&#39;</span>yellow<span style="color:#e6db74">&#39;, &#39;</span>blue<span style="color:#e6db74">&#39;, &#39;</span>orange<span style="color:#e6db74">&#39;}, &#39;</span>fruit<span style="color:#e6db74">&#39;: {&#39;</span>banana<span style="color:#e6db74">&#39;, &#39;</span>orange<span style="color:#e6db74">&#39;}})</span>
-</code></pre></div><hr>
+defaultdict(<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#960050;background-color:#1e0010">&#39;</span><span style="color:#a6e22e">set</span><span style="color:#e6db74">&#39;&gt;, {&#39;</span>color<span style="color:#e6db74">&#39;: {&#39;</span>yellow<span style="color:#e6db74">&#39;, &#39;</span>blue<span style="color:#e6db74">&#39;, &#39;</span>orange<span style="color:#e6db74">&#39;}, &#39;</span>fruit<span style="color:#e6db74">&#39;: {&#39;</span>banana<span style="color:#e6db74">&#39;, &#39;</span>orange<span style="color:#e6db74">&#39;}})</span></code></pre></div>
+<hr />
+
 <h2 id="conclusion">Conclusion</h2>
-<p>To conclude, I will say that <em><strong>there is always a beautiful way to do anything in Python</strong></em>. Search for it before you write code. Going to StackOverflow is okay. I go there a lot of times when I get stuck. Always Remember:</p>
+
+<p>To conclude, I will say that <strong><em>there is always a beautiful way to do anything in Python</em></strong>. Search for it before you write code. Going to StackOverflow is okay. I go there a lot of times when I get stuck. Always Remember:</p>
+
 <blockquote>
 <p>Creating a function for what already is provided is not pythonic.</p>
 </blockquote>
-<p>Also if you want to learn more about Python 3, I would like to call out an excellent course on Learn <a href="https://bit.ly/2XshreA">Intermediate level Python</a> from the University of Michigan. Do check it out.</p>
-<p>If you liked this post <strong>do share</strong>. It will help increase coverage for this post. I am going to be writing more beginner friendly posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.com/"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz">@mlwhiz</a>.</p>
+
+<p>Also if you want to learn more about Python 3, I would like to call out an excellent course on Learn <a href="https://bit.ly/2XshreA" rel="nofollow" target="_blank">Intermediate level Python</a> from the University of Michigan. Do check it out.</p>
+
+<p>If you liked this post <strong>do share</strong>. It will help increase coverage for this post. I am going to be writing more beginner friendly posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.com/" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
 
 		</div>
 		
@@ -404,7 +423,7 @@ defaultdict(<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">c
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
 		</ul>
 	</div>
 </div>
