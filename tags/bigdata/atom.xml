@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1" xmlns:content="http://purl.org/rss/1.0/modules/content" xmlns:media="http://search.yahoo.com/mrss/" >
 
   
   <channel>
-    <title>Bigdata on MLWhiz</title>
+    <title>BigData on MLWhiz</title>
     <link>https://mlwhiz.com/tags/bigdata/</link>
-    <description>Recent content in Bigdata on MLWhiz</description>
+    <description>Recent content in BigData on MLWhiz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 07 Jul 2019 00:00:00 +0000</lastBuildDate>
@@ -37,7 +36,7 @@ Now most of the Spark documentation, while good, did not explain it from the per
 
       <content:encoded>  
         
-        <![CDATA[    Big Data has become synonymous with Data engineering.
+        <![CDATA[ Big Data has become synonymous with Data engineering.
 But the line between Data Engineering and Data scientists is blurring day by day.
 At this point in time, I think that Big Data must be in the repertoire of all data scientists.
 Reason: Too much data is getting generated day by day
@@ -46,50 +45,50 @@ Now most of the Spark documentation, while good, did not explain it from the per
 So I thought of giving it a shot.
 This post is going to be about — “How to make Spark work?”
 This post is going to be quite long. Actually my longest post on medium, so go pick up a Coffee.
-How it all started?-MapReduce   Suppose you are tasked with cutting all the trees in the forest. Perhaps not a good business with all the global warming, but here it serves our purpose and we are talking hypothetically, so I will continue. You have two options:
- Get Batista with an electric powered chainsaw to do your work and make him cut each tree one by one.
- Get 500 normal guys with normal axes and make them work on different trees.
+How it all started?-MapReduce Suppose you are tasked with cutting all the trees in the forest. Perhaps not a good business with all the global warming, but here it serves our purpose and we are talking hypothetically, so I will continue. You have two options:
+  Get Batista with an electric powered chainsaw to do your work and make him cut each tree one by one.
+  Get 500 normal guys with normal axes and make them work on different trees.
   Which would you prefer?
 Although Option 1 is still the way some people would go, the need for option 2 led to the emergence of MapReduce.
 In Bigdata speak, we call the Batista solution as scaling vertically/scaling-upas in we add/stuff a lot of RAM and hard disk in a single worker.
 And the second solution is called scaling horizontally/scaling-sideways. As in you connect a lot of ordinary machines(with less RAM) together and use them in parallel.
 Now, vertical scaling has certain benefits over Horizontal scaling:
- It is fast if the size of the problem is small: Think 2 trees. Batista would be through with both of them with his awesome chainsaw while our two guys would be still hacking with their axes.
- It is easy to understand. This is how we have always done things. We normally think about things in a sequential pattern and that is how our whole computer architecture and design has evolved.
+  It is fast if the size of the problem is small: Think 2 trees. Batista would be through with both of them with his awesome chainsaw while our two guys would be still hacking with their axes.
+  It is easy to understand. This is how we have always done things. We normally think about things in a sequential pattern and that is how our whole computer architecture and design has evolved.
   But, Horizontal Scaling is
- Less Expensive: Getting 50 normal guys itself is much cheaper than getting a single guy like Batista. Apart from that Batista needs a lot of care and maintenance to keep him cool and he is very sensitive to even small things just like machines with a high amount of RAM.
- Faster when the size of the problem is big: Now imagine 1000 trees and 1000 workers vs a single Batista. With Horizontal Scaling, if we face a very large problem we will just hire 100 or maybe 1000 more cheap workers. It doesn’t work like that with Batista. You have to increase RAM and that means more cooling infrastructure and more maintenance costs.
-    MapReduce is what makes the second option possible by letting us use a cluster of computers for parallelization.
+  Less Expensive: Getting 50 normal guys itself is much cheaper than getting a single guy like Batista. Apart from that Batista needs a lot of care and maintenance to keep him cool and he is very sensitive to even small things just like machines with a high amount of RAM.
+  Faster when the size of the problem is big: Now imagine 1000 trees and 1000 workers vs a single Batista. With Horizontal Scaling, if we face a very large problem we will just hire 100 or maybe 1000 more cheap workers. It doesn’t work like that with Batista. You have to increase RAM and that means more cooling infrastructure and more maintenance costs.
+  MapReduce is what makes the second option possible by letting us use a cluster of computers for parallelization.
 Now, MapReduce looks like a fairly technical term. But let us break it a little. MapReduce is made up of two terms:
 Map: It is basically the apply/map function. We split our data into n chunks and send each chunk to a different worker(Mapper). If there is any function we would like to apply over the rows of Data our worker does that.
 Reduce: Aggregate the data using some function based on a groupby key. It is basically a groupby.
 Of course, there is a lot going in the background to make the system work as intended.
 Don’t worry, if you don’t understand it yet. Just keep reading. Maybe you will understand it when we use MapReduce ourselves in the examples I am going to provide.
-Why Spark?   Hadoop was the first open source system that introduced us to the MapReduce paradigm of programming and Spark is the system that made it faster, much much faster(100x).
+ Why Spark? Hadoop was the first open source system that introduced us to the MapReduce paradigm of programming and Spark is the system that made it faster, much much faster(100x).
 There used to be a lot of data movement in Hadoop as it used to write intermediate results to the file system.
 This affected the speed at which you could do analysis.
 Spark provided us with an in-memory model, so Spark doesn’t write too much to the disk while working.
 Simply, Spark is faster than Hadoop and a lot of people use Spark now.
 So without further ado let us get started.
-Getting Started with Spark Installing Spark is actually a headache of its own.
+ Getting Started with Spark Installing Spark is actually a headache of its own.
 Since we want to understand how it works and really work with it, I would suggest that you use Sparks on Databricks here online with the community edition. Don’t worry it is free.
-  Once you register and login will be presented with the following screen.
-  You can start a new notebook here.
+Once you register and login will be presented with the following screen.
+You can start a new notebook here.
 Select the Python notebook and give any name to your notebook.
 Once you start a new notebook and try to execute any command, the notebook will ask you if you want to start a new cluster. Do it.
 The next step will be to check if the sparkcontext is present. To check if the sparkcontext is present you just have to run this command:
-sc   This means that we are set up with a notebook where we can run Spark.
-Load Some Data The next step is to upload some data we will use to learn Spark. Just click on ‘Import and Explore Data’ on the home tab.
+sc This means that we are set up with a notebook where we can run Spark.
+ Load Some Data The next step is to upload some data we will use to learn Spark. Just click on ‘Import and Explore Data’ on the home tab.
 I will end up using multiple datasets by the end of this post but let us start with something very simple.
 Let us add the file shakespeare.txt which you can download from here.
-  You can see that the file is loaded to /FileStore/tables/shakespeare.txt location.
-Our First Spark Program I like to learn by examples so let’s get done with the “Hello World” of Distributed computing: The WordCount Program.
-# Distribute the data - Create a RDD  lines = sc.textFile(&amp;#34;/FileStore/tables/shakespeare.txt&amp;#34;) # Create a list with all words, Create tuple (word,1), reduce by key i.e. the word counts = (lines.flatMap(lambda x: x.split(&amp;#39; &amp;#39;)) .map(lambda x: (x, 1)) .reduceByKey(lambda x,y : x &#43; y)) # get the output on local output = counts.take(10) # print output for (word, count) in output: print(&amp;#34;%s: %i&amp;#34; % (word, count))   So that is a small example which counts the number of words in the document and prints 10 of them.
+You can see that the file is loaded to /FileStore/tables/shakespeare.txt location.
+ Our First Spark Program I like to learn by examples so let’s get done with the “Hello World” of Distributed computing: The WordCount Program.
+# Distribute the data - Create a RDD  lines = sc.textFile(&amp;#34;/FileStore/tables/shakespeare.txt&amp;#34;) # Create a list with all words, Create tuple (word,1), reduce by key i.e. the word counts = (lines.flatMap(lambda x: x.split(&amp;#39; &amp;#39;)) .map(lambda x: (x, 1)) .reduceByKey(lambda x,y : x &#43; y)) # get the output on local output = counts.take(10) # print output for (word, count) in output: print(&amp;#34;%s: %i&amp;#34; % (word, count)) So that is a small example which counts the number of words in the document and prints 10 of them.
 And most of the work gets done in the second command.
 Don’t worry if you are not able to follow this yet as I still need to tell you about the things that make Spark work.
 But before we get into Spark basics, Let us refresh some of our Python Basics. Understanding Spark becomes a lot easier if you have used functional programming with Python.
 For those of you who haven’t used it, below is a brief intro.
-A functional approach to programming in Python   1. Map map is used to map a function to an array or a list. Say you want to apply some function to every element in a list.
+ A functional approach to programming in Python 1. Map map is used to map a function to an array or a list. Say you want to apply some function to every element in a list.
 You can do this by simply using a for loop but python lambda functions let you do this in a single line in Python.
 my_list = [1,2,3,4,5,6,7,8,9,10] # Lets say I want to square each term in my_list. squared_list = map(lambda x:x**2,my_list) print(list(squared_list)) ------------------------------------------------------------ [1, 4, 9, 16, 25, 36, 49, 64, 81, 100] In the above example, you could think of map as a function which takes two arguments — A function and a list.
 It then applies the function to every element of the list.
@@ -102,11 +101,11 @@ my_list = [1,2,3,4,5,6,7,8,9,10] # Lets say I want only the even numbers in my l
 This function takes two arguments — a function to reduce that takes two arguments, and a list over which the reduce function is to be applied.
 import functools my_list = [1,2,3,4,5] # Lets say I want to sum all elements in my list. sum_list = functools.reduce(lambda x,y:x&#43;y,my_list) print(sum_list) In python2 reduce used to be a part of Python, now we have to use reduce as a part of functools.
 Here the lambda function takes in two values x, y and returns their sum. Intuitively you can think that the reduce function works as:
- Reduce function first sends 1,2 ; the lambda function returns 3 Reduce function then sends 3,3 ; the lambda function returns 6 Reduce function then sends 6,4 ; the lambda function returns 10 Reduce function finally sends 10,5 ; the lambda function returns 15  A condition on the lambda function we use in reduce is that it must be:
- commutative that is a &#43; b = b &#43; a and
- associative that is (a &#43; b) &#43; c == a &#43; (b &#43; c).
+ Reduce function first sends 1,2 ; the lambda function returns 3 Reduce function then sends 3,3 ; the lambda function returns 6 Reduce function then sends 6,4 ; the lambda function returns 10 Reduce function finally sends 10,5 ; the lambda function returns 15 A condition on the lambda function we use in reduce is that it must be:
+  commutative that is a &#43; b = b &#43; a and
+  associative that is (a &#43; b) &#43; c == a &#43; (b &#43; c).
   In the above case, we used sum which is commutative as well as associative. Other functions that we could have used: max, min, * etc.
-Moving Again to Spark As we have now got the fundamentals of Python Functional Programming out of the way, lets again head to Spark.
+ Moving Again to Spark As we have now got the fundamentals of Python Functional Programming out of the way, lets again head to Spark.
 But first, let us delve a little bit into how spark works. Spark actually consists of two things a driver and workers.
 Workers normally do all the work and the driver makes them do that work.
 RDD An RDD(Resilient Distributed Dataset) is a parallelized data structure that gets distributed across the worker nodes. They are the basic units of Spark programming.
@@ -114,9 +113,9 @@ In our wordcount example, in the first line
 lines = sc.textFile(&amp;quot;/FileStore/tables/shakespeare.txt&amp;quot;)  We took a text file and distributed it across worker nodes so that they can work on it in parallel. We could also parallelize lists using the function sc.parallelize
 For example:
 data = [1,2,3,4,5,6,7,8,9,10] new_rdd = sc.parallelize(data,4) new_rdd --------------------------------------------------------------- ParallelCollectionRDD[22] at parallelize at PythonRDD.scala:267 In Spark, we can do two different types of operations on RDD: Transformations and Actions.
- Transformations: Create new datasets from existing RDDs
- Actions: Mechanism to get results out of Spark
-  Transformation Basics   So let us say you have got your data in the form of an RDD.
+  Transformations: Create new datasets from existing RDDs
+  Actions: Mechanism to get results out of Spark
+   Transformation Basics So let us say you have got your data in the form of an RDD.
 To requote your data is now accessible to the worker machines. You want to do some transformations on the data now.
 You may want to filter, apply some function, etc.
 In Spark, this is done using Transformation functions.
@@ -139,7 +138,7 @@ category_total_price_rdd = category_price_rdd.reduceByKey(lambda x,y:x&#43;y) ca
 Let us again use map to get data in the required form.
 data = [(&amp;#39;Apple&amp;#39;,&amp;#39;Fruit&amp;#39;,200),(&amp;#39;Banana&amp;#39;,&amp;#39;Fruit&amp;#39;,24),(&amp;#39;Tomato&amp;#39;,&amp;#39;Fruit&amp;#39;,56),(&amp;#39;Potato&amp;#39;,&amp;#39;Vegetable&amp;#39;,103),(&amp;#39;Carrot&amp;#39;,&amp;#39;Vegetable&amp;#39;,34)] rdd = sc.parallelize(data,4) category_product_rdd = rdd.map(lambda x: (x[1],x[0])) category_product_rdd.collect() ------------------------------------------------------------ [(&amp;#39;Fruit&amp;#39;, &amp;#39;Apple&amp;#39;), (&amp;#39;Fruit&amp;#39;, &amp;#39;Banana&amp;#39;), (&amp;#39;Fruit&amp;#39;, &amp;#39;Tomato&amp;#39;), (&amp;#39;Vegetable&amp;#39;, &amp;#39;Potato&amp;#39;), (&amp;#39;Vegetable&amp;#39;, &amp;#39;Carrot&amp;#39;)] We then use groupByKey as:
 grouped_products_by_category_rdd = category_product_rdd.groupByKey() findata = grouped_products_by_category_rdd.collect() for data in findata: print(data[0],list(data[1])) ------------------------------------------------------------ Vegetable [&amp;#39;Potato&amp;#39;, &amp;#39;Carrot&amp;#39;] Fruit [&amp;#39;Apple&amp;#39;, &amp;#39;Banana&amp;#39;, &amp;#39;Tomato&amp;#39;] Here the groupByKey function worked and it returned the category and the list of products in that category.
-Action Basics   You have filtered your data, mapped some functions on it. Done your computation.
+ Action Basics You have filtered your data, mapped some functions on it. Done your computation.
 Now you want to get the data on your local machine or save it to a file or show the results in the form of some graphs in excel or any visualization tool.
 You will need actions for that. A comprehensive list of actions is provided here.
 Some of the most common actions that I tend to use are:
@@ -148,7 +147,7 @@ Some of the most common actions that I tend to use are:
 rdd = sc.parallelize([1,2,3,4,5]) rdd.reduce(lambda x,y : x&#43;y) --------------------------------- 15 3. take: Sometimes you will need to see what your RDD contains without getting all the elements in memory itself. take returns a list with the first n elements of the RDD.
 rdd = sc.parallelize([1,2,3,4,5]) rdd.take(3) --------------------------------- [1, 2, 3] 4. takeOrdered: takeOrdered returns the first n elements of the RDD using either their natural order or a custom comparator.
 rdd = sc.parallelize([5,3,12,23]) # descending order rdd.takeOrdered(3,lambda s:-1*s) ---- [23, 12, 5] rdd = sc.parallelize([(5,23),(3,34),(12,344),(23,29)]) # descending order rdd.takeOrdered(3,lambda s:-1*s[1]) --- [(12, 344), (3, 34), (23, 29)] We have our basics covered finally. Let us get back to our wordcount example
-Understanding The WordCount Example   Now we sort of understand the transformations and the actions provided to us by Spark.
+ Understanding The WordCount Example Now we sort of understand the transformations and the actions provided to us by Spark.
 It should not be difficult to understand the wordcount program now. Let us go through the program line by line.
 The first line creates an RDD and distributes it to the workers.
 lines = sc.textFile(&amp;quot;/FileStore/tables/shakespeare.txt&amp;quot;)  This RDD lines contains a list of sentences in the file. You can see the rdd content using take
@@ -162,16 +161,19 @@ After which the RDD approaches the final desirable form.
 [(&#39;word1&#39;,1),(&#39;word2&#39;,2),(&#39;word3&#39;,2),(&#39;word4&#39;,1)]  This next line is an action that takes the first 10 elements of the resulting RDD locally.
 output = counts.take(10)  This line just prints the output
 for (word, count) in output: print(&amp;quot;%s: %i&amp;quot; % (word, count))  And that is it for the wordcount program. Hope you understand it now.
-So till now, we talked about the Wordcount example and the basic transformations and actions that you could use in Spark. But we don’t do wordcount in real life.
+ So till now, we talked about the Wordcount example and the basic transformations and actions that you could use in Spark. But we don’t do wordcount in real life.
 We have to work on bigger problems which are much more complex. Worry not! Whatever we have learned till now will let us do that and more.
-Spark in Action with Example   Let us work with a concrete example which takes care of some usual transformations.
-We will work on Movielens ml-100k.zip dataset which is a stable benchmark dataset. 100,000 ratings from 1000 users on 1700 movies. Released 4&amp;frasl;1998.
+ Spark in Action with Example Let us work with a concrete example which takes care of some usual transformations.
+We will work on Movielens ml-100k.zip dataset which is a stable benchmark dataset. 100,000 ratings from 1000 users on 1700 movies. Released 4/1998.
 The Movielens dataset contains a lot of files but we are going to be working with 3 files only:
-1) Users: This file name is kept as “u.user”, The columns in this file are:
-[&#39;user_id&#39;, &#39;age&#39;, &#39;sex&#39;, &#39;occupation&#39;, &#39;zip_code&#39;]  2) Ratings: This file name is kept as “u.data”, The columns in this file are:
-[&#39;user_id&#39;, &#39;movie_id&#39;, &#39;rating&#39;, &#39;unix_timestamp&#39;]  3) Movies: This file name is kept as “u.item”, The columns in this file are:
-[&#39;movie_id&#39;, &#39;title&#39;, &#39;release_date&#39;, &#39;video_release_date&#39;, &#39;imdb_url&#39;, and 18 more columns.....]  Let us start by importing these 3 files into our spark instance using ‘Import and Explore Data’ on the home tab.
-  Our business partner now comes to us and asks us to find out the 25 most rated movie titles from this data. How many times a movie has been rated?
+  Users: This file name is kept as “u.user”, The columns in this file are:
+[&amp;lsquo;user_id&amp;rsquo;, &amp;lsquo;age&amp;rsquo;, &amp;lsquo;sex&amp;rsquo;, &amp;lsquo;occupation&amp;rsquo;, &amp;lsquo;zip_code&amp;rsquo;]
+  Ratings: This file name is kept as “u.data”, The columns in this file are:
+[&amp;lsquo;user_id&amp;rsquo;, &amp;lsquo;movie_id&amp;rsquo;, &amp;lsquo;rating&amp;rsquo;, &amp;lsquo;unix_timestamp&amp;rsquo;]
+  Movies: This file name is kept as “u.item”, The columns in this file are:
+[&amp;lsquo;movie_id&amp;rsquo;, &amp;lsquo;title&amp;rsquo;, &amp;lsquo;release_date&amp;rsquo;, &amp;lsquo;video_release_date&amp;rsquo;, &amp;lsquo;imdb_url&amp;rsquo;, and 18 more columns&amp;hellip;..]
+  Let us start by importing these 3 files into our spark instance using ‘Import and Explore Data’ on the home tab.
+Our business partner now comes to us and asks us to find out the 25 most rated movie titles from this data. How many times a movie has been rated?
 Let us load the data in different RDDs and see what the data contains.
 userRDD = sc.textFile(&amp;#34;/FileStore/tables/u.user&amp;#34;) ratingRDD = sc.textFile(&amp;#34;/FileStore/tables/u.data&amp;#34;) movieRDD = sc.textFile(&amp;#34;/FileStore/tables/u.item&amp;#34;) print(&amp;#34;userRDD:&amp;#34;,userRDD.take(1)) print(&amp;#34;ratingRDD:&amp;#34;,ratingRDD.take(1)) print(&amp;#34;movieRDD:&amp;#34;,movieRDD.take(1)) ----------------------------------------------------------- userRDD: [&amp;#39;1|24|M|technician|85711&amp;#39;] ratingRDD: [&amp;#39;196\t242\t3\t881250949&amp;#39;] movieRDD: [&amp;#39;1|Toy Story (1995)|01-Jan-1995||http://us.imdb.com/M/title-exact?Toy%20Story%20(1995)|0|0|0|1|1|1|0|0|0|0|0|0|0|0|0|0|0|0|0&amp;#39;] We note that to answer this question we will need to use the ratingRDD. But the ratingRDD does not have the movie name.
 So we would have to merge movieRDD and ratingRDD using movie_id.
@@ -186,33 +188,33 @@ Now we want to find the most highly rated 25 movies using the same dataset. We a
 You can use RDDs to work with non-relational databases too.
 They let you do a lot of things that you couldn’t do with SparkSQL?
 Yes, you can use SQL with Spark too which I am going to talk about now.
-Spark DataFrames   Spark has provided DataFrame API for us Data Scientists to work with relational data. Here is the documentation for the adventurous folks.
+ Spark DataFrames Spark has provided DataFrame API for us Data Scientists to work with relational data. Here is the documentation for the adventurous folks.
 Remember that in the background it still is all RDDs and that is why the starting part of this post focussed on RDDs.
 I will start with some common functionalities you will need to work with Spark DataFrames. Would look a lot like Pandas with some syntax changes.
 1. Reading the File ratings = spark.read.load(&amp;#34;/FileStore/tables/u.data&amp;#34;,format=&amp;#34;csv&amp;#34;, sep=&amp;#34;\t&amp;#34;, inferSchema=&amp;#34;true&amp;#34;, header=&amp;#34;false&amp;#34;) 2. Show File We have two ways to show files using Spark Dataframes.
-ratings.show()   display(ratings)   I prefer display as it looks a lot nicer and clean.
+ratings.show() display(ratings) I prefer display as it looks a lot nicer and clean.
 3. Change Column names Good functionality. Always required. Don’t forget the * in front of the list.
-ratings = ratings.toDF(*[&amp;#39;user_id&amp;#39;, &amp;#39;movie_id&amp;#39;, &amp;#39;rating&amp;#39;, &amp;#39;unix_timestamp&amp;#39;]) display(ratings)   4. Some Basic Stats print(ratings.count()) #Row Count print(len(ratings.columns)) #Column Count --------------------------------------------------------- 100000 4 We can also see the dataframe statistics using:
-display(ratings.describe())   5. Select a few columns display(ratings.select(&amp;#39;user_id&amp;#39;,&amp;#39;movie_id&amp;#39;))   6. Filter Filter a dataframe using multiple conditions:
-display(ratings.filter((ratings.rating==5) &amp;amp; (ratings.user_id==253)))   7. Groupby We can use groupby function with a spark dataframe too. Pretty much same as a pandas groupby with the exception that you will need to import pyspark.sql.functions
+ratings = ratings.toDF(*[&amp;#39;user_id&amp;#39;, &amp;#39;movie_id&amp;#39;, &amp;#39;rating&amp;#39;, &amp;#39;unix_timestamp&amp;#39;]) display(ratings) 4. Some Basic Stats print(ratings.count()) #Row Count print(len(ratings.columns)) #Column Count --------------------------------------------------------- 100000 4 We can also see the dataframe statistics using:
+display(ratings.describe()) 5. Select a few columns display(ratings.select(&amp;#39;user_id&amp;#39;,&amp;#39;movie_id&amp;#39;)) 6. Filter Filter a dataframe using multiple conditions:
+display(ratings.filter((ratings.rating==5) &amp;amp; (ratings.user_id==253))) 7. Groupby We can use groupby function with a spark dataframe too. Pretty much same as a pandas groupby with the exception that you will need to import pyspark.sql.functions
 from pyspark.sql import functions as F display(ratings.groupBy(&amp;#34;user_id&amp;#34;).agg(F.count(&amp;#34;user_id&amp;#34;),F.mean(&amp;#34;rating&amp;#34;))) Here we have found the count of ratings and average rating from each user_id
-  8. Sort display(ratings.sort(&amp;#34;user_id&amp;#34;))   We can also do a descending sort using F.desc function as below.
-# descending Sort from pyspark.sql import functions as F display(ratings.sort(F.desc(&amp;#34;user_id&amp;#34;)))   Joins/Merging with Spark Dataframes I was not able to find a pandas equivalent of merge with Spark DataFrames but we can use SQL with dataframes and thus we can merge dataframes using SQL.
+8. Sort display(ratings.sort(&amp;#34;user_id&amp;#34;)) We can also do a descending sort using F.desc function as below.
+# descending Sort from pyspark.sql import functions as F display(ratings.sort(F.desc(&amp;#34;user_id&amp;#34;)))  Joins/Merging with Spark Dataframes I was not able to find a pandas equivalent of merge with Spark DataFrames but we can use SQL with dataframes and thus we can merge dataframes using SQL.
 Let us try to run some SQL on Ratings.
 We first register the ratings df to a temporary table ratings_table on which we can run sql operations.
 As you can see the result of the SQL select statement is again a Spark Dataframe.
-ratings.registerTempTable(&amp;#39;ratings_table&amp;#39;) newDF = sqlContext.sql(&amp;#39;select * from ratings_table where rating&amp;gt;4&amp;#39;) display(newDF)   Let us now add one more Spark Dataframe to the mix to see if we can use join using the SQL queries:
-#get one more dataframe to join movies = spark.read.load(&amp;#34;/FileStore/tables/u.item&amp;#34;,format=&amp;#34;csv&amp;#34;, sep=&amp;#34;|&amp;#34;, inferSchema=&amp;#34;true&amp;#34;, header=&amp;#34;false&amp;#34;) # change column names movies = movies.toDF(*[&amp;#34;movie_id&amp;#34;,&amp;#34;movie_title&amp;#34;,&amp;#34;release_date&amp;#34;,&amp;#34;video_release_date&amp;#34;,&amp;#34;IMDb_URL&amp;#34;,&amp;#34;unknown&amp;#34;,&amp;#34;Action&amp;#34;,&amp;#34;Adventure&amp;#34;,&amp;#34;Animation &amp;#34;,&amp;#34;Children&amp;#34;,&amp;#34;Comedy&amp;#34;,&amp;#34;Crime&amp;#34;,&amp;#34;Documentary&amp;#34;,&amp;#34;Drama&amp;#34;,&amp;#34;Fantasy&amp;#34;,&amp;#34;Film_Noir&amp;#34;,&amp;#34;Horror&amp;#34;,&amp;#34;Musical&amp;#34;,&amp;#34;Mystery&amp;#34;,&amp;#34;Romance&amp;#34;,&amp;#34;Sci_Fi&amp;#34;,&amp;#34;Thriller&amp;#34;,&amp;#34;War&amp;#34;,&amp;#34;Western&amp;#34;]) display(movies)   Now let us try joining the tables on movie_id to get the name of the movie in the ratings table.
-movies.registerTempTable(&amp;#39;movies_table&amp;#39;) display(sqlContext.sql(&amp;#39;select ratings_table.*,movies_table.movie_title from ratings_table left join movies_table on movies_table.movie_id = ratings_table.movie_id&amp;#39;))   Let us try to do what we were doing earlier with the RDDs. Finding the top 25 most rated movies:
-mostrateddf = sqlContext.sql(&amp;#39;select movie_id,movie_title, count(user_id) as num_ratings from (select ratings_table.*,movies_table.movie_title from ratings_table left join movies_table on movies_table.movie_id = ratings_table.movie_id)A group by movie_id,movie_title order by num_ratings desc &amp;#39;) display(mostrateddf)   And finding the top 25 highest rated movies having more than 100 votes:
-highrateddf = sqlContext.sql(&amp;#39;select movie_id,movie_title, avg(rating) as avg_rating,count(movie_id) as num_ratings from (select ratings_table.*,movies_table.movie_title from ratings_table left join movies_table on movies_table.movie_id = ratings_table.movie_id)A group by movie_id,movie_title having num_ratings&amp;gt;100 order by avg_rating desc &amp;#39;) display(highrateddf)   I have used GROUP BY, HAVING, AND ORDER BY clauses as well as aliases in the above query. That shows that you can do pretty much complex stuff using sqlContext.sql
-A Small Note About Display You can also use display command to display charts in your notebooks.
-  You can see more options when you select Plot Options.
-  Converting from Spark Dataframe to RDD and vice versa: Sometimes you may want to convert to RDD from a spark Dataframe or vice versa so that you can have the best of both worlds.
+ratings.registerTempTable(&amp;#39;ratings_table&amp;#39;) newDF = sqlContext.sql(&amp;#39;select * from ratings_table where rating&amp;gt;4&amp;#39;) display(newDF) Let us now add one more Spark Dataframe to the mix to see if we can use join using the SQL queries:
+#get one more dataframe to join movies = spark.read.load(&amp;#34;/FileStore/tables/u.item&amp;#34;,format=&amp;#34;csv&amp;#34;, sep=&amp;#34;|&amp;#34;, inferSchema=&amp;#34;true&amp;#34;, header=&amp;#34;false&amp;#34;) # change column names movies = movies.toDF(*[&amp;#34;movie_id&amp;#34;,&amp;#34;movie_title&amp;#34;,&amp;#34;release_date&amp;#34;,&amp;#34;video_release_date&amp;#34;,&amp;#34;IMDb_URL&amp;#34;,&amp;#34;unknown&amp;#34;,&amp;#34;Action&amp;#34;,&amp;#34;Adventure&amp;#34;,&amp;#34;Animation &amp;#34;,&amp;#34;Children&amp;#34;,&amp;#34;Comedy&amp;#34;,&amp;#34;Crime&amp;#34;,&amp;#34;Documentary&amp;#34;,&amp;#34;Drama&amp;#34;,&amp;#34;Fantasy&amp;#34;,&amp;#34;Film_Noir&amp;#34;,&amp;#34;Horror&amp;#34;,&amp;#34;Musical&amp;#34;,&amp;#34;Mystery&amp;#34;,&amp;#34;Romance&amp;#34;,&amp;#34;Sci_Fi&amp;#34;,&amp;#34;Thriller&amp;#34;,&amp;#34;War&amp;#34;,&amp;#34;Western&amp;#34;]) display(movies) Now let us try joining the tables on movie_id to get the name of the movie in the ratings table.
+movies.registerTempTable(&amp;#39;movies_table&amp;#39;) display(sqlContext.sql(&amp;#39;select ratings_table.*,movies_table.movie_title from ratings_table left join movies_table on movies_table.movie_id = ratings_table.movie_id&amp;#39;)) Let us try to do what we were doing earlier with the RDDs. Finding the top 25 most rated movies:
+mostrateddf = sqlContext.sql(&amp;#39;select movie_id,movie_title, count(user_id) as num_ratings from (select ratings_table.*,movies_table.movie_title from ratings_table left join movies_table on movies_table.movie_id = ratings_table.movie_id)A group by movie_id,movie_title order by num_ratings desc &amp;#39;) display(mostrateddf) And finding the top 25 highest rated movies having more than 100 votes:
+highrateddf = sqlContext.sql(&amp;#39;select movie_id,movie_title, avg(rating) as avg_rating,count(movie_id) as num_ratings from (select ratings_table.*,movies_table.movie_title from ratings_table left join movies_table on movies_table.movie_id = ratings_table.movie_id)A group by movie_id,movie_title having num_ratings&amp;gt;100 order by avg_rating desc &amp;#39;) display(highrateddf) I have used GROUP BY, HAVING, AND ORDER BY clauses as well as aliases in the above query. That shows that you can do pretty much complex stuff using sqlContext.sql
+ A Small Note About Display You can also use display command to display charts in your notebooks.
+You can see more options when you select Plot Options.
+ Converting from Spark Dataframe to RDD and vice versa: Sometimes you may want to convert to RDD from a spark Dataframe or vice versa so that you can have the best of both worlds.
 To convert from DF to RDD, you can simply do :
-highratedrdd =highrateddf.rdd highratedrdd.take(2)   To go from an RDD to a dataframe:
-from pyspark.sql import Row # creating a RDD first data = [(&amp;#39;A&amp;#39;,1),(&amp;#39;B&amp;#39;,2),(&amp;#39;C&amp;#39;,3),(&amp;#39;D&amp;#39;,4)] rdd = sc.parallelize(data) # map the schema using Row. rdd_new = rdd.map(lambda x: Row(key=x[0], value=int(x[1]))) # Convert the rdd to Dataframe rdd_as_df = sqlContext.createDataFrame(rdd_new) display(rdd_as_df)   RDD provides you with more control at the cost of time and coding effort. While Dataframes provide you with familiar coding platform. And now you can move back and forth between these two.
-Conclusion   This was a big post and congratulations if you reached the end.
+highratedrdd =highrateddf.rdd highratedrdd.take(2) To go from an RDD to a dataframe:
+from pyspark.sql import Row # creating a RDD first data = [(&amp;#39;A&amp;#39;,1),(&amp;#39;B&amp;#39;,2),(&amp;#39;C&amp;#39;,3),(&amp;#39;D&amp;#39;,4)] rdd = sc.parallelize(data) # map the schema using Row. rdd_new = rdd.map(lambda x: Row(key=x[0], value=int(x[1]))) # Convert the rdd to Dataframe rdd_as_df = sqlContext.createDataFrame(rdd_new) display(rdd_as_df) RDD provides you with more control at the cost of time and coding effort. While Dataframes provide you with familiar coding platform. And now you can move back and forth between these two.
+Conclusion This was a big post and congratulations if you reached the end.
 Spark has provided us with an interface where we could use transformations and actions on our data. Spark also has the Dataframe API to ease the transition of Data scientists to Big Data.
 Hopefully, I’ve covered the basics well enough to pique your interest and help you get started with Spark.
 You can find all the code at the GitHub repository.

@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1" xmlns:content="http://purl.org/rss/1.0/modules/content" xmlns:media="http://search.yahoo.com/mrss/" >
 
   
   <channel>
-    <title>Probability on MLWhiz</title>
+    <title>probability on MLWhiz</title>
     <link>https://mlwhiz.com/tags/probability/</link>
-    <description>Recent content in Probability on MLWhiz</description>
+    <description>Recent content in probability on MLWhiz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 14 Sep 2017 00:00:00 +0000</lastBuildDate>
@@ -32,70 +31,57 @@
 
       <content:encoded>  
         
-        <![CDATA[  Distributions play an important role in the life of every Statistician. I coming from a non-statistic background am not so well versed in these and keep forgetting about the properties of these famous distributions. That is why I chose to write my own understanding in an intuitive way to keep a track. One of the most helpful way to learn more about these is the STAT110 course by Joe Blitzstein and his book. You can check out this Coursera course too. Hope it could be useful to someone else too. So here goes:
+        <![CDATA[ Distributions play an important role in the life of every Statistician. I coming from a non-statistic background am not so well versed in these and keep forgetting about the properties of these famous distributions. That is why I chose to write my own understanding in an intuitive way to keep a track. One of the most helpful way to learn more about these is the STAT110 course by Joe Blitzstein and his book. You can check out this Coursera course too. Hope it could be useful to someone else too. So here goes:
 1. Bernoulli Distribution: Perhaps the most simple discrete distribution of all.
 Story: A Coin is tossed with probability p of heads.
 PMF of Bernoulli Distribution is given by:
-$$P(X=k) = \begin{cases}1-p &amp; k = 0\\p &amp; k = 1\end{cases}$$ CDF of Bernoulli Distribution is given by:
-$$P(X \leq k) = \begin{cases}0 &amp; k \lt 0\\1-p &amp; 0 \leq k \lt 1 \\1 &amp; k \geq 1\end{cases}$$ Expected Value:
-$$E[X] = \sum kP(X=k)$$ $$E[X] = 0*P(X=0)&#43;1*P(X=1) = p$$
-Variance:
-$$Var[X] = E[X^2] - E[X]^2$$ Now we find, $$E[X]^2 = p^2$$ and $$E[X^2] = \sum k^2P(X=k)$$ $$E[X^2] = 0^2P(X=0) &#43; 1^2P(X=1) = p $$ Thus, $$Var[X] = p(1-p)$$
-2. Binomial Distribution:   One of the most basic distribution in the Statistician toolkit. The parameters of this distribution is n(number of trials) and p(probability of success).
+CDF of Bernoulli Distribution is given by:
+Expected Value:$$E[X] = \sum kP(X=k)$$ $$E[X] = 0P(X=0)&#43;1P(X=1) = p$$
+Variance:$$Var[X] = E[X^2] - E[X]^2$$ Now we find, $$E[X]^2 = p^2$$ and $$E[X^2] = \sum k^2P(X=k)$$ $$E[X^2] = 0^2P(X=0) &#43; 1^2P(X=1) = p $$ Thus, $$Var[X] = p(1-p)$$
+2. Binomial Distribution: One of the most basic distribution in the Statistician toolkit. The parameters of this distribution is n(number of trials) and p(probability of success).
 Story: Probability of getting exactly k successes in n trials
 PMF of binomial Distribution is given by:
 $$P(X=k) = \left(\begin{array}{c}n\ k\end{array}\right) p^{k}(1-p)^{n-k}$$
 CDF of binomial Distribution is given by:
 $$ P(X\leq k) = \sum_{i=0}^k \left(\begin{array}{c}n\ i\end{array}\right) p^i(1-p)^{n-i} $$
-Expected Value:
-$$E[X] = \sum kP(X=k)$$ $$E[X] = \sum_{k=0}^n k \left(\begin{array}{c}n\ k\end{array}\right) * p^{k}(1-p)^{n-k} = np $$
+Expected Value:$$E[X] = \sum kP(X=k)$$ $$E[X] = \sum_{k=0}^n k \left(\begin{array}{c}n\ k\end{array}\right) * p^{k}(1-p)^{n-k} = np $$
 A better way to solve this:
-$$ X = I_{1} &#43; I_{2} &#43; ....&#43; I_{n-1}&#43; I_{n} $$ X is the sum on n Indicator Bernoulli random variables.
+X is the sum on n Indicator Bernoulli random variables.
 Thus,
- $$E[X] = E[I_{1} &#43; I_{2} &#43; ....&#43; I_{n-1}&#43; I_{n}]$$ $$E[X] = E[I_{1}] &#43; E[I_{2}] &#43; ....&#43; E[I_{n-1}]&#43; E[I_{n}]$$ $$E[X] = \underbrace{p &#43; p &#43; ....&#43; p &#43; p}_{n} = np$$ Variance:
-$$ X = I_{1} &#43; I_{2} &#43; ....&#43; I_{n-1}&#43; I_{n} $$ X is the sum on n Indicator Bernoulli random variables. $$Var[X] = Var[I_{1} &#43; I_{2} &#43; ....&#43; I_{n-1}&#43; I_{n}]$$ $$Var[X] = Var[I_{1}] &#43; Var[I_{2}] &#43; ....&#43; Var[I_{n-1}]&#43; Var[I_{n}]$$ $$Var[X] = \underbrace{p(1-p) &#43; p(1-p) &#43; ....&#43; p(1-p) &#43; p(1-p)}_{n} = np(1-p)$$ 3. Geometric Distribution: The parameters of this distribution is p(probability of success).
+Variance:3. Geometric Distribution: The parameters of this distribution is p(probability of success).
 Story: The number of failures before the first success(Heads) when a coin with probability p is tossed
 PMF of Geometric Distribution is given by:
 $$P(X=k) = (1-p)^kp$$
 CDF of Geometric Distribution is given by:
 $$ P(X\leq k) = \sum_{i=0}^k (1-p)^{i}p$$ $$ P(X\leq k) = p(1&#43;q&#43;q^2&amp;hellip;&#43;q^k)= p(1-q^k)/(1-q) = 1-(1-p)^k $$
-Expected Value:
-$$E[X] = \sum kP(X=k)$$ $$E[X] = \sum_{k=0}^{inf} k (1-p)^kp$$ $$E[X] = qp &#43;2q^2p &#43;3q^3p &#43;4q^4p &amp;hellip;. $$ $$E[X] = qp(1&#43;2q&#43;3q^2&#43;4q^3&#43;&amp;hellip;.)$$ $$E[X] = qp/(1-q)^2 = q/p $$
-Variance:
-$$Var[X] = E[X^2] - E[X]^2$$ Now we find, $$E[X]^2 = q^2/p^2$$ and $$E[X^2] = \sum_{k=0}^{inf} k^2q^kp= qp &#43; 4q^2p &#43; 9q^3p &#43;16q^4p &amp;hellip; = qp(1&#43;4q&#43;9q^2&#43;16q^3&amp;hellip;.)$$ $$E[X^2] = qp^{-2}(1&#43;q)$$
+Expected Value:$$E[X] = \sum kP(X=k)$$ $$E[X] = \sum_{k=0}^{inf} k (1-p)^kp$$ $$E[X] = qp &#43;2q^2p &#43;3q^3p &#43;4q^4p &amp;hellip;. $$ $$E[X] = qp(1&#43;2q&#43;3q^2&#43;4q^3&#43;&amp;hellip;.)$$ $$E[X] = qp/(1-q)^2 = q/p $$
+Variance:$$Var[X] = E[X^2] - E[X]^2$$ Now we find, $$E[X]^2 = q^2/p^2$$ and $$E[X^2] = \sum_{k=0}^{inf} k^2q^kp= qp &#43; 4q^2p &#43; 9q^3p &#43;16q^4p &amp;hellip; = qp(1&#43;4q&#43;9q^2&#43;16q^3&amp;hellip;.)$$ $$E[X^2] = qp^{-2}(1&#43;q)$$
 Thus, $$Var[X] =q/p^2$$
 Check Math appendix at bottom of this post for Geometric Series Proofs.
-Example:
-Q. A doctor is seeking an anti-depressant for a newly diagnosed patient. Suppose that, of the available anti-depressant drugs, the probability that any particular drug will be effective for a particular patient is p=0.6. What is the probability that the first drug found to be effective for this patient is the first drug tried, the second drug tried, and so on? What is the expected number of drugs that will be tried to find one that is effective?
+Example:Q. A doctor is seeking an anti-depressant for a newly diagnosed patient. Suppose that, of the available anti-depressant drugs, the probability that any particular drug will be effective for a particular patient is p=0.6. What is the probability that the first drug found to be effective for this patient is the first drug tried, the second drug tried, and so on? What is the expected number of drugs that will be tried to find one that is effective?
 A. Expected number of drugs that will be tried to find one that is effective = q/p = .4/.6 =.67
 4. Negative Binomial Distribution: The parameters of this distribution is p(probability of success) and r(number of success).
 Story: The number of failures of independent Bernoulli(p) trials before the rth success.
 PMF of Negative Binomial Distribution is given by:
 r successes , k failures , last attempt needs to be a success: $$P(X=k) = \left(\begin{array}{c}k&#43;r-1\ k\end{array}\right) p^r(1-p)^k$$
-Expected Value:
-The negative binomial RV could be stated as the sum of r Geometric RVs $$X = X^1&#43;X^2&amp;hellip;. X^{r-1} &#43;X^r$$ Thus, $$E[X] = E[X^1]&#43;E[X^2]&amp;hellip;. E[X^{r-1}] &#43;E[X^r]$$
+Expected Value:The negative binomial RV could be stated as the sum of r Geometric RVs $$X = X^1&#43;X^2&amp;hellip;. X^{r-1} &#43;X^r$$ Thus, $$E[X] = E[X^1]&#43;E[X^2]&amp;hellip;. E[X^{r-1}] &#43;E[X^r]$$
 $$E[X] = rq/p$$
-Variance:
-The negative binomial RV could be stated as the sum of r independent Geometric RVs $$X = X^1&#43;X^2&amp;hellip;. X^{r-1} &#43;X^r$$ Thus, $$Var[X] = Var[X^1]&#43;Var[X^2]&amp;hellip;. Var[X^{r-1}] &#43;Var[X^r]$$
+Variance:The negative binomial RV could be stated as the sum of r independent Geometric RVs $$X = X^1&#43;X^2&amp;hellip;. X^{r-1} &#43;X^r$$ Thus, $$Var[X] = Var[X^1]&#43;Var[X^2]&amp;hellip;. Var[X^{r-1}] &#43;Var[X^r]$$
 $$Var[X] = rq/p^2$$
-Example:
-Q. Pat is required to sell candy bars to raise money for the 6th grade field trip. There are thirty houses in the neighborhood, and Pat is not supposed to return home until five candy bars have been sold. So the child goes door to door, selling candy bars. At each house, there is a 0.4 probability of selling one candy bar and a 0.6 probability of selling nothing. What&amp;rsquo;s the probability of selling the last candy bar at the nth house?
+Example:Q. Pat is required to sell candy bars to raise money for the 6th grade field trip. There are thirty houses in the neighborhood, and Pat is not supposed to return home until five candy bars have been sold. So the child goes door to door, selling candy bars. At each house, there is a 0.4 probability of selling one candy bar and a 0.6 probability of selling nothing. What&amp;rsquo;s the probability of selling the last candy bar at the nth house?
 A. r = 5 ; k = n - r
 Probability of selling the last candy bar at the nth house = $$P(X=k) = \left(\begin{array}{c}k&#43;r-1\ k\end{array}\right) p^r(1-p)^k$$ $$P(X=k) = \left(\begin{array}{c}n-1\ n-5\end{array}\right) .4^5(.6)^{n-5}$$
 5. Poisson Distribution: The parameters of this distribution is $\lambda$ the rate parameter.
 Motivation: There is as such no story to this distribution but only motivation for using this distribution. The Poisson distribution is often used for applications where we count the successes of a large number of trials where the per-trial success rate is small. For example, the Poisson distribution is a good starting point for counting the number of people who email you over the course of an hour.The number of chocolate chips in a chocolate chip cookie is another good candidate for a Poisson distribution, or the number of earthquakes in a year in some particular region
 PMF of Poisson Distribution is given by: $$ P(X=k) = \frac{e^{-\lambda}\lambda^k} {k!}$$
-Expected Value:
-$$E[X] = \sum kP(X=k)$$ $$ E[X] = \sum_{k=0}^{inf} k \frac{e^{-\lambda}\lambda^k} {k!}$$ $$ E[X] = \lambda e^{-\lambda}\sum_{k=0}^{inf} \frac{\lambda^{k-1}} {(k-1)!}$$ $$ E[X] = \lambda e^{-\lambda} e^{\lambda} = \lambda $$ Variance:
-$$Var[X] = E[X^2] - E[X]^2$$ Now we find, $$E[X^2] = \lambda &#43; \lambda^2$$ Thus, $$Var[X] = \lambda$$
-Example:
-Q. If electricity power failures occur according to a Poisson distribution with an average of 3 failures every twenty weeks, calculate the probability that there will not be more than one failure during a particular week?
+Expected Value:Variance:Now we find,
+Example:Q. If electricity power failures occur according to a Poisson distribution with an average of 3 failures every twenty weeks, calculate the probability that there will not be more than one failure during a particular week?
 A. Probability = P(X=0)&#43;P(X=1) =
-$$e^{-3/20} &#43; e^{-3/20}3/20 = 23/20*e^{-3/20} $$ Probability of selling the last candy bar at the nth house = $$P(X=k) = \left(\begin{array}{c}k&#43;r-1\ k\end{array}\right) p^r(1-p)^k$$ $$P(X=k) = \left(\begin{array}{c}n-1\ n-5\end{array}\right) .4^5(.6)^{n-5}$$
+Probability of selling the last candy bar at the nth house = $$P(X=k) = \left(\begin{array}{c}k&#43;r-1\ k\end{array}\right) p^r(1-p)^k$$ $$P(X=k) = \left(\begin{array}{c}n-1\ n-5\end{array}\right) .4^5(.6)^{n-5}$$
 Math Appendix: Some Math (For Geometric Distribution) :
 $$a&#43;ar&#43;ar^2&#43;ar^3&#43;⋯=a/(1−r)=a(1−r)^{−1}$$ Taking the derivatives of both sides, the first derivative with respect to r must be: $$a&#43;2ar&#43;3ar^2&#43;4ar^3⋯=a(1−r)^{−2}$$ Multiplying above with r: $$ar&#43;2ar^2&#43;3ar^3&#43;4ar^4⋯=ar(1−r)^{−2}$$ Taking the derivatives of both sides, the first derivative with respect to r must be: $$a&#43;4ar&#43;9ar^2&#43;16ar^3⋯=a(1−r)^{-3}(1&#43;r)$$
 Bonus - Python Graphs and Functions: # Useful Function to create graph def chart_creator(x,y,title): import matplotlib.pyplot as plt #sets up plotting under plt import seaborn as sns #sets up styles and gives us more plotting options import pandas as pd #lets us handle data as dataframes %matplotlib inline # Create a list of 100 Normal RVs data = pd.DataFrame(zip(x,y)) data.columns = [&amp;#39;x&amp;#39;,&amp;#39;y&amp;#39;] # We dont Probably need the Gridlines. Do we? If yes comment this line sns.set(style=&amp;#34;ticks&amp;#34;) # Here we create a matplotlib axes object. The extra parameters we use # &amp;#34;ci&amp;#34; to remove confidence interval # &amp;#34;marker&amp;#34; to have a x as marker. # &amp;#34;scatter_kws&amp;#34; to provide style info for the points.[s for size] # &amp;#34;line_kws&amp;#34; to provide style info for the line.[lw for line width] g = sns.regplot(x=&amp;#39;x&amp;#39;, y=&amp;#39;y&amp;#39;, data=data, ci = False, scatter_kws={&amp;#34;color&amp;#34;:&amp;#34;darkred&amp;#34;,&amp;#34;alpha&amp;#34;:0.3,&amp;#34;s&amp;#34;:90}, line_kws={&amp;#34;color&amp;#34;:&amp;#34;g&amp;#34;,&amp;#34;alpha&amp;#34;:0.5,&amp;#34;lw&amp;#34;:0},marker=&amp;#34;x&amp;#34;) # remove the top and right line in graph sns.despine() # Set the size of the graph from here g.figure.set_size_inches(12,8) # Set the Title of the graph from here g.axes.set_title(title, fontsize=34,color=&amp;#34;r&amp;#34;,alpha=0.5) # Set the xlabel of the graph from here g.set_xlabel(&amp;#34;k&amp;#34;,size = 67,color=&amp;#34;r&amp;#34;,alpha=0.5) # Set the ylabel of the graph from here g.set_ylabel(&amp;#34;pmf&amp;#34;,size = 67,color=&amp;#34;r&amp;#34;,alpha=0.5) # Set the ticklabel size and color of the graph from here g.tick_params(labelsize=14,labelcolor=&amp;#34;black&amp;#34;) And here I will generate the PMFs of the discrete distributions we just discussed above using Pythons built in functions. For more details on the upper function, please see my previous post - Create basic graph visualizations with SeaBorn. Also take a look at the documentation guide for the below functions
-# Binomial : from scipy.stats import binom n=30 p=0.5 k = range(0,n) pmf = binom.pmf(k, n, p) chart_creator(k,pmf,&amp;#34;Binomial PMF&amp;#34;)   # Geometric : from scipy.stats import geom n=30 p=0.5 k = range(0,n) # -1 here is the location parameter for generating the PMF we want. pmf = geom.pmf(k, p,-1) chart_creator(k,pmf,&amp;#34;Geometric PMF&amp;#34;)   # Negative Binomial : from scipy.stats import nbinom r=5 # number of successes p=0.5 # probability of Success k = range(0,25) # number of failures # -1 here is the location parameter for generating the PMF we want. pmf = nbinom.pmf(k, r, p) chart_creator(k,pmf,&amp;#34;Nbinom PMF&amp;#34;)   #Poisson from scipy.stats import poisson lamb = .3 # Rate k = range(0,5) pmf = poisson.pmf(k, lamb) chart_creator(k,pmf,&amp;#34;Poisson PMF&amp;#34;)   References:  Introduction to Probability by Joe Blitzstein Wikipedia  Next thing I want to come up with is a same sort of post for continuous distributions too. Keep checking for the same. Till then Ciao.
+# Binomial : from scipy.stats import binom n=30 p=0.5 k = range(0,n) pmf = binom.pmf(k, n, p) chart_creator(k,pmf,&amp;#34;Binomial PMF&amp;#34;) # Geometric : from scipy.stats import geom n=30 p=0.5 k = range(0,n) # -1 here is the location parameter for generating the PMF we want. pmf = geom.pmf(k, p,-1) chart_creator(k,pmf,&amp;#34;Geometric PMF&amp;#34;) # Negative Binomial : from scipy.stats import nbinom r=5 # number of successes p=0.5 # probability of Success k = range(0,25) # number of failures # -1 here is the location parameter for generating the PMF we want. pmf = nbinom.pmf(k, r, p) chart_creator(k,pmf,&amp;#34;Nbinom PMF&amp;#34;) #Poisson from scipy.stats import poisson lamb = .3 # Rate k = range(0,5) pmf = poisson.pmf(k, lamb) chart_creator(k,pmf,&amp;#34;Poisson PMF&amp;#34;) References:  Introduction to Probability by Joe Blitzstein Wikipedia  Next thing I want to come up with is a same sort of post for continuous distributions too. Keep checking for the same. Till then Ciao.
 ]]>
         
       </content:encoded>
@@ -121,7 +107,7 @@ Problem Statement: In a room full of N people, what is the probability that 2 or
 
       <content:encoded>  
         
-        <![CDATA[  Newton once said that &amp;ldquo;God does not play dice with the universe&amp;rdquo;. But actually he does. Everything happening around us could be explained in terms of probabilities. We repeatedly watch things around us happen due to chances, yet we never learn. We always get dumbfounded by the playfulness of nature.
+        <![CDATA[ Newton once said that &amp;ldquo;God does not play dice with the universe&amp;rdquo;. But actually he does. Everything happening around us could be explained in terms of probabilities. We repeatedly watch things around us happen due to chances, yet we never learn. We always get dumbfounded by the playfulness of nature.
 One of such ways intuition plays with us is with the Birthday problem.
 Problem Statement: In a room full of N people, what is the probability that 2 or more people share the same birthday(Assumption: 365 days in year)?
 By the pigeonhole principle, the probability reaches 100% when the number of people reaches 366 (since there are only 365 possible birthdays).
@@ -129,7 +115,7 @@ However, the paradox is that 99.9% probability is reached with just 70 people, a
 Mathematical Proof: Sometimes a good strategy when trying to find out probability of an event is to look at the probability of the complement event.Here it is easier to find the probability of the complement event. We just need to count the number of cases in which no person has the same birthday.(Sampling without replacement) Since there are k ways in which birthdays can be chosen with replacement.
 $P(birthday Match) = 1 - \dfrac{(365).364&amp;hellip;(365−k&#43;1)}{365^k}$
 Simulation: Lets try to build around this result some more by trying to simulate this result:
-%matplotlib inline import matplotlib import numpy as np import matplotlib.pyplot as plt import matplotlib.pyplot as plt #sets up plotting under plt import seaborn as sns #sets up styles and gives us more plotting options import pandas as pd #lets us handle data as dataframes import random def sim_bithday_problem(num_people_room, trials =1000): &amp;#39;&amp;#39;&amp;#39;This function takes as input the number of people in the room. Runs 1000 trials by default and returns (number of times same brthday found)/(no of trials) &amp;#39;&amp;#39;&amp;#39; same_birthdays_found = 0 for i in range(trials): # randomly sample from the birthday space which could be any of a number from 1 to 365 birthdays = [random.randint(1,365) for x in range(num_people_room)] if len(birthdays) - len(set(birthdays))&amp;gt;0: same_birthdays_found&#43;=1 return same_birthdays_found/float(trials) num_people = range(2,100) probs = [sim_bithday_problem(i) for i in num_people] data = pd.DataFrame() data[&amp;#39;num_peeps&amp;#39;] = num_people data[&amp;#39;probs&amp;#39;] = probs sns.set(style=&amp;#34;ticks&amp;#34;) g = sns.regplot(x=&amp;#34;num_peeps&amp;#34;, y=&amp;#34;probs&amp;#34;, data=data, ci = False, scatter_kws={&amp;#34;color&amp;#34;:&amp;#34;darkred&amp;#34;,&amp;#34;alpha&amp;#34;:0.3,&amp;#34;s&amp;#34;:90}, marker=&amp;#34;x&amp;#34;,fit_reg=False) sns.despine() g.figure.set_size_inches(10,6) g.axes.set_title(&amp;#39;As the Number of people in room reaches 23 the probability reaches ~0.5\nAt more than 50 people the probability is reaching 1&amp;#39;, fontsize=15,color=&amp;#34;g&amp;#34;,alpha=0.5) g.set_xlabel(&amp;#34;# of people in room&amp;#34;,size = 30,color=&amp;#34;r&amp;#34;,alpha=0.5) g.set_ylabel(&amp;#34;Probability&amp;#34;,size = 30,color=&amp;#34;r&amp;#34;,alpha=0.5) g.tick_params(labelsize=14,labelcolor=&amp;#34;black&amp;#34;)   We can see from the graph that as the Number of people in room reaches 23 the probability reaches ~ 0.5. So we have proved this fact Mathematically as well as with simulation.
+%matplotlib inline import matplotlib import numpy as np import matplotlib.pyplot as plt import matplotlib.pyplot as plt #sets up plotting under plt import seaborn as sns #sets up styles and gives us more plotting options import pandas as pd #lets us handle data as dataframes import random def sim_bithday_problem(num_people_room, trials =1000): &amp;#39;&amp;#39;&amp;#39;This function takes as input the number of people in the room. Runs 1000 trials by default and returns (number of times same brthday found)/(no of trials) &amp;#39;&amp;#39;&amp;#39; same_birthdays_found = 0 for i in range(trials): # randomly sample from the birthday space which could be any of a number from 1 to 365 birthdays = [random.randint(1,365) for x in range(num_people_room)] if len(birthdays) - len(set(birthdays))&amp;gt;0: same_birthdays_found&#43;=1 return same_birthdays_found/float(trials) num_people = range(2,100) probs = [sim_bithday_problem(i) for i in num_people] data = pd.DataFrame() data[&amp;#39;num_peeps&amp;#39;] = num_people data[&amp;#39;probs&amp;#39;] = probs sns.set(style=&amp;#34;ticks&amp;#34;) g = sns.regplot(x=&amp;#34;num_peeps&amp;#34;, y=&amp;#34;probs&amp;#34;, data=data, ci = False, scatter_kws={&amp;#34;color&amp;#34;:&amp;#34;darkred&amp;#34;,&amp;#34;alpha&amp;#34;:0.3,&amp;#34;s&amp;#34;:90}, marker=&amp;#34;x&amp;#34;,fit_reg=False) sns.despine() g.figure.set_size_inches(10,6) g.axes.set_title(&amp;#39;As the Number of people in room reaches 23 the probability reaches ~0.5\nAt more than 50 people the probability is reaching 1&amp;#39;, fontsize=15,color=&amp;#34;g&amp;#34;,alpha=0.5) g.set_xlabel(&amp;#34;# of people in room&amp;#34;,size = 30,color=&amp;#34;r&amp;#34;,alpha=0.5) g.set_ylabel(&amp;#34;Probability&amp;#34;,size = 30,color=&amp;#34;r&amp;#34;,alpha=0.5) g.tick_params(labelsize=14,labelcolor=&amp;#34;black&amp;#34;) We can see from the graph that as the Number of people in room reaches 23 the probability reaches ~ 0.5. So we have proved this fact Mathematically as well as with simulation.
 Intuition: To understand it we need to think of this problem in terms of pairs. There are ${{23}\choose{2}} = 253$ pairs of people in the room when only 23 people are present. Now with that big number you should not find the probability of 0.5 too much. In the case of 70 people we are looking at ${{70}\choose{2}} = 2450$ pairs.
 So thats it for now. To learn more about this go to Wikipedia which has an awesome page on this topic.
 References:  Introduction to Probability by Joseph K. Blitzstein Birthday Problem on Wikipedia  ]]>

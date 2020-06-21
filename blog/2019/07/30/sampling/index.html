@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.53" />
+	<meta name="generator" content="Hugo 0.72.0" />
 	<meta property="og:title" content="The 5 Sampling Algorithms every Data Scientist need to know" />
 <meta property="og:description" content="This post is about some of the most common sampling techniques one can use while working with data." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2019/07/30/sampling/" />
 <meta property="og:image" content="https://mlwhiz.com/images/sampling/1.jpg" />
-<meta property="article:published_time" content="2019-07-30T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2019-07-30T00:00:00&#43;00:00"/>
+<meta property="article:published_time" content="2019-07-30T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-07-30T00:00:00+00:00" />
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/sampling/1.jpg"/>
@@ -169,59 +169,35 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			
-
-<p><img src="/images/sampling/1.jpg" alt="" /></p>
-
+			<p><img src="/images/sampling/1.jpg" alt=""></p>
 <p>Data Science is the study of algorithms.</p>
-
 <p>I grapple through with many algorithms on a day to day basis so I thought of listing some of the most common and most used algorithms one will end up using in this new DS Algorithm series.</p>
-
-<p><strong><em>This post is about some of the most common sampling techniques one can use while working with data.</em></strong></p>
-
+<p><em><strong>This post is about some of the most common sampling techniques one can use while working with data.</strong></em></p>
 <h2 id="simple-random-sampling"><strong>Simple Random Sampling</strong></h2>
-
 <p><em>Say you want to select a subset of a population in which each member of the subset has an equal probability of being chosen.</em></p>
-
 <p>Below we select 100 sample points from a dataset.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">sample_df <span style="color:#f92672">=</span> df<span style="color:#f92672">.</span>sample(<span style="color:#ae81ff">100</span>)</code></pre></div>
-<hr />
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">sample_df <span style="color:#f92672">=</span> df<span style="color:#f92672">.</span>sample(<span style="color:#ae81ff">100</span>)
+</code></pre></div><hr>
 <h2 id="stratified-sampling"><strong>Stratified Sampling</strong></h2>
-
-<p><img src="/images/sampling/2.jpg" alt="" /></p>
-
+<p><img src="/images/sampling/2.jpg" alt=""></p>
 <p>Assume that we need to estimate the average number of votes for each candidate in an election. Assume that the country has 3 towns:</p>
-
 <p>Town A has 1 million factory workers,</p>
-
 <p>Town B has 2 million workers, and</p>
-
 <p>Town C has 3 million retirees.</p>
-
 <p>We can choose to get a random sample of size 60 over the entire population but there is some chance that the random sample turns out to be not well balanced across these towns and hence is biased causing a significant error in estimation.</p>
-
 <p>Instead, if we choose to take a random sample of 10, 20 and 30 from Town A, B and C respectively then we can produce a smaller error in estimation for the same total size of the sample.</p>
-
 <p>You can do something like this pretty easily with Python:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> train_test_split
 X_train, X_test, y_train, y_test <span style="color:#f92672">=</span> train_test_split(X, y,
                                                         stratify<span style="color:#f92672">=</span>y, 
-                                                        test_size<span style="color:#f92672">=</span><span style="color:#ae81ff">0.25</span>)</code></pre></div>
-<hr />
-
+                                                        test_size<span style="color:#f92672">=</span><span style="color:#ae81ff">0.25</span>)
+</code></pre></div><hr>
 <h2 id="reservoir-sampling"><strong>Reservoir Sampling</strong></h2>
-
-<p><img src="/images/sampling/3.jpg" alt="" /></p>
-
+<p><img src="/images/sampling/3.jpg" alt=""></p>
 <p>I love this problem statement:</p>
-
-<p><strong><em>Say you have a stream of items of large and unknown length that we can only iterate over once.</em></strong></p>
-
-<p><strong><em>Create an algorithm that randomly chooses an item from this stream such that each item is equally likely to be selected.</em></strong></p>
-
+<p><em><strong>Say you have a stream of items of large and unknown length that we can only iterate over once.</strong></em></p>
+<p><em><strong>Create an algorithm that randomly chooses an item from this stream such that each item is equally likely to be selected.</strong></em></p>
 <p>How can we do that?</p>
-
 <p>Let us assume we have to sample 5 objects out of an infinite stream such that each element has an equal probability of getting selected.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> random
 
@@ -246,46 +222,27 @@ reservoir <span style="color:#f92672">=</span> []
             <span style="color:#75715e"># Select item in stream and remove one of the k items already selected</span>
              reservoir[random<span style="color:#f92672">.</span>choice(range(<span style="color:#ae81ff">0</span>,k))] <span style="color:#f92672">=</span> element
 
-<span style="color:#66d9ef">print</span>(reservoir)</code></pre></div>
-<pre><code>[1369, 4108, 9986, 828, 5589]
+<span style="color:#66d9ef">print</span>(reservoir)
+</code></pre></div><pre><code>[1369, 4108, 9986, 828, 5589]
 </code></pre>
-
 <p>It can be mathematically proved that in the sample each element has the same probability of getting selected from the stream.</p>
-
 <p>How?</p>
-
 <p>It always helps to think of a smaller problem when it comes to mathematics.</p>
-
 <p>So, let us think of a stream of only 3 items and we have to keep 2 of them.</p>
-
 <p>We see the first item, we hold it in the list as our reservoir has space. We see the second item, we hold it in the list as our reservoir has space.</p>
-
-<p>We see the third item. Here is where things get interesting. We choose the third item to be in the list with probability <sup>2</sup>&frasl;<sub>3</sub>.</p>
-
+<p>We see the third item. Here is where things get interesting. We choose the third item to be in the list with probability 2/3.</p>
 <p>Let us now see the probability of first item getting selected:</p>
-
 <p>The probability of removing the first item is the probability of element 3 getting selected multiplied by the probability of Element 1 getting randomly chosen as the replacement candidate from the 2 elements in the reservoir. That probability is:</p>
-
-<p><sup>2</sup>&frasl;<sub>3</sub>*<sup>1</sup>&frasl;<sub>2</sub> = <sup>1</sup>&frasl;<sub>3</sub></p>
-
+<p>2/3*1/2 = 1/3</p>
 <p>Thus the probability of 1 getting selected is:</p>
-
-<p>1–1/3 = <sup>2</sup>&frasl;<sub>3</sub></p>
-
+<p>1–1/3 = 2/3</p>
 <p>We can have the exact same argument for the Second Element and we can extend it for many elements.</p>
-
-<p>Thus each item has the same probability of getting selected: <sup>2</sup>&frasl;<sub>3</sub> or in general k/n</p>
-
-<hr />
-
+<p>Thus each item has the same probability of getting selected: 2/3 or in general k/n</p>
+<hr>
 <h2 id="random-undersampling-and-oversampling">Random Undersampling and Oversampling</h2>
-
-<p><img src="/images/sampling/4.png" alt="[Source](https://www.kaggle.com/rafjaa/resampling-strategies-for-imbalanced-datasets#t1)" /></p>
-
+<p><img src="/images/sampling/4.png" alt="Source"></p>
 <p>It is too often that we encounter an imbalanced dataset.</p>
-
 <p>A widely adopted technique for dealing with highly imbalanced datasets is called resampling. It consists of removing samples from the majority class (under-sampling) and/or adding more examples from the minority class (over-sampling).</p>
-
 <p>Let us first create some example imbalanced data.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.datasets <span style="color:#f92672">import</span> make_classification
 
@@ -297,8 +254,8 @@ X, y <span style="color:#f92672">=</span> make_classification(
 )
 
 X <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame(X)
-X[<span style="color:#e6db74">&#39;target&#39;</span>] <span style="color:#f92672">=</span> y</code></pre></div>
-<p>We can now do random oversampling and undersampling using:</p>
+X[<span style="color:#e6db74">&#39;target&#39;</span>] <span style="color:#f92672">=</span> y
+</code></pre></div><p>We can now do random oversampling and undersampling using:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">num_0 <span style="color:#f92672">=</span> len(X[X[<span style="color:#e6db74">&#39;target&#39;</span>]<span style="color:#f92672">==</span><span style="color:#ae81ff">0</span>])
 num_1 <span style="color:#f92672">=</span> len(X[X[<span style="color:#e6db74">&#39;target&#39;</span>]<span style="color:#f92672">==</span><span style="color:#ae81ff">1</span>])
 <span style="color:#66d9ef">print</span>(num_0,num_1)
@@ -311,58 +268,40 @@ undersampled_data <span style="color:#f92672">=</span> pd<span style="color:#f92
 <span style="color:#75715e"># random oversample</span>
 
 oversampled_data <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat([ X[X[<span style="color:#e6db74">&#39;target&#39;</span>]<span style="color:#f92672">==</span><span style="color:#ae81ff">0</span>] , X[X[<span style="color:#e6db74">&#39;target&#39;</span>]<span style="color:#f92672">==</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>sample(num_0, replace<span style="color:#f92672">=</span>True) ])
-<span style="color:#66d9ef">print</span>(len(oversampled_data))</code></pre></div>
-<pre><code>OUTPUT:
+<span style="color:#66d9ef">print</span>(len(oversampled_data))
+</code></pre></div><pre><code>OUTPUT:
 90 10
 20
 180
 </code></pre>
-
-<hr />
-
+<hr>
 <h2 id="undersampling-and-oversampling-using-imbalanced-learn">Undersampling and Oversampling using imbalanced-learn</h2>
-
 <p>imbalanced-learn(imblearn) is a Python Package to tackle the curse of imbalanced datasets.</p>
-
 <p>It provides a variety of methods to undersample and oversample.</p>
-
 <h3 id="a-undersampling-using-tomek-links">a. Undersampling using Tomek Links:</h3>
-
 <p>One of such methods it provides is called Tomek Links. Tomek links are pairs of examples of opposite classes in close vicinity.</p>
-
 <p>In this algorithm, we end up removing the majority element from the Tomek link which provides a better decision boundary for a classifier.</p>
-
-<p><img src="/images/sampling/tomek.png" alt="[Source](https://www.kaggle.com/rafjaa/resampling-strategies-for-imbalanced-datasets#t1)" /></p>
+<p><img src="/images/sampling/tomek.png" alt="Source"></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> imblearn.under_sampling <span style="color:#f92672">import</span> TomekLinks
 
 tl <span style="color:#f92672">=</span> TomekLinks(return_indices<span style="color:#f92672">=</span>True, ratio<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;majority&#39;</span>)
-X_tl, y_tl, id_tl <span style="color:#f92672">=</span> tl<span style="color:#f92672">.</span>fit_sample(X, y)</code></pre></div>
-<h3 id="b-oversampling-using-smote">b. Oversampling using SMOTE:</h3>
-
+X_tl, y_tl, id_tl <span style="color:#f92672">=</span> tl<span style="color:#f92672">.</span>fit_sample(X, y)
+</code></pre></div><h3 id="b-oversampling-using-smote">b. Oversampling using SMOTE:</h3>
 <p>In SMOTE (Synthetic Minority Oversampling Technique) we synthesize elements for the minority class, in the vicinity of already existing elements.</p>
-
-<p><img src="/images/sampling/5.png" alt="[Source](https://www.kaggle.com/rafjaa/resampling-strategies-for-imbalanced-datasets#t1)" /></p>
+<p><img src="/images/sampling/5.png" alt="Source"></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> imblearn.over_sampling <span style="color:#f92672">import</span> SMOTE
 
 smote <span style="color:#f92672">=</span> SMOTE(ratio<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;minority&#39;</span>)
-X_sm, y_sm <span style="color:#f92672">=</span> smote<span style="color:#f92672">.</span>fit_sample(X, y)</code></pre></div>
-<p>There are a variety of other methods in the <a href="https://github.com/scikit-learn-contrib/imbalanced-learn#id3" rel="nofollow" target="_blank">imblearn</a> package for both undersampling(Cluster Centroids, NearMiss, etc.) and oversampling(ADASYN and bSMOTE) that you can check out.</p>
-
-<hr />
-
+X_sm, y_sm <span style="color:#f92672">=</span> smote<span style="color:#f92672">.</span>fit_sample(X, y)
+</code></pre></div><p>There are a variety of other methods in the <a href="https://github.com/scikit-learn-contrib/imbalanced-learn#id3">imblearn</a> package for both undersampling(Cluster Centroids, NearMiss, etc.) and oversampling(ADASYN and bSMOTE) that you can check out.</p>
+<hr>
 <h2 id="conclusion">Conclusion</h2>
-
-<p><a href="https://amzn.to/2YieJg2" rel="nofollow" target="_blank">Algorithms</a> are the lifeblood of data science.</p>
-
-<p><strong><em>Sampling is an important topic in data science and we really don’t talk about it as much as we should.</em></strong></p>
-
+<p><a href="https://amzn.to/2YieJg2">Algorithms</a> are the lifeblood of data science.</p>
+<p><em><strong>Sampling is an important topic in data science and we really don’t talk about it as much as we should.</strong></em></p>
 <p>A good sampling strategy sometimes could pull the whole project forward. A bad sampling strategy could give us incorrect results. So one should be careful while selecting a sampling strategy.</p>
-
 <p>So use sampling, be it at work or at bars.</p>
-
-<p>If you want to learn more about Data Science, I would like to call out this <a href="https://www.coursera.org/learn/machine-learning?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;siteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&amp;source=post_page---------------------------" rel="nofollow" target="_blank"><strong><em>excellent course</em></strong></a> by Andrew Ng. This was the one that got me started. Do check it out.</p>
-
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+<p>If you want to learn more about Data Science, I would like to call out this <a href="https://www.coursera.org/learn/machine-learning?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;siteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&amp;source=post_page---------------------------"><em><strong>excellent course</strong></em></a> by Andrew Ng. This was the one that got me started. Do check it out.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------">@mlwhiz</a>.</p>
 
 		</div>
 		
@@ -500,7 +439,7 @@ X_sm, y_sm <span style="color:#f92672">=</span> smote<span style="color:#f92672"
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
 		</ul>
 	</div>
 </div>

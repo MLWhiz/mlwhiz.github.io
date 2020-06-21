@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.53" />
+	<meta name="generator" content="Hugo 0.72.0" />
 	<meta property="og:title" content="Implementing Object Detection and Instance Segmentation for Data Scientists" />
 <meta property="og:description" content="This post is about implementing and getting an object detector on our custom dataset of weapons" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2019/12/06/weapons/" />
 <meta property="og:image" content="https://mlwhiz.com/images/weapons/main.png" />
-<meta property="article:published_time" content="2019-12-06T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2019-12-06T00:00:00&#43;00:00"/>
+<meta property="article:published_time" content="2019-12-06T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-12-06T00:00:00+00:00" />
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/weapons/main.png"/>
@@ -169,91 +169,57 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			
-
-<p><img src="/images/weapons/main.png" alt="" /></p>
-
+			<p><img src="/images/weapons/main.png" alt=""></p>
 <p>Object Detection is a helpful tool to have in your coding repository.</p>
-
 <p>It forms the backbone of many fantastic industrial applications. Some of them being self-driving cars, medical imaging and face detection.</p>
-
-<p>In my last <a href="https://towardsdatascience.com/a-hitchhikers-guide-to-object-detection-and-instance-segmentation-ac0146fe8e11" rel="nofollow" target="_blank">post</a> on Object detection, I talked about how Object detection models evolved.</p>
-
+<p>In my last <a href="https://towardsdatascience.com/a-hitchhikers-guide-to-object-detection-and-instance-segmentation-ac0146fe8e11">post</a> on Object detection, I talked about how Object detection models evolved.</p>
 <p>But what good is theory, if we can’t implement it?</p>
-
-<p><strong><em>This post is about implementing and getting an object detector on our custom dataset of weapons.</em></strong></p>
-
+<p><em><strong>This post is about implementing and getting an object detector on our custom dataset of weapons.</strong></em></p>
 <p>The problem we will specifically solve today is that of Instance Segmentation using Mask-RCNN.</p>
-
-<hr />
-
+<hr>
 <h2 id="instance-segmentation">Instance Segmentation</h2>
-
-<p><em>Can we create</em> <strong><em>masks</em></strong> <em>for each object in the image? Specifically something like:</em></p>
-
-<p><img src="/images/weapons/0.png" alt="" /></p>
-
+<p><em>Can we create</em> <em><strong>masks</strong></em> <em>for each object in the image? Specifically something like:</em></p>
+<p><img src="/images/weapons/0.png" alt=""></p>
 <p>The most common way to solve this problem is by using Mask-RCNN. The architecture of Mask-RCNN looks like below:</p>
-
-<p><img src="/images/weapons/1.png" alt="[Source](https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272)" /><em><a href="https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272" rel="nofollow" target="_blank">Source</a></em></p>
-
+<p><img src="/images/weapons/1.png" alt="Source"><em><a href="https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272">Source</a></em></p>
 <p>Essentially, it comprises of:</p>
-
 <ul>
-<li><p>A backbone network like resnet50/resnet101</p></li>
-
-<li><p>A Region Proposal network</p></li>
-
-<li><p>ROI-Align layers</p></li>
-
-<li><p>Two output layers — one to predict masks and one to predict class and bounding box.</p></li>
+<li>
+<p>A backbone network like resnet50/resnet101</p>
+</li>
+<li>
+<p>A Region Proposal network</p>
+</li>
+<li>
+<p>ROI-Align layers</p>
+</li>
+<li>
+<p>Two output layers — one to predict masks and one to predict class and bounding box.</p>
+</li>
 </ul>
-
 <p>There is a lot more to it. If you want to learn more about the theory, read my last post&ndash;
-<a href="https://towardsdatascience.com/a-hitchhikers-guide-to-object-detection-and-instance-segmentation-ac0146fe8e11" rel="nofollow" target="_blank">Demystifying Object Detection and Instance Segmentation for Data Scientists</a></p>
-
-<p>This post is mostly going to be about the <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/object_detection" rel="nofollow" target="_blank">code</a>.</p>
-
-<hr />
-
+<a href="https://towardsdatascience.com/a-hitchhikers-guide-to-object-detection-and-instance-segmentation-ac0146fe8e11">Demystifying Object Detection and Instance Segmentation for Data Scientists</a></p>
+<p>This post is mostly going to be about the <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/object_detection">code</a>.</p>
+<hr>
 <h2 id="1-creating-your-custom-dataset-for-instance-segmentation">1. Creating your Custom Dataset for Instance Segmentation</h2>
-
-<p><img src="/images/weapons/2.png" alt="Our Dataset" /></p>
-
+<p><img src="/images/weapons/2.png" alt="Our Dataset"></p>
 <p>The use case we will be working on is a weapon detector. A weapon detector is something that can be used in conjunction with street cameras as well as CCTV’s to fight crime. So it is pretty nifty.</p>
-
-<p>So, I started with downloading 40 images each of guns and swords from the <a href="https://storage.googleapis.com/openimages/web/index.html" rel="nofollow" target="_blank">open image dataset</a> and annotated them using the VIA tool. Now setting up the annotation project in VIA is petty important, so I will try to explain it step by step.</p>
-
+<p>So, I started with downloading 40 images each of guns and swords from the <a href="https://storage.googleapis.com/openimages/web/index.html">open image dataset</a> and annotated them using the VIA tool. Now setting up the annotation project in VIA is petty important, so I will try to explain it step by step.</p>
 <h3 id="1-set-up-via">1. Set up VIA</h3>
-
 <p>VIA is an annotation tool, using which you can annotate images both bounding boxes as well as masks. I found it as one of the best tools to do annotation as it is online and runs in the browser itself.</p>
-
-<p>To use it, open <a href="http://www.robots.ox.ac.uk/~vgg/software/via/via.html" rel="nofollow" target="_blank">http://www.robots.ox.ac.uk/~vgg/software/via/via.html</a></p>
-
+<p>To use it, open <a href="http://www.robots.ox.ac.uk/~vgg/software/via/via.html">http://www.robots.ox.ac.uk/~vgg/software/via/via.html</a></p>
 <p>You will see a page like:</p>
-
-<p><img src="/images/weapons/3.png" alt="" /></p>
-
+<p><img src="/images/weapons/3.png" alt=""></p>
 <p>The next thing we want to do is to add the different class names in the region_attributes. Here I have added ‘gun’ and ‘sword’ as per our use case as these are the two distinct targets I want to annotate.</p>
-
-<p><img src="/images/weapons/4.png" alt="" /></p>
-
+<p><img src="/images/weapons/4.png" alt=""></p>
 <h3 id="2-annotate-the-images">2. Annotate the Images</h3>
-
 <p>I have kept all the files in the folder data. Next step is to add the files we want to annotate. We can add files in the data folder using the “Add Files” button in the VIA tool. And start annotating along with labels as shown below after selecting the polyline tool.</p>
-
-<p><img src="/images/weapons/5.png" alt="Click, Click, Enter, Escape, Select" /></p>
-
+<p><img src="/images/weapons/5.png" alt="Click, Click, Enter, Escape, Select"></p>
 <h3 id="3-download-the-annotation-file">3. Download the annotation file</h3>
-
 <p>Click on save project on the top menu of the VIA tool.</p>
-
-<p><img src="/images/weapons/6.png" alt="" /></p>
-
+<p><img src="/images/weapons/6.png" alt=""></p>
 <p>Save file as via_region_data.json by changing the project name field. This will save the annotations in COCO format.</p>
-
 <h3 id="4-set-up-the-data-directory-structure">4. Set up the data directory structure</h3>
-
 <p>We will need to set up the data directories first so that we can do object detection. In the code below, I am creating a directory structure that is required for the model that we are going to use.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> random <span style="color:#f92672">import</span> random
 <span style="color:#f92672">import</span> os
@@ -289,9 +255,8 @@ valid_annotations <span style="color:#f92672">=</span> {}
 <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;procdata/val/via_region_data.json&#39;</span>, <span style="color:#e6db74">&#39;w&#39;</span>) <span style="color:#66d9ef">as</span> fp:
     json<span style="color:#f92672">.</span>dump(valid_annotations, fp)
 <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;procdata/train/via_region_data.json&#39;</span>, <span style="color:#e6db74">&#39;w&#39;</span>) <span style="color:#66d9ef">as</span> fp:
-    json<span style="color:#f92672">.</span>dump(train_annotations, fp)</code></pre></div>
-<p>After running the above code, we will get the data in the below folder structure:</p>
-
+    json<span style="color:#f92672">.</span>dump(train_annotations, fp)
+</code></pre></div><p>After running the above code, we will get the data in the below folder structure:</p>
 <pre><code>- procdata
      - train
          - img1.jpg
@@ -302,32 +267,29 @@ valid_annotations <span style="color:#f92672">=</span> {}
          - img4.jpg
          - via_region_data.json
 </code></pre>
-
-<hr />
-
+<hr>
 <h2 id="2-setup-the-coding-environment">2. Setup the Coding Environment</h2>
-
-<p>We will use the code from the <a href="https://github.com/matterport/Mask_RCNN" rel="nofollow" target="_blank">matterport/Mask_RCNN</a> GitHub repository. You can start by cloning the repository and installing the required libraries.</p>
+<p>We will use the code from the <a href="https://github.com/matterport/Mask_RCNN">matterport/Mask_RCNN</a> GitHub repository. You can start by cloning the repository and installing the required libraries.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git clone https://github.com/matterport/Mask_RCNN
 cd Mask_RCNN
-pip install -r requirements.txt</code></pre></div>
-<p>Once we are done with installing the dependencies and cloning the repo, we can start with implementing our project.</p>
-
-<p>We make a copy of the samples/balloon directory in Mask_RCNN folder and create a <strong><em>samples/guns_and_swords</em></strong> directory where we will continue our work:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cp -r samples/balloon samples/guns_and_swords</code></pre></div>
-<h3 id="setting-up-the-code">Setting up the Code</h3>
-
+pip install -r requirements.txt
+</code></pre></div><p>Once we are done with installing the dependencies and cloning the repo, we can start with implementing our project.</p>
+<p>We make a copy of the samples/balloon directory in Mask_RCNN folder and create a <em><strong>samples/guns_and_swords</strong></em> directory where we will continue our work:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cp -r samples/balloon samples/guns_and_swords
+</code></pre></div><h3 id="setting-up-the-code">Setting up the Code</h3>
 <p>We start by renaming and changing balloon.py in the <code>samples/guns_and_swords</code> directory to <code>gns.py</code>. The <code>balloon.py</code> file right now trains for one target. I have extended it to use multiple targets. In this file, we change:</p>
-
 <ol>
-<li><p><code>balloonconfig</code> to <code>gnsConfig</code></p></li>
-
-<li><p><code>BalloonDataset</code> to <code>gnsDataset</code> : We changed some code here to get the target names from our annotation data and also give multiple targets.</p></li>
-
-<li><p>And some changes in the train function</p></li>
+<li>
+<p><code>balloonconfig</code> to <code>gnsConfig</code></p>
+</li>
+<li>
+<p><code>BalloonDataset</code> to <code>gnsDataset</code> : We changed some code here to get the target names from our annotation data and also give multiple targets.</p>
+</li>
+<li>
+<p>And some changes in the train function</p>
+</li>
 </ol>
-
-<p>Showing only the changed <code>gnsConfig</code> here to get you an idea. You can take a look at the whole <a href="https://github.com/MLWhiz/data_science_blogs/blob/master/object_detection/guns_and_swords/gns.py" rel="nofollow" target="_blank">gns.py</a> code here.</p>
+<p>Showing only the changed <code>gnsConfig</code> here to get you an idea. You can take a look at the whole <a href="https://github.com/MLWhiz/data_science_blogs/blob/master/object_detection/guns_and_swords/gns.py">gns.py</a> code here.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">gnsConfig</span>(Config):
     <span style="color:#e6db74">&#34;&#34;&#34;Configuration for training on the toy  dataset.
 </span><span style="color:#e6db74">    Derives from the base Config class and overrides some values.
@@ -339,19 +301,13 @@ pip install -r requirements.txt</code></pre></div>
     IMAGES_PER_GPU <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
     <span style="color:#75715e"># Number of classes (including background)</span>
     NUM_CLASSES <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>  <span style="color:#75715e"># Background + sword + gun</span>
-    <span style="color:#75715e"># Number of training steps per epoch</span></code></pre></div>
-<hr />
-
+    <span style="color:#75715e"># Number of training steps per epoch</span>
+</code></pre></div><hr>
 <h2 id="3-visualizing-images-and-masks">3. Visualizing Images and Masks</h2>
-
-<p>Once we are done with changing the <code>gns.py</code> file,we can visualize our masks and images. You can do simply by following this <a href="hhttps://github.com/MLWhiz/data_science_blogs/blob/master/object_detection/guns_and_swords/1.%20Visualize%20Dataset.ipynb" rel="nofollow" target="_blank">Visualize Dataset.ipynb</a> notebook.</p>
-
-<p><img src="/images/weapons/a.png" alt="" /></p>
-
-<hr />
-
+<p>Once we are done with changing the <code>gns.py</code> file,we can visualize our masks and images. You can do simply by following this <a href="hhttps://github.com/MLWhiz/data_science_blogs/blob/master/object_detection/guns_and_swords/1.%20Visualize%20Dataset.ipynb">Visualize Dataset.ipynb</a> notebook.</p>
+<p><img src="/images/weapons/a.png" alt=""></p>
+<hr>
 <h2 id="4-train-the-maskrcnn-model-with-transfer-learning">4. Train the MaskRCNN Model with Transfer Learning</h2>
-
 <p>To train the maskRCNN model, on the Guns and Swords dataset, we need to run one of the following commands on the command line based on if we want to initialise our model with COCO weights or imagenet weights:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># Train a new model starting from pre-trained COCO weights</span>
  python3 gns.py train — dataset<span style="color:#f92672">=</span>/path/to/dataset — weights<span style="color:#f92672">=</span>coco
@@ -360,33 +316,22 @@ pip install -r requirements.txt</code></pre></div>
  python3 gns.py train — dataset<span style="color:#f92672">=</span>/path/to/dataset — weights<span style="color:#f92672">=</span>last
 
 <span style="color:#75715e"># Train a new model starting from ImageNet weights</span>
- python3 gns.py train — dataset<span style="color:#f92672">=</span>/path/to/dataset — weights<span style="color:#f92672">=</span>imagenet</code></pre></div>
-<p>The command with weights=last will resume training from the last epoch. The weights are going to be saved in the logs directory in the Mask_RCNN folder.</p>
-
+ python3 gns.py train — dataset<span style="color:#f92672">=</span>/path/to/dataset — weights<span style="color:#f92672">=</span>imagenet
+</code></pre></div><p>The command with weights=last will resume training from the last epoch. The weights are going to be saved in the logs directory in the Mask_RCNN folder.</p>
 <p>This is how the loss looks after our final epoch.</p>
-
-<p><img src="/images/weapons/12.png" alt="" /></p>
-
+<p><img src="/images/weapons/12.png" alt=""></p>
 <h3 id="visualize-the-losses-using-tensorboard">Visualize the losses using Tensorboard</h3>
-
 <p>You can take advantage of tensorboard to visualise how your network is performing. Just run:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">tensorboard --logdir ~/objectDetection/Mask_RCNN/logs/gns20191010T1234</code></pre></div>
-<p>You can get the tensorboard at</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">tensorboard --logdir ~/objectDetection/Mask_RCNN/logs/gns20191010T1234
+</code></pre></div><p>You can get the tensorboard at</p>
 <pre><code>https://localhost:6006
 </code></pre>
-
 <p>Here is how our mask loss looks like:</p>
-
-<p><img src="/images/weapons/13.png" alt="" /></p>
-
+<p><img src="/images/weapons/13.png" alt=""></p>
 <p>We can see that the validation loss is performing pretty abruptly. This is expected as we only have kept 20 images in the validation set.</p>
-
-<hr />
-
+<hr>
 <h2 id="5-prediction-on-new-images">5. Prediction on New Images</h2>
-
-<p>Predicting a new image is also pretty easy. Just follow the <a href="https://github.com/MLWhiz/data_science_blogs/blob/master/object_detection/guns_and_swords/2.%20predict.ipynb" rel="nofollow" target="_blank">prediction.ipynb</a> notebook for a minimal example using our trained model. Below is the main part of the code.</p>
+<p>Predicting a new image is also pretty easy. Just follow the <a href="https://github.com/MLWhiz/data_science_blogs/blob/master/object_detection/guns_and_swords/2.%20predict.ipynb">prediction.ipynb</a> notebook for a minimal example using our trained model. Below is the main part of the code.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Function taken from utils.dataset</span>
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">load_image</span>(image_path):
     <span style="color:#e6db74">&#34;&#34;&#34;Load the specified image and return a [H,W,3] Numpy array.
@@ -408,23 +353,22 @@ results <span style="color:#f92672">=</span> model<span style="color:#f92672">.<
 ax <span style="color:#f92672">=</span> get_ax(<span style="color:#ae81ff">1</span>)
 r <span style="color:#f92672">=</span> results[<span style="color:#ae81ff">0</span>]
 a <span style="color:#f92672">=</span> visualize<span style="color:#f92672">.</span>display_instances(image, r[<span style="color:#e6db74">&#39;rois&#39;</span>], r[<span style="color:#e6db74">&#39;masks&#39;</span>], r[<span style="color:#e6db74">&#39;class_ids&#39;</span>], dataset<span style="color:#f92672">.</span>class_names, r[<span style="color:#e6db74">&#39;scores&#39;</span>], ax<span style="color:#f92672">=</span>ax,
-                            title<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Predictions&#34;</span>)</code></pre></div>
-<p>This is how the result looks for some images in the validation set:</p>
-
-<p><img src="/images/weapons/b.png" alt="" /></p>
-
-<hr />
-
+                            title<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Predictions&#34;</span>)
+</code></pre></div><p>This is how the result looks for some images in the validation set:</p>
+<p><img src="/images/weapons/b.png" alt=""></p>
+<hr>
 <h2 id="improvements">Improvements</h2>
-
 <p>The results don’t look very promising and leave a lot to be desired, but that is to be expected because of very less training data(60 images). One can try to do the below things to improve the model performance for this weapon detector.</p>
-
 <ol>
-<li><p>We just trained on 60 images due to time constraints. While we used transfer learning the data is still too less — Annotate more data.</p></li>
-
-<li><p>Train for more epochs and longer time. See how validation loss and training loss looks like.</p></li>
-
-<li><p>Change hyperparameters in the mrcnn/config file in the Mask_RCNN directory. For information on what these hyperparameters mean, take a look at my previous post. The main ones you can look at:</p></li>
+<li>
+<p>We just trained on 60 images due to time constraints. While we used transfer learning the data is still too less — Annotate more data.</p>
+</li>
+<li>
+<p>Train for more epochs and longer time. See how validation loss and training loss looks like.</p>
+</li>
+<li>
+<p>Change hyperparameters in the mrcnn/config file in the Mask_RCNN directory. For information on what these hyperparameters mean, take a look at my previous post. The main ones you can look at:</p>
+</li>
 </ol>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># if you want to provide different weights to different losses</span>
 LOSS_WEIGHTS <span style="color:#f92672">=</span>{<span style="color:#e6db74">&#39;rpn_class_loss&#39;</span>: <span style="color:#ae81ff">1.0</span>, <span style="color:#e6db74">&#39;rpn_bbox_loss&#39;</span>: <span style="color:#ae81ff">1.0</span>, <span style="color:#e6db74">&#39;mrcnn_class_loss&#39;</span>: <span style="color:#ae81ff">1.0</span>, <span style="color:#e6db74">&#39;mrcnn_bbox_loss&#39;</span>: <span style="color:#ae81ff">1.0</span>, <span style="color:#e6db74">&#39;mrcnn_mask_loss&#39;</span>: <span style="color:#ae81ff">1.0</span>}
@@ -434,21 +378,14 @@ RPN_ANCHOR_SCALES <span style="color:#f92672">=</span> (<span style="color:#ae81
 
 <span style="color:#75715e"># Ratios of anchors at each cell (width/height)</span>
 <span style="color:#75715e"># A value of 1 represents a square anchor, and 0.5 is a wide anchor</span>
-RPN_ANCHOR_RATIOS <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>]</code></pre></div>
-<hr />
-
+RPN_ANCHOR_RATIOS <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>]
+</code></pre></div><hr>
 <h2 id="conclusion">Conclusion</h2>
-
-<p><strong><em>In this post, I talked about how to implement Instance segmentation using Mask-RCNN for a custom dataset.</em></strong></p>
-
+<p><em><strong>In this post, I talked about how to implement Instance segmentation using Mask-RCNN for a custom dataset.</strong></em></p>
 <p>I tried to make the coding part as simple as possible and hope you find the code useful. In the next part of this post, I will deploy this model using a web app. So stay tuned.</p>
-
-<p>You can download the annotated weapons data as well as the code at <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/object_detection" rel="nofollow" target="_blank">Github</a>.</p>
-
-<p>If you want to know more about various <strong><em>Object Detection techniques, motion estimation, object tracking in video etc</em></strong>., I would like to recommend this awesome course on <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">Deep Learning in Computer Vision</a> in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">Advanced machine learning specialization</a>.</p>
-
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
-
+<p>You can download the annotated weapons data as well as the code at <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/object_detection">Github</a>.</p>
+<p>If you want to know more about various <em><strong>Object Detection techniques, motion estimation, object tracking in video etc</strong></em>., I would like to recommend this awesome course on <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Deep Learning in Computer Vision</a> in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a>.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz">@mlwhiz</a>.</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources as sharing knowledge is never a bad idea.</p>
 
 		</div>
@@ -587,7 +524,7 @@ RPN_ANCHOR_RATIOS <span style="color:#f92672">=</span> [<span style="color:#ae81
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
 		</ul>
 	</div>
 </div>

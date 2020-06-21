@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.53" />
+	<meta name="generator" content="Hugo 0.72.0" />
 	<meta property="og:title" content="Make your own Super Pandas using Multiproc" />
 <meta property="og:description" content="This post is a part of my series on Python Shorts. Some tips on how to use python. This post is about using the computing power we have at hand and applying it to the data structure we use most." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2019/04/22/python_pandas_multiproc/" />
 <meta property="og:image" content="https://mlwhiz.com/images/superpanda/superpanda.png" />
-<meta property="article:published_time" content="2019-05-02T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2019-05-02T00:00:00&#43;00:00"/>
+<meta property="article:published_time" content="2019-05-02T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-05-02T00:00:00+00:00" />
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/superpanda/superpanda.png"/>
@@ -169,42 +169,22 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			
-
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/superpanda/superpanda.png" style="height:80%;width:80%"></center>
-</div>
-
-<p><strong><em>Parallelization is awesome.</em></strong></p>
-
+			<!-- raw HTML omitted -->
+<p><em><strong>Parallelization is awesome.</strong></em></p>
 <p>We data scientists have got laptops with quad-core, octa-core, turbo-boost. We work with servers with even more cores and computing power.</p>
-
-<p><strong><em>But do we really utilize the raw power we have at hand?</em></strong></p>
-
+<p><em><strong>But do we really utilize the raw power we have at hand?</strong></em></p>
 <p>Instead, we wait for time taking processes to finish. Sometimes for hours, when urgent deliverables are at hand.</p>
-
 <p>Can we do better? Can we get better?</p>
-
-<p>In this series of posts named <strong><a href="https://towardsdatascience.com/tagged/python-shorts" rel="nofollow" target="_blank">Python Shorts</a>,</strong> I will explain some simple constructs provided by Python, some essential tips and some use cases I come up with regularly in my Data Science work.</p>
-
-<p><strong><em>This post is about using the computing power we have at hand and applying it to the data structure we use most.</em></strong></p>
-
+<p>In this series of posts named <strong><a href="https://towardsdatascience.com/tagged/python-shorts">Python Shorts</a>,</strong> I will explain some simple constructs provided by Python, some essential tips and some use cases I come up with regularly in my Data Science work.</p>
+<p><em><strong>This post is about using the computing power we have at hand and applying it to the data structure we use most.</strong></em></p>
 <h2 id="problem-statement">Problem Statement</h2>
-
 <p>We have got a huge pandas data frame, and we want to apply a complex function to it which takes a lot of time.</p>
-
 <p>For this post, I will use data from the Quora Insincere Question Classification on Kaggle, and we need to create some numerical features like length, the number of punctuations, etc. on it.</p>
-
 <p>The competition was a Kernel-based competition and the code needed to run in 2 hours. So every minute was essential, and there was too much time going in preprocessing.</p>
-
-<p><strong><em>Can we use parallelization to get extra performance out of our code?</em></strong></p>
-
+<p><em><strong>Can we use parallelization to get extra performance out of our code?</strong></em></p>
 <p>Yes, we can.</p>
-
 <h2 id="parallelization-using-just-a-single-function">Parallelization using just a single function</h2>
-
-<p><img src="https://cdn-images-1.medium.com/max/8576/0*ltZjDNBvTB54UM6a" alt="Can we make all our cores run?" /><em>Can we make all our cores run?</em></p>
-
+<p><img src="https://cdn-images-1.medium.com/max/8576/0*ltZjDNBvTB54UM6a" alt="Can we make all our cores run?"><em>Can we make all our cores run?</em></p>
 <p>Let me first start with defining the function I want to use to create our features. add_features is the toy function we wish to apply to our data.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> random
 <span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
@@ -228,52 +208,36 @@ if (!doNotTrack) {
     df[<span style="color:#e6db74">&#39;num_smilies&#39;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#39;question_text&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> comment: sum(comment<span style="color:#f92672">.</span>count(w) <span style="color:#66d9ef">for</span> w <span style="color:#f92672">in</span> (<span style="color:#e6db74">&#39;:-)&#39;</span>, <span style="color:#e6db74">&#39;:)&#39;</span>, <span style="color:#e6db74">&#39;;-)&#39;</span>, <span style="color:#e6db74">&#39;;)&#39;</span>)))
     df[<span style="color:#e6db74">&#39;num_sad&#39;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#39;question_text&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> comment: sum(comment<span style="color:#f92672">.</span>count(w) <span style="color:#66d9ef">for</span> w <span style="color:#f92672">in</span> (<span style="color:#e6db74">&#39;:-&lt;&#39;</span>, <span style="color:#e6db74">&#39;:()&#39;</span>, <span style="color:#e6db74">&#39;;-()&#39;</span>, <span style="color:#e6db74">&#39;;(&#39;</span>)))
     df[<span style="color:#e6db74">&#34;mean_word_len&#34;</span>] <span style="color:#f92672">=</span> df[<span style="color:#e6db74">&#34;question_text&#34;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x: np<span style="color:#f92672">.</span>mean([len(w) <span style="color:#66d9ef">for</span> w <span style="color:#f92672">in</span> str(x)<span style="color:#f92672">.</span>split()]))
-    <span style="color:#66d9ef">return</span> df</code></pre></div>
-<p>We can use parallelized apply using the below function.</p>
+    <span style="color:#66d9ef">return</span> df
+</code></pre></div><p>We can use parallelized apply using the below function.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parallelize_dataframe</span>(df, func, n_cores<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>):
     df_split <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array_split(df, n_cores)
     pool <span style="color:#f92672">=</span> Pool(n_cores)
     df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat(pool<span style="color:#f92672">.</span>map(func, df_split))
     pool<span style="color:#f92672">.</span>close()
     pool<span style="color:#f92672">.</span>join()
-    <span style="color:#66d9ef">return</span> df</code></pre></div>
-<p>What does it do? It breaks the dataframe into n_cores parts, and spawns n_cores processes which apply the function to all the pieces.</p>
-
+    <span style="color:#66d9ef">return</span> df
+</code></pre></div><p>What does it do? It breaks the dataframe into n_cores parts, and spawns n_cores processes which apply the function to all the pieces.</p>
 <p>Once it applies the function to all the split dataframes, it just concatenates the split dataframe and returns the full dataframe to us.</p>
-
 <h3 id="how-can-we-use-it">How can we use it?</h3>
-
 <p>It is pretty simple to use.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">train <span style="color:#f92672">=</span> parallelize_dataframe(train_df, add_features)</code></pre></div>
-<h3 id="does-this-work">Does this work?</h3>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">train <span style="color:#f92672">=</span> parallelize_dataframe(train_df, add_features)
+</code></pre></div><h3 id="does-this-work">Does this work?</h3>
 <p>To check the performance of this parallelize function, I ran %%timeit magic on this function in my Jupyter notebook in a Kaggle Kernel.</p>
-
-<p><img src="https://cdn-images-1.medium.com/max/2248/1*MKR-8UbD5UabvvS9OZLWig.png" alt="" /></p>
-
+<p><img src="https://cdn-images-1.medium.com/max/2248/1*MKR-8UbD5UabvvS9OZLWig.png" alt=""></p>
 <p>vs. just using the function as it is:</p>
-
-<p><img src="https://cdn-images-1.medium.com/max/2408/1*uZ7IGJdazYddXZuMI6JfFA.png" alt="" /></p>
-
+<p><img src="https://cdn-images-1.medium.com/max/2408/1*uZ7IGJdazYddXZuMI6JfFA.png" alt=""></p>
 <p>As you can see I gained some performance just by using the parallelize function. And it was using a kaggle kernel which has only got 2 CPUs.</p>
-
-<p>In the actual competition, there was a lot of computation involved, and the add_features function I was using was much more involved. And this parallelize function helped me immensely to reduce processing time and get a <a href="https://mlwhiz.com/blog/2019/02/19/siver_medal_kaggle_learnings/" rel="nofollow" target="_blank">Silver medal</a>.</p>
-
-<p>Here is the <a href="https://www.kaggle.com/mlwhiz/parallelization-kernel" rel="nofollow" target="_blank">kernel</a> with the full code.</p>
-
+<p>In the actual competition, there was a lot of computation involved, and the add_features function I was using was much more involved. And this parallelize function helped me immensely to reduce processing time and get a <a href="https://mlwhiz.com/blog/2019/02/19/siver_medal_kaggle_learnings/">Silver medal</a>.</p>
+<p>Here is the <a href="https://www.kaggle.com/mlwhiz/parallelization-kernel">kernel</a> with the full code.</p>
 <h2 id="conclusion">Conclusion</h2>
-
 <p><strong>Parallelization is not a silver bullet; it is buckshot.</strong> It won’t solve all your problems, and you would still have to work on optimizing your functions, but it is a great tool to have in your arsenal.</p>
-
 <p>Time never comes back, and sometimes we have a shortage of it. At these times we should be able to use parallelization easily.</p>
-
 <blockquote>
 <h1 id="parallelization-is-not-a-silver-bullet-it-is-a-buckshot">Parallelization is not a silver bullet it is a buckshot</h1>
 </blockquote>
-
-<p>Also if you want to learn more about Python 3, I would like to call out an excellent course on Learn <a href="https://bit.ly/2XshreA" rel="nofollow" target="_blank">Intermediate level Python</a> from the University of Michigan. Do check it out.</p>
-
-<p>I am going to be writing more beginner friendly posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.com/" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+<p>Also if you want to learn more about Python 3, I would like to call out an excellent course on Learn <a href="https://bit.ly/2XshreA">Intermediate level Python</a> from the University of Michigan. Do check it out.</p>
+<p>I am going to be writing more beginner friendly posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.com/"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz">@mlwhiz</a>.</p>
 
 		</div>
 		
@@ -410,7 +374,7 @@ if (!doNotTrack) {
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
 		</ul>
 	</div>
 </div>

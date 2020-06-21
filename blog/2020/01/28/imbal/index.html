@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.53" />
+	<meta name="generator" content="Hugo 0.72.0" />
 	<meta property="og:title" content="The 5 most useful Techniques to Handle Imbalanced datasets" />
 <meta property="og:description" content="This post is about explaining the various techniques you can use to handle imbalanced datasets" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2020/01/28/imbal/" />
 <meta property="og:image" content="https://mlwhiz.com/images/imbal/main.png" />
-<meta property="article:published_time" content="2020-01-28T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2020-01-28T00:00:00&#43;00:00"/>
+<meta property="article:published_time" content="2020-01-28T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-01-28T00:00:00+00:00" />
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/imbal/main.png"/>
@@ -169,47 +169,38 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			
-
-<p><img src="/images/imbal/main.png" alt="" /></p>
-
+			<p><img src="/images/imbal/main.png" alt=""></p>
 <p>Have you ever faced an issue where you have such a small sample for the positive class in your dataset that the model is unable to learn?</p>
-
-<p><strong><em>In such cases, you get a pretty high accuracy just by predicting the majority class, but you fail to capture the minority class, which is most often the point of creating the model in the first place.</em></strong></p>
-
+<p><em><strong>In such cases, you get a pretty high accuracy just by predicting the majority class, but you fail to capture the minority class, which is most often the point of creating the model in the first place.</strong></em></p>
 <p>Such datasets are a pretty common occurrence and are called as an imbalanced dataset.</p>
-
 <blockquote>
 <p>Imbalanced datasets are a special case for classification problem where the class distribution is not uniform among the classes. Typically, they are composed by two classes: The majority (negative) class and the minority (positive) class</p>
 </blockquote>
-
 <p>Imbalanced datasets can be found for different use cases in various domains:</p>
-
 <ul>
-<li><p><strong>Finance</strong>: Fraud detection datasets commonly have a fraud rate of ~1–2%</p></li>
-
-<li><p><strong>Ad Serving</strong>: Click prediction datasets also don’t have a high clickthrough rate.</p></li>
-
-<li><p><strong>Transportation</strong>/<strong>Airline</strong>: Will Airplane failure occur?</p></li>
-
-<li><p><strong>Medical</strong>: Does a patient has cancer?</p></li>
-
-<li><p><strong>Content moderation</strong>: Does a post contain NSFW content?</p></li>
+<li>
+<p><strong>Finance</strong>: Fraud detection datasets commonly have a fraud rate of ~1–2%</p>
+</li>
+<li>
+<p><strong>Ad Serving</strong>: Click prediction datasets also don’t have a high clickthrough rate.</p>
+</li>
+<li>
+<p><strong>Transportation</strong>/<strong>Airline</strong>: Will Airplane failure occur?</p>
+</li>
+<li>
+<p><strong>Medical</strong>: Does a patient has cancer?</p>
+</li>
+<li>
+<p><strong>Content moderation</strong>: Does a post contain NSFW content?</p>
+</li>
 </ul>
-
 <p>So how do we solve such problems?</p>
-
-<p><strong><em>This post is about explaining the various techniques you can use to handle imbalanced datasets.</em></strong></p>
-
-<hr />
-
+<p><em><strong>This post is about explaining the various techniques you can use to handle imbalanced datasets.</strong></em></p>
+<hr>
 <h2 id="1-random-undersampling-and-oversampling">1. Random Undersampling and Oversampling</h2>
-
-<p><img src="/images/imbal/0.png" alt="" />
-<em><a href="https://www.kaggle.com/rafjaa/resampling-strategies-for-imbalanced-datasets#t1" rel="nofollow" target="_blank">Source</a></em></p>
-
+<p><img src="/images/imbal/0.png" alt="">
+<em><a href="https://www.kaggle.com/rafjaa/resampling-strategies-for-imbalanced-datasets#t1">Source</a></em></p>
 <p>A widely adopted and perhaps the most straightforward method for dealing with highly imbalanced datasets is called resampling. It consists of removing samples from the majority class (under-sampling) and/or adding more examples from the minority class (over-sampling).</p>
-
 <p>Let us first create some example imbalanced data.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.datasets <span style="color:#f92672">import</span> make_classification
 
@@ -221,8 +212,8 @@ X, y <span style="color:#f92672">=</span> make_classification(
 )
 
 X <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame(X)
-X[<span style="color:#e6db74">&#39;target&#39;</span>] <span style="color:#f92672">=</span> y</code></pre></div>
-<p>We can now do random oversampling and undersampling using:</p>
+X[<span style="color:#e6db74">&#39;target&#39;</span>] <span style="color:#f92672">=</span> y
+</code></pre></div><p>We can now do random oversampling and undersampling using:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">num_0 <span style="color:#f92672">=</span> len(X[X[<span style="color:#e6db74">&#39;target&#39;</span>]<span style="color:#f92672">==</span><span style="color:#ae81ff">0</span>])
 num_1 <span style="color:#f92672">=</span> len(X[X[<span style="color:#e6db74">&#39;target&#39;</span>]<span style="color:#f92672">==</span><span style="color:#ae81ff">1</span>])
 <span style="color:#66d9ef">print</span>(num_0,num_1)
@@ -235,127 +226,90 @@ undersampled_data <span style="color:#f92672">=</span> pd<span style="color:#f92
 <span style="color:#75715e"># random oversample</span>
 
 oversampled_data <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat([ X[X[<span style="color:#e6db74">&#39;target&#39;</span>]<span style="color:#f92672">==</span><span style="color:#ae81ff">0</span>] , X[X[<span style="color:#e6db74">&#39;target&#39;</span>]<span style="color:#f92672">==</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>sample(num_0, replace<span style="color:#f92672">=</span>True) ])
-<span style="color:#66d9ef">print</span>(len(oversampled_data))</code></pre></div>
-<pre><code>OUTPUT:
+<span style="color:#66d9ef">print</span>(len(oversampled_data))
+</code></pre></div><pre><code>OUTPUT:
 90 10
 20
 180
 </code></pre>
-
-<hr />
-
+<hr>
 <h2 id="2-undersampling-and-oversampling-using-imbalanced-learn">2. Undersampling and Oversampling using imbalanced-learn</h2>
-
 <p>imbalanced-learn(<code>imblearn</code>) is a Python Package to tackle the curse of imbalanced datasets.</p>
-
 <p>It provides a variety of methods to undersample and oversample.</p>
-
 <h3 id="a-undersampling-using-tomek-links">a. Undersampling using Tomek Links:</h3>
-
 <p>One of such methods it provides is called Tomek Links. Tomek links are pairs of examples of opposite classes in close vicinity.</p>
-
 <p>In this algorithm, we end up removing the majority element from the Tomek link, which provides a better decision boundary for a classifier.</p>
-
-<p><img src="/images/imbal/1.png" alt="" /></p>
-
-<p><em><a href="https://www.kaggle.com/rafjaa/resampling-strategies-for-imbalanced-datasets#t1" rel="nofollow" target="_blank">Source</a></em></p>
+<p><img src="/images/imbal/1.png" alt=""></p>
+<p><em><a href="https://www.kaggle.com/rafjaa/resampling-strategies-for-imbalanced-datasets#t1">Source</a></em></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> imblearn.under_sampling <span style="color:#f92672">import</span> TomekLinks
 
 tl <span style="color:#f92672">=</span> TomekLinks(return_indices<span style="color:#f92672">=</span>True, ratio<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;majority&#39;</span>)
 
-X_tl, y_tl, id_tl <span style="color:#f92672">=</span> tl<span style="color:#f92672">.</span>fit_sample(X, y)</code></pre></div>
-<h3 id="b-oversampling-using-smote">b. Oversampling using SMOTE:</h3>
-
+X_tl, y_tl, id_tl <span style="color:#f92672">=</span> tl<span style="color:#f92672">.</span>fit_sample(X, y)
+</code></pre></div><h3 id="b-oversampling-using-smote">b. Oversampling using SMOTE:</h3>
 <p>In SMOTE (Synthetic Minority Oversampling Technique) we synthesize elements for the minority class, in the vicinity of already existing elements.</p>
-
-<p><img src="/images/imbal/2.png" alt="" /></p>
-
-<p><em><a href="https://www.kaggle.com/rafjaa/resampling-strategies-for-imbalanced-datasets#t1" rel="nofollow" target="_blank">Source</a></em></p>
+<p><img src="/images/imbal/2.png" alt=""></p>
+<p><em><a href="https://www.kaggle.com/rafjaa/resampling-strategies-for-imbalanced-datasets#t1">Source</a></em></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> imblearn.over_sampling <span style="color:#f92672">import</span> SMOTE
 
 smote <span style="color:#f92672">=</span> SMOTE(ratio<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;minority&#39;</span>)
 
-X_sm, y_sm <span style="color:#f92672">=</span> smote<span style="color:#f92672">.</span>fit_sample(X, y)</code></pre></div>
-<p>There are a variety of other methods in the <a href="https://github.com/scikit-learn-contrib/imbalanced-learn#id3" rel="nofollow" target="_blank">imblearn</a> package for both undersampling(Cluster Centroids, NearMiss, etc.) and oversampling(ADASYN and bSMOTE) that you can check out.</p>
-
-<hr />
-
+X_sm, y_sm <span style="color:#f92672">=</span> smote<span style="color:#f92672">.</span>fit_sample(X, y)
+</code></pre></div><p>There are a variety of other methods in the <a href="https://github.com/scikit-learn-contrib/imbalanced-learn#id3">imblearn</a> package for both undersampling(Cluster Centroids, NearMiss, etc.) and oversampling(ADASYN and bSMOTE) that you can check out.</p>
+<hr>
 <h2 id="3-class-weights-in-the-models">3. Class weights in the models</h2>
-
-<p><img src="/images/imbal/3.png" alt="" /></p>
-
+<p><img src="/images/imbal/3.png" alt=""></p>
 <p>Most of the machine learning models provide a parameter called class_weights. For example, in a random forest classifier using, class_weights we can specify a higher weight for the minority class using a dictionary.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.linear_model <span style="color:#f92672">import</span> LogisticRegression
 
-clf <span style="color:#f92672">=</span> LogisticRegression(class_weight<span style="color:#f92672">=</span>{<span style="color:#ae81ff">0</span>:<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>:<span style="color:#ae81ff">10</span>})</code></pre></div>
-<p><strong><em>But what happens exactly in the background?</em></strong></p>
-
+clf <span style="color:#f92672">=</span> LogisticRegression(class_weight<span style="color:#f92672">=</span>{<span style="color:#ae81ff">0</span>:<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>:<span style="color:#ae81ff">10</span>})
+</code></pre></div><p><em><strong>But what happens exactly in the background?</strong></em></p>
 <p>In logistic Regression, we calculate loss per example using binary cross-entropy:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">Loss <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>ylog(p) <span style="color:#f92672">-</span> (<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>y)log(<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>p)</code></pre></div>
-<p>In this particular form, we give equal weight to both the positive and the negative classes. When we set class_weight as <code>class_weight = {0:1,1:20}</code>, the classifier in the background tries to minimize:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">NewLoss <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">20</span>ylog(p) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>(<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>y)log(<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>p)</code></pre></div>
-<p><strong><em>So what happens exactly here?</em></strong></p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">Loss <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>ylog(p) <span style="color:#f92672">-</span> (<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>y)log(<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>p)
+</code></pre></div><p>In this particular form, we give equal weight to both the positive and the negative classes. When we set class_weight as <code>class_weight = {0:1,1:20}</code>, the classifier in the background tries to minimize:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">NewLoss <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">20</span>ylog(p) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>(<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>y)log(<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>p)
+</code></pre></div><p><em><strong>So what happens exactly here?</strong></em></p>
 <ul>
-<li><p>If our model gives a probability of 0.3 and we misclassify a positive example, the NewLoss acquires a value of -20log(0.3) = 10.45</p></li>
-
-<li><p>If our model gives a probability of 0.7 and we misclassify a negative example, the NewLoss acquires a value of -log(0.3) = 0.52</p></li>
+<li>
+<p>If our model gives a probability of 0.3 and we misclassify a positive example, the NewLoss acquires a value of -20log(0.3) = 10.45</p>
+</li>
+<li>
+<p>If our model gives a probability of 0.7 and we misclassify a negative example, the NewLoss acquires a value of -log(0.3) = 0.52</p>
+</li>
 </ul>
-
 <p>That means we penalize our model around twenty times more when it misclassifies a positive minority example in this case.</p>
-
-<p><strong><em>How can we compute class_weights?</em></strong></p>
-
+<p><em><strong>How can we compute class_weights?</strong></em></p>
 <p><em>There is no one method to do this, and this should be constructed as a hyperparameter search problem for your particular problem.</em></p>
-
 <p>But if you want to get class_weights using the distribution of the y variable, you can use the following nifty utility from sklearn.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.utils.class_weight <span style="color:#f92672">import</span> compute_class_weight
 
-class_weights <span style="color:#f92672">=</span> compute_class_weight(<span style="color:#e6db74">&#39;balanced&#39;</span>, np<span style="color:#f92672">.</span>unique(y), y)</code></pre></div>
-<hr />
-
+class_weights <span style="color:#f92672">=</span> compute_class_weight(<span style="color:#e6db74">&#39;balanced&#39;</span>, np<span style="color:#f92672">.</span>unique(y), y)
+</code></pre></div><hr>
 <h2 id="4-change-your-evaluation-metric">4. Change your Evaluation Metric</h2>
-
-<p><img src="/images/imbal/4.png" alt="" /></p>
-
-<p>Choosing the right evaluation metric is pretty essential whenever we work with imbalanced datasets. Generally, in such cases, the F1 Score is what I want as my <a href="https://towardsdatascience.com/the-5-classification-evaluation-metrics-you-must-know-aa97784ff226" rel="nofollow" target="_blank"><strong><em>evaluation metric</em></strong></a>.</p>
-
+<p><img src="/images/imbal/4.png" alt=""></p>
+<p>Choosing the right evaluation metric is pretty essential whenever we work with imbalanced datasets. Generally, in such cases, the F1 Score is what I want as my <a href="https://towardsdatascience.com/the-5-classification-evaluation-metrics-you-must-know-aa97784ff226"><em><strong>evaluation metric</strong></em></a>.</p>
 <p>The F1 score is a number between 0 and 1 and is the harmonic mean of precision and recall.</p>
-
-<p><img src="/images/imbal/5.png" alt="" /></p>
-
-<p><strong><em>So how does it help?</em></strong></p>
-
-<p>Let us start with a binary prediction problem. <strong><em>We are predicting if an asteroid will hit the earth or not.</em></strong></p>
-
+<p><img src="/images/imbal/5.png" alt=""></p>
+<p><em><strong>So how does it help?</strong></em></p>
+<p>Let us start with a binary prediction problem. <em><strong>We are predicting if an asteroid will hit the earth or not.</strong></em></p>
 <p>So we create a model that predicts “No” for the whole training set.</p>
-
-<p><strong><em>What is the accuracy(Normally the most used evaluation metric)?</em></strong></p>
-
+<p><em><strong>What is the accuracy(Normally the most used evaluation metric)?</strong></em></p>
 <p>It is more than 99%, and so according to accuracy, this model is pretty good, but it is worthless.</p>
-
-<p><strong><em>Now, what is the F1 score?</em></strong></p>
-
+<p><em><strong>Now, what is the F1 score?</strong></em></p>
 <p>Our precision here is 0. What is the recall of our positive class? It is zero. And hence the F1 score is also 0.</p>
-
 <p>And thus we get to know that the classifier that has an accuracy of 99% is worthless for our case. And hence it solves our problem.</p>
-
-<p><img src="/images/imbal/6.png" alt="" /></p>
-
-<p>Simply stated the <strong><em>F1 score sort of maintains a balance between the precision and recall for your classifier</em></strong>. If your precision is low, the F1 is low, and if the recall is low again, your F1 score is low.</p>
-
+<p><img src="/images/imbal/6.png" alt=""></p>
+<p>Simply stated the <em><strong>F1 score sort of maintains a balance between the precision and recall for your classifier</strong></em>. If your precision is low, the F1 is low, and if the recall is low again, your F1 score is low.</p>
 <blockquote>
 <p>If you are a police inspector and you want to catch criminals, you want to be sure that the person you catch is a criminal (Precision) and you also want to capture as many criminals (Recall) as possible. The F1 score manages this tradeoff.</p>
 </blockquote>
-
 <h3 id="how-to-use">How to Use?</h3>
-
 <p>You can calculate the F1 score for binary prediction problems using:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> f1_score
 y_true <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>]
 y_pred <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>]
-f1_score(y_true, y_pred)</code></pre></div>
-<p>This is one of the functions which I use to get the best threshold for maximizing F1 score for binary predictions. The below function iterates through possible threshold values to find the one that gives the best F1 score.</p>
+f1_score(y_true, y_pred)
+</code></pre></div><p>This is one of the functions which I use to get the best threshold for maximizing F1 score for binary predictions. The below function iterates through possible threshold values to find the one that gives the best F1 score.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># y_pred is an array of predictions</span>
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">bestThresshold</span>(y_true,y_pred):
     best_thresh <span style="color:#f92672">=</span> None
@@ -365,47 +319,27 @@ f1_score(y_true, y_pred)</code></pre></div>
         <span style="color:#66d9ef">if</span> score <span style="color:#f92672">&gt;</span> best_score:
             best_thresh <span style="color:#f92672">=</span> thresh
             best_score <span style="color:#f92672">=</span> score
-    <span style="color:#66d9ef">return</span> best_score , best_thresh</code></pre></div>
-<hr />
-
+    <span style="color:#66d9ef">return</span> best_score , best_thresh
+</code></pre></div><hr>
 <h2 id="5-miscellaneous">5. Miscellaneous</h2>
-
-<p><img src="/images/imbal/7.png" alt="" /></p>
-
+<p><img src="/images/imbal/7.png" alt=""></p>
 <p>Various other methods might work depending on your use case and the problem you are trying to solve:</p>
-
 <h3 id="a-collect-more-data">a) Collect more Data</h3>
-
 <p>This is a definite thing you should try if you can. Getting more data with more positive examples is going to help your models get a more varied perspective of both the majority and minority classes.</p>
-
 <h3 id="b-treat-the-problem-as-anomaly-detection">b) Treat the problem as anomaly detection</h3>
-
 <p>You might want to treat your classification problem as an anomaly detection problem.</p>
-
 <p><strong>Anomaly detection</strong> is the identification of rare items, events or observations which raise suspicions by differing significantly from the majority of the data</p>
-
 <p>You can use Isolation forests or autoencoders for anomaly detection.</p>
-
 <h3 id="c-model-based">c) Model-based</h3>
-
 <p>Some models are particularly suited for imbalanced datasets.</p>
-
 <p>For example, in boosting models, we give more weights to the cases that get misclassified in each tree iteration.</p>
-
-<hr />
-
+<hr>
 <h2 id="conclusion">Conclusion</h2>
-
 <p>There is no one size fits all when working with imbalanced datasets. You will have to try multiple things based on your problem.</p>
-
 <p>In this post, I talked about the usual suspects that come to my mind whenever I face such a problem.</p>
-
 <p>A suggestion would be to try using all of the above approaches and try to see whatever works best for your use case.</p>
-
-<p>If you want to <a href="https://towardsdatascience.com/how-did-i-start-with-data-science-3f4de6b501b0?source=---------8------------------" rel="nofollow" target="_blank">learn</a> more about imbalanced datasets and the problems they pose, I would like to call out this <a href="https://www.coursera.org/learn/machine-learning?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;siteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&amp;source=post_page---------------------------" rel="nofollow" target="_blank"><strong><em>excellent course</em></strong></a> by Andrew Ng. This was the one that got me started. Do check it out.</p>
-
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
-
+<p>If you want to <a href="https://towardsdatascience.com/how-did-i-start-with-data-science-3f4de6b501b0?source=---------8------------------">learn</a> more about imbalanced datasets and the problems they pose, I would like to call out this <a href="https://www.coursera.org/learn/machine-learning?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;siteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&amp;source=post_page---------------------------"><em><strong>excellent course</strong></em></a> by Andrew Ng. This was the one that got me started. Do check it out.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------">@mlwhiz</a>.</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 		</div>
@@ -544,7 +478,7 @@ f1_score(y_true, y_pred)</code></pre></div>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
 		</ul>
 	</div>
 </div>

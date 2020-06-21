@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.53" />
+	<meta name="generator" content="Hugo 0.72.0" />
 	<meta property="og:title" content="Add this single word to make your Pandas Apply faster" />
 <meta property="og:description" content="This post is about using the computing power we have at hand and applying it to Pandas DataFrames using Swifter." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2020/02/20/swifter/" />
 <meta property="og:image" content="https://mlwhiz.com/images/swifter/main.png" />
-<meta property="article:published_time" content="2020-02-20T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2020-02-20T00:00:00&#43;00:00"/>
+<meta property="article:published_time" content="2020-02-20T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-02-20T00:00:00+00:00" />
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/swifter/main.png"/>
@@ -169,54 +169,31 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			
-
-<p><img src="/images/swifter/main.png" alt="" /></p>
-
+			<p><img src="/images/swifter/main.png" alt=""></p>
 <p>We as data scientists have got laptops with quad-core, octa-core, turbo-boost. We work with servers with even more cores and computing power.</p>
-
-<p><strong><em>But do we really utilize the raw power we have at hand?</em></strong></p>
-
+<p><em><strong>But do we really utilize the raw power we have at hand?</strong></em></p>
 <p>Sometimes we get limited by the limitation of tools at our disposal. And sometimes we are not willing to write all that extraneous code to save a couple of minutes. And end up realizing only later that time optimization would have helped in the long run.</p>
-
-<p><strong><em>So, can we do better?</em></strong></p>
-
+<p><em><strong>So, can we do better?</strong></em></p>
 <p>Yes, Obviously.</p>
-
-<p>Previously, I had written on how to make your apply function faster-using <a href="https://towardsdatascience.com/make-your-own-super-pandas-using-multiproc-1c04f41944a1" rel="nofollow" target="_blank">multiprocessing</a>, but thanks to the <a href="https://github.com/jmcarpenter2/swifter" rel="nofollow" target="_blank">swifter</a> library, it is even more trivial now.</p>
-
-<p><strong><em>This post is about using the computing power we have at hand and applying it to Pandas DataFrames using Swifter.</em></strong></p>
-
-<hr />
-
+<p>Previously, I had written on how to make your apply function faster-using <a href="https://towardsdatascience.com/make-your-own-super-pandas-using-multiproc-1c04f41944a1">multiprocessing</a>, but thanks to the <a href="https://github.com/jmcarpenter2/swifter">swifter</a> library, it is even more trivial now.</p>
+<p><em><strong>This post is about using the computing power we have at hand and applying it to Pandas DataFrames using Swifter.</strong></em></p>
+<hr>
 <h2 id="problem-statement">Problem Statement</h2>
-
 <p>We have got a huge pandas data frame, and we want to apply a complex function to it which takes a lot of time.</p>
-
 <p>For this post, I will generate some data with 25M rows and 4 columns.</p>
-
-<p><strong><em>Can use parallelization easily to get extra performance out of our code?</em></strong></p>
-
+<p><em><strong>Can use parallelization easily to get extra performance out of our code?</strong></em></p>
 <pre><code>import pandas as pd
 import numpy as np
 
 pdf = pd.DataFrame(np.random.randint(0,100,size=(25000000, 4)),columns=list('abcd'))
 </code></pre>
-
 <p>The Data looks like:</p>
-
-<p><img src="/images/swifter/0.png" alt="Data Sample" /><em>Data Sample</em></p>
-
-<hr />
-
+<p><img src="/images/swifter/0.png" alt="Data Sample"><em>Data Sample</em></p>
+<hr>
 <h2 id="parallelization-using-just-a-single-change">Parallelization using just a single change</h2>
-
-<p><img src="/images/swifter/1.png" alt="Relax and Parallelize !!!" /><em>Relax and Parallelize !!!</em></p>
-
+<p><img src="/images/swifter/1.png" alt="Relax and Parallelize !!!"><em>Relax and Parallelize !!!</em></p>
 <p>Let’s set up a simple experiment.</p>
-
-<p>We will try to create a new column in our dataframe. We can do this simply by using <a href="https://towardsdatascience.com/apply-and-lambda-usage-in-pandas-b13a1ea037f7" rel="nofollow" target="_blank">apply-lambda</a> in Pandas.</p>
-
+<p>We will try to create a new column in our dataframe. We can do this simply by using <a href="https://towardsdatascience.com/apply-and-lambda-usage-in-pandas-b13a1ea037f7">apply-lambda</a> in Pandas.</p>
 <pre><code>def func(a,b):
     if a&gt;50:
         return True
@@ -227,70 +204,40 @@ pdf = pd.DataFrame(np.random.randint(0,100,size=(25000000, 4)),columns=list('abc
 
 pdf['e'] = pdf.apply(lambda x : func(x['a'],x['b']),axis=1)
 </code></pre>
-
-<p><img src="/images/swifter/2.png" alt="" /></p>
-
+<p><img src="/images/swifter/2.png" alt=""></p>
 <p>The above code takes ~10 Minutes to run. And we are just doing a simple calculation on 2 columns here.</p>
-
 <p>Can we do better and what would it take?</p>
-
-<p>Yes, we can do better just by adding a “magic word” — <strong><em>Swifter.</em></strong></p>
-
+<p>Yes, we can do better just by adding a “magic word” — <em><strong>Swifter.</strong></em></p>
 <p>But first, you need to install swifter, which is as simple as:</p>
-
 <pre><code>conda install -c conda-forge swifter
 </code></pre>
-
 <p>You can then just import and append swifter keyword before the apply to use it.</p>
-
 <pre><code>import swifter
 pdf['e'] = pdf.**swifter**.apply(lambda x : func(x['a'],x['b']),axis=1)
 </code></pre>
-
-<h3 id="so-does-this-work"><strong><em>So, Does this work?</em></strong></h3>
-
-<p><img src="/images/swifter/3.png" alt="" /></p>
-
+<h3 id="so-does-this-work"><em><strong>So, Does this work?</strong></em></h3>
+<p><img src="/images/swifter/3.png" alt=""></p>
 <p>Yes. It does. We get a 2x improvement in run time vs. just using the function as it is.</p>
-
-<h3 id="so-what-exactly-is-happening-here"><strong><em>So what exactly is happening here?</em></strong></h3>
-
-<p><img src="/images/swifter/4.png" alt="[Source](https://github.com/jmcarpenter2/swifter): How increasing data size effects performances for Dask, Pandas and Swifter?" /><em><a href="https://github.com/jmcarpenter2/swifter" rel="nofollow" target="_blank">Source</a>: How increasing data size effects performances for Dask, Pandas and Swifter?</em></p>
-
-<p><strong><em>Swifter chooses the best way to implement the apply possible for your function by either vectorizing your function or using Dask in the backend to parallelize your function or by maybe using simple pandas apply if the dataset is small.</em></strong></p>
-
+<h3 id="so-what-exactly-is-happening-here"><em><strong>So what exactly is happening here?</strong></em></h3>
+<p><img src="/images/swifter/4.png" alt="Source: How increasing data size effects performances for Dask, Pandas and Swifter?"><em><a href="https://github.com/jmcarpenter2/swifter">Source</a>: How increasing data size effects performances for Dask, Pandas and Swifter?</em></p>
+<p><em><strong>Swifter chooses the best way to implement the apply possible for your function by either vectorizing your function or using Dask in the backend to parallelize your function or by maybe using simple pandas apply if the dataset is small.</strong></em></p>
 <p>In this particular case, Swifter is using Dask to parallelize our apply functions with the default value of npartitions = cpu_count()*2.</p>
-
 <p>For the MacBook I am working on the CPU Count is 6 and the hyperthreading is 2. Thus CPU Count is 12 and that makes npartitions=24.</p>
-
-<p><strong><em>We could also choose to set n_partitions ourselves.</em></strong> Though I have observed the default value works just fine in most cases sometimes you might be able to tune this as well to gain additional speedups.</p>
-
+<p><em><strong>We could also choose to set n_partitions ourselves.</strong></em> Though I have observed the default value works just fine in most cases sometimes you might be able to tune this as well to gain additional speedups.</p>
 <p>For example: Below I set n_partitions=12 and we get a 2x speedup again. Here reducing our number of partitions results in smaller run times as the data movement cost between the partitions is high.</p>
-
-<p><img src="/images/swifter/5.png" alt="" /></p>
-
-<hr />
-
+<p><img src="/images/swifter/5.png" alt=""></p>
+<hr>
 <h2 id="conclusion">Conclusion</h2>
-
 <blockquote>
 <p><strong>Parallelization is not a silver bullet; it is buckshot.</strong></p>
 </blockquote>
-
 <p>Parallelization won’t solve all your problems, and you would still have to work on optimizing your functions, but it is a great tool to have in your arsenal.</p>
-
 <p>Time never comes back, and sometimes we have a shortage of it. At these times we need parallelization to be at our disposal with a single word.</p>
-
-<p><strong><em>And that word is <a href="https://github.com/jmcarpenter2/swifter" rel="nofollow" target="_blank">swifter</a>.</em></strong></p>
-
-<hr />
-
+<p><em><strong>And that word is <a href="https://github.com/jmcarpenter2/swifter">swifter</a>.</strong></em></p>
+<hr>
 <h2 id="continue-learning">Continue Learning</h2>
-
-<p>Also if you want to learn more about <a href="https://amzn.to/2XPSiiG" rel="nofollow" target="_blank">Python</a> 3, I would like to call out an excellent course on Learn <a href="https://bit.ly/2XshreA" rel="nofollow" target="_blank">Intermediate level Python</a> from the University of Michigan. Do check it out.</p>
-
-<p>I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
-
+<p>Also if you want to learn more about <a href="https://amzn.to/2XPSiiG">Python</a> 3, I would like to call out an excellent course on Learn <a href="https://bit.ly/2XshreA">Intermediate level Python</a> from the University of Michigan. Do check it out.</p>
+<p>I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz">@mlwhiz</a>.</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 		</div>
@@ -429,7 +376,7 @@ pdf['e'] = pdf.**swifter**.apply(lambda x : func(x['a'],x['b']),axis=1)
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
 		</ul>
 	</div>
 </div>

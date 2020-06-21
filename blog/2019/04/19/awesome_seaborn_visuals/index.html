@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.53" />
+	<meta name="generator" content="Hugo 0.72.0" />
 	<meta property="og:title" content="3 Awesome Visualization Techniques for every dataset" />
 <meta property="og:description" content="Some awesome visualizations using Seaborn you should try out with every dataset you encounter." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2019/04/19/awesome_seaborn_visuals/" />
 <meta property="og:image" content="https://mlwhiz.com/images/visualizations/football.jpeg" />
-<meta property="article:published_time" content="2019-04-19T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2019-04-19T00:00:00&#43;00:00"/>
+<meta property="article:published_time" content="2019-04-19T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-04-19T00:00:00+00:00" />
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/visualizations/football.jpeg"/>
@@ -169,36 +169,21 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			
-
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/visualizations/football.jpeg" style="height:80%;width:80%"></center>
-</div>
-
+			<!-- raw HTML omitted -->
 <p>Visualizations are awesome. <strong>However, a good visualization is annoyingly hard to make.</strong></p>
-
 <p>Moreover, it takes time and effort when it comes to present these visualizations to a bigger audience.</p>
-
-<p>We all know how to make <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&amp;ranMID=40328&amp;ranEAID=je6NUbpObpQ&amp;ranSiteID=je6NUbpObpQ-vcqjNx1ZulOAw6KkBwc5gg&amp;siteID=je6NUbpObpQ-vcqjNx1ZulOAw6KkBwc5gg&amp;utm_content=10&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=je6NUbpObpQ" rel="nofollow" target="_blank">Bar-Plots, Scatter Plots, and Histograms</a>, yet <strong>we don&rsquo;t pay much attention to beautify them.</strong></p>
-
+<p>We all know how to make <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&amp;ranMID=40328&amp;ranEAID=je6NUbpObpQ&amp;ranSiteID=je6NUbpObpQ-vcqjNx1ZulOAw6KkBwc5gg&amp;siteID=je6NUbpObpQ-vcqjNx1ZulOAw6KkBwc5gg&amp;utm_content=10&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=je6NUbpObpQ">Bar-Plots, Scatter Plots, and Histograms</a>, yet <strong>we don&rsquo;t pay much attention to beautify them.</strong></p>
 <p>This hurts us - our credibility with peers and managers. You won&rsquo;t feel it now, but it happens.</p>
-
-<p>Also, I find it essential to reuse my code. Every time I visit a new dataset do I need to start again? Some <strong><em>reusable ideas of graphs that can help us to find information about the data FAST.</em></strong></p>
-
+<p>Also, I find it essential to reuse my code. Every time I visit a new dataset do I need to start again? Some <em><strong>reusable ideas of graphs that can help us to find information about the data FAST.</strong></em></p>
 <p>In this post, I am also going to talk about 3 cool visual tools:</p>
-
 <ul>
 <li>Categorical Correlation with Graphs,</li>
 <li>Pairplots,</li>
 <li>Swarmplots and Graph Annotations using Seaborn.</li>
 </ul>
-
-<p><strong><em>In short, this post is about useful and presentable graphs.</em></strong></p>
-
-<hr />
-
-<p>I will be using data from <a href="https://www.kaggle.com/karangadiya/fifa19" rel="nofollow" target="_blank">FIFA 19 complete player dataset</a> on kaggle - Detailed attributes for every player registered in the latest edition of FIFA 19 database.</p>
-
+<p><em><strong>In short, this post is about useful and presentable graphs.</strong></em></p>
+<hr>
+<p>I will be using data from <a href="https://www.kaggle.com/karangadiya/fifa19">FIFA 19 complete player dataset</a> on kaggle - Detailed attributes for every player registered in the latest edition of FIFA 19 database.</p>
 <p>Since the Dataset has many columns, we will only focus on a subset of categorical and continuous columns.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
 <span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
@@ -218,16 +203,8 @@ catcols <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;N
 <span style="color:#75715e"># Subset the columns</span>
 player_df <span style="color:#f92672">=</span> player_df[numcols<span style="color:#f92672">+</span> catcols]
 <span style="color:#75715e"># Few rows of data</span>
-player_df<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">5</span>)</code></pre></div>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center>
-    <figure>
-      <img src="/images/visualizations/football_dataset_head.png">
-      <figcaption style="font-size: 12px;">Player Data</figcaption>
-    </figure>
-</center>
-</div>
-
+player_df<span style="color:#f92672">.</span>head(<span style="color:#ae81ff">5</span>)
+</code></pre></div><!-- raw HTML omitted -->
 <p>This is a nicely formatted data, yet we need to do <strong>some preprocessing to the Wage and Value columns</strong>(as they are in Euro and contain strings) to make them numeric for our subsequent analysis.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">wage_split</span>(x):
     <span style="color:#66d9ef">try</span>:
@@ -243,21 +220,14 @@ player_df[<span style="color:#e6db74">&#39;Wage&#39;</span>] <span style="color:
             <span style="color:#66d9ef">return</span> float(x<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;K&#34;</span>)[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">1</span>:])<span style="color:#f92672">/</span><span style="color:#ae81ff">1000</span>
     <span style="color:#66d9ef">except</span>:
         <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
-player_df[<span style="color:#e6db74">&#39;Value&#39;</span>] <span style="color:#f92672">=</span> player_df[<span style="color:#e6db74">&#39;Value&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x : value_split(x))</code></pre></div>
-<hr />
-
-<h2 id="categorical-correlation-with-graphs">Categorical Correlation with Graphs:</h2>
-
+player_df[<span style="color:#e6db74">&#39;Value&#39;</span>] <span style="color:#f92672">=</span> player_df[<span style="color:#e6db74">&#39;Value&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x : value_split(x))
+</code></pre></div><hr>
+<h2 id="categorical-correlation-withgraphs">Categorical Correlation with Graphs:</h2>
 <p>In Simple terms, Correlation is a measure of how two variables move together.</p>
-
 <p>For example, In the real world, <em>Income and Spend are positively correlated. If one increases the other also increases.</em></p>
-
 <p><em>Academic Performance and Video Games Usage is negatively correlated. Increase in one predicts a decrease in another.</em></p>
-
 <p>So if our predictor variable is positively or negatively correlated with our target variable, it is valuable.</p>
-
 <p>I feel that Correlations among different variables are a pretty good thing to do when we try to understand our data.</p>
-
 <p>We can create a pretty good correlation plot using Seaborn easily.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">corr <span style="color:#f92672">=</span> player_df<span style="color:#f92672">.</span>corr()
 g <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>heatmap(corr,  vmax<span style="color:#f92672">=.</span><span style="color:#ae81ff">3</span>, center<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,
@@ -265,134 +235,73 @@ g <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>he
 sns<span style="color:#f92672">.</span>despine()
 g<span style="color:#f92672">.</span>figure<span style="color:#f92672">.</span>set_size_inches(<span style="color:#ae81ff">14</span>,<span style="color:#ae81ff">10</span>)
     
-plt<span style="color:#f92672">.</span>show()</code></pre></div>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center>
-    <figure>
-      <img src="/images/visualizations/correlation_numerical.png">
-      <figcaption style="font-size: 12px;">Where did all the categorical variables go?</figcaption>
-    </figure>
-</center>
-</div>
-
+plt<span style="color:#f92672">.</span>show()
+</code></pre></div><!-- raw HTML omitted -->
 <p>But do you notice any problem?</p>
-
 <p>Yes, this graph only calculates Correlation between Numerical columns.
 What if my target variable is <code>Club</code> or <code>Position</code>?</p>
-
 <p>I want to be able to get a correlation among three different cases, and we use the following metrics of correlation to calculate these:</p>
-
 <h3 id="1-numerical-variables">1. Numerical Variables</h3>
-
-<p>We already have this in the form of <a href="https://en.wikipedia.org/wiki/Pearson_correlation_coefficient" rel="nofollow" target="_blank">Pearson&rsquo;s Correlation</a> which is a measure of how two variables move together. This Ranges from [-1,1]</p>
-
+<p>We already have this in the form of <a href="https://en.wikipedia.org/wiki/Pearson_correlation_coefficient">Pearson&rsquo;s Correlation</a> which is a measure of how two variables move together. This Ranges from [-1,1]</p>
 <h3 id="2-categorical-variables">2. Categorical Variables</h3>
-
-<p>We will use <a href="https://en.wikipedia.org/wiki/Cram%C3%A9r%27s_V" rel="nofollow" target="_blank">Cramer&rsquo;s V</a> for categorical-categorical cases. It is the intercorrelation of two discrete variables and used with variables having two or more levels. It is a symmetrical measure as in the order of variable does not matter. Cramer(A,B) == Cramer(B,A).</p>
-
+<p>We will use <a href="https://en.wikipedia.org/wiki/Cram%C3%A9r%27s_V">Cramer&rsquo;s V</a> for categorical-categorical cases. It is the intercorrelation of two discrete variables and used with variables having two or more levels. It is a symmetrical measure as in the order of variable does not matter. Cramer(A,B) == Cramer(B,A).</p>
 <p>For Example: In our dataset, <code>Club</code> and <code>Nationality</code> must be somehow correlated.</p>
-
 <p>Let us check this using a stacked graph which is an excellent way to understand distribution between categorical vs. categorical variables. Note that we use a subset of data since there are a lot of nationalities and club in this data.</p>
-
 <p>We keep only the best teams(Kept FC Porto just for more diversity in the sample)and the most common nationalities.</p>
-
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/visualizations/stacked_club_nationality.png" "></center>
-</div>
-
+<!-- raw HTML omitted -->
 <p><em>Note that Club preference says quite a bit about Nationality: knowing the former helps a lot in predicting the latter.</em></p>
-
 <p>We can see that if a player belongs to England, it is more probable that he plays in Chelsea or Manchester United and not in FC Barcelona or Bayern Munchen or Porto.</p>
-
 <p><em>So there is some information present here. Cramer&rsquo;s V captures the same information.</em></p>
-
 <p>If all clubs have the same proportion of players from every nationality, Cramer&rsquo;s V is 0.</p>
-
 <p>If Every club prefers a single nationality Cramer&rsquo;s V ==1, for example, all England player play in Manchester United, All Germans in Bayern Munchen and so on.</p>
-
 <p>In all other cases, it ranges from [0,1]</p>
-
 <h3 id="3-numerical-and-categorical-variables">3. Numerical and Categorical variables</h3>
-
-<p>We will use the <a href="https://en.wikipedia.org/wiki/Correlation_ratio" rel="nofollow" target="_blank">Correlation Ratio</a> for categorical-continuous cases.</p>
-
+<p>We will use the <a href="https://en.wikipedia.org/wiki/Correlation_ratio">Correlation Ratio</a> for categorical-continuous cases.</p>
 <p>Without getting into too much Maths, it is a measure of Dispersion.</p>
-
 <blockquote>
 <p>Given a number can we find out which category it belongs to?</p>
 </blockquote>
-
 <p>For Example:</p>
-
 <p>Suppose we have two columns from our dataset: <code>SprintSpeed</code> and <code>Position</code>:</p>
-
 <ul>
 <li>GK: 58(De Gea),52(T. Courtois), 58(M. Neuer), 43(G. Buffon)</li>
 <li>CB: 68(D. Godin), 59(V. Kompany), 73(S. Umtiti), 75(M. Benatia)</li>
 <li>ST: 91(C.Ronaldo), 94(G. Bale), 80(S.Aguero), 76(R. Lewandowski)</li>
 </ul>
-
 <p><em>As you can see these numbers are pretty predictive of the bucket they fall into and thus high Correlation Ratio.</em></p>
-
 <p><em>If I know the sprint speed is more than 85, I can definitely say this player plays at ST.</em></p>
-
 <p>This ratio also ranges from [0,1]</p>
-
-<hr />
-
-<p>The code to do this is taken from the dython package. I won&rsquo;t write too much into code which you can anyway find in my <a href="https://www.kaggle.com/mlwhiz/seaborn-visualizations-using-football-data" rel="nofollow" target="_blank">Kaggle Kernel</a>. The final result looks something like:</p>
+<hr>
+<p>The code to do this is taken from the dython package. I won&rsquo;t write too much into code which you can anyway find in my <a href="https://www.kaggle.com/mlwhiz/seaborn-visualizations-using-football-data">Kaggle Kernel</a>. The final result looks something like:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">player_df <span style="color:#f92672">=</span> player_df<span style="color:#f92672">.</span>fillna(<span style="color:#ae81ff">0</span>)
-results <span style="color:#f92672">=</span> associations(player_df,nominal_columns<span style="color:#f92672">=</span>catcols,return_results<span style="color:#f92672">=</span>True)</code></pre></div>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center>
-    <figure>
-      <img src="/images/visualizations/correlation_plot_full.png">
-      <figcaption style="font-size: 12px;">Categorical vs. Categorical, Categorical vs. Numeric, Numeric vs. Numeric. Much more interesting</figcaption>
-    </figure>
-</center>
-</div>
-
-<p><strong><em>Isn&rsquo;t it Beautiful?</em></strong></p>
-
+results <span style="color:#f92672">=</span> associations(player_df,nominal_columns<span style="color:#f92672">=</span>catcols,return_results<span style="color:#f92672">=</span>True)
+</code></pre></div><!-- raw HTML omitted -->
+<p><em><strong>Isn&rsquo;t it Beautiful?</strong></em></p>
 <p>We can understand so much about Football just by looking at this data. For Example:</p>
-
 <ul>
-<li><p>The position of a player is highly correlated with dribbling ability. You won&rsquo;t play Messi at the back. Right?</p></li>
-
-<li><p>Value is more highly correlated with passing and ball control than dribbling. The rule is to pass the ball always. Neymar I am looking at you.</p></li>
-
-<li><p>Club and Wage have high Correlation. To be expected.</p></li>
-
-<li><p>Body Type and Preferred Foot is correlated highly. Does that mean if you are Lean, you are most likely left-footed? Doesn&rsquo;t make much sense. One can investigate further.</p></li>
+<li>
+<p>The position of a player is highly correlated with dribbling ability. You won&rsquo;t play Messi at the back. Right?</p>
+</li>
+<li>
+<p>Value is more highly correlated with passing and ball control than dribbling. The rule is to pass the ball always. Neymar I am looking at you.</p>
+</li>
+<li>
+<p>Club and Wage have high Correlation. To be expected.</p>
+</li>
+<li>
+<p>Body Type and Preferred Foot is correlated highly. Does that mean if you are Lean, you are most likely left-footed? Doesn&rsquo;t make much sense. One can investigate further.</p>
+</li>
 </ul>
-
 <p>Moreover, so much info we could find with this simple graph which was not visible in the typical correlation plot without Categorical Variables.</p>
-
 <p>I leave it here at that. One can look more into the chart and find more meaningful results, but the point is that this makes life so much easier to find patterns.</p>
-
-<hr />
-
+<hr>
 <h2 id="pairplots">Pairplots</h2>
-
 <p>While I talked a lot about correlation, it is a fickle metric.</p>
-
 <p>To understand what I mean let us see one example.</p>
-
 <p><strong>Anscombe&rsquo;s quartet</strong> comprises four datasets that have nearly identical Correlation of 1, yet have very different distributions and appear very different when graphed.</p>
-
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center>
-    <figure>
-      <img src="/images/visualizations/anscombe.png">
-      <figcaption style="font-size: 12px;">Anscombe Quartet - Correlations can be fickle.</figcaption>
-    </figure>
-</center>
-</div>
-
+<!-- raw HTML omitted -->
 <p>Thus sometimes it becomes crucial to plot correlated data. And see the distributions individually.</p>
-
 <p>Now we have many columns in our dataset. Graphing them all would be so much effort.</p>
-
 <p>No, it is a single line of code.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">filtered_player_df <span style="color:#f92672">=</span> player_df[(player_df[<span style="color:#e6db74">&#39;Club&#39;</span>]<span style="color:#f92672">.</span>isin([<span style="color:#e6db74">&#39;FC Barcelona&#39;</span>, <span style="color:#e6db74">&#39;Paris Saint-Germain&#39;</span>,
        <span style="color:#e6db74">&#39;Manchester United&#39;</span>, <span style="color:#e6db74">&#39;Manchester City&#39;</span>, <span style="color:#e6db74">&#39;Chelsea&#39;</span>, <span style="color:#e6db74">&#39;Real Madrid&#39;</span>,<span style="color:#e6db74">&#39;FC Porto&#39;</span>,<span style="color:#e6db74">&#39;FC Bayern München&#39;</span>])) <span style="color:#f92672">&amp;</span> 
@@ -400,49 +309,34 @@ results <span style="color:#f92672">=</span> associations(player_df,nominal_colu
        <span style="color:#e6db74">&#39;Brazil&#39;</span>, <span style="color:#e6db74">&#39;Italy&#39;</span>,<span style="color:#e6db74">&#39;Spain&#39;</span>,<span style="color:#e6db74">&#39;Germany&#39;</span>])) 
                      ]
 <span style="color:#75715e"># Single line to create pairplot</span>
-g <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>pairplot(filtered_player_df[[<span style="color:#e6db74">&#39;Value&#39;</span>,<span style="color:#e6db74">&#39;SprintSpeed&#39;</span>,<span style="color:#e6db74">&#39;Potential&#39;</span>,<span style="color:#e6db74">&#39;Wage&#39;</span>]])</code></pre></div>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/visualizations/pairplot_normal.png" "></center>
-</div>
-
+g <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>pairplot(filtered_player_df[[<span style="color:#e6db74">&#39;Value&#39;</span>,<span style="color:#e6db74">&#39;SprintSpeed&#39;</span>,<span style="color:#e6db74">&#39;Potential&#39;</span>,<span style="color:#e6db74">&#39;Wage&#39;</span>]])
+</code></pre></div><!-- raw HTML omitted -->
 <p>Pretty Good. We can see so much in this graph.</p>
-
 <ul>
-<li><p>Wage and Value are highly correlated.</p></li>
-
-<li><p>Most of the other values are correlated too. However, the trend of potential vs. value is unusual. We can see how the value increases exponentially as we reach a particular potential threshold. This information can be helpful in modeling. Can use some transformation on Potential to make it more correlated?</p></li>
+<li>
+<p>Wage and Value are highly correlated.</p>
+</li>
+<li>
+<p>Most of the other values are correlated too. However, the trend of potential vs. value is unusual. We can see how the value increases exponentially as we reach a particular potential threshold. This information can be helpful in modeling. Can use some transformation on Potential to make it more correlated?</p>
+</li>
 </ul>
-
 <p><strong>Caveat:</strong> No categorical columns.</p>
-
 <p>Can we do better? We always can.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">g <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>pairplot(filtered_player_df[[<span style="color:#e6db74">&#39;Value&#39;</span>,<span style="color:#e6db74">&#39;SprintSpeed&#39;</span>,<span style="color:#e6db74">&#39;Potential&#39;</span>,<span style="color:#e6db74">&#39;Wage&#39;</span>,<span style="color:#e6db74">&#39;Club&#39;</span>]],hue <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Club&#39;</span>)</code></pre></div>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/visualizations/pairplot_color.png" "></center>
-</div>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">g <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>pairplot(filtered_player_df[[<span style="color:#e6db74">&#39;Value&#39;</span>,<span style="color:#e6db74">&#39;SprintSpeed&#39;</span>,<span style="color:#e6db74">&#39;Potential&#39;</span>,<span style="color:#e6db74">&#39;Wage&#39;</span>,<span style="color:#e6db74">&#39;Club&#39;</span>]],hue <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Club&#39;</span>)
+</code></pre></div><!-- raw HTML omitted -->
 <p>So much more info. Just by adding the <code>hue</code> parameter as a categorical variable <code>Club</code>.</p>
-
 <ul>
 <li>Porto&rsquo;s Wage distribution is too much towards the lower side.</li>
 <li>I don&rsquo;t see that steep distribution in value of Porto players. Porto&rsquo;s players would always be looking out for an opportunity.</li>
 <li>See how a lot of pink points(Chelsea) form sort of a cluster on Potential vs. wage graph. Chelsea has a lot of high potential players with lower wages. Needs more attention.</li>
 </ul>
-
 <p>I already know some of the points on the Wage/Value Subplot.</p>
-
 <p>The blue point for wage 500k is Messi. Also, the orange point having more value than Messi is Neymar.</p>
-
 <p>Although this hack still doesn&rsquo;t solve the Categorical problem, I have something cool to look into categorical variables distribution. Though individually.</p>
-
-<hr />
-
+<hr>
 <h2 id="swarmplots">SwarmPlots</h2>
-
 <p>How to see the relationship between categorical and numerical data?</p>
-
 <p>Enter into picture Swarmplots, just like their name. <em>A swarm of points plotted for each category with a little dispersion on the y-axis to make them easier to see.</em></p>
-
 <p>They are my current favorite for plotting such relationships.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">g <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>swarmplot(y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Club&#34;</span>,
               x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Wage&#39;</span>, 
@@ -452,16 +346,8 @@ g <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>pa
 <span style="color:#75715e"># remove the top and right line in graph</span>
 sns<span style="color:#f92672">.</span>despine()
 g<span style="color:#f92672">.</span>figure<span style="color:#f92672">.</span>set_size_inches(<span style="color:#ae81ff">14</span>,<span style="color:#ae81ff">10</span>)
-plt<span style="color:#f92672">.</span>show()</code></pre></div>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center>
-    <figure>
-      <img src="/images/visualizations/club and wage.png">
-      <figcaption style="font-size: 12px;">Swarmplot...</figcaption>
-    </figure>
-</center>
-</div>
-
+plt<span style="color:#f92672">.</span>show()
+</code></pre></div><!-- raw HTML omitted -->
 <p>Why don&rsquo;t I use Boxplots? <strong>Where are the median values? Can I plot that?</strong> Obviously. Overlay a bar plot on top, and we have a great looking graph.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">g <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>boxplot(y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Club&#34;</span>,
               x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Wage&#39;</span>, 
@@ -474,20 +360,10 @@ g <span style="color:#f92672">=</span> sns<span style="color:#f92672">.</span>sw
 <span style="color:#75715e"># remove the top and right line in graph</span>
 sns<span style="color:#f92672">.</span>despine()
 g<span style="color:#f92672">.</span>figure<span style="color:#f92672">.</span>set_size_inches(<span style="color:#ae81ff">12</span>,<span style="color:#ae81ff">8</span>)
-plt<span style="color:#f92672">.</span>show()</code></pre></div>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center>
-    <figure>
-      <img src="/images/visualizations/swarn_box.png">
-      <figcaption style="font-size: 12px;">Swarmplot+Boxplot, Interesting</figcaption>
-    </figure>
-</center>
-</div>
-
+plt<span style="color:#f92672">.</span>show()
+</code></pre></div><!-- raw HTML omitted -->
 <p>Pretty good. We can see the individual points on the graph, see some statistics and understand the wage difference categorically.</p>
-
-<p><strong><em>The far right point is Messi. However, I should not have to tell you that in a text below the chart. Right?</em></strong></p>
-
+<p><em><strong>The far right point is Messi. However, I should not have to tell you that in a text below the chart. Right?</strong></em></p>
 <p>This graph is going to go in a presentation. Your boss says. I want to write Messi on this graph. Comes into picture <strong>annotations.</strong></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">max_wage <span style="color:#f92672">=</span> filtered_player_df<span style="color:#f92672">.</span>Wage<span style="color:#f92672">.</span>max()
 max_wage_player <span style="color:#f92672">=</span> filtered_player_df[(player_df[<span style="color:#e6db74">&#39;Wage&#39;</span>] <span style="color:#f92672">==</span> max_wage)][<span style="color:#e6db74">&#39;Name&#39;</span>]<span style="color:#f92672">.</span>values[<span style="color:#ae81ff">0</span>]
@@ -510,16 +386,8 @@ plt<span style="color:#f92672">.</span>annotate(s <span style="color:#f92672">=<
              arrowprops <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;facecolor&#39;</span>:<span style="color:#e6db74">&#39;gray&#39;</span>, <span style="color:#e6db74">&#39;width&#39;</span>: <span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;shrink&#39;</span>: <span style="color:#ae81ff">0.03</span>},
              backgroundcolor <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;white&#39;</span>)
 g<span style="color:#f92672">.</span>figure<span style="color:#f92672">.</span>set_size_inches(<span style="color:#ae81ff">12</span>,<span style="color:#ae81ff">8</span>)
-plt<span style="color:#f92672">.</span>show()</code></pre></div>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center>
-    <figure>
-      <img src="/images/visualizations/annotated_box_swarn.png">
-      <figcaption style="font-size: 12px;">Annotated, Statistical Info and point swarm. To the presentation, I go.</figcaption>
-    </figure>
-</center>
-</div>
-
+plt<span style="color:#f92672">.</span>show()
+</code></pre></div><!-- raw HTML omitted -->
 <ul>
 <li>See Porto Down there. Competing with the giants with such a small wage budget.</li>
 <li>So many Highly paid players in Real and Barcelona.</li>
@@ -527,29 +395,19 @@ plt<span style="color:#f92672">.</span>show()</code></pre></div>
 <li>Manchester United and Chelsea believes in equality. Many players clustered in around the same wage scale.</li>
 <li>I am happy that while Neymar is more valued than Messi, Messi and Neymar have a huge Wage difference.</li>
 </ul>
-
 <p>A semblance of normalcy in this crazy world.</p>
-
-<hr />
-
+<hr>
 <p>So to recap, in this post, we talked about calculating and reading correlations between different variable types, plotting correlations between numerical data and Plotting categorical data with Numerical data using Swarmplots. I love how we can overlay chart elements on top of each other in Seaborn.</p>
-
-<hr />
-
-<p>Also if you want to learn more about Visualizations, I would like to call out an excellent course about <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">Data Visualization and applied plotting</a> from the University of Michigan which is a part of a pretty good <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">Data Science Specialization with Python</a> in itself. Do check it out</p>
-
-<p>If you liked this post, do look at my other <a href="https://mlwhiz.com/blog/2015/09/13/seaborn_visualizations/" rel="nofollow" target="_blank">post</a> on Seaborn too where I have created some more straightforward reusable graphs. I am going to be writing more beginner friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank">Medium</a> or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a></p>
-
-<p>Code for this post in this <a href="https://www.kaggle.com/mlwhiz/seaborn-visualizations-using-football-data" rel="nofollow" target="_blank">kaggle kernel</a>.</p>
-
-<hr />
-
+<hr>
+<p>Also if you want to learn more about Visualizations, I would like to call out an excellent course about <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Data Visualization and applied plotting</a> from the University of Michigan which is a part of a pretty good <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Data Science Specialization with Python</a> in itself. Do check it out</p>
+<p>If you liked this post, do look at my other <a href="https://mlwhiz.com/blog/2015/09/13/seaborn_visualizations/">post</a> on Seaborn too where I have created some more straightforward reusable graphs. I am going to be writing more beginner friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal">Medium</a> or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz">@mlwhiz</a></p>
+<p>Code for this post in this <a href="https://www.kaggle.com/mlwhiz/seaborn-visualizations-using-football-data">kaggle kernel</a>.</p>
+<hr>
 <h2 id="references">References:</h2>
-
 <ul>
-<li><a href="https://towardsdatascience.com/the-search-for-categorical-correlation-a1cf7f1888c9" rel="nofollow" target="_blank">The Search for Categorical Correlation</a></li>
-<li><a href="https://seaborn.pydata.org/generated/seaborn.swarmplot.html" rel="nofollow" target="_blank">Seaborn Swarmplot Documentation</a></li>
-<li><a href="https://seaborn.pydata.org/generated/seaborn.pairplot.html" rel="nofollow" target="_blank">Seaborn Pairplot Documentation</a></li>
+<li><a href="https://towardsdatascience.com/the-search-for-categorical-correlation-a1cf7f1888c9">The Search for Categorical Correlation</a></li>
+<li><a href="https://seaborn.pydata.org/generated/seaborn.swarmplot.html">Seaborn Swarmplot Documentation</a></li>
+<li><a href="https://seaborn.pydata.org/generated/seaborn.pairplot.html">Seaborn Pairplot Documentation</a></li>
 </ul>
 
 		</div>
@@ -689,7 +547,7 @@ plt<span style="color:#f92672">.</span>show()</code></pre></div>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
 		</ul>
 	</div>
 </div>

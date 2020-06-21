@@ -14,12 +14,13 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.53" />
+	<meta name="generator" content="Hugo 0.72.0" />
 	<meta property="og:title" content="Machine Learning Algorithms for Data Scientists" />
 <meta property="og:description" content="Machine Learning algorithms for Data Scientists" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://mlwhiz.com/blog/2017/02/05/ml_algorithms_for_data_scientist/" /><meta property="article:published_time" content="2017-02-05T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2017-02-05T00:00:00&#43;00:00"/>
+<meta property="og:url" content="https://mlwhiz.com/blog/2017/02/05/ml_algorithms_for_data_scientist/" />
+<meta property="article:published_time" content="2017-02-05T00:00:00+00:00" />
+<meta property="article:modified_time" content="2017-02-05T00:00:00+00:00" />
 
 	<meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Machine Learning Algorithms for Data Scientists"/>
@@ -165,84 +166,61 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			
-
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/mlago_fords.png"  height="400" width="600" ></center>
-</div>
-
+			<!-- raw HTML omitted -->
 <p>As a data scientist I believe that a lot of work has to be done before Classification/Regression/Clustering methods are applied to the data you get. The data which may be messy, unwieldy and big. So here are the list of algorithms that helps a data scientist to make better models using the data they have:</p>
-
 <h2 id="1-sampling-algorithms-in-case-you-want-to-work-with-a-sample-of-data">1. Sampling Algorithms. In case you want to work with a sample of data.</h2>
-
 <ul>
 <li><strong>Simple Random Sampling :</strong> <em>Say you want to select a subset of a population in which each member of the subset has an equal probability of being chosen.</em></li>
 <li><strong>Stratified Sampling:</strong> Assume that we need to estimate average number of votes for each candidate in an election. Assume that country has 3 towns : Town A has 1 million factory workers, Town B has 2 million workers and Town C has 3 million retirees. We can choose to get a random sample of size 60 over entire population but there is some chance that the random sample turns out to be not well balanced across these towns and hence is biased causing a significant error in estimation. Instead if we choose to take a random sample of 10, 20 and 30 from Town A, B and C respectively then we can produce a smaller error in estimation for the same total size of sample.</li>
 <li><strong>Reservoir Sampling</strong> :<em>Say you have a stream of items of large and unknown length that we can only iterate over once. Create an algorithm that randomly chooses an item from this stream such that each item is equally likely to be selected.</em></li>
 </ul>
-
 <h2 id="2-map-reduce-if-you-want-to-work-with-the-whole-data">2. <strong>Map-Reduce. If you want to work with the whole data</strong>.</h2>
-
 <p>Can be used for feature creation. For Example: I had a use case where I had a graph of 60 Million customers and 130 Million accounts. Each account was connected to other account if they had the Same SSN or Same Name+DOB+Address. I had to find customer ID’s for each of the accounts. On a single node parsing such a graph took more than 2 days. On a Hadoop cluster of 80 nodes running a <em>Connected Component Algorithm</em> took less than 24 minutes. On Spark it is even faster.</p>
-
 <h2 id="3-graph-algorithms">3. <strong>Graph Algorithms.</strong></h2>
-
 <p>Recently I was working on an optimization problem which was focussed on finding shortest distance and routes between two points in a store layout. Routes which don’t pass through different aisles, so we cannot use euclidean distances. We solved this problem by considering turning points in the store layout and the <em>djikstra’s Algorithm.</em></p>
-
-<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script>
-
+<!-- raw HTML omitted -->
 <h2 id="4-feature-selection">4. <strong>Feature Selection.</strong></h2>
-
 <ul>
 <li><strong>Univariate Selection.</strong> Statistical tests can be used to select those features that have the strongest relationship with the output variable.</li>
 <li><strong>VarianceThreshold.</strong> Feature selector that removes all low-variance features.</li>
 <li><strong>Recursive Feature Elimination.</strong> The goal of recursive feature elimination (RFE) is to select features by recursively considering smaller and smaller sets of features. First, the estimator is trained on the initial set of features and weights are assigned to each one of them. Then, features whose absolute weights are the smallest are pruned from the current set features. That procedure is recursively repeated on the pruned set until the desired number of features to select is eventually reached.</li>
 <li><strong>Feature Importance:</strong> Methods that use ensembles of decision trees (like Random Forest or Extra Trees) can also compute the relative importance of each attribute. These importance values can be used to inform a feature selection process.</li>
 </ul>
-
 <h2 id="5-algorithms-to-work-efficiently">5. <strong>Algorithms to work efficiently.</strong></h2>
-
 <p>Apart from these above algorithms sometimes you may need to write your own algorithms. Now I think of big algorithms as a combination of small but powerful algorithms. You just need to have idea of these algorithms to make a more better/efficient product. So some of these powerful algorithms which can help you are:</p>
-
 <ul>
-<li><strong>Recursive Algorithms:</strong>Binary search algorithm.</li>
+<li>**Recursive Algorithms:**Binary search algorithm.</li>
 <li><strong>Divide and Conquer Algorithms:</strong> Merge-Sort.</li>
-<li><strong>Dynamic Programming:</strong>Solving a complex problem by breaking it down into a collection of simpler subproblems, solving each of those subproblems just once, and storing their solutions.</li>
+<li>**Dynamic Programming:**Solving a complex problem by breaking it down into a collection of simpler subproblems, solving each of those subproblems just once, and storing their solutions.</li>
 </ul>
-
-<h2 id="6-classification-regression-algorithms-the-usual-suspects-minimum-you-must-know">6. <strong>Classification/Regression Algorithms.</strong> The usual suspects. Minimum you must know:</h2>
-
+<h2 id="6-classificationregression-algorithms-the-usual-suspects-minimum-you-must-know">6. <strong>Classification/Regression Algorithms.</strong> The usual suspects. Minimum you must know:</h2>
 <ol>
 <li><strong>Linear Regression -</strong> Ridge Regression, Lasso Regression, ElasticNet</li>
 <li><strong>Logistic Regression</strong></li>
 <li>From there you can build upon:
-
 <ol>
 <li><strong>Decision Trees -</strong> ID3, CART, C4.5, C5.0</li>
 <li><strong>KNN</strong></li>
 <li><strong>SVM</strong></li>
 <li><strong>ANN</strong> - Back Propogation, CNN</li>
-</ol></li>
+</ol>
+</li>
 <li>And then on to Ensemble based algorithms:
-
 <ol>
 <li><strong>Boosting</strong>: Gradient Boosted Trees</li>
 <li><strong>Bagging</strong>: Random Forests</li>
 <li><strong>Blending</strong>: Prediction outputs of different learning algorithms are fed into another learning algorithm.</li>
-</ol></li>
 </ol>
-
-<h2 id="7-clustering-methods-for-unsupervised-learning">7 . <strong>Clustering Methods.</strong>For unsupervised learning.</h2>
-
+</li>
+</ol>
+<h2 id="7--clustering-methodsfor-unsupervised-learning">7 . **Clustering Methods.**For unsupervised learning.</h2>
 <ol>
 <li><strong>k-Means</strong></li>
 <li><strong>k-Medians</strong></li>
 <li><strong>Expectation Maximisation (EM)</strong></li>
 <li><strong>Hierarchical Clustering</strong></li>
 </ol>
-
 <h2 id="8-other-algorithms-you-can-learn-about">8. <strong>Other algorithms you can learn about:</strong></h2>
-
 <ol>
 <li><strong>Apriori algorithm</strong>- Association Rule Mining</li>
 <li><strong>Eclat algorithm -</strong> Association Rule Mining</li>
@@ -252,7 +230,6 @@ if (!doNotTrack) {
 <li><strong>Bayesian Algorithms</strong></li>
 <li><strong>NLP -</strong> For language based models. Chatbots.</li>
 </ol>
-
 <p>Hope this has been helpful&hellip;..</p>
 
 		</div>
@@ -392,7 +369,7 @@ if (!doNotTrack) {
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
 		</ul>
 	</div>
 </div>

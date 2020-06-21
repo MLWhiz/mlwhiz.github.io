@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.53" />
+	<meta name="generator" content="Hugo 0.72.0" />
 	<meta property="og:title" content="Practical Spark Tips for Data Scientists" />
 <meta property="og:description" content="This post is going to be about Practical Spark and memory management tips for Data Scientists." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2020/03/20/practicalspark/" />
 <meta property="og:image" content="https://mlwhiz.com/images/practicalspark/main.png" />
-<meta property="article:published_time" content="2020-03-20T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2020-03-20T00:00:00&#43;00:00"/>
+<meta property="article:published_time" content="2020-03-20T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-03-20T00:00:00+00:00" />
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/practicalspark/main.png"/>
@@ -169,128 +169,77 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			
-
-<p><img src="/images/practicalspark/main.png" alt="" /></p>
-
-<p><strong><em>I know — Spark is sometimes frustrating to work with.</em></strong></p>
-
-<p><strong><em>Although sometimes we can manage our big data using tools like <a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientist-on-gpu-d9a6c7759c7f?source=---------5------------------" rel="nofollow" target="_blank">Rapids</a> or <a href="https://towardsdatascience.com/add-this-single-word-to-make-your-pandas-apply-faster-90ee2fffe9e8?source=---------11------------------" rel="nofollow" target="_blank">Parallelization</a>,</em></strong> there is no way around using Spark if you are working with Terabytes of data.</p>
-
-<p>In my <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" rel="nofollow" target="_blank">l</a>ast few posts on Spark, I explained how to work with <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" rel="nofollow" target="_blank">PySpark RDDs</a> and <a href="https://towardsdatascience.com/5-ways-to-add-a-new-column-in-a-pyspark-dataframe-4e75c2fd8c08" rel="nofollow" target="_blank">Dataframes</a>. Although these posts explain a lot on how to work with RDDs and Dataframe operations, they still are not quite enough.</p>
-
+			<p><img src="/images/practicalspark/main.png" alt=""></p>
+<p><em><strong>I know — Spark is sometimes frustrating to work with.</strong></em></p>
+<p><em><strong>Although sometimes we can manage our big data using tools like <a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientist-on-gpu-d9a6c7759c7f?source=---------5------------------">Rapids</a> or <a href="https://towardsdatascience.com/add-this-single-word-to-make-your-pandas-apply-faster-90ee2fffe9e8?source=---------11------------------">Parallelization</a>,</strong></em> there is no way around using Spark if you are working with Terabytes of data.</p>
+<p>In my <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a">l</a>ast few posts on Spark, I explained how to work with <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a">PySpark RDDs</a> and <a href="https://towardsdatascience.com/5-ways-to-add-a-new-column-in-a-pyspark-dataframe-4e75c2fd8c08">Dataframes</a>. Although these posts explain a lot on how to work with RDDs and Dataframe operations, they still are not quite enough.</p>
 <p>Why? Because Spark gives memory errors a lot of times, and it is only when you genuinely work on big datasets with spark, would you be able to truly work with Spark.</p>
-
 <p><strong>This post is going to be about — “Practical Spark and memory management tips for Data Scientists.”</strong></p>
-
-<hr />
-
+<hr>
 <h2 id="1-map-side-joins">1. Map Side Joins</h2>
-
-<p><img src="/images/practicalspark/0.png" alt="Joining Dataframes" /></p>
-
+<p><img src="/images/practicalspark/0.png" alt="Joining Dataframes"></p>
 <p>The syntax of joins in Spark is pretty similar to pandas:</p>
-
 <pre><code>df3 = df1.join(df2, df1.column == df2.column,how='left')
 </code></pre>
-
 <p>But I faced a problem. The df1 had around 1Billion rows while df2 had around 100 Rows. When I tried the above join, it didn’t work and failed with memory exhausted errors after running for 20 minutes.</p>
-
 <p>I was writing this code on a pretty big cluster with more than 400 executors with each executor having more than 4GB RAM. I was stumped as I tried to repartition my data frames using multiple schemes, but nothing seemed to work.</p>
-
 <p>So what should I do? Is Spark not able to work with a mere billion rows? Not Really. I just needed to use Map-side joins or broadcasting in Spark terminology.</p>
-
 <pre><code>from pyspark.sql.functions import broadcast
 df3 = df1.join(broadcast(df2), df1.column == df2.column,how='left')
 </code></pre>
-
 <p>Using the simple broadcasting code above, I was able to send the smaller df2 to all the nodes, and this didn’t take a lot of time or memory. What happens in the backend is that a copy of df2 is sent to all the partitions and each partition uses that copy to do the join. That means that there is no data movement when it comes to df1, which is a lot bigger than df2.</p>
-
-<hr />
-
+<hr>
 <h2 id="2-spark-cluster-configurations">2. Spark Cluster Configurations</h2>
-
-<p><img src="/images/practicalspark/1.png" alt="Set the Parallelism and worker nodes based on your task size" /><em>Set the Parallelism and worker nodes based on your task size</em></p>
-
+<p><img src="/images/practicalspark/1.png" alt="Set the Parallelism and worker nodes based on your task size"><em>Set the Parallelism and worker nodes based on your task size</em></p>
 <p>What also made my life difficult while I was starting work with Spark was the way the Spark cluster needs to be configured. Your spark cluster might need a lot of custom configuration ad tuning based on the job you want to run.</p>
-
 <p>Some of the most important configurations and options are as follows:</p>
-
-<h3 id="a-spark-sql-shuffle-partitions-and-spark-default-parallelism">a. spark.sql.shuffle.partitions and spark.default.parallelism:</h3>
-
+<h3 id="a-sparksqlshufflepartitions-and-sparkdefaultparallelism">a. spark.sql.shuffle.partitions and spark.default.parallelism:</h3>
 <p>spark.sql.shuffle.partitions configures the number of partitions to use when shuffling data for joins or aggregations. The spark.default.parallelism is the default number of partitions in RDDs returned by transformations like join, reduceByKey, and parallelize when not set by the user. The default value for these is 200.</p>
-
-<p><strong><em>In simple words, these set the degree of parallelism you want to have in your cluster.</em></strong></p>
-
+<p><em><strong>In simple words, these set the degree of parallelism you want to have in your cluster.</strong></em></p>
 <p>If you don’t have a lot of data, the value of 200 is fine, but if you have huge data, you might want to increase these numbers. It also depends on the number of executors you have. My cluster was pretty big with 400 executors, so I kept this at 1200. A rule of thumb is to keep it as a multiple of the number of executors so that each executor ends up with multiple jobs.</p>
-
 <pre><code>sqlContext.setConf( &quot;spark.sql.shuffle.partitions&quot;, 800)
 sqlContext.setConf( &quot;spark.default.parallelism&quot;, 800)
 </code></pre>
-
-<h3 id="b-spark-sql-parquet-binaryasstring">b. spark.sql.parquet.binaryAsString</h3>
-
+<h3 id="b-sparksqlparquetbinaryasstring">b. spark.sql.parquet.binaryAsString</h3>
 <p>I was working with .parquet files in Spark, and most of my data columns were strings. But somehow whenever I loaded the data in Spark, the string columns got converted into binary format on which I was not able to use any string manipulation functions. The way I solved this was by using:</p>
-
 <pre><code>sqlContext.setConf(&quot;spark.sql.parquet.binaryAsString&quot;,&quot;true&quot;)
 </code></pre>
-
 <p>The above configuration converts the binary format to string while loading parquet files. Now it is a default configuration I set whenever I work with Spark.</p>
-
 <h3 id="c-yarn-configurations">c. Yarn Configurations:</h3>
-
 <p>There are other configurations that you might need to tune that define your cluster. But these need to be set up when the cluster is starting and are not as dynamic as the above ones. The few I want to put down here are for managing memory spills on the executor nodes. Sometimes the executor core gets a lot of work.</p>
-
 <ul>
-<li><p>spark.yarn.executor.memoryOverhead: 8192</p></li>
-
-<li><p>yarn.nodemanager.vmem-check-enabled: False</p></li>
+<li>
+<p>spark.yarn.executor.memoryOverhead: 8192</p>
+</li>
+<li>
+<p>yarn.nodemanager.vmem-check-enabled: False</p>
+</li>
 </ul>
-
-<p>There are a lot of configurations that you might want to tune while setting up your spark cluster. You can take a look at them in the <a href="https://spark.apache.org/docs/latest/configuration.html" rel="nofollow" target="_blank">official docs</a>.</p>
-
-<hr />
-
+<p>There are a lot of configurations that you might want to tune while setting up your spark cluster. You can take a look at them in the <a href="https://spark.apache.org/docs/latest/configuration.html">official docs</a>.</p>
+<hr>
 <h2 id="3-repartitioning">3. Repartitioning</h2>
-
-<p><img src="/images/practicalspark/2.png" alt="Keeping the workers happy by having them handle an equal amount of data" /><em>Keeping the workers happy by having them handle an equal amount of data</em></p>
-
+<p><img src="/images/practicalspark/2.png" alt="Keeping the workers happy by having them handle an equal amount of data"><em>Keeping the workers happy by having them handle an equal amount of data</em></p>
 <p>You might want to repartition your data if you feel your data has been skewed while working with all the transformations and joins. The simplest way to do it is by using:</p>
-
 <pre><code>df = df.repartition(1000)
 </code></pre>
-
 <p>Sometimes you might also want to repartition by a known scheme as this scheme might be used by a certain join or aggregation operation later on. You can use multiple columns to repartition using:</p>
-
 <pre><code>df = df.repartition('cola', 'colb','colc','cold')
 </code></pre>
-
 <p>You can get the number of partitions in a data frame using:</p>
-
 <pre><code>df.rdd.getNumPartitions()
 </code></pre>
-
 <p>You can also check out the distribution of records in a partition by using the glom function. This helps in understanding the skew in the data that happens while working with various transformations.</p>
-
 <pre><code>df.glom().map(len).collect()
 </code></pre>
-
-<hr />
-
+<hr>
 <h2 id="conclusion">Conclusion</h2>
-
 <p>There are a lot of things we don’t know, we don’t know. These are called unknown unknowns. It is only by multiple code failures and reading up on multiple stack overflow threads that we understand what we need.</p>
-
 <p>Here I have tried to summarize a few of the problems that I faced around memory issues and configurations while working with Spark and how to solve them. There are a lot of other configuration options in Spark, which I have not covered, but I hope this post gave you some clarity on how to set these and use them.</p>
-
 <p>Now, if you need to learn Spark basics, take a look at my previous post:
-<a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" rel="nofollow" target="_blank"><strong>The Hitchhikers guide to handle Big Data using Spark</strong>
-*Not just an Introduction*towardsdatascience.com</a></p>
-
-<p>Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out these excellent courses on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293556&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-essentials" rel="nofollow" target="_blank">Big Data Essentials: HDFS, MapReduce and Spark RDD</a> and <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293488&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-analysis" rel="nofollow" target="_blank">Big Data Analysis: Hive, Spark SQL, DataFrames and GraphFrames</a> by Yandex on Coursera.</p>
-
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a></p>
-
+<a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a"><strong>The Hitchhikers guide to handle Big Data using Spark</strong>
+<em>Not just an Introduction</em>towardsdatascience.com</a></p>
+<p>Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out these excellent courses on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293556&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-essentials">Big Data Essentials: HDFS, MapReduce and Spark RDD</a> and <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293488&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-analysis">Big Data Analysis: Hive, Spark SQL, DataFrames and GraphFrames</a> by Yandex on Coursera.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------">@mlwhiz</a></p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 		</div>
@@ -342,7 +291,7 @@ sqlContext.setConf( &quot;spark.default.parallelism&quot;, 800)
 
 <nav class="post-nav flex">
 	<div class="post-nav__item post-nav__item--prev">
-		<a class="post-nav__link" href="/blog/2020/02/24/sparkcolumns/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">5 Ways to add a new column in a PySpark Dataframe</p></a>
+		<a class="post-nav__link" href="/blog/2020/02/24/job/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">5 tips for getting your first Data Science job in 2020</p></a>
 	</div>
 	<div class="post-nav__item post-nav__item--next">
 		<a class="post-nav__link" href="/blog/2020/03/24/coronaai/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">Can AI help in fighting against Corona?</p></a>
@@ -429,7 +378,7 @@ sqlContext.setConf( &quot;spark.default.parallelism&quot;, 800)
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
 		</ul>
 	</div>
 </div>

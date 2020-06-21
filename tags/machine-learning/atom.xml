@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1" xmlns:content="http://purl.org/rss/1.0/modules/content" xmlns:media="http://search.yahoo.com/mrss/" >
 
   
   <channel>
-    <title>Machine Learning on MLWhiz</title>
+    <title>machine learning on MLWhiz</title>
     <link>https://mlwhiz.com/tags/machine-learning/</link>
-    <description>Recent content in Machine Learning on MLWhiz</description>
+    <description>Recent content in machine learning on MLWhiz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 28 Dec 2017 00:00:00 +0000</lastBuildDate>
@@ -29,11 +28,11 @@
 
       
       <description>Recently I was working on a in-class competition from the &amp;amp;ldquo;How to win a data science competition&amp;amp;rdquo; Coursera course. You can start for free with the 7-day Free Trial. Learned a lot of new things from that about using XGBoost for time series prediction tasks.
-The one thing that I tried out in this competition was the Hyperopt package - A bayesian Parameter Tuning Framework. And I was literally amazed.</description>
+The one thing that I tried out in this competition was the Hyperopt package - A bayesian Parameter Tuning Framework. And I was literally amazed. Left the machine with hyperopt in the night.</description>
 
       <content:encoded>  
         
-        <![CDATA[  Recently I was working on a in-class competition from the &amp;ldquo;How to win a data science competition&amp;rdquo; Coursera course. You can start for free with the 7-day Free Trial. Learned a lot of new things from that about using XGBoost for time series prediction tasks.
+        <![CDATA[ Recently I was working on a in-class competition from the &amp;ldquo;How to win a data science competition&amp;rdquo; Coursera course. You can start for free with the 7-day Free Trial. Learned a lot of new things from that about using XGBoost for time series prediction tasks.
 The one thing that I tried out in this competition was the Hyperopt package - A bayesian Parameter Tuning Framework. And I was literally amazed. Left the machine with hyperopt in the night. And in the morning I had my results. It was really awesome and I did avoid a lot of hit and trial.
 What really is Hyperopt? From the site:
  Hyperopt is a Python library for serial and parallel optimization over awkward search spaces, which may include real-valued, discrete, and conditional dimensions.
@@ -69,7 +68,7 @@ But after getting to an CV error of .47 on the Kaggle LB and being stuck there ,
 
       <content:encoded>  
         
-        <![CDATA[  THE PROBLEM: Recently I was working on the Criteo Advertising Competition on Kaggle. The competition was a classification problem which basically involved predicting the click through rates based on several features provided in the train data. Seeing the size of the data (11 GB Train), I felt that going with Vowpal Wabbit might be a better option.
+        <![CDATA[ THE PROBLEM: Recently I was working on the Criteo Advertising Competition on Kaggle. The competition was a classification problem which basically involved predicting the click through rates based on several features provided in the train data. Seeing the size of the data (11 GB Train), I felt that going with Vowpal Wabbit might be a better option.
 But after getting to an CV error of .47 on the Kaggle LB and being stuck there , I felt the need to go back to Scikit learn. While SciKit learn seemed to have a partial_fit method in SGDClassifier, I still could not find a partial_fit method in the OneHotEncoder or DictVectorizer class which made me look to the internet again. Now while I could find many advices on how to use OneHotEncoding and DictVectorizer on small data, I cannot find something relate to data too big to store in the memory. How do I OneHotEncode such a large data file?
 DICTVECTORIZER How does a DictVectorizer works. There is a lot of stuff around the net for this but I dint get to understand much around it. This blog from Zygmuntz of Fastml came to rescue then. Although still it didn’t resolve how to apply that to such large amount of data.
 from sklearn.feature_extraction import DictVectorizer as DV # Create Vectorizer vectorizer = DV( sparse = False ) # Read the whole Data traindata = pd.read_csv(train_file, header=None, sep=&amp;#39;,&amp;#39;, names = colnames) # Retain the categorical Columns train_df = traindata[cat_col] # Convert Panda Data frame to Dict train_dict = train_df.T.to_dict().values() # Create Fit vectorizer.fit(test_dict) THE DATA The data was basically comprised of 40 Features with: 1. First two Columns as ID, Label 2. Next 13 columns Continuous columns labelled I1-I13 3. Next 26 Columns Categorical labelled C1-C26 Further the categorical columns were very sparse and some of the categorical variables could take more than a million different values.
@@ -77,7 +76,7 @@ THE WORKAROUNDS The main problem that I faced was that I could not fit that much
 I know that it is a lot to take in, so let’s take an example to understand it: Let’s say we have a data of infinite size, which has 3 categorical variables: C1 could take values 1-100 C2 could take values 1-3 C3 could take values 1-1000 Then we just have to find which category could take the maximum number of values (i.e. C3 in the above case) and make a dict which contains other categories replicated to contain as many values In other words, we need to make a dict like: {C1 : [1,2,3,……,97,98,99,100]*10 , C2 : [1,2,3]*333&#43;[1] , C3: [1….1000]} Notice the star sign at the last of the list. That means that for every key in the dict the number of values is now 1000(i.e. the maximum number of features).
 And so that is what I did. After we have the Vectorizer Fit, the next task was to transform the data. I took the data transformed it and sent it to my model line by line. P.S. Don’t store the transformed data as around a 100000 records takes ~ 10GB of Hard Disk Space due to the high number of features.
 Hope you find it Informative and happy learning.
- ]]>
+]]>
         
       </content:encoded>
       

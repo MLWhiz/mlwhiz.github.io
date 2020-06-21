@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1" xmlns:content="http://purl.org/rss/1.0/modules/content" xmlns:media="http://search.yahoo.com/mrss/" >
 
   
   <channel>
-    <title>Deploy Ml Models on MLWhiz</title>
+    <title>Deploy ML Models on MLWhiz</title>
     <link>https://mlwhiz.com/tags/deploy-ml-models/</link>
-    <description>Recent content in Deploy Ml Models on MLWhiz</description>
+    <description>Recent content in Deploy ML Models on MLWhiz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 10 Jan 2016 00:00:00 +0000</lastBuildDate>
@@ -30,7 +29,7 @@ Recently I was thinking about a way to deploy all these machine learning models 
 
       <content:encoded>  
         
-        <![CDATA[  It has been a long time since I wrote anything on my blog. So thought about giving everyone a treat this time. Or so I think it is.
+        <![CDATA[ It has been a long time since I wrote anything on my blog. So thought about giving everyone a treat this time. Or so I think it is.
 Recently I was thinking about a way to deploy all these machine learning models I create in python. I searched through the web but couldn&amp;rsquo;t find anything nice and easy. Then I fell upon this book by Sebastian Rashcka and I knew that it was what I was looking for. To tell you the truth I did had some experience in Flask earlier but this book made it a whole lot easier to deploy a machine learning model in flask.
 So today I am going to give a brief intro about Flask Apps and how to deploy them using a service called Openshift.
 So What is flask? Flask is a Python Web Framework that makes it easier to create webapps from python.
@@ -48,7 +47,7 @@ brew install python-virtualenv cd helloworld/wsgi/ virtualenv venv --python=pyth
 put this code in run.py
 import os from flask import Flask app = Flask(__name__) @app.route(&amp;#39;/&amp;#39;) def home(): &amp;#34;&amp;#34;&amp;#34;Render website&amp;#39;s home page.&amp;#34;&amp;#34;&amp;#34; return &amp;#39;Hello World!&amp;#39; if __name__ == &amp;#39;__main__&amp;#39;: app.run(debug=&amp;#34;True&amp;#34;) Also change the file named application to:
 #!/usr/bin/python import os import sys sys.path.insert(0, os.path.dirname(__file__) or &amp;#39;.&amp;#39;) PY_DIR = os.path.join(os.environ[&amp;#39;OPENSHIFT_HOMEDIR&amp;#39;], &amp;#34;python&amp;#34;) virtenv = PY_DIR &#43; &amp;#39;/virtenv/&amp;#39; PY_CACHE = os.path.join(virtenv, &amp;#39;lib&amp;#39;, os.environ[&amp;#39;OPENSHIFT_PYTHON_VERSION&amp;#39;], &amp;#39;site-packages&amp;#39;) os.environ[&amp;#39;PYTHON_EGG_CACHE&amp;#39;] = os.path.join(PY_CACHE) virtualenv = os.path.join(virtenv, &amp;#39;bin/activate_this.py&amp;#39;) try: exec(open(virtualenv).read(), dict(__file__=virtualenv)) except IOError: pass from run import app as application Run this to host your app:
-cd helloworld/wsgi python run.py  You should be able to see your app on: http://127.0.0.1:5000/ You can deploy this webapp to Openshift using:
+cd helloworld/wsgi python run.py You should be able to see your app on: http://127.0.0.1:5000/ You can deploy this webapp to Openshift using:
 cd helloworld git add . git commit -a -m &amp;#34;Initial deployment of this app to the web&amp;#34; git push Open http://helloworld-mlwhiz.rhcloud.com/ in your browser. You would see Hello World! there. Now we have got a very basic structure complete.
 Our Simple Calculator App: We will now work on creating a app that operates on two numbers provided by the user. The functions possible are &#43;,- and *. You can see this web app in action here before moving on. This app will help us in understanding how user forms work with Flask and how to manage user inputs in Flask. First of all change the code in run.py to
 import os from flask import Flask,render_template, request from wtforms import Form, TextAreaField, validators,SelectField app = Flask(__name__) # Code to create a WTForm with three fields. 2 text fields and 1 dropdown menu. class OutputForm(Form): myChoices=[(&amp;#39;&#43;&amp;#39;, &amp;#39;&#43;&amp;#39;), (&amp;#39;-&amp;#39;, &amp;#39;-&amp;#39;), (&amp;#39;*&amp;#39;, &amp;#39;*&amp;#39;)] num1 = TextAreaField(&amp;#39;&amp;#39;,[validators.DataRequired()]) num2 = TextAreaField(&amp;#39;&amp;#39;,[validators.DataRequired()]) Operator = SelectField(u&amp;#39;&amp;#39;, choices = myChoices, validators = [validators.DataRequired()]) # This uses the render_template method in flask to use a template first_app.html. # This html contains placeholders for the form that is provided in the kwargs argument to the function call. @app.route(&amp;#39;/&amp;#39;) def index(): #return &amp;#39;Hello World!&amp;#39; form = OutputForm(request.form) return render_template(&amp;#39;first_app.html&amp;#39;,form = form) # This is the output that is displayed. It checks if the form is validated and POST request is made. # If true it renders the output.html else renders the main index page. # Most of the work is done here. Gets the user inputs using the request.form method. @app.route(&amp;#39;/output&amp;#39;, methods=[&amp;#39;POST&amp;#39;]) def output(): form = OutputForm(request.form) if request.method == &amp;#39;POST&amp;#39; and form.validate(): num1 = request.form[&amp;#39;num1&amp;#39;] num2 = request.form[&amp;#39;num2&amp;#39;] op = request.form[&amp;#39;Operator&amp;#39;] if op==&amp;#34;&#43;&amp;#34;: name=str(int(num1)&#43;int(num2)) elif op==&amp;#34;-&amp;#34;: name=str(int(num1)-int(num2)) elif op==&amp;#34;*&amp;#34;: name=str(int(num1)*int(num2)) return render_template(&amp;#39;output.html&amp;#39;, name=name) return render_template(&amp;#39;first_app.html&amp;#39;, form=form) if __name__ == &amp;#39;__main__&amp;#39;: app.run(debug=&amp;#34;True&amp;#34;) We use WTF forms here to create a form object. We pass this form object to the HTML render_template method. We have accessed these again in the output function so that we can show them in output.html where all the major work is done for creating the app.

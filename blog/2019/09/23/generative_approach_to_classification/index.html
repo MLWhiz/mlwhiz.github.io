@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.53" />
+	<meta name="generator" content="Hugo 0.72.0" />
 	<meta property="og:title" content="A Generative Approach to Classification" />
 <meta property="og:description" content="This post is about understanding Generative Models and how they differ from Discriminative models." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2019/09/23/generative_approach_to_classification/" />
 <meta property="og:image" content="https://mlwhiz.com/images/generative/1.jpeg" />
-<meta property="article:published_time" content="2019-09-23T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2019-09-23T00:00:00&#43;00:00"/>
+<meta property="article:published_time" content="2019-09-23T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-09-23T00:00:00+00:00" />
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/generative/1.jpeg"/>
@@ -169,93 +169,58 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			
-
-<p><img src="/images/generative/1.jpeg" alt="" /></p>
-
+			<p><img src="/images/generative/1.jpeg" alt=""></p>
 <p>I always get confused whenever someone talks about generative vs. discriminative classification models.</p>
-
 <p>I end up reading it again and again, yet somehow it eludes me.</p>
-
 <p>So I thought of writing a post on it to improve my understanding.</p>
-
-<p><strong><em>This post is about understanding Generative Models and how they differ from Discriminative models.</em></strong></p>
-
+<p><em><strong>This post is about understanding Generative Models and how they differ from Discriminative models.</strong></em></p>
 <p><em>In the end, we will create a simple generative model ourselves.</em></p>
-
-<hr />
-
+<hr>
 <h2 id="discriminative-vs-generative-classifiers">Discriminative vs. Generative Classifiers</h2>
-
-<p><strong><em>Problem Statement:</em></strong> Having some input data, X we want to classify the data into labels y.</p>
-
+<p><em><strong>Problem Statement:</strong></em> Having some input data, X we want to classify the data into labels y.</p>
 <p>A generative model learns the <strong>joint</strong> probability distribution p(x,y) while a discriminative model learns the <strong>conditional</strong> probability distribution p(y|x)</p>
-
-<p><strong><em>So really, what is the difference? They both look pretty much the same.</em></strong></p>
-
+<p><em><strong>So really, what is the difference? They both look pretty much the same.</strong></em></p>
 <p>Suppose we have a small sample of data:</p>
-
 <p>(x,y) : [(0,1), (1,0), (1,0), (1, 1)]</p>
-
 <p>Then p(x,y) is</p>
-
-<p><img src="/images/generative/2.png" alt="" /></p>
-
+<p><img src="/images/generative/2.png" alt=""></p>
 <p>While p(y|x) is</p>
-
-<p><img src="/images/generative/3.png" alt="" /></p>
-
+<p><img src="/images/generative/3.png" alt=""></p>
 <p>As you can see, they model different probabilities.</p>
-
 <p>The discriminative distribution p(y|x) could be used straightforward to classify an example x into a class y. An example of a discriminative classification model is Logistic regression, where we try to model P(y|X).</p>
-
-<p><img src="/images/generative/4.png" alt="" /></p>
-
+<p><img src="/images/generative/4.png" alt=""></p>
 <p>Generative algorithms model p(x,y). An example is the Naive Bayes model in which we try to model P(X,y) and then use the Bayes equation to predict.</p>
-
-<hr />
-
+<hr>
 <h2 id="the-central-idea-behind-generative-classification">The Central Idea Behind Generative Classification</h2>
-
 <ul>
-<li><p>Fit each class separately with a probability distribution.</p></li>
-
-<li><p>To classify a new point, find out which distribution is it most probable to come from.</p></li>
+<li>
+<p>Fit each class separately with a probability distribution.</p>
+</li>
+<li>
+<p>To classify a new point, find out which distribution is it most probable to come from.</p>
+</li>
 </ul>
-
-<p><strong><em>Don’t worry if you don’t understand yet. You will surely get it by the end of this post.</em></strong></p>
-
-<hr />
-
+<p><em><strong>Don’t worry if you don’t understand yet. You will surely get it by the end of this post.</strong></em></p>
+<hr>
 <h2 id="a-small-example">A Small Example</h2>
-
-<p><img src="/images/generative/5.jpg" alt="" /></p>
-
+<p><img src="/images/generative/5.jpg" alt=""></p>
 <p>Let us work with the iris dataset.</p>
-
 <p>For our simple example, we will work with a single x variable SepalLength and our target variable Species.</p>
-
-<p>Let us see the distribution of sepal length with Species. I am using <a href="https://towardsdatascience.com/pythons-one-liner-graph-creation-library-with-animations-hans-rosling-style-f2cb50490396" rel="nofollow" target="_blank">plotly_express</a> for this.</p>
+<p>Let us see the distribution of sepal length with Species. I am using <a href="https://towardsdatascience.com/pythons-one-liner-graph-creation-library-with-animations-hans-rosling-style-f2cb50490396">plotly_express</a> for this.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> plotly_express <span style="color:#f92672">as</span> px
-px<span style="color:#f92672">.</span>histogram(iris, x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>,color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Species&#39;</span>,nbins<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)</code></pre></div>
-<p><img src="/images/generative/6.png" alt="" /></p>
-
+px<span style="color:#f92672">.</span>histogram(iris, x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>,color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Species&#39;</span>,nbins<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)
+</code></pre></div><p><img src="/images/generative/6.png" alt=""></p>
 <p>To create generative models, we need to find out two sets of values:</p>
-
 <h3 id="1-probability-of-individual-classes">1. Probability of individual classes:</h3>
-
 <p>To get individual class probability is fairly trivial- For example, the number of instances in our dataset, which is setosa divided by the total number of cases in the dataset.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">p_setosa <span style="color:#f92672">=</span> len(iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-setosa&#39;</span>])<span style="color:#f92672">/</span>len(iris)
 p_versicolor <span style="color:#f92672">=</span> len(iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-versicolor&#39;</span>])<span style="color:#f92672">/</span>len(iris)
 p_virginica <span style="color:#f92672">=</span> len(iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-virginica&#39;</span>])<span style="color:#f92672">/</span>len(iris)
-<span style="color:#66d9ef">print</span>(p_setosa,p_versicolor,p_virginica)</code></pre></div>
-<pre><code>0.3333333333333333 0.3333333333333333 0.3333333333333333
+<span style="color:#66d9ef">print</span>(p_setosa,p_versicolor,p_virginica)
+</code></pre></div><pre><code>0.3333333333333333 0.3333333333333333 0.3333333333333333
 </code></pre>
-
 <p>The iris dataset is pretty much balanced.</p>
-
 <h3 id="2-the-probability-distribution-of-x-for-each-class">2. The probability distribution of x for each class:</h3>
-
 <p>Here we fit a probability distribution over our X. We assume here that the X data is distributed normally. And hence we can find the sample means and variance for these three distributions(As we have three classes)</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np                                                              
 <span style="color:#f92672">import</span> seaborn <span style="color:#f92672">as</span> sns                                                           
@@ -279,39 +244,29 @@ yy <span style="color:#f92672">=</span> stats<span style="color:#f92672">.</span
 plt<span style="color:#f92672">.</span>plot(xx, yy, <span style="color:#e6db74">&#39;red&#39;</span>, lw<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>) 
 sns<span style="color:#f92672">.</span>despine()
 g<span style="color:#f92672">.</span>figure<span style="color:#f92672">.</span>set_size_inches(<span style="color:#ae81ff">20</span>,<span style="color:#ae81ff">10</span>)
-g<span style="color:#f92672">.</span>legend()</code></pre></div>
-<p><img src="/images/generative/7.png" alt="" /></p>
-
+g<span style="color:#f92672">.</span>legend()
+</code></pre></div><p><img src="/images/generative/7.png" alt=""></p>
 <p>In the above graph, I have fitted three normal distributions for each of the species just using sample means and variances for each of the three species.</p>
-
-<p><strong><em>So, how do we predict using this?</em></strong></p>
-
+<p><em><strong>So, how do we predict using this?</strong></em></p>
 <p>Let us say we get a new example with SepalLength = 7 cm.</p>
-
-<p><img src="/images/generative/8.png" alt="" /></p>
-
+<p><img src="/images/generative/8.png" alt=""></p>
 <p>Since we see that the maximum probability comes for Virginica, we predict virginica for x=7, and based on the graph too; it looks pretty much the right choice.</p>
-
 <p>You can get the values using the code too.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">x <span style="color:#f92672">=</span> iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-setosa&#39;</span>][<span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>]
 <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Setosa&#34;</span>,stats<span style="color:#f92672">.</span>norm<span style="color:#f92672">.</span>pdf(<span style="color:#ae81ff">7</span>,loc<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>mean(x),scale<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>std(x))<span style="color:#f92672">*.</span><span style="color:#ae81ff">33</span>)
 x <span style="color:#f92672">=</span> iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-versicolor&#39;</span>][<span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>]
 <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Versicolor&#34;</span>,stats<span style="color:#f92672">.</span>norm<span style="color:#f92672">.</span>pdf(<span style="color:#ae81ff">7</span>,loc<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>mean(x),scale<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>std(x))<span style="color:#f92672">*.</span><span style="color:#ae81ff">33</span>)
 x <span style="color:#f92672">=</span> iris[iris[<span style="color:#e6db74">&#39;Species&#39;</span>]<span style="color:#f92672">==</span><span style="color:#e6db74">&#39;Iris-virginica&#39;</span>][<span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>]
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Virginica&#34;</span>,stats<span style="color:#f92672">.</span>norm<span style="color:#f92672">.</span>pdf(<span style="color:#ae81ff">7</span>,loc<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>mean(x),scale<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>std(x))<span style="color:#f92672">*.</span><span style="color:#ae81ff">33</span>)</code></pre></div>
-<pre><code>Setosa 3.062104211904799e-08
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Virginica&#34;</span>,stats<span style="color:#f92672">.</span>norm<span style="color:#f92672">.</span>pdf(<span style="color:#ae81ff">7</span>,loc<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>mean(x),scale<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>std(x))<span style="color:#f92672">*.</span><span style="color:#ae81ff">33</span>)
+</code></pre></div><pre><code>Setosa 3.062104211904799e-08
 Versicolor 0.029478757465669376
 Virginica 0.16881724812694823
 </code></pre>
-
 <p>This is all well and good. But when do we ever work with a single variable?</p>
-
 <p>Let us extend our example for two variables. This time let us use PetalLength too.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">px<span style="color:#f92672">.</span>scatter(iris, <span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>, <span style="color:#e6db74">&#39;PetalLengthCm&#39;</span>,color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Species&#39;</span>)</code></pre></div>
-<p><img src="/images/generative/9.png" alt="" /></p>
-
-<p><strong><em>So how do we proceed in this case?</em></strong></p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">px<span style="color:#f92672">.</span>scatter(iris, <span style="color:#e6db74">&#39;SepalLengthCm&#39;</span>, <span style="color:#e6db74">&#39;PetalLengthCm&#39;</span>,color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Species&#39;</span>)
+</code></pre></div><p><img src="/images/generative/9.png" alt=""></p>
+<p><em><strong>So how do we proceed in this case?</strong></em></p>
 <p>The first time we had fit a Normal Distribution over our single x, this time we will fit Bivariate Normal.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-PY" data-lang="PY"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np                                                              
 <span style="color:#f92672">import</span> seaborn <span style="color:#f92672">as</span> sns                                                           
@@ -360,32 +315,20 @@ Z <span style="color:#f92672">=</span> bivariate_normal(X,Y, sigma_x1, sigma_x2,
 plt<span style="color:#f92672">.</span>contour(X,Y,Z,colors<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>)
 sns<span style="color:#f92672">.</span>despine()
 g<span style="color:#f92672">.</span>figure<span style="color:#f92672">.</span>set_size_inches(<span style="color:#ae81ff">20</span>,<span style="color:#ae81ff">10</span>)
-g<span style="color:#f92672">.</span>legend()</code></pre></div>
-<p>Here is how it looks:</p>
-
-<p><img src="/images/generative/10.png" alt="" /></p>
-
+g<span style="color:#f92672">.</span>legend()
+</code></pre></div><p>Here is how it looks:</p>
+<p><img src="/images/generative/10.png" alt=""></p>
 <p>Now the rest of the calculations remains the same.</p>
-
 <p>Just the normal gets replaced by Bivariate normal in the above equations. And as you can see, we get a pretty better separation amongst the classes by using the bivariate normal.</p>
-
 <p><em>As an extension to this case for multiple variables(more than 2), we can use the multivariate normal distribution.</em></p>
-
-<hr />
-
+<hr>
 <h2 id="conclusion">Conclusion</h2>
-
 <p>Generative models are good at generating data. But at the same time, creating such models that capture the underlying distribution of data is extremely hard.</p>
-
 <p>Generative modeling involves a lot of assumptions, and thus, these models don’t perform as well as discriminative models in the classification setting. In the above example also we assumed that the distribution is normal, which might not be correct and hence may induce a bias.</p>
-
-<p>But understanding how they work is helpful all the same. One class of such models is called <a href="https://towardsdatascience.com/an-end-to-end-introduction-to-gans-bf253f1fa52f" rel="nofollow" target="_blank">generative adversarial networks</a> which are pretty useful for generating new images and are pretty interesting too.</p>
-
-<p><a href="https://www.kaggle.com/mlwhiz/generative-modeling" rel="nofollow" target="_blank">Here</a> is the kernel with all the code along with the visualizations.</p>
-
-<p>If you want to learn more about generative models and Machine Learning, I would recommend this <a href="https://www.awin1.com/cread.php?awinmid=6798&amp;awinaffid=633074&amp;clickref=&amp;p=%5B%5Bhttps%3A%2F%2Fwww.edx.org%2Fcourse%2Fmachine-learning-fundamentals-4%5D%5D" rel="nofollow" target="_blank">Machine Learning Fundamentals</a> course from the University of San Diego. The above post is by and large inspired from content from this course in the <a href="https://www.awin1.com/cread.php?awinmid=6798&amp;awinaffid=633074&amp;clickref=&amp;p=%5B%5Bhttps%3A%2F%2Fwww.edx.org%2Fmicromasters%2Fuc-san-diegox-data-science%5D%5D" rel="nofollow" target="_blank">MicroMasters from SanDiego</a>, which I am currently working on to structure my Data Science learning.</p>
-
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+<p>But understanding how they work is helpful all the same. One class of such models is called <a href="https://towardsdatascience.com/an-end-to-end-introduction-to-gans-bf253f1fa52f">generative adversarial networks</a> which are pretty useful for generating new images and are pretty interesting too.</p>
+<p><a href="https://www.kaggle.com/mlwhiz/generative-modeling">Here</a> is the kernel with all the code along with the visualizations.</p>
+<p>If you want to learn more about generative models and Machine Learning, I would recommend this <a href="https://www.awin1.com/cread.php?awinmid=6798&amp;awinaffid=633074&amp;clickref=&amp;p=%5B%5Bhttps%3A%2F%2Fwww.edx.org%2Fcourse%2Fmachine-learning-fundamentals-4%5D%5D">Machine Learning Fundamentals</a> course from the University of San Diego. The above post is by and large inspired from content from this course in the <a href="https://www.awin1.com/cread.php?awinmid=6798&amp;awinaffid=633074&amp;clickref=&amp;p=%5B%5Bhttps%3A%2F%2Fwww.edx.org%2Fmicromasters%2Fuc-san-diegox-data-science%5D%5D">MicroMasters from SanDiego</a>, which I am currently working on to structure my Data Science learning.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------">@mlwhiz</a>.</p>
 
 		</div>
 		
@@ -523,7 +466,7 @@ g<span style="color:#f92672">.</span>legend()</code></pre></div>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
 		</ul>
 	</div>
 </div>

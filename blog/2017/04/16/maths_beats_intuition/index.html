@@ -14,12 +14,13 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.53" />
+	<meta name="generator" content="Hugo 0.72.0" />
 	<meta property="og:title" content="Maths Beats Intuition probably every damn time" />
 <meta property="og:description" content="A Simulation &#43; intuition based approach to solve the birthday problem." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://mlwhiz.com/blog/2017/04/16/maths_beats_intuition/" /><meta property="article:published_time" content="2017-04-16T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2017-04-16T00:00:00&#43;00:00"/>
+<meta property="og:url" content="https://mlwhiz.com/blog/2017/04/16/maths_beats_intuition/" />
+<meta property="article:published_time" content="2017-04-16T00:00:00+00:00" />
+<meta property="article:modified_time" content="2017-04-16T00:00:00+00:00" />
 
 	<meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Maths Beats Intuition probably every damn time"/>
@@ -165,30 +166,18 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			
-
-<p>Newton once said that <strong>&ldquo;God does not play dice with the universe&rdquo;</strong>. But actually he does. Everything happening around us could be explained in terms of probabilities. We repeatedly watch things around us happen due to chances, yet we never learn. We always get dumbfounded by the playfulness of nature.</p>
-
+			<p>Newton once said that <strong>&ldquo;God does not play dice with the universe&rdquo;</strong>. But actually he does. Everything happening around us could be explained in terms of probabilities. We repeatedly watch things around us happen due to chances, yet we never learn. We always get dumbfounded by the playfulness of nature.</p>
 <p>One of such ways intuition plays with us is with the Birthday problem.</p>
-
 <h2 id="problem-statement">Problem Statement:</h2>
-
 <p><em>In a room full of N people, what is the probability that 2 or more people share the same birthday(Assumption: 365 days in year)?</em></p>
-
-<p>By the <a href="https://en.wikipedia.org/wiki/Pigeonhole_principle" rel="nofollow" target="_blank">pigeonhole principle</a>, the probability reaches 100% when the number of people reaches 366 (since there are only 365 possible birthdays).</p>
-
+<p>By the <a href="https://en.wikipedia.org/wiki/Pigeonhole_principle">pigeonhole principle</a>, the probability reaches 100% when the number of people reaches 366 (since there are only 365 possible birthdays).</p>
 <p><strong>However, the paradox is that 99.9% probability is reached with just 70 people, and 50% probability is reached with just 23 people.</strong></p>
-
 <h2 id="mathematical-proof">Mathematical Proof:</h2>
-
 <p>Sometimes a good strategy when trying to find out probability of an event is to look at the probability of the complement event.Here it is easier to find the probability of the complement event.
 We just need to count the number of cases in which no person has the same birthday.(Sampling without replacement)
 Since there are k ways in which birthdays can be chosen with replacement.</p>
-
 <p>$P(birthday Match) = 1 - \dfrac{(365).364&hellip;(365−k+1)}{365^k}$</p>
-
 <h2 id="simulation">Simulation:</h2>
-
 <p>Lets try to build around this result some more by trying to simulate this result:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">%</span>matplotlib inline
 <span style="color:#f92672">import</span> matplotlib
@@ -228,24 +217,16 @@ g<span style="color:#f92672">.</span>figure<span style="color:#f92672">.</span>s
 g<span style="color:#f92672">.</span>axes<span style="color:#f92672">.</span>set_title(<span style="color:#e6db74">&#39;As the Number of people in room reaches 23 the probability reaches ~0.5</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">At more than 50 people the probability is reaching 1&#39;</span>, fontsize<span style="color:#f92672">=</span><span style="color:#ae81ff">15</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;g&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
 g<span style="color:#f92672">.</span>set_xlabel(<span style="color:#e6db74">&#34;# of people in room&#34;</span>,size <span style="color:#f92672">=</span> <span style="color:#ae81ff">30</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;r&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
 g<span style="color:#f92672">.</span>set_ylabel(<span style="color:#e6db74">&#34;Probability&#34;</span>,size <span style="color:#f92672">=</span> <span style="color:#ae81ff">30</span>,color<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;r&#34;</span>,alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
-g<span style="color:#f92672">.</span>tick_params(labelsize<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>,labelcolor<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;black&#34;</span>)</code></pre></div>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/bithdayproblem.png"  height="400" width="700" ></center>
-</div>
-
+g<span style="color:#f92672">.</span>tick_params(labelsize<span style="color:#f92672">=</span><span style="color:#ae81ff">14</span>,labelcolor<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;black&#34;</span>)
+</code></pre></div><!-- raw HTML omitted -->
 <p>We can see from the <a href="/blog/2015/09/13/seaborn_visualizations/">graph</a> that as the Number of people in room reaches 23 the probability reaches ~ 0.5. So we have proved this fact Mathematically as well as with simulation.</p>
-
 <h2 id="intuition">Intuition:</h2>
-
 <p>To understand it we need to think of this problem in terms of pairs. There are ${{23}\choose{2}} = 253$ pairs of people in the room when only 23 people are present. Now with that big number you should not find the probability of 0.5 too much. In the case of 70 people we are looking at ${{70}\choose{2}} = 2450$ pairs.</p>
-
-<p>So thats it for now. To learn more about this go to <a href="https://en.wikipedia.org/wiki/Birthday_problem" rel="nofollow" target="_blank">Wikipedia</a> which has an awesome page on this topic.</p>
-
+<p>So thats it for now. To learn more about this go to <a href="https://en.wikipedia.org/wiki/Birthday_problem">Wikipedia</a> which has an awesome page on this topic.</p>
 <h2 id="references">References:</h2>
-
 <ol>
-<li><a href="http://amzn.to/2nIUkxq" rel="nofollow" target="_blank">Introduction to Probability by Joseph K. Blitzstein</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Birthday_problem" rel="nofollow" target="_blank">Birthday Problem on Wikipedia</a></li>
+<li><a href="http://amzn.to/2nIUkxq">Introduction to Probability by Joseph K. Blitzstein</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Birthday_problem">Birthday Problem on Wikipedia</a></li>
 </ol>
 
 		</div>
@@ -386,7 +367,7 @@ g<span style="color:#f92672">.</span>tick_params(labelsize<span style="color:#f9
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
 		</ul>
 	</div>
 </div>

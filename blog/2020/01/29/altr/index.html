@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.53" />
+	<meta name="generator" content="Hugo 0.72.0" />
 	<meta property="og:title" content="Handling Trees in Data Science Algorithmic Interview" />
 <meta property="og:description" content="This post is about fast-tracking this study and explaining tree concepts for the data scientists so that you breeze through the next time you get asked these in an interview." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2020/01/29/altr/" />
 <meta property="og:image" content="https://mlwhiz.com/images/altr/main.png" />
-<meta property="article:published_time" content="2020-01-29T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2020-01-29T00:00:00&#43;00:00"/>
+<meta property="article:published_time" content="2020-01-29T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-01-29T00:00:00+00:00" />
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/altr/main.png"/>
@@ -169,111 +169,71 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			
-
-<p><img src="/images/altr/main.png" alt="" /></p>
-
+			<p><img src="/images/altr/main.png" alt=""></p>
 <p>Algorithms and data structures are an integral part of data science. While most of us data scientists don’t take a proper algorithms course while studying, they are crucial all the same.</p>
-
 <p>Many companies ask data structures and algorithms as part of their interview process for hiring data scientists.</p>
-
-<p>Now the question that many people ask here is what is the use of asking a data scientist such questions. <strong><em>The way I like to describe it is that a data structure question may be thought of as a coding aptitude test.</em></strong></p>
-
+<p>Now the question that many people ask here is what is the use of asking a data scientist such questions. <em><strong>The way I like to describe it is that a data structure question may be thought of as a coding aptitude test.</strong></em></p>
 <p><em>We all have given aptitude tests at various stages of our life, and while they are not a perfect proxy to judge someone, almost nothing ever really is.</em> So, why not a standard algorithm test to judge people’s coding ability.</p>
-
 <p>But let’s not kid ourselves, they will require the same zeal to crack as your Data Science interviews, and thus, you might want to give some time for the study of algorithms and Data structure questions.</p>
-
-<p><strong><em>This post is about fast-tracking this study and explaining tree concepts for the data scientists so that you breeze through the next time you get asked these in an interview.</em></strong></p>
-
-<hr />
-
+<p><em><strong>This post is about fast-tracking this study and explaining tree concepts for the data scientists so that you breeze through the next time you get asked these in an interview.</strong></em></p>
+<hr>
 <h2 id="but-first-why-are-trees-important-for-data-science">But First, Why are Trees important for Data Science?</h2>
-
 <p>To data scientists, Trees mean a different thing than they mean for a Software Engineer.</p>
-
 <p>For a software engineer, a tree is just a simple Data Structure they can use to manage hierarchical relationships while for a Data Scientists trees form the basis of some of the most useful classification and regression algorithms.</p>
-
 <p>So where do these two meet?</p>
-
 <p>They are necessarily the same thing. Don’t be surprised. Below is how data scientists and software engineer’s look at trees.</p>
-
-<p><img src="/images/altr/0.png" alt="They are essentially the same" /></p>
-
+<p><img src="/images/altr/0.png" alt="They are essentially the same"></p>
 <p>The only difference is that Data science tree nodes keep much more information that helps us in identifying how to traverse the tree. For example, in the case of Data science tree for prediction, we will look at the feature in the node and determine which way we want to move based on the split value.</p>
-
 <p>If you want to write your decision tree from scratch, you might need to understand how trees work from a software engineering perspective too.</p>
-
-<hr />
-
+<hr>
 <h2 id="types-of-trees">Types of Trees:</h2>
-
 <p>In this post, I will only be talking about two kinds of trees that get asked a lot in Data Science interview questions. Binary Trees(BT) and an extension of Binary Trees called Binary Search Trees(BST).</p>
-
 <h3 id="1-binary-trees">1. Binary Trees:</h3>
-
 <p>A binary tree is simply a tree in which each node has up to two children. A decision tree is an example we see in our day to day lives.</p>
-
-<p><img src="/images/altr/1.png" alt="Binary Tree: Each Node has up to 2 children" /></p>
-
-<h3 id="2-binary-search-tree-bst">2. Binary Search Tree(BST):</h3>
-
+<p><img src="/images/altr/1.png" alt="Binary Tree: Each Node has up to 2 children"></p>
+<h3 id="2-binary-search-treebst">2. Binary Search Tree(BST):</h3>
 <p>A binary search tree is a binary tree in which:</p>
-
 <ul>
-<li><p>All left descendants of a node are less than or equal to the node, and</p></li>
-
-<li><p>All right descendants of the node are greater than the node.</p></li>
+<li>
+<p>All left descendants of a node are less than or equal to the node, and</p>
+</li>
+<li>
+<p>All right descendants of the node are greater than the node.</p>
+</li>
 </ul>
-
 <p>There are variations to this definition when it comes to equalities. Sometimes the equalities are on the right-hand side or either side. Sometimes only distinct values are allowed in the tree.</p>
-
-<p><img src="/images/altr/2.png" alt="[Source](https://www.freecodecamp.org/news/data-structures-101-binary-search-tree-398267b6bff0/)" /></p>
-
-<p><em><a href="https://www.freecodecamp.org/news/data-structures-101-binary-search-tree-398267b6bff0/" rel="nofollow" target="_blank">Source</a></em></p>
-
+<p><img src="/images/altr/2.png" alt="Source"></p>
+<p><em><a href="https://www.freecodecamp.org/news/data-structures-101-binary-search-tree-398267b6bff0/">Source</a></em></p>
 <p>8 is greater than all the elements in the left subtree and smaller than all elements in the right subtree. The same could be said for any node in the tree.</p>
-
-<hr />
-
+<hr>
 <h2 id="creating-a-simple-tree">Creating a Simple Tree:</h2>
-
 <p>So How do we construct a simple tree?</p>
-
 <p>By definition, a tree is made up of nodes. So we start by defining the node class which we will use to create nodes. Our node class is pretty simple as it holds value for a node, the location of the left child and the location of the right child.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">node</span>:
     <span style="color:#66d9ef">def</span> __init__(self,val):
         self<span style="color:#f92672">.</span>val <span style="color:#f92672">=</span> val
         self<span style="color:#f92672">.</span>left <span style="color:#f92672">=</span> None
-        self<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> None</code></pre></div>
-<p>We can create a simple tree now as:</p>
+        self<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> None
+</code></pre></div><p>We can create a simple tree now as:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">root <span style="color:#f92672">=</span> node(<span style="color:#ae81ff">1</span>)
 root<span style="color:#f92672">.</span>left <span style="color:#f92672">=</span> node(<span style="color:#ae81ff">2</span>)
-root<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> node(<span style="color:#ae81ff">3</span>)</code></pre></div>
-<p>Now I have noticed that we cannot really get the hang of Tree-based questions without doing some coding ourselves.</p>
-
-<p><strong><em>So let us get a little deeper into the coding part with some problems I found most interesting when it comes to trees.</em></strong></p>
-
+root<span style="color:#f92672">.</span>right <span style="color:#f92672">=</span> node(<span style="color:#ae81ff">3</span>)
+</code></pre></div><p>Now I have noticed that we cannot really get the hang of Tree-based questions without doing some coding ourselves.</p>
+<p><em><strong>So let us get a little deeper into the coding part with some problems I found most interesting when it comes to trees.</strong></em></p>
 <h2 id="inorder-tree-traversal">Inorder Tree Traversal:</h2>
-
 <p>There are a variety of ways to traverse a tree, but I find the inorder traversal to be most intuitive.</p>
-
 <p>When we do an inorder traversal on the root node on a Binary Search tree, it visits/prints the node in ascending order.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">inorder</span>(node):
     <span style="color:#66d9ef">if</span> node:
         inorder(node<span style="color:#f92672">.</span>left)
         <span style="color:#66d9ef">print</span>(node<span style="color:#f92672">.</span>val)
-        inorder(node<span style="color:#f92672">.</span>right)</code></pre></div>
-<p>This above method is pretty important as it allows us to visit all the nodes.</p>
-
+        inorder(node<span style="color:#f92672">.</span>right)
+</code></pre></div><p>This above method is pretty important as it allows us to visit all the nodes.</p>
 <p>So if we want to search for a node in any binary tree, we might try to use inorder tree traversal.</p>
-
-<hr />
-
+<hr>
 <h2 id="creating-a-binary-search-tree-from-a-sorted-array">Creating a Binary Search Tree from a Sorted array</h2>
-
 <p>What kind of coders will we be if we need to create a tree piece by piece manually as we did above?</p>
-
-<p><strong><em>So can we create a BST from a sorted array of unique elements?</em></strong></p>
+<p><em><strong>So can we create a BST from a sorted array of unique elements?</strong></em></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create_bst</span>(array,min_index,max_index):
     <span style="color:#66d9ef">if</span> max_index<span style="color:#f92672">&lt;</span>min_index:
         <span style="color:#66d9ef">return</span> None
@@ -286,30 +246,22 @@ root<span style="color:#f92672">.</span>right <span style="color:#f92672">=</spa
     <span style="color:#66d9ef">return</span> root
 
 a <span style="color:#f92672">=</span> [<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">7</span>]
-root <span style="color:#f92672">=</span> create_bst(a,<span style="color:#ae81ff">0</span>,len(a)<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)</code></pre></div>
-<p>Trees are inherently recursive, and so we use recursion here. We take the mid element of the array and assign it as the node. We then apply the create_bst function to the left part of the array and assign it to node.left and do the same with the right part of the array.</p>
-
+root <span style="color:#f92672">=</span> create_bst(a,<span style="color:#ae81ff">0</span>,len(a)<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</code></pre></div><p>Trees are inherently recursive, and so we use recursion here. We take the mid element of the array and assign it as the node. We then apply the create_bst function to the left part of the array and assign it to node.left and do the same with the right part of the array.</p>
 <p>And we get our BST.</p>
-
 <p>Have we done it right? We can check it by creating the BST and then doing an inorder traversal.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">inorder(root)</code></pre></div>
-<pre><code>2
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">inorder(root)
+</code></pre></div><pre><code>2
 4
 5
 6
 7
 </code></pre>
-
 <p>Seems Right!</p>
-
-<hr />
-
-<h2 id="let-s-check-if-our-tree-is-a-valid-bst">Let’s check if our tree is a Valid BST</h2>
-
-<p><img src="/images/altr/3.png" alt="Think Recursion!!!" /></p>
-
+<hr>
+<h2 id="lets-check-if-our-tree-is-a-valid-bst">Let’s check if our tree is a Valid BST</h2>
+<p><img src="/images/altr/3.png" alt="Think Recursion!!!"></p>
 <p>But again what sort of coders are we if we need to print all the elements and check manually for the BST property being satisfied?</p>
-
 <p>Here is a simple code to check if our BST is valid or not. We assume strict inequality in our Binary Search Tree.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">isValidBST</span>(node, minval, maxval):
     <span style="color:#66d9ef">if</span> node:
@@ -320,33 +272,21 @@ root <span style="color:#f92672">=</span> create_bst(a,<span style="color:#ae81f
         <span style="color:#66d9ef">return</span> isValidBST(node<span style="color:#f92672">.</span>left,minval,node<span style="color:#f92672">.</span>val) <span style="color:#f92672">&amp;</span>    isValidBST(node<span style="color:#f92672">.</span>right,node<span style="color:#f92672">.</span>val,maxval)
     <span style="color:#66d9ef">return</span> True
 
-isValidBST(root,<span style="color:#f92672">-</span>float(<span style="color:#e6db74">&#39;inf&#39;</span>),float(<span style="color:#e6db74">&#39;inf&#39;</span>))</code></pre></div>
-<pre><code>True
+isValidBST(root,<span style="color:#f92672">-</span>float(<span style="color:#e6db74">&#39;inf&#39;</span>),float(<span style="color:#e6db74">&#39;inf&#39;</span>))
+</code></pre></div><pre><code>True
 </code></pre>
-
 <p>We check the subtrees recursively if they satisfy the Binary Search tree property or not. At each recursive call, we change the minval or maxval for the call to provide the function with the range of allowed values for the subtree.</p>
-
-<hr />
-
+<hr>
 <h2 id="conclusion">Conclusion</h2>
-
-<p><strong><em>In this post, I talked about Trees from a software engineering perspective. If you want to see trees from a data science perspective, you might take a look at this post.</em></strong>
-<a href="https://towardsdatascience.com/the-simple-math-behind-3-decision-tree-splitting-criterions-85d4de2a75fe" rel="nofollow" target="_blank"><strong>The Simple Math behind 3 Decision Tree Splitting criterions</strong></a></p>
-
+<p><em><strong>In this post, I talked about Trees from a software engineering perspective. If you want to see trees from a data science perspective, you might take a look at this post.</strong></em>
+<a href="https://towardsdatascience.com/the-simple-math-behind-3-decision-tree-splitting-criterions-85d4de2a75fe"><strong>The Simple Math behind 3 Decision Tree Splitting criterions</strong></a></p>
 <p>Trees form the basis of some of the most asked questions in Data Science algorithmic interviews. I used to despair such tree-based questions in the past, but now I have grown to like the mental exercise involved in them. And I love the recursive structure involved in such problems.</p>
-
 <p>And while you can go a fair bit in data science without learning them, you can learn them just for a little bit of fun and maybe to improve your programming skills.</p>
-
-<p>Here is a small <a href="https://www.kaggle.com/mlwhiz/tree-data-structure-and-algorithms" rel="nofollow" target="_blank">notebook</a> for you where I have put all these small concepts for you to try and run.</p>
-
-<p>Take a look at my other posts in the <a href="https://towardsdatascience.com/tagged/algorithms-interview" rel="nofollow" target="_blank">Algorithmic Interviews Series</a>, if you want to learn about <a href="https://towardsdatascience.com/three-programming-concepts-for-data-scientists-c264fc3b1de8" rel="nofollow" target="_blank">Recursion</a>, <a href="https://towardsdatascience.com/dynamic-programming-for-data-scientists-bb7154b4298b" rel="nofollow" target="_blank">Dynamic Programming</a> or <a href="https://towardsdatascience.com/a-simple-introduction-of-linked-lists-for-data-scientists-a71f0eb31d87" rel="nofollow" target="_blank">Linked Lists</a>.</p>
-
+<p>Here is a small <a href="https://www.kaggle.com/mlwhiz/tree-data-structure-and-algorithms">notebook</a> for you where I have put all these small concepts for you to try and run.</p>
+<p>Take a look at my other posts in the <a href="https://towardsdatascience.com/tagged/algorithms-interview">Algorithmic Interviews Series</a>, if you want to learn about <a href="https://towardsdatascience.com/three-programming-concepts-for-data-scientists-c264fc3b1de8">Recursion</a>, <a href="https://towardsdatascience.com/dynamic-programming-for-data-scientists-bb7154b4298b">Dynamic Programming</a> or <a href="https://towardsdatascience.com/a-simple-introduction-of-linked-lists-for-data-scientists-a71f0eb31d87">Linked Lists</a>.</p>
 <h2 id="continue-learning">Continue Learning</h2>
-
-<p>If you want to read up more on Algorithms and Data structures, here is an <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdata-structures-algorithms" rel="nofollow" target="_blank"><strong>Algorithm Specialization on Coursera by UCSanDiego</strong></a>, which I highly recommend.</p>
-
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
-
+<p>If you want to read up more on Algorithms and Data structures, here is an <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdata-structures-algorithms"><strong>Algorithm Specialization on Coursera by UCSanDiego</strong></a>, which I highly recommend.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------"><strong>Medium</strong></a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------"><strong>blog</strong></a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------">@mlwhiz</a>.</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 		</div>
@@ -485,7 +425,7 @@ isValidBST(root,<span style="color:#f92672">-</span>float(<span style="color:#e6
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
 		</ul>
 	</div>
 </div>

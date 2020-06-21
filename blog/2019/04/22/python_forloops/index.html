@@ -14,14 +14,14 @@
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
 	
 	
-	<meta name="generator" content="Hugo 0.53" />
+	<meta name="generator" content="Hugo 0.72.0" />
 	<meta property="og:title" content="Minimize for loop usage in Python" />
 <meta property="og:description" content="This post is a part of my series on Python Shorts. Some tips on how to use python. In this post I talk about why and how you should avoid using for loops in Python" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mlwhiz.com/blog/2019/04/22/python_forloops/" />
 <meta property="og:image" content="https://mlwhiz.com/images/python2/loops.jpeg" />
-<meta property="article:published_time" content="2019-04-23T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2019-04-23T00:00:00&#43;00:00"/>
+<meta property="article:published_time" content="2019-04-23T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-04-23T00:00:00+00:00" />
 
 	<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://mlwhiz.com/images/python2/loops.jpeg"/>
@@ -169,91 +169,65 @@ if (!doNotTrack) {
 </div>
 		</header>
 		<div class="content post__content clearfix">
-			
-
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/python2/loops.jpeg" style="height:80%;width:80%"></center>
-</div>
-
+			<!-- raw HTML omitted -->
 <p>Python provides us with many styles of coding.</p>
-
 <p>In a way, it is pretty inclusive.</p>
-
 <p>One can come from any language and start writing Python.</p>
-
-<p><strong><em>However, learning to write a language and writing a language in an optimized way are two different things.</em></strong></p>
-
-<p>In this series of posts named <a href="https://bit.ly/2XshreA" rel="nofollow" target="_blank"><strong>Python Shorts</strong></a>, I will explain some simple but very useful constructs provided by Python, some essential tips and some use cases I come up with regularly in my Data Science work.</p>
-
-<p>In this post, <strong><em>I am going to talk about for loops in Python and how you should avoid them whenever possible.</em></strong></p>
-
+<p><em><strong>However, learning to write a language and writing a language in an optimized way are two different things.</strong></em></p>
+<p>In this series of posts named <a href="https://bit.ly/2XshreA"><strong>Python Shorts</strong></a>, I will explain some simple but very useful constructs provided by Python, some essential tips and some use cases I come up with regularly in my Data Science work.</p>
+<p>In this post, <em><strong>I am going to talk about for loops in Python and how you should avoid them whenever possible.</strong></em></p>
 <h2 id="3-ways-of-writing-a-for-loop">3 Ways of writing a for loop:</h2>
-
 <p>Let me explain this with a simple example statement.</p>
-
-<p>Suppose you want to take the <strong><em>sum of squares in a list.</em></strong></p>
-
+<p>Suppose you want to take the <em><strong>sum of squares in a list.</strong></em></p>
 <p>This is a valid problem we all face in machine learning whenever we want to calculate the distance between two points in n dimension.</p>
-
 <p>You can do this using loops easily.</p>
-
 <p>In fact, I will show you** three ways to do the same task which I have seen people use and let you choose for yourself which you find the best.**</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">x <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">9</span>]
 sum_squared <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
 
 <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(x)):
-    sum_squared<span style="color:#f92672">+=</span>x[i]<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span></code></pre></div>
-<p>Whenever I see the above code in a python codebase, I understand that the person has come from C or Java background.</p>
-
+    sum_squared<span style="color:#f92672">+=</span>x[i]<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>
+</code></pre></div><p>Whenever I see the above code in a python codebase, I understand that the person has come from C or Java background.</p>
 <p>A **slightly more pythonic way **of doing the same thing is:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">x <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">9</span>]
 sum_squared <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
 
 <span style="color:#66d9ef">for</span> y <span style="color:#f92672">in</span> x:
-    sum_squared<span style="color:#f92672">+=</span>y<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span></code></pre></div>
-<p>Better.</p>
-
+    sum_squared<span style="color:#f92672">+=</span>y<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>
+</code></pre></div><p>Better.</p>
 <p>I didn’t index the list. And my code is more readable.</p>
-
 <p>But still, the pythonic way to do it is in one line.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">x <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">9</span>]
-sum_squared <span style="color:#f92672">=</span> sum([y<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span> <span style="color:#66d9ef">for</span> y <span style="color:#f92672">in</span> x])</code></pre></div>
-<p><strong><em>This approach is called List Comprehension, and this may very well be one of the reasons that I love Python.</em></strong></p>
-
+sum_squared <span style="color:#f92672">=</span> sum([y<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span> <span style="color:#66d9ef">for</span> y <span style="color:#f92672">in</span> x])
+</code></pre></div><p><em><strong>This approach is called List Comprehension, and this may very well be one of the reasons that I love Python.</strong></em></p>
 <p>You can also use if in a list comprehension.</p>
-
 <p>Let’s say we wanted a list of squared numbers for even numbers only.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">x <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">9</span>]
 even_squared <span style="color:#f92672">=</span> [y<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span> <span style="color:#66d9ef">for</span> y <span style="color:#f92672">in</span> x <span style="color:#66d9ef">if</span> y<span style="color:#f92672">%</span><span style="color:#ae81ff">2</span><span style="color:#f92672">==</span><span style="color:#ae81ff">0</span>]
 <span style="color:#f92672">--------------------------------------------</span>
-[<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">16</span>,<span style="color:#ae81ff">36</span>,<span style="color:#ae81ff">64</span>]</code></pre></div>
-<p><strong><em>if-else?</em></strong></p>
-
+[<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">16</span>,<span style="color:#ae81ff">36</span>,<span style="color:#ae81ff">64</span>]
+</code></pre></div><p><em><strong>if-else?</strong></em></p>
 <p>What if we wanted to have the number squared for even and cubed for odd?</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">x <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">9</span>]
 squared_cubed <span style="color:#f92672">=</span> [y<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span> <span style="color:#66d9ef">if</span> y<span style="color:#f92672">%</span><span style="color:#ae81ff">2</span><span style="color:#f92672">==</span><span style="color:#ae81ff">0</span> <span style="color:#66d9ef">else</span> y<span style="color:#f92672">**</span><span style="color:#ae81ff">3</span> <span style="color:#66d9ef">for</span> y <span style="color:#f92672">in</span> x]
 <span style="color:#f92672">--------------------------------------------</span>
-[<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">27</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">125</span>, <span style="color:#ae81ff">36</span>, <span style="color:#ae81ff">343</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">729</span>]</code></pre></div>
-<p>Great!!!</p>
-
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/python2/xkcd_rules.png" style="height:80%;width:80%"></center>
-</div>
-
+[<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">27</span>, <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">125</span>, <span style="color:#ae81ff">36</span>, <span style="color:#ae81ff">343</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">729</span>]
+</code></pre></div><p>Great!!!</p>
+<!-- raw HTML omitted -->
 <p>So basically follow specific <strong>guidelines:</strong> Whenever you feel like writing a for statement, you should ask yourself the following questions,</p>
-
 <ul>
-<li><p>Can it be done without a for loop? Most Pythonic</p></li>
-
-<li><p>Can it be done using <strong>list comprehension</strong>? If yes, use it.</p></li>
-
-<li><p>Can I do it without indexing arrays? if not, think about using enumerate</p></li>
+<li>
+<p>Can it be done without a for loop? Most Pythonic</p>
+</li>
+<li>
+<p>Can it be done using <strong>list comprehension</strong>? If yes, use it.</p>
+</li>
+<li>
+<p>Can I do it without indexing arrays? if not, think about using enumerate</p>
+</li>
 </ul>
-
 <p>What is enumerate?</p>
-
 <p>Sometimes we need both the index in an array as well as the value in an array.</p>
-
 <p>In such cases, I prefer to use <strong>enumerate</strong> rather than indexing the list.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">L <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;blue&#39;</span>, <span style="color:#e6db74">&#39;yellow&#39;</span>, <span style="color:#e6db74">&#39;orange&#39;</span>]
 <span style="color:#66d9ef">for</span> i, val <span style="color:#f92672">in</span> enumerate(L):
@@ -261,49 +235,38 @@ squared_cubed <span style="color:#f92672">=</span> [y<span style="color:#f92672"
 <span style="color:#f92672">---------------------------------------------------------------</span>
 index <span style="color:#f92672">is</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">and</span> value <span style="color:#f92672">is</span> blue
 index <span style="color:#f92672">is</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">and</span> value <span style="color:#f92672">is</span> yellow
-index <span style="color:#f92672">is</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">and</span> value <span style="color:#f92672">is</span> orange</code></pre></div>
-<p>The rule is:</p>
-
+index <span style="color:#f92672">is</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">and</span> value <span style="color:#f92672">is</span> orange
+</code></pre></div><p>The rule is:</p>
 <blockquote>
 <h3 id="never-index-a-list-if-you-can-do-without-it">Never index a list, if you can do without it.</h3>
 </blockquote>
-
 <h2 id="try-using-dictionary-comprehension">Try Using Dictionary Comprehension</h2>
-
 <p>Also try using <strong>dictionary comprehension</strong>, which is a relatively new addition in Python. The syntax is pretty similar to List comprehension.</p>
-
 <p>Let me explain using an example. I want to get a dictionary with (key: squared value) for every value in x.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">x <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">9</span>]
 {k:k<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span> <span style="color:#66d9ef">for</span> k <span style="color:#f92672">in</span> x}
 <span style="color:#f92672">---------------------------------------------------------</span>
-{<span style="color:#ae81ff">1</span>: <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>: <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">3</span>: <span style="color:#ae81ff">9</span>, <span style="color:#ae81ff">4</span>: <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">5</span>: <span style="color:#ae81ff">25</span>, <span style="color:#ae81ff">6</span>: <span style="color:#ae81ff">36</span>, <span style="color:#ae81ff">7</span>: <span style="color:#ae81ff">49</span>, <span style="color:#ae81ff">8</span>: <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">9</span>: <span style="color:#ae81ff">81</span>}</code></pre></div>
-<p>What if I want a dict only for even values?</p>
+{<span style="color:#ae81ff">1</span>: <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>: <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">3</span>: <span style="color:#ae81ff">9</span>, <span style="color:#ae81ff">4</span>: <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">5</span>: <span style="color:#ae81ff">25</span>, <span style="color:#ae81ff">6</span>: <span style="color:#ae81ff">36</span>, <span style="color:#ae81ff">7</span>: <span style="color:#ae81ff">49</span>, <span style="color:#ae81ff">8</span>: <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">9</span>: <span style="color:#ae81ff">81</span>}
+</code></pre></div><p>What if I want a dict only for even values?</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">x <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">9</span>]
 {k:k<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span> <span style="color:#66d9ef">for</span> k <span style="color:#f92672">in</span> x <span style="color:#66d9ef">if</span> x<span style="color:#f92672">%</span><span style="color:#ae81ff">2</span><span style="color:#f92672">==</span><span style="color:#ae81ff">0</span>}
 <span style="color:#f92672">---------------------------------------------------------</span>
-{<span style="color:#ae81ff">2</span>: <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>: <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">6</span>: <span style="color:#ae81ff">36</span>, <span style="color:#ae81ff">8</span>: <span style="color:#ae81ff">64</span>}</code></pre></div>
-<p>What if we want squared value for even key and cubed number for the odd key?</p>
+{<span style="color:#ae81ff">2</span>: <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>: <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">6</span>: <span style="color:#ae81ff">36</span>, <span style="color:#ae81ff">8</span>: <span style="color:#ae81ff">64</span>}
+</code></pre></div><p>What if we want squared value for even key and cubed number for the odd key?</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">x <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">7</span>,<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">9</span>]
 {k:k<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span> <span style="color:#66d9ef">if</span> k<span style="color:#f92672">%</span><span style="color:#ae81ff">2</span><span style="color:#f92672">==</span><span style="color:#ae81ff">0</span> <span style="color:#66d9ef">else</span> k<span style="color:#f92672">**</span><span style="color:#ae81ff">3</span> <span style="color:#66d9ef">for</span> k <span style="color:#f92672">in</span> x}
 <span style="color:#f92672">---------------------------------------------------------</span>
-{<span style="color:#ae81ff">1</span>: <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>: <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">3</span>: <span style="color:#ae81ff">27</span>, <span style="color:#ae81ff">4</span>: <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">5</span>: <span style="color:#ae81ff">125</span>, <span style="color:#ae81ff">6</span>: <span style="color:#ae81ff">36</span>, <span style="color:#ae81ff">7</span>: <span style="color:#ae81ff">343</span>, <span style="color:#ae81ff">8</span>: <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">9</span>: <span style="color:#ae81ff">729</span>}</code></pre></div>
-<h2 id="conclusion">Conclusion</h2>
-
+{<span style="color:#ae81ff">1</span>: <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>: <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">3</span>: <span style="color:#ae81ff">27</span>, <span style="color:#ae81ff">4</span>: <span style="color:#ae81ff">16</span>, <span style="color:#ae81ff">5</span>: <span style="color:#ae81ff">125</span>, <span style="color:#ae81ff">6</span>: <span style="color:#ae81ff">36</span>, <span style="color:#ae81ff">7</span>: <span style="color:#ae81ff">343</span>, <span style="color:#ae81ff">8</span>: <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">9</span>: <span style="color:#ae81ff">729</span>}
+</code></pre></div><h2 id="conclusion">Conclusion</h2>
 <p>To conclude, I will say that while it might seem easy to transfer the knowledge you acquired from other languages to Python, you won’t be able to appreciate the beauty of Python if you keep doing that. Python is much more powerful when we use its ways and decidedly much more fun.</p>
-
 <p><strong>So, use List Comprehensions and Dict comprehensions when you need afor loop. Use enumerate if you need array index.</strong></p>
-
 <blockquote>
 <h3 id="avoid-for-loops-like-plague">Avoid for loops like plague</h3>
 </blockquote>
-
 <p>Your code will be much more readable and maintainable in the long run.</p>
-
-<p>Also if you want to learn more about Python 3, I would like to call out an excellent course on Learn <a href="https://bit.ly/2XshreA" rel="nofollow" target="_blank">Intermediate level Python</a> from the University of Michigan. Do check it out.</p>
-
-<p>I am going to be writing more beginner friendly posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.com/" rel="nofollow" target="_blank"><strong>blog</strong></a> to be informed about them.</p>
-
-<p>As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+<p>Also if you want to learn more about Python 3, I would like to call out an excellent course on Learn <a href="https://bit.ly/2XshreA">Intermediate level Python</a> from the University of Michigan. Do check it out.</p>
+<p>I am going to be writing more beginner friendly posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.com/"><strong>blog</strong></a> to be informed about them.</p>
+<p>As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz">@mlwhiz</a>.</p>
 
 		</div>
 		
@@ -440,7 +403,7 @@ index <span style="color:#f92672">is</span> <span style="color:#ae81ff">2</span>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/27/covidcourses/">5 Online Courses you can take for free during COVID-19 Epidemic</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/24/coronaai/">Can AI help in fighting against Corona?</a></li>
 			<li class="widget__item"><a class="widget__link" href="/blog/2020/03/20/practicalspark/">Practical Spark Tips for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/sparkcolumns/">5 Ways to add a new column in a PySpark Dataframe</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/02/24/job/">5 tips for getting your first Data Science job in 2020</a></li>
 		</ul>
 	</div>
 </div>
