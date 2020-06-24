@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>End to End Pipeline for setting up Multiclass Image Classification for Data Scientists</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="End to End Pipeline for setting up Multiclass Image Classification for Data Scientists" />
+<meta property="og:description" content="Have you ever wondered how Facebook takes care of the abusive and inappropriate images shared by some of its users? Or how Facebook’s tagging feature works? Or how Google Lens recognizes products through images?
+All of the above are examples of image classification in different settings. Multiclass image classification is a common task in computer vision, where we categorize an image into three or more classes.
+In the past, I always used Keras for computer vision projects." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2020/06/06/multiclass_image_classification_pytorch/" />
+<meta property="og:image" content="https://mlwhiz.com/images/multiclass_image_classification_pytorch/main.png" />
+<meta property="article:published_time" content="2020-06-24T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-06-24T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/multiclass_image_classification_pytorch/main.png"/>
+
+<meta name="twitter:title" content="End to End Pipeline for setting up Multiclass Image Classification for Data Scientists"/>
+<meta name="twitter:description" content="Have you ever wondered how Facebook takes care of the abusive and inappropriate images shared by some of its users? Or how Facebook’s tagging feature works? Or how Google Lens recognizes products through images?
+All of the above are examples of image classification in different settings. Multiclass image classification is a common task in computer vision, where we categorize an image into three or more classes.
+In the past, I always used Keras for computer vision projects."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/resources/index.html">Learning Resources</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">End to End Pipeline for setting up Multiclass Image Classification for Data Scientists</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2020-06-24T00:00:00">June 24, 2020</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/multiclass_image_classification_pytorch/main.png" alt="" /></p>
+
+<p><em>Have you ever wondered how Facebook takes care of the abusive and inappropriate images shared by some of its users? Or how Facebook’s tagging feature works? Or how Google Lens recognizes products through images?</em></p>
+
+<p>All of the above are examples of <a href="https://lionbridge.ai/services/image-annotation/" rel="nofollow" target="_blank">image classification</a> in different settings. Multiclass image classification is a common task in computer vision, where we categorize an image into three or more classes.</p>
+
+<p>In the past, I always used Keras for computer vision projects. However, recently when the opportunity to work on multiclass image classification presented itself, I decided to use PyTorch. I have already moved from Keras to PyTorch for all <a href="https://mlwhiz.com/blog/2019/01/06/pytorch_keras_conversion/" rel="nofollow" target="_blank">NLP tasks</a>, so why not vision, too?</p>
+
+<blockquote>
+<p><a href="https://redirect.viglink.com/?format=go&amp;jsonp=vglnk_159220215223010&amp;key=0d3176c012db018d69225ad1c36210fa&amp;libId=kbg41t7r0102t244000DAap2a6q0u&amp;subId=fd1ffa7fd7152e4e20568fbe49a489d0&amp;cuid=fd1ffa7fd7152e4e20568fbe49a489d0&amp;loc=https%3A%2F%2Fmlwhiz.com%2Fblog%2F2020%2F02%2F21%2Fds2020%2F&amp;v=1&amp;out=https%3A%2F%2Fclick.linksynergy.com%2Flink%3Fid%3DlVarvwc5BD0%26offerid%3D467035.14805039480%26type%3D2%26murl%3Dhttps%253A%252F%252Fwww.coursera.org%252Flearn%252Fdeep-neural-networks-with-pytorch&amp;ref=https%3A%2F%2Fwww.google.com%2F&amp;title=Become%20a%20Data%20Scientist%20in%202020%20with%20these%2010%20resources&amp;txt=Deep%20Neural%20Networks%20with%20Pytorch" rel="nofollow" target="_blank">PyTorch</a> is powerful, and I also like its more pythonic structure.</p>
+</blockquote>
+
+<p><strong><em>In this post, we’ll create an end to end pipeline for image multiclass classification using Pytorch.</em></strong>This will include training the model, putting the model’s results in a form that can be shown to business partners, and functions to help deploy the model easily. As an added feature we will look at Test Time Augmentation using Pytorch also.</p>
+
+<p>But before we learn how to do image classification, let’s first look at transfer learning, the most common method for dealing with such problems.</p>
+
+<hr />
+
+<h2 id="what-is-transfer-learning">What is Transfer Learning?</h2>
+
+<p>Transfer learning is the process of repurposing knowledge from one task to another. From a modelling perspective, this means using a model trained on one dataset and fine-tuning it for use with another. But why does it work?</p>
+
+<p>Let’s start with some background. Every year the visual recognition community comes together for a very particular challenge: <a href="http://image-net.org/explore" rel="nofollow" target="_blank">The Imagenet Challenge</a>. The task in this challenge is to classify 1,000,000 images into 1,000 categories.</p>
+
+<p>This challenge has already resulted in researchers training big convolutional deep learning models. The results have included great models like Resnet50 and Inception.</p>
+
+<p>But, what does it mean to train a neural model? Essentially, it means the researchers have learned the weights for a neural network after training the model on a million images.</p>
+
+<p>So, what if we could get those weights? We could then use them and load them into our own neural networks model to predict on the test dataset, right? Actually, we can go even further than that; we can add an extra layer on top of the neural network these researchers have prepared to classify our own dataset.</p>
+
+<blockquote>
+<p>While the exact workings of these complex models is still a mystery, we do know that the lower convolutional layers capture low-level image features like edges and gradients. In comparison, higher convolutional layers capture more and more intricate details, such as body parts, faces, and other compositional features.</p>
+</blockquote>
+
+<p><img src="/images/multiclass_image_classification_pytorch/0.png" alt="Source: [Visualizing and Understanding Convolutional Networks](https://arxiv.org/pdf/1311.2901.pdf). You can see how the first few layers capture basic shapes, and the shapes become more and more complex in the later layers." /><em>Source: <a href="https://arxiv.org/pdf/1311.2901.pdf" rel="nofollow" target="_blank">Visualizing and Understanding Convolutional Networks</a>. You can see how the first few layers capture basic shapes, and the shapes become more and more complex in the later layers.</em></p>
+
+<p>In the example above from ZFNet (a variant of Alexnet), one of the first convolutional neural networks to achieve success on the Imagenet task, you can see how the lower layers capture lines and edges, and the later layers capture more complex features. The final fully-connected layers are generally assumed to capture information that is relevant for solving the respective task, e.g. ZFNet’s fully-connected layers indicate which features are relevant for classifying an image into one of 1,000 object categories.</p>
+
+<p>For a new vision task, it is possible for us to simply use the off-the-shelf features of a state-of-the-art CNN pre-trained on ImageNet, and train a new model on these extracted features.</p>
+
+<p>The intuition behind this idea is that a model trained to recognize animals might also be used to recognize cats vs dogs. In our case,
+&gt; # a model that has been trained on 1000 different categories has seen a lot of real-world information, and we can use this information to create our own custom classifier.</p>
+
+<p><strong><em>So that’s the theory and intuition. How do we get it to actually work? Let’s look at some code. You can find the complete code for this post on <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/compvisblog" rel="nofollow" target="_blank">Github</a>.</em></strong></p>
+
+<hr />
+
+<h2 id="data-exploration">Data Exploration</h2>
+
+<p>We will start with the <a href="https://www.kaggle.com/clorichel/boat-types-recognition/version/1" rel="nofollow" target="_blank">Boat Dataset</a> from Kaggle to understand the multiclass image classification problem. This dataset contains about 1,500 pictures of boats of different types: buoys, cruise ships, ferry boats, freight boats, gondolas, inflatable boats, kayaks, paper boats, and sailboats. Our goal is to create a model that looks at a boat image and classifies it into the correct category.</p>
+
+<p>Here’s a sample of images from the dataset:</p>
+
+<p><img src="/images/multiclass_image_classification_pytorch/1.png" alt="" /></p>
+
+<p>And here are the category counts:</p>
+
+<p><img src="/images/multiclass_image_classification_pytorch/2.png" alt="" /></p>
+
+<p>Since the categories <em>“freight boats”, “inflatable boats”
+, and “boats”</em> don’t have a lot of images; we will be removing these categories when we train our model.</p>
+
+<hr />
+
+<h2 id="creating-the-required-directory-structure">Creating the required Directory Structure</h2>
+
+<p>Before we can go through with training our deep learning models, we need to create the required directory structure for our images. Right now, our data directory structure looks like:</p>
+
+<pre><code>images
+    sailboat
+    kayak
+    .
+    .
+</code></pre>
+
+<p>We need our images to be contained in 3 folders train, val and test. We will then train on the images in train dataset, validate on the ones in the val dataset and finally test them on images in the test dataset.</p>
+
+<pre><code>data
+    train
+        sailboat
+        kayak
+        .
+        .
+    val
+        sailboat
+        kayak
+        .
+        .
+    test
+        sailboat
+        kayak
+        .
+        .
+</code></pre>
+
+<p>You might have your data in a different format, but I have found that apart from the usual libraries, the glob.glob and os.system functions are very helpful. Here you can find the complete <a href="https://github.com/MLWhiz/data_science_blogs/blob/master/compvisblog/Boats_DataExploration.ipynb" rel="nofollow" target="_blank">data preparation code</a>. Now let’s take a quick look at some of the not-so-used libraries that I found useful while doing data prep.</p>
+
+<h3 id="what-is-glob-glob">What is glob.glob?</h3>
+
+<p>Simply, glob lets you get names of files or folders in a directory using a regex. For example, you can do something like:</p>
+
+<pre><code>from glob import glob
+categories = glob(“images/*”)
+print(categories)
+------------------------------------------------------------------
+['images/kayak', 'images/boats', 'images/gondola', 'images/sailboat', 'images/inflatable boat', 'images/paper boat', 'images/buoy', 'images/cruise ship', 'images/freight boat', 'images/ferry boat']
+</code></pre>
+
+<h3 id="what-is-os-system">What is os.system?</h3>
+
+<p>os.system is a function in os library which lets you run any command-line function in python itself. I generally use it to run Linux functions, but it can also be used to run R scripts within python as shown <a href="https://towardsdatascience.com/python-pro-tip-want-to-use-r-java-c-or-any-language-in-python-d304be3a0559" rel="nofollow" target="_blank">here</a>. For example, I use it in my data preparation to copy files from one directory to another after getting the information from a pandas data frame. I also use <a href="https://towardsdatascience.com/how-and-why-to-use-f-strings-in-python3-adbba724b251" rel="nofollow" target="_blank">f string formatting</a>.</p>
+
+<pre><code>import os
+
+for i,row in fulldf.iterrows():
+    # Boat category
+    cat = row['category']
+    # section is train,val or test
+    section = row['type']
+    # input filepath to copy
+    ipath = row['filepath']
+    # output filepath to paste
+    opath = ipath.replace(f&quot;images/&quot;,f&quot;data/{section}/&quot;)
+    # running the cp command
+    os.system(f&quot;cp '{ipath}' '{opath}'&quot;)
+</code></pre>
+
+<p>Now since we have our data in the required folder structure, we can move on to more exciting parts.</p>
+
+<hr />
+
+<h2 id="data-preprocessing">Data Preprocessing</h2>
+
+<h3 id="transforms">Transforms:</h3>
+
+<p><strong>1. Imagenet Preprocessing</strong></p>
+
+<p>In order to use our images with a network trained on the Imagenet dataset, we need to preprocess our images in the same way as the Imagenet network. For that, we need to rescale the images to 224×224 and normalize them as per Imagenet standards. We can use the torchvision transforms library to do that. Here we take a CenterCrop of 224×224 and normalize as per Imagenet standards. The operations defined below happen sequentially. You can find a list of all transforms provided by <a href="https://pytorch.org/docs/stable/torchvision/transforms.html" rel="nofollow" target="_blank">PyTorch here</a>.</p>
+
+<pre><code>transforms.Compose([
+        transforms.CenterCrop(size=224),  
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406],
+                             [0.229, 0.224, 0.225])  
+    ])
+</code></pre>
+
+<p><strong>2. Data Augmentations</strong></p>
+
+<p>We can do a lot more preprocessing for data augmentations. Neural networks work better with a lot of data. <a href="https://lionbridge.ai/articles/data-augmentation-with-machine-learning-an-overview/" rel="nofollow" target="_blank">Data augmentation</a> is a strategy which we use at training time to increase the amount of data we have.</p>
+
+<p>For example, we can flip the image of a boat horizontally, and it will still be a boat. Or we can randomly crop images or add color jitters. Here is the image transforms dictionary I have used that applies to both the Imagenet preprocessing as well as augmentations. This dictionary contains the various transforms we have for the train, test and validation data as used in this <a href="https://towardsdatascience.com/transfer-learning-with-convolutional-neural-networks-in-pytorch-dd09190245ce" rel="nofollow" target="_blank">great post</a>. As you’d expect, we don’t apply the horizontal flips or other data augmentation transforms to the test data and validation data because we don’t want to get predictions on an augmented image.</p>
+
+<pre><code># Image transformations
+image_transforms = {
+    # Train uses data augmentation
+    'train':
+    transforms.Compose([
+        transforms.RandomResizedCrop(size=256, scale=(0.8, 1.0)),
+        transforms.RandomRotation(degrees=15),
+        transforms.ColorJitter(),
+        transforms.RandomHorizontalFlip(),
+        transforms.CenterCrop(size=224),  # Image net standards
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406],
+                             [0.229, 0.224, 0.225])  # Imagenet standards
+    ]),
+    # Validation does not use augmentation
+    'valid':
+    transforms.Compose([
+        transforms.Resize(size=256),
+        transforms.CenterCrop(size=224),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ]),
+
+        # Test does not use augmentation
+    'test':
+    transforms.Compose([
+        transforms.Resize(size=256),
+        transforms.CenterCrop(size=224),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ]),
+}
+</code></pre>
+
+<p>Here is an example of the train transforms applied to an image in the training dataset. Not only do we get a lot of different images from a single image, but it also helps our network become invariant to the object orientation.</p>
+
+<pre><code>ex_img = Image.open('/home/rahul/projects/compvisblog/data/train/cruise ship/cruise-ship-oasis-of-the-seas-boat-water-482183.jpg')
+
+t = image_transforms['train']
+plt.figure(figsize=(24, 24))
+
+for i in range(16):
+    ax = plt.subplot(4, 4, i + 1)
+    _ = imshow_tensor(t(ex_img), ax=ax)
+
+plt.tight_layout()
+</code></pre>
+
+<p><img src="/images/multiclass_image_classification_pytorch/3.png" alt="" /></p>
+
+<h3 id="dataloaders">DataLoaders</h3>
+
+<p>The next step is to provide the training, validation, and test dataset locations to PyTorch. We can do this by using the PyTorch datasets and DataLoader class. This part of the code will mostly remain the same if we have our data in the required directory structures.</p>
+
+<pre><code># Datasets from folders
+
+traindir = &quot;data/train&quot;
+validdir = &quot;data/val&quot;
+testdir = &quot;data/test&quot;
+
+data = {
+    'train':
+    datasets.ImageFolder(root=traindir, transform=image_transforms['train']),
+    'valid':
+    datasets.ImageFolder(root=validdir, transform=image_transforms['valid']),
+    'test':
+    datasets.ImageFolder(root=testdir, transform=image_transforms['test'])
+}
+
+# Dataloader iterators, make sure to shuffle
+dataloaders = {
+    'train': DataLoader(data['train'], batch_size=batch_size, shuffle=True,num_workers=10),
+    'val': DataLoader(data['valid'], batch_size=batch_size, shuffle=True,num_workers=10),
+    'test': DataLoader(data['test'], batch_size=batch_size, shuffle=True,num_workers=10)
+}
+</code></pre>
+
+<p>These dataloaders help us to iterate through the dataset. For example, we will use the dataloader below in our model training. The data variable will contain data in the form (batch_size, color_channels, height, width) while the target is of shape (batch_size) and hold the label information.</p>
+
+<pre><code>train_loader = dataloaders['train']
+for ii, (data, target) in enumerate(train_loader):
+</code></pre>
+
+<hr />
+
+<h2 id="modeling">Modeling</h2>
+
+<h3 id="1-create-the-model-using-a-pre-trained-model">1. Create the model using a pre-trained model</h3>
+
+<p>Right now these following pre-trained models are available to use in the torchvision library:</p>
+
+<ul>
+<li><p><a href="https://arxiv.org/abs/1404.5997" rel="nofollow" target="_blank">AlexNet</a></p></li>
+
+<li><p><a href="https://arxiv.org/abs/1409.1556" rel="nofollow" target="_blank">VGG</a></p></li>
+
+<li><p><a href="https://arxiv.org/abs/1512.03385" rel="nofollow" target="_blank">ResNet</a></p></li>
+
+<li><p><a href="https://arxiv.org/abs/1602.07360" rel="nofollow" target="_blank">SqueezeNet</a></p></li>
+
+<li><p><a href="https://arxiv.org/abs/1608.06993" rel="nofollow" target="_blank">DenseNet</a></p></li>
+
+<li><p><a href="https://arxiv.org/abs/1512.00567" rel="nofollow" target="_blank">Inception</a> v3</p></li>
+
+<li><p><a href="https://arxiv.org/abs/1409.4842" rel="nofollow" target="_blank">GoogLeNet</a></p></li>
+
+<li><p><a href="https://arxiv.org/abs/1807.11164" rel="nofollow" target="_blank">ShuffleNet</a> v2</p></li>
+
+<li><p><a href="https://arxiv.org/abs/1801.04381" rel="nofollow" target="_blank">MobileNet</a> v2</p></li>
+
+<li><p><a href="https://arxiv.org/abs/1611.05431" rel="nofollow" target="_blank">ResNeXt</a></p></li>
+
+<li><p><a href="https://pytorch.org/docs/stable/torchvision/models.html#wide-resnet" rel="nofollow" target="_blank">Wide ResNet</a></p></li>
+
+<li><p><a href="https://arxiv.org/abs/1807.11626" rel="nofollow" target="_blank">MNASNet</a></p></li>
+</ul>
+
+<p>Here I will be using resnet50 on our dataset, but you can effectively use any other model too as per your choice.</p>
+
+<pre><code>from torchvision import models
+model = models.resnet50(pretrained=True)
+</code></pre>
+
+<p>We start by freezing our model weights since we don’t want to change the weights for the renet50 models.</p>
+
+<pre><code># Freeze model weights
+for param in model.parameters():
+    param.requires_grad = False
+</code></pre>
+
+<p>The next thing we need to do is to replace the linear classification layer in the model by our custom classifier. I have found that to do this, it is better first to see the model structure to determine what is the final linear layer. We can do this simply by printing the model object:</p>
+
+<pre><code>print(model)
+------------------------------------------------------------------
+ResNet(
+  (conv1): Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+  (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (relu): ReLU(inplace=True)
+   .
+   .
+   .
+   .
+
+(conv3): Conv2d(512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (bn3): BatchNorm2d(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (relu): ReLU(inplace=True)
+    )
+  )  
+(avgpool): AdaptiveAvgPool2d(output_size=(1, 1))
+  **(fc): Linear(in_features=2048, out_features=1000, bias=True)**
+)
+</code></pre>
+
+<p>Here we find that the final linear layer that takes the input from the convolutional layers is named fc</p>
+
+<p>We can now simply replace the fc layer using our custom neural network. This neural network takes input from the previous layer to fc and gives the log softmax output of shape (batch_size x n_classes).</p>
+
+<pre><code>n_inputs = model.fc.in_features
+model.fc = nn.Sequential(
+                      nn.Linear(n_inputs, 256), 
+                      nn.ReLU(), 
+                      nn.Dropout(0.4),
+                      nn.Linear(256, n_classes),                   
+                      nn.LogSoftmax(dim=1))
+</code></pre>
+
+<p>Please note that the new layers added now are fully trainable by default.</p>
+
+<h3 id="2-load-the-model-on-gpu">2. Load the model on GPU</h3>
+
+<p>We can use a single GPU or multiple GPU(if we have them) using DataParallel from PyTorch. Here is what we can use to detect the GPU as well as the number of GPUs to load the model on GPU. Right now I am training my models on dual Titan RTX GPUs.</p>
+
+<pre><code># Whether to train on a gpu
+train_on_gpu = cuda.is_available()
+print(f'Train on gpu: {train_on_gpu}')
+
+# Number of gpus
+if train_on_gpu:
+    gpu_count = cuda.device_count()
+    print(f'{gpu_count} gpus detected.')
+    if gpu_count &gt; 1:
+        multi_gpu = True
+    else:
+        multi_gpu = False
+
+if train_on_gpu:
+    model = model.to('cuda')
+
+if multi_gpu:
+    model = nn.DataParallel(model)
+</code></pre>
+
+<h3 id="3-define-criterion-and-optimizers">3. Define criterion and optimizers</h3>
+
+<p>One of the most important things to notice when you are training any model is the choice of loss-function and the optimizer used. Here we want to use categorical cross-entropy as we have got a multiclass classification problem and the <a href="https://cs231n.github.io/neural-networks-3/#ada" rel="nofollow" target="_blank">Adam</a> optimizer, which is the most commonly used optimizer. But since we are applying a LogSoftmax operation on the output of our model, we will be using the NLL loss.</p>
+
+<pre><code>from torch import optim
+
+criteration = nn.NLLLoss()
+optimizer = optim.Adam(model.parameters())
+</code></pre>
+
+<h3 id="4-training-the-model">4. Training the model</h3>
+
+<p>Given below is the full code used to train the model. It might look pretty big on its own, but essentially what we are doing is as follows:</p>
+
+<ul>
+<li><p>Start running epochs. In each epoch-</p></li>
+
+<li><p>Set the model mode to train using model.train().</p></li>
+
+<li><p>Loop through the data using the train dataloader.</p></li>
+
+<li><p>Load your data to the GPU using the data, target = data.cuda(), target.cuda() command</p></li>
+
+<li><p>Set the existing gradients in the optimizer to zero using optimizer.zero_grad()</p></li>
+
+<li><p>Run the forward pass through the batch using output = model(data)</p></li>
+
+<li><p>Compute loss using loss = criterion(output, target)</p></li>
+
+<li><p>Backpropagate the losses through the network using loss.backward()</p></li>
+
+<li><p>Take an optimizer step to change the weights in the whole network using optimizer.step()</p></li>
+
+<li><p>All the other steps in the training loop are just to maintain the history and calculate accuracy.</p></li>
+
+<li><p>Set the model mode to eval using model.eval().</p></li>
+
+<li><p>Get predictions for the validation data using valid_loader and calculate valid_loss and valid_acc</p></li>
+
+<li><p>Print the validation loss and validation accuracy results every print_every epoch.</p></li>
+
+<li><p>Save the best model based on validation loss.</p></li>
+
+<li><p><strong>Early Stopping:</strong> If the cross-validation loss doesn’t improve for max_epochs_stop stop the training and load the best available model with the minimum validation loss.</p></li>
+</ul>
+
+<p>Here is the output from running the above code. Just showing the last few epochs. The validation accuracy started at ~55% in the first epoch, and we ended up with a validation accuracy of ~90%.</p>
+
+<p><img src="/images/multiclass_image_classification_pytorch/4.png" alt="" /></p>
+
+<p>And here are the training curves showing the loss and accuracy metrics:</p>
+
+<p><img src="/images/multiclass_image_classification_pytorch/5.png" alt="" /></p>
+
+<p><img src="/images/multiclass_image_classification_pytorch/6.png" alt="Training curves" /></p>
+
+<hr />
+
+<h2 id="inference-and-model-results">Inference and Model Results</h2>
+
+<p>We want our results in different ways to use our model. For one, we require test accuracies and confusion matrices. All of the code for creating these results is in the code notebook.</p>
+
+<h3 id="1-test-results">1. Test Results</h3>
+
+<p>The overall accuracy of the test model is:</p>
+
+<pre><code>Overall Accuracy: 88.65 %
+</code></pre>
+
+<p>Here is the confusion matrix for results on the test dataset.</p>
+
+<p><img src="/images/multiclass_image_classification_pytorch/7.png" alt="" /></p>
+
+<p>We can also look at the category wise accuracies. I have also added the train counts to see the results from a new perspective.</p>
+
+<p><img src="/images/multiclass_image_classification_pytorch/8.png" alt="" /></p>
+
+<h3 id="2-visualizing-predictions-for-single-image">2. Visualizing Predictions for Single Image</h3>
+
+<p>For deployment purposes, it helps to be able to get predictions for a single image. You can get the code from the notebook.</p>
+
+<p><img src="/images/multiclass_image_classification_pytorch/9.png" alt="" /></p>
+
+<h3 id="3-visualizing-predictions-for-a-category">3. Visualizing Predictions for a Category</h3>
+
+<p>We can also see the category wise results for debugging purposes and presentations.</p>
+
+<p><img src="/images/multiclass_image_classification_pytorch/10.png" alt="" /></p>
+
+<h3 id="4-test-results-with-test-time-augmentation">4. Test results with Test Time Augmentation</h3>
+
+<p>We can also do test time augmentation to increase our test accuracy. Here I am using a new test data loader and transforms:</p>
+
+<pre><code># Image transformations
+tta_random_image_transforms = transforms.Compose([
+        transforms.RandomResizedCrop(size=256, scale=(0.8, 1.0)),
+        transforms.RandomRotation(degrees=15),
+        transforms.ColorJitter(),
+        transforms.RandomHorizontalFlip(),
+        transforms.CenterCrop(size=224),  # Image net standards
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406],
+                             [0.229, 0.224, 0.225])  # Imagenet standards
+    ])
+
+# Datasets from folders
+ttadata = {
+    'test':
+    datasets.ImageFolder(root=testdir, transform=tta_random_image_transforms)
+}
+
+# Dataloader iterators
+ttadataloader = {
+    'test': DataLoader(ttadata['test'], batch_size=512, shuffle=False,num_workers=10)
+}
+</code></pre>
+
+<p>We can then get the predictions on the test set using the below function:</p>
+
+<p>In the function above, I am applying the tta_random_image_transforms to each image 5 times before getting its prediction. The final prediction is the average of all five predictions. When we use TTA over the whole test dataset, we noticed that the accuracy increased by around 1%</p>
+
+<pre><code>TTA Accuracy: 89.71%
+</code></pre>
+
+<p>Also, here is the results for TTA compared to normal results category wise:</p>
+
+<p><img src="/images/multiclass_image_classification_pytorch/11.png" alt="" /></p>
+
+<p>In this small dataset, the TTA might not seem to add much value, but I have noticed that it adds value with big datasets.</p>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>In this post, I talked about the end to end pipeline for working on a multiclass image classification project using PyTorch. We worked on creating some readymade code to train a model using transfer learning, visualize the results, use Test time augmentation, and got predictions for a single image so that we can deploy our model when needed using any tool like <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582" rel="nofollow" target="_blank">Streamlit</a>.</p>
+
+<p>You can find the complete code for this post on <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/compvisblog" rel="nofollow" target="_blank">Github</a>.</p>
+
+<p>If you would like to learn more about Image Classification and Convolutional Neural Networks take a look at the <a href="https://www.coursera.org/specializations/deep-learning?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-qdJc22ApgTq6oWNEbD8fdw&amp;siteID=lVarvwc5BD0-qdJc22ApgTq6oWNEbD8fdw&amp;utm_content=10&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">Deep Learning Specialization</a> from Andrew Ng. Also, to learn more about PyTorch and start from the basics, you can take a look at the <a href="https://www.coursera.org/learn/deep-neural-networks-with-pytorch?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-qRrseBA2NWUg_WxbnxmDwQ&amp;siteID=lVarvwc5BD0-qRrseBA2NWUg_WxbnxmDwQ&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">Deep Neural Networks with PyTorch</a> course offered by IBM.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX" rel="nofollow" target="_blank">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
+<p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
+
+<p><em>This post was first published <a href="https://lionbridge.ai/articles/end-to-end-multiclass-image-classification-using-pytorch-and-transfer-learning/" rel="nofollow" target="_blank">here</a>.</em></p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2020/06/06/hummingbird_faster_ml_preds/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">How to run your ML model Predictions 50 times faster?</p></a>
+	</div>
+	<div class="post-nav__item post-nav__item--next">
+		<a class="post-nav__link" href="/blog/2020/06/06/dlrig/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">A definitive guide for Setting up a Deep Learning Workstation with Ubuntu</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<style type="text/css">
+
+  .btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-session {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+</style>
+
+
+<aside class="sidebar">
+  <div style="text-align:center">     
+    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/fastapi_for_data_scientists/">A Layman’s Guide for Data Scientists to create APIs in minutes</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/dlrig/">A definitive guide for Setting up a Deep Learning Workstation with Ubuntu</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/multiclass_image_classification_pytorch/">End to End Pipeline for setting up Multiclass Image Classification for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/hummingbird_faster_ml_preds/">How to run your ML model Predictions 50 times faster?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/spark_df_complete_guide/">The Most Complete Guide to pySpark DataFrames</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/democratize/">Don’t Democratize Data Science</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/cogbias/">Five Cognitive Biases In Data Science (And how to avoid them)</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/dls/">Stop Worrying and Create your Deep Learning Server in 30 minutes</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/24/fstring/">How and Why to use f strings in Python3?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/24/multitextclass/">Using Deep Learning for End to End Multiclass Text Classification</a></li>
+		</ul>
+	</div>
+</div>
+
+<div style="text-align:center">     
+    
+    <a class="btn btn-session" href="https://www.patreon.com/bePatron?u=28135435" role="button">1:1 Session</a>
+  </div>
+
+<br>
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+<center><strong>Subsribe to Get</strong>
+<a href="https://www.amazon.in/Advanced-Python-Tips-explained-Simply-ebook/dp/B07TM3D279">
+  <img src="https://m.media-amazon.com/images/I/41IoozUrQWL.jpg" width="70%" height="70%"></img></a>
+  
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;
+ 
+  }
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: -webkit-center;
+    padding: 10px -5px 10px 3%;}  
+ 
+  #mc_embed_signup form {
+    text-align: -webkit-center;
+    } 
+
+    #mc_embed_signup input.button {
+    min-width: 100px;
+}
+   
+</style>
+
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+</center>
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2020 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>

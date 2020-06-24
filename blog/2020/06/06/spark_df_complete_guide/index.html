@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>The Most Complete Guide to pySpark DataFrames</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="The Most Complete Guide to pySpark DataFrames" />
+<meta property="og:description" content="Big Data has become synonymous with Data engineering. But the line between Data Engineering and Data scientists is blurring day by day. At this point in time, I think that Big Data must be in the repertoire of all data scientists.
+Reason: Too much data is getting generated day by day
+And that brings us to Spark which is one of the most used tools when it comes to working with Big Data." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2020/06/06/spark_df_complete_guide/" />
+<meta property="og:image" content="https://mlwhiz.com/images/spark_df_complete_guide/main.png" />
+<meta property="article:published_time" content="2020-06-24T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-06-24T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/spark_df_complete_guide/main.png"/>
+
+<meta name="twitter:title" content="The Most Complete Guide to pySpark DataFrames"/>
+<meta name="twitter:description" content="Big Data has become synonymous with Data engineering. But the line between Data Engineering and Data scientists is blurring day by day. At this point in time, I think that Big Data must be in the repertoire of all data scientists.
+Reason: Too much data is getting generated day by day
+And that brings us to Spark which is one of the most used tools when it comes to working with Big Data."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/resources/index.html">Learning Resources</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">The Most Complete Guide to pySpark DataFrames</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2020-06-24T00:00:00">June 24, 2020</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/spark_df_complete_guide/main.png" alt="" /></p>
+
+<p>Big Data has become synonymous with Data engineering. But the line between Data Engineering and Data scientists is blurring day by day. At this point in time, I think that Big Data must be in the repertoire of all data scientists.</p>
+
+<p>Reason: <strong><em>Too much data is getting generated day by day</em></strong></p>
+
+<p>And that brings us to <a href="https://amzn.to/2JZBgou" rel="nofollow" target="_blank">Spark</a> which is one of the most used tools when it comes to working with Big Data.</p>
+
+<p>While once upon a time Spark used to be heavily reliant on <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" rel="nofollow" target="_blank">RDD manipulations</a>, Spark has now provided a DataFrame API for us Data Scientists to work with. Here is the <a href="https://docs.databricks.com/spark/latest/dataframes-datasets/introduction-to-dataframes-python.html#" rel="nofollow" target="_blank">documentation</a> for the adventurous folks. But while the documentation is good, it does not explain it from the perspective of a Data Scientist. Neither does it properly document the most common use cases for Data Science.</p>
+
+<p><strong><em>In this post, I will talk about installing Spark, standard Spark functionalities you will need to work with DataFrames, and finally some tips to handle the inevitable errors you will face.</em></strong></p>
+
+<p>This post is going to be quite long. Actually one of my longest posts on medium, so go on and pick up a Coffee.</p>
+
+<p>Also here is the Table of Contents, if you want to skip to a specific section:</p>
+
+<ul>
+<li>Installation</li>
+<li>Data</li>
+<li>1. Basic Functions
+
+<ul>
+<li>Read</li>
+<li>See a few rows in the file</li>
+<li>Change Column Names</li>
+<li>Select Columns</li>
+<li>Sort</li>
+<li>Cast</li>
+<li>Filter</li>
+<li>GroupBy</li>
+<li>Joins</li>
+</ul></li>
+<li>2. Broadcast/Map Side Joins</li>
+<li>3. Use SQL with DataFrames</li>
+<li>4. Create New Columns
+
+<ul>
+<li>Using Spark Native Functions</li>
+<li>Using Spark UDFs</li>
+<li>Using RDDs</li>
+<li>Using Pandas UDF</li>
+</ul></li>
+<li>5. Spark Window Functions
+
+<ul>
+<li>Ranking</li>
+<li>Lag Variables</li>
+<li>Rolling Aggregations</li>
+</ul></li>
+<li>6. Pivot Dataframes</li>
+<li>7. Unpivot/Stack Dataframes</li>
+<li>8. Salting</li>
+<li>Some More Tips and Tricks
+
+<ul>
+<li>Caching</li>
+<li>Save and Load from an intermediate step</li>
+<li>Repartitioning</li>
+<li>Reading Parquet File in Local</li>
+</ul></li>
+<li>Conclusion</li>
+</ul>
+
+<hr />
+
+<h2 id="installation">Installation</h2>
+
+<p>I am working on installing Spark on Ubuntu 18.04, but the steps should remain the same for MAC too. I am assuming that you already have Anaconda and Python3 installed. After that, you can just go through these steps:</p>
+
+<ul>
+<li>Download the Spark Binary from Apache Spark <a href="http://spark.apache.org/downloads.html" rel="nofollow" target="_blank">Website</a>. And click on the Download Spark link to download Spark.</li>
+</ul>
+
+<p><img src="/images/spark_df_complete_guide/0.png" alt="" /></p>
+
+<p>Once you have downloaded the above file, you can start with unzipping the file in your home directory.
+Just Open up the terminal and put these commands in.</p>
+
+<pre><code>cd ~
+cp Downloads/spark-2.4.5-bin-hadoop2.7.tgz ~
+tar -zxvf spark-2.4.5-bin-hadoop2.7.tgz
+</code></pre>
+
+<p>Check your Java Version. As of version 2.4 Spark works with Java 8. You can check your Java Version using the command java -version on the terminal window.</p>
+
+<p>I had Java 11 in my machine, so I had to run the following commands on my terminal to install and change default Java to Java 8:</p>
+
+<pre><code>sudo apt install openjdk-8-jdk
+sudo update-alternatives --config java
+</code></pre>
+
+<p>You will need to manually select the Java version 8 by typing the selection number.</p>
+
+<p><img src="/images/spark_df_complete_guide/1.png" alt="" /></p>
+
+<p>Rechecking Java version should give something like:</p>
+
+<p><img src="/images/spark_df_complete_guide/2.png" alt="" /></p>
+
+<p>Edit your ~/.bashrc file and add the following lines at the end of the file:</p>
+
+<pre><code>function pysparknb () 
+{
+#Spark path
+SPARK_PATH=~/spark-2.4.5-bin-hadoop2.7
+
+export PYSPARK_DRIVER_PYTHON=&quot;jupyter&quot;
+export PYSPARK_DRIVER_PYTHON_OPTS=&quot;notebook&quot;
+
+# For pyarrow 0.15 users, you have to add the line below or you will get an error while using pandas_udf 
+export ARROW_PRE_0_15_IPC_FORMAT=1
+
+**# Change the local[10] to local[numCores in your machine]**
+$SPARK_PATH/bin/pyspark --master **local[10]**
+}
+</code></pre>
+
+<p>Source ~/.bashrc</p>
+
+<pre><code>source ~/.bashrc
+</code></pre>
+
+<p>Run the pysparknb function in the terminal and you will be able to access the notebook. You will be able to open a new notebook as well as the sparkcontext will be loaded automatically.</p>
+
+<pre><code>pysparknb
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/3.png" alt="" /></p>
+
+<hr />
+
+<h2 id="data">Data</h2>
+
+<p>With the installation out of the way, we can move to the more interesting part of this post. I will be working with the <a href="https://www.kaggle.com/kimjihoo/coronavirusdataset" rel="nofollow" target="_blank">Data Science for COVID-19 in South Korea</a>, which is one of the most detailed datasets on the internet for COVID.</p>
+
+<p>Please note that I will be using this dataset to showcase some of the most useful functionalities of Spark, but this should not be in any way considered a data exploration exercise for this amazing dataset.</p>
+
+<p><img src="/images/spark_df_complete_guide/4.png" alt="Source: [Kaggle](https://www.kaggle.com/kimjihoo/coronavirusdataset?select=Case.csv)" /></p>
+
+<p>I will mainly work with the following three tables only in this post:</p>
+
+<ul>
+<li><p>Cases</p></li>
+
+<li><p>Region</p></li>
+
+<li><p>TimeProvince</p></li>
+</ul>
+
+<p><strong><em>You can find all the code at the <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/sparkdf" rel="nofollow" target="_blank">GitHub</a> repository.</em></strong></p>
+
+<hr />
+
+<h2 id="1-basic-functions">1. Basic Functions</h2>
+
+<h3 id="read">Read</h3>
+
+<p>We can start by loading the files in our dataset using the spark.read.load command. This command reads parquet files, which is the default file format for spark, but you can add the parameter format to read .csv files using it.</p>
+
+<pre><code>cases = spark.read.load(&quot;/home/rahul/projects/sparkdf/coronavirusdataset/Case.csv&quot;,format=&quot;csv&quot;, sep=&quot;,&quot;, inferSchema=&quot;true&quot;, header=&quot;true&quot;)
+</code></pre>
+
+<h3 id="see-a-few-rows-in-the-file">See a few rows in the file</h3>
+
+<pre><code>cases.show()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/5.png" alt="" /></p>
+
+<p>This file contains the cases grouped by way of the infection spread. This might have helped in the rigorous tracking of Corona Cases in South Korea.</p>
+
+<p>The way this file looks is great right now, but sometimes as we increase the number of columns, the formatting becomes not too great. I have noticed that the following trick helps in displaying in pandas format in my Jupyter Notebook. The .toPandas() function converts a spark dataframe into a pandas Dataframe which is easier to show.</p>
+
+<pre><code>cases.limit(10).toPandas()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/6.png" alt="" /></p>
+
+<h3 id="change-column-names">Change Column Names</h3>
+
+<p>Sometimes we would like to change the name of columns in our Spark Dataframes. We can do this simply using the below command to change a single column:</p>
+
+<pre><code>cases = cases.withColumnRenamed(&quot;infection_case&quot;,&quot;infection_source&quot;)
+</code></pre>
+
+<p>Or for all columns:</p>
+
+<pre><code>cases = cases.toDF(*['case_id', 'province', 'city', 'group', 'infection_case', 'confirmed',
+       'latitude', 'longitude'])
+</code></pre>
+
+<h3 id="select-columns">Select Columns</h3>
+
+<p>We can select a subset of columns using the select keyword.</p>
+
+<pre><code>cases = cases.select('province','city','infection_case','confirmed')
+cases.show()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/7.png" alt="" /></p>
+
+<h3 id="sort">Sort</h3>
+
+<p>We can sort by the number of confirmed cases. Here note that the cases data frame will not change after performing this command as we don’t assign it to any variable.</p>
+
+<pre><code>cases.sort(&quot;confirmed&quot;).show()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/8.png" alt="" /></p>
+
+<p>But that is inverted. We want to see the most cases at the top. We can do this using the F.desc function:</p>
+
+<pre><code># descending Sort
+from pyspark.sql import functions as F
+cases.sort(F.desc(&quot;confirmed&quot;)).show()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/9.png" alt="" /></p>
+
+<p>We can see the most cases in a logical area in South Korea originated from <code>Shincheonji Church</code>.</p>
+
+<h3 id="cast">Cast</h3>
+
+<p>Though we don’t face it in this dataset, there might be scenarios where Pyspark reads a double as integer or string, In such cases, you can use the cast function to convert types.</p>
+
+<pre><code>from pyspark.sql.types import DoubleType, IntegerType, StringType
+
+cases = cases.withColumn('confirmed', F.col('confirmed').cast(IntegerType()))
+
+cases = cases.withColumn('city', F.col('city').cast(StringType()))
+</code></pre>
+
+<h3 id="filter">Filter</h3>
+
+<p>We can filter a data frame using multiple conditions using AND(&amp;), OR(|) and NOT(~) conditions. For example, we may want to find out all the different infection_case in Daegu Province with more than 10 confirmed cases.</p>
+
+<pre><code>cases.filter((cases.confirmed&gt;10) &amp; (cases.province=='Daegu')).show()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/10.png" alt="" /></p>
+
+<h3 id="groupby">GroupBy</h3>
+
+<p>We can use groupBy function with a spark DataFrame too. Pretty much same as the pandas groupBy with the exception that you will need to import pyspark.sql.functions. <a href="https://people.eecs.berkeley.edu/~jegonzal/pyspark/pyspark.sql.html#module-pyspark.sql.functions" rel="nofollow" target="_blank">Here</a> is the list of functions you can use with this function module.</p>
+
+<pre><code>from pyspark.sql import functions as F
+
+cases.groupBy([&quot;province&quot;,&quot;city&quot;]).agg(F.sum(&quot;confirmed&quot;) ,F.max(&quot;confirmed&quot;)).show()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/11.png" alt="" /></p>
+
+<p>If you don’t like the new column names, you can use the alias keyword to rename columns in the agg command itself.</p>
+
+<pre><code>cases.groupBy([&quot;province&quot;,&quot;city&quot;]).agg(
+    F.sum(&quot;confirmed&quot;).alias(&quot;TotalConfirmed&quot;),\
+    F.max(&quot;confirmed&quot;).alias(&quot;MaxFromOneConfirmedCase&quot;)\
+    ).show()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/12.png" alt="" /></p>
+
+<h3 id="joins">Joins</h3>
+
+<p>To Start with Joins we will need to introduce one more CSV file. We will go with the region file which contains region information such as elementary_school_count, elderly_population_ratio, etc.</p>
+
+<pre><code>regions = spark.read.load(&quot;/home/rahul/projects/sparkdf/coronavirusdataset/Region.csv&quot;,format=&quot;csv&quot;, sep=&quot;,&quot;, inferSchema=&quot;true&quot;, header=&quot;true&quot;)
+regions.limit(10).toPandas()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/13.png" alt="" /></p>
+
+<p>We want to get this information in our cases file by joining the two DataFrames. We can do this by using:</p>
+
+<pre><code>cases = cases.join(regions, ['province','city'],how='left')
+cases.limit(10).toPandas()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/14.png" alt="" /></p>
+
+<hr />
+
+<h2 id="2-broadcast-map-side-joins">2. Broadcast/Map Side Joins</h2>
+
+<p>Sometimes you might face a scenario where you need to join a very big table(~1B Rows) with a very small table(~100–200 rows). The scenario might also involve increasing the size of your database like in the example below.</p>
+
+<p><img src="/images/spark_df_complete_guide/15.png" alt="" /></p>
+
+<p>Such sort of operations is aplenty in Spark where you might want to apply multiple operations to a particular key. But assuming that the data for each key in the Big table is large, it will involve a lot of data movement. And sometimes so much that the application itself breaks. A small optimization then you can do when joining on such big tables(assuming the other table is small) is to broadcast the small table to each machine/node when you perform a join. You can do this easily using the broadcast keyword. This has been a lifesaver many times with Spark when everything else fails.</p>
+
+<pre><code>from pyspark.sql.functions import broadcast
+cases = cases.join(broadcast(regions), ['province','city'],how='left')
+</code></pre>
+
+<hr />
+
+<h2 id="3-use-sql-with-dataframes">3. Use SQL with DataFrames</h2>
+
+<p>If you want, you can also use SQL with data frames. Let us try to run some SQL on the cases table.</p>
+
+<p>We first register the cases dataframe to a temporary table cases_table on which we can run SQL operations. As you can see, the result of the SQL select statement is again a Spark Dataframe.</p>
+
+<pre><code>cases.registerTempTable('cases_table')
+newDF = sqlContext.sql('select * from cases_table where confirmed&gt;100')
+newDF.show()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/16.png" alt="" /></p>
+
+<p>I have shown a minimal example above, but you can use pretty much complex SQL queries involving GROUP BY, HAVING, AND ORDER BY clauses as well as aliases in the above query.</p>
+
+<hr />
+
+<h2 id="4-create-new-columns">4. Create New Columns</h2>
+
+<p>There are many ways that you can use to create a column in a PySpark Dataframe. I will try to show the most usable of them.</p>
+
+<h3 id="using-spark-native-functions">Using Spark Native Functions</h3>
+
+<p>The most pysparkish way to create a new column in a PySpark DataFrame is by using built-in functions. This is the most performant programmatical way to create a new column, so this is the first place I go whenever I want to do some column manipulation.</p>
+
+<p>We can use .withcolumn along with PySpark SQL functions to create a new column. In essence, you can find String functions, Date functions, and Math functions already implemented using Spark functions. Our first function, the F.col function gives us access to the column. So if we wanted to add 100 to a column, we could use F.col as:</p>
+
+<pre><code>import pyspark.sql.functions as F
+casesWithNewConfirmed = cases.withColumn(&quot;NewConfirmed&quot;, 100 + F.col(&quot;confirmed&quot;))
+
+casesWithNewConfirmed.show()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/17.png" alt="" /></p>
+
+<p>We can also use math functions like F.exp function:</p>
+
+<pre><code>casesWithExpConfirmed = cases.withColumn(&quot;ExpConfirmed&quot;, F.exp(&quot;confirmed&quot;))
+
+casesWithExpConfirmed.show()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/18.png" alt="" /></p>
+
+<p>There are a lot of other functions provided in this module, which are enough for most simple use cases. You can check out the functions list <a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#module-pyspark.sql.functions" rel="nofollow" target="_blank">here</a>.</p>
+
+<h3 id="using-spark-udfs">Using Spark UDFs</h3>
+
+<p>Sometimes we want to do complicated things to a column or multiple columns. This could be thought of as a map operation on a PySpark Dataframe to a single column or multiple columns. While Spark SQL functions do solve many use cases when it comes to column creation, I use Spark UDF whenever I need more matured Python functionality.</p>
+
+<p>To use Spark UDFs, we need to use the F.udf function to convert a regular python function to a Spark UDF. We also need to specify the return type of the function. In this example the return type is StringType()</p>
+
+<pre><code>import pyspark.sql.functions as F
+from pyspark.sql.types import *
+def casesHighLow(confirmed):
+    if confirmed &lt; 50: 
+        return 'low'
+    else:
+        return 'high'
+
+#convert to a UDF Function by passing in the function and return type of function
+casesHighLowUDF = F.udf(casesHighLow, StringType())
+
+CasesWithHighLow = cases.withColumn(&quot;HighLow&quot;, casesHighLowUDF(&quot;confirmed&quot;))
+CasesWithHighLow.show()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/19.png" alt="" /></p>
+
+<h3 id="using-rdds">Using RDDs</h3>
+
+<p>This might seem a little odd, but sometimes both the spark UDFs and SQL functions are not enough for a particular use-case. I have observed the RDDs being much more performant in some use-cases in real life. You might want to utilize the better partitioning that you get with spark RDDs. Or you may want to use group functions in Spark RDDs.</p>
+
+<p>Whatever the case be, I find this way of using RDD to create new columns pretty useful for people who have experience working with RDDs that is the basic building block in the Spark ecosystem. Don’t worry much if you don’t understand it. It is just here for completion.</p>
+
+<p><strong><em>The process below makes use of the functionality to convert between Row and pythondict objects.</em></strong> We convert a row object to a dictionary. Work with the dictionary as we are used to and convert that dictionary back to row again. This might come in handy in a lot of situations.</p>
+
+<pre><code>import math
+from pyspark.sql import Row
+
+def rowwise_function(row):
+    # convert row to python dictionary:
+    row_dict = row.asDict()
+    # Add a new key in the dictionary with the new column name and value.
+    # This might be a big complex function.
+    row_dict['expConfirmed'] = float(np.exp(row_dict['confirmed']))
+    # convert dict to row back again:
+    newrow = Row(**row_dict)
+    # return new row
+    return newrow
+
+# convert cases dataframe to RDD
+cases_rdd = cases.rdd
+
+# apply our function to RDD
+cases_rdd_new = cases_rdd.map(lambda row: rowwise_function(row))
+
+# Convert RDD Back to DataFrame
+casesNewDf = sqlContext.createDataFrame(cases_rdd_new)
+
+casesNewDf.show()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/20.png" alt="" /></p>
+
+<h3 id="using-pandas-udf">Using Pandas UDF</h3>
+
+<p>This functionality was introduced in the Spark version 2.3.1. And this allows you to use pandas functionality with Spark. I generally use it when I have to run a groupBy operation on a Spark dataframe or whenever I need to create rolling features and want to use Pandas rolling functions/window functions rather than Spark window functions which we will go through later in this post.</p>
+
+<p>The way we use it is by using the F.pandas_udf decorator. <strong><em>We assume here that the input to the function will be a pandas data frame.</em></strong> And we need to return a pandas dataframe in turn from this function.</p>
+
+<p>The only complexity here is that we have to provide a schema for the output Dataframe. We can use the original schema of a dataframe to create the outSchema.</p>
+
+<pre><code>cases.printSchema()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/21.png" alt="" /></p>
+
+<p>Here I am using Pandas UDF to get normalized confirmed cases grouped by infection_case. The main advantage here is that I get to work with pandas dataframes in Spark.</p>
+
+<pre><code>from pyspark.sql.types import IntegerType, StringType, DoubleType, BooleanType
+from pyspark.sql.types import StructType, StructField
+
+# Declare the schema for the output of our function
+
+outSchema = StructType([StructField('case_id',IntegerType(),True),
+                        StructField('province',StringType(),True),
+                        StructField('city',StringType(),True),
+                        StructField('group',BooleanType(),True),
+                        StructField('infection_case',StringType(),True),
+                        StructField('confirmed',IntegerType(),True),
+                        StructField('latitude',StringType(),True),
+                        StructField('longitude',StringType(),True),
+                        StructField('normalized_confirmed',DoubleType(),True)
+                       ])
+# decorate our function with pandas_udf decorator
+@F.pandas_udf(outSchema, F.PandasUDFType.GROUPED_MAP)
+def subtract_mean(pdf):
+    # pdf is a pandas.DataFrame
+    v = pdf.confirmed
+    v = v - v.mean()
+    pdf['normalized_confirmed'] = v
+    return pdf
+
+confirmed_groupwise_normalization = cases.groupby(&quot;infection_case&quot;).apply(subtract_mean)
+
+confirmed_groupwise_normalization.limit(10).toPandas()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/22.png" alt="" /></p>
+
+<hr />
+
+<h2 id="5-spark-window-functions">5. Spark Window Functions</h2>
+
+<p>Window functions may make a whole blog post in itself. Here I will talk about some of the most important window functions available in spark.</p>
+
+<p>For this, I will also use one more data CSV, which has dates present as that will help with understanding Window functions much better. I will use the TimeProvince dataframe which contains daily case information for each province.</p>
+
+<p><img src="/images/spark_df_complete_guide/23.png" alt="" /></p>
+
+<h3 id="ranking">Ranking</h3>
+
+<p>You can get rank as well as dense_rank on a group using this function. For example, you may want to have a column in your cases table that provides the rank of infection_case based on the number of infection_case in a province. We can do this by:</p>
+
+<pre><code>from pyspark.sql.window import Window
+
+windowSpec = Window().partitionBy(['province']).orderBy(F.desc('confirmed'))
+
+cases.withColumn(&quot;rank&quot;,F.rank().over(windowSpec)).show()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/24.png" alt="" /></p>
+
+<h3 id="lag-variables">Lag Variables</h3>
+
+<p>Sometimes our data science models may need lag based features. For example, a model might have variables like the price last week or sales quantity the previous day. We can create such features using the lag function with window functions. Here I am trying to get the confirmed cases 7 days before. I am filtering to show the results as the first few days of corona cases were zeros. You can see here that the lag_7 day feature is shifted by 7 days.</p>
+
+<pre><code>from pyspark.sql.window import Window
+windowSpec = Window().partitionBy(['province']).orderBy('date')
+timeprovinceWithLag = timeprovince.withColumn(&quot;lag_7&quot;,F.lag(&quot;confirmed&quot;, 7).over(windowSpec))
+
+timeprovinceWithLag.filter(timeprovinceWithLag.date&gt;'2020-03-10').show()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/25.png" alt="" /></p>
+
+<h3 id="rolling-aggregations">Rolling Aggregations</h3>
+
+<p>Sometimes it helps to provide rolling averages to our models. For example, we might want to have a rolling 7-day sales sum/mean as a feature for our sales regression model. Let us calculate the rolling mean of confirmed cases for the last 7 days here. This is what a lot of the people are already doing with this dataset to see the real trends.</p>
+
+<pre><code>from pyspark.sql.window import Window
+
+windowSpec = Window().partitionBy(['province']).orderBy('date').rowsBetween(-6,0)
+
+timeprovinceWithRoll = timeprovince.withColumn(&quot;roll_7_confirmed&quot;,F.mean(&quot;confirmed&quot;).over(windowSpec))
+
+timeprovinceWithRoll.filter(timeprovinceWithLag.date&gt;'2020-03-10').show()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/26.png" alt="" /></p>
+
+<p>There are a few things here to understand. First is the <strong>rowsBetween(-6,0)</strong> function that we are using here. This function has a form of rowsBetween(start,end) with both start and end inclusive. Using this we only look at the past 7 days in a particular window including the current_day. Here 0 specifies the current_row and -6 specifies the seventh row previous to current_row. Remember we count starting from 0.</p>
+
+<p>So to get roll_7_confirmed for date 2020–03–22 we look at the confirmed cases for dates 2020–03–22 to 2020–03–16 and take their mean.</p>
+
+<p>If we had used <strong>rowsBetween(-7,-1)</strong> we would just have looked at past 7 days of data and not the current_day.</p>
+
+<p>One could also find a use for <code>rowsBetween(Window.unboundedPreceding, Window.currentRow)</code> where we take the rows between the first row in a window and the current_row to get running totals. I am calculating cumulative_confirmed here.</p>
+
+<pre><code>from pyspark.sql.window import Window
+
+windowSpec = Window().partitionBy(['province']).orderBy('date').rowsBetween(Window.unboundedPreceding,Window.currentRow)
+timeprovinceWithRoll = timeprovince.withColumn(&quot;cumulative_confirmed&quot;,F.sum(&quot;confirmed&quot;).over(windowSpec))
+timeprovinceWithRoll.filter(timeprovinceWithLag.date&gt;'2020-03-10').show()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/27.png" alt="" /></p>
+
+<hr />
+
+<h2 id="6-pivot-dataframes">6. Pivot Dataframes</h2>
+
+<p>Sometimes we may need to have the dataframe in flat format. This happens frequently in movie data where we may want to show genres as columns instead of rows. We can use pivot to do this. Here I am trying to get one row for each date and getting the province names as columns.</p>
+
+<pre><code>pivotedTimeprovince = timeprovince.groupBy('date').pivot('province').agg(F.sum('confirmed').alias('confirmed') , F.sum('released').alias('released'))
+
+pivotedTimeprovince.limit(10).toPandas()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/28.png" alt="" /></p>
+
+<p>One thing to note here is that we need to provide an aggregation always with the pivot function even if the data has a single row for a date.</p>
+
+<hr />
+
+<h2 id="7-unpivot-stack-dataframes">7. Unpivot/Stack Dataframes</h2>
+
+<p>This is just the opposite of the pivot. Given a pivoted dataframe like above, can we go back to the original?</p>
+
+<p>Yes, we can. But the way is not that straightforward. For one we will need to replace - with _ in the column names as it interferes with what we are about to do. We can simply rename the columns:</p>
+
+<pre><code>newColnames = [x.replace(&quot;-&quot;,&quot;_&quot;) for x in pivotedTimeprovince.columns]
+
+pivotedTimeprovince = pivotedTimeprovince.toDF(*newColnames)
+</code></pre>
+
+<p>Now we will need to create an expression which looks like the below:</p>
+
+<pre><code>&quot;stack(34, 'Busan_confirmed' , Busan_confirmed,'Busan_released' , Busan_released,'Chungcheongbuk_do_confirmed' ,
+
+.
+.
+.
+
+'Seoul_released' , Seoul_released,'Ulsan_confirmed' , Ulsan_confirmed,'Ulsan_released' , Ulsan_released) as (Type,Value)&quot;
+</code></pre>
+
+<p>The general format is as follows:</p>
+
+<pre><code>&quot;stack(&lt;cnt of columns you want to put in one column&gt;, 'firstcolname', firstcolname , 'secondcolname' ,secondcolname ......) as (Type, Value)&quot;
+</code></pre>
+
+<p>It may seem daunting, but we can create such an expression using our programming skills.</p>
+
+<pre><code>expression = &quot;&quot;
+cnt=0
+for column in pivotedTimeprovince.columns:
+    if column!='date':
+        cnt +=1
+        expression += f&quot;'{column}' , {column},&quot;
+
+expression = f&quot;stack({cnt}, {expression[:-1]}) as (Type,Value)&quot;
+</code></pre>
+
+<p>And we can unpivot using:</p>
+
+<pre><code>unpivotedTimeprovince = pivotedTimeprovince.select('date',F.expr(exprs))
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/29.png" alt="" /></p>
+
+<p>And voila! we have got our dataframe in a vertical format. There are quite a few column creations, filters, and join operations needed to get exactly the same format as before, but I will not get into those.</p>
+
+<hr />
+
+<h2 id="8-salting">8. Salting</h2>
+
+<p>Sometimes it might happen that a lot of data goes to a single executor since the same key is assigned for a lot of rows in our data. Salting is another way that helps you to manage data skewness.</p>
+
+<p>So assuming we want to do the sum operation when we have skewed keys. We can start by creating the Salted Key and then doing a double aggregation on that key as the sum of a sum still equals sum. To understand this assume we need the sum of confirmed infection_cases on the cases table and assume that the key infection_cases is skewed. We can do the required operation in two steps.</p>
+
+<p><strong>1. Create a Salting Key</strong></p>
+
+<p>We first create a salting key using a concatenation of infection_case column and a random_number between 0 to 9. In case your key is even more skewed, you can split it in even more than 10 parts.</p>
+
+<pre><code>cases = cases.withColumn(&quot;salt_key&quot;, F.concat(F.col(&quot;infection_case&quot;), F.lit(&quot;_&quot;), F.monotonically_increasing_id() % 10))
+</code></pre>
+
+<p>This is how the table looks after the operation:</p>
+
+<p><img src="/images/spark_df_complete_guide/30.png" alt="" /></p>
+
+<p><strong>2. First Groupby on salt key</strong></p>
+
+<pre><code>cases_temp = cases.groupBy([&quot;infection_case&quot;,&quot;salt_key&quot;]).agg(F.sum(&quot;confirmed&quot;)).show()
+</code></pre>
+
+<p><img src="/images/spark_df_complete_guide/31.png" alt="" /></p>
+
+<p><strong>3. Second Group On the original Key</strong></p>
+
+<p><img src="/images/spark_df_complete_guide/32.png" alt="" /></p>
+
+<p>Here we saw how the sum of sum can be used to get the final sum. You can also make use of facts like:</p>
+
+<ul>
+<li><p>min of min is min</p></li>
+
+<li><p>max of max is max</p></li>
+
+<li><p>sum of count is count</p></li>
+</ul>
+
+<p>You can think about ways in which salting as an idea could be applied to joins too.</p>
+
+<hr />
+
+<h2 id="some-more-tips-and-tricks">Some More Tips and Tricks</h2>
+
+<h3 id="caching">Caching</h3>
+
+<p>Spark works on the lazy execution principle. What that means is that nothing really gets executed until you use an action function like the .count() on a dataframe. And if you do a .count function, it generally helps to cache at this step. So I have made it a point to cache() my dataframes whenever I do a .count() operation.</p>
+
+<pre><code>df.cache().count()
+</code></pre>
+
+<h3 id="save-and-load-from-an-intermediate-step">Save and Load from an intermediate step</h3>
+
+<pre><code>df.write.parquet(&quot;data/df.parquet&quot;)
+df.unpersist()
+spark.read.load(&quot;data/df.parquet&quot;)
+</code></pre>
+
+<p>When you work with Spark you will frequently run with memory and storage issues. While in some cases such issues might be resolved using techniques like broadcasting, salting or cache, sometimes just interrupting the workflow and saving and reloading the whole dataframe at a crucial step has helped me a lot. This helps spark to let go of a lot of memory that gets utilized for storing intermediate shuffle data and unused caches.</p>
+
+<h3 id="repartitioning">Repartitioning</h3>
+
+<p>You might want to repartition your data if you feel your data has been skewed while working with all the transformations and joins. The simplest way to do it is by using:</p>
+
+<pre><code>df = df.repartition(1000)
+</code></pre>
+
+<p>Sometimes you might also want to repartition by a known scheme as this scheme might be used by a certain join or aggregation operation later on. You can use multiple columns to repartition using:</p>
+
+<pre><code>df = df.repartition('cola', 'colb','colc','cold')
+</code></pre>
+
+<p>You can get the number of partitions in a data frame using:</p>
+
+<pre><code>df.rdd.getNumPartitions()
+</code></pre>
+
+<p>You can also check out the distribution of records in a partition by using the glom function. This helps in understanding the skew in the data that happens while working with various transformations.</p>
+
+<pre><code>df.glom().map(len).collect()
+</code></pre>
+
+<h3 id="reading-parquet-file-in-local">Reading Parquet File in Local</h3>
+
+<p>Sometimes you might want to read the parquet files in a system where Spark is not available. In such cases, I normally use the below code:</p>
+
+<pre><code>from glob import glob
+def load_df_from_parquet(parquet_directory):
+   df = pd.DataFrame()
+   for file in glob(f&quot;{parquet_directory}/*&quot;):
+      df = pd.concat([df,pd.read_parquet(file)])
+   return df
+</code></pre>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p><img src="/images/spark_df_complete_guide/33.png" alt="Source: [Pixabay](https://pixabay.com/photos/dawn-graduates-throwing-hats-dusk-1840298/)" /></p>
+
+<p>This was a big post and congratulations on you reaching the end. These are the most common functionalities I end up using in my day to day job.</p>
+
+<p>Hopefully, I’ve covered the Dataframe basics well enough to pique your interest and help you get started with Spark. If you want to learn more about how Spark Started or RDD basics take a look at this <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" rel="nofollow" target="_blank">post</a></p>
+
+<p><strong><em>You can find all the code at this <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/sparkdf" rel="nofollow" target="_blank">GitHub</a> repository where I keep code for all my posts.</em></strong></p>
+
+<h3 id="continue-learning">Continue Learning</h3>
+
+<p>Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out these excellent courses on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293556&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-essentials" rel="nofollow" target="_blank">Big Data Essentials: HDFS, MapReduce and Spark RDD</a> and <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293488&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-analysis" rel="nofollow" target="_blank">Big Data Analysis: Hive, Spark SQL, DataFrames and GraphFrames</a> by Yandex on Coursera.</p>
+
+<p>I am going to be writing more of such posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX" rel="nofollow" target="_blank">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
+<p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2020/05/25/democratize/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Don’t Democratize Data Science</p></a>
+	</div>
+	<div class="post-nav__item post-nav__item--next">
+		<a class="post-nav__link" href="/blog/2020/06/06/hummingbird_faster_ml_preds/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">How to run your ML model Predictions 50 times faster?</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<style type="text/css">
+
+  .btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-session {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+</style>
+
+
+<aside class="sidebar">
+  <div style="text-align:center">     
+    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/fastapi_for_data_scientists/">A Layman’s Guide for Data Scientists to create APIs in minutes</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/dlrig/">A definitive guide for Setting up a Deep Learning Workstation with Ubuntu</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/multiclass_image_classification_pytorch/">End to End Pipeline for setting up Multiclass Image Classification for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/hummingbird_faster_ml_preds/">How to run your ML model Predictions 50 times faster?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/spark_df_complete_guide/">The Most Complete Guide to pySpark DataFrames</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/democratize/">Don’t Democratize Data Science</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/cogbias/">Five Cognitive Biases In Data Science (And how to avoid them)</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/dls/">Stop Worrying and Create your Deep Learning Server in 30 minutes</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/24/fstring/">How and Why to use f strings in Python3?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/24/multitextclass/">Using Deep Learning for End to End Multiclass Text Classification</a></li>
+		</ul>
+	</div>
+</div>
+
+<div style="text-align:center">     
+    
+    <a class="btn btn-session" href="https://www.patreon.com/bePatron?u=28135435" role="button">1:1 Session</a>
+  </div>
+
+<br>
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+<center><strong>Subsribe to Get</strong>
+<a href="https://www.amazon.in/Advanced-Python-Tips-explained-Simply-ebook/dp/B07TM3D279">
+  <img src="https://m.media-amazon.com/images/I/41IoozUrQWL.jpg" width="70%" height="70%"></img></a>
+  
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;
+ 
+  }
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: -webkit-center;
+    padding: 10px -5px 10px 3%;}  
+ 
+  #mc_embed_signup form {
+    text-align: -webkit-center;
+    } 
+
+    #mc_embed_signup input.button {
+    min-width: 100px;
+}
+   
+</style>
+
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+</center>
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2020 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>

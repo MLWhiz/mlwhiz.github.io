@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>A Layman’s Guide for Data Scientists to create APIs in minutes</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="A Layman’s Guide for Data Scientists to create APIs in minutes" />
+<meta property="og:description" content="Have you ever been in a situation where you want to provide your model predictions to a frontend developer without them having access to model related code? Or has a developer ever asked you to create an API that they can use? I have faced this a lot.
+As Data Science and Web developers try to collaborate, API’s become an essential piece of the puzzle to make codes as well as skills more modular." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2020/06/06/fastapi_for_data_scientists/" />
+<meta property="og:image" content="https://mlwhiz.com/images/fastapi_for_data_scientists/main.png" />
+<meta property="article:published_time" content="2020-06-24T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-06-24T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/fastapi_for_data_scientists/main.png"/>
+
+<meta name="twitter:title" content="A Layman’s Guide for Data Scientists to create APIs in minutes"/>
+<meta name="twitter:description" content="Have you ever been in a situation where you want to provide your model predictions to a frontend developer without them having access to model related code? Or has a developer ever asked you to create an API that they can use? I have faced this a lot.
+As Data Science and Web developers try to collaborate, API’s become an essential piece of the puzzle to make codes as well as skills more modular."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/resources/index.html">Learning Resources</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">A Layman’s Guide for Data Scientists to create APIs in minutes</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2020-06-24T00:00:00">June 24, 2020</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/fastapi_for_data_scientists/main.png" alt="" /></p>
+
+<p>Have you ever been in a situation where you want to provide your model predictions to a frontend developer without them having access to model related code? Or has a developer ever asked you to create an API that they can use? I have faced this a lot.</p>
+
+<p>As Data Science and Web developers try to collaborate, API’s become an essential piece of the puzzle to make codes as well as skills more modular. In fact, in the same way, that a data scientist can’t be expected to know much about Javascript or nodeJS, a frontend developer should be able to get by without knowing any Data Science Language. And APIs do play a considerable role in this abstraction.</p>
+
+<p>But, APIs are confusing. I myself have been confused a lot while creating and sharing them with my development teams who talk in their API terminology like GET request, PUT request, endpoint, Payloads, etc.</p>
+
+<p><strong><em>This post will be about simplifying and understanding how APIs work, explaining some of the above terms, and creating an API using the excellent API building framework called FastAPI, which makes creating APIs a breeze.</em></strong></p>
+
+<hr />
+
+<h2 id="what-is-an-api">What is an API?</h2>
+
+<p>Before we go any further, we need to understand what an API is. According to Wikipedia:</p>
+
+<blockquote>
+<p>An <strong>application programming interface</strong> (<strong>API</strong>) is a <a href="https://en.wikipedia.org/wiki/Interface_(computing)" rel="nofollow" target="_blank">computing interface</a> which defines interactions between multiple software intermediaries. It defines the kinds of calls or requests that can be made, how to make them, the data formats that should be used, the conventions to follow, etc.</p>
+</blockquote>
+
+<p><em>The way I like to understand an API is that it’s an “online function,” a function that I can call online.</em></p>
+
+<p>For example:</p>
+
+<p>I can have a movie API, which returns me names of drama movies when I pass the “animation” genre as input.</p>
+
+<p><img src="/images/fastapi_for_data_scientists/0.png" alt="" /></p>
+
+<p>The advantage of using such a sort of mechanism is that the API user doesn’t get access to the whole dataset or source code and yet they can get all the information they need. <em>This is how many services on the internet like <a href="https://aws.amazon.com/rekognition/" rel="nofollow" target="_blank">Amazon Rekognition</a>, which is an image and video API, or <a href="https://cloud.google.com/natural-language/pricing" rel="nofollow" target="_blank">Google Natural Language API</a>, which is an NLP API works. They provide us access to some great functions without letting us have the source code, which is often valuable and kept hidden. For example, I can send an image to Amazon Rekognition API, and it can provide me with Face detection and Analysis.</em></p>
+
+<p><img src="/images/fastapi_for_data_scientists/1.png" alt="[Source](https://aws.amazon.com/rekognition/?blog-cards.sort-by=item.additionalFields.createdDate&amp;blog-cards.sort-order=desc)" /></p>
+
+<p>For example, here is a free API floated by Open Movie DB, which lets us search for movies using parameters:</p>
+
+<pre><code>[http://www.omdbapi.com/?i=tt3896198&amp;apikey=9ea43e94](http://www.omdbapi.com/?i=tt3896198&amp;apikey=9ea43e94)
+</code></pre>
+
+<p>Here I provided the IMDB id for the movie Guardians of the Galaxy 2, using the i parameter for the API. If you open this link in your browser, you will see the whole information of the movie as per the Open Movie Database</p>
+
+<p><img src="/images/fastapi_for_data_scientists/2.png" alt="Output from OMDB" /><em>Output from OMDB</em></p>
+
+<p>But before we go any further, let’s understand some terms:</p>
+
+<ul>
+<li><p><strong>Endpoint:</strong> In the above API call, the endpoint is : <a href="http://www.omdbapi.com/" rel="nofollow" target="_blank">http://www.omdbapi.com/</a> . Simply this is the location of where the function code is running.</p></li>
+
+<li><p><strong>API Access Key</strong>: Most of the public APIs will have some access key, which you can request. For OMDB API, I had to register and get the API key which is <a href="http://www.omdbapi.com/?i=tt3896198&amp;apikey=9ea43e94" rel="nofollow" target="_blank">9ea43e94</a>.</p></li>
+
+<li><p><strong>? Operator:</strong>This operator is used to specify the parameters we want to send to the API or our “online function.” Here we give two params to our API i.e., IMDB movie ID and API Access Key using the ? operator. Since there are multiple inputs, we use &amp; operator also.</p></li>
+</ul>
+
+<hr />
+
+<h2 id="why-fastapi">Why FastAPI?</h2>
+
+<p><em>“If you’re looking to learn one modern framework for building REST APIs, check out FastAPI […] It’s fast, easy to use and easy to learn […]”</em> — <a href="https://spacy.io/" rel="nofollow" target="_blank">spaCy</a> creators</p>
+
+<p>While Python has many frameworks to build APIs, the most common being Flask and Tornado, FastAPI is much better than available alternatives in its ease of usage as it seems much more pythonic in comparison with Flask.</p>
+
+<p>Also, FastAPI is fast. As the Github docs say, <strong>“Very high performance, on par with NodeJS and Go.”</strong> We can also check the latency <a href="https://www.techempower.com/benchmarks/#section=test&amp;runid=7464e520-0dc2-473d-bd34-dbdfd7e85911&amp;hw=ph&amp;test=query&amp;l=z8kflr-v&amp;a=2" rel="nofollow" target="_blank">benchmarks</a> for ourselves.</p>
+
+<p><img src="/images/fastapi_for_data_scientists/3.png" alt="[Source](https://www.techempower.com/benchmarks/#section=test&amp;runid=7464e520-0dc2-473d-bd34-dbdfd7e85911&amp;hw=ph&amp;test=query&amp;l=z8kflr-v&amp;a=23)" /></p>
+
+<p>That is around a speedup by a factor of 2 when compared to Flask and that too without a lot of code change. This means a huge deal when it comes to building an API that can serve millions of customers as it can reduce production efforts and also use less expensive hardware to serve.</p>
+
+<p>So enough of comparison and talk, let’s try to use FastAPI to create our API.</p>
+
+<hr />
+
+<h2 id="how-to-write-an-api-with-fastapi">How to write an API with FastAPI?</h2>
+
+<p>One of the most common use cases for Data Science is how to create an API for getting a model’s prediction? Let us assume that we have a Titanic Survival model in place that predicts if a person will survive or not. And, it needs a person’s age and sex as input params to predict. We will create this API using FastAPI in two ways: GET and PUT. Don’t worry; I will explain each as we go.</p>
+
+<p><strong>What is GET? —</strong> In a GET request, we usually try to retrieve data using query parameters that are embedded in the query string itself. For example, in the OMDB API, we use the GET request to specify the movie id and access key as part of the query itself.</p>
+
+<p><strong>What is PUT? —</strong> An alternative to the GET request is the PUT request, where we send parameters using a payload, as we will see in the second method. The payload is not part of the query string, and thus PUT is more secure. It will become more clear when you see the second part.</p>
+
+<p>But before we go any further, we need to install FastAPI and uvicorn ASGI server with:</p>
+
+<pre><code>pip install fastapi
+pip install uvicorn
+</code></pre>
+
+<h3 id="1-the-get-way">1. The GET Way:</h3>
+
+<p>A simple FastAPI method to writing a GET API for our titanic model use case is as follows:</p>
+
+<pre><code>from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get(&quot;/predict&quot;)
+def predict_complex_model(age: int,sex:str):
+    # Assume a big and complex model here. For this test I am using a simple rule based model
+    if age&lt;10 or sex=='F':
+        return {'survived':1}
+    else:
+        return {'survived':0}
+</code></pre>
+
+<p>Save the above code in a file named fastapiapp.py and then you can run it using the below command on terminal.</p>
+
+<pre><code>$ uvicorn fastapiapp:app --reload
+</code></pre>
+
+<p>The above means that your API is now running on your server, and the &ndash;reload flag indicates that the API gets updated automatically when you change the fastapiapp.py file. This is very helpful while developing and testing, but you should remove this &ndash;reload flag when you put the API in production. Now you can visit the below path in your browser, and you will get the prediction results:</p>
+
+<pre><code>[http://127.0.0.1:8000/predict?age=10&amp;sex=M](http://127.0.0.1:8000/predict?age=10&amp;sex=M)
+</code></pre>
+
+<p><img src="/images/fastapi_for_data_scientists/4.png" alt="" /></p>
+
+<p>What happens is as you hit the command in your browser, it calls the <a href="http://127.0.0.1:8000/predict?age=10&amp;sex=M" rel="nofollow" target="_blank">http://127.0.0.1:8000/</a>predict endpoint which in turn calls the associated method predict_complex_model with the with params age=10 and sex=&rsquo;M&rsquo;</p>
+
+<p>So, it allows us to use our function from a browser, but that’s still not very helpful. Your developer friend needs to use your predict function to show output on a frontend website. How can you provide him with access to this function?</p>
+
+<p>It is pretty simple. If your developer friend also uses Python, for example, he can use the requests module like below:</p>
+
+<pre><code>import requests
+
+age = 15
+sex = &quot;F&quot;
+
+response = requests.get(f&quot;[http://127.0.0.1:8000/predict?age={age}&amp;sex={](http://127.0.0.1:8000/predict?age=10&amp;sex=M)sex}&quot;)
+output = response.json()
+</code></pre>
+
+<p><img src="/images/fastapi_for_data_scientists/5.png" alt="" /></p>
+
+<p>So we can get the output from the running API(on the server) into our Python Program. A Javascript user would use Javascript Request Library, and a nodeJS developer will use something similar to do this in nodeJS. We will just need to provide them with the endpoint and parameters required.</p>
+
+<p>To test your API, you could also go to the:</p>
+
+<pre><code>[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+</code></pre>
+
+<p>Where you will find a GUI way to test your API.</p>
+
+<p><img src="/images/fastapi_for_data_scientists/6.png" alt="" /></p>
+
+<p>But as we said earlier, <strong>THIS IS NOT SECURE</strong> as GET parameters are passed via URL. This means that parameters get stored in server logs and browser history. This is not intended. Further, this toy example just had two input parameters, so we were able to do it this way, think of a case where we need to provide many parameters to our predict function.</p>
+
+<p>In such a case or I dare say in most of the cases, we use the PUT API.</p>
+
+<h3 id="2-the-put-way">2. The PUT Way</h3>
+
+<p>Using the PUT API, we can call any function by providing a payload to the function. A payload is nothing but a JSON dictionary of input parameters that doesn’t get appended to the query string and is thus much more secure than GET.</p>
+
+<p>Here is the minimal example where we do that same thing as before using PUT. We just change the content of fastapiapp.py to:</p>
+
+<pre><code>from fastapi import FastAPI
+from pydantic import BaseModel
+
+class Input(BaseModel):
+    age : int
+    sex : str
+
+app = FastAPI()
+
+[@app](http://twitter.com/app).put(&quot;/predict&quot;)
+def predict_complex_model(d:Input):
+    if d.age&lt;10 or d.sex=='F':
+        return {'survived':1}
+    else:
+        return {'survived':0}
+</code></pre>
+
+<p>note that we use app.put here in place of app.get previously. We also needed to provide a new class Input , which uses a library called pydantic to validate the input data types that we will get from the API end-user while previously in GET, we validated the inputs using the function parameter list. Also, this time you won’t be able to see your content using a URL on the web. For example, using the browser to point to the endpoint location gives:</p>
+
+<p><img src="/images/fastapi_for_data_scientists/7.png" alt="" /></p>
+
+<p>So, we can check using the programmatic way using requests in Python again:</p>
+
+<pre><code>import requests,json
+payload = json.dumps({
+  &quot;age&quot;: 10,
+  &quot;sex&quot;: &quot;F&quot;
+})
+response = requests.put(&quot;[http://127.0.0.1:8000/predict](http://127.0.0.1:8000/predict)&quot;,data = payload)
+response.json()
+</code></pre>
+
+<p><img src="/images/fastapi_for_data_scientists/8.png" alt="" /></p>
+
+<p>Notice that we use requests.put here and we provide the payload using the data param in the requests.put function and we also make use of json library to convert our payload to JSON from a dict object.</p>
+
+<p>We could also have used the GUI way as before using:</p>
+
+<pre><code>[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+</code></pre>
+
+<p><img src="/images/fastapi_for_data_scientists/9.png" alt="" /></p>
+
+<p>And, we are done with creating our API. It was simple for a change.</p>
+
+<p>FastAPI makes the API creation, which used to be one of the dreaded parts of the Data Science process, much more intuitive, easy, and Fast.</p>
+
+<p>You can find the code for this post as well as all my posts at my <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/fastapi" rel="nofollow" target="_blank">GitHub</a> repository.</p>
+
+<hr />
+
+<h2 id="continue-learning">Continue Learning</h2>
+
+<p>If you want to learn more about building and putting a Machine Learning model in production, this <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.14884356434&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Faws-machine-learning" rel="nofollow" target="_blank">course on AWS</a> for implementing Machine Learning applications promises just that.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a></p>
+
+<p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2020/06/06/dlrig/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">A definitive guide for Setting up a Deep Learning Workstation with Ubuntu</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<style type="text/css">
+
+  .btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-session {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+</style>
+
+
+<aside class="sidebar">
+  <div style="text-align:center">     
+    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/fastapi_for_data_scientists/">A Layman’s Guide for Data Scientists to create APIs in minutes</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/dlrig/">A definitive guide for Setting up a Deep Learning Workstation with Ubuntu</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/multiclass_image_classification_pytorch/">End to End Pipeline for setting up Multiclass Image Classification for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/hummingbird_faster_ml_preds/">How to run your ML model Predictions 50 times faster?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/spark_df_complete_guide/">The Most Complete Guide to pySpark DataFrames</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/democratize/">Don’t Democratize Data Science</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/cogbias/">Five Cognitive Biases In Data Science (And how to avoid them)</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/dls/">Stop Worrying and Create your Deep Learning Server in 30 minutes</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/24/fstring/">How and Why to use f strings in Python3?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/24/multitextclass/">Using Deep Learning for End to End Multiclass Text Classification</a></li>
+		</ul>
+	</div>
+</div>
+
+<div style="text-align:center">     
+    
+    <a class="btn btn-session" href="https://www.patreon.com/bePatron?u=28135435" role="button">1:1 Session</a>
+  </div>
+
+<br>
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+<center><strong>Subsribe to Get</strong>
+<a href="https://www.amazon.in/Advanced-Python-Tips-explained-Simply-ebook/dp/B07TM3D279">
+  <img src="https://m.media-amazon.com/images/I/41IoozUrQWL.jpg" width="70%" height="70%"></img></a>
+  
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;
+ 
+  }
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: -webkit-center;
+    padding: 10px -5px 10px 3%;}  
+ 
+  #mc_embed_signup form {
+    text-align: -webkit-center;
+    } 
+
+    #mc_embed_signup input.button {
+    min-width: 100px;
+}
+   
+</style>
+
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+</center>
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2020 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>

@@ -8,11 +8,472 @@
     <description>Recent content on MLWhiz</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 25 May 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 24 Jun 2020 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="https://mlwhiz.com/atom.xml" rel="self" type="application/rss+xml" />
     
 
+    
+
+    <item>
+      <title>A Layman’s Guide for Data Scientists to create APIs in minutes</title>
+      <link>https://mlwhiz.com/blog/2020/06/06/fastapi_for_data_scientists/</link>
+      <pubDate>Wed, 24 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2020/06/06/fastapi_for_data_scientists/</guid>
+      
+      
+      <media:content type="image/png" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/fastapi_for_data_scientists/main.png"></media:content>
+      
+
+      
+      <description>Have you ever been in a situation where you want to provide your model predictions to a frontend developer without them having access to model related code? Or has a developer ever asked you to create an API that they can use? I have faced this a lot.
+As Data Science and Web developers try to collaborate, API’s become an essential piece of the puzzle to make codes as well as skills more modular.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  Have you ever been in a situation where you want to provide your model predictions to a frontend developer without them having access to model related code? Or has a developer ever asked you to create an API that they can use? I have faced this a lot.
+As Data Science and Web developers try to collaborate, API’s become an essential piece of the puzzle to make codes as well as skills more modular. In fact, in the same way, that a data scientist can’t be expected to know much about Javascript or nodeJS, a frontend developer should be able to get by without knowing any Data Science Language. And APIs do play a considerable role in this abstraction.
+But, APIs are confusing. I myself have been confused a lot while creating and sharing them with my development teams who talk in their API terminology like GET request, PUT request, endpoint, Payloads, etc.
+This post will be about simplifying and understanding how APIs work, explaining some of the above terms, and creating an API using the excellent API building framework called FastAPI, which makes creating APIs a breeze.
+What is an API? Before we go any further, we need to understand what an API is. According to Wikipedia:
+ An application programming interface (API) is a computing interface which defines interactions between multiple software intermediaries. It defines the kinds of calls or requests that can be made, how to make them, the data formats that should be used, the conventions to follow, etc.
+ The way I like to understand an API is that it’s an “online function,” a function that I can call online.
+For example:
+I can have a movie API, which returns me names of drama movies when I pass the “animation” genre as input.
+The advantage of using such a sort of mechanism is that the API user doesn’t get access to the whole dataset or source code and yet they can get all the information they need. This is how many services on the internet like Amazon Rekognition, which is an image and video API, or Google Natural Language API, which is an NLP API works. They provide us access to some great functions without letting us have the source code, which is often valuable and kept hidden. For example, I can send an image to Amazon Rekognition API, and it can provide me with Face detection and Analysis.
+For example, here is a free API floated by Open Movie DB, which lets us search for movies using parameters:
+[http://www.omdbapi.com/?i=tt3896198&amp;amp;apikey=9ea43e94](http://www.omdbapi.com/?i=tt3896198&amp;amp;apikey=9ea43e94)  Here I provided the IMDB id for the movie Guardians of the Galaxy 2, using the i parameter for the API. If you open this link in your browser, you will see the whole information of the movie as per the Open Movie Database
+Output from OMDB
+But before we go any further, let’s understand some terms:
+ Endpoint: In the above API call, the endpoint is : http://www.omdbapi.com/ . Simply this is the location of where the function code is running.
+ API Access Key: Most of the public APIs will have some access key, which you can request. For OMDB API, I had to register and get the API key which is 9ea43e94.
+ ? Operator:This operator is used to specify the parameters we want to send to the API or our “online function.” Here we give two params to our API i.e., IMDB movie ID and API Access Key using the ? operator. Since there are multiple inputs, we use &amp;amp; operator also.
+  Why FastAPI? “If you’re looking to learn one modern framework for building REST APIs, check out FastAPI […] It’s fast, easy to use and easy to learn […]” — spaCy creators
+While Python has many frameworks to build APIs, the most common being Flask and Tornado, FastAPI is much better than available alternatives in its ease of usage as it seems much more pythonic in comparison with Flask.
+Also, FastAPI is fast. As the Github docs say, “Very high performance, on par with NodeJS and Go.” We can also check the latency benchmarks for ourselves.
+That is around a speedup by a factor of 2 when compared to Flask and that too without a lot of code change. This means a huge deal when it comes to building an API that can serve millions of customers as it can reduce production efforts and also use less expensive hardware to serve.
+So enough of comparison and talk, let’s try to use FastAPI to create our API.
+How to write an API with FastAPI? One of the most common use cases for Data Science is how to create an API for getting a model’s prediction? Let us assume that we have a Titanic Survival model in place that predicts if a person will survive or not. And, it needs a person’s age and sex as input params to predict. We will create this API using FastAPI in two ways: GET and PUT. Don’t worry; I will explain each as we go.
+What is GET? — In a GET request, we usually try to retrieve data using query parameters that are embedded in the query string itself. For example, in the OMDB API, we use the GET request to specify the movie id and access key as part of the query itself.
+What is PUT? — An alternative to the GET request is the PUT request, where we send parameters using a payload, as we will see in the second method. The payload is not part of the query string, and thus PUT is more secure. It will become more clear when you see the second part.
+But before we go any further, we need to install FastAPI and uvicorn ASGI server with:
+pip install fastapi pip install uvicorn  1. The GET Way: A simple FastAPI method to writing a GET API for our titanic model use case is as follows:
+from fastapi import FastAPI app = FastAPI() @app.get(&amp;quot;/predict&amp;quot;) def predict_complex_model(age: int,sex:str): # Assume a big and complex model here. For this test I am using a simple rule based model if age&amp;lt;10 or sex==&#39;F&#39;: return {&#39;survived&#39;:1} else: return {&#39;survived&#39;:0}  Save the above code in a file named fastapiapp.py and then you can run it using the below command on terminal.
+$ uvicorn fastapiapp:app --reload  The above means that your API is now running on your server, and the &amp;ndash;reload flag indicates that the API gets updated automatically when you change the fastapiapp.py file. This is very helpful while developing and testing, but you should remove this &amp;ndash;reload flag when you put the API in production. Now you can visit the below path in your browser, and you will get the prediction results:
+[http://127.0.0.1:8000/predict?age=10&amp;amp;sex=M](http://127.0.0.1:8000/predict?age=10&amp;amp;sex=M)  What happens is as you hit the command in your browser, it calls the http://127.0.0.1:8000/predict endpoint which in turn calls the associated method predict_complex_model with the with params age=10 and sex=&amp;rsquo;M&amp;rsquo;
+So, it allows us to use our function from a browser, but that’s still not very helpful. Your developer friend needs to use your predict function to show output on a frontend website. How can you provide him with access to this function?
+It is pretty simple. If your developer friend also uses Python, for example, he can use the requests module like below:
+import requests age = 15 sex = &amp;quot;F&amp;quot; response = requests.get(f&amp;quot;[http://127.0.0.1:8000/predict?age={age}&amp;amp;sex={](http://127.0.0.1:8000/predict?age=10&amp;amp;sex=M)sex}&amp;quot;) output = response.json()  So we can get the output from the running API(on the server) into our Python Program. A Javascript user would use Javascript Request Library, and a nodeJS developer will use something similar to do this in nodeJS. We will just need to provide them with the endpoint and parameters required.
+To test your API, you could also go to the:
+[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)  Where you will find a GUI way to test your API.
+But as we said earlier, THIS IS NOT SECURE as GET parameters are passed via URL. This means that parameters get stored in server logs and browser history. This is not intended. Further, this toy example just had two input parameters, so we were able to do it this way, think of a case where we need to provide many parameters to our predict function.
+In such a case or I dare say in most of the cases, we use the PUT API.
+2. The PUT Way Using the PUT API, we can call any function by providing a payload to the function. A payload is nothing but a JSON dictionary of input parameters that doesn’t get appended to the query string and is thus much more secure than GET.
+Here is the minimal example where we do that same thing as before using PUT. We just change the content of fastapiapp.py to:
+from fastapi import FastAPI from pydantic import BaseModel class Input(BaseModel): age : int sex : str app = FastAPI() [@app](http://twitter.com/app).put(&amp;quot;/predict&amp;quot;) def predict_complex_model(d:Input): if d.age&amp;lt;10 or d.sex==&#39;F&#39;: return {&#39;survived&#39;:1} else: return {&#39;survived&#39;:0}  note that we use app.put here in place of app.get previously. We also needed to provide a new class Input , which uses a library called pydantic to validate the input data types that we will get from the API end-user while previously in GET, we validated the inputs using the function parameter list. Also, this time you won’t be able to see your content using a URL on the web. For example, using the browser to point to the endpoint location gives:
+So, we can check using the programmatic way using requests in Python again:
+import requests,json payload = json.dumps({ &amp;quot;age&amp;quot;: 10, &amp;quot;sex&amp;quot;: &amp;quot;F&amp;quot; }) response = requests.put(&amp;quot;[http://127.0.0.1:8000/predict](http://127.0.0.1:8000/predict)&amp;quot;,data = payload) response.json()  Notice that we use requests.put here and we provide the payload using the data param in the requests.put function and we also make use of json library to convert our payload to JSON from a dict object.
+We could also have used the GUI way as before using:
+[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)  And, we are done with creating our API. It was simple for a change.
+FastAPI makes the API creation, which used to be one of the dreaded parts of the Data Science process, much more intuitive, easy, and Fast.
+You can find the code for this post as well as all my posts at my GitHub repository.
+Continue Learning If you want to learn more about building and putting a Machine Learning model in production, this course on AWS for implementing Machine Learning applications promises just that.
+Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at Medium or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz
+Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
+    
+
+    <item>
+      <title>A definitive guide for Setting up a Deep Learning Workstation with Ubuntu</title>
+      <link>https://mlwhiz.com/blog/2020/06/06/dlrig/</link>
+      <pubDate>Wed, 24 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2020/06/06/dlrig/</guid>
+      
+      
+      <media:content type="image/png" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/dlrig/main.png"></media:content>
+      
+
+      
+      <description>Creating my own workstation has been a dream for me if nothing else. I knew the process involved, yet I somehow never got to it.
+But this time I just had to do it. So, I found out some free time to create a Deep Learning Rig with a lot of assistance from NVIDIA folks who were pretty helpful. On that note special thanks to Josh Patterson and Michael Cooper.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  Creating my own workstation has been a dream for me if nothing else. I knew the process involved, yet I somehow never got to it.
+But this time I just had to do it. So, I found out some free time to create a Deep Learning Rig with a lot of assistance from NVIDIA folks who were pretty helpful. On that note special thanks to Josh Patterson and Michael Cooper.
+Now, every time I create the whole deep learning setup from an installation viewpoint, I end up facing similar challenges. It’s like running around in circles with all these various dependencies and errors. This time also I had to try many things before the whole configuration came to life without errors.
+So this time, I made it a point to document everything while installing all the requirements and their dependencies in my own system.
+This post is about setting up your own Linux Ubuntu 18.04 system for deep learning with everything you might need.
+If a pre-built deep learning system is preferred, I can recommend Exxact’s line of workstations and servers.
+I assume that you have a fresh Ubuntu 18.04 installation. I am taking inspiration from Slav Ivanov’s excellent post in 2017 on creating a Deep Learning box. You can call it the 2020 version for the same post from a setup perspective, but a lot of the things have changed from then, and there are a lot of caveats with specific CUDA versions not supported by Tensorflow and Pytorch.
+Starting up ](/images/dlrig/0.png)
+Before we do anything with our installation, we need to update our Linux system to the latest packages. We can do this simply by using:
+sudo apt-get update sudo apt-get --assume-yes upgrade sudo apt-get --assume-yes install tmux build-essential gcc g&#43;&#43; make binutils sudo apt-get --assume-yes install software-properties-common sudo apt-get --assume-yes install git  The Process So now we have everything set up we want to install the following four things:
+ GPU Drivers: Why is your PC not supporting high graphic resolutions? Or how would your graphics cards talk to your python interfaces?
+ CUDA: A layer to provide access to the GPU’s instruction set and parallel computation units. In simple words, it allows us a way to write code for GPUs
+ CuDNN: a library that provides Primitives for Deep Learning Network
+ Pytorch, Tensorflow, and Rapids: higher-level APIs to code Deep Neural Networks
+  1. GPU Drivers The first step is to add the latest NVIDIA drivers. You can choose the GPU product type, Linux 64 bit, and download Type as “Linux Long-Lived” for the 18.04 version.
+Clicking on search will take you to a downloads page:
+From where you can download the driver file NVIDIA-Linux-x86_64–440.44.run and run it using:
+chmod &#43;x NVIDIA-Linux-x86_64–440.44.run sudo sh NVIDIA-Linux-x86_64–440.44.run  For you, the file may be named differently, depending on the latest version.
+2. CUDA We will now need to install the CUDA toolkit. Somehow the CUDA toolkit 10.2 is still not supported by Pytorch and Tensorflow, so we will go with CUDA Toolkit 10.1, which is supported by both.
+Also, the commands on the product page for CUDA 10.1 didn’t work for me and the commands I ended up using are:
+sudo apt-key adv --fetch-keys [http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub](http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub) &amp;amp;&amp;amp; echo &amp;quot;deb [https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64](https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64) /&amp;quot; | sudo tee /etc/apt/sources.list.d/cuda.list sudo apt-get update &amp;amp;&amp;amp; sudo apt-get -o Dpkg::Options::=&amp;quot;--force-overwrite&amp;quot; install cuda-10-1 cuda-drivers  The next step is to create the LD_LIBRARY_PATH and append to the PATH variable the path where CUDA got installed. Just run this below command on your terminal.
+echo &#39;export PATH=/usr/local/cuda-10.1/bin${PATH:&#43;:${PATH}}&#39; &amp;gt;&amp;gt; ~/.bashrc &amp;amp;&amp;amp; echo &#39;export LD_LIBRARY_PATH=/usr/local/cuda-10.1/lib64${LD_LIBRARY_PATH:&#43;:${LD_LIBRARY_PATH}}&#39; &amp;gt;&amp;gt; ~/.bashrc &amp;amp;&amp;amp; source ~/.bashrc &amp;amp;&amp;amp; sudo ldconfig  After this, one can check if CUDA is installed correctly by using:
+nvcc --version  As you can see, the CUDA Version is 10.1 as we wanted. Also, check if you can use the command:
+nvidia-smi  For me, it showed an error when I used it the first time, but a simple reboot solved the issue. And both my NVIDIA graphic cards show up in all their awesome glory. Don’t worry that the display says the CUDA version supported is 10.2. I was also confused, but it is just the maximum CUDA version supported by the graphics driver that is shown in nvidia-smi.
+3.CuDNN What is the use of all these libraries if we are not going to train neural nets? CuDNN provides various primitives for Deep Learning, which are later used by PyTorch/TensorFlow.
+But we first need to get a developer account first to install CuDNN. Once you fill-up the signup form, you will see the screen below. Select the cuDNN version that applies to your CUDA version. For me, the CUDA version is 10.1, so I select the second one.
+Once you select the appropriate CuDNN version the screen expands:
+For my use case, I needed to download three files for Ubuntu 18.04:
+[cuDNN Runtime Library for Ubuntu18.04 (Deb)](https://developer.nvidia.com/compute/machine-learning/cudnn/secure/7.6.5.32/Production/10.1_20191031/Ubuntu18_04-x64/libcudnn7_7.6.5.32-1%2Bcuda10.1_amd64.deb) [cuDNN Developer Library for Ubuntu18.04 (Deb)](https://developer.nvidia.com/compute/machine-learning/cudnn/secure/7.6.5.32/Production/10.1_20191031/Ubuntu18_04-x64/libcudnn7-dev_7.6.5.32-1%2Bcuda10.1_amd64.deb) [cuDNN Code Samples and User Guide for Ubuntu18.04 (Deb)](https://developer.nvidia.com/compute/machine-learning/cudnn/secure/7.6.5.32/Production/10.1_20191031/Ubuntu18_04-x64/libcudnn7-doc_7.6.5.32-1%2Bcuda10.1_amd64.deb)  After downloading these files, you can install using these commands. You can also see the exact commands if anything changes in the future:
+# Install the runtime library: sudo dpkg -i libcudnn7_7.6.5.32-1&#43;cuda10.1_amd64.deb #Install the developer library: sudo dpkg -i libcudnn7-dev_7.6.5.32-1&#43;cuda10.1_amd64.deb #Install the code samples and cuDNN User Guide(Optional): sudo dpkg -i libcudnn7-doc_7.6.5.32-1&#43;cuda10.1_amd64.deb  4. Anaconda, Pytorch, Tensorflow, and Rapids And finally, we reach the crux. We will install the software which we will interface with most of the times.
+We need to install Python with virtual environments. I have downloaded python3 as it is the most stable version as of now, and it is time to say goodbye to Python 2.7. It was great while it lasted. And we will also install Pytorch and Tensorflow. I prefer them both for specific tasks as applicable.
+You can go to the anaconda distribution page and download the package.
+Once downloaded you can simply run the shell script:
+sudo sh Anaconda3-2019.10-Linux-x86_64.sh  You will also need to run these commands on your shell to add some commands to your ~/.bashrc file, and update the conda distribution with the latest libraries versions.
+cat &amp;gt;&amp;gt; ~/.bashrc &amp;lt;&amp;lt; &#39;EOF&#39; export PATH=$HOME/anaconda3/bin:${PATH} EOF source .bashrc conda upgrade -y --all  The next step is creating a new environment for your deep learning pursuits or using an existing one. I created a new Conda environment using:
+conda create --name py37  Here py37 is the name we provide to this new conda environment. You can activate this conda environment using:
+conda activate py37  You should now be able to see something like:
+Notice the py37 at the start of command in terminal
+We can now add all our required packages to this environment using pip or conda. The latest version 1.3, as seen from the pytorch site, is not yet available for CUDA 10.2, as I already mentioned, so we are in luck with CUDA 10.1. Also, we will need to specify the version of TensorFlow as 2.1.0, as this version was built using 10.1 CUDA.
+I also install RAPIDS, which is a library to get your various data science workloads to GPUs. Why use GPUs only for deep learning and not for Data processing? You can get the command to install rapids from the rapids release selector:
+sudo apt install python3-pip conda install -c rapidsai -c nvidia -c conda-forge -c defaults rapids=0.11 python=3.7 cudatoolkit=10.1 pip install torchvision  Since PyTorch installation interfered with TensorFlow, I installed TensorFlow in another environment.
+conda create --name tf conda activate tf pip install --upgrade tensorflow  Now we can check if the TF and Pytorch installations are correctly done by using the below commands in their own environments:
+# Should print True python3 -c &amp;quot;import tensorflow as tf; print(tf.test.is_gpu_available())&amp;quot; # should print cuda python3 -c &amp;quot;import torch; print(torch.device(&#39;cuda&#39; if torch.cuda.is_available() else &#39;cpu&#39;))&amp;quot;  If the install is showing some errors for TensorFlow or the GPU test is failing, you might want to add these two additional lines at the end of your bashrc file and restart the terminal:
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64 export CUDA_HOME=/usr/local/cuda  You might also want to install jupyter lab or jupyter notebook. Thanks to the developers, the process is as easy as just running jupyter labor jupyter notebook in your terminal, whichever you do prefer. I personally like notebook better without all the unnecessary clutter.
+Conclusion In this post, I talked about all the software you are going to need to install in your deep learning rig without hassle.
+You might still need some help and face some problems for which my best advice would be to check out the different NVIDIA and Stack Overflow forums.
+So we have got our deep learning rig setup, and its time for some tests now. In the next few posts, I am going to do some benchmarking on the GPUs and will try to write more on various deep Learning libraries one can include in their workflow. So stay tuned.
+Continue Learning If you want to learn more about Deep Learning, here is an excellent course. You can start for free with the 7-day Free Trial.
+Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at Medium or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz
+Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
+    
+
+    <item>
+      <title>End to End Pipeline for setting up Multiclass Image Classification for Data Scientists</title>
+      <link>https://mlwhiz.com/blog/2020/06/06/multiclass_image_classification_pytorch/</link>
+      <pubDate>Wed, 24 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2020/06/06/multiclass_image_classification_pytorch/</guid>
+      
+      
+      <media:content type="image/png" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/multiclass_image_classification_pytorch/main.png"></media:content>
+      
+
+      
+      <description>Have you ever wondered how Facebook takes care of the abusive and inappropriate images shared by some of its users? Or how Facebook’s tagging feature works? Or how Google Lens recognizes products through images?
+All of the above are examples of image classification in different settings. Multiclass image classification is a common task in computer vision, where we categorize an image into three or more classes.
+In the past, I always used Keras for computer vision projects.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  Have you ever wondered how Facebook takes care of the abusive and inappropriate images shared by some of its users? Or how Facebook’s tagging feature works? Or how Google Lens recognizes products through images?
+All of the above are examples of image classification in different settings. Multiclass image classification is a common task in computer vision, where we categorize an image into three or more classes.
+In the past, I always used Keras for computer vision projects. However, recently when the opportunity to work on multiclass image classification presented itself, I decided to use PyTorch. I have already moved from Keras to PyTorch for all NLP tasks, so why not vision, too?
+ PyTorch is powerful, and I also like its more pythonic structure.
+ In this post, we’ll create an end to end pipeline for image multiclass classification using Pytorch.This will include training the model, putting the model’s results in a form that can be shown to business partners, and functions to help deploy the model easily. As an added feature we will look at Test Time Augmentation using Pytorch also.
+But before we learn how to do image classification, let’s first look at transfer learning, the most common method for dealing with such problems.
+What is Transfer Learning? Transfer learning is the process of repurposing knowledge from one task to another. From a modelling perspective, this means using a model trained on one dataset and fine-tuning it for use with another. But why does it work?
+Let’s start with some background. Every year the visual recognition community comes together for a very particular challenge: The Imagenet Challenge. The task in this challenge is to classify 1,000,000 images into 1,000 categories.
+This challenge has already resulted in researchers training big convolutional deep learning models. The results have included great models like Resnet50 and Inception.
+But, what does it mean to train a neural model? Essentially, it means the researchers have learned the weights for a neural network after training the model on a million images.
+So, what if we could get those weights? We could then use them and load them into our own neural networks model to predict on the test dataset, right? Actually, we can go even further than that; we can add an extra layer on top of the neural network these researchers have prepared to classify our own dataset.
+ While the exact workings of these complex models is still a mystery, we do know that the lower convolutional layers capture low-level image features like edges and gradients. In comparison, higher convolutional layers capture more and more intricate details, such as body parts, faces, and other compositional features.
+ Source: Visualizing and Understanding Convolutional Networks. You can see how the first few layers capture basic shapes, and the shapes become more and more complex in the later layers.
+In the example above from ZFNet (a variant of Alexnet), one of the first convolutional neural networks to achieve success on the Imagenet task, you can see how the lower layers capture lines and edges, and the later layers capture more complex features. The final fully-connected layers are generally assumed to capture information that is relevant for solving the respective task, e.g. ZFNet’s fully-connected layers indicate which features are relevant for classifying an image into one of 1,000 object categories.
+For a new vision task, it is possible for us to simply use the off-the-shelf features of a state-of-the-art CNN pre-trained on ImageNet, and train a new model on these extracted features.
+The intuition behind this idea is that a model trained to recognize animals might also be used to recognize cats vs dogs. In our case, &amp;gt; # a model that has been trained on 1000 different categories has seen a lot of real-world information, and we can use this information to create our own custom classifier.
+So that’s the theory and intuition. How do we get it to actually work? Let’s look at some code. You can find the complete code for this post on Github.
+Data Exploration We will start with the Boat Dataset from Kaggle to understand the multiclass image classification problem. This dataset contains about 1,500 pictures of boats of different types: buoys, cruise ships, ferry boats, freight boats, gondolas, inflatable boats, kayaks, paper boats, and sailboats. Our goal is to create a model that looks at a boat image and classifies it into the correct category.
+Here’s a sample of images from the dataset:
+And here are the category counts:
+Since the categories “freight boats”, “inflatable boats” , and “boats” don’t have a lot of images; we will be removing these categories when we train our model.
+Creating the required Directory Structure Before we can go through with training our deep learning models, we need to create the required directory structure for our images. Right now, our data directory structure looks like:
+images sailboat kayak . .  We need our images to be contained in 3 folders train, val and test. We will then train on the images in train dataset, validate on the ones in the val dataset and finally test them on images in the test dataset.
+data train sailboat kayak . . val sailboat kayak . . test sailboat kayak . .  You might have your data in a different format, but I have found that apart from the usual libraries, the glob.glob and os.system functions are very helpful. Here you can find the complete data preparation code. Now let’s take a quick look at some of the not-so-used libraries that I found useful while doing data prep.
+What is glob.glob? Simply, glob lets you get names of files or folders in a directory using a regex. For example, you can do something like:
+from glob import glob categories = glob(“images/*”) print(categories) ------------------------------------------------------------------ [&#39;images/kayak&#39;, &#39;images/boats&#39;, &#39;images/gondola&#39;, &#39;images/sailboat&#39;, &#39;images/inflatable boat&#39;, &#39;images/paper boat&#39;, &#39;images/buoy&#39;, &#39;images/cruise ship&#39;, &#39;images/freight boat&#39;, &#39;images/ferry boat&#39;]  What is os.system? os.system is a function in os library which lets you run any command-line function in python itself. I generally use it to run Linux functions, but it can also be used to run R scripts within python as shown here. For example, I use it in my data preparation to copy files from one directory to another after getting the information from a pandas data frame. I also use f string formatting.
+import os for i,row in fulldf.iterrows(): # Boat category cat = row[&#39;category&#39;] # section is train,val or test section = row[&#39;type&#39;] # input filepath to copy ipath = row[&#39;filepath&#39;] # output filepath to paste opath = ipath.replace(f&amp;quot;images/&amp;quot;,f&amp;quot;data/{section}/&amp;quot;) # running the cp command os.system(f&amp;quot;cp &#39;{ipath}&#39; &#39;{opath}&#39;&amp;quot;)  Now since we have our data in the required folder structure, we can move on to more exciting parts.
+Data Preprocessing Transforms: 1. Imagenet Preprocessing
+In order to use our images with a network trained on the Imagenet dataset, we need to preprocess our images in the same way as the Imagenet network. For that, we need to rescale the images to 224×224 and normalize them as per Imagenet standards. We can use the torchvision transforms library to do that. Here we take a CenterCrop of 224×224 and normalize as per Imagenet standards. The operations defined below happen sequentially. You can find a list of all transforms provided by PyTorch here.
+transforms.Compose([ transforms.CenterCrop(size=224), transforms.ToTensor(), transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) ])  2. Data Augmentations
+We can do a lot more preprocessing for data augmentations. Neural networks work better with a lot of data. Data augmentation is a strategy which we use at training time to increase the amount of data we have.
+For example, we can flip the image of a boat horizontally, and it will still be a boat. Or we can randomly crop images or add color jitters. Here is the image transforms dictionary I have used that applies to both the Imagenet preprocessing as well as augmentations. This dictionary contains the various transforms we have for the train, test and validation data as used in this great post. As you’d expect, we don’t apply the horizontal flips or other data augmentation transforms to the test data and validation data because we don’t want to get predictions on an augmented image.
+# Image transformations image_transforms = { # Train uses data augmentation &#39;train&#39;: transforms.Compose([ transforms.RandomResizedCrop(size=256, scale=(0.8, 1.0)), transforms.RandomRotation(degrees=15), transforms.ColorJitter(), transforms.RandomHorizontalFlip(), transforms.CenterCrop(size=224), # Image net standards transforms.ToTensor(), transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) # Imagenet standards ]), # Validation does not use augmentation &#39;valid&#39;: transforms.Compose([ transforms.Resize(size=256), transforms.CenterCrop(size=224), transforms.ToTensor(), transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) ]), # Test does not use augmentation &#39;test&#39;: transforms.Compose([ transforms.Resize(size=256), transforms.CenterCrop(size=224), transforms.ToTensor(), transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) ]), }  Here is an example of the train transforms applied to an image in the training dataset. Not only do we get a lot of different images from a single image, but it also helps our network become invariant to the object orientation.
+ex_img = Image.open(&#39;/home/rahul/projects/compvisblog/data/train/cruise ship/cruise-ship-oasis-of-the-seas-boat-water-482183.jpg&#39;) t = image_transforms[&#39;train&#39;] plt.figure(figsize=(24, 24)) for i in range(16): ax = plt.subplot(4, 4, i &#43; 1) _ = imshow_tensor(t(ex_img), ax=ax) plt.tight_layout()  DataLoaders The next step is to provide the training, validation, and test dataset locations to PyTorch. We can do this by using the PyTorch datasets and DataLoader class. This part of the code will mostly remain the same if we have our data in the required directory structures.
+# Datasets from folders traindir = &amp;quot;data/train&amp;quot; validdir = &amp;quot;data/val&amp;quot; testdir = &amp;quot;data/test&amp;quot; data = { &#39;train&#39;: datasets.ImageFolder(root=traindir, transform=image_transforms[&#39;train&#39;]), &#39;valid&#39;: datasets.ImageFolder(root=validdir, transform=image_transforms[&#39;valid&#39;]), &#39;test&#39;: datasets.ImageFolder(root=testdir, transform=image_transforms[&#39;test&#39;]) } # Dataloader iterators, make sure to shuffle dataloaders = { &#39;train&#39;: DataLoader(data[&#39;train&#39;], batch_size=batch_size, shuffle=True,num_workers=10), &#39;val&#39;: DataLoader(data[&#39;valid&#39;], batch_size=batch_size, shuffle=True,num_workers=10), &#39;test&#39;: DataLoader(data[&#39;test&#39;], batch_size=batch_size, shuffle=True,num_workers=10) }  These dataloaders help us to iterate through the dataset. For example, we will use the dataloader below in our model training. The data variable will contain data in the form (batch_size, color_channels, height, width) while the target is of shape (batch_size) and hold the label information.
+train_loader = dataloaders[&#39;train&#39;] for ii, (data, target) in enumerate(train_loader):  Modeling 1. Create the model using a pre-trained model Right now these following pre-trained models are available to use in the torchvision library:
+ AlexNet
+ VGG
+ ResNet
+ SqueezeNet
+ DenseNet
+ Inception v3
+ GoogLeNet
+ ShuffleNet v2
+ MobileNet v2
+ ResNeXt
+ Wide ResNet
+ MNASNet
+  Here I will be using resnet50 on our dataset, but you can effectively use any other model too as per your choice.
+from torchvision import models model = models.resnet50(pretrained=True)  We start by freezing our model weights since we don’t want to change the weights for the renet50 models.
+# Freeze model weights for param in model.parameters(): param.requires_grad = False  The next thing we need to do is to replace the linear classification layer in the model by our custom classifier. I have found that to do this, it is better first to see the model structure to determine what is the final linear layer. We can do this simply by printing the model object:
+print(model) ------------------------------------------------------------------ ResNet( (conv1): Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False) (bn1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True) (relu): ReLU(inplace=True) . . . . (conv3): Conv2d(512, 2048, kernel_size=(1, 1), stride=(1, 1), bias=False) (bn3): BatchNorm2d(2048, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True) (relu): ReLU(inplace=True) ) ) (avgpool): AdaptiveAvgPool2d(output_size=(1, 1)) **(fc): Linear(in_features=2048, out_features=1000, bias=True)** )  Here we find that the final linear layer that takes the input from the convolutional layers is named fc
+We can now simply replace the fc layer using our custom neural network. This neural network takes input from the previous layer to fc and gives the log softmax output of shape (batch_size x n_classes).
+n_inputs = model.fc.in_features model.fc = nn.Sequential( nn.Linear(n_inputs, 256), nn.ReLU(), nn.Dropout(0.4), nn.Linear(256, n_classes), nn.LogSoftmax(dim=1))  Please note that the new layers added now are fully trainable by default.
+2. Load the model on GPU We can use a single GPU or multiple GPU(if we have them) using DataParallel from PyTorch. Here is what we can use to detect the GPU as well as the number of GPUs to load the model on GPU. Right now I am training my models on dual Titan RTX GPUs.
+# Whether to train on a gpu train_on_gpu = cuda.is_available() print(f&#39;Train on gpu: {train_on_gpu}&#39;) # Number of gpus if train_on_gpu: gpu_count = cuda.device_count() print(f&#39;{gpu_count} gpus detected.&#39;) if gpu_count &amp;gt; 1: multi_gpu = True else: multi_gpu = False if train_on_gpu: model = model.to(&#39;cuda&#39;) if multi_gpu: model = nn.DataParallel(model)  3. Define criterion and optimizers One of the most important things to notice when you are training any model is the choice of loss-function and the optimizer used. Here we want to use categorical cross-entropy as we have got a multiclass classification problem and the Adam optimizer, which is the most commonly used optimizer. But since we are applying a LogSoftmax operation on the output of our model, we will be using the NLL loss.
+from torch import optim criteration = nn.NLLLoss() optimizer = optim.Adam(model.parameters())  4. Training the model Given below is the full code used to train the model. It might look pretty big on its own, but essentially what we are doing is as follows:
+ Start running epochs. In each epoch-
+ Set the model mode to train using model.train().
+ Loop through the data using the train dataloader.
+ Load your data to the GPU using the data, target = data.cuda(), target.cuda() command
+ Set the existing gradients in the optimizer to zero using optimizer.zero_grad()
+ Run the forward pass through the batch using output = model(data)
+ Compute loss using loss = criterion(output, target)
+ Backpropagate the losses through the network using loss.backward()
+ Take an optimizer step to change the weights in the whole network using optimizer.step()
+ All the other steps in the training loop are just to maintain the history and calculate accuracy.
+ Set the model mode to eval using model.eval().
+ Get predictions for the validation data using valid_loader and calculate valid_loss and valid_acc
+ Print the validation loss and validation accuracy results every print_every epoch.
+ Save the best model based on validation loss.
+ Early Stopping: If the cross-validation loss doesn’t improve for max_epochs_stop stop the training and load the best available model with the minimum validation loss.
+  Here is the output from running the above code. Just showing the last few epochs. The validation accuracy started at ~55% in the first epoch, and we ended up with a validation accuracy of ~90%.
+And here are the training curves showing the loss and accuracy metrics:
+Inference and Model Results We want our results in different ways to use our model. For one, we require test accuracies and confusion matrices. All of the code for creating these results is in the code notebook.
+1. Test Results The overall accuracy of the test model is:
+Overall Accuracy: 88.65 %  Here is the confusion matrix for results on the test dataset.
+We can also look at the category wise accuracies. I have also added the train counts to see the results from a new perspective.
+2. Visualizing Predictions for Single Image For deployment purposes, it helps to be able to get predictions for a single image. You can get the code from the notebook.
+3. Visualizing Predictions for a Category We can also see the category wise results for debugging purposes and presentations.
+4. Test results with Test Time Augmentation We can also do test time augmentation to increase our test accuracy. Here I am using a new test data loader and transforms:
+# Image transformations tta_random_image_transforms = transforms.Compose([ transforms.RandomResizedCrop(size=256, scale=(0.8, 1.0)), transforms.RandomRotation(degrees=15), transforms.ColorJitter(), transforms.RandomHorizontalFlip(), transforms.CenterCrop(size=224), # Image net standards transforms.ToTensor(), transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) # Imagenet standards ]) # Datasets from folders ttadata = { &#39;test&#39;: datasets.ImageFolder(root=testdir, transform=tta_random_image_transforms) } # Dataloader iterators ttadataloader = { &#39;test&#39;: DataLoader(ttadata[&#39;test&#39;], batch_size=512, shuffle=False,num_workers=10) }  We can then get the predictions on the test set using the below function:
+In the function above, I am applying the tta_random_image_transforms to each image 5 times before getting its prediction. The final prediction is the average of all five predictions. When we use TTA over the whole test dataset, we noticed that the accuracy increased by around 1%
+TTA Accuracy: 89.71%  Also, here is the results for TTA compared to normal results category wise:
+In this small dataset, the TTA might not seem to add much value, but I have noticed that it adds value with big datasets.
+Conclusion In this post, I talked about the end to end pipeline for working on a multiclass image classification project using PyTorch. We worked on creating some readymade code to train a model using transfer learning, visualize the results, use Test time augmentation, and got predictions for a single image so that we can deploy our model when needed using any tool like Streamlit.
+You can find the complete code for this post on Github.
+If you would like to learn more about Image Classification and Convolutional Neural Networks take a look at the Deep Learning Specialization from Andrew Ng. Also, to learn more about PyTorch and start from the basics, you can take a look at the Deep Neural Networks with PyTorch course offered by IBM.
+Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at Medium or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz.
+Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.
+This post was first published here.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
+    
+
+    <item>
+      <title>How to run your ML model Predictions 50 times faster?</title>
+      <link>https://mlwhiz.com/blog/2020/06/06/hummingbird_faster_ml_preds/</link>
+      <pubDate>Wed, 24 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2020/06/06/hummingbird_faster_ml_preds/</guid>
+      
+      
+      <media:content type="image/png" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/hummingbird_faster_ml_preds/main.png"></media:content>
+      
+
+      
+      <description>With the advent of so many computing and serving frameworks, it is getting stressful day by day for the developers to put a model into production. If the question of what model performs best on my data was not enough, now the question is what framework to choose for serving a model trained with Sklearn or LightGBM or PyTorch. And new frameworks are being added as each day passes.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  With the advent of so many computing and serving frameworks, it is getting stressful day by day for the developers to put a model into production. If the question of what model performs best on my data was not enough, now the question is what framework to choose for serving a model trained with Sklearn or LightGBM or PyTorch. And new frameworks are being added as each day passes.
+So is it imperative for a Data Scientist to learn a different framework because a Data Engineer is comfortable with that, or conversely, does a Data Engineer need to learn a new platform that the Data Scientist favors?
+Add to that the factor of speed and performance that these various frameworks offer, and the question suddenly becomes even more complicated.
+So, I was pleasantly surprised when I came across the Hummingbird project on Github recently, which aims to answer this question or at least takes a positive step in the right direction.
+So, What is HummingBird? As per their documentation:
+ Hummingbird is a library for compiling trained traditional ML models into tensor computations. Hummingbird allows users to seamlessly leverage neural network frameworks (such as PyTorch) to accelerate traditional ML models. Thanks to Hummingbird, users can benefit from:
+(1) all the current and future optimizations implemented in neural network frameworks;
+(2) native hardware acceleration;
+(3) having a unique platform to support both traditional and neural network models, and have all of this
+(4) without having to re-engineer their models.
+ Put even more simply; you can now convert your models written in Scikit-learn or Xgboost or LightGBM into PyTorch models and gain the performance benefits of Pytorch while inferencing.
+As of right now, Here is the list of operators Hummingbird supports with more on the way.
+A Simple Example We can start by installing Hummingbird, which is as simple as:
+pip install hummingbird-ml  To use hummingbird, I will begin with a minimal example on a small random classification Dataset. We start by creating a sample dataset with 100,000 rows and using a RandomForestClassifier on top of that.
+import numpy as np from sklearn.ensemble import RandomForestClassifier from hummingbird.ml import convert # Create some random data for binary classification from sklearn import datasets X, y = datasets.make_classification(n_samples=100000, n_features=28) # Create and train a model (scikit-learn RandomForestClassifier in this case) skl_model = RandomForestClassifier(n_estimators=1000, max_depth=10) skl_model.fit(X, y)  What hummingbird helps us with is to convert this sklearn model into a PyTorch model by just using the simple command:
+# Using Hummingbird to convert the model to PyTorch model = convert(skl_model, &#39;pytorch&#39;) print(type(model)) -------------------------------------------------------- hummingbird.ml._container.PyTorchBackendModel  We can now load our new Pytorch model to GPU using:
+model.to(&#39;cuda&#39;)  This is great. So, we can convert from sklearn model to a PyTorch model, which should run faster on a GPU. But by how much?
+Let us see a simple performance comparison.
+Comparison 1. Batch Mode We will start by using the sklearn model to predict the whole train dataset and check out the time it takes.
+We can do the same with our new PyTorch model:
+That is a speedup of 9580&amp;frasl;195 ~ 50x.
+2. Single Example Prediction We predict a single example here to see how the model would perform in a real-time setting. The sklearn model:
+vs. Pytorch model
+That is again a speedup of 79.6&amp;frasl;1.6 ~50x.
+Small Caveat A small caveat I experienced is that the predictions from the sklearn model and the hummingbird PyTorch model were not exactly the same.
+For example, here are the predictions I got from both models:
+Yes, sometimes, they differ in the 7th digit, which might be a function of the conversion process. I think that it won’t change the final 1 or 0 predictions much. We can also check that:
+scikit_1_0 = scikit_preds[:,1]&amp;gt;0.5 hb_1_0 = hb_preds[:,1]&amp;gt;0.5 print(len(scikit_1_0) == sum(scikit_1_0==hb_1_0)) ------------------------------------------------------------ True  So, for this case, both the models exactly gave the same 1 or 0 predictions for the whole dataset of 100,000 rows.
+So I guess it is okay.
+Conclusion The developers at Microsoft are still working on adding many more operators which range from models to feature engineering like MinMaxScaler or LabelEncoder to the code, and I am hopeful that they will further develop and improve this project. Here is the roadmap to development if you are interested.
+Although Hummingbird is not perfect yet, it is the first system able to run classical ML inference DNN frameworks and proves them mature enough to be used as generic compilers. I will try to include it in my development workflow when it comes to making predictions at high throughput or latency.
+You can find the code for this post as well as all my posts at my GitHub repository.
+Continue Learning If you want to learn more about building and putting a Machine Learning model in production, this course on AWS for implementing Machine Learning applications promises just that.
+Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at Medium or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz
+Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
+    
+
+    <item>
+      <title>The Most Complete Guide to pySpark DataFrames</title>
+      <link>https://mlwhiz.com/blog/2020/06/06/spark_df_complete_guide/</link>
+      <pubDate>Wed, 24 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2020/06/06/spark_df_complete_guide/</guid>
+      
+      
+      <media:content type="image/png" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/spark_df_complete_guide/main.png"></media:content>
+      
+
+      
+      <description>Big Data has become synonymous with Data engineering. But the line between Data Engineering and Data scientists is blurring day by day. At this point in time, I think that Big Data must be in the repertoire of all data scientists.
+Reason: Too much data is getting generated day by day
+And that brings us to Spark which is one of the most used tools when it comes to working with Big Data.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  Big Data has become synonymous with Data engineering. But the line between Data Engineering and Data scientists is blurring day by day. At this point in time, I think that Big Data must be in the repertoire of all data scientists.
+Reason: Too much data is getting generated day by day
+And that brings us to Spark which is one of the most used tools when it comes to working with Big Data.
+While once upon a time Spark used to be heavily reliant on RDD manipulations, Spark has now provided a DataFrame API for us Data Scientists to work with. Here is the documentation for the adventurous folks. But while the documentation is good, it does not explain it from the perspective of a Data Scientist. Neither does it properly document the most common use cases for Data Science.
+In this post, I will talk about installing Spark, standard Spark functionalities you will need to work with DataFrames, and finally some tips to handle the inevitable errors you will face.
+This post is going to be quite long. Actually one of my longest posts on medium, so go on and pick up a Coffee.
+Also here is the Table of Contents, if you want to skip to a specific section:
+ Installation Data 1. Basic Functions  Read See a few rows in the file Change Column Names Select Columns Sort Cast Filter GroupBy Joins  2. Broadcast/Map Side Joins 3. Use SQL with DataFrames 4. Create New Columns  Using Spark Native Functions Using Spark UDFs Using RDDs Using Pandas UDF  5. Spark Window Functions  Ranking Lag Variables Rolling Aggregations  6. Pivot Dataframes 7. Unpivot/Stack Dataframes 8. Salting Some More Tips and Tricks  Caching Save and Load from an intermediate step Repartitioning Reading Parquet File in Local  Conclusion  Installation I am working on installing Spark on Ubuntu 18.04, but the steps should remain the same for MAC too. I am assuming that you already have Anaconda and Python3 installed. After that, you can just go through these steps:
+ Download the Spark Binary from Apache Spark Website. And click on the Download Spark link to download Spark.  Once you have downloaded the above file, you can start with unzipping the file in your home directory. Just Open up the terminal and put these commands in.
+cd ~ cp Downloads/spark-2.4.5-bin-hadoop2.7.tgz ~ tar -zxvf spark-2.4.5-bin-hadoop2.7.tgz  Check your Java Version. As of version 2.4 Spark works with Java 8. You can check your Java Version using the command java -version on the terminal window.
+I had Java 11 in my machine, so I had to run the following commands on my terminal to install and change default Java to Java 8:
+sudo apt install openjdk-8-jdk sudo update-alternatives --config java  You will need to manually select the Java version 8 by typing the selection number.
+Rechecking Java version should give something like:
+Edit your ~/.bashrc file and add the following lines at the end of the file:
+function pysparknb () { #Spark path SPARK_PATH=~/spark-2.4.5-bin-hadoop2.7 export PYSPARK_DRIVER_PYTHON=&amp;quot;jupyter&amp;quot; export PYSPARK_DRIVER_PYTHON_OPTS=&amp;quot;notebook&amp;quot; # For pyarrow 0.15 users, you have to add the line below or you will get an error while using pandas_udf export ARROW_PRE_0_15_IPC_FORMAT=1 **# Change the local[10] to local[numCores in your machine]** $SPARK_PATH/bin/pyspark --master **local[10]** }  Source ~/.bashrc
+source ~/.bashrc  Run the pysparknb function in the terminal and you will be able to access the notebook. You will be able to open a new notebook as well as the sparkcontext will be loaded automatically.
+pysparknb  Data With the installation out of the way, we can move to the more interesting part of this post. I will be working with the Data Science for COVID-19 in South Korea, which is one of the most detailed datasets on the internet for COVID.
+Please note that I will be using this dataset to showcase some of the most useful functionalities of Spark, but this should not be in any way considered a data exploration exercise for this amazing dataset.
+I will mainly work with the following three tables only in this post:
+ Cases
+ Region
+ TimeProvince
+  You can find all the code at the GitHub repository.
+1. Basic Functions Read We can start by loading the files in our dataset using the spark.read.load command. This command reads parquet files, which is the default file format for spark, but you can add the parameter format to read .csv files using it.
+cases = spark.read.load(&amp;quot;/home/rahul/projects/sparkdf/coronavirusdataset/Case.csv&amp;quot;,format=&amp;quot;csv&amp;quot;, sep=&amp;quot;,&amp;quot;, inferSchema=&amp;quot;true&amp;quot;, header=&amp;quot;true&amp;quot;)  See a few rows in the file cases.show()  This file contains the cases grouped by way of the infection spread. This might have helped in the rigorous tracking of Corona Cases in South Korea.
+The way this file looks is great right now, but sometimes as we increase the number of columns, the formatting becomes not too great. I have noticed that the following trick helps in displaying in pandas format in my Jupyter Notebook. The .toPandas() function converts a spark dataframe into a pandas Dataframe which is easier to show.
+cases.limit(10).toPandas()  Change Column Names Sometimes we would like to change the name of columns in our Spark Dataframes. We can do this simply using the below command to change a single column:
+cases = cases.withColumnRenamed(&amp;quot;infection_case&amp;quot;,&amp;quot;infection_source&amp;quot;)  Or for all columns:
+cases = cases.toDF(*[&#39;case_id&#39;, &#39;province&#39;, &#39;city&#39;, &#39;group&#39;, &#39;infection_case&#39;, &#39;confirmed&#39;, &#39;latitude&#39;, &#39;longitude&#39;])  Select Columns We can select a subset of columns using the select keyword.
+cases = cases.select(&#39;province&#39;,&#39;city&#39;,&#39;infection_case&#39;,&#39;confirmed&#39;) cases.show()  Sort We can sort by the number of confirmed cases. Here note that the cases data frame will not change after performing this command as we don’t assign it to any variable.
+cases.sort(&amp;quot;confirmed&amp;quot;).show()  But that is inverted. We want to see the most cases at the top. We can do this using the F.desc function:
+# descending Sort from pyspark.sql import functions as F cases.sort(F.desc(&amp;quot;confirmed&amp;quot;)).show()  We can see the most cases in a logical area in South Korea originated from Shincheonji Church.
+Cast Though we don’t face it in this dataset, there might be scenarios where Pyspark reads a double as integer or string, In such cases, you can use the cast function to convert types.
+from pyspark.sql.types import DoubleType, IntegerType, StringType cases = cases.withColumn(&#39;confirmed&#39;, F.col(&#39;confirmed&#39;).cast(IntegerType())) cases = cases.withColumn(&#39;city&#39;, F.col(&#39;city&#39;).cast(StringType()))  Filter We can filter a data frame using multiple conditions using AND(&amp;amp;), OR(|) and NOT(~) conditions. For example, we may want to find out all the different infection_case in Daegu Province with more than 10 confirmed cases.
+cases.filter((cases.confirmed&amp;gt;10) &amp;amp; (cases.province==&#39;Daegu&#39;)).show()  GroupBy We can use groupBy function with a spark DataFrame too. Pretty much same as the pandas groupBy with the exception that you will need to import pyspark.sql.functions. Here is the list of functions you can use with this function module.
+from pyspark.sql import functions as F cases.groupBy([&amp;quot;province&amp;quot;,&amp;quot;city&amp;quot;]).agg(F.sum(&amp;quot;confirmed&amp;quot;) ,F.max(&amp;quot;confirmed&amp;quot;)).show()  If you don’t like the new column names, you can use the alias keyword to rename columns in the agg command itself.
+cases.groupBy([&amp;quot;province&amp;quot;,&amp;quot;city&amp;quot;]).agg( F.sum(&amp;quot;confirmed&amp;quot;).alias(&amp;quot;TotalConfirmed&amp;quot;),\ F.max(&amp;quot;confirmed&amp;quot;).alias(&amp;quot;MaxFromOneConfirmedCase&amp;quot;)\ ).show()  Joins To Start with Joins we will need to introduce one more CSV file. We will go with the region file which contains region information such as elementary_school_count, elderly_population_ratio, etc.
+regions = spark.read.load(&amp;quot;/home/rahul/projects/sparkdf/coronavirusdataset/Region.csv&amp;quot;,format=&amp;quot;csv&amp;quot;, sep=&amp;quot;,&amp;quot;, inferSchema=&amp;quot;true&amp;quot;, header=&amp;quot;true&amp;quot;) regions.limit(10).toPandas()  We want to get this information in our cases file by joining the two DataFrames. We can do this by using:
+cases = cases.join(regions, [&#39;province&#39;,&#39;city&#39;],how=&#39;left&#39;) cases.limit(10).toPandas()  2. Broadcast/Map Side Joins Sometimes you might face a scenario where you need to join a very big table(~1B Rows) with a very small table(~100–200 rows). The scenario might also involve increasing the size of your database like in the example below.
+Such sort of operations is aplenty in Spark where you might want to apply multiple operations to a particular key. But assuming that the data for each key in the Big table is large, it will involve a lot of data movement. And sometimes so much that the application itself breaks. A small optimization then you can do when joining on such big tables(assuming the other table is small) is to broadcast the small table to each machine/node when you perform a join. You can do this easily using the broadcast keyword. This has been a lifesaver many times with Spark when everything else fails.
+from pyspark.sql.functions import broadcast cases = cases.join(broadcast(regions), [&#39;province&#39;,&#39;city&#39;],how=&#39;left&#39;)  3. Use SQL with DataFrames If you want, you can also use SQL with data frames. Let us try to run some SQL on the cases table.
+We first register the cases dataframe to a temporary table cases_table on which we can run SQL operations. As you can see, the result of the SQL select statement is again a Spark Dataframe.
+cases.registerTempTable(&#39;cases_table&#39;) newDF = sqlContext.sql(&#39;select * from cases_table where confirmed&amp;gt;100&#39;) newDF.show()  I have shown a minimal example above, but you can use pretty much complex SQL queries involving GROUP BY, HAVING, AND ORDER BY clauses as well as aliases in the above query.
+4. Create New Columns There are many ways that you can use to create a column in a PySpark Dataframe. I will try to show the most usable of them.
+Using Spark Native Functions The most pysparkish way to create a new column in a PySpark DataFrame is by using built-in functions. This is the most performant programmatical way to create a new column, so this is the first place I go whenever I want to do some column manipulation.
+We can use .withcolumn along with PySpark SQL functions to create a new column. In essence, you can find String functions, Date functions, and Math functions already implemented using Spark functions. Our first function, the F.col function gives us access to the column. So if we wanted to add 100 to a column, we could use F.col as:
+import pyspark.sql.functions as F casesWithNewConfirmed = cases.withColumn(&amp;quot;NewConfirmed&amp;quot;, 100 &#43; F.col(&amp;quot;confirmed&amp;quot;)) casesWithNewConfirmed.show()  We can also use math functions like F.exp function:
+casesWithExpConfirmed = cases.withColumn(&amp;quot;ExpConfirmed&amp;quot;, F.exp(&amp;quot;confirmed&amp;quot;)) casesWithExpConfirmed.show()  There are a lot of other functions provided in this module, which are enough for most simple use cases. You can check out the functions list here.
+Using Spark UDFs Sometimes we want to do complicated things to a column or multiple columns. This could be thought of as a map operation on a PySpark Dataframe to a single column or multiple columns. While Spark SQL functions do solve many use cases when it comes to column creation, I use Spark UDF whenever I need more matured Python functionality.
+To use Spark UDFs, we need to use the F.udf function to convert a regular python function to a Spark UDF. We also need to specify the return type of the function. In this example the return type is StringType()
+import pyspark.sql.functions as F from pyspark.sql.types import * def casesHighLow(confirmed): if confirmed &amp;lt; 50: return &#39;low&#39; else: return &#39;high&#39; #convert to a UDF Function by passing in the function and return type of function casesHighLowUDF = F.udf(casesHighLow, StringType()) CasesWithHighLow = cases.withColumn(&amp;quot;HighLow&amp;quot;, casesHighLowUDF(&amp;quot;confirmed&amp;quot;)) CasesWithHighLow.show()  Using RDDs This might seem a little odd, but sometimes both the spark UDFs and SQL functions are not enough for a particular use-case. I have observed the RDDs being much more performant in some use-cases in real life. You might want to utilize the better partitioning that you get with spark RDDs. Or you may want to use group functions in Spark RDDs.
+Whatever the case be, I find this way of using RDD to create new columns pretty useful for people who have experience working with RDDs that is the basic building block in the Spark ecosystem. Don’t worry much if you don’t understand it. It is just here for completion.
+The process below makes use of the functionality to convert between Row and pythondict objects. We convert a row object to a dictionary. Work with the dictionary as we are used to and convert that dictionary back to row again. This might come in handy in a lot of situations.
+import math from pyspark.sql import Row def rowwise_function(row): # convert row to python dictionary: row_dict = row.asDict() # Add a new key in the dictionary with the new column name and value. # This might be a big complex function. row_dict[&#39;expConfirmed&#39;] = float(np.exp(row_dict[&#39;confirmed&#39;])) # convert dict to row back again: newrow = Row(**row_dict) # return new row return newrow # convert cases dataframe to RDD cases_rdd = cases.rdd # apply our function to RDD cases_rdd_new = cases_rdd.map(lambda row: rowwise_function(row)) # Convert RDD Back to DataFrame casesNewDf = sqlContext.createDataFrame(cases_rdd_new) casesNewDf.show()  Using Pandas UDF This functionality was introduced in the Spark version 2.3.1. And this allows you to use pandas functionality with Spark. I generally use it when I have to run a groupBy operation on a Spark dataframe or whenever I need to create rolling features and want to use Pandas rolling functions/window functions rather than Spark window functions which we will go through later in this post.
+The way we use it is by using the F.pandas_udf decorator. We assume here that the input to the function will be a pandas data frame. And we need to return a pandas dataframe in turn from this function.
+The only complexity here is that we have to provide a schema for the output Dataframe. We can use the original schema of a dataframe to create the outSchema.
+cases.printSchema()  Here I am using Pandas UDF to get normalized confirmed cases grouped by infection_case. The main advantage here is that I get to work with pandas dataframes in Spark.
+from pyspark.sql.types import IntegerType, StringType, DoubleType, BooleanType from pyspark.sql.types import StructType, StructField # Declare the schema for the output of our function outSchema = StructType([StructField(&#39;case_id&#39;,IntegerType(),True), StructField(&#39;province&#39;,StringType(),True), StructField(&#39;city&#39;,StringType(),True), StructField(&#39;group&#39;,BooleanType(),True), StructField(&#39;infection_case&#39;,StringType(),True), StructField(&#39;confirmed&#39;,IntegerType(),True), StructField(&#39;latitude&#39;,StringType(),True), StructField(&#39;longitude&#39;,StringType(),True), StructField(&#39;normalized_confirmed&#39;,DoubleType(),True) ]) # decorate our function with pandas_udf decorator @F.pandas_udf(outSchema, F.PandasUDFType.GROUPED_MAP) def subtract_mean(pdf): # pdf is a pandas.DataFrame v = pdf.confirmed v = v - v.mean() pdf[&#39;normalized_confirmed&#39;] = v return pdf confirmed_groupwise_normalization = cases.groupby(&amp;quot;infection_case&amp;quot;).apply(subtract_mean) confirmed_groupwise_normalization.limit(10).toPandas()  5. Spark Window Functions Window functions may make a whole blog post in itself. Here I will talk about some of the most important window functions available in spark.
+For this, I will also use one more data CSV, which has dates present as that will help with understanding Window functions much better. I will use the TimeProvince dataframe which contains daily case information for each province.
+Ranking You can get rank as well as dense_rank on a group using this function. For example, you may want to have a column in your cases table that provides the rank of infection_case based on the number of infection_case in a province. We can do this by:
+from pyspark.sql.window import Window windowSpec = Window().partitionBy([&#39;province&#39;]).orderBy(F.desc(&#39;confirmed&#39;)) cases.withColumn(&amp;quot;rank&amp;quot;,F.rank().over(windowSpec)).show()  Lag Variables Sometimes our data science models may need lag based features. For example, a model might have variables like the price last week or sales quantity the previous day. We can create such features using the lag function with window functions. Here I am trying to get the confirmed cases 7 days before. I am filtering to show the results as the first few days of corona cases were zeros. You can see here that the lag_7 day feature is shifted by 7 days.
+from pyspark.sql.window import Window windowSpec = Window().partitionBy([&#39;province&#39;]).orderBy(&#39;date&#39;) timeprovinceWithLag = timeprovince.withColumn(&amp;quot;lag_7&amp;quot;,F.lag(&amp;quot;confirmed&amp;quot;, 7).over(windowSpec)) timeprovinceWithLag.filter(timeprovinceWithLag.date&amp;gt;&#39;2020-03-10&#39;).show()  Rolling Aggregations Sometimes it helps to provide rolling averages to our models. For example, we might want to have a rolling 7-day sales sum/mean as a feature for our sales regression model. Let us calculate the rolling mean of confirmed cases for the last 7 days here. This is what a lot of the people are already doing with this dataset to see the real trends.
+from pyspark.sql.window import Window windowSpec = Window().partitionBy([&#39;province&#39;]).orderBy(&#39;date&#39;).rowsBetween(-6,0) timeprovinceWithRoll = timeprovince.withColumn(&amp;quot;roll_7_confirmed&amp;quot;,F.mean(&amp;quot;confirmed&amp;quot;).over(windowSpec)) timeprovinceWithRoll.filter(timeprovinceWithLag.date&amp;gt;&#39;2020-03-10&#39;).show()  There are a few things here to understand. First is the rowsBetween(-6,0) function that we are using here. This function has a form of rowsBetween(start,end) with both start and end inclusive. Using this we only look at the past 7 days in a particular window including the current_day. Here 0 specifies the current_row and -6 specifies the seventh row previous to current_row. Remember we count starting from 0.
+So to get roll_7_confirmed for date 2020–03–22 we look at the confirmed cases for dates 2020–03–22 to 2020–03–16 and take their mean.
+If we had used rowsBetween(-7,-1) we would just have looked at past 7 days of data and not the current_day.
+One could also find a use for rowsBetween(Window.unboundedPreceding, Window.currentRow) where we take the rows between the first row in a window and the current_row to get running totals. I am calculating cumulative_confirmed here.
+from pyspark.sql.window import Window windowSpec = Window().partitionBy([&#39;province&#39;]).orderBy(&#39;date&#39;).rowsBetween(Window.unboundedPreceding,Window.currentRow) timeprovinceWithRoll = timeprovince.withColumn(&amp;quot;cumulative_confirmed&amp;quot;,F.sum(&amp;quot;confirmed&amp;quot;).over(windowSpec)) timeprovinceWithRoll.filter(timeprovinceWithLag.date&amp;gt;&#39;2020-03-10&#39;).show()  6. Pivot Dataframes Sometimes we may need to have the dataframe in flat format. This happens frequently in movie data where we may want to show genres as columns instead of rows. We can use pivot to do this. Here I am trying to get one row for each date and getting the province names as columns.
+pivotedTimeprovince = timeprovince.groupBy(&#39;date&#39;).pivot(&#39;province&#39;).agg(F.sum(&#39;confirmed&#39;).alias(&#39;confirmed&#39;) , F.sum(&#39;released&#39;).alias(&#39;released&#39;)) pivotedTimeprovince.limit(10).toPandas()  One thing to note here is that we need to provide an aggregation always with the pivot function even if the data has a single row for a date.
+7. Unpivot/Stack Dataframes This is just the opposite of the pivot. Given a pivoted dataframe like above, can we go back to the original?
+Yes, we can. But the way is not that straightforward. For one we will need to replace - with _ in the column names as it interferes with what we are about to do. We can simply rename the columns:
+newColnames = [x.replace(&amp;quot;-&amp;quot;,&amp;quot;_&amp;quot;) for x in pivotedTimeprovince.columns] pivotedTimeprovince = pivotedTimeprovince.toDF(*newColnames)  Now we will need to create an expression which looks like the below:
+&amp;quot;stack(34, &#39;Busan_confirmed&#39; , Busan_confirmed,&#39;Busan_released&#39; , Busan_released,&#39;Chungcheongbuk_do_confirmed&#39; , . . . &#39;Seoul_released&#39; , Seoul_released,&#39;Ulsan_confirmed&#39; , Ulsan_confirmed,&#39;Ulsan_released&#39; , Ulsan_released) as (Type,Value)&amp;quot;  The general format is as follows:
+&amp;quot;stack(&amp;lt;cnt of columns you want to put in one column&amp;gt;, &#39;firstcolname&#39;, firstcolname , &#39;secondcolname&#39; ,secondcolname ......) as (Type, Value)&amp;quot;  It may seem daunting, but we can create such an expression using our programming skills.
+expression = &amp;quot;&amp;quot; cnt=0 for column in pivotedTimeprovince.columns: if column!=&#39;date&#39;: cnt &#43;=1 expression &#43;= f&amp;quot;&#39;{column}&#39; , {column},&amp;quot; expression = f&amp;quot;stack({cnt}, {expression[:-1]}) as (Type,Value)&amp;quot;  And we can unpivot using:
+unpivotedTimeprovince = pivotedTimeprovince.select(&#39;date&#39;,F.expr(exprs))  And voila! we have got our dataframe in a vertical format. There are quite a few column creations, filters, and join operations needed to get exactly the same format as before, but I will not get into those.
+8. Salting Sometimes it might happen that a lot of data goes to a single executor since the same key is assigned for a lot of rows in our data. Salting is another way that helps you to manage data skewness.
+So assuming we want to do the sum operation when we have skewed keys. We can start by creating the Salted Key and then doing a double aggregation on that key as the sum of a sum still equals sum. To understand this assume we need the sum of confirmed infection_cases on the cases table and assume that the key infection_cases is skewed. We can do the required operation in two steps.
+1. Create a Salting Key
+We first create a salting key using a concatenation of infection_case column and a random_number between 0 to 9. In case your key is even more skewed, you can split it in even more than 10 parts.
+cases = cases.withColumn(&amp;quot;salt_key&amp;quot;, F.concat(F.col(&amp;quot;infection_case&amp;quot;), F.lit(&amp;quot;_&amp;quot;), F.monotonically_increasing_id() % 10))  This is how the table looks after the operation:
+2. First Groupby on salt key
+cases_temp = cases.groupBy([&amp;quot;infection_case&amp;quot;,&amp;quot;salt_key&amp;quot;]).agg(F.sum(&amp;quot;confirmed&amp;quot;)).show()  3. Second Group On the original Key
+Here we saw how the sum of sum can be used to get the final sum. You can also make use of facts like:
+ min of min is min
+ max of max is max
+ sum of count is count
+  You can think about ways in which salting as an idea could be applied to joins too.
+Some More Tips and Tricks Caching Spark works on the lazy execution principle. What that means is that nothing really gets executed until you use an action function like the .count() on a dataframe. And if you do a .count function, it generally helps to cache at this step. So I have made it a point to cache() my dataframes whenever I do a .count() operation.
+df.cache().count()  Save and Load from an intermediate step df.write.parquet(&amp;quot;data/df.parquet&amp;quot;) df.unpersist() spark.read.load(&amp;quot;data/df.parquet&amp;quot;)  When you work with Spark you will frequently run with memory and storage issues. While in some cases such issues might be resolved using techniques like broadcasting, salting or cache, sometimes just interrupting the workflow and saving and reloading the whole dataframe at a crucial step has helped me a lot. This helps spark to let go of a lot of memory that gets utilized for storing intermediate shuffle data and unused caches.
+Repartitioning You might want to repartition your data if you feel your data has been skewed while working with all the transformations and joins. The simplest way to do it is by using:
+df = df.repartition(1000)  Sometimes you might also want to repartition by a known scheme as this scheme might be used by a certain join or aggregation operation later on. You can use multiple columns to repartition using:
+df = df.repartition(&#39;cola&#39;, &#39;colb&#39;,&#39;colc&#39;,&#39;cold&#39;)  You can get the number of partitions in a data frame using:
+df.rdd.getNumPartitions()  You can also check out the distribution of records in a partition by using the glom function. This helps in understanding the skew in the data that happens while working with various transformations.
+df.glom().map(len).collect()  Reading Parquet File in Local Sometimes you might want to read the parquet files in a system where Spark is not available. In such cases, I normally use the below code:
+from glob import glob def load_df_from_parquet(parquet_directory): df = pd.DataFrame() for file in glob(f&amp;quot;{parquet_directory}/*&amp;quot;): df = pd.concat([df,pd.read_parquet(file)]) return df  Conclusion This was a big post and congratulations on you reaching the end. These are the most common functionalities I end up using in my day to day job.
+Hopefully, I’ve covered the Dataframe basics well enough to pique your interest and help you get started with Spark. If you want to learn more about how Spark Started or RDD basics take a look at this post
+You can find all the code at this GitHub repository where I keep code for all my posts.
+Continue Learning Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out these excellent courses on Big Data Essentials: HDFS, MapReduce and Spark RDD and Big Data Analysis: Hive, Spark SQL, DataFrames and GraphFrames by Yandex on Coursera.
+I am going to be writing more of such posts in the future too. Let me know what you think about the series. Follow me up at Medium or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz.
+Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
     
 
     <item>
@@ -7103,111 +7564,6 @@ i=1 all_data = [] while True: dom = get_dom(i) datalist=parse_dom(dom) if len(da
 In the next part of the tutorial we will run exploratory data analysis on this data using pandas and maplotlib.
 Till then keep learning.
  ]]>
-        
-      </content:encoded>
-      
-      
-      
-    </item>
-    
-
-    <item>
-      <title>Dictvectorizer for One Hot Encoding of Categorical Data</title>
-      <link>https://mlwhiz.com/blog/2014/09/30/dictvectorizer_one_hot_encoding/</link>
-      <pubDate>Tue, 30 Sep 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://mlwhiz.com/blog/2014/09/30/dictvectorizer_one_hot_encoding/</guid>
-      
-      
-
-      
-      <description>THE PROBLEM: Recently I was working on the Criteo Advertising Competition on Kaggle. The competition was a classification problem which basically involved predicting the click through rates based on several features provided in the train data. Seeing the size of the data (11 GB Train), I felt that going with Vowpal Wabbit might be a better option.
-But after getting to an CV error of .47 on the Kaggle LB and being stuck there , I felt the need to go back to Scikit learn.</description>
-
-      <content:encoded>  
-        
-        <![CDATA[  THE PROBLEM: Recently I was working on the Criteo Advertising Competition on Kaggle. The competition was a classification problem which basically involved predicting the click through rates based on several features provided in the train data. Seeing the size of the data (11 GB Train), I felt that going with Vowpal Wabbit might be a better option.
-But after getting to an CV error of .47 on the Kaggle LB and being stuck there , I felt the need to go back to Scikit learn. While SciKit learn seemed to have a partial_fit method in SGDClassifier, I still could not find a partial_fit method in the OneHotEncoder or DictVectorizer class which made me look to the internet again. Now while I could find many advices on how to use OneHotEncoding and DictVectorizer on small data, I cannot find something relate to data too big to store in the memory. How do I OneHotEncode such a large data file?
-DICTVECTORIZER How does a DictVectorizer works. There is a lot of stuff around the net for this but I dint get to understand much around it. This blog from Zygmuntz of Fastml came to rescue then. Although still it didn’t resolve how to apply that to such large amount of data.
-from sklearn.feature_extraction import DictVectorizer as DV # Create Vectorizer vectorizer = DV( sparse = False ) # Read the whole Data traindata = pd.read_csv(train_file, header=None, sep=&amp;#39;,&amp;#39;, names = colnames) # Retain the categorical Columns train_df = traindata[cat_col] # Convert Panda Data frame to Dict train_dict = train_df.T.to_dict().values() # Create Fit vectorizer.fit(test_dict) THE DATA The data was basically comprised of 40 Features with: 1. First two Columns as ID, Label 2. Next 13 columns Continuous columns labelled I1-I13 3. Next 26 Columns Categorical labelled C1-C26 Further the categorical columns were very sparse and some of the categorical variables could take more than a million different values.
-THE WORKAROUNDS The main problem that I faced was that I could not fit that much data in a DataFrame, even when I have a machine of 16GB, and that lead me to think that do I have a need for such a large data frame. And that lead me to the first part of the solution. I don’t need to load the whole data at once. I just needed to create another dictionary with all the possible combinations and then fit my dictvectorizer on it.
-I know that it is a lot to take in, so let’s take an example to understand it: Let’s say we have a data of infinite size, which has 3 categorical variables: C1 could take values 1-100 C2 could take values 1-3 C3 could take values 1-1000 Then we just have to find which category could take the maximum number of values (i.e. C3 in the above case) and make a dict which contains other categories replicated to contain as many values In other words, we need to make a dict like: {C1 : [1,2,3,……,97,98,99,100]*10 , C2 : [1,2,3]*333&#43;[1] , C3: [1….1000]} Notice the star sign at the last of the list. That means that for every key in the dict the number of values is now 1000(i.e. the maximum number of features).
-And so that is what I did. After we have the Vectorizer Fit, the next task was to transform the data. I took the data transformed it and sent it to my model line by line. P.S. Don’t store the transformed data as around a 100000 records takes ~ 10GB of Hard Disk Space due to the high number of features.
-Hope you find it Informative and happy learning.
- ]]>
-        
-      </content:encoded>
-      
-      
-      
-    </item>
-    
-
-    <item>
-      <title>Learning pyspark – Installation – Part 1</title>
-      <link>https://mlwhiz.com/blog/2014/09/28/learning_pyspark/</link>
-      <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://mlwhiz.com/blog/2014/09/28/learning_pyspark/</guid>
-      
-      
-
-      
-      <description>This is part one of a learning series of pyspark, which is a python binding to the spark program written in Scala.
-The installation is pretty simple. These steps were done on Mac OS Mavericks but should work for Linux too. Here are the steps for the installation:
-1. Download the Binaries: Spark : http://spark.apache.org/downloads.html Scala : http://www.scala-lang.org/download/ Dont use Latest Version of Scala, Use Scala 2.10.x 2. Add these lines to your .</description>
-
-      <content:encoded>  
-        
-        <![CDATA[  This is part one of a learning series of pyspark, which is a python binding to the spark program written in Scala.
-The installation is pretty simple. These steps were done on Mac OS Mavericks but should work for Linux too. Here are the steps for the installation:
-1. Download the Binaries: Spark : http://spark.apache.org/downloads.html Scala : http://www.scala-lang.org/download/ Dont use Latest Version of Scala, Use Scala 2.10.x 2. Add these lines to your .bash_profile: export SCALA_HOME=your_path_to_scala export SPARK_HOME=your_path_to_spark 3. Build Spark(This will take time): brew install sbt cd $SPARK_HOME sbt/sbt assembly 4. Start the Pyspark Shell: $SPARK_HOME/bin/pyspark And Voila. You are running pyspark on your Machine
-To check that everything is properly installed, Lets run a simple program:
-test = sc.parallelize([1,2,3]) test.count() This should return 3. So Now Just Run Hadoop On your Machine and then run pyspark Using:
-cd /usr/local/hadoop/ bin/start-all.sh jps $SPARK_HOME/bin/pyspark  ]]>
-        
-      </content:encoded>
-      
-      
-      
-    </item>
-    
-
-    <item>
-      <title>Hadoop, Mapreduce and More – Part 1</title>
-      <link>https://mlwhiz.com/blog/2014/09/27/hadoop_mapreduce/</link>
-      <pubDate>Sat, 27 Sep 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://mlwhiz.com/blog/2014/09/27/hadoop_mapreduce/</guid>
-      
-      
-
-      
-      <description>It has been some time since I was stalling learning Hadoop. Finally got some free time and realized that Hadoop may not be so difficult after all. What I understood finally is that Hadoop is basically comprised of 3 elements:
- A File System Map – Reduce Its many individual Components.  Let’s go through each of them one by one.
-1. Hadoop as a File System: One of the main things that Hadoop provides is cheap data storage.</description>
-
-      <content:encoded>  
-        
-        <![CDATA[  It has been some time since I was stalling learning Hadoop. Finally got some free time and realized that Hadoop may not be so difficult after all. What I understood finally is that Hadoop is basically comprised of 3 elements:
- A File System Map – Reduce Its many individual Components.  Let’s go through each of them one by one.
-1. Hadoop as a File System: One of the main things that Hadoop provides is cheap data storage. What happens intrinsically is that the Hadoop system takes a file, cuts it into chunks and keeps those chunks at different places in a cluster. Suppose you have a big big file in your local system and you want that file to be:
- On the cloud for easy access Processable in human time  The one thing you can look forward to is Hadoop.
-Assuming that you have got hadoop installed on the amazon cluster you are working on.
-Start the Hadoop Cluster: You need to run the following commands to start the hadoop cluster(Based on location of hadoop installation directory):
-cd /usr/local/hadoop/ bin/start-all.sh jps Adding File to HDFS: Every command in Hadoop starts with hadoop fs and the rest of it works like the UNIX syntax. To add a file “purchases.txt” to the hdfs system:
-hadoop fs -put purchases.txt /usr/purchases.txt 2. Hadoop for Map-Reduce: MapReduce is a programming model and an associated implementation for processing and generating large data sets with a parallel, distributed algorithm on a cluster.
-While Hadoop is implemented in Java, you can use almost any language to do map-reduce in hadoop using hadoop streaming. Suppose you have a big file containing the Name of store and sales of store each hour. And you want to find out the sales per store using map-reduce. Lets Write a sample code for that:
-InputFile
-A,300,12:00 B,234,1:00 C,234,2:00 D,123,3:00 A,123,1:00 B,346,2:00  Mapper.py
-import sys def mapper(): # The Mapper takes inputs from stdin and prints out store name and value for line in sys.stdin: data = line.strip().split(&amp;#34;,&amp;#34;) storeName,Value,time=data print &amp;#34;{0},{1}&amp;#34;.format(storeName,Value) Reducer.py
-import sys def reducer(): # The reducer takes inputs from mapper and prints out aggregated store name and value salesTotal = 0 oldKey = None for line in sys.stdin: data = line.strip().split(&amp;#34;,&amp;#34;) #Adding a little bit of Defensive programming if len(data) != 2: continue curKey,curVal = data if oldKey adn oldKey != curKey: print &amp;#34;{0},{1}&amp;#34;.format(oldKey,salesTotal) salesTotal=0 oldKey=curKey salesTotal &#43;= curVal if oldkey!=None: print &amp;#34;{0},{1}&amp;#34;.format(oldKey,salesTotal) Running the program on shell using pipes
-textfile.txt | ./mapper.py | sort | ./reducer.py Running the program on mapreduce using Hadoop Streaming
-hadoop jar contrib/streaming/hadoop-*streaming*.jar / -file mapper.py -mapper mapper.py / -file reducer.py -reducer reducer.py / -input /inputfile -output /outputfile 3. Hadoop Components: Now if you have been following Hadoop you might have heard about Apache, Cloudera, HortonWorks etc. All of these are Hadoop vendors who provide Hadoop Along with its components. I will talk about the main component of Hadoop here – Hive. So what exactly is Hive: Hive is a SQL like interface to map-reduce queries. So if you don’t understand all the hocus-pocus of map-reduce but know SQL, you can do map-reduce via Hive. Seems Promising? It is. While the syntax is mainly SQL, it is still a little different and there are some quirks that we need to understand to work with Hive. First of all lets open hive command prompt: For that you just have to type “hive”, and voila you are in. Here are some general commands
-show databases # -- See all Databases use database # -- Use a particular Database show tables # -- See all tables in a particular Database describe table  Creating an external table:
-CREATE EXTERNAL TABLE IF NOT EXISTS BXDataSet (ISBN STRING,BookTitle STRING, ImageURLL STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ‘;’ STORED AS TEXTFILE; LOAD DATA INPATH ‘/user/book.csv’ OVERWRITE INTO TABLE BXDataSet; The query commands work the same way as in SQL. You can do all the group by and hive will automatically convert it in map-reduce:
-select * from tablename; Stay Tuned for Part 2 – Where we will talk about another components of Hadoop – PIG To learn more about hadoop in the meantime these are the books I recommend:
-  ]]>
         
       </content:encoded>
       

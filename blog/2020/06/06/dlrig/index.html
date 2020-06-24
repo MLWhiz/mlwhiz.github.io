@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>A definitive guide for Setting up a Deep Learning Workstation with Ubuntu</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="A definitive guide for Setting up a Deep Learning Workstation with Ubuntu" />
+<meta property="og:description" content="Creating my own workstation has been a dream for me if nothing else. I knew the process involved, yet I somehow never got to it.
+But this time I just had to do it. So, I found out some free time to create a Deep Learning Rig with a lot of assistance from NVIDIA folks who were pretty helpful. On that note special thanks to Josh Patterson and Michael Cooper." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2020/06/06/dlrig/" />
+<meta property="og:image" content="https://mlwhiz.com/images/dlrig/main.png" />
+<meta property="article:published_time" content="2020-06-24T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2020-06-24T00:00:00&#43;00:00"/>
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/dlrig/main.png"/>
+
+<meta name="twitter:title" content="A definitive guide for Setting up a Deep Learning Workstation with Ubuntu"/>
+<meta name="twitter:description" content="Creating my own workstation has been a dream for me if nothing else. I knew the process involved, yet I somehow never got to it.
+But this time I just had to do it. So, I found out some free time to create a Deep Learning Rig with a lot of assistance from NVIDIA folks who were pretty helpful. On that note special thanks to Josh Patterson and Michael Cooper."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/resources/index.html">Learning Resources</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">A definitive guide for Setting up a Deep Learning Workstation with Ubuntu</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2020-06-24T00:00:00">June 24, 2020</time>
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/dlrig/main.png" alt="" /></p>
+
+<p>Creating my own workstation has been a dream for me if nothing else. I knew the process involved, yet I somehow never got to it.</p>
+
+<p>But this time I just had to do it. So, I found out some free time to create a Deep Learning Rig with a lot of assistance from NVIDIA folks who were pretty helpful. On that note special thanks to <a href="undefined" rel="nofollow" target="_blank">Josh Patterson</a> and Michael Cooper.</p>
+
+<p>Now, every time I create the whole deep learning setup from an installation viewpoint, I end up facing similar challenges. It’s like running around in circles with all these various dependencies and errors. This time also I had to try many things before the whole configuration came to life without errors.</p>
+
+<p><em>So this time, I made it a point to document everything while installing all the requirements and their dependencies in my own system.</em></p>
+
+<p><strong><em>This post is about setting up your own Linux Ubuntu 18.04 system for deep learning with everything you might need.</em></strong></p>
+
+<p><em>If a pre-built deep learning system is preferred, I can recommend <a href="https://www.exxactcorp.com/Deep-Learning-NVIDIA-GPU-Solutions?utm_source=web%20referral&amp;utm_medium=backlink&amp;utm_campaign=Rahul%20Agarwal" rel="nofollow" target="_blank">Exxact’s line</a> of workstations and servers.</em></p>
+
+<p>I assume that you have a fresh Ubuntu 18.04 installation. I am taking inspiration from <a href="https://blog.slavv.com/@slavivanov?source=post_page-----148c5ebe6415----------------------" rel="nofollow" target="_blank">Slav Ivanov’s</a> excellent <a href="https://blog.slavv.com/the-1700-great-deep-learning-box-assembly-setup-and-benchmarks-148c5ebe6415" rel="nofollow" target="_blank">post</a> in 2017 on creating a Deep Learning box. You can call it the 2020 version for the same post from a setup perspective, but a lot of the things have changed from then, and there are a lot of caveats with specific CUDA versions not supported by Tensorflow and Pytorch.</p>
+
+<h2 id="starting-up">Starting up</h2>
+
+<p><img src="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" alt="" />](/images/dlrig/0.png)</p>
+
+<p>Before we do anything with our installation, we need to update our Linux system to the latest packages. We can do this simply by using:</p>
+
+<pre><code>sudo apt-get update
+sudo apt-get --assume-yes upgrade
+sudo apt-get --assume-yes install tmux build-essential gcc g++ make binutils
+sudo apt-get --assume-yes install software-properties-common
+sudo apt-get --assume-yes install git
+</code></pre>
+
+<h2 id="the-process">The Process</h2>
+
+<p>So now we have everything set up we want to install the following four things:</p>
+
+<ol>
+<li><p><strong>GPU Drivers</strong>: Why is your PC not supporting high graphic resolutions? Or how would your graphics cards talk to your python interfaces?</p></li>
+
+<li><p><strong>CUDA</strong>: A layer to provide access to the GPU’s instruction set and parallel computation units. In simple words, it allows us a way to write code for GPUs</p></li>
+
+<li><p><strong>CuDNN</strong>: a library that provides Primitives for Deep Learning Network</p></li>
+
+<li><p><strong>Pytorch, Tensorflow, and Rapids</strong>: higher-level APIs to code Deep Neural Networks</p></li>
+</ol>
+
+<h3 id="1-gpu-drivers">1. GPU Drivers</h3>
+
+<p>The first step is to add the <a href="https://www.nvidia.com/Download/index.aspx" rel="nofollow" target="_blank">latest</a> NVIDIA drivers. You can choose the GPU product type, Linux 64 bit, and download Type as “Linux Long-Lived” for the 18.04 version.</p>
+
+<p><img src="/images/dlrig/1.png" alt="" /></p>
+
+<p>Clicking on search will take you to a downloads page:</p>
+
+<p><img src="/images/dlrig/2.png" alt="" /></p>
+
+<p>From where you can download the driver file NVIDIA-Linux-x86_64–440.44.run and run it using:</p>
+
+<pre><code>chmod +x NVIDIA-Linux-x86_64–440.44.run
+sudo sh NVIDIA-Linux-x86_64–440.44.run
+</code></pre>
+
+<p>For you, the file may be named differently, depending on the latest version.</p>
+
+<h3 id="2-cuda">2. CUDA</h3>
+
+<p>We will now need to install the CUDA toolkit. Somehow the CUDA toolkit 10.2 is still not supported by Pytorch and Tensorflow, so we will go with CUDA Toolkit 10.1, which is supported by both.</p>
+
+<p>Also, the commands on the product page for CUDA 10.1 didn’t work for me and the commands I ended up using are:</p>
+
+<pre><code>sudo apt-key adv --fetch-keys [http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub](http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub) &amp;&amp; echo &quot;deb [https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64](https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64) /&quot; | sudo tee /etc/apt/sources.list.d/cuda.list
+
+sudo apt-get update &amp;&amp; sudo apt-get -o Dpkg::Options::=&quot;--force-overwrite&quot; install cuda-10-1 cuda-drivers
+</code></pre>
+
+<p>The next step is to create the LD_LIBRARY_PATH and append to the PATH variable the path where CUDA got installed. Just run this below command on your terminal.</p>
+
+<pre><code>echo 'export PATH=/usr/local/cuda-10.1/bin${PATH:+:${PATH}}' &gt;&gt; ~/.bashrc &amp;&amp; echo 'export LD_LIBRARY_PATH=/usr/local/cuda-10.1/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}' &gt;&gt; ~/.bashrc &amp;&amp; source ~/.bashrc &amp;&amp; sudo ldconfig
+</code></pre>
+
+<p>After this, one can check if CUDA is installed correctly by using:</p>
+
+<pre><code>nvcc --version
+</code></pre>
+
+<p><img src="/images/dlrig/3.png" alt="" /></p>
+
+<p>As you can see, the CUDA Version is 10.1 as we wanted. Also, check if you can use the command:</p>
+
+<pre><code>nvidia-smi
+</code></pre>
+
+<p>For me, it showed an error when I used it the first time, but a simple reboot solved the issue. And both my NVIDIA graphic cards show up in all their awesome glory. Don’t worry that the display says the CUDA version supported is 10.2. I was also <a href="https://stackoverflow.com/questions/53422407/different-cuda-versions-shown-by-nvcc-and-nvidia-smi" rel="nofollow" target="_blank">confused</a>, but it is just the maximum CUDA version supported by the graphics driver that is shown in nvidia-smi.</p>
+
+<p><img src="/images/dlrig/4.png" alt="" /></p>
+
+<h3 id="3-cudnn">3.CuDNN</h3>
+
+<p>What is the use of all these libraries if we are not going to train neural nets? CuDNN provides various primitives for Deep Learning, which are later used by PyTorch/TensorFlow.</p>
+
+<p>But we first need to get a <a href="https://developer.nvidia.com/rdp/form/cudnn-download-survey" rel="nofollow" target="_blank">developer account</a> first to install CuDNN. Once you fill-up the signup form, you will see the screen below. Select the cuDNN version that applies to your CUDA version. For me, the CUDA version is 10.1, so I select the second one.</p>
+
+<p><img src="/images/dlrig/5.png" alt="" /></p>
+
+<p>Once you select the appropriate CuDNN version the screen expands:</p>
+
+<p><img src="/images/dlrig/6.png" alt="" /></p>
+
+<p>For my use case, I needed to download three files for Ubuntu 18.04:</p>
+
+<pre><code>[cuDNN Runtime Library for Ubuntu18.04  (Deb)](https://developer.nvidia.com/compute/machine-learning/cudnn/secure/7.6.5.32/Production/10.1_20191031/Ubuntu18_04-x64/libcudnn7_7.6.5.32-1%2Bcuda10.1_amd64.deb)
+
+[cuDNN Developer Library for Ubuntu18.04  (Deb)](https://developer.nvidia.com/compute/machine-learning/cudnn/secure/7.6.5.32/Production/10.1_20191031/Ubuntu18_04-x64/libcudnn7-dev_7.6.5.32-1%2Bcuda10.1_amd64.deb)
+
+[cuDNN Code Samples and User Guide for Ubuntu18.04  (Deb)](https://developer.nvidia.com/compute/machine-learning/cudnn/secure/7.6.5.32/Production/10.1_20191031/Ubuntu18_04-x64/libcudnn7-doc_7.6.5.32-1%2Bcuda10.1_amd64.deb)
+</code></pre>
+
+<p>After downloading these files, you can install using these commands. You can also see the exact <a href="https://docs.nvidia.com/deeplearning/sdk/cudnn-install/index.html" rel="nofollow" target="_blank">commands</a> if anything changes in the future:</p>
+
+<pre><code># Install the runtime library:
+sudo dpkg -i libcudnn7_7.6.5.32-1+cuda10.1_amd64.deb
+
+#Install the developer library:
+sudo dpkg -i libcudnn7-dev_7.6.5.32-1+cuda10.1_amd64.deb
+
+#Install the code samples and cuDNN User Guide(Optional):
+sudo dpkg -i libcudnn7-doc_7.6.5.32-1+cuda10.1_amd64.deb
+</code></pre>
+
+<h3 id="4-anaconda-pytorch-tensorflow-and-rapids">4. Anaconda, Pytorch, Tensorflow, and Rapids</h3>
+
+<p>And finally, we reach the crux. We will install the software which we will interface with most of the times.</p>
+
+<p>We need to install Python with virtual environments. I have downloaded python3 as it is the most stable version as of now, and it is time to say goodbye to Python 2.7. It was great while it lasted. And we will also install Pytorch and Tensorflow. I prefer them both for specific tasks as applicable.</p>
+
+<p>You can go to the <a href="https://www.anaconda.com/distribution/" rel="nofollow" target="_blank">anaconda distribution</a> page and download the package.</p>
+
+<p><img src="/images/dlrig/7.png" alt="" /></p>
+
+<p>Once downloaded you can simply run the shell script:</p>
+
+<pre><code>sudo sh Anaconda3-2019.10-Linux-x86_64.sh
+</code></pre>
+
+<p>You will also need to run these commands on your shell to add some commands to your ~/.bashrc file, and update the conda distribution with the latest libraries versions.</p>
+
+<pre><code>cat &gt;&gt; ~/.bashrc &lt;&lt; 'EOF'
+export PATH=$HOME/anaconda3/bin:${PATH}
+EOF
+
+source .bashrc
+conda upgrade -y --all
+</code></pre>
+
+<p>The next step is creating a new environment for your deep learning pursuits or using an existing one. I created a new Conda environment using:</p>
+
+<pre><code>conda create --name py37
+</code></pre>
+
+<p>Here py37 is the name we provide to this new conda environment. You can activate this conda environment using:</p>
+
+<pre><code>conda activate py37
+</code></pre>
+
+<p>You should now be able to see something like:</p>
+
+<p><img src="/images/dlrig/8.png" alt="Notice the py37 at the start of command in terminal" /><em>Notice the py37 at the start of command in terminal</em></p>
+
+<p>We can now add all our required packages to this environment using pip or conda. The latest version 1.3, as seen from the <a href="https://pytorch.org/get-started/locally/" rel="nofollow" target="_blank">pytorch site</a>, is not yet available for CUDA 10.2, as I already mentioned, so we are in luck with CUDA 10.1. Also, we will need to specify the version of TensorFlow as 2.1.0, as this version was built using 10.1 CUDA.</p>
+
+<p>I also install RAPIDS, which is a library to get your various data science workloads to GPUs. Why use GPUs only for deep learning and not for Data processing? You can get the command to install rapids from the <a href="https://rapids.ai/start.html" rel="nofollow" target="_blank">rapids release selector</a>:</p>
+
+<p><img src="/images/dlrig/9.png" alt="" /></p>
+
+<pre><code>sudo apt install python3-pip
+
+conda install -c rapidsai -c nvidia -c conda-forge -c defaults rapids=0.11 python=3.7 cudatoolkit=10.1
+
+pip install torchvision
+</code></pre>
+
+<p>Since PyTorch installation interfered with TensorFlow, I installed TensorFlow in another environment.</p>
+
+<pre><code>conda create --name tf
+conda activate tf
+pip install --upgrade tensorflow
+</code></pre>
+
+<p>Now we can check if the TF and Pytorch installations are correctly done by using the below commands in their own environments:</p>
+
+<pre><code># Should print True
+python3 -c &quot;import tensorflow as tf; print(tf.test.is_gpu_available())&quot;
+
+# should print cuda
+python3 -c &quot;import torch; print(torch.device('cuda' if torch.cuda.is_available() else 'cpu'))&quot;
+</code></pre>
+
+<p>If the install is showing some errors for TensorFlow or the GPU test is failing, you might want to add these two additional lines at the end of your bashrc file and restart the terminal:</p>
+
+<pre><code>export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64
+
+export CUDA_HOME=/usr/local/cuda
+</code></pre>
+
+<p>You might also want to install jupyter lab or jupyter notebook. Thanks to the developers, the process is as easy as just running jupyter labor jupyter notebook in your terminal, whichever you do prefer. I personally like notebook better without all the unnecessary clutter.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p><strong><em>In this post, I talked about all the software you are going to need to install in your deep learning rig without hassle.</em></strong></p>
+
+<p>You might still need some help and face some problems for which my best advice would be to check out the different NVIDIA and Stack Overflow forums.</p>
+
+<p>So we have got our deep learning rig setup, and its time for some tests now. In the next few posts, I am going to do some benchmarking on the GPUs and will try to write more on various deep Learning libraries one can include in their workflow. So stay tuned.</p>
+
+<h2 id="continue-learning">Continue Learning</h2>
+
+<p>If you want to learn more about <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135386&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fintro-to-deep-learning" rel="nofollow" target="_blank">Deep Learning, here</a> is an excellent course. You can start for free with the 7-day Free Trial.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a></p>
+
+<p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2020/06/06/multiclass_image_classification_pytorch/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">End to End Pipeline for setting up Multiclass Image Classification for Data Scientists</p></a>
+	</div>
+	<div class="post-nav__item post-nav__item--next">
+		<a class="post-nav__link" href="/blog/2020/06/06/fastapi_for_data_scientists/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">A Layman’s Guide for Data Scientists to create APIs in minutes</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<style type="text/css">
+
+  .btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-session {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+</style>
+
+
+<aside class="sidebar">
+  <div style="text-align:center">     
+    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/fastapi_for_data_scientists/">A Layman’s Guide for Data Scientists to create APIs in minutes</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/dlrig/">A definitive guide for Setting up a Deep Learning Workstation with Ubuntu</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/multiclass_image_classification_pytorch/">End to End Pipeline for setting up Multiclass Image Classification for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/hummingbird_faster_ml_preds/">How to run your ML model Predictions 50 times faster?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/spark_df_complete_guide/">The Most Complete Guide to pySpark DataFrames</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/democratize/">Don’t Democratize Data Science</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/cogbias/">Five Cognitive Biases In Data Science (And how to avoid them)</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/dls/">Stop Worrying and Create your Deep Learning Server in 30 minutes</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/24/fstring/">How and Why to use f strings in Python3?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/24/multitextclass/">Using Deep Learning for End to End Multiclass Text Classification</a></li>
+		</ul>
+	</div>
+</div>
+
+<div style="text-align:center">     
+    
+    <a class="btn btn-session" href="https://www.patreon.com/bePatron?u=28135435" role="button">1:1 Session</a>
+  </div>
+
+<br>
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+<center><strong>Subsribe to Get</strong>
+<a href="https://www.amazon.in/Advanced-Python-Tips-explained-Simply-ebook/dp/B07TM3D279">
+  <img src="https://m.media-amazon.com/images/I/41IoozUrQWL.jpg" width="70%" height="70%"></img></a>
+  
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {background-color: #127edc;
+ 
+  }
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: -webkit-center;
+    padding: 10px -5px 10px 3%;}  
+ 
+  #mc_embed_signup form {
+    text-align: -webkit-center;
+    } 
+
+    #mc_embed_signup input.button {
+    min-width: 100px;
+}
+   
+</style>
+
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+</center>
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2020 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
