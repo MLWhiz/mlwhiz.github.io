@@ -1,0 +1,134 @@
+/*---- general stuff ----*/
+//column width
+$columnWidth:  750px;
+
+//font colors
+$primaryTextColor:   #555;
+$secondaryTextColor: #000;
+
+//font family
+$primaryFontFamily:   'Open Sans', sans-serif;  
+$secondaryFontFamily: 'Cabin Sketch', serif;
+
+/*---- hr stuff ----*/
+//hr colors
+$barColor:      #555;
+$barColorHover: #ff9d62;
+$barTextColor:  #555;
+
+//hr size
+$barHeight:      3px;
+$barHeightHover: 5px;
+
+//hr transition
+$barTransition: .3s;
+
+*, 
+*::before, 
+*::after {
+  box-sizing: border-box;
+}
+
+
+
+
+.hero {
+  height: 20em;
+  width: 100%;
+  background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/40447/760f90e82da444fedc33689ace0d1c9e.jpg);
+  margin: 0;
+  padding-top: 1px;
+  background-size: cover;
+  h1 {
+    max-width: $columnWidth;
+    padding: 20px;
+    margin: 0 auto;
+    margin-top: .25em;
+  }
+}
+
+.wrap {
+  max-width: $columnWidth;
+  margin: 0 auto;
+  padding: 0 1em;
+  font-size: 1.25em;
+  position: relative;
+  overflow: hidden;
+  background: white;
+}
+
+hr { 
+  border: none;
+  height: $barHeight;
+  width: 100%;
+  background: $barColor;
+  margin: 0;
+  border-top: 15px solid white;
+  border-bottom: 15px solid white;
+  transition: $barTransition;
+  &::before, 
+  &::after {
+    opacity: 0;
+    font-size: .65em;
+    margin-top: 12px;
+    color: $barTextColor;
+    position: absolute;
+    transition: $barTransition;
+  }
+  &::before {
+    content: attr(data-percent);
+    left: 20px;
+    width: 100%;
+    border-top: 30px solid transparent;
+    margin-top: -18px;
+    transform: translateY(5px);
+  } 
+  &::after {
+    content: attr(data-readtime);
+    right: 20px;
+    transform: translateY(5px);
+  }
+  
+  &:hover {
+    &::before, 
+    &::after {
+      opacity: 1;
+      transition: $barTransition;
+    }
+    &::before {
+      transform: translateY(-5px);
+    }
+    &::after {
+      transform: translateY(-5px);
+    }
+  }
+  
+  &.active {
+    height: $barHeightHover;
+    background: $barColorHover;
+    margin-top: -2px;
+  }
+} 
+ 
+.explanation {
+  position: absolute;
+  font-size: .6em;
+  color: #919191;
+}
+
+@media screen and (max-width: 768px) {
+  html, 
+  body {
+    font-size: 14px;
+  }
+  .hero {
+    background-size: auto;
+    background-position-y: 15%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .hero {
+    background-position-y: 10%;
+  }
+}
