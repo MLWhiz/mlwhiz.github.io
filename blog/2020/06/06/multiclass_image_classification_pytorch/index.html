@@ -563,7 +563,211 @@ optimizer = optim.Adam(model.parameters())
 
 <li><p><strong>Early Stopping:</strong> If the cross-validation loss doesn’t improve for max_epochs_stop stop the training and load the best available model with the minimum validation loss.</p></li>
 </ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">train</span>(model,
+          criterion,
+          optimizer,
+          train_loader,
+          valid_loader,
+          save_file_name,
+          max_epochs_stop<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>,
+          n_epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>,
+          print_every<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>):
+    <span style="color:#e6db74">&#34;&#34;&#34;Train a PyTorch Model
+</span><span style="color:#e6db74">    Params
+</span><span style="color:#e6db74">    --------
+</span><span style="color:#e6db74">        model (PyTorch model): cnn to train
+</span><span style="color:#e6db74">        criterion (PyTorch loss): objective to minimize
+</span><span style="color:#e6db74">        optimizer (PyTorch optimizier): optimizer to compute gradients of model parameters
+</span><span style="color:#e6db74">        train_loader (PyTorch dataloader): training dataloader to iterate through
+</span><span style="color:#e6db74">        valid_loader (PyTorch dataloader): validation dataloader used for early stopping
+</span><span style="color:#e6db74">        save_file_name (str ending in &#39;.pt&#39;): file path to save the model state dict
+</span><span style="color:#e6db74">        max_epochs_stop (int): maximum number of epochs with no improvement in validation loss for early stopping
+</span><span style="color:#e6db74">        n_epochs (int): maximum number of training epochs
+</span><span style="color:#e6db74">        print_every (int): frequency of epochs to print training stats
+</span><span style="color:#e6db74">    Returns
+</span><span style="color:#e6db74">    --------
+</span><span style="color:#e6db74">        model (PyTorch model): trained cnn with best weights
+</span><span style="color:#e6db74">        history (DataFrame): history of train and validation loss and accuracy
+</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
 
+    <span style="color:#75715e"># Early stopping intialization</span>
+    epochs_no_improve <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+    valid_loss_min <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>Inf
+
+    valid_max_acc <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+    history <span style="color:#f92672">=</span> []
+
+    <span style="color:#75715e"># Number of epochs already trained (if using loaded in model weights)</span>
+    <span style="color:#66d9ef">try</span>:
+        <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Model has been trained for: {model.epochs} epochs.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>)
+    <span style="color:#66d9ef">except</span>:
+        model<span style="color:#f92672">.</span>epochs <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+        <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Starting Training from Scratch.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>)
+
+    overall_start <span style="color:#f92672">=</span> timer()
+
+    <span style="color:#75715e"># Main loop</span>
+    <span style="color:#66d9ef">for</span> epoch <span style="color:#f92672">in</span> range(n_epochs):
+
+        <span style="color:#75715e"># keep track of training and validation loss each epoch</span>
+        train_loss <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
+        valid_loss <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
+
+        train_acc <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+        valid_acc <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+
+        <span style="color:#75715e"># Set to training</span>
+        model<span style="color:#f92672">.</span>train()
+        start <span style="color:#f92672">=</span> timer()
+
+        <span style="color:#75715e"># Training loop</span>
+        <span style="color:#66d9ef">for</span> ii, (data, target) <span style="color:#f92672">in</span> enumerate(train_loader):
+            <span style="color:#75715e"># Tensors to gpu</span>
+            <span style="color:#66d9ef">if</span> train_on_gpu:
+                data, target <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>cuda(), target<span style="color:#f92672">.</span>cuda()
+
+            <span style="color:#75715e"># Clear gradients</span>
+            optimizer<span style="color:#f92672">.</span>zero_grad()
+            <span style="color:#75715e"># Predicted outputs are log probabilities</span>
+            output <span style="color:#f92672">=</span> model(data)
+
+            <span style="color:#75715e"># Loss and backpropagation of gradients</span>
+            loss <span style="color:#f92672">=</span> criterion(output, target)
+            loss<span style="color:#f92672">.</span>backward()
+
+            <span style="color:#75715e"># Update the parameters</span>
+            optimizer<span style="color:#f92672">.</span>step()
+
+            <span style="color:#75715e"># Track train loss by multiplying average loss by number of examples in batch</span>
+            train_loss <span style="color:#f92672">+=</span> loss<span style="color:#f92672">.</span>item() <span style="color:#f92672">*</span> data<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>)
+
+            <span style="color:#75715e"># Calculate accuracy by finding max log probability</span>
+            _, pred <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>max(output, dim<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+            correct_tensor <span style="color:#f92672">=</span> pred<span style="color:#f92672">.</span>eq(target<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>view_as(pred))
+            <span style="color:#75715e"># Need to convert correct tensor from int to float to average</span>
+            accuracy <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>mean(correct_tensor<span style="color:#f92672">.</span>type(torch<span style="color:#f92672">.</span>FloatTensor))
+            <span style="color:#75715e"># Multiply average accuracy times the number of examples in batch</span>
+            train_acc <span style="color:#f92672">+=</span> accuracy<span style="color:#f92672">.</span>item() <span style="color:#f92672">*</span> data<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>)
+
+            <span style="color:#75715e"># Track training progress</span>
+            <span style="color:#66d9ef">print</span>(
+                f<span style="color:#e6db74">&#39;Epoch: {epoch}</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">{100 * (ii + 1) / len(train_loader):.2f}</span><span style="color:#e6db74">% c</span><span style="color:#e6db74">omplete. {timer() - start:.2f} seconds elapsed in epoch.&#39;</span>,
+                end<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\r</span><span style="color:#e6db74">&#39;</span>)
+
+        <span style="color:#75715e"># After training loops ends, start validation</span>
+        <span style="color:#66d9ef">else</span>:
+            model<span style="color:#f92672">.</span>epochs <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+
+            <span style="color:#75715e"># Don&#39;t need to keep track of gradients</span>
+            <span style="color:#66d9ef">with</span> torch<span style="color:#f92672">.</span>no_grad():
+                <span style="color:#75715e"># Set to evaluation mode</span>
+                model<span style="color:#f92672">.</span>eval()
+
+                <span style="color:#75715e"># Validation loop</span>
+                <span style="color:#66d9ef">for</span> data, target <span style="color:#f92672">in</span> valid_loader:
+                    <span style="color:#75715e"># Tensors to gpu</span>
+                    <span style="color:#66d9ef">if</span> train_on_gpu:
+                        data, target <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>cuda(), target<span style="color:#f92672">.</span>cuda()
+
+                    <span style="color:#75715e"># Forward pass</span>
+                    output <span style="color:#f92672">=</span> model(data)
+
+                    <span style="color:#75715e"># Validation loss</span>
+                    loss <span style="color:#f92672">=</span> criterion(output, target)
+                    <span style="color:#75715e"># Multiply average loss times the number of examples in batch</span>
+                    valid_loss <span style="color:#f92672">+=</span> loss<span style="color:#f92672">.</span>item() <span style="color:#f92672">*</span> data<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>)
+
+                    <span style="color:#75715e"># Calculate validation accuracy</span>
+                    _, pred <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>max(output, dim<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+                    correct_tensor <span style="color:#f92672">=</span> pred<span style="color:#f92672">.</span>eq(target<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>view_as(pred))
+                    accuracy <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>mean(
+                        correct_tensor<span style="color:#f92672">.</span>type(torch<span style="color:#f92672">.</span>FloatTensor))
+                    <span style="color:#75715e"># Multiply average accuracy times the number of examples</span>
+                    valid_acc <span style="color:#f92672">+=</span> accuracy<span style="color:#f92672">.</span>item() <span style="color:#f92672">*</span> data<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>)
+
+                <span style="color:#75715e"># Calculate average losses</span>
+                train_loss <span style="color:#f92672">=</span> train_loss <span style="color:#f92672">/</span> len(train_loader<span style="color:#f92672">.</span>dataset)
+                valid_loss <span style="color:#f92672">=</span> valid_loss <span style="color:#f92672">/</span> len(valid_loader<span style="color:#f92672">.</span>dataset)
+
+                <span style="color:#75715e"># Calculate average accuracy</span>
+                train_acc <span style="color:#f92672">=</span> train_acc <span style="color:#f92672">/</span> len(train_loader<span style="color:#f92672">.</span>dataset)
+                valid_acc <span style="color:#f92672">=</span> valid_acc <span style="color:#f92672">/</span> len(valid_loader<span style="color:#f92672">.</span>dataset)
+
+                history<span style="color:#f92672">.</span>append([train_loss, valid_loss, train_acc, valid_acc])
+
+                <span style="color:#75715e"># Print training and validation results</span>
+                <span style="color:#66d9ef">if</span> (epoch <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">%</span> print_every <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+                    <span style="color:#66d9ef">print</span>(
+                        f<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Epoch: {epoch} </span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">Training Loss: {train_loss:.4f} </span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">Validation Loss: {valid_loss:.4f}&#39;</span>
+                    )
+                    <span style="color:#66d9ef">print</span>(
+                        f<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\t\t</span><span style="color:#e6db74">Training Accuracy: {100 * train_acc:.2f}%</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74"> Validation Accuracy: {100 * valid_acc:.2f}%&#39;</span>
+                    )
+
+                <span style="color:#75715e"># Save the model if validation loss decreases</span>
+                <span style="color:#66d9ef">if</span> valid_loss <span style="color:#f92672">&lt;</span> valid_loss_min:
+                    <span style="color:#75715e"># Save model</span>
+                    torch<span style="color:#f92672">.</span>save(model<span style="color:#f92672">.</span>state_dict(), save_file_name)
+                    <span style="color:#75715e"># Track improvement</span>
+                    epochs_no_improve <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+                    valid_loss_min <span style="color:#f92672">=</span> valid_loss
+                    valid_best_acc <span style="color:#f92672">=</span> valid_acc
+                    best_epoch <span style="color:#f92672">=</span> epoch
+
+                <span style="color:#75715e"># Otherwise increment count of epochs with no improvement</span>
+                <span style="color:#66d9ef">else</span>:
+                    epochs_no_improve <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+                    <span style="color:#75715e"># Trigger early stopping</span>
+                    <span style="color:#66d9ef">if</span> epochs_no_improve <span style="color:#f92672">&gt;=</span> max_epochs_stop:
+                        <span style="color:#66d9ef">print</span>(
+                            f<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Early Stopping! Total epochs: {epoch}. Best epoch: {best_epoch} with loss: {valid_loss_min:.2f} and acc: {100 * valid_acc:.2f}%&#39;</span>
+                        )
+                        total_time <span style="color:#f92672">=</span> timer() <span style="color:#f92672">-</span> overall_start
+                        <span style="color:#66d9ef">print</span>(
+                            f<span style="color:#e6db74">&#39;{total_time:.2f} total seconds elapsed. {total_time / (epoch+1):.2f} seconds per epoch.&#39;</span>
+                        )
+
+                        <span style="color:#75715e"># Load the best state dict</span>
+                        model<span style="color:#f92672">.</span>load_state_dict(torch<span style="color:#f92672">.</span>load(save_file_name))
+                        <span style="color:#75715e"># Attach the optimizer</span>
+                        model<span style="color:#f92672">.</span>optimizer <span style="color:#f92672">=</span> optimizer
+
+                        <span style="color:#75715e"># Format history</span>
+                        history <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame(
+                            history,
+                            columns<span style="color:#f92672">=</span>[
+                                <span style="color:#e6db74">&#39;train_loss&#39;</span>, <span style="color:#e6db74">&#39;valid_loss&#39;</span>, <span style="color:#e6db74">&#39;train_acc&#39;</span>,
+                                <span style="color:#e6db74">&#39;valid_acc&#39;</span>
+                            ])
+                        <span style="color:#66d9ef">return</span> model, history
+
+    <span style="color:#75715e"># Attach the optimizer</span>
+    model<span style="color:#f92672">.</span>optimizer <span style="color:#f92672">=</span> optimizer
+    <span style="color:#75715e"># Record overall time and print out stats</span>
+    total_time <span style="color:#f92672">=</span> timer() <span style="color:#f92672">-</span> overall_start
+    <span style="color:#66d9ef">print</span>(
+        f<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Best epoch: {best_epoch} with loss: {valid_loss_min:.2f} and acc: {100 * valid_acc:.2f}%&#39;</span>
+    )
+    <span style="color:#66d9ef">print</span>(
+        f<span style="color:#e6db74">&#39;{total_time:.2f} total seconds elapsed. {total_time / (epoch):.2f} seconds per epoch.&#39;</span>
+    )
+    <span style="color:#75715e"># Format history</span>
+    history <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame(
+        history,
+        columns<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;train_loss&#39;</span>, <span style="color:#e6db74">&#39;valid_loss&#39;</span>, <span style="color:#e6db74">&#39;train_acc&#39;</span>, <span style="color:#e6db74">&#39;valid_acc&#39;</span>])
+    <span style="color:#66d9ef">return</span> model, history
+
+<span style="color:#75715e"># Running the model</span>
+model, history <span style="color:#f92672">=</span> train(
+    model,
+    criterion,
+    optimizer,
+    dataloaders[<span style="color:#e6db74">&#39;train&#39;</span>],
+    dataloaders[<span style="color:#e6db74">&#39;val&#39;</span>],
+    save_file_name<span style="color:#f92672">=</span>save_file_name,
+    max_epochs_stop<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>,
+    n_epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>,
+    print_every<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)</code></pre></div>
 <p>Here is the output from running the above code. Just showing the last few epochs. The validation accuracy started at ~55% in the first epoch, and we ended up with a validation accuracy of ~90%.</p>
 
 <p><img src="/images/multiclass_image_classification_pytorch/4.png" alt="" /></p>
@@ -636,7 +840,38 @@ ttadataloader = {
 </code></pre>
 
 <p>We can then get the predictions on the test set using the below function:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">tta_preds_n_averaged</span>(model, test_loader,n<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>):
+    <span style="color:#e6db74">&#34;&#34;&#34;Returns the TTA preds from a trained PyTorch model
+</span><span style="color:#e6db74">    Params
+</span><span style="color:#e6db74">    --------
+</span><span style="color:#e6db74">        model (PyTorch model): trained cnn for inference
+</span><span style="color:#e6db74">        test_loader (PyTorch DataLoader): test dataloader
+</span><span style="color:#e6db74">        
+</span><span style="color:#e6db74">    Returns
+</span><span style="color:#e6db74">    --------
+</span><span style="color:#e6db74">        results (array): results for each category
+</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+    <span style="color:#75715e"># Hold results</span>
+    results <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros((len(test_loader<span style="color:#f92672">.</span>dataset), n_classes))
+    bs <span style="color:#f92672">=</span> test_loader<span style="color:#f92672">.</span>batch_size
+    model<span style="color:#f92672">.</span>eval()
+    <span style="color:#66d9ef">with</span> torch<span style="color:#f92672">.</span>no_grad():
+        <span style="color:#75715e">#aug loop:</span>
+        <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(n):
+            <span style="color:#75715e"># Testing loop</span>
+            tmp_pred <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros((len(test_loader<span style="color:#f92672">.</span>dataset), n_classes))
+            <span style="color:#66d9ef">for</span> i,(data, targets) <span style="color:#f92672">in</span> enumerate(tqdm<span style="color:#f92672">.</span>tqdm(test_loader)):
 
+                <span style="color:#75715e"># Tensors to gpu</span>
+                <span style="color:#66d9ef">if</span> train_on_gpu:
+                    data, targets <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>to(<span style="color:#e6db74">&#39;cuda&#39;</span>), targets<span style="color:#f92672">.</span>to(<span style="color:#e6db74">&#39;cuda&#39;</span>)
+
+                <span style="color:#75715e"># Raw model output</span>
+                out <span style="color:#f92672">=</span> model(data)
+                tmp_pred[i<span style="color:#f92672">*</span>bs:(i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">*</span>bs] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array(out<span style="color:#f92672">.</span>cpu())
+            
+            results<span style="color:#f92672">+=</span>tmp_pred
+    <span style="color:#66d9ef">return</span> results<span style="color:#f92672">/</span>n</code></pre></div>
 <p>In the function above, I am applying the tta_random_image_transforms to each image 5 times before getting its prediction. The final prediction is the average of all five predictions. When we use TTA over the whole test dataset, we noticed that the accuracy increased by around 1%</p>
 
 <pre><code>TTA Accuracy: 89.71%
