@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Deployment could be easy — A Data Scientist’s Guide to deploy an Image detection FastAPI API using Amazon ec2</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="Deployment could be easy — A Data Scientist’s Guide to deploy an Image detection FastAPI API using Amazon ec2" />
+<meta property="og:description" content="Just recently, I had written a simple tutorial on FastAPI, which was about simplifying and understanding how APIs work, and creating a simple API using the framework.
+That post got quite a good response, but the most asked question was how to deploy the FastAPI API on ec2 and how to use images data rather than simple strings, integers, and floats as input to the API.
+I scoured the net for this, but all I could find was some undercooked documentation and a lot of different ways people were taking to deploy using NGINX or ECS." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2020/08/08/deployment_fastapi/" />
+<meta property="og:image" content="https://mlwhiz.com/images/deployment_fastapi/main.png" />
+<meta property="article:published_time" content="2020-08-04T00:00:00&#43;00:00"/>
+
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/deployment_fastapi/main.png"/>
+
+<meta name="twitter:title" content="Deployment could be easy — A Data Scientist’s Guide to deploy an Image detection FastAPI API using Amazon ec2"/>
+<meta name="twitter:description" content="Just recently, I had written a simple tutorial on FastAPI, which was about simplifying and understanding how APIs work, and creating a simple API using the framework.
+That post got quite a good response, but the most asked question was how to deploy the FastAPI API on ec2 and how to use images data rather than simple strings, integers, and floats as input to the API.
+I scoured the net for this, but all I could find was some undercooked documentation and a lot of different ways people were taking to deploy using NGINX or ECS."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,600,600i,700,700i%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+	<link rel="stylesheet" href="/css/style.css">
+	
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/resources/index.html">Learning Resources</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Deployment could be easy — A Data Scientist’s Guide to deploy an Image detection FastAPI API using Amazon ec2</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2020-08-04T00:00:00">August 04, 2020</time>
+	
+		
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/deployment_fastapi/main.png" alt="" /></p>
+
+<p>Just recently, I had written a simple <a href="https://towardsdatascience.com/a-layman-guide-for-data-scientists-to-create-apis-in-minutes-31e6f451cd2f" rel="nofollow" target="_blank">tutorial</a> on FastAPI, which was about simplifying and understanding how APIs work, and creating a simple API using the framework.</p>
+
+<p>That post got quite a good response, but the most asked question was how to deploy the FastAPI API on ec2 and how to use images data rather than simple strings, integers, and floats as input to the API.</p>
+
+<p>I scoured the net for this, but all I could find was some undercooked documentation and a lot of different ways people were taking to deploy using NGINX or ECS. None of those seemed particularly great or complete to me.</p>
+
+<p>So, I tried to do this myself using some help from <a href="https://fastapi.tiangolo.com/deployment/" rel="nofollow" target="_blank">FastAPI documentation</a>. In this post, we will look at predominantly four things:</p>
+
+<ul>
+<li><p>Setting Up an Amazon Instance</p></li>
+
+<li><p>Creating a FastAPI API for Object Detection</p></li>
+
+<li><p>Deploying FastAPI using Docker</p></li>
+
+<li><p>An End to End App with UI</p></li>
+</ul>
+
+<p><strong><em>So, without further ado, let’s get started.</em></strong></p>
+
+<p>You can skip any part you feel you are versed with though I would expect you to go through the whole post, long as it may be, as there’s a lot of interconnection between concepts.</p>
+
+<hr />
+
+<h2 id="1-setting-up-amazon-instance">1. Setting Up Amazon Instance</h2>
+
+<p>Before we start with using the Amazon ec2 instance, we need to set one up. You might need to sign up with your email ID and set up the payment information on the <a href="https://aws.amazon.com/" rel="nofollow" target="_blank">AWS website</a>. Works just like a single sign-on. From here, I will assume that you have an AWS account and so I am going to explain the next essential parts so you can follow through.</p>
+
+<ul>
+<li><p>Go to AWS Management Console using <a href="https://us-west-2.console.aws.amazon.com/console" rel="nofollow" target="_blank">https://us-west-2.console.aws.amazon.com/console</a>.</p></li>
+
+<li><p>On the AWS Management Console, you can select “Launch a Virtual Machine.” Here we are trying to set up the machine where we will deploy our FastAPI API.</p></li>
+
+<li><p>In the first step, you need to choose the AMI template for the machine. I am selecting the 18.04 Ubuntu Server since Ubuntu.</p></li>
+</ul>
+
+<p><img src="/images/deployment_fastapi/0.png" alt="" /></p>
+
+<ul>
+<li>In the second step, I select the t2.xlarge machine, which has 4 CPUs and 16GB RAM rather than the free tier since I want to use an Object Detection model and will need some resources.</li>
+</ul>
+
+<p><img src="/images/deployment_fastapi/1.png" alt="" /></p>
+
+<ul>
+<li>Keep pressing Next until you reach the “6. Configure Security Group” tab. This is the most crucial step here. You will need to add a rule with Type: “HTTP” and Port Range:80.</li>
+</ul>
+
+<p><img src="/images/deployment_fastapi/2.png" alt="" /></p>
+
+<ul>
+<li>You can click on “Review and Launch” and finally on the “Launch” button to launch the instance. Once you click on Launch, you might need to create a new key pair. Here I am creating a new key pair named fastapi and downloading that using the “Download Key Pair” button. Keep this key safe as it would be required every time you need to login to this particular machine. Click on “Launch Instance” after downloading the key pair</li>
+</ul>
+
+<p><img src="/images/deployment_fastapi/3.png" alt="" /></p>
+
+<ul>
+<li>You can now go to your instances to see if your instance has started. Hint: See the Instance state; it should be showing “Running.”</li>
+</ul>
+
+<p><img src="/images/deployment_fastapi/4.png" alt="" /></p>
+
+<ul>
+<li>Also, to note here are the Public DNS(IPv4) address and the IPv4 public IP. We will need it to connect to this machine. For me, they are:</li>
+</ul>
+
+<pre><code>Public DNS (IPv4): ec2-18-237-28-174.us-west-2.compute.amazonaws.com
+
+IPv4 Public IP: 18.237.28.174
+</code></pre>
+
+<ul>
+<li>Once you have that run the following commands in the folder, you saved the fastapi.pem file. If the file is named fastapi.txt you might need to rename it to fastapi.pem.</li>
+</ul>
+
+<pre><code># run fist command if fastapi.txt gets downloaded.
+# mv fastapi.txt fastapi.pem
+
+chmod 400 fastapi.pem
+ssh -i &quot;fastapi.pem&quot; ubuntu@&lt;Your Public DNS(IPv4) Address&gt;
+</code></pre>
+
+<p><img src="/images/deployment_fastapi/5.png" alt="" /></p>
+
+<p>Now we have got our Amazon instance up and running. We can move on here to the real part of the post.</p>
+
+<hr />
+
+<h2 id="2-creating-a-fastapi-api-for-object-detection">2. Creating a FastAPI API for Object Detection</h2>
+
+<p>Before we deploy an API, we need to have an API with us, right? In one of my last posts, I had written a simple <a href="https://towardsdatascience.com/a-layman-guide-for-data-scientists-to-create-apis-in-minutes-31e6f451cd2f" rel="nofollow" target="_blank">tutorial to understand FastAPI</a> and API basics. Do read the post if you want to understand FastAPI basics.</p>
+
+<p>So, here I will try to create an Image detection API. As for how to pass the Image data to the API? The idea is — <strong><em>What is an image but a string?</em></strong> An image is just made up of bytes, and we can encode these bytes as a string. We will use the base64 string representation, which is a popular way to get binary data to ASCII characters. And, we will pass this string representation to give an image to our API.</p>
+
+<h3 id="a-some-image-basics-what-is-image-but-a-string">A. Some Image Basics: What is Image, But a String?</h3>
+
+<p>So, let us first see how we can convert an Image to a String. We read the binary data from an image file using the ‘rb’ flag and turn it into a base64 encoded data representation using the base64.b64encode function. We then use the decode to utf-8 function to get the base encoded data into human-readable characters. Don’t worry if it doesn’t make a lot of sense right now. <strong><em>Just understand that any data is binary, and we can convert binary data to its string representation using a series of steps.</em></strong></p>
+
+<p>As a simple example, if I have a simple image like below, we can convert it to a string using:</p>
+
+<p><img src="/images/deployment_fastapi/6.png" alt="dog_with_ball.jpg" /></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> base64
+
+<span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#34;sample_images/dog_with_ball.jpg&#34;</span>, <span style="color:#e6db74">&#34;rb&#34;</span>) <span style="color:#66d9ef">as</span> image_file:
+    base64str <span style="color:#f92672">=</span> base64<span style="color:#f92672">.</span>b64encode(image_file<span style="color:#f92672">.</span>read())<span style="color:#f92672">.</span>decode(<span style="color:#e6db74">&#34;utf-8&#34;</span>)</code></pre></div>
+<p><img src="/images/deployment_fastapi/7.png" alt="We can get a string representation of any image" /></p>
+
+<p>Here I have got a string representation of a file named dog_with_ball.png on my laptop.</p>
+
+<p>Great, we now have a string representation of an image. And, we can send this string representation to our FastAPI. But we also need to have a way to read an image back from its string representation. After all, our image detection API using PyTorch and any other package needs to have an image object that they can predict, and those methods don’t work on a string.</p>
+
+<p>So here is a way to create a PIL image back from an image’s base64 string. Mostly we just do the reverse steps in the same order. We encode in ‘utf-8’ using .encode. We then use base64.b64decode to decode to bytes. We use these bytes to create a bytes object using io.BytesIO and use Image.open to open this bytes IO object as a PIL image, which can easily be used as an input to my PyTorch prediction code.*** Again simply, it is just a way to convert base64 image string to an actual image.***</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> base64
+<span style="color:#f92672">import</span> io
+<span style="color:#f92672">from</span> PIL <span style="color:#f92672">import</span> Image
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">base64str_to_PILImage</span>(base64str):
+   base64_img_bytes <span style="color:#f92672">=</span> base64str<span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#39;utf-8&#39;</span>)
+   base64bytes <span style="color:#f92672">=</span> base64<span style="color:#f92672">.</span>b64decode(base64_img_bytes)
+   bytesObj <span style="color:#f92672">=</span> io<span style="color:#f92672">.</span>BytesIO(base64bytes)
+   img <span style="color:#f92672">=</span> Image<span style="color:#f92672">.</span>open(bytesObj) 
+   <span style="color:#66d9ef">return</span> img</code></pre></div>
+<p>So does this function work? Let’s see for ourselves. We can use just the string to get back the image.</p>
+
+<p><img src="/images/deployment_fastapi/8.png" alt="" /></p>
+
+<p>And we have our happy dog back again. Looks better than the string.</p>
+
+<h3 id="b-writing-the-actual-fastapi-code">B. Writing the Actual FastAPI code</h3>
+
+<p>So, as now we understand that our API can get an image as a string from our user, let’s create an object detection API that makes use of this image as a string and outputs the bounding boxes for the object with the object classes as well.</p>
+
+<p>Here, I will be using a Pytorch pre-trained fasterrcnn_resnet50_fpn detection model from the torchvision.models for object detection, which is trained on the COCO dataset to keep the code simple, but one can use any model. You can look at these posts if you want to train your custom <a href="https://towardsdatascience.com/end-to-end-pipeline-for-setting-up-multiclass-image-classification-for-data-scientists-2e051081d41c" rel="nofollow" target="_blank">image classification</a> or <a href="https://lionbridge.ai/articles/create-an-end-to-end-object-detection-pipeline-using-yolov5/" rel="nofollow" target="_blank">image detection</a> model using Pytorch.</p>
+
+<p>Below is the full code for the FastAPI. Although it may look long, we already know all the parts. In this code, we essentially do the following steps:</p>
+
+<ul>
+<li><p>Create our fast API app using the FastAPI() constructor.</p></li>
+
+<li><p>Load our model and the classes it was trained on. I got the list of classes from the PyTorch <a href="https://pytorch.org/docs/stable/torchvision/models.html" rel="nofollow" target="_blank">docs</a>.</p></li>
+
+<li><p>We also defined a new class Input , which uses a library called pydantic to validate the input data types that we will get from the API end-user. Here the end-user gives the base64str and some score threshold for object detection prediction.</p></li>
+
+<li><p>We add a function called base64str_to_PILImage which does just what it is named.</p></li>
+
+<li><p>And we write a predict function called get_predictionbase64 which returns a dict of bounding boxes and classes using a base64 string representation of an image and a threshold as an input. We also add <a href="http://twitter.com/app" rel="nofollow" target="_blank">@app</a>.put(“/predict”) on top of this function to define our endpoint. If you need to understand put and endpoint refer to my previous <a href="https://towardsdatascience.com/a-layman-guide-for-data-scientists-to-create-apis-in-minutes-31e6f451cd2f" rel="nofollow" target="_blank">post</a> on FastAPI.</p></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> fastapi <span style="color:#f92672">import</span> FastAPI
+<span style="color:#f92672">from</span> pydantic <span style="color:#f92672">import</span> BaseModel
+<span style="color:#f92672">import</span> torchvision
+<span style="color:#f92672">from</span> torchvision <span style="color:#f92672">import</span> transforms
+<span style="color:#f92672">import</span> torch
+<span style="color:#f92672">from</span> torchvision.models.detection.faster_rcnn <span style="color:#f92672">import</span> FastRCNNPredictor
+<span style="color:#f92672">from</span> PIL <span style="color:#f92672">import</span> Image
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> cv2
+<span style="color:#f92672">import</span> io<span style="color:#f92672">,</span> json
+<span style="color:#f92672">import</span> base64
+
+
+app <span style="color:#f92672">=</span> FastAPI()
+
+<span style="color:#75715e"># load a pre-trained Model and convert it to eval mode. </span>
+<span style="color:#75715e"># This model loads just once when we start the API.</span>
+model <span style="color:#f92672">=</span> torchvision<span style="color:#f92672">.</span>models<span style="color:#f92672">.</span>detection<span style="color:#f92672">.</span>fasterrcnn_resnet50_fpn(pretrained<span style="color:#f92672">=</span>True)
+COCO_INSTANCE_CATEGORY_NAMES <span style="color:#f92672">=</span> [
+    <span style="color:#e6db74">&#39;__background__&#39;</span>, <span style="color:#e6db74">&#39;person&#39;</span>, <span style="color:#e6db74">&#39;bicycle&#39;</span>, <span style="color:#e6db74">&#39;car&#39;</span>, <span style="color:#e6db74">&#39;motorcycle&#39;</span>, <span style="color:#e6db74">&#39;airplane&#39;</span>, <span style="color:#e6db74">&#39;bus&#39;</span>,
+    <span style="color:#e6db74">&#39;train&#39;</span>, <span style="color:#e6db74">&#39;truck&#39;</span>, <span style="color:#e6db74">&#39;boat&#39;</span>, <span style="color:#e6db74">&#39;traffic light&#39;</span>, <span style="color:#e6db74">&#39;fire hydrant&#39;</span>, <span style="color:#e6db74">&#39;N/A&#39;</span>, <span style="color:#e6db74">&#39;stop sign&#39;</span>,
+    <span style="color:#e6db74">&#39;parking meter&#39;</span>, <span style="color:#e6db74">&#39;bench&#39;</span>, <span style="color:#e6db74">&#39;bird&#39;</span>, <span style="color:#e6db74">&#39;cat&#39;</span>, <span style="color:#e6db74">&#39;dog&#39;</span>, <span style="color:#e6db74">&#39;horse&#39;</span>, <span style="color:#e6db74">&#39;sheep&#39;</span>, <span style="color:#e6db74">&#39;cow&#39;</span>,
+    <span style="color:#e6db74">&#39;elephant&#39;</span>, <span style="color:#e6db74">&#39;bear&#39;</span>, <span style="color:#e6db74">&#39;zebra&#39;</span>, <span style="color:#e6db74">&#39;giraffe&#39;</span>, <span style="color:#e6db74">&#39;N/A&#39;</span>, <span style="color:#e6db74">&#39;backpack&#39;</span>, <span style="color:#e6db74">&#39;umbrella&#39;</span>, <span style="color:#e6db74">&#39;N/A&#39;</span>, <span style="color:#e6db74">&#39;N/A&#39;</span>,
+    <span style="color:#e6db74">&#39;handbag&#39;</span>, <span style="color:#e6db74">&#39;tie&#39;</span>, <span style="color:#e6db74">&#39;suitcase&#39;</span>, <span style="color:#e6db74">&#39;frisbee&#39;</span>, <span style="color:#e6db74">&#39;skis&#39;</span>, <span style="color:#e6db74">&#39;snowboard&#39;</span>, <span style="color:#e6db74">&#39;sports ball&#39;</span>,
+    <span style="color:#e6db74">&#39;kite&#39;</span>, <span style="color:#e6db74">&#39;baseball bat&#39;</span>, <span style="color:#e6db74">&#39;baseball glove&#39;</span>, <span style="color:#e6db74">&#39;skateboard&#39;</span>, <span style="color:#e6db74">&#39;surfboard&#39;</span>, <span style="color:#e6db74">&#39;tennis racket&#39;</span>,
+    <span style="color:#e6db74">&#39;bottle&#39;</span>, <span style="color:#e6db74">&#39;N/A&#39;</span>, <span style="color:#e6db74">&#39;wine glass&#39;</span>, <span style="color:#e6db74">&#39;cup&#39;</span>, <span style="color:#e6db74">&#39;fork&#39;</span>, <span style="color:#e6db74">&#39;knife&#39;</span>, <span style="color:#e6db74">&#39;spoon&#39;</span>, <span style="color:#e6db74">&#39;bowl&#39;</span>,
+    <span style="color:#e6db74">&#39;banana&#39;</span>, <span style="color:#e6db74">&#39;apple&#39;</span>, <span style="color:#e6db74">&#39;sandwich&#39;</span>, <span style="color:#e6db74">&#39;orange&#39;</span>, <span style="color:#e6db74">&#39;broccoli&#39;</span>, <span style="color:#e6db74">&#39;carrot&#39;</span>, <span style="color:#e6db74">&#39;hot dog&#39;</span>, <span style="color:#e6db74">&#39;pizza&#39;</span>,
+    <span style="color:#e6db74">&#39;donut&#39;</span>, <span style="color:#e6db74">&#39;cake&#39;</span>, <span style="color:#e6db74">&#39;chair&#39;</span>, <span style="color:#e6db74">&#39;couch&#39;</span>, <span style="color:#e6db74">&#39;potted plant&#39;</span>, <span style="color:#e6db74">&#39;bed&#39;</span>, <span style="color:#e6db74">&#39;N/A&#39;</span>, <span style="color:#e6db74">&#39;dining table&#39;</span>,
+    <span style="color:#e6db74">&#39;N/A&#39;</span>, <span style="color:#e6db74">&#39;N/A&#39;</span>, <span style="color:#e6db74">&#39;toilet&#39;</span>, <span style="color:#e6db74">&#39;N/A&#39;</span>, <span style="color:#e6db74">&#39;tv&#39;</span>, <span style="color:#e6db74">&#39;laptop&#39;</span>, <span style="color:#e6db74">&#39;mouse&#39;</span>, <span style="color:#e6db74">&#39;remote&#39;</span>, <span style="color:#e6db74">&#39;keyboard&#39;</span>, <span style="color:#e6db74">&#39;cell phone&#39;</span>,
+    <span style="color:#e6db74">&#39;microwave&#39;</span>, <span style="color:#e6db74">&#39;oven&#39;</span>, <span style="color:#e6db74">&#39;toaster&#39;</span>, <span style="color:#e6db74">&#39;sink&#39;</span>, <span style="color:#e6db74">&#39;refrigerator&#39;</span>, <span style="color:#e6db74">&#39;N/A&#39;</span>, <span style="color:#e6db74">&#39;book&#39;</span>,
+    <span style="color:#e6db74">&#39;clock&#39;</span>, <span style="color:#e6db74">&#39;vase&#39;</span>, <span style="color:#e6db74">&#39;scissors&#39;</span>, <span style="color:#e6db74">&#39;teddy bear&#39;</span>, <span style="color:#e6db74">&#39;hair drier&#39;</span>, <span style="color:#e6db74">&#39;toothbrush&#39;</span>
+]
+model<span style="color:#f92672">.</span>eval()
+
+<span style="color:#75715e"># define the Input class</span>
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Input</span>(BaseModel):
+    base64str : str
+    threshold : float
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">base64str_to_PILImage</span>(base64str):
+    base64_img_bytes <span style="color:#f92672">=</span> base64str<span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#39;utf-8&#39;</span>)
+    base64bytes <span style="color:#f92672">=</span> base64<span style="color:#f92672">.</span>b64decode(base64_img_bytes)
+    bytesObj <span style="color:#f92672">=</span> io<span style="color:#f92672">.</span>BytesIO(base64bytes)
+    img <span style="color:#f92672">=</span> Image<span style="color:#f92672">.</span>open(bytesObj) 
+    <span style="color:#66d9ef">return</span> img
+
+<span style="color:#a6e22e">@app.put</span>(<span style="color:#e6db74">&#34;/predict&#34;</span>)
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_predictionbase64</span>(d:Input):
+    <span style="color:#e6db74">&#39;&#39;&#39;
+</span><span style="color:#e6db74">    FastAPI API will take a base 64 image as input and return a json object
+</span><span style="color:#e6db74">    &#39;&#39;&#39;</span>
+    <span style="color:#75715e"># Load the image</span>
+    img <span style="color:#f92672">=</span> base64str_to_PILImage(d<span style="color:#f92672">.</span>base64str)
+    <span style="color:#75715e"># Convert image to tensor</span>
+    transform <span style="color:#f92672">=</span> transforms<span style="color:#f92672">.</span>Compose([transforms<span style="color:#f92672">.</span>ToTensor()])
+    img <span style="color:#f92672">=</span> transform(img)
+    <span style="color:#75715e"># get prediction on image</span>
+    pred <span style="color:#f92672">=</span> model([img])
+    pred_class <span style="color:#f92672">=</span> [COCO_INSTANCE_CATEGORY_NAMES[i] <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> list(pred[<span style="color:#ae81ff">0</span>][<span style="color:#e6db74">&#39;labels&#39;</span>]<span style="color:#f92672">.</span>numpy())]
+    pred_boxes <span style="color:#f92672">=</span> [[(float(i[<span style="color:#ae81ff">0</span>]), float(i[<span style="color:#ae81ff">1</span>])), (float(i[<span style="color:#ae81ff">2</span>]), float(i[<span style="color:#ae81ff">3</span>]))] <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> list(pred[<span style="color:#ae81ff">0</span>][<span style="color:#e6db74">&#39;boxes&#39;</span>]<span style="color:#f92672">.</span>detach()<span style="color:#f92672">.</span>numpy())] 
+    pred_score <span style="color:#f92672">=</span> list(pred[<span style="color:#ae81ff">0</span>][<span style="color:#e6db74">&#39;scores&#39;</span>]<span style="color:#f92672">.</span>detach()<span style="color:#f92672">.</span>numpy())
+    pred_t <span style="color:#f92672">=</span> [pred_score<span style="color:#f92672">.</span>index(x) <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> pred_score <span style="color:#66d9ef">if</span> x <span style="color:#f92672">&gt;</span> d<span style="color:#f92672">.</span>threshold][<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+    pred_boxes <span style="color:#f92672">=</span> pred_boxes[:pred_t<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>]
+    pred_class <span style="color:#f92672">=</span> pred_class[:pred_t<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>]
+    <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#39;boxes&#39;</span>: pred_boxes,
+        <span style="color:#e6db74">&#39;classes&#39;</span> : pred_class}</code></pre></div>
+<h3 id="c-local-before-global-test-the-fastapi-code-locally">C. Local Before Global: Test the FastAPI code locally</h3>
+
+<p>Before we move on to AWS, let us check if the code works on our local machine. We can start the API on our laptop using:</p>
+
+<pre><code>uvicorn fastapiapp:app --reload
+</code></pre>
+
+<p>The above means that your API is now running on your local server, and the &ndash;reload flag indicates that the API gets updated automatically when you change the fastapiapp.py file. This is very helpful while developing and testing, but you should remove this &ndash;reload flag when you put the API in production.</p>
+
+<p>You should see something like:</p>
+
+<p><img src="/images/deployment_fastapi/9.png" alt="" /></p>
+
+<p>You can now try to access this API and see if it works using the requests module:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> requests<span style="color:#f92672">,</span>json
+
+payload <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>dumps({
+  <span style="color:#e6db74">&#34;base64str&#34;</span>: base64str,
+  <span style="color:#e6db74">&#34;threshold&#34;</span>: <span style="color:#ae81ff">0.5</span>
+})
+
+response <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>put(<span style="color:#e6db74">&#34;[http://127.0.0.1:8000/predict](http://127.0.0.1:8000/predict)&#34;</span>,data <span style="color:#f92672">=</span> payload)
+data_dict <span style="color:#f92672">=</span> response<span style="color:#f92672">.</span>json()</code></pre></div>
+<p><img src="/images/deployment_fastapi/10.png" alt="" /></p>
+
+<p>And so we get our results using the API. This image contains a dog and a sports ball. We also have corner 1 (x1,y1) and corner 2 (x2,y2) coordinates of our bounding boxes.</p>
+
+<h3 id="d-lets-visualize">D. Lets Visualize</h3>
+
+<p>Although not strictly necessary, we can visualize how the results look in our Jupyter notebook:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> PIL <span style="color:#f92672">import</span> Image
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> cv2
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">PILImage_to_cv2</span>(img):
+    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>asarray(img)
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">drawboundingbox</span>(img, boxes,pred_cls, rect_th<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, text_size<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, text_th<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>):
+    img <span style="color:#f92672">=</span> PILImage_to_cv2(img)
+    class_color_dict <span style="color:#f92672">=</span> {}
+    
+    <span style="color:#75715e">#initialize some random colors for each class for better looking bounding boxes</span>
+    <span style="color:#66d9ef">for</span> cat <span style="color:#f92672">in</span> pred_cls:
+        class_color_dict[cat] <span style="color:#f92672">=</span> [random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">255</span>) <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>)]
+    
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(boxes)):
+        cv2<span style="color:#f92672">.</span>rectangle(img, (int(boxes[i][<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">0</span>]), int(boxes[i][<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">1</span>])),
+                      (int(boxes[i][<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">0</span>]),int(boxes[i][<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">1</span>])),
+                      color<span style="color:#f92672">=</span>class_color_dict[pred_cls[i]], thickness<span style="color:#f92672">=</span>rect_th)
+        cv2<span style="color:#f92672">.</span>putText(img,pred_cls[i], (int(boxes[i][<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">0</span>]), int(boxes[i][<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">1</span>])),  cv2<span style="color:#f92672">.</span>FONT_HERSHEY_SIMPLEX, text_size, class_color_dict[pred_cls[i]],thickness<span style="color:#f92672">=</span>text_th) <span style="color:#75715e"># Write the prediction class</span>
+    plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">20</span>,<span style="color:#ae81ff">30</span>))
+    plt<span style="color:#f92672">.</span>imshow(img)
+    plt<span style="color:#f92672">.</span>xticks([])
+    plt<span style="color:#f92672">.</span>yticks([])
+    plt<span style="color:#f92672">.</span>show()
+    
+img <span style="color:#f92672">=</span> Image<span style="color:#f92672">.</span>open(<span style="color:#e6db74">&#34;sample_images/dog_with_ball.jpg&#34;</span>)
+drawboundingbox(img, data_dict[<span style="color:#e6db74">&#39;boxes&#39;</span>], data_dict[<span style="color:#e6db74">&#39;classes&#39;</span>])</code></pre></div>
+<p>Here is the output:</p>
+
+<p><img src="/images/deployment_fastapi/11.png" alt="" /></p>
+
+<p>Here you will note that I got the image from the local file system, and that sort of can be considered as cheating as we don’t want to save every file that the user sends to us through a web UI. We should have been able to use the same base64string object that we also had to create this image. Right?</p>
+
+<p>Not to worry, we could do that too. Remember our base64str_to_PILImage function? We could have used that also.</p>
+
+<pre><code>img = base64str_to_PILImage(base64str)
+drawboundingbox(img, data_dict['boxes'], data_dict['classes'])
+</code></pre>
+
+<p><img src="/images/deployment_fastapi/12.png" alt="" /></p>
+
+<p>That looks great. We have our working FastAPI, and we also have our amazon instance. We can now move on to Deployment.</p>
+
+<hr />
+
+<h2 id="3-deployment-on-amazon-ec2">3. Deployment on Amazon ec2</h2>
+
+<p>Till now, we have created an AWS instance and, we have also created a FastAPI that takes as input a base64 string representation of an image and returns bounding boxes and the associated class. But all the FastAPI code still resides in our local machine. <strong><em>How do we put it on the ec2 server? And run predictions on the cloud.</em></strong></p>
+
+<h3 id="a-install-docker">A. Install Docker</h3>
+
+<p>We will deploy our app using docker, as is suggested by the fastAPI creator himself. I will try to explain how docker works as we go. The below part may look daunting but it just is a series of commands and steps. So stay with me.</p>
+
+<p>We can start by installing docker using:</p>
+
+<pre><code>sudo apt-get update
+sudo apt install docker.io
+</code></pre>
+
+<p>We then start the docker service using:</p>
+
+<pre><code>sudo service docker start
+</code></pre>
+
+<h3 id="b-creating-the-folder-structure-for-docker">B. Creating the folder structure for docker</h3>
+
+<pre><code>└── dockerfastapi
+    ├── Dockerfile
+    ├── app
+    │   └── main.py
+    └── requirements.txt
+</code></pre>
+
+<p>Here dockerfastapi is our project’s main folder. And here are the different files in this folder:</p>
+
+<p><strong>i. requirements.txt:</strong> Docker needs a file, which tells it which all libraries are required for our app to run. Here I have listed all the libraries I used in my Fastapi API.</p>
+
+<pre><code>numpy
+opencv-python
+matplotlib
+torchvision
+torch
+fastapi
+pydantic
+</code></pre>
+
+<p><strong>ii. Dockerfile:</strong> The second file is Dockerfile.</p>
+
+<pre><code>FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
+
+COPY ./app /app
+COPY requirements.txt .
+RUN pip --no-cache-dir install -r requirements.txt
+</code></pre>
+
+<p><strong><em>How Docker works?:</em></strong> You can skip this section, but it will help to get some understanding of how docker works.</p>
+
+<p><img src="/images/deployment_fastapi/13.png" alt="" /></p>
+
+<p>The dockerfile can be thought of something like a sh file,which contains commands to create a docker image that can be run in a container. One can think of a docker image as an environment where everything like Python and Python libraries is installed. A container is a unit which is just an isolated box in our system that uses a dockerimage. The advantage of using docker is that we can create multiple docker images and use them in multiple containers. For example, one image might contain python36, and another can contain python37. And we can spawn multiple containers in a single Linux server.</p>
+
+<p>Our Dockerfile contains a few things:</p>
+
+<ul>
+<li><p>FROM command: Here the first line FROM specifies that we start with tiangolo’s (FastAPI creator) Docker image. As per his site: “<em>This image has an “auto-tuning” mechanism included so that you can just add your code and get that same high performance automatically. And without making sacrifices”</em>. What we are doing is just starting from an image that installs python3.7 for us along with some added configurations for uvicorn and gunicorn ASGI servers and a start.sh file for ASGI servers automatically. For adventurous souls, particularly <a href="https://github.com/tiangolo/uvicorn-gunicorn-fastapi-docker/blob/master/docker-images/python3.7.dockerfile" rel="nofollow" target="_blank">commandset</a>1 and <a href="https://github.com/tiangolo/uvicorn-gunicorn-docker/blob/master/docker-images/python3.7.dockerfile" rel="nofollow" target="_blank">commandset2</a> get executed through a sort of a daisy-chaining of commands.</p></li>
+
+<li><p>COPY command: We can think of a docker image also as a folder that contains files and such. Here we copy our app folder and the requirements.txt file, which we created earlier to our docker image.</p></li>
+
+<li><p>RUN Command: We run pip install command to install all our python dependencies using the requirements.txt file that is now on the docker image.</p></li>
+</ul>
+
+<p><strong>iii. main.py:</strong> This file contains the fastapiapp.py code we created earlier. Remember to keep the name of the file main.py only.</p>
+
+<h3 id="c-docker-build">C. Docker Build</h3>
+
+<p>We have got all our files in the required structure, but we haven’t yet used any docker command. We will first need to build an image containing all dependencies using Dockerfile.</p>
+
+<p>We can do this simply by:</p>
+
+<pre><code>sudo docker build -t myimage .
+</code></pre>
+
+<p>This downloads, copies and installs some files and libraries from tiangolo’s image and creates an image called myimage. This myimage has python37 and some python packages as specified by requirements.txt file.</p>
+
+<p><img src="/images/deployment_fastapi/14.png" alt="" /></p>
+
+<p>We will then just need to start a container that runs this image. We can do this using:</p>
+
+<pre><code>sudo docker run -d --name mycontainer -p 80:80 myimage
+</code></pre>
+
+<p>This will create a container named mycontainer which runs our docker image myimage. The part 80:80 connects our docker container port 80 to our Linux machine port 80.</p>
+
+<p><img src="/images/deployment_fastapi/15.png" alt="" /></p>
+
+<p>And actually that’s it. At this point, you should be able to open the below URL in your browser.</p>
+
+<pre><code># &lt;IPV4 public IP&gt;/docs
+URL: 18.237.28.174/docs
+</code></pre>
+
+<p><img src="/images/deployment_fastapi/16.png" alt="" /></p>
+
+<p>And we can check our app programmatically using:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">payload <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>dumps({
+  <span style="color:#e6db74">&#34;base64str&#34;</span>: base64str,
+  <span style="color:#e6db74">&#34;threshold&#34;</span>: <span style="color:#ae81ff">0.5</span>
+})
+
+response <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>put(<span style="color:#e6db74">&#34;[http://18.237.28.174/predict](http://18.237.28.174/predict)&#34;</span>,data <span style="color:#f92672">=</span> payload)
+data_dict <span style="color:#f92672">=</span> response<span style="color:#f92672">.</span>json()
+<span style="color:#66d9ef">print</span>(data_dict)</code></pre></div>
+<p><img src="/images/deployment_fastapi/17.png" alt="" />
+&gt; # Yup, finally our API is deployed.</p>
+
+<h3 id="d-troubleshooting-as-the-real-world-is-not-perfect">D. Troubleshooting as the real world is not perfect</h3>
+
+<p>All the above was good and will just work out of the box if you follow the exact instructions, but the real world doesn’t work like that. You will surely get some errors along the way and would need to debug your code. So to help you with that, some docker commands may come handy:</p>
+
+<ul>
+<li><strong>Logs:</strong> When we ran our container using sudo docker run we don’t get a lot of info, and that is a big problem when you are debugging. You can see the real-time logs using the below command. If you see an error here, you will need to change your code and build the image again.</li>
+</ul>
+
+<pre><code>    sudo docker logs -f mycontainer
+</code></pre>
+
+<p><img src="/images/deployment_fastapi/18.png" alt="" /></p>
+
+<ul>
+<li><strong>Starting and Stopping Docker:</strong> Sometimes, it might help just to restart your docker. In that case, you can use:</li>
+</ul>
+
+<pre><code>    sudo service docker stop
+    sudo service docker start
+</code></pre>
+
+<ul>
+<li><strong>Listing images and containers:</strong> Working with docker, you will end up creating images and containers, but you won’t be able to see them in the working directory. You can list your images and containers using:</li>
+</ul>
+
+<pre><code>    sudo docker container ls
+    sudo docker image ls
+</code></pre>
+
+<p><img src="/images/deployment_fastapi/19.png" alt="" /></p>
+
+<ul>
+<li><strong>Deleting unused docker images or containers:</strong> You might need to remove some images or containers as these take up a lot of space on the system. Here is how you do that.</li>
+</ul>
+
+<pre><code>    # the prune command removes the unused containers and images
+    sudo docker system prune
+
+    # delete a particular container
+    sudo docker rm mycontainer
+
+    # remove myimage
+    sudo docker image rm myimage
+
+    # remove all images
+    sudo docker image prune — all
+</code></pre>
+
+<ul>
+<li><strong>Checking localhost:</strong>The Linux server doesn’t have a browser, but we can still see the browser output though it’s a little ugly:</li>
+</ul>
+
+<pre><code>    curl localhost
+</code></pre>
+
+<p><img src="/images/deployment_fastapi/20.png" alt="" /></p>
+
+<ul>
+<li><strong>Develop without reloading image again and again:</strong> For development, it’s useful to be able just to change the contents of the code on our machine and test it live, without having to build the image every time. In that case, it’s also useful to run the server with live auto-reload automatically at every code change. Here, we use our app directory on our Linux machine, and we replace the default (/start.sh) with the development alternative /start-reload.sh during development. After everything looks fine, we can build our image again run it inside the container.</li>
+</ul>
+
+<pre><code>    sudo docker run -d -p 80:80 -v $(pwd):/app myimage /start-reload.sh
+</code></pre>
+
+<p>If this doesn’t seem sufficient, adding here a docker cheat sheet containing useful docker commands:</p>
+
+<p><img src="/images/deployment_fastapi/21.png" alt="[Source](http://dockerlabs.collabnix.com/docker/cheatsheet/)" /></p>
+
+<hr />
+
+<h2 id="4-an-end-to-end-app-with-ui">4. An End to End App with UI</h2>
+
+<p>We are done here with our API creation, but we can also create a UI based app using <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582" rel="nofollow" target="_blank">Streamlit</a> using our FastAPI API. This is not how you will do it in a production setting (where you might have developers making apps using react, node.js or javascript)but is mostly here to check the end-to-end flow of how to use an image API. I will host this barebones Streamlit app on local rather than the ec2 server, and it will get the bounding box info and classes from the FastAPI API hosted on ec2.</p>
+
+<p>If you need to learn more about how streamlit works, you can check out this <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582" rel="nofollow" target="_blank">post</a>. Also, if you would want to deploy this streamlit app also to ec2, here is a <a href="https://towardsdatascience.com/how-to-deploy-a-streamlit-app-using-an-amazon-free-ec2-instance-416a41f69dc3" rel="nofollow" target="_blank">tutorial</a> again.</p>
+
+<p>Here is the flow of the whole app with UI and FastAPI API on ec2:</p>
+
+<p><img src="/images/deployment_fastapi/22.png" alt="Project Architecture" /><em>Project Architecture</em></p>
+
+<p>The most important problems we need to solve in our streamlit app are:</p>
+
+<h3 id="how-to-get-an-image-file-from-the-user-using-streamlit">How to get an image file from the user using Streamlit?</h3>
+
+<p><strong>A. Using File uploader:</strong> We can use the file uploader using:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">bytesObj <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>file_uploader(<span style="color:#960050;background-color:#1e0010">“</span>Choose an image file<span style="color:#960050;background-color:#1e0010">”</span>)</code></pre></div>
+<p>The next problem is, what is this bytesObj we get from the streamlit file uploader? In streamlit, we will get a bytesIO object from the file_uploader and we will need to convert it to base64str for our FastAPI app input. This can be done using:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">bytesioObj_to_base64str</span>(bytesObj):
+   <span style="color:#66d9ef">return</span> base64<span style="color:#f92672">.</span>b64encode(bytesObj<span style="color:#f92672">.</span>read())<span style="color:#f92672">.</span>decode(<span style="color:#e6db74">&#34;utf-8&#34;</span>)
+
+base64str <span style="color:#f92672">=</span> bytesioObj_to_base64str(bytesObj)</code></pre></div>
+<p><strong>B. Using URL:</strong> We can also get an image URL from the user using text_input.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">url <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>text_input(<span style="color:#960050;background-color:#1e0010">‘</span>Enter URL<span style="color:#960050;background-color:#1e0010">’</span>)</code></pre></div>
+<p>We can then get image from URL in base64 string format using the requests module and base64 encode and utf-8 decode:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ImgURL_to_base64str</span>(url):
+    <span style="color:#66d9ef">return</span> base64<span style="color:#f92672">.</span>b64encode(requests<span style="color:#f92672">.</span>get(url)<span style="color:#f92672">.</span>content)<span style="color:#f92672">.</span>decode(<span style="color:#e6db74">&#34;utf-8&#34;</span>)
+
+base64str <span style="color:#f92672">=</span> ImgURL_to_base64str(url)</code></pre></div>
+<p>And here is the complete code of our Streamlit app. You have seen most of the code in this post already.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> streamlit <span style="color:#f92672">as</span> st
+<span style="color:#f92672">import</span> base64
+<span style="color:#f92672">import</span> io
+<span style="color:#f92672">import</span> requests<span style="color:#f92672">,</span>json
+<span style="color:#f92672">from</span> PIL <span style="color:#f92672">import</span> Image
+<span style="color:#f92672">import</span> cv2
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#f92672">as</span> plt
+<span style="color:#f92672">import</span> requests
+<span style="color:#f92672">import</span> random
+
+<span style="color:#75715e"># use file uploader object to recieve image</span>
+<span style="color:#75715e"># Remember that this bytes object can be used only once</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">bytesioObj_to_base64str</span>(bytesObj):
+    <span style="color:#66d9ef">return</span> base64<span style="color:#f92672">.</span>b64encode(bytesObj<span style="color:#f92672">.</span>read())<span style="color:#f92672">.</span>decode(<span style="color:#e6db74">&#34;utf-8&#34;</span>)
+
+<span style="color:#75715e"># Image conversion functions</span>
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">base64str_to_PILImage</span>(base64str):
+    base64_img_bytes <span style="color:#f92672">=</span> base64str<span style="color:#f92672">.</span>encode(<span style="color:#e6db74">&#39;utf-8&#39;</span>)
+    base64bytes <span style="color:#f92672">=</span> base64<span style="color:#f92672">.</span>b64decode(base64_img_bytes)
+    bytesObj <span style="color:#f92672">=</span> io<span style="color:#f92672">.</span>BytesIO(base64bytes)
+    img <span style="color:#f92672">=</span> Image<span style="color:#f92672">.</span>open(bytesObj) 
+    <span style="color:#66d9ef">return</span> img
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">PILImage_to_cv2</span>(img):
+    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>asarray(img)
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ImgURL_to_base64str</span>(url):
+    <span style="color:#66d9ef">return</span> base64<span style="color:#f92672">.</span>b64encode(requests<span style="color:#f92672">.</span>get(url)<span style="color:#f92672">.</span>content)<span style="color:#f92672">.</span>decode(<span style="color:#e6db74">&#34;utf-8&#34;</span>)
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">drawboundingbox</span>(img, boxes,pred_cls, rect_th<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, text_size<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, text_th<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>):
+    img <span style="color:#f92672">=</span> PILImage_to_cv2(img)
+    class_color_dict <span style="color:#f92672">=</span> {}
+    
+    <span style="color:#75715e">#initialize some random colors for each class for better looking bounding boxes</span>
+    <span style="color:#66d9ef">for</span> cat <span style="color:#f92672">in</span> pred_cls:
+        class_color_dict[cat] <span style="color:#f92672">=</span> [random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">255</span>) <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>)]
+    
+    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(boxes)):
+        cv2<span style="color:#f92672">.</span>rectangle(img, (int(boxes[i][<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">0</span>]), int(boxes[i][<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">1</span>])),
+                      (int(boxes[i][<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">0</span>]),int(boxes[i][<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">1</span>])),
+                      color<span style="color:#f92672">=</span>class_color_dict[pred_cls[i]], thickness<span style="color:#f92672">=</span>rect_th)
+        cv2<span style="color:#f92672">.</span>putText(img,pred_cls[i], (int(boxes[i][<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">0</span>]), int(boxes[i][<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">1</span>])),  cv2<span style="color:#f92672">.</span>FONT_HERSHEY_SIMPLEX, text_size, class_color_dict[pred_cls[i]],thickness<span style="color:#f92672">=</span>text_th)
+    plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">20</span>,<span style="color:#ae81ff">30</span>))
+    plt<span style="color:#f92672">.</span>imshow(img)
+    plt<span style="color:#f92672">.</span>xticks([])
+    plt<span style="color:#f92672">.</span>yticks([])
+    plt<span style="color:#f92672">.</span>show()
+
+st<span style="color:#f92672">.</span>markdown(<span style="color:#e6db74">&#34;&lt;h1&gt;Our Object Detector App using FastAPI&lt;/h1&gt;&lt;br&gt;&#34;</span>, unsafe_allow_html<span style="color:#f92672">=</span>True)
+
+bytesObj <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>file_uploader(<span style="color:#e6db74">&#34;Choose an image file&#34;</span>)
+
+st<span style="color:#f92672">.</span>markdown(<span style="color:#e6db74">&#34;&lt;center&gt;&lt;h2&gt;or&lt;/h2&gt;&lt;/center&gt;&#34;</span>, unsafe_allow_html<span style="color:#f92672">=</span>True)
+
+url <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>text_input(<span style="color:#e6db74">&#39;Enter URL&#39;</span>)
+
+<span style="color:#66d9ef">if</span> bytesObj <span style="color:#f92672">or</span> url:
+    <span style="color:#75715e"># In streamlit we will get a bytesIO object from the file_uploader </span>
+    <span style="color:#75715e"># and we convert it to base64str for our FastAPI</span>
+    <span style="color:#66d9ef">if</span> bytesObj:
+        base64str <span style="color:#f92672">=</span> bytesioObj_to_base64str(bytesObj)
+    
+    <span style="color:#66d9ef">elif</span> url:
+        base64str <span style="color:#f92672">=</span> ImgURL_to_base64str(url)
+
+    <span style="color:#75715e"># We will also create the image in PIL Image format using this base64 str</span>
+    <span style="color:#75715e"># Will use this image to show in matplotlib in streamlit</span>
+    img <span style="color:#f92672">=</span> base64str_to_PILImage(base64str)
+        
+    <span style="color:#75715e"># Run FastAPI </span>
+    payload <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>dumps({
+      <span style="color:#e6db74">&#34;base64str&#34;</span>: base64str,
+      <span style="color:#e6db74">&#34;threshold&#34;</span>: <span style="color:#ae81ff">0.5</span>
+    })
+
+    response <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>put(<span style="color:#e6db74">&#34;http://18.237.28.174/predict&#34;</span>,data <span style="color:#f92672">=</span> payload)
+    data_dict <span style="color:#f92672">=</span> response<span style="color:#f92672">.</span>json()
+
+
+    st<span style="color:#f92672">.</span>markdown(<span style="color:#e6db74">&#34;&lt;center&gt;&lt;h1&gt;App Result&lt;/h1&gt;&lt;/center&gt;&#34;</span>, unsafe_allow_html<span style="color:#f92672">=</span>True)
+    drawboundingbox(img, data_dict[<span style="color:#e6db74">&#39;boxes&#39;</span>], data_dict[<span style="color:#e6db74">&#39;classes&#39;</span>])
+    st<span style="color:#f92672">.</span>pyplot()
+    st<span style="color:#f92672">.</span>markdown(<span style="color:#e6db74">&#34;&lt;center&gt;&lt;h1&gt;FastAPI Response&lt;/h1&gt;&lt;/center&gt;&lt;br&gt;&#34;</span>, unsafe_allow_html<span style="color:#f92672">=</span>True)
+    st<span style="color:#f92672">.</span>write(data_dict)</code></pre></div>
+<p>We can run this streamlit app in local using:</p>
+
+<pre><code>streamlit run streamlitapp.py
+</code></pre>
+
+<p>And we can see our app running on our localhost:8501. Works well with user-uploaded images as well as URL based images. Here is a cat image for some of you cat enthusiasts as well.</p>
+
+<table><tr><td><img src='/images/deployment_fastapi/23.png'></td><td><img src='/images/deployment_fastapi/24.png'></td></tr></table>
+
+<p>So that’s it. We have created a whole workflow here to deploy image detection models through FastAPI on ec2 and utilizing those results in Streamlit. I hope this helps your woes around deploying models in production. You can find the code for this post as well as all my posts at my <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/deployFastApi" rel="nofollow" target="_blank">GitHub</a> repository.</p>
+
+<p>Let me know if you like this post and if you would like to include Docker or FastAPI or Streamlit in your day to day deployment needs. I am also looking to create a much detailed post on Docker so follow me up to stay tuned with my writing as well. Details below.</p>
+
+<hr />
+
+<h2 id="continue-learning">Continue Learning</h2>
+
+<p>If you want to learn more about building and putting a Machine Learning model in production, this <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.14884356434&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Faws-machine-learning" rel="nofollow" target="_blank">course on AWS</a> for implementing Machine Learning applications promises just that.</p>
+
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX?source=post_page---------------------------" rel="nofollow" target="_blank">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz?source=post_page---------------------------" rel="nofollow" target="_blank">@mlwhiz</a></p>
+
+<p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2020/08/08/yolov5/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">How to Create an End to End Object Detector using Yolov5</p></a>
+	</div>
+	<div class="post-nav__item post-nav__item--next">
+		<a class="post-nav__link" href="/blog/2020/08/04/spark_dataproc/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">Accelerating Spark 3.0 Google DataProc Project with NVIDIA GPUs in 6 simple steps</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<style type="text/css">
+
+  .btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-session {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+</style>
+
+
+<aside class="sidebar">
+  <div style="text-align:center">     
+    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/04/spark_dataproc/">Accelerating Spark 3.0 Google DataProc Project with NVIDIA GPUs in 6 simple steps</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/08/deployment_fastapi/">Deployment could be easy — A Data Scientist’s Guide to deploy an Image detection FastAPI API using Amazon ec2</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/08/yolov5/">How to Create an End to End Object Detector using Yolov5</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/fastapi_for_data_scientists/">A Layman’s Guide for Data Scientists to create APIs in minutes</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/dlrig/">A definitive guide for Setting up a Deep Learning Workstation with Ubuntu</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/multiclass_image_classification_pytorch/">End to End Pipeline for setting up Multiclass Image Classification for Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/hummingbird_faster_ml_preds/">How to run your ML model Predictions 50 times faster?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/spark_df_complete_guide/">The Most Complete Guide to pySpark DataFrames</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/democratize/">Don’t Democratize Data Science</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/05/25/cogbias/">Five Cognitive Biases In Data Science (And how to avoid them)</a></li>
+		</ul>
+	</div>
+</div>
+
+<div style="text-align:center">     
+    
+    <a class="btn btn-session" href="https://www.patreon.com/bePatron?u=28135435" role="button">1:1 Session</a>
+  </div>
+
+<br>
+
+
+
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+<style type="text/css">
+.bookclass .shareaholic-share-buttons-heading .shareaholic-canvas{
+  font-family: montserrat,sans-serif;
+  font-size:.5em ;
+  font-weight: 500;
+  }
+</style>
+<center>
+
+
+
+<div class="bookclass">Subscribe to Get
+<a href="https://www.amazon.in/Advanced-Python-Tips-explained-Simply-ebook/dp/B07TM3D279">
+  <img src="https://d2sofvawe08yqg.cloudfront.net/advancedpythontips/hero2x?1593185350" width="70%" height="70%"></img></a>
+  </div>
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {
+
+    background-color: #3f51b5;
+ 
+  }
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: -webkit-center;
+    padding: 10px -5px 10px 3%;}  
+ 
+  #mc_embed_signup form {
+    text-align: -webkit-center;
+    } 
+
+    #mc_embed_signup input.button {
+    min-width: 110px;
+}
+
+    #mc_embed_signup #mc_embed_signup_scroll{
+      font-family: montserrat,sans-serif;  
+      font-size:1em; 
+    }
+    #mc_embed_signup input.email {
+      font-family: montserrat,sans-serif; 
+    }
+
+
+   
+</style>
+
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+</center>
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2020 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
