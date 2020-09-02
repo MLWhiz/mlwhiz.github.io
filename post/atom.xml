@@ -16,6 +16,90 @@
     
 
     <item>
+      <title>Create an Awesome Development Setup for Data Science using Atom</title>
+      <link>https://mlwhiz.com/blog/2020/09/02/atom_for_data_science/</link>
+      <pubDate>Wed, 02 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mlwhiz.com/blog/2020/09/02/atom_for_data_science/</guid>
+      
+      
+      <media:content type="image/png" medium="image" width="700" height="400"
+      url="https://mlwhiz.com/images/atom_for_data_science/main.png"></media:content>
+      
+
+      
+      <description>Before I even begin this article, let me just say that I love iPython Notebooks, and Atom is not an alternative to Jupyter in any way. Notebooks provide me an interface where I have to think of “Coding one code block at a time,” as I like to call it, and it helps me to think more clearly while helping me make my code more modular.
+Yet, Jupyter is not suitable for some tasks in its present form.</description>
+
+      <content:encoded>  
+        
+        <![CDATA[  Before I even begin this article, let me just say that I love iPython Notebooks, and Atom is not an alternative to Jupyter in any way. Notebooks provide me an interface where I have to think of “Coding one code block at a time,” as I like to call it, and it helps me to think more clearly while helping me make my code more modular.
+Yet, Jupyter is not suitable for some tasks in its present form. And the most prominent is when I have to work with .py files. And one will need to work with .py files whenever they want to push your code to production or change other people’s code. So, until now, I used sublime text to edit Python files, and I found it excellent. But recently, when I looked at the Atom editor, my loyalties seemed to shift when I saw the multiple out of the box options provided by it.
+Now, the real power to Atom comes from the various packages you can install. In this post, I will talk about the packages that help make Atom just the most hackable and wholesome development environment ever.
+Installing Atom and Some Starting Tweaks Before we even begin, we need to install Atom. You can do it from the main website here. The installation process is pretty simple, whatever your platform is. For Linux, I just downloaded the .deb file and double-clicked it. Once you have installed Atom, You can look at doing some tweaks:
+ Open Core settings in Atom using Ctrl&#43;Shift&#43;P and typing settings therein. This Ctrl&#43;Shift&#43;P command is going to be one of the most important commands in Atom as it lets you navigate and run a lot of commands.  Accessing the Settings window using Ctrl&#43;Shift&#43;P
+ Now go to the Editor menu and Uncheck “Soft Tabs”. This is done so that TAB key registers as a TAB and not two spaces. If you want you can also activate “Soft Wrap” which wraps the text if the text exceeds the window width.  My preferred settings for soft-wrap and soft-tabs.
+Now, as we have Atom installed, we can look at some of the most awesome packages it provides. And the most important of them is GitHub.
+1. Commit to Github without leaving Editor Are you fed up with leaving your text editor to use terminal every time you push a commit to Github? If your answer is yes, Atom solves this very problem by letting you push commits without you ever leaving the text editor window.
+This is one of the main features that pushed me towards Atom from Sublime Text. I like how this functionality comes preloaded with Atom and it doesn’t take much time to set it up.
+To start using it, click on the GitHub link in the right bottom of the Atom screen, and the Atom screen will prompt you to log in to your Github to provide access. It is a one-time setup, and once you log in and give the token generated to Atom, you will be able to push your commits from the Atom screen itself without navigating to the terminal window.
+  ![]  ![]   The process to push a commit is:
+ Change any file or multiple files.
+ Click on Git on the bottom right corner.
+ Stage the Changes
+ Write a commit message.
+ Click on Push in the bottom right corner.
+ And we are done:)
+  Below, I am pushing a very simple commit to Github, where I add a title to my Markdown file. Its a GIF file, so it might take some time to load.
+Committing in Atom
+2. Write Markdown with real-time preview I am always torn between the medium editor vs. Markdown whenever I write blog posts for my site. For one, I prefer using Markdown when I have to use Math symbols for my post or have to use custom HTML. But, I also like the Medium editor as it is WYSIWYG(What You See Is What You Get). And with Atom, I have finally found the perfect markdown editor for me, which provides me with Markdown as well as WYSIWYG. And it has now become a default option for me to create any README.md files for GitHub.
+Using Markdown in Atom is again a piece of cake and is activated by default. To see a live preview with Markdown in Atom:
+ Use Ctrl&#43;Shift&#43;M to open Markdown Preview Pane.
+ Whatever changes you do in the document will reflect near real-time in the preview window.
+  Markdown Split Screen editor
+3. Minimap — A navigation map for Large code files Till now, we haven’t installed any new package to Atom, so let’s install an elementary package as our first package. This package is called minimap, and it is something that I like to have from my Sublime Text days. It lets you have a side panel where you can click and reach any part of the code. Pretty useful for large files.
+To install a package, you can go to settings and click on Install Packages. Ctrl&#43;Shift&#43;P &amp;gt; Settings &amp;gt; &#43; Install &amp;gt; Minimap&amp;gt; Install
+Installing Minimap or any package
+Once you install the package, you can see the minimap on the side of your screen.
+Sidebar to navigate large files with ease
+4. Python Autocomplete with function definitions in Text Editor An editor is never really complete until it provides you with some autocomplete options for your favorite language. Atom integrates well with Kite, which tries to integrate AI and autocomplete.
+So, to enable autocomplete with Kite, we can use the package named autocomplete-python in Atom. The install steps remain the same as before. i.e.
+Ctrl&#43;Shift&#43;P &amp;gt; Settings &amp;gt; &#43; Install &amp;gt; autocomplete-python&amp;gt; Install
+You will also see the option of using Kite along with it. I usually end up using Kite instead of Jedi(Another autocomplete option). This is how it looks when you work on a Python document with Kite autocompletion.
+Autocomplete with Kite lets you see function definitions too.
+5. Hydrogen — Run Python code in Jupyter environment Want to run Python also in your Atom Editor with any Jupyter Kernel? There is a way for that too. We just need to install “Hydrogen” using the same method as before. Once Hydrogen is installed you can use it by:
+ Run the command on which your cursor is on using Ctrl&#43;Enter.
+ Select any Kernel from the Kernel Selection Screen. I select pyt kernel from the list.
+ Now I can continue working in pyt kernel.
+  Runnin command using Ctrl&#43;Enter will ask you which environment to use.
+Sometimes it might happen that you don’t see an environment/kernel in Atom. In such cases, you can install ipykernel to make that kernel visible to Jupyter as well as Atom.
+Here is how to make a new kernel and make it visible in Jupyter/Atom:
+conda create -n exampleenv python=3.7 conda activate exampleenv conda install -c anaconda ipykernel python -m ipykernel install --user --name=exampleenv  Once you run these commands, your kernel will be installed. You can now update the Atom’s kernel list by using:
+Ctrl&#43;Shift&#43;P &amp;gt;Hydrogen: Update Kernels
+And your kernel should now be available in your Atom editor.
+6. Search Stack Overflow from your Text Editor Stack Overflow is an integral part of any developer’s life. But you know what the hassle is? To leave the coding environment and go to Chrome to search for every simple thing you need to do. And we end up doing it back and forth throughout the day. So, what if we can access Stack Overflow from Atom? You can do precisely that through the “ask-stack” package, which lets one search for questions on SO. We can access it using Ctrl&#43;Alt&#43;A
+Access Stack Overflow in Atom using Ctrl&#43;Alt&#43;A.
+Some other honorable mentions of packages you could use are:
+ Teletype: Do Pair Coding.
+ Linter: Checks code for Stylistic and Programmatic errors. To enable linting in Python, You can use “linter” and “python-linters”.
+ Highlight Selected: Highlight all occurrences of a text by double-clicking or selecting the text with a cursor.
+ Atom-File-Icons: Provides you with file icons in the left side tree view. Looks much better than before, right?
+  Icons for files
+Conclusion In this post, I talked about how I use Atom in my Python Development flow.
+There are a plethora of other packages in Atom which you may like, and you can look at them to make your environment even more customizable. Or one can even write their own packages as well as Atom is called as the “Most Hackable Editor”.
+If you want to learn about Python and not exactly a Python editor, I would like to call out an excellent course on Learn Intermediate level Python from the University of Michigan. Do check it out. Also, here are my course recommendations to become a Data Scientist in 2020.
+I am going to be writing more beginner-friendly posts in the future too. Follow me up at Medium or Subscribe to my blog to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter @mlwhiz.
+Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.
+]]>
+        
+      </content:encoded>
+      
+      
+      
+    </item>
+    
+
+    <item>
       <title>A Layman’s Introduction to GANs for Data Scientists using PyTorch</title>
       <link>https://mlwhiz.com/blog/2020/08/27/pyt_gan/</link>
       <pubDate>Thu, 27 Aug 2020 00:00:00 +0000</pubDate>
@@ -7615,81 +7699,6 @@ Now Create a folder named template in helloworld/wsgi and create a file named _f
 h1 { color: blue; font-family: verdana; font-size: 300%; } p { color: red; font-family: courier; font-size: 160%; } And we are mostly done. Run run.py in the wsgi directory and you would be able to access the app at : http://127.0.0.1:5000/. Again deploy this webapp to Openshift using:
 cd helloworld git add . git commit -a -m &amp;#34;Initial deployment of this app to the web&amp;#34; git push Endnotes So here we took inputs from the user and show the output using the flask App. The final app is hosted at http://helloworld-mlwhiz.rhcloud.com/ for you to see. This code provides us with a code skeletn which will be valuable when we will deploy a whole ML model, which is the main motive of this series.
 References  Most of the code here is taken from this awesome book by Sebastian Raschka: Python Machine Learning https://blog.openshift.com/beginners-guide-to-writing-flask-apps-on-openshift/  ]]>
-        
-      </content:encoded>
-      
-      
-      
-    </item>
-    
-
-    <item>
-      <title>Shell Basics every Data Scientist Should know - Part II(AWK)</title>
-      <link>https://mlwhiz.com/blog/2015/10/11/shell_basics_for_data_science_2/</link>
-      <pubDate>Sun, 11 Oct 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://mlwhiz.com/blog/2015/10/11/shell_basics_for_data_science_2/</guid>
-      
-      
-
-      
-      <description>Yesterday I got introduced to awk programming on the shell and is it cool. It lets you do stuff on the command line which you never imagined. As a matter of fact, it&amp;amp;rsquo;s a whole data analytics software in itself when you think about it. You can do selections, groupby, mean, median, sum, duplication, append. You just ask. There is no limit actually.
-And it is easy to learn.</description>
-
-      <content:encoded>  
-        
-        <![CDATA[  Yesterday I got introduced to awk programming on the shell and is it cool. It lets you do stuff on the command line which you never imagined. As a matter of fact, it&amp;rsquo;s a whole data analytics software in itself when you think about it. You can do selections, groupby, mean, median, sum, duplication, append. You just ask. There is no limit actually.
-And it is easy to learn.
-In this post, I will try to give you a brief intro about how you could add awk to your daily work-flow.
-Please see my previous post if you want some background or some basic to intermediate understanding of shell commands.
-Basics/ Fundamentals So let me start with an example first. Say you wanted to sum a column in a comma delimited file. How would you do that in shell?
-Here is the command. The great thing about awk is that it took me nearly 5 sec to write this command. I did not have to open any text editor to write a python script.
-It lets you do adhoc work quickly.
-awk &amp;#39;BEGIN{ sum=0; FS=&amp;#34;,&amp;#34;} { sum &#43;= $5 } END { print sum }&amp;#39; data.txt 44662539172  See the command one more time. There is a basic structure to the awk command
-BEGIN {action} pattern {action} pattern {action} . . pattern { action} END {action}   An awk program consists of:
- An optional BEGIN segment : In the begin part we initialize our variables before we even start reading from the file or the standard input.
- pattern - action pairs: In the middle part we Process the input data. You put multiple pattern action pairs when you want to do multiple things with the same line.
- An optional END segment: In the end part we do something we want to do when we have reached the end of file.
-  An awk command is called on a file using:
-awk &amp;#39;BEGIN{SOMETHING HERE} {SOMETHING HERE: could put Multiple Blocks Like this} END {SOMETHING HERE}&amp;#39; file.txt You also need to know about these preinitialized variables that awk keeps track of.:
- FS : field separator. Default is whitespace (1 or more spaces or tabs). If you are using any other seperator in the file you should specify it in the Begin Part. RS : record separator. Default record separator is newline. Can be changed in BEGIN action. NR : NR is the variable whose value is the number of the current record. You normally use it in the action blocks in the middle. NF : The Number of Fields after the single line has been split up using FS. Dollar variables : awk splits up the line which is coming to it by using the given FS and keeps the split parts in the $ variables. For example column 1 is in $1, column 2 is in $2. $0 is the string representation of the whole line. Note that if you want to access last column you don&amp;rsquo;t have to count. You can just use $NF. For second last column you can use $(NF-1). Pretty handy. Right.  So If you are with me till here, the hard part is done. Now the fun part starts. Lets look at the first awk command again and try to understand it.
-awk &amp;#39;BEGIN{ sum=0; FS=&amp;#34;,&amp;#34;} { sum &#43;= $5 } END { print sum }&amp;#39; data.txt So there is a begin block. Remember before we read any line. We initialize sum to 0 and FS to &amp;ldquo;,&amp;rdquo;.
-Now as awk reads its input line by line it increments sum by the value in column 5(as specified by $5).
-Note that there is no pattern specified here so awk will do the action for every line.
-When awk has completed reading the file it prints out the sum.
-What if you wanted mean?
-We could create a cnt Variable:
-awk &amp;#39;BEGIN{ sum=0;cnt=0; FS=&amp;#34;,&amp;#34;} { sum &#43;= $5; cnt&#43;=1 } END { print sum/cnt }&amp;#39; data.txt 1.86436e&#43;06  or better yet, use our friend NR which bash is already keeping track of:
-awk &amp;#39;BEGIN{ sum=0; FS=&amp;#34;,&amp;#34;} { sum &#43;= $5 } END { print sum/NR }&amp;#39; data.txt 1.86436e&#43;06  Filter a file In the mean and sum awk commands we did not put any pattern in our middle commands. Let us use a simple pattern now. Suppose we have a file Salaries.csv which contains:
-head salaries.txt yearID,teamID,lgID,playerID,salary 1985,BAL,AL,murraed02,1472819 1985,BAL,AL,lynnfr01,1090000 1985,BAL,AL,ripkeca01,800000 1985,BAL,AL,lacyle01,725000 1985,BAL,AL,flanami01,641667 1985,BAL,AL,boddimi01,625000 1985,BAL,AL,stewasa01,581250 1985,BAL,AL,martide01,560000 1985,BAL,AL,roeniga01,558333  I want to filter records for players who who earn more than 22 M in 2013 just because I want to. You just do:
-awk &amp;#39;BEGIN{FS=&amp;#34;,&amp;#34;} $5&amp;gt;=22000000 &amp;amp;&amp;amp; $1==2013{print $0}&amp;#39; Salaries.csv 2013,DET,AL,fieldpr01,23000000 2013,MIN,AL,mauerjo01,23000000 2013,NYA,AL,rodrial01,29000000 2013,NYA,AL,wellsve01,24642857 2013,NYA,AL,sabatcc01,24285714 2013,NYA,AL,teixema01,23125000 2013,PHI,NL,leecl02,25000000 2013,SFN,NL,linceti01,22250000  Cool right. Now let me explain it a little bit. The part in the command &amp;ldquo;$5&amp;gt;=22000000 &amp;amp;&amp;amp; $1==2013&amp;rdquo; is called a pattern. It says that print this line($0) if and only if the Salary($5) is more than 22M and(&amp;amp;&amp;amp;) year($1) is equal to 2013. If the incoming record(line) does not satisfy this pattern it never reaches the inner block.
-So Now you could do basic Select SQL at the command line only if you had:
-The logic Operators:
- == equality operator; returns TRUE is both sides are equal
- != inverse equality operator
- &amp;amp;&amp;amp; logical AND
- || logical OR
- ! logical NOT
- &amp;lt;, &amp;gt;, &amp;lt;=, &amp;gt;= relational operators
-  Normal Arithmetic Operators: &#43;, -, /, *, %, ^
-Some String Functions: length, substr, split
-GroupBy Now you will say: &amp;ldquo;Hey Dude SQL without groupby is incomplete&amp;rdquo;. You are right and for that we can use the associative array. Lets just see the command first and then I will explain. So lets create another useless use case(or may be something useful to someone :)) We want to find out the number of records for each year in the file. i.e we want to find the distribution of years in the file. Here is the command:
-awk &amp;#39;BEGIN{FS=&amp;#34;,&amp;#34;} {my_array[$1]=my_array[$1]&#43;1} END{ for (k in my_array){if(k!=&amp;#34;yearID&amp;#34;)print k&amp;#34;|&amp;#34;my_array[k]}; }&amp;#39; Salaries.csv 1990|867 1991|685 1996|931 1997|925 ...  Now I would like to tell you a secret. You don&amp;rsquo;t really need to declare the variables you want to use in awk. So you did not really needed to define sum, cnt variables before. I only did that because it is good practice. If you don&amp;rsquo;t declare a user defined variable in awk, awk assumes it to be null or zero depending on the context. So in the command above we don&amp;rsquo;t declare our myarray in the begin block and that is fine.
-Associative Array: The variable myarray is actually an associative array. i.e. It stores data in a key value format.(Python dictionaries anyone). The same array could keep integer keys and String keys. For example, I can do this in a single code.
-myarray[1]=&#34;key&#34; myarray[&#39;mlwhiz&#39;] = 1   For Loop for associative arrays: I could use a for loop to read associative array
-for (k in array) { DO SOMETHING } # Assigns to k each Key of array (unordered) # Element is array[k]   If Statement:Uses a syntax like C for the if statement. the else block is optional:
-if (n  0){ DO SOMETHING } else{ DO SOMETHING }   So lets dissect the above command now.
-I set the File separator to &amp;ldquo;,&amp;rdquo; in the beginning. I use the first column as the key of myarray. If the key exists I increment the value by 1.
-At the end, I loop through all the keys and print out key value pairs separated by &amp;ldquo;|&amp;rdquo;
-I know that the header line in my file contains &amp;ldquo;yearID&amp;rdquo; in column 1 and I don&amp;rsquo;t want &amp;lsquo;yearID|1&amp;rsquo; in the output. So I only print when Key is not equal to &amp;lsquo;yearID&amp;rsquo;.
-GroupBy with case statement: cat Salaries.csv | awk &amp;#39;BEGIN{FS=&amp;#34;,&amp;#34;} $5&amp;lt;100000{array5[&amp;#34;[0-100000)&amp;#34;]&#43;=1} $5&amp;gt;=100000&amp;amp;&amp;amp;$5&amp;lt;250000{array5[&amp;#34;[100000,250000)&amp;#34;]=array5[&amp;#34;[100000,250000)&amp;#34;]&#43;1} $5&amp;gt;=250000&amp;amp;&amp;amp;$5&amp;lt;500000{array5[&amp;#34;[250000-500000)&amp;#34;]=array5[&amp;#34;[250000-500000)&amp;#34;]&#43;1} $5&amp;gt;=500000&amp;amp;&amp;amp;$5&amp;lt;1000000{array5[&amp;#34;[500000-1000000)&amp;#34;]=array5[&amp;#34;[500000-1000000)&amp;#34;]&#43;1} $5&amp;gt;=1000000{array5[&amp;#34;[1000000)&amp;#34;]=array5[&amp;#34;[1000000)&amp;#34;]&#43;1} END{ print &amp;#34;VAR Distrib:&amp;#34;; for (v in array5){print v&amp;#34;|&amp;#34;array5[v]} }&amp;#39; VAR Distrib: [250000-500000)|8326 [0-100000)|2 [1000000)|23661 [100000,250000)|9480  Here we used multiple pattern-action blocks to create a case statement.
-For The Brave: This is a awk code that I wrote to calculate the Mean,Median,min,max and sum of a column simultaneously. Try to go through the code and understand it.I have added comments too. Think of this as an exercise. Try to run this code and play with it. You may learn some new tricks in the process. If you don&amp;rsquo;t understand it do not worry. Just get started writing your own awk codes, you will be able to understand it in very little time.
-# Create a New file named A.txt to keep only the salary column. cat Salaries.csv | cut -d &amp;#34;,&amp;#34; -f 5 &amp;gt; A.txt FILENAME=&amp;#34;A.txt&amp;#34; # The first awk counts the number of lines which are numeric. We use a regex here to check if the column is numeric or not. # &amp;#39;;&amp;#39; stands for Synchronous execution i.e sort only runs after the awk is over. # The output of both commands are given to awk command which does the whole work. # So Now the first line going to the second awk is the number of lines in the file which are numeric. # and from the second to the end line the file is sorted. (awk &amp;#39;BEGIN {c=0} $1 ~ /^[-0-9]*(\.[0-9]*)?$/ {c=c&#43;1;} END {print c;}&amp;#39; &amp;#34;$FILENAME&amp;#34;; \  sort -n &amp;#34;$FILENAME&amp;#34;) | awk &amp;#39; BEGIN { c = 0; sum = 0; med1_loc = 0; med2_loc = 0; med1_val = 0; med2_val = 0; min = 0; max = 0; } NR==1 { LINES = $1 # We check whether numlines is even or odd so that we keep only # the locations in the array where the median might be. if (LINES%2==0) {med1_loc = LINES/2-1; med2_loc = med1_loc&#43;1;} if (LINES%2!=0) {med1_loc = med2_loc = (LINES-1)/2;} } $1 ~ /^[-0-9]*(\.[0-9]*)?$/ &amp;amp;&amp;amp; NR!=1 { # setting min value if (c==0) {min = $1;} # middle two values in array if (c==med1_loc) {med1_val = $1;} if (c==med2_loc) {med2_val = $1;} c&#43;&#43; sum &#43;= $1 max = $1 } END { ave = sum / c median = (med1_val &#43; med2_val ) / 2 print &amp;#34;sum:&amp;#34; sum print &amp;#34;count:&amp;#34; c print &amp;#34;mean:&amp;#34; ave print &amp;#34;median:&amp;#34; median print &amp;#34;min:&amp;#34; min print &amp;#34;max:&amp;#34; max } &amp;#39; &amp;lt;pre style=&amp;#34;font-size:50%; padding:7px; margin:0em; background-color:#FFF112&amp;#34;&amp;gt;sum:44662539172 count:23956 mean:1.86436e&#43;06 median:507950 min:0 max:33000000 &amp;lt;/pre&amp;gt; Endnote: awk is an awesome tool and there are a lot of use-cases where it can make your life simple. There is a sort of a learning curve, but I think that it would be worth it in the long term. I have tried to give you a taste of awk and I have covered a lot of ground here in this post. To tell you a bit more there, awk is a full programming language. There are for loops, while loops, conditionals, booleans, functions and everything else that you would expect from a programming language. So you could look more still.
-To learn more about awk you can use this book. This book is a free resource and you could learn more about awk and use cases.
-Or if you like to have your book binded and in paper like me you can buy this book, which is a gem:
-Do leave comments in case you find more use-cases for awk or if you want me to write on new use-cases. Or just comment weather you liked it or not and how I could improve as I am also new and trying to learn more of this.
-Till then Ciao !!!
-]]>
         
       </content:encoded>
       

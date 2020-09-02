@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-us">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Create an Awesome Development Setup for Data Science using Atom</title>
+	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
+	<meta name="description" content="">
+	
+
+	
+	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
+	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
+	
+	
+	<meta name="generator" content="Hugo 0.53" />
+	<meta property="og:title" content="Create an Awesome Development Setup for Data Science using Atom" />
+<meta property="og:description" content="Before I even begin this article, let me just say that I love iPython Notebooks, and Atom is not an alternative to Jupyter in any way. Notebooks provide me an interface where I have to think of “Coding one code block at a time,” as I like to call it, and it helps me to think more clearly while helping me make my code more modular.
+Yet, Jupyter is not suitable for some tasks in its present form." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mlwhiz.com/blog/2020/09/02/atom_for_data_science/" />
+<meta property="og:image" content="https://mlwhiz.com/images/atom_for_data_science/main.png" />
+<meta property="article:published_time" content="2020-09-02T00:00:00&#43;00:00"/>
+
+
+	<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://mlwhiz.com/images/atom_for_data_science/main.png"/>
+
+<meta name="twitter:title" content="Create an Awesome Development Setup for Data Science using Atom"/>
+<meta name="twitter:description" content="Before I even begin this article, let me just say that I love iPython Notebooks, and Atom is not an alternative to Jupyter in any way. Notebooks provide me an interface where I have to think of “Coding one code block at a time,” as I like to call it, and it helps me to think more clearly while helping me make my code more modular.
+Yet, Jupyter is not suitable for some tasks in its present form."/>
+
+
+	<link rel="dns-prefetch" href="//fonts.googleapis.com">
+	<link rel="dns-prefetch" href="//fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
+	<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,600,600i,700,700i%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+	<link rel="stylesheet" href="/css/style.css">
+	
+	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	
+	
+		
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-54777926-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+	
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
+	
+
+	
+	<script>
+	  !function(f,b,e,v,n,t,s)
+	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	  n.queue=[];t=b.createElement(e);t.async=!0;
+	  t.src=v;s=b.getElementsByTagName(e)[0];
+	  s.parentNode.insertBefore(t,s)}(window, document,'script',
+	  'https://connect.facebook.net/en_US/fbevents.js');
+	  fbq('init', '1062344757288542');
+	  fbq('track', 'PageView');
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
+	/></noscript>
+	
+
+
+	
+  	<script async>(function(s,u,m,o,j,v){j=u.createElement(m);v=u.getElementsByTagName(m)[0];j.async=1;j.src=o;j.dataset.sumoSiteId='22863fd8ad7ebbfab9b8ca60b7db8f65e9a15559f384f785f66903e365aa8f48';v.parentNode.insertBefore(j,v)})(window,document,'script','//load.sumo.com/');</script>
+  	<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+</head>
+<body class="body">
+	  
+	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	  
+	<div class="container container--outer">
+		<header class="header">
+	<div class="container">
+		<div class="logo">
+
+			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+
+				<div class="logo__title">MLWhiz</div>
+				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
+			</a>
+		</div>
+		
+<nav class="menu">
+	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+		<span class="menu__btn-title" tabindex="-1">Menu</span>
+	</button>
+	<ul class="menu__list">
+		<li class="menu__item">
+			<a class="menu__link" href="/">Blog</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/archive">Archive</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/about/">About Me</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/nlpseries/">NLP</a>
+		</li>
+		<li class="menu__item">
+			<a class="menu__link" href="/resources/index.html">Learning Resources</a>
+		</li>
+	</ul>
+</nav>
+
+	</div>
+</header>
+
+
+		<div class="wrapper flex">
+			<div class="primary">
+			
+<main class="main" role="main">
+	<article class="post">
+		<header class="post__header">
+			<h1 class="post__title">Create an Awesome Development Setup for Data Science using Atom</h1>
+			<div class="post__meta meta">
+<div class="meta__item-datetime meta__item">
+	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+	<time class="meta__text" datetime="2020-09-02T00:00:00">September 02, 2020</time>
+	
+		
+</div>
+</div>
+		</header>
+		<div class="content post__content clearfix">
+			
+
+<p><img src="/images/atom_for_data_science/main.png" alt="" /></p>
+
+<p>Before I even begin this article, let me just say that I love iPython Notebooks, and Atom is not an alternative to Jupyter in any way. Notebooks provide me an interface where I have to think of <em>“Coding one code block at a time,”</em> as I like to call it, and it helps me to think more clearly while helping me make my code more modular.</p>
+
+<p><strong>Yet, Jupyter is not suitable for some tasks in its present form</strong>. And the most prominent is when I have to work with .py files. And one will need to work with .py files whenever they want to push your code to production or change other people’s code. So, until now, I used sublime text to edit Python files, and I found it excellent. But recently, when I looked at the Atom editor, my loyalties seemed to shift when I saw the multiple out of the box options provided by it.</p>
+
+<p>Now, the real power to Atom comes from the various packages you can install. In this post, I will talk about the packages that help make Atom just the most hackable and wholesome development environment ever.</p>
+
+<hr />
+
+<h2 id="installing-atom-and-some-starting-tweaks">Installing Atom and Some Starting Tweaks</h2>
+
+<p>Before we even begin, we need to install Atom. You can do it from the main website <a href="https://atom.io/." rel="nofollow" target="_blank">here</a>. The installation process is pretty simple, whatever your platform is. For Linux, I just downloaded the .deb file and double-clicked it. Once you have installed Atom, You can look at doing some tweaks:</p>
+
+<ul>
+<li>Open Core settings in Atom using <code>Ctrl+Shift+P</code> and typing settings therein. This <code>Ctrl+Shift+P</code> command is going to be one of the most important commands in Atom as it lets you navigate and run a lot of commands.</li>
+</ul>
+
+<p><img src="/images/atom_for_data_science/0.png" alt="Accessing the Settings window using `Ctrl+Shift+P`" /><em>Accessing the Settings window using <code>Ctrl+Shift+P</code></em></p>
+
+<ul>
+<li>Now go to the Editor menu and Uncheck “Soft Tabs”. This is done so that TAB key registers as a TAB and not two spaces. If you want you can also activate “Soft Wrap” which wraps the text if the text exceeds the window width.</li>
+</ul>
+
+<p><img src="/images/atom_for_data_science/1.png" alt="My preferred settings for soft-wrap and soft-tabs." /><em>My preferred settings for soft-wrap and soft-tabs.</em></p>
+
+<p>Now, as we have Atom installed, we can look at some of the most awesome packages it provides. And the most important of them is GitHub.</p>
+
+<hr />
+
+<h3 id="1-commit-to-github-without-leaving-editor">1. Commit to Github without leaving Editor</h3>
+
+<p>Are you fed up with leaving your text editor to use terminal every time you push a commit to Github? If your answer is yes, Atom solves this very problem by letting you push commits without you ever leaving the text editor window.</p>
+
+<p>This is one of the main features that pushed me towards Atom from Sublime Text. I like how this functionality comes preloaded with Atom and it doesn’t take much time to set it up.</p>
+
+<p>To start using it, click on the GitHub link in the right bottom of the Atom screen, and the Atom screen will prompt you to log in to your Github to provide access. It is a one-time setup, and once you log in and give the token generated to Atom, you will be able to push your commits from the Atom screen itself without navigating to the terminal window.</p>
+
+<table><tr>
+<td>
+![]<img src=/images/atom_for_data_science/2.png>
+</td>
+<td>
+![]<img src=/images/atom_for_data_science/3.png>
+</td>
+</tr>
+</table>
+
+<p>The process to push a commit is:</p>
+
+<ul>
+<li><p>Change any file or multiple files.</p></li>
+
+<li><p>Click on Git on the bottom right corner.</p></li>
+
+<li><p>Stage the Changes</p></li>
+
+<li><p>Write a commit message.</p></li>
+
+<li><p>Click on Push in the bottom right corner.</p></li>
+
+<li><p>And we are done:)</p></li>
+</ul>
+
+<p>Below, I am pushing a very simple commit to Github, where I add a title to my Markdown file. Its a GIF file, so it might take some time to load.</p>
+
+<p><img src="/images/atom_for_data_science/4.png" alt="Committing in Atom" /><em>Committing in Atom</em></p>
+
+<hr />
+
+<h3 id="2-write-markdown-with-real-time-preview">2. Write Markdown with real-time preview</h3>
+
+<p>I am always torn between the medium editor vs. Markdown whenever I write blog posts for my site. For one, I prefer using Markdown when I have to use Math symbols for my post or have to use custom HTML. But, I also like the Medium editor as it is WYSIWYG(What You See Is What You Get). And with Atom, I have finally found the perfect markdown editor for me, which provides me with Markdown as well as WYSIWYG. And it has now become a default option for me to create any README.md files for GitHub.</p>
+
+<p>Using Markdown in Atom is again a piece of cake and is activated by default. To see a live preview with Markdown in Atom:</p>
+
+<ul>
+<li><p>Use <code>Ctrl+Shift+M</code> to open Markdown Preview Pane.</p></li>
+
+<li><p>Whatever changes you do in the document will reflect near real-time in the preview window.</p></li>
+</ul>
+
+<p><img src="/images/atom_for_data_science/5.png" alt="Markdown Split Screen editor" /><em>Markdown Split Screen editor</em></p>
+
+<h3 id="3-minimap-a-navigation-map-for-large-code-files">3. Minimap — A navigation map for Large code files</h3>
+
+<p>Till now, we haven’t installed any new package to Atom, so let’s install an elementary package as our first package. This package is called <a href="https://atom.io/packages/minimap" rel="nofollow" target="_blank">minimap</a>, and it is something that I like to have from my Sublime Text days. It lets you have a side panel where you can click and reach any part of the code. Pretty useful for large files.</p>
+
+<p>To install a package, you can go to settings and click on Install Packages.
+<code>Ctrl+Shift+P &gt; Settings &gt; + Install &gt; Minimap&gt; Install</code></p>
+
+<p><img src="/images/atom_for_data_science/6.png" alt="Installing Minimap or any package" /><em>Installing Minimap or any package</em></p>
+
+<p>Once you install the package, you can see the minimap on the side of your screen.</p>
+
+<p><img src="/images/atom_for_data_science/7.png" alt="Sidebar to navigate large files with ease" /><em>Sidebar to navigate large files with ease</em></p>
+
+<h3 id="4-python-autocomplete-with-function-definitions-in-text-editor">4. Python Autocomplete with function definitions in Text Editor</h3>
+
+<p>An editor is never really complete until it provides you with some autocomplete options for your favorite language. Atom integrates well with Kite, which tries to integrate AI and autocomplete.</p>
+
+<p>So, to enable autocomplete with Kite, we can use the package named <a href="https://atom.io/packages/autocomplete-python" rel="nofollow" target="_blank">autocomplete-python</a> in Atom. The install steps remain the same as before. i.e.</p>
+
+<p><code>Ctrl+Shift+P &gt; Settings &gt; + Install &gt; autocomplete-python&gt; Install</code></p>
+
+<p>You will also see the option of using Kite along with it. I usually end up using Kite instead of Jedi(Another autocomplete option). This is how it looks when you work on a Python document with Kite autocompletion.</p>
+
+<p><img src="/images/atom_for_data_science/8.png" alt="Autocomplete with Kite lets you see function definitions too." /><em>Autocomplete with Kite lets you see function definitions too.</em></p>
+
+<h3 id="5-hydrogen-run-python-code-in-jupyter-environment">5. Hydrogen — Run Python code in Jupyter environment</h3>
+
+<p>Want to run Python also in your Atom Editor with any Jupyter Kernel? There is a way for that too. We just need to install “<a href="https://atom.io/packages/hydrogen" rel="nofollow" target="_blank">Hydrogen</a>” using the same method as before. Once Hydrogen is installed you can use it by:</p>
+
+<ul>
+<li><p>Run the command on which your cursor is on using Ctrl+Enter.</p></li>
+
+<li><p>Select any Kernel from the Kernel Selection Screen. I select pyt kernel from the list.</p></li>
+
+<li><p>Now I can continue working in pyt kernel.</p></li>
+</ul>
+
+<p><img src="/images/atom_for_data_science/9.png" alt="Runnin command using Ctrl+Enter will ask you which environment to use." /><em>Runnin command using Ctrl+Enter will ask you which environment to use.</em></p>
+
+<p>Sometimes it might happen that you don’t see an environment/kernel in Atom. In such cases, you can install ipykernel to make that kernel visible to Jupyter as well as Atom.</p>
+
+<p>Here is how to make a new kernel and make it visible in Jupyter/Atom:</p>
+
+<pre><code>conda create -n exampleenv python=3.7
+conda activate exampleenv
+conda install -c anaconda ipykernel
+python -m ipykernel install --user --name=exampleenv
+</code></pre>
+
+<p>Once you run these commands, your kernel will be installed. You can now update the Atom’s kernel list by using:</p>
+
+<p><code>Ctrl+Shift+P</code> &gt;Hydrogen: Update Kernels</p>
+
+<p><img src="/images/atom_for_data_science/10.png" alt="" /></p>
+
+<p>And your kernel should now be available in your Atom editor.</p>
+
+<h3 id="6-search-stack-overflow-from-your-text-editor">6. Search Stack Overflow from your Text Editor</h3>
+
+<p>Stack Overflow is an integral part of any developer’s life. But you know what the hassle is? To leave the coding environment and go to Chrome to search for every simple thing you need to do. And we end up doing it back and forth throughout the day. So, what if we can access Stack Overflow from Atom? You can do precisely that through the <strong>“<a href="https://atom.io/packages/ask-stack" rel="nofollow" target="_blank">ask-stack</a>”</strong> package, which lets one search for questions on SO. We can access it using <code>Ctrl+Alt+A</code></p>
+
+<p><img src="/images/atom_for_data_science/11.png" alt="Access Stack Overflow in Atom using Ctrl+Alt+A." /><em>Access Stack Overflow in Atom using Ctrl+Alt+A.</em></p>
+
+<p>Some other honorable mentions of packages you could use are:</p>
+
+<ul>
+<li><p><a href="https://atom.io/packages/teletype" rel="nofollow" target="_blank">Teletype</a>: Do Pair Coding.</p></li>
+
+<li><p><strong>Linter:</strong> Checks code for Stylistic and Programmatic errors. To enable linting in Python, You can use “<a href="https://atom.io/packages/linter" rel="nofollow" target="_blank">linter</a>” and “<a href="https://atom.io/packages/python-linters" rel="nofollow" target="_blank">python-linters</a>”.</p></li>
+
+<li><p><a href="https://atom.io/packages/highlight-selected" rel="nofollow" target="_blank">Highlight Selected</a>: Highlight all occurrences of a text by double-clicking or selecting the text with a cursor.</p></li>
+
+<li><p><a href="https://atom.io/packages/atom-file-icons" rel="nofollow" target="_blank">Atom-File-Icons</a>: Provides you with file icons in the left side tree view. Looks much better than before, right?</p></li>
+</ul>
+
+<p><img src="/images/atom_for_data_science/12.png" alt="Icons for files" /><em>Icons for files</em></p>
+
+<hr />
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>In this post, I talked about how I use Atom in my Python Development flow.</p>
+
+<p>There are a plethora of other <a href="https://atom.io/packages" rel="nofollow" target="_blank">packages</a> in Atom which you may like, and you can look at them to make your environment even more customizable. Or one can even write their own packages as well as Atom is called as the <strong><em>“Most Hackable Editor”</em></strong>.</p>
+
+<p>If you want to learn about Python and not exactly a Python editor, I would like to call out an excellent course on Learn <a href="https://bit.ly/2XshreA" rel="nofollow" target="_blank">Intermediate level Python</a> from the University of Michigan. Do check it out. Also, here are my <a href="https://towardsdatascience.com/top-10-resources-to-become-a-data-scientist-in-2020-99a315194701?source=---------2------------------" rel="nofollow" target="_blank">course recommendations</a> to become a Data Scientist in 2020.</p>
+
+<p>I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="http://eepurl.com/dbQnuX" rel="nofollow" target="_blank">blog</a> to be informed about them. As always, I welcome feedback and constructive criticism and can be reached on Twitter <a href="https://twitter.com/MLWhiz" rel="nofollow" target="_blank">@mlwhiz</a>.</p>
+
+<p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
+
+		</div>
+		
+<div class="post__tags tags clearfix">
+	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
+	<ul class="tags__list">
+		<li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li>
+		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
+	</ul>
+</div>
+		
+
+<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</article>
+</main>
+
+
+<nav class="post-nav flex">
+	<div class="post-nav__item post-nav__item--prev">
+		<a class="post-nav__link" href="/blog/2020/08/27/pyt_gan/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">A Layman’s Introduction to GANs for Data Scientists using PyTorch</p></a>
+	</div>
+</nav>
+
+<section class="comments">
+	<div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+
+
+			</div>
+			<style type="text/css">
+
+  .btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-session {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+</style>
+
+
+<aside class="sidebar">
+  <div style="text-align:center">     
+    
+  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </div>
+  <br><div class="widget-search widget">
+	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
+		<label>
+			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
+		</label>
+		<input class="widget-search__submit" type="submit" value="Search">
+		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
+	</form>
+</div>
+<div class="widget-recent widget">
+	<h4 class="widget__title">Recent Posts</h4>
+	<div class="widget__content">
+		<ul class="widget__list">
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/09/02/atom_for_data_science/">Create an Awesome Development Setup for Data Science using Atom</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/27/pyt_gan/">A Layman’s Introduction to GANs for Data Scientists using PyTorch</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/27/mlengineercourses/">Become an ML Engineer with these courses from Amazon and Google</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/27/pandasql/">How to use SQL with Pandas?</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/12/ctskills/">5 Essential Business-Oriented Critical Thinking Skills For Data Scientists</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/09/owndlrig/">Creating my First Deep Learning &#43; Data Science Workstation</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/04/spark_dataproc/">Accelerating Spark 3.0 Google DataProc Project with NVIDIA GPUs in 6 simple steps</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/08/deployment_fastapi/">Deployment could be easy — A Data Scientist’s Guide to deploy an Image detection FastAPI API using Amazon ec2</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/08/yolov5/">How to Create an End to End Object Detector using Yolov5</a></li>
+			<li class="widget__item"><a class="widget__link" href="/blog/2020/06/06/fastapi_for_data_scientists/">A Layman’s Guide for Data Scientists to create APIs in minutes</a></li>
+		</ul>
+	</div>
+</div>
+
+<div style="text-align:center">     
+    
+    <a class="btn btn-session" href="https://www.patreon.com/bePatron?u=28135435" role="button">1:1 Session</a>
+  </div>
+
+<br>
+
+
+
+
+<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
+
+<style type="text/css">
+.bookclass .shareaholic-share-buttons-heading .shareaholic-canvas{
+  font-family: montserrat,sans-serif;
+  font-size:.5em ;
+  font-weight: 500;
+  }
+</style>
+<center>
+
+
+
+<div class="bookclass">Subscribe to Get
+<a href="https://www.amazon.in/Advanced-Python-Tips-explained-Simply-ebook/dp/B07TM3D279">
+  <img src="https://d2sofvawe08yqg.cloudfront.net/advancedpythontips/hero2x?1593185350" width="70%" height="70%"></img></a>
+  </div>
+
+<link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+
+
+<style type="text/css">
+  #mc_embed_signup .button {
+
+    background-color: #3f51b5;
+ 
+  }
+  #mc_embed_signup form .center{
+    display: block;
+    position: relative;
+    text-align: -webkit-center;
+    padding: 10px -5px 10px 3%;}  
+ 
+  #mc_embed_signup form {
+    text-align: -webkit-center;
+    } 
+
+    #mc_embed_signup input.button {
+    min-width: 110px;
+}
+
+    #mc_embed_signup #mc_embed_signup_scroll{
+      font-family: montserrat,sans-serif;  
+      font-size:1em; 
+    }
+    #mc_embed_signup input.email {
+      font-family: montserrat,sans-serif; 
+    }
+
+
+   
+</style>
+
+<div id="mc_embed_signup">
+<form action="//mlwhiz.us15.list-manage.com/subscribe/post?u=4e9962f4ce4a94818bcc2f249&amp;id=87a48fafdd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+    <div id="mc_embed_signup_scroll">
+    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+    
+    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_4e9962f4ce4a94818bcc2f249_87a48fafdd" tabindex="-1" value=""></div>
+    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+    </div>
+</form>
+</div>
+</center>
+</aside>
+		</div>
+		<footer class="footer">
+	<div class="container footer__container flex">
+		
+		<div class="footer__copyright">
+			&copy;  2014-2020 Rahul Agarwal.
+			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
+		</div>
+	</div>
+</footer>
+
+
+
+	</div>
+<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
+<script async defer src="/js/menu.js"></script></body>
+</html>
