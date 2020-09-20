@@ -1,94 +1,46 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en-us">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Accelerating Spark 3.0 Google DataProc Project with NVIDIA GPUs in 6 simple steps</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="">
-	
+<html lang="en-us"><head>
+  <meta charset="utf-8">
+  <title>MLWhiz</title>
 
-	
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="This is meta description">
+  <meta name="author" content="Rahul Agarwal">
+  <meta name="generator" content="Hugo 0.74.3" />
+
+  
 	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
-
-	
-	<meta name="generator" content="Hugo 0.53" />
-	<meta property="og:title" content="Accelerating Spark 3.0 Google DataProc Project with NVIDIA GPUs in 6 simple steps" />
-<meta property="og:description" content="Data Exploration is a key part of Data Science. And does it take long? Ahh. Don’t even ask. Preparing a data set for ML not only requires understanding the data set, cleaning, and creating new features, it also involves doing these steps repeatedly until we have a fine-tuned system.
-As we moved towards bigger datasets, Apache Spark came as a ray of hope. It gave us a scalable and distributed in-memory system to work with Big Data." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://mlwhiz.com/blog/2020/08/04/spark_dataproc/" />
-<meta property="og:image" content="https://mlwhiz.com/images/spark_dataproc/main.png" />
-<meta property="article:published_time" content="2020-08-04T00:00:00&#43;00:00"/>
-
-
-	<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://mlwhiz.com/images/spark_dataproc/main.png"/>
-
-<meta name="twitter:title" content="Accelerating Spark 3.0 Google DataProc Project with NVIDIA GPUs in 6 simple steps"/>
-<meta name="twitter:description" content="Data Exploration is a key part of Data Science. And does it take long? Ahh. Don’t even ask. Preparing a data set for ML not only requires understanding the data set, cleaning, and creating new features, it also involves doing these steps repeatedly until we have a fine-tuned system.
-As we moved towards bigger datasets, Apache Spark came as a ray of hope. It gave us a scalable and distributed in-memory system to work with Big Data."/>
-
-
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-	<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,600,600i,700,700i%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
-	<link rel="stylesheet" href="/css/style.css">
-
-	<link rel="stylesheet" href="/css/custom.css">
-	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-
-	
-		
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-54777926-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
-
-	
-	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
 	
 
-	
-	<script>
-	  !function(f,b,e,v,n,t,s)
-	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-	  n.queue=[];t=b.createElement(e);t.async=!0;
-	  t.src=v;s=b.getElementsByTagName(e)[0];
-	  s.parentNode.insertBefore(t,s)}(window, document,'script',
-	  'https://connect.facebook.net/en_US/fbevents.js');
-	  fbq('init', '1062344757288542');
-	  fbq('track', 'PageView');
-	</script>
-	<noscript><img height="1" width="1" style="display:none"
-	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
-	/></noscript>
-	
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/plugins/bootstrap/bootstrap.min.css ">
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/plugins/slick/slick.css ">
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/plugins/themify-icons/themify-icons.css ">
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/plugins/venobox/venobox.css ">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/scss/style.min.css" media="screen">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <link rel="stylesheet" type="text/css" href="/css/font/flaticon.css" >
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://mlwhiz.com/images/favicon-200x200.png " type="image/x-icon">
+  <link rel="icon" href="https://mlwhiz.com/images/favicon.png " type="image/x-icon">
 
 
-	
 
-<script async data-uid="a0ebaf958d" src="https://mlwhiz.ck.page/a0ebaf958d/index.js"></script>
-
-
-  	<script type="text/javascript" async
+  
+  <script async data-uid="a0ebaf958d" src="https://mlwhiz.ck.page/a0ebaf958d/index.js"></script>
+  <script type="text/javascript" async
   src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
   MathJax.Hub.Config({
   tex2jax: {
@@ -116,337 +68,197 @@ if (!doNotTrack) {
   TeX: { equationNumbers: { autoNumber: "AMS" } }
   });
 </script>
+
 </head>
-<body class="body">
-	  
-	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
-	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-	  
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container">
-		<div class="logo">
+<body>
+      
+   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+   
+<!-- preloader start -->
+<div class="preloader">
+  
+</div>
+<!-- preloader end -->
+<!-- navigation -->
+<header class="navigation">
+  <div class="container">
+    
+    <nav class="navbar navbar-expand-lg navbar-white bg-transparent border-bottom pl-0">
+      <a class="navbar-brand mobile-view" href="https://mlwhiz.com/"><img class="img-fluid"
+          src="https://mlwhiz.com/images/logo.png" alt="MLWhiz"></a>
+      <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navigation">
+        <i class="ti-menu h3"></i>
+      </button>
 
-			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+      <div class="collapse navbar-collapse text-center" id="navigation">
+        <div class="desktop-view">
+          <ul class="navbar-nav mr-auto">
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://www.linkedin.com/in/rahulagwl/"><i class="ti-linkedin"></i></a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://medium.com/@rahul_agarwal"><i class="ti-book"></i></a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://twitter.com/MLWhiz"><i class="ti-twitter-alt"></i></a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://www.facebook.com/mlwhizblog"><i class="ti-facebook"></i></a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/MLWhiz"><i class="ti-github"></i></a>
+            </li>
+            
+          </ul>
+        </div>
 
-				<div class="logo__title">MLWhiz</div>
-				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
-			</a>
-		</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">Menu</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">Blog</span>
-				
-			</a>
-		</li>
-		<li class="menu__item menu__dropdown">
-			<a class="menu__link" href="/tags">
-				
-				<span class="menu__text">Topics</span>
-				<label class="drop-icon" for="Topics">▾</label>
-				
-			</a>
-			<input type="checkbox" id="Topics">
-			<ul class="submenu__list">
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/deep-learning">
-						
-						<span class="menu__text">Deep Learning</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/artificial-intelligence">
-						
-						<span class="menu__text">Artificial Intelligence</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/natural-language-processing">
-						
-						<span class="menu__text">Natural Language Processing</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/computer-vision">
-						
-						<span class="menu__text">Computer Vision</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/machine-learning">
-						
-						<span class="menu__text">Machine Learning</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/data-science">
-						
-						<span class="menu__text">Data Science</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/big-data">
-						
-						<span class="menu__text">Big Data</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/python">
-						
-						<span class="menu__text">Python</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/statistics">
-						
-						<span class="menu__text">Statistics</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/visualization">
-						
-						<span class="menu__text">Visualization</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/production">
-						
-						<span class="menu__text">Production</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/algorithms">
-						
-						<span class="menu__text">Algorithms</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/kaggle">
-						
-						<span class="menu__text">Kaggle</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/graphs">
-						
-						<span class="menu__text">Graphs</span>
-						
-					</a>
-					</li>
-				
-			</ul>
-		</li>
-		<li class="menu__item menu__dropdown">
-			<a class="menu__link" href="/resources/index.html">
-				
-				<span class="menu__text">Learning Resources</span>
-				<label class="drop-icon" for="Learning Resources">▾</label>
-				
-			</a>
-			<input type="checkbox" id="Learning Resources">
-			<ul class="submenu__list">
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/best-content">
-						
-						<span class="menu__text">Best Content</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/awesome-guides">
-						
-						<span class="menu__text">Awesome Guides</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/curated-resources">
-						
-						<span class="menu__text">Curated Resources</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/tools">
-						
-						<span class="menu__text">Tools</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/productivity">
-						
-						<span class="menu__text">Productivity</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/opinion">
-						
-						<span class="menu__text">Opinion</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/jobs">
-						
-						<span class="menu__text">Jobs</span>
-						
-					</a>
-					</li>
-				
-			</ul>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">About Me</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/archive">
-				
-				<span class="menu__text">Archive</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/atom.xml">
-				
-				<span class="menu__text">RSS</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
+        <a class="navbar-brand mx-auto desktop-view" href="https://mlwhiz.com/"><img class="img-fluid-custom"
+            src="https://mlwhiz.com/images/logo.png" alt="MLWhiz"></a>
 
+        <ul class="navbar-nav">
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="https://mlwhiz.com/about">About</a>
+          </li>
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="https://mlwhiz.com/blog">Blog</a>
+          </li>
+          
+          
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+              Topics
+            </a>
+            <div class="dropdown-menu">
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/natural-language-processing">NLP</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/deep-learning">Computer Vision</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/deep-learning">Deep Learning</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/data-science">DS/ML</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/big-data">Big Data</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/awesome-guides">My Best Content</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/learning-resources">Learning Resources</a>
+              
+            </div>
+          </li>
+          
+          
+        </ul>
 
-	</div>
+        
+        <!-- search -->
+        <div class="search pl-lg-4">
+          <button id="searchOpen" class="search-btn"><i class="ti-search"></i></button>
+          <div class="search-wrapper">
+            <form action="https://mlwhiz.com//search" class="h-100">
+              <input class="search-box px-4" id="search-query" name="s" type="search" placeholder="Type & Hit Enter...">
+            </form>
+            <button id="searchClose" class="search-close"><i class="ti-close text-dark"></i></button>
+          </div>
+        </div>
+        
+
+        
+      </div>
+    </nav>
+  </div>
 </header>
+<!-- /navigation -->
 
 
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">Accelerating Spark 3.0 Google DataProc Project with NVIDIA GPUs in 6 simple steps</h1>
-			<div class="post__meta meta">
-<div class="meta__item-datetime meta__item">
-	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
-	<time class="meta__text" datetime="2020-08-04T00:00:00">August 04, 2020</time>
-	
-		
-</div>
-</div>
-		</header>
-		<div class="content post__content clearfix">
-			
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 mb-5 mb-lg-0">
+        
+        
+        <a href="/categories/big-data"
+          class="categoryStyle">Big Data</a>
+        
+        <a href="/categories/data-science"
+          class="categoryStyle">Data Science</a>
+        
+        <h1>Accelerating Spark 3.0 Google DataProc Project with NVIDIA GPUs in 6 simple steps</h1>
+        <div class="mb-3 post-meta">
+          <span>By Rahul Agarwal</span>
+          
+          <svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"></path></svg>
 
-<p><img src="/images/spark_dataproc/main.png" alt="" /></p>
+          <span>04 August 2020</span>
+          
+        </div>
+        
+        <img src="https://mlwhiz.com/images/spark_dataproc/main.png" class="img-fluid w-100 mb-4" alt="Accelerating Spark 3.0 Google DataProc Project with NVIDIA GPUs in 6 simple steps">
+        
+        <div class="content mb-5">
+          <p>Data Exploration is a key part of Data Science. And does it take long? Ahh. Don’t even ask. Preparing a data set for ML not only requires understanding the data set, cleaning, and creating new features, it also involves doing these steps repeatedly until we have a fine-tuned system.</p>
+<p>As we moved towards bigger datasets, <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a">Apache Spark</a> came as a ray of hope. It gave us a scalable and distributed in-memory system to work with Big Data. By the by, we also saw frameworks like <a href="https://towardsdatascience.com/moving-from-keras-to-pytorch-f0d4fff4ce79">Pytorch</a> and Tensorflow that inherently parallelized matrix computations using thousands of GPU cores.</p>
+<p>But never did we see these two systems working in tandem in the past. We continued to use Spark for Big Data ETL tasks and GPUs for matrix intensive problems in <a href="https://towardsdatascience.com/stop-worrying-and-create-your-deep-learning-server-in-30-minutes-bb5bd956b8de">Deep Learning</a>.</p>
+<p>
+  <img src="/images/spark_dataproc/0.png" alt="&lt;a href=&#34;https://marketing.thepoweroftwo.solutions/acton/attachment/42621/f-0f867d92-c1d0-4112-afef-26f9cbb51499/1/-/-/-/-/NVIDIA%20&amp;amp;%20Google%20Cloud%20Dataproc%20ebook%20July2020.pdf&#34;&gt;Source&lt;/a&gt;">
 
-<p>Data Exploration is a key part of Data Science. And does it take long? Ahh. Don’t even ask. Preparing a data set for ML not only requires understanding the data set, cleaning, and creating new features, it also involves doing these steps repeatedly until we have a fine-tuned system.</p>
 
-<p>As we moved towards bigger datasets, <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" rel="nofollow" target="_blank">Apache Spark</a> came as a ray of hope. It gave us a scalable and distributed in-memory system to work with Big Data. By the by, we also saw frameworks like <a href="https://towardsdatascience.com/moving-from-keras-to-pytorch-f0d4fff4ce79" rel="nofollow" target="_blank">Pytorch</a> and Tensorflow that inherently parallelized matrix computations using thousands of GPU cores.</p>
 
-<p>But never did we see these two systems working in tandem in the past. We continued to use Spark for Big Data ETL tasks and GPUs for matrix intensive problems in <a href="https://towardsdatascience.com/stop-worrying-and-create-your-deep-learning-server-in-30-minutes-bb5bd956b8de" rel="nofollow" target="_blank">Deep Learning</a>.</p>
-
-<p><img src="/images/spark_dataproc/0.png" alt="[Source](https://marketing.thepoweroftwo.solutions/acton/attachment/42621/f-0f867d92-c1d0-4112-afef-26f9cbb51499/1/-/-/-/-/NVIDIA%20&amp;%20Google%20Cloud%20Dataproc%20ebook%20July2020.pdf)" /></p>
-
-<p>And that is where Spark 3.0 comes. It provides us with a way to add NVIDIA GPUs to our Spark cluster nodes. The work done by these nodes can now be parallelized using both the CPU+GPU using the software platform for GPU computing, <a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientist-on-gpu-d9a6c7759c7f?source=post_stats_page---------------------------" rel="nofollow" target="_blank">RAPIDS</a>.</p>
-
+</p>
+<p>And that is where Spark 3.0 comes. It provides us with a way to add NVIDIA GPUs to our Spark cluster nodes. The work done by these nodes can now be parallelized using both the CPU+GPU using the software platform for GPU computing, <a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientist-on-gpu-d9a6c7759c7f?source=post_stats_page---------------------------">RAPIDS</a>.</p>
 <blockquote>
-<h1 id="spark-gpu-rapids-spark-3-0">Spark + GPU + RAPIDS = Spark 3.0</h1>
+<h1 id="spark--gpu--rapids--spark-30">Spark + GPU + RAPIDS = Spark 3.0</h1>
 </blockquote>
-
-<p>As per <a href="https://www.nvidia.com/en-in/deep-learning-ai/solutions/data-science/apache-spark-3/" rel="nofollow" target="_blank">NVIDIA</a>, the early adopters of Spark 3.0 already see a significantly faster performance with their current data loads. Such reductions in processing times can allow Data Scientists to perform more iterations on much bigger datasets, allowing Retailers to improve their forecasting, finance companies to enhance their credit models, and ad tech firms to improve their ability to predict click-through rates.</p>
-
+<p>As per <a href="https://www.nvidia.com/en-in/deep-learning-ai/solutions/data-science/apache-spark-3/">NVIDIA</a>, the early adopters of Spark 3.0 already see a significantly faster performance with their current data loads. Such reductions in processing times can allow Data Scientists to perform more iterations on much bigger datasets, allowing Retailers to improve their forecasting, finance companies to enhance their credit models, and ad tech firms to improve their ability to predict click-through rates.</p>
 <p>Excited yet. So how can you start using Spark 3.0? Luckily, Google Cloud, Spark, and NVIDIA have come together and simplified the cluster creation process for us. With Dataproc on Google Cloud, we can have a fully-managed Apache Spark cluster with GPUs in a few minutes.</p>
-
-<p><strong><em>This post is about setting up your own Dataproc Spark Cluster with NVIDIA GPUs on Google Cloud.</em></strong></p>
-
-<hr />
-
+<p><em><strong>This post is about setting up your own Dataproc Spark Cluster with NVIDIA GPUs on Google Cloud.</strong></em></p>
+<hr>
 <h3 id="1-create-a-new-gcp-project">1. Create a New GCP Project</h3>
+<p>After the initial signup on the <a href="https://cloud.google.com/">Google Cloud Platform</a>, we can start a new project. Here I begin by creating a new project namedSparkDataProc.</p>
+<p>
+  <img src="/images/spark_dataproc/1.png" alt="Create a New Project">
 
-<p>After the initial signup on the <a href="https://cloud.google.com/" rel="nofollow" target="_blank">Google Cloud Platform</a>, we can start a new project. Here I begin by creating a new project namedSparkDataProc.</p>
 
-<p><img src="/images/spark_dataproc/1.png" alt="Create a New Project" /><em>Create a New Project</em></p>
 
-<hr />
-
+<em>Create a New Project</em></p>
+<hr>
 <h3 id="2-enable-the-apis-in-the-gcp-project">2. Enable the APIs in the GCP Project</h3>
-
 <p>Once we add this project, we can go to our new project and start a Cloud Shell instance by clicking the “Activate <strong>Cloud Shell</strong>” button at the top right corner. Doing so will open up a terminal window at the bottom of our screen where we can run our next commands to set up a data proc cluster:</p>
+<p>
+  <img src="/images/spark_dataproc/2.png" alt="Activate &lt;strong&gt;Cloud Shell&lt;/strong&gt; for putting your commands">
 
-<p><img src="/images/spark_dataproc/2.png" alt="Activate **Cloud Shell** for putting your commands" /></p>
 
+
+</p>
 <p>After this, we will need to run some commands to set up our project in the cloud shell. We start by enabling dataproc services within your project. Enable the Compute and Dataproc APIs to access Dataproc, and enable the Storage API as you’ll need a Google Cloud Storage bucket to house your data. We also set our default region. This may take several minutes:</p>
-
 <pre><code>gcloud services enable compute.googleapis.com
 gcloud services enable dataproc.googleapis.com
 gcloud services enable storage-api.googleapis.com
 gcloud config set dataproc/region us-central1
 </code></pre>
-
-<hr />
-
+<hr>
 <h3 id="3-create-and-put-some-data-in-gcs-bucket">3. Create and Put some data in GCS Bucket</h3>
-
 <p>Once done, we can create a new Google Cloud Storage Bucket, where we will keep all our data in the Cloud Shell:</p>
-
 <pre><code>#You might need to change this name as this needs to be unique across all the users
 export BUCKET_NAME=rahulsparktest
 
 #Create the Bucket
 gsutil mb gs://${BUCKET_NAME}
 </code></pre>
-
 <p>We can also put some data in the bucket for later run purposes when we are running our spark cluster.</p>
-
 <pre><code># Get data in cloudshell terminal
 git clone https://github.com/caroljmcdonald/spark3-book
 mkdir -p ~/data/cal_housing
@@ -455,22 +267,16 @@ tar -xzf spark3-book/data/cal_housing.tgz -C ~/data
 # Put data into Bucket using gsutil
 gsutil cp ~/data/CaliforniaHousing/cal_housing.data gs://${BUCKET_NAME}/data/cal_housing/cal_housing.csv
 </code></pre>
-
-<hr />
-
+<hr>
 <h3 id="4-setup-the-dataproc-rapids-cluster">4. Setup the DataProc Rapids Cluster</h3>
-
-<p>To create a DataProc RAPIDS cluster that uses NVIDIA T4 GPUs, we need to get some initialization scripts that are used to instantiate our cluster. These scripts will install the GPU drivers(<a href="https://raw.githubusercontent.com/GoogleCloudDataproc/initialization-actions/master/gpu/install_gpu_driver.sh" rel="nofollow" target="_blank">install_gpu_driver.sh</a>) and create the Rapids conda environment(<a href="https://raw.githubusercontent.com/GoogleCloudDataproc/initialization-actions/master/rapids/rapids.sh" rel="nofollow" target="_blank">rapids.sh</a>) automatically for us. Since these scripts are in the development phase, the best way is to get the scripts from the GitHub source. We can do this using the below commands in our cloud shell in which we get the initialization scripts and copy them into our GS Bucket:</p>
-
+<p>To create a DataProc RAPIDS cluster that uses NVIDIA T4 GPUs, we need to get some initialization scripts that are used to instantiate our cluster. These scripts will install the GPU drivers(<a href="https://raw.githubusercontent.com/GoogleCloudDataproc/initialization-actions/master/gpu/install_gpu_driver.sh">install_gpu_driver.sh</a>) and create the Rapids conda environment(<a href="https://raw.githubusercontent.com/GoogleCloudDataproc/initialization-actions/master/rapids/rapids.sh">rapids.sh</a>) automatically for us. Since these scripts are in the development phase, the best way is to get the scripts from the GitHub source. We can do this using the below commands in our cloud shell in which we get the initialization scripts and copy them into our GS Bucket:</p>
 <pre><code>wget https://raw.githubusercontent.com/GoogleCloudDataproc/initialization-actions/master/rapids/rapids.sh
 wget https://raw.githubusercontent.com/GoogleCloudDataproc/initialization-actions/master/gpu/install_gpu_driver.sh
 
 gsutil cp rapids.sh gs://$BUCKET_NAME
 gsutil cp install_gpu_driver.sh gs://$BUCKET_NAME
 </code></pre>
-
-<p>We can now create our cluster using the below command in the Cloud Shell. In the below command, we are using a predefined image version(2.0.0-RC2-ubuntu18) which has Spark 3.0 and python 3.7 to create our dataproc cluster. I am using a previous version of this image since the newest version has some issues with running Jupyter and Jupyter Lab. You can get a list of all versions <a href="https://cloud.google.com/dataproc/docs/release-notes" rel="nofollow" target="_blank">here</a>.</p>
-
+<p>We can now create our cluster using the below command in the Cloud Shell. In the below command, we are using a predefined image version(2.0.0-RC2-ubuntu18) which has Spark 3.0 and python 3.7 to create our dataproc cluster. I am using a previous version of this image since the newest version has some issues with running Jupyter and Jupyter Lab. You can get a list of all versions <a href="https://cloud.google.com/dataproc/docs/release-notes">here</a>.</p>
 <pre><code>CLUSTER_NAME=sparktestcluster
 REGION=us-central1
 gcloud beta dataproc clusters create ${CLUSTER_NAME} \
@@ -488,51 +294,63 @@ gcloud beta dataproc clusters create ${CLUSTER_NAME} \
 --properties=&quot;^#^spark:spark.task.resource.gpu.amount=0.125#spark:spark.executor.
 cores=8#spark:spark.task.cpus=1#spark:spark.yarn.unmanagedAM.enabled=false&quot;
 </code></pre>
+<p>
+  <img src="/images/spark_dataproc/3.png" alt="&lt;strong&gt;Cluster Architecture&lt;/strong&gt;">
 
-<p><img src="/images/spark_dataproc/3.png" alt="**Cluster Architecture**" /></p>
 
+
+</p>
 <p>Our resulting Dataproc cluster has:</p>
-
 <ul>
-<li><p>One 8-core master node and two 32-core worker nodes</p></li>
-
-<li><p>Two NVIDIA T4 GPUs attached to each worker node</p></li>
-
-<li><p>Anaconda, Jupyter, and Zeppelin enabled</p></li>
-
-<li><p>Component gateway enabled for accessing Web UIs hosted on the cluster</p></li>
-
-<li><p>Extra Spark config tuning suitable for a notebook environment set using the properties flag. Specifically, we set spark.executor.cores=8 for improved parallelization and spark.yarn.unmanagedAM.enabled=false since it currently breaks <strong><em>SparkUI</em></strong>.</p></li>
+<li>
+<p>One 8-core master node and two 32-core worker nodes</p>
+</li>
+<li>
+<p>Two NVIDIA T4 GPUs attached to each worker node</p>
+</li>
+<li>
+<p>Anaconda, Jupyter, and Zeppelin enabled</p>
+</li>
+<li>
+<p>Component gateway enabled for accessing Web UIs hosted on the cluster</p>
+</li>
+<li>
+<p>Extra Spark config tuning suitable for a notebook environment set using the properties flag. Specifically, we set spark.executor.cores=8 for improved parallelization and spark.yarn.unmanagedAM.enabled=false since it currently breaks <em><strong>SparkUI</strong></em>.</p>
+</li>
 </ul>
-
-<p><strong><em>Troubleshooting:</em></strong> If you get errors regarding limits after this command, you might want to change some of the quotas in your default <a href="https://console.cloud.google.com/iam-admin/quotas?project=sparkdataproc" rel="nofollow" target="_blank">Google Console Quotas Page</a>. The limits I ended up changing were:</p>
-
+<p><em><strong>Troubleshooting:</strong></em> If you get errors regarding limits after this command, you might want to change some of the quotas in your default <a href="https://console.cloud.google.com/iam-admin/quotas?project=sparkdataproc">Google Console Quotas Page</a>. The limits I ended up changing were:</p>
 <ul>
-<li><p><strong>GPUs (all regions)</strong> to 12 (Minimum:4)</p></li>
-
-<li><p><strong>CPUs (all regions)</strong> to 164 (Minimum:72)</p></li>
-
-<li><p><strong>NVIDIA T4 GPUs</strong> in us-central1 to 12 (Minimum:4)</p></li>
-
-<li><p><strong>CPUs</strong> in us-central1 to 164 (Minimum:72)</p></li>
+<li>
+<p><strong>GPUs (all regions)</strong> to 12 (Minimum:4)</p>
+</li>
+<li>
+<p><strong>CPUs (all regions)</strong> to 164 (Minimum:72)</p>
+</li>
+<li>
+<p><strong>NVIDIA T4 GPUs</strong> in us-central1 to 12 (Minimum:4)</p>
+</li>
+<li>
+<p><strong>CPUs</strong> in us-central1 to 164 (Minimum:72)</p>
+</li>
 </ul>
-
 <p>I actually requested more limits than I required as the limit increase process might take a little longer and I will spin up some larger clusters later.</p>
-
-<hr />
-
+<hr>
 <h3 id="5-run-jupyterlab-on-dataproc-rapids-cluster">5. Run JupyterLab on DataProc Rapids Cluster</h3>
+<p>Once your command succeeds(It might take 10–15 mins) you will be able to see your Dataproc cluster at <a href="https://console.cloud.google.com/dataproc/clusters">https://console.cloud.google.com/dataproc/clusters</a>. Or you can go to the Google Cloud Platform console on your browser and search for “Dataproc” and click on the “Dataproc” icon(It looks like three connected circles). This will navigate you to the Dataproc clusters page.</p>
+<p>
+  <img src="/images/spark_dataproc/4.png" alt="Dataproc Clusters Page">
 
-<p>Once your command succeeds(It might take 10–15 mins) you will be able to see your Dataproc cluster at <a href="https://console.cloud.google.com/dataproc/clusters" rel="nofollow" target="_blank">https://console.cloud.google.com/dataproc/clusters</a>. Or you can go to the Google Cloud Platform console on your browser and search for “Dataproc” and click on the “Dataproc” icon(It looks like three connected circles). This will navigate you to the Dataproc clusters page.</p>
 
-<p><img src="/images/spark_dataproc/4.png" alt="Dataproc Clusters Page" /></p>
 
+</p>
 <p>Now, you would be able to open a web interface(Jupyter/JupyterLab/Zeppelin) if you click on the sparktestcluster and then “Web Interfaces”.</p>
+<p>
+  <img src="/images/spark_dataproc/5.png" alt="Web Interface Page for our Cluster">
 
-<p><img src="/images/spark_dataproc/5.png" alt="Web Interface Page for our Cluster" /></p>
 
+
+</p>
 <p>After opening up your Jupyter Pyspark Notebook, here is some example code for you to run if you are following along with this tutorial. In this code, we load a small dataset, and we see that the df.count() function ran in 252ms which is indeed fast for Spark, but I would do a much detailed benchmarking post later so keep tuned.</p>
-
 <pre><code>file = &quot;gs://rahulsparktest/data/cal_housing/cal_housing.csv&quot;
 
 df = spark.read.load(file,format=&quot;csv&quot;, sep=&quot;,&quot;, inferSchema=&quot;true&quot;, header=&quot;false&quot;)
@@ -541,31 +359,38 @@ colnames = [&quot;longitude&quot;,&quot;latitude&quot;,&quot;medage&quot;,&quot;
 df = df.toDF(*colnames)
 df.count()
 </code></pre>
+<p>
+  <img src="/images/spark_dataproc/6.png" alt="Yes Our &lt;strong&gt;Jupyter Notebook&lt;/strong&gt; Works">
 
-<p><img src="/images/spark_dataproc/6.png" alt="Yes Our **Jupyter Notebook** Works" /></p>
 
+
+</p>
 <h3 id="6-access-the-spark-ui">6. Access the Spark UI</h3>
-
 <p>That is all well and done, but one major problem I faced was that I was not able to access the Spark UI using the link provided in the notebook. I found out that there were two ways to access the Spark UI for debugging purposes:</p>
-
 <p><strong>A. Using the Web Interface option:</strong></p>
-
 <p>We can access Spark UI by clicking first on <strong>Yarn Resource Manager</strong> Link on the <strong>Web Interface</strong> and then on Application Master on the corresponding page:</p>
+<p>
+  <img src="/images/spark_dataproc/7.png" alt="Click on &lt;strong&gt;Application Master&lt;/strong&gt; in &lt;strong&gt;Tracking UI&lt;/strong&gt; Column to get Spark UI">
 
-<p><img src="/images/spark_dataproc/7.png" alt="Click on **Application Master** in **Tracking UI** Column to get Spark UI" /></p>
 
+
+</p>
 <p>And, you will arrive at the Spark UI Page:</p>
+<p>
+  <img src="/images/spark_dataproc/8.png" alt="Yes! We get the Spark UI.">
 
-<p><img src="/images/spark_dataproc/8.png" alt="Yes! We get the Spark UI." /></p>
 
+
+</p>
 <p>B. <strong>Using the SSH Tunneling option:</strong></p>
-
 <p>Another option to access the Spark UI is using Tunneling. To do this, you need to go to the Web Interface Page and click on <em>“Create an SSH tunnel to connect to a web interface”.</em></p>
+<p>
+  <img src="/images/spark_dataproc/9.png" alt="Spark Test Cluster Web Interface using SSH">
 
-<p><img src="/images/spark_dataproc/9.png" alt="Spark Test Cluster Web Interface using SSH" /></p>
 
+
+</p>
 <p>This will give you two commands that you want to run on your <strong>local machine</strong> and not on Cloud shell. But before running them, you need to install google cloud SDK to your machine and set it up for your current project:</p>
-
 <pre><code>sudo snap install google-cloud-sdk --classic
 
 # This Below command will open the browser where you can authenticate by selecting your own google account.
@@ -574,97 +399,328 @@ gcloud auth login
 # Set up the project as sparkdataproc (project ID)
 gcloud config set project sparkdataproc
 </code></pre>
-
 <p>Once done with this, we can simply run the first command:</p>
-
 <pre><code>gcloud compute ssh sparktestcluster-m --project=sparkdataproc  --zone=us-central1-b -- -D 1080 -N
 </code></pre>
-
 <p>And then the second one in another tab/window. This command will open up a new chrome window where you can access the Spark UI by clicking on Application Master the same as before.</p>
-
 <pre><code>/usr/bin/google-chrome --proxy-server=&quot;socks5://localhost:1080&quot;   --user-data-dir=&quot;/tmp/sparktestcluster-m&quot; [http://sparktestcluster-m:8088](http://sparktestcluster-m:8088)
 </code></pre>
-
 <p>And that is it for setting up a Spark3.0 Cluster accelerated by GPUs.</p>
-
 <p>It took me around 30 mins to go through all these steps if I don’t count the debugging time and the quota increase requests.</p>
-
 <p>I am totally amazed by the concept of using a GPU on Spark and the different streams of experiments it opens up. Will be working on a lot of these in the coming weeks not only to benchmark but also because it is fun. So stay tuned.</p>
-
-<hr />
-
+<hr>
 <h2 id="continue-learning">Continue Learning</h2>
+<p>Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out these excellent courses on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293556&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-essentials">Big Data Essentials: HDFS, MapReduce, and Spark RDD</a> and <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293488&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-analysis">Big Data Analysis: Hive, Spark SQL, DataFrames and GraphFrames</a> by Yandex on Coursera.</p>
+<p>I am going to be writing more of such posts in the future too. Let me know what you think about them. Follow me up at <a href="https://medium.com/@rahul_agarwal">Medium</a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c">blog</a>.</p>
 
-<p>Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out these excellent courses on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293556&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-essentials" rel="nofollow" target="_blank">Big Data Essentials: HDFS, MapReduce, and Spark RDD</a> and <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293488&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-analysis" rel="nofollow" target="_blank">Big Data Analysis: Hive, Spark SQL, DataFrames and GraphFrames</a> by Yandex on Coursera.</p>
 
-<p>I am going to be writing more of such posts in the future too. Let me know what you think about them. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank">Medium</a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c" rel="nofollow" target="_blank">blog</a>.</p>
 
-		</div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+  
 
-		 
-		<script async data-uid="8d7942551b" src="https://mlwhiz.ck.page/8d7942551b/index.js"></script>
-		<br>
-		
-		
-<div class="post__tags tags clearfix">
-	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
-	<ul class="tags__list">
-		<li class="tags__item"><a class="tags__link btn" href="/tags/big-data/" rel="tag">Big Data</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/machine-learning/" rel="tag">Machine Learning</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/data-science/" rel="tag">Data Science</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/artificial-intelligence/" rel="tag">Artificial Intelligence</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/production/" rel="tag">Production</a></li>
-	</ul>
+  <div class="widget">
+    
+<script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#00aaa1', 'S6S3NPCD');kofiwidget2.draw();</script>
+
 </div>
-		
+  <div class="widget">
+    
+    <h4 class="widget-title">About Me</h4>
+    
+    <img src="https://mlwhiz.com/images/author.jpg" alt=""
+      class="img-fluid author-thumb-sm d-block mx-auto rounded-circle mb-4">
+    
+    <p>I’m a data scientist consultant and big data engineer based in Bangalore, where I am currently working with WalmartLabs .</p>
+    <a href="https://mlwhiz.com/about/" class="btn btn-outline-primary">Know More</a>
+    
+  </div>
 
-<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+  
+  <div class="widget">
+    <h4 class="widget-title">Topics</h4>
+    <ul class="list-unstyled">
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/awesome-guides">Awesome Guides</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/big-data">Big Data</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/computer-vision">Computer Vision</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/data-science">Data Science</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/deep-learning">Deep Learning</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/learning-resources">Learning Resources</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/natural-language-processing">Natural Language Processing</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/programming">Programming</a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="widget">
+    <h4 class="widget-title">Tags</h4>
+    <ul class="list-inline">
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/algorithms">Algorithms</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/artificial-intelligence">Artificial Intelligence</a></li>
+          
+
+
+          
+
+
+          
+
+
+          
+
+
+          
+
+
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/dask">Dask</a></li>
+          
+
+
+          
+
+
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/deployment">Deployment</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/ec2">Ec2</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/generative-adversarial-networks">Generative Adversarial Networks</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/graphs">Graphs</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/image-classification">Image Classification</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/instance-segmentation">Instance Segmentation</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/interpretability">Interpretability</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/jobs">Jobs</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/kaggle">Kaggle</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/machine-learning">Machine Learning</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/math">Math</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/multiprocessing">Multiprocessing</a></li>
+          
+
+
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/object-detection">Object Detection</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/opinion">Opinion</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/pandas">Pandas</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/production">Production</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/productivity">Productivity</a></li>
+          
+
+
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/python">Python</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/pytorch">Pytorch</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/spark">Spark</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/sql">Sql</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/statistics">Statistics</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/streamlit">Streamlit</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/text-classification">Text Classification</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/timeseries">Timeseries</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/tools">Tools</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/visualization">Visualization</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/xgboost">Xgboost</a></li>
+          
+    </ul>
+  </div>
+  
+  <div class="widget">
+    <h4 class="widget-title">Connect With Me</h4>
+    <ul class="list-inline social-links">
+      
+      <li class="list-inline-item"><a href="https://www.linkedin.com/in/rahulagwl/"><i class="ti-linkedin"></i></a></li>
+      
+      <li class="list-inline-item"><a href="https://medium.com/@rahul_agarwal"><i class="ti-book"></i></a></li>
+      
+      <li class="list-inline-item"><a href="https://twitter.com/MLWhiz"><i class="ti-twitter-alt"></i></a></li>
+      
+      <li class="list-inline-item"><a href="https://www.facebook.com/mlwhizblog"><i class="ti-facebook"></i></a></li>
+      
+      <li class="list-inline-item"><a href="https://github.com/MLWhiz"><i class="ti-github"></i></a></li>
+      
+    </ul>
+  </div>
+  
+  
+<script async data-uid="bfe9f82f10" src="https://mlwhiz.ck.page/bfe9f82f10/index.js"></script>
+
+<script async data-uid="3452d924e2" src="https://mlwhiz.ck.page/3452d924e2/index.js"></script>
+
+</div>
+
+    </div>
+    
+<script async data-uid="8d7942551b" src="https://mlwhiz.ck.page/8d7942551b/index.js"></script>
+
+<div class="shareaholic-canvas col-lg-8 mb-5 mb-lg-0" data-app="share_buttons" data-app-id="28372088"></div>
 
 <a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	</article>
-</main>
-
-
-<nav class="post-nav flex">
-	<div class="post-nav__item post-nav__item--prev">
-		<a class="post-nav__link" href="/blog/2020/08/08/deployment_fastapi/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Deployment could be easy — A Data Scientist’s Guide to deploy an Image detection FastAPI API using Amazon ec2</p></a>
-	</div>
-	<div class="post-nav__item post-nav__item--next">
-		<a class="post-nav__link" href="/blog/2020/08/09/owndlrig/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">Creating my First Deep Learning &#43; Data Science Workstation</p></a>
-	</div>
-</nav>
-
-<section class="comments">
-	<div id="disqus_thread"></div>
+<div id="disqus_thread"></div>
 <script type="application/javascript">
     var disqus_config = function () {
     
@@ -684,113 +740,131 @@ gcloud config set project sparkdataproc
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  </div>
 </section>
 
 
-			</div>
-			<style type="text/css">
 
-  .btn {
-    display: inline-block;
-    font-weight: 400;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    border: 1px solid transparent;
-    padding: .375rem .75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    border-radius: .25rem;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
-
-.btn-session {
-    color: #fff;
-    background-color: #28a745;
-    border-color: #28a745;
-}
-</style>
-
-
-<aside class="sidebar">
-  <div style="text-align:center">
-    
-  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-5">
+        <a href="https://mlwhiz.com/"><img src="https://mlwhiz.com/images/logo.png" class="img-fluid-custom-bottom" alt="MLWhiz"></a>
+      </div>
+      <div class="col-lg-3 col-sm-6 mb-5">
+        <h6 class="mb-4">Contact Me</h6>
+        <ul class="list-unstyled">
+          <li class="mb-3"><i class="ti-location-pin mr-3 text-primary"></i>India, Bangalore</li>
+          <li class="mb-3"><a class="text-dark" href="mailto:rahul@mlwhiz.com"><i
+                class="ti-email mr-3 text-primary"></i>rahul@mlwhiz.com</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-sm-6 mb-5">
+        <h6 class="mb-4">Social Contacts</h6>
+        <ul class="list-unstyled">
+          
+          <li class="mb-3"><a class="text-dark" href="https://www.linkedin.com/in/rahulagwl/">Linkedin</a></li>
+          
+          <li class="mb-3"><a class="text-dark" href="https://medium.com/@rahul_agarwal">Medium</a></li>
+          
+          <li class="mb-3"><a class="text-dark" href="https://twitter.com/MLWhiz">Twitter</a></li>
+          
+          <li class="mb-3"><a class="text-dark" href="https://www.facebook.com/mlwhizblog">Facebook</a></li>
+          
+          <li class="mb-3"><a class="text-dark" href="https://github.com/MLWhiz">Github</a></li>
+          
+        </ul>
+      </div>
+      <div class="col-lg-3 col-sm-6 mb-5">
+        <h6 class="mb-4">Categories</h6>
+        <ul class="list-unstyled">
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/awesome-guides">Awesome Guides</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/big-data">Big Data</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/computer-vision">Computer Vision</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/data-science">Data Science</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/deep-learning">Deep Learning</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/learning-resources">Learning Resources</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/natural-language-processing">Natural Language Processing</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/programming">Programming</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-sm-6 mb-5">
+        <h6 class="mb-4">Quick Links</h6>
+        <ul class="list-unstyled">
+          
+          <li class="mb-3"><a class="text-dark" href="https://mlwhiz.com/about">About</a></li>
+          
+          
+          <li class="mb-3"><a class="text-dark" href="https://mlwhiz.com/blog">Post</a></li>
+          
+          
+          
+        </ul>
+      </div>
+      <div class="col-12 border-top py-4 text-center">
+        Copyright © 2020 <a href="https://mlwhiz.com">MLWhiz</a> All Rights Reserved
+      </div>
+    </div>
   </div>
-  <br><div class="widget-search widget">
-	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
-		<label>
-			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
-		</label>
-		<input class="widget-search__submit" type="submit" value="Search">
-		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
-	</form>
-</div>
-<div class="widget-recent widget">
-	<h4 class="widget__title">Recent Posts</h4>
-	<div class="widget__content">
-		<ul class="widget__list">
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/09/09/pytorch_guide/">The Most Complete Guide to PyTorch for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/09/02/atom_for_data_science/">Create an Awesome Development Setup for Data Science using Atom</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/27/pyt_gan/">A Layman’s Introduction to GANs for Data Scientists using PyTorch</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/27/mlengineercourses/">Become an ML Engineer with these courses from Amazon and Google</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/27/pandasql/">How to use SQL with Pandas?</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/12/ctskills/">5 Essential Business-Oriented Critical Thinking Skills For Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/09/owndlrig/">Creating my First Deep Learning &#43; Data Science Workstation</a></li>
-		</ul>
-	</div>
-</div>
-
-<div style="text-align:center">
-    
-    <a class="btn btn-session" href="https://www.patreon.com/bePatron?u=28135435" role="button">1:1 Session</a>
-  </div>
-
-<br>
-
-
-
-
-<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
-
-<style type="text/css">
-.bookclass .shareaholic-share-buttons-heading .shareaholic-canvas{
-  font-family: montserrat,sans-serif;
-  font-size:.5em ;
-  font-weight: 500;
-  }
-</style>
-<center>
-
-
-
-
-<script async data-uid="bfe9f82f10" src="https://mlwhiz.ck.page/bfe9f82f10/index.js"></script>
-
-<script async data-uid="3452d924e2" src="https://mlwhiz.ck.page/3452d924e2/index.js"></script>
-
-
-</center>
-</aside>
-
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy;  2014-2020 Rahul Agarwal.
-			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
-		</div>
-	</div>
 </footer>
 
+<script>
+  var indexURL = "https://mlwhiz.com/index.json"
+</script>
 
+<!-- JS Plugins -->
 
-	</div>
-<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
-<script async defer src="/js/menu.js"></script></body>
+<script src="https://mlwhiz.com/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/slick/slick.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/search/fuse.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/search/mark.js"></script>
+
+<script src="https://mlwhiz.com/plugins/search/search.js"></script>
+
+<!-- Main Script -->
+
+<script src="https://mlwhiz.com/js/script.min.js"></script>
+<!-- google analitycs -->
+<script>
+  (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+  ga('create', 'UA-54777926-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
 </html>

@@ -1,92 +1,46 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en-us">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>NLP  Learning Series: Part 4 - Transfer Learning Intuition for Text Classification</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="Recently, I started up with an NLP competition on Kaggle called Quora Question insincerity challenge. It is an NLP Challenge on text classification, and as the problem has become more clear after working through the competition as well as by going through the invaluable kernels put up by the kaggle experts, I thought of sharing the knowledge. In this post, I will try to take you through some basic conventional models like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and try to access their performance to create a baseline.">
-	
+<html lang="en-us"><head>
+  <meta charset="utf-8">
+  <title>MLWhiz</title>
 
-	
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Recently, I started up with an NLP competition on Kaggle called Quora Question insincerity challenge. It is an NLP Challenge on text classification, and as the problem has become more clear after working through the competition as well as by going through the invaluable kernels put up by the kaggle experts, I thought of sharing the knowledge. In this post, I will try to take you through some basic conventional models like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and try to access their performance to create a baseline.">
+  <meta name="author" content="Rahul Agarwal">
+  <meta name="generator" content="Hugo 0.74.3" />
+
+  
 	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
-
-	
-	<meta name="generator" content="Hugo 0.53" />
-	<meta property="og:title" content="NLP  Learning Series: Part 4 - Transfer Learning Intuition for Text Classification" />
-<meta property="og:description" content="Recently, I started up with an NLP competition on Kaggle called Quora Question insincerity challenge. It is an NLP Challenge on text classification, and as the problem has become more clear after working through the competition as well as by going through the invaluable kernels put up by the kaggle experts, I thought of sharing the knowledge. In this post, I will try to take you through some basic conventional models like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and try to access their performance to create a baseline." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://mlwhiz.com/blog/2019/03/30/transfer_learning_text_classification/" />
-<meta property="og:image" content="https://mlwhiz.com/images/nlp_tl/spiderman.jpeg" />
-<meta property="article:published_time" content="2019-03-30T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2020-02-21T12:53:40&#43;05:30"/>
-
-	<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://mlwhiz.com/images/nlp_tl/spiderman.jpeg"/>
-
-<meta name="twitter:title" content="NLP  Learning Series: Part 4 - Transfer Learning Intuition for Text Classification"/>
-<meta name="twitter:description" content="Recently, I started up with an NLP competition on Kaggle called Quora Question insincerity challenge. It is an NLP Challenge on text classification, and as the problem has become more clear after working through the competition as well as by going through the invaluable kernels put up by the kaggle experts, I thought of sharing the knowledge. In this post, I will try to take you through some basic conventional models like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and try to access their performance to create a baseline."/>
-
-
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-	<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,600,600i,700,700i%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
-	<link rel="stylesheet" href="/css/style.css">
-
-	<link rel="stylesheet" href="/css/custom.css">
-	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-
-	
-		
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-54777926-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
-
-	
-	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
 	
 
-	
-	<script>
-	  !function(f,b,e,v,n,t,s)
-	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-	  n.queue=[];t=b.createElement(e);t.async=!0;
-	  t.src=v;s=b.getElementsByTagName(e)[0];
-	  s.parentNode.insertBefore(t,s)}(window, document,'script',
-	  'https://connect.facebook.net/en_US/fbevents.js');
-	  fbq('init', '1062344757288542');
-	  fbq('track', 'PageView');
-	</script>
-	<noscript><img height="1" width="1" style="display:none"
-	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
-	/></noscript>
-	
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/plugins/bootstrap/bootstrap.min.css ">
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/plugins/slick/slick.css ">
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/plugins/themify-icons/themify-icons.css ">
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/plugins/venobox/venobox.css ">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/scss/style.min.css" media="screen">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <link rel="stylesheet" type="text/css" href="/css/font/flaticon.css" >
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://mlwhiz.com/images/favicon-200x200.png " type="image/x-icon">
+  <link rel="icon" href="https://mlwhiz.com/images/favicon.png " type="image/x-icon">
 
 
-	
 
-<script async data-uid="a0ebaf958d" src="https://mlwhiz.ck.page/a0ebaf958d/index.js"></script>
-
-
-  	<script type="text/javascript" async
+  
+  <script async data-uid="a0ebaf958d" src="https://mlwhiz.ck.page/a0ebaf958d/index.js"></script>
+  <script type="text/javascript" async
   src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
   MathJax.Hub.Config({
   tex2jax: {
@@ -114,352 +68,197 @@ if (!doNotTrack) {
   TeX: { equationNumbers: { autoNumber: "AMS" } }
   });
 </script>
+
 </head>
-<body class="body">
-	  
-	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
-	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-	  
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container">
-		<div class="logo">
+<body>
+      
+   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+   
+<!-- preloader start -->
+<div class="preloader">
+  
+</div>
+<!-- preloader end -->
+<!-- navigation -->
+<header class="navigation">
+  <div class="container">
+    
+    <nav class="navbar navbar-expand-lg navbar-white bg-transparent border-bottom pl-0">
+      <a class="navbar-brand mobile-view" href="https://mlwhiz.com/"><img class="img-fluid"
+          src="https://mlwhiz.com/images/logo.png" alt="MLWhiz"></a>
+      <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navigation">
+        <i class="ti-menu h3"></i>
+      </button>
 
-			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+      <div class="collapse navbar-collapse text-center" id="navigation">
+        <div class="desktop-view">
+          <ul class="navbar-nav mr-auto">
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://www.linkedin.com/in/rahulagwl/"><i class="ti-linkedin"></i></a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://medium.com/@rahul_agarwal"><i class="ti-book"></i></a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://twitter.com/MLWhiz"><i class="ti-twitter-alt"></i></a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://www.facebook.com/mlwhizblog"><i class="ti-facebook"></i></a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/MLWhiz"><i class="ti-github"></i></a>
+            </li>
+            
+          </ul>
+        </div>
 
-				<div class="logo__title">MLWhiz</div>
-				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
-			</a>
-		</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">Menu</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">Blog</span>
-				
-			</a>
-		</li>
-		<li class="menu__item menu__dropdown">
-			<a class="menu__link" href="/tags">
-				
-				<span class="menu__text">Topics</span>
-				<label class="drop-icon" for="Topics">▾</label>
-				
-			</a>
-			<input type="checkbox" id="Topics">
-			<ul class="submenu__list">
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/deep-learning">
-						
-						<span class="menu__text">Deep Learning</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/artificial-intelligence">
-						
-						<span class="menu__text">Artificial Intelligence</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/natural-language-processing">
-						
-						<span class="menu__text">Natural Language Processing</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/computer-vision">
-						
-						<span class="menu__text">Computer Vision</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/machine-learning">
-						
-						<span class="menu__text">Machine Learning</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/data-science">
-						
-						<span class="menu__text">Data Science</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/big-data">
-						
-						<span class="menu__text">Big Data</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/python">
-						
-						<span class="menu__text">Python</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/statistics">
-						
-						<span class="menu__text">Statistics</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/visualization">
-						
-						<span class="menu__text">Visualization</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/production">
-						
-						<span class="menu__text">Production</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/algorithms">
-						
-						<span class="menu__text">Algorithms</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/kaggle">
-						
-						<span class="menu__text">Kaggle</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/graphs">
-						
-						<span class="menu__text">Graphs</span>
-						
-					</a>
-					</li>
-				
-			</ul>
-		</li>
-		<li class="menu__item menu__dropdown">
-			<a class="menu__link" href="/resources/index.html">
-				
-				<span class="menu__text">Learning Resources</span>
-				<label class="drop-icon" for="Learning Resources">▾</label>
-				
-			</a>
-			<input type="checkbox" id="Learning Resources">
-			<ul class="submenu__list">
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/best-content">
-						
-						<span class="menu__text">Best Content</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/awesome-guides">
-						
-						<span class="menu__text">Awesome Guides</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/curated-resources">
-						
-						<span class="menu__text">Curated Resources</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/tools">
-						
-						<span class="menu__text">Tools</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/productivity">
-						
-						<span class="menu__text">Productivity</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/opinion">
-						
-						<span class="menu__text">Opinion</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/jobs">
-						
-						<span class="menu__text">Jobs</span>
-						
-					</a>
-					</li>
-				
-			</ul>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">About Me</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/archive">
-				
-				<span class="menu__text">Archive</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/atom.xml">
-				
-				<span class="menu__text">RSS</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
+        <a class="navbar-brand mx-auto desktop-view" href="https://mlwhiz.com/"><img class="img-fluid-custom"
+            src="https://mlwhiz.com/images/logo.png" alt="MLWhiz"></a>
 
+        <ul class="navbar-nav">
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="https://mlwhiz.com/about">About</a>
+          </li>
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="https://mlwhiz.com/blog">Blog</a>
+          </li>
+          
+          
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+              Topics
+            </a>
+            <div class="dropdown-menu">
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/natural-language-processing">NLP</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/deep-learning">Computer Vision</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/deep-learning">Deep Learning</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/data-science">DS/ML</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/big-data">Big Data</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/awesome-guides">My Best Content</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/learning-resources">Learning Resources</a>
+              
+            </div>
+          </li>
+          
+          
+        </ul>
 
-	</div>
+        
+        <!-- search -->
+        <div class="search pl-lg-4">
+          <button id="searchOpen" class="search-btn"><i class="ti-search"></i></button>
+          <div class="search-wrapper">
+            <form action="https://mlwhiz.com//search" class="h-100">
+              <input class="search-box px-4" id="search-query" name="s" type="search" placeholder="Type & Hit Enter...">
+            </form>
+            <button id="searchClose" class="search-close"><i class="ti-close text-dark"></i></button>
+          </div>
+        </div>
+        
+
+        
+      </div>
+    </nav>
+  </div>
 </header>
+<!-- /navigation -->
 
 
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">NLP  Learning Series: Part 4 - Transfer Learning Intuition for Text Classification</h1>
-			<div class="post__meta meta">
-<div class="meta__item-datetime meta__item">
-	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
-	<time class="meta__text" datetime="2019-03-30T00:00:00">March 30, 2019</time>
-	
-		
-</div>
-</div>
-		</header>
-		<div class="content post__content clearfix">
-			
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 mb-5 mb-lg-0">
+        
+        
+        <a href="/categories/natural-language-processing"
+          class="categoryStyle">Natural Language Processing</a>
+        
+        <a href="/categories/deep-learning"
+          class="categoryStyle">Deep Learning</a>
+        
+        <a href="/categories/awesome-guides"
+          class="categoryStyle">Awesome Guides</a>
+        
+        <h1>NLP  Learning Series: Part 4 - Transfer Learning Intuition for Text Classification</h1>
+        <div class="mb-3 post-meta">
+          <span>By Rahul Agarwal</span>
+          
+          <svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"></path></svg>
 
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/nlp_tl/spiderman.jpeg"  height="400" width="700" ></center>
-</div>
-
-<p>This post is the fourth post of the NLP Text classification series. To give you a recap, I started up with an NLP text classification competition on Kaggle called Quora Question insincerity challenge. So I thought to share the knowledge via a series of blog posts on text classification. The <a href="/blog/2019/01/17/deeplearning_nlp_preprocess/">first post</a> talked about the different <strong>preprocessing techniques that work with Deep learning models</strong> and <strong>increasing embeddings coverage</strong>. In the <a href="/blog/2019/02/08/deeplearning_nlp_conventional_methods/">second post</a>, I talked through some <strong>basic conventional models</strong> like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and tried to access their performance to create a baseline. In the <a href="/blog/2019/03/09/deeplearning_architectures_text_classification/">third post</a>, I delved deeper into <strong>Deep learning models and the various architectures</strong> we could use to solve the text Classification problem. In this post, I will try to use ULMFit model which is a transfer learning approach to this data.</p>
-
-<p><strong>As a side note</strong>: if you want to know more about NLP, I would like to <strong>recommend this excellent course</strong> on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" rel="nofollow" target="_blank">Natural Language Processing</a> in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">Advanced machine learning specialization</a>. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few. You can start for free with the 7-day Free Trial.</p>
-
+          <span>30 March 2019</span>
+          
+        </div>
+        
+        <img src="https://mlwhiz.com/images/nlp_tl/spiderman.jpeg" class="img-fluid w-100 mb-4" alt="NLP  Learning Series: Part 4 - Transfer Learning Intuition for Text Classification">
+        
+        <div class="content mb-5">
+          <p>This post is the fourth post of the NLP Text classification series. To give you a recap, I started up with an NLP text classification competition on Kaggle called Quora Question insincerity challenge. So I thought to share the knowledge via a series of blog posts on text classification. The <a href="/blog/2019/01/17/deeplearning_nlp_preprocess/">first post</a> talked about the different <strong>preprocessing techniques that work with Deep learning models</strong> and <strong>increasing embeddings coverage</strong>. In the <a href="/blog/2019/02/08/deeplearning_nlp_conventional_methods/">second post</a>, I talked through some <strong>basic conventional models</strong> like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and tried to access their performance to create a baseline. In the <a href="/blog/2019/03/09/deeplearning_architectures_text_classification/">third post</a>, I delved deeper into <strong>Deep learning models and the various architectures</strong> we could use to solve the text Classification problem. In this post, I will try to use ULMFit model which is a transfer learning approach to this data.</p>
+<p><strong>As a side note</strong>: if you want to know more about NLP, I would like to <strong>recommend this excellent course</strong> on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing">Natural Language Processing</a> in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a>. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few. You can start for free with the 7-day Free Trial.</p>
 <p>Before introducing the notion of transfer learning to NLP applications, we will first need to understand a little bit about Language models.</p>
-
-<hr />
-
+<hr>
 <h2 id="language-models-and-nlp-transfer-learning-intuition">Language Models And NLP Transfer Learning Intuition:</h2>
-
 <p>In very basic terms the objective of the language model is to <strong>predict the next word given a stream of input words.</strong> In the past, many different approaches have been used to solve this particular problem. Probabilistic models using Markov assumption is one example of this sort of models.</p>
-
 <p>$$ P(W_n) = P(W_n|W_{n-1}) $$</p>
-
 <p>In the recent era, people have been using <em>RNNs/LSTMs</em> to create such language models. They take as input a word embedding and at each time state return the probability distribution of next word probability over the dictionary words. An example of this is shown below in which the below Neural Network uses multiple stacked layers of RNN cells to learn a language model to predict the next word.</p>
-
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/nlp_tl/language_model.png"  height="400" width="700" ></center>
 </div>
-
 <p><em>Now why do we need the concept of Language Modeling? Or How does predicting the next word tie with the current task of text classification?</em> The intuition ties to the way that the neural network gets trained. The neural network that can predict the next word after being trained on a massive corpus like Wikipedia already has learned a lot of structure in a particular language. Can we use this knowledge in the weights of the network for our advantage? Yes, we can, and that is where the idea of Transfer Learning in NLP stems from. So to make this intuition more concrete, Let us think that our neural network is divided into two parts -</p>
-
 <ul>
 <li><strong>Language Specific</strong>: The lower part of the neural network is language specific. That is it learns the features of the language. This part could be used to transfer our knowledge from a language corpus to our current task</li>
 <li><strong>Task Specific</strong>: I will call the upper part of our network as task specific. The weights in these layers are trained so that it learns to predict the next word.</li>
 </ul>
-
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/nlp_tl/language_model_2.png"  height="400" width="700" ></center>
 </div>
-
 <p>Now as it goes in a lot of transfer learning models for Image, we stack the Language Specific part with some dense and softmax layers(Our new task) and train on our new task to achieve what we want to do.</p>
-
-<hr />
-
+<hr>
 <h2 id="ulmfit">ULMFit:</h2>
-
 <p>Now the concept of Transfer learning in NLP is not entirely new and people already used Language models for transfer learning back in 2015-16 without good result. So what has changed now?</p>
-
 <p>The thing that has changed is that people like Jeremy Howard and Sebastian Ruder have done a lot of research on how to train these networks. And so we have achieved state of the art results on many text datasets with Transfer Learning approaches.</p>
-
-<p>Let&rsquo;s follow up with the key research findings in the <a href="https://arxiv.org/pdf/1801.06146.pdf" rel="nofollow" target="_blank">ULMFit paper</a> written by them along with the code.</p>
-
-<hr />
-
+<p>Let&rsquo;s follow up with the key research findings in the <a href="https://arxiv.org/pdf/1801.06146.pdf">ULMFit paper</a> written by them along with the code.</p>
+<hr>
 <h2 id="change-in-the-way-transfer-learning-networks-are-trained">Change in the way Transfer Learning networks are trained:</h2>
-
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/nlp_tl/ulmfit_training.png"  height="400" width="700" ></center>
 </div>
-
 <p>Training a model as per ULMFiT we need to take these three steps:</p>
-
-<p>a) <strong>Create a Base Language Model:</strong> Training the language model on a general-domain corpus that captures high-level natural language features<br />
-b) <strong>Finetune Base Language Model on Task Specific Data:</strong> Fine-tuning the pre-trained language model on target task data<br />
+<p>a) <strong>Create a Base Language Model:</strong> Training the language model on a general-domain corpus that captures high-level natural language features<br>
+b) <strong>Finetune Base Language Model on Task Specific Data:</strong> Fine-tuning the pre-trained language model on target task data<br>
 c) <strong>Finetune Base Language Model Layers + Task Specific Layers on Task Specific Data:</strong> Fine-tuning the classifier on target task data</p>
-
 <p>So let us go through these three steps one by one along with the code that is provided to us with the FastAI library.</p>
-
 <h4 id="a-create-a-base-language-model">a) Create a Base Language Model:</h4>
-
 <p>This task might be the most time-consuming task. This model is analogous to resnet50 or Inception for the vision task. In the paper, they use the language model AWD-LSTM, a regular LSTM architecture trained with various tuned dropout hyperparameters. This model was trained on Wikitext-103 consisting of 28,595 preprocessed Wikipedia articles and 103 million words. We won&rsquo;t perform this task ourselves and will use the fabulous FastAI library to use this model as below. The code below will take our data and preprocess it for usage in the AWD_LSTM model as well as load the model.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Language model data : We use test_df as validation for language model</span>
 data_lm <span style="color:#f92672">=</span> TextLMDataBunch<span style="color:#f92672">.</span>from_df(path <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>,train_df<span style="color:#f92672">=</span> train_df ,valid_df <span style="color:#f92672">=</span> test_df)
-learn <span style="color:#f92672">=</span> language_model_learner(data_lm, AWD_LSTM, drop_mult<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)</code></pre></div>
-<p>It is also where we preprocess the data as per the required usage for the FastAI models. For example:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">print</span>(train_df)</code></pre></div>
-<div style="margin-top: 9px; margin-bottom: 10px;">
+learn <span style="color:#f92672">=</span> language_model_learner(data_lm, AWD_LSTM, drop_mult<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+</code></pre></div><p>It is also where we preprocess the data as per the required usage for the FastAI models. For example:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">print</span>(train_df)
+</code></pre></div><div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/nlp_tl/train_df.png"  height="400" width="700" ></center>
 </div>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">print</span>(data_lm)</code></pre></div>
-<pre><code>TextLMDataBunch;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">print</span>(data_lm)
+</code></pre></div><pre><code>TextLMDataBunch;
 
 Train: LabelList (1306122 items)
 x: LMTextList
@@ -476,10 +275,7 @@ y: LMLabelList
 Path: .;
 
 Test: None
-</code></pre>
-
-<p>The tokenized prepared data is based on a lot of research from the FastAI developers. To make this post a little bit complete, I am sharing some of the tokens definition as well.</p>
-
+</code></pre><p>The tokenized prepared data is based on a lot of research from the FastAI developers. To make this post a little bit complete, I am sharing some of the tokens definition as well.</p>
 <ul>
 <li><em>xxunk</em> is for an unknown word (one that isn&rsquo;t present in the current vocabulary)</li>
 <li><em>xxpad</em> is the token used for padding, if we need to regroup several texts of different lengths in a batch</li>
@@ -487,49 +283,36 @@ Test: None
 <li><em>xxmaj</em> is used to indicate the next word begins with a capital in the original text</li>
 <li><em>xxup</em> is used to indicate the next word is written in all caps in the original text</li>
 </ul>
-
 <h4 id="b-finetune-base-language-model-on-task-specific-data">b) Finetune Base Language Model on Task Specific Data</h4>
-
 <p>This task is also pretty easy when we look at the code. The specific details of how we do the training is what holds the essence.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Learning with Discriminative fine tuning</span>
 learn<span style="color:#f92672">.</span>fit_one_cycle(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1e-2</span>)
 learn<span style="color:#f92672">.</span>unfreeze()
 learn<span style="color:#f92672">.</span>fit_one_cycle(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1e-3</span>)
 <span style="color:#75715e"># Save encoder Object</span>
-learn<span style="color:#f92672">.</span>save_encoder(<span style="color:#e6db74">&#39;ft_enc&#39;</span>)</code></pre></div>
-<p>The paper introduced two general concepts for this learning stage:</p>
-
+learn<span style="color:#f92672">.</span>save_encoder(<span style="color:#e6db74">&#39;ft_enc&#39;</span>)
+</code></pre></div><p>The paper introduced two general concepts for this learning stage:</p>
 <ul>
 <li><strong>Discriminative fine-tuning:</strong></li>
 </ul>
-
 <p>The Main Idea is: As different layers capture different types of information, they should be fine-tuned to different extents.
 Instead of using the same learning rate for all layers of the model, discriminative fine-tuning allows us to tune each layer with different learning
 rates. In the paper, the authors suggest first to finetune only the last layer, and then unfreeze all the layers with a learning rate lowered by a factor of 2.6.</p>
-
 <ul>
 <li><strong>Slanted triangular learning rates:</strong></li>
 </ul>
-
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/nlp_tl/Stlr.png"  height="200" width="400" ></center>
 </div>
-
 <p>According to the authors: <em>&ldquo;For adapting its parameters to task-specific features, we would like the model to quickly converge to a suitable region of the parameter space in the beginning of training and then refine its parameters&rdquo;</em>
 The Main Idea is to use a high learning rate at the starting stage for increased learning and low learning rates to finetune at later stages in an epoch.</p>
-
 <p>After training our Language model on the Quora dataset, we should be able to see how our model performs on the Language Model task itself. FastAI library provides us with a simple function to do that.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># check how the language model performs</span>
-learn<span style="color:#f92672">.</span>predict(<span style="color:#e6db74">&#34;What should&#34;</span>, n_words<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>)</code></pre></div>
-<pre><code>'What should be the likelihood of a tourist visiting Mumbai for'
-</code></pre>
-
-<hr />
-
-<h4 id="c-finetune-base-language-model-layers-task-specific-layers-on-task-specific-data">c) Finetune Base Language Model Layers + Task Specific Layers on Task Specific Data</h4>
-
+learn<span style="color:#f92672">.</span>predict(<span style="color:#e6db74">&#34;What should&#34;</span>, n_words<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>)
+</code></pre></div><pre><code>'What should be the likelihood of a tourist visiting Mumbai for'
+</code></pre><hr>
+<h4 id="c-finetune-base-language-model-layers--task-specific-layers-on-task-specific-data">c) Finetune Base Language Model Layers + Task Specific Layers on Task Specific Data</h4>
 <p>This is the stage where task-specific learning takes place that is we add the classification layers and fine tune them.</p>
-
 <p>The authors augment the pretrained language model with two additional
 linear blocks. Each block uses batch normalization (Ioffe and Szegedy, 2015) and dropout, with ReLU activations for the intermediate layer and a
 softmax activation that outputs a probability distribution over target classes at the last layer. The params of these task-specific layers are the only ones that are learned from scratch.</p>
@@ -547,137 +330,354 @@ learn<span style="color:#f92672">.</span>freeze_to(<span style="color:#f92672">-
 learn<span style="color:#f92672">.</span>fit_one_cycle(<span style="color:#ae81ff">1</span>, slice(<span style="color:#ae81ff">5e-3</span><span style="color:#f92672">/</span><span style="color:#ae81ff">2.</span>, <span style="color:#ae81ff">5e-3</span>))
 <span style="color:#75715e"># Fitting Classifier Object - discriminative learning</span>
 learn<span style="color:#f92672">.</span>unfreeze()
-learn<span style="color:#f92672">.</span>fit_one_cycle(<span style="color:#ae81ff">1</span>, slice(<span style="color:#ae81ff">2e-3</span><span style="color:#f92672">/</span><span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">2e-3</span>))</code></pre></div>
-<p>Here also the Authors have derived a few novel methods:</p>
-
+learn<span style="color:#f92672">.</span>fit_one_cycle(<span style="color:#ae81ff">1</span>, slice(<span style="color:#ae81ff">2e-3</span><span style="color:#f92672">/</span><span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">2e-3</span>))
+</code></pre></div><p>Here also the Authors have derived a few novel methods:</p>
 <ul>
 <li><strong>Concat Pooling:</strong></li>
 </ul>
-
 <p>The authors use not only the concatenation of all the hidden state but also the Maxpool and Meanpool representation of all hidden states as input to the linear layers.</p>
-
-<p>$$ H = [h_1, &hellip; , h_T ] $$</p>
-
+<p>$$ H = [h_1, . . . , h_T ] $$</p>
 <p>$$ h_c = [h_T , maxpool(H), meanpool(H)] $$</p>
-
 <ul>
 <li><strong>Gradual Unfreezing:</strong></li>
 </ul>
-
 <p>Rather than fine-tuning all layers at once, which risks catastrophic forgetting(Forgetting everything we have learned so far from language models), the authors propose to gradually unfreeze the model starting from the last layer as this contains the least general knowledge. The Authors first unfreeze the last layer and fine-tune all unfrozen layers for one epoch. They then unfreeze the next lower frozen layer and repeat, until they finetune all layers until convergence at the last iteration. The function <code>slice(2e-3/100, 2e-3)</code> means that we train every layer with different learning rates ranging from max to min value.</p>
-
 <p>One can get the predictions for the test data at once using:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">test_preds <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array(learn<span style="color:#f92672">.</span>get_preds(DatasetType<span style="color:#f92672">.</span>Test, ordered<span style="color:#f92672">=</span>True)[<span style="color:#ae81ff">0</span>])[:,<span style="color:#ae81ff">1</span>]</code></pre></div>
-<p>I am a big fan of Kaggle Kernels. One could not have imagined having all that compute for free. You can find a running version of the above code in this <a href="https://www.kaggle.com/mlwhiz/ulmfit" rel="nofollow" target="_blank">kaggle kernel</a>. Do try to experiment with it after forking and running the code. Also please upvote the kernel if you find it helpful.</p>
-
-<hr />
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">test_preds <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array(learn<span style="color:#f92672">.</span>get_preds(DatasetType<span style="color:#f92672">.</span>Test, ordered<span style="color:#f92672">=</span>True)[<span style="color:#ae81ff">0</span>])[:,<span style="color:#ae81ff">1</span>]
+</code></pre></div><p>I am a big fan of Kaggle Kernels. One could not have imagined having all that compute for free. You can find a running version of the above code in this <a href="https://www.kaggle.com/mlwhiz/ulmfit">kaggle kernel</a>. Do try to experiment with it after forking and running the code. Also please upvote the kernel if you find it helpful.</p>
+<hr>
 <h2 id="results">Results:</h2>
-
 <p>Here are the final results of all the different approaches I have tried on the Kaggle Dataset. I ran a 5 fold Stratified CV.</p>
-
 <h3 id="a-conventional-methods">a. Conventional Methods:</h3>
-
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/results_conv.png"  style="height:40%;width:40%"></center>
 </div>
-
 <h3 id="b-deep-learning-methods">b. Deep Learning Methods:</h3>
-
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/results_deep_learning.png"  style="height:50%;width:50%"></center>
 </div>
-
-<h3 id="c-transfer-learning-methods-ulmfit">c. Transfer Learning Methods(ULMFIT):</h3>
-
+<h3 id="c-transfer-learning-methodsulmfit">c. Transfer Learning Methods(ULMFIT):</h3>
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/nlp_tl/results_ulm.png"  style="height:30%;width:30%"></center>
 </div>
-
 <p>The results achieved were not very good compared to deep learning methods, but I still liked the idea of the transfer learning approach, and it was so easy to implement it using fastAI. Also running the code took a lot of time at 9 hours, compared to other methods which got over in 2 hours.</p>
-
 <p>Even if this approach didn&rsquo;t work well for this dataset, it is a valid approach for other datasets, as the Authors of the paper have achieved pretty good results on different datasets — definitely a genuine method to try out.</p>
-
 <p><strong>PS:</strong> Note that I didn&rsquo;t work on tuning the above models, so these results are only cursory. You can try to squeeze more performance by performing hyperparams tuning <a href="/blog/2017/12/28/hyperopt_tuning_ml_model/">using hyperopt</a> or just old fashioned Grid-search.</p>
-
-<hr />
-
+<hr>
 <h2 id="conclusion">Conclusion:</h2>
-
-<p>Finally, this post concludes my NLP Learning series. It took a lot of time to write, but the effort was well worth it. I hope you found it helpful in your work. I will try to write some more on this topic when I get some time. Follow me up at <a href="https://medium.com/@rahul_agarwal" rel="nofollow" target="_blank">Medium</a> or Subscribe to my blog to be informed about my next posts.</p>
-
-<p>Also if you want to <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" rel="nofollow" target="_blank"><strong>learn more about NLP</strong> here</a> is an excellent course. You can start for free with the 7-day Free Trial.</p>
-
+<p>Finally, this post concludes my NLP Learning series. It took a lot of time to write, but the effort was well worth it. I hope you found it helpful in your work. I will try to write some more on this topic when I get some time. Follow me up at <a href="https://medium.com/@rahul_agarwal">Medium</a> or Subscribe to my blog to be informed about my next posts.</p>
+<p>Also if you want to <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing"><strong>learn more about NLP</strong> here</a> is an excellent course. You can start for free with the 7-day Free Trial.</p>
 <p>Let me know if you think I can add something more to the post; I will try to incorporate it.</p>
-
 <p>Cheers!!!</p>
 
-		</div>
 
-		 
-		<script async data-uid="8d7942551b" src="https://mlwhiz.ck.page/8d7942551b/index.js"></script>
-		<br>
-		
-		
-<div class="post__tags tags clearfix">
-	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
-	<ul class="tags__list">
-		<li class="tags__item"><a class="tags__link btn" href="/tags/natural-language-processing/" rel="tag">Natural Language Processing</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/deep-learning/" rel="tag">Deep Learning</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/artificial-intelligence/" rel="tag">Artificial Intelligence</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/kaggle/" rel="tag">Kaggle</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/best-content/" rel="tag">Best Content</a></li>
-	</ul>
+
+        </div>
+      </div>
+      <div class="col-lg-4">
+  
+
+  <div class="widget">
+    
+<script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#00aaa1', 'S6S3NPCD');kofiwidget2.draw();</script>
+
 </div>
-		
+  <div class="widget">
+    
+    <h4 class="widget-title">About Me</h4>
+    
+    <img src="https://mlwhiz.com/images/author.jpg" alt=""
+      class="img-fluid author-thumb-sm d-block mx-auto rounded-circle mb-4">
+    
+    <p>I’m a data scientist consultant and big data engineer based in Bangalore, where I am currently working with WalmartLabs .</p>
+    <a href="https://mlwhiz.com/about/" class="btn btn-outline-primary">Know More</a>
+    
+  </div>
 
-<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+  
+  <div class="widget">
+    <h4 class="widget-title">Topics</h4>
+    <ul class="list-unstyled">
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/awesome-guides">Awesome Guides</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/big-data">Big Data</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/computer-vision">Computer Vision</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/data-science">Data Science</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/deep-learning">Deep Learning</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/learning-resources">Learning Resources</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/natural-language-processing">Natural Language Processing</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/programming">Programming</a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="widget">
+    <h4 class="widget-title">Tags</h4>
+    <ul class="list-inline">
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/algorithms">Algorithms</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/artificial-intelligence">Artificial Intelligence</a></li>
+          
+
+
+          
+
+
+          
+
+
+          
+
+
+          
+
+
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/dask">Dask</a></li>
+          
+
+
+          
+
+
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/deployment">Deployment</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/ec2">Ec2</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/generative-adversarial-networks">Generative Adversarial Networks</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/graphs">Graphs</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/image-classification">Image Classification</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/instance-segmentation">Instance Segmentation</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/interpretability">Interpretability</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/jobs">Jobs</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/kaggle">Kaggle</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/machine-learning">Machine Learning</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/math">Math</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/multiprocessing">Multiprocessing</a></li>
+          
+
+
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/object-detection">Object Detection</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/opinion">Opinion</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/pandas">Pandas</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/production">Production</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/productivity">Productivity</a></li>
+          
+
+
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/python">Python</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/pytorch">Pytorch</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/spark">Spark</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/sql">Sql</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/statistics">Statistics</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/streamlit">Streamlit</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/text-classification">Text Classification</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/timeseries">Timeseries</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/tools">Tools</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/visualization">Visualization</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/xgboost">Xgboost</a></li>
+          
+    </ul>
+  </div>
+  
+  <div class="widget">
+    <h4 class="widget-title">Connect With Me</h4>
+    <ul class="list-inline social-links">
+      
+      <li class="list-inline-item"><a href="https://www.linkedin.com/in/rahulagwl/"><i class="ti-linkedin"></i></a></li>
+      
+      <li class="list-inline-item"><a href="https://medium.com/@rahul_agarwal"><i class="ti-book"></i></a></li>
+      
+      <li class="list-inline-item"><a href="https://twitter.com/MLWhiz"><i class="ti-twitter-alt"></i></a></li>
+      
+      <li class="list-inline-item"><a href="https://www.facebook.com/mlwhizblog"><i class="ti-facebook"></i></a></li>
+      
+      <li class="list-inline-item"><a href="https://github.com/MLWhiz"><i class="ti-github"></i></a></li>
+      
+    </ul>
+  </div>
+  
+  
+<script async data-uid="bfe9f82f10" src="https://mlwhiz.ck.page/bfe9f82f10/index.js"></script>
+
+<script async data-uid="3452d924e2" src="https://mlwhiz.ck.page/3452d924e2/index.js"></script>
+
+</div>
+
+    </div>
+    
+<script async data-uid="8d7942551b" src="https://mlwhiz.ck.page/8d7942551b/index.js"></script>
+
+<div class="shareaholic-canvas col-lg-8 mb-5 mb-lg-0" data-app="share_buttons" data-app-id="28372088"></div>
 
 <a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	</article>
-</main>
-
-
-<nav class="post-nav flex">
-	<div class="post-nav__item post-nav__item--prev">
-		<a class="post-nav__link" href="/blog/2019/03/09/deeplearning_architectures_text_classification/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">NLP  Learning Series: Part 3 - Attention, CNN and what not for Text Classification</p></a>
-	</div>
-	<div class="post-nav__item post-nav__item--next">
-		<a class="post-nav__link" href="/blog/2019/03/31/sublime_ds_post/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">Why Sublime Text for Data Science is Hotter than Jennifer Lawrence?</p></a>
-	</div>
-</nav>
-
-<section class="comments">
-	<div id="disqus_thread"></div>
+<div id="disqus_thread"></div>
 <script type="application/javascript">
     var disqus_config = function () {
     
@@ -697,113 +697,131 @@ learn<span style="color:#f92672">.</span>fit_one_cycle(<span style="color:#ae81f
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  </div>
 </section>
 
 
-			</div>
-			<style type="text/css">
 
-  .btn {
-    display: inline-block;
-    font-weight: 400;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    border: 1px solid transparent;
-    padding: .375rem .75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    border-radius: .25rem;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
-
-.btn-session {
-    color: #fff;
-    background-color: #28a745;
-    border-color: #28a745;
-}
-</style>
-
-
-<aside class="sidebar">
-  <div style="text-align:center">
-    
-  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-5">
+        <a href="https://mlwhiz.com/"><img src="https://mlwhiz.com/images/logo.png" class="img-fluid-custom-bottom" alt="MLWhiz"></a>
+      </div>
+      <div class="col-lg-3 col-sm-6 mb-5">
+        <h6 class="mb-4">Contact Me</h6>
+        <ul class="list-unstyled">
+          <li class="mb-3"><i class="ti-location-pin mr-3 text-primary"></i>India, Bangalore</li>
+          <li class="mb-3"><a class="text-dark" href="mailto:rahul@mlwhiz.com"><i
+                class="ti-email mr-3 text-primary"></i>rahul@mlwhiz.com</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-sm-6 mb-5">
+        <h6 class="mb-4">Social Contacts</h6>
+        <ul class="list-unstyled">
+          
+          <li class="mb-3"><a class="text-dark" href="https://www.linkedin.com/in/rahulagwl/">Linkedin</a></li>
+          
+          <li class="mb-3"><a class="text-dark" href="https://medium.com/@rahul_agarwal">Medium</a></li>
+          
+          <li class="mb-3"><a class="text-dark" href="https://twitter.com/MLWhiz">Twitter</a></li>
+          
+          <li class="mb-3"><a class="text-dark" href="https://www.facebook.com/mlwhizblog">Facebook</a></li>
+          
+          <li class="mb-3"><a class="text-dark" href="https://github.com/MLWhiz">Github</a></li>
+          
+        </ul>
+      </div>
+      <div class="col-lg-3 col-sm-6 mb-5">
+        <h6 class="mb-4">Categories</h6>
+        <ul class="list-unstyled">
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/awesome-guides">Awesome Guides</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/big-data">Big Data</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/computer-vision">Computer Vision</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/data-science">Data Science</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/deep-learning">Deep Learning</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/learning-resources">Learning Resources</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/natural-language-processing">Natural Language Processing</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/programming">Programming</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-sm-6 mb-5">
+        <h6 class="mb-4">Quick Links</h6>
+        <ul class="list-unstyled">
+          
+          <li class="mb-3"><a class="text-dark" href="https://mlwhiz.com/about">About</a></li>
+          
+          
+          <li class="mb-3"><a class="text-dark" href="https://mlwhiz.com/blog">Post</a></li>
+          
+          
+          
+        </ul>
+      </div>
+      <div class="col-12 border-top py-4 text-center">
+        Copyright © 2020 <a href="https://mlwhiz.com">MLWhiz</a> All Rights Reserved
+      </div>
+    </div>
   </div>
-  <br><div class="widget-search widget">
-	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
-		<label>
-			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
-		</label>
-		<input class="widget-search__submit" type="submit" value="Search">
-		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
-	</form>
-</div>
-<div class="widget-recent widget">
-	<h4 class="widget__title">Recent Posts</h4>
-	<div class="widget__content">
-		<ul class="widget__list">
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/09/09/pytorch_guide/">The Most Complete Guide to PyTorch for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/09/02/atom_for_data_science/">Create an Awesome Development Setup for Data Science using Atom</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/27/pyt_gan/">A Layman’s Introduction to GANs for Data Scientists using PyTorch</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/27/mlengineercourses/">Become an ML Engineer with these courses from Amazon and Google</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/27/pandasql/">How to use SQL with Pandas?</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/12/ctskills/">5 Essential Business-Oriented Critical Thinking Skills For Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/09/owndlrig/">Creating my First Deep Learning &#43; Data Science Workstation</a></li>
-		</ul>
-	</div>
-</div>
-
-<div style="text-align:center">
-    
-    <a class="btn btn-session" href="https://www.patreon.com/bePatron?u=28135435" role="button">1:1 Session</a>
-  </div>
-
-<br>
-
-
-
-
-<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
-
-<style type="text/css">
-.bookclass .shareaholic-share-buttons-heading .shareaholic-canvas{
-  font-family: montserrat,sans-serif;
-  font-size:.5em ;
-  font-weight: 500;
-  }
-</style>
-<center>
-
-
-
-
-<script async data-uid="bfe9f82f10" src="https://mlwhiz.ck.page/bfe9f82f10/index.js"></script>
-
-<script async data-uid="3452d924e2" src="https://mlwhiz.ck.page/3452d924e2/index.js"></script>
-
-
-</center>
-</aside>
-
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy;  2014-2020 Rahul Agarwal.
-			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
-		</div>
-	</div>
 </footer>
 
+<script>
+  var indexURL = "https://mlwhiz.com/index.json"
+</script>
 
+<!-- JS Plugins -->
 
-	</div>
-<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
-<script async defer src="/js/menu.js"></script></body>
+<script src="https://mlwhiz.com/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/slick/slick.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/search/fuse.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/search/mark.js"></script>
+
+<script src="https://mlwhiz.com/plugins/search/search.js"></script>
+
+<!-- Main Script -->
+
+<script src="https://mlwhiz.com/js/script.min.js"></script>
+<!-- google analitycs -->
+<script>
+  (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+  ga('create', 'UA-54777926-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
 </html>

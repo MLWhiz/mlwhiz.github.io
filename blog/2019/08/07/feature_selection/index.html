@@ -1,92 +1,46 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en-us">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>The 5 Feature Selection Algorithms every Data Scientist should know</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="This post is about some of the most common feature selection techniques one can use while working with data.">
-	
+<html lang="en-us"><head>
+  <meta charset="utf-8">
+  <title>MLWhiz</title>
 
-	
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="This post is about some of the most common feature selection techniques one can use while working with data.">
+  <meta name="author" content="Rahul Agarwal">
+  <meta name="generator" content="Hugo 0.74.3" />
+
+  
 	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
-
-	
-	<meta name="generator" content="Hugo 0.53" />
-	<meta property="og:title" content="The 5 Feature Selection Algorithms every Data Scientist should know" />
-<meta property="og:description" content="This post is about some of the most common feature selection techniques one can use while working with data." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://mlwhiz.com/blog/2019/08/07/feature_selection/" />
-<meta property="og:image" content="https://mlwhiz.com/images/fs/1.png" />
-<meta property="article:published_time" content="2019-08-07T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2020-02-21T12:53:40&#43;05:30"/>
-
-	<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://mlwhiz.com/images/fs/1.png"/>
-
-<meta name="twitter:title" content="The 5 Feature Selection Algorithms every Data Scientist should know"/>
-<meta name="twitter:description" content="This post is about some of the most common feature selection techniques one can use while working with data."/>
-
-
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-	<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,600,600i,700,700i%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
-	<link rel="stylesheet" href="/css/style.css">
-
-	<link rel="stylesheet" href="/css/custom.css">
-	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-
-	
-		
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-54777926-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
-
-	
-	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
 	
 
-	
-	<script>
-	  !function(f,b,e,v,n,t,s)
-	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-	  n.queue=[];t=b.createElement(e);t.async=!0;
-	  t.src=v;s=b.getElementsByTagName(e)[0];
-	  s.parentNode.insertBefore(t,s)}(window, document,'script',
-	  'https://connect.facebook.net/en_US/fbevents.js');
-	  fbq('init', '1062344757288542');
-	  fbq('track', 'PageView');
-	</script>
-	<noscript><img height="1" width="1" style="display:none"
-	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
-	/></noscript>
-	
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/plugins/bootstrap/bootstrap.min.css ">
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/plugins/slick/slick.css ">
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/plugins/themify-icons/themify-icons.css ">
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/plugins/venobox/venobox.css ">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/scss/style.min.css" media="screen">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <link rel="stylesheet" type="text/css" href="/css/font/flaticon.css" >
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://mlwhiz.com/images/favicon-200x200.png " type="image/x-icon">
+  <link rel="icon" href="https://mlwhiz.com/images/favicon.png " type="image/x-icon">
 
 
-	
 
-<script async data-uid="a0ebaf958d" src="https://mlwhiz.ck.page/a0ebaf958d/index.js"></script>
-
-
-  	<script type="text/javascript" async
+  
+  <script async data-uid="a0ebaf958d" src="https://mlwhiz.ck.page/a0ebaf958d/index.js"></script>
+  <script type="text/javascript" async
   src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
   MathJax.Hub.Config({
   tex2jax: {
@@ -114,366 +68,219 @@ if (!doNotTrack) {
   TeX: { equationNumbers: { autoNumber: "AMS" } }
   });
 </script>
+
 </head>
-<body class="body">
-	  
-	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
-	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-	  
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container">
-		<div class="logo">
+<body>
+      
+   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+   
+<!-- preloader start -->
+<div class="preloader">
+  
+</div>
+<!-- preloader end -->
+<!-- navigation -->
+<header class="navigation">
+  <div class="container">
+    
+    <nav class="navbar navbar-expand-lg navbar-white bg-transparent border-bottom pl-0">
+      <a class="navbar-brand mobile-view" href="https://mlwhiz.com/"><img class="img-fluid"
+          src="https://mlwhiz.com/images/logo.png" alt="MLWhiz"></a>
+      <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navigation">
+        <i class="ti-menu h3"></i>
+      </button>
 
-			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+      <div class="collapse navbar-collapse text-center" id="navigation">
+        <div class="desktop-view">
+          <ul class="navbar-nav mr-auto">
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://www.linkedin.com/in/rahulagwl/"><i class="ti-linkedin"></i></a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://medium.com/@rahul_agarwal"><i class="ti-book"></i></a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://twitter.com/MLWhiz"><i class="ti-twitter-alt"></i></a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://www.facebook.com/mlwhizblog"><i class="ti-facebook"></i></a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/MLWhiz"><i class="ti-github"></i></a>
+            </li>
+            
+          </ul>
+        </div>
 
-				<div class="logo__title">MLWhiz</div>
-				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
-			</a>
-		</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">Menu</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">Blog</span>
-				
-			</a>
-		</li>
-		<li class="menu__item menu__dropdown">
-			<a class="menu__link" href="/tags">
-				
-				<span class="menu__text">Topics</span>
-				<label class="drop-icon" for="Topics">▾</label>
-				
-			</a>
-			<input type="checkbox" id="Topics">
-			<ul class="submenu__list">
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/deep-learning">
-						
-						<span class="menu__text">Deep Learning</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/artificial-intelligence">
-						
-						<span class="menu__text">Artificial Intelligence</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/natural-language-processing">
-						
-						<span class="menu__text">Natural Language Processing</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/computer-vision">
-						
-						<span class="menu__text">Computer Vision</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/machine-learning">
-						
-						<span class="menu__text">Machine Learning</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/data-science">
-						
-						<span class="menu__text">Data Science</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/big-data">
-						
-						<span class="menu__text">Big Data</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/python">
-						
-						<span class="menu__text">Python</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/statistics">
-						
-						<span class="menu__text">Statistics</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/visualization">
-						
-						<span class="menu__text">Visualization</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/production">
-						
-						<span class="menu__text">Production</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/algorithms">
-						
-						<span class="menu__text">Algorithms</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/kaggle">
-						
-						<span class="menu__text">Kaggle</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/graphs">
-						
-						<span class="menu__text">Graphs</span>
-						
-					</a>
-					</li>
-				
-			</ul>
-		</li>
-		<li class="menu__item menu__dropdown">
-			<a class="menu__link" href="/resources/index.html">
-				
-				<span class="menu__text">Learning Resources</span>
-				<label class="drop-icon" for="Learning Resources">▾</label>
-				
-			</a>
-			<input type="checkbox" id="Learning Resources">
-			<ul class="submenu__list">
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/best-content">
-						
-						<span class="menu__text">Best Content</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/awesome-guides">
-						
-						<span class="menu__text">Awesome Guides</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/curated-resources">
-						
-						<span class="menu__text">Curated Resources</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/tools">
-						
-						<span class="menu__text">Tools</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/productivity">
-						
-						<span class="menu__text">Productivity</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/opinion">
-						
-						<span class="menu__text">Opinion</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/jobs">
-						
-						<span class="menu__text">Jobs</span>
-						
-					</a>
-					</li>
-				
-			</ul>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">About Me</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/archive">
-				
-				<span class="menu__text">Archive</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/atom.xml">
-				
-				<span class="menu__text">RSS</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
+        <a class="navbar-brand mx-auto desktop-view" href="https://mlwhiz.com/"><img class="img-fluid-custom"
+            src="https://mlwhiz.com/images/logo.png" alt="MLWhiz"></a>
 
+        <ul class="navbar-nav">
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="https://mlwhiz.com/about">About</a>
+          </li>
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="https://mlwhiz.com/blog">Blog</a>
+          </li>
+          
+          
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+              Topics
+            </a>
+            <div class="dropdown-menu">
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/natural-language-processing">NLP</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/deep-learning">Computer Vision</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/deep-learning">Deep Learning</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/data-science">DS/ML</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/big-data">Big Data</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/awesome-guides">My Best Content</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/learning-resources">Learning Resources</a>
+              
+            </div>
+          </li>
+          
+          
+        </ul>
 
-	</div>
+        
+        <!-- search -->
+        <div class="search pl-lg-4">
+          <button id="searchOpen" class="search-btn"><i class="ti-search"></i></button>
+          <div class="search-wrapper">
+            <form action="https://mlwhiz.com//search" class="h-100">
+              <input class="search-box px-4" id="search-query" name="s" type="search" placeholder="Type & Hit Enter...">
+            </form>
+            <button id="searchClose" class="search-close"><i class="ti-close text-dark"></i></button>
+          </div>
+        </div>
+        
+
+        
+      </div>
+    </nav>
+  </div>
 </header>
+<!-- /navigation -->
 
 
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">The 5 Feature Selection Algorithms every Data Scientist should know</h1>
-			<div class="post__meta meta">
-<div class="meta__item-datetime meta__item">
-	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
-	<time class="meta__text" datetime="2019-08-07T00:00:00">August 07, 2019</time>
-	
-		
-</div>
-</div>
-		</header>
-		<div class="content post__content clearfix">
-			
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 mb-5 mb-lg-0">
+        
+        
+        <a href="/categories/data-science"
+          class="categoryStyle">Data Science</a>
+        
+        <a href="/categories/awesome-guides"
+          class="categoryStyle">Awesome Guides</a>
+        
+        <h1>The 5 Feature Selection Algorithms every Data Scientist should know</h1>
+        <div class="mb-3 post-meta">
+          <span>By Rahul Agarwal</span>
+          
+          <svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"></path></svg>
 
-<p><img src="/images/fs/1.png" alt="" /></p>
-
-<p>Data Science is the study of algorithms.</p>
-
-<p>I grapple through with many algorithms on a day to day basis, so I thought of listing some of the most common and most used algorithms one will end up using in this new <a href="https://towardsdatascience.com/tagged/ds-algorithms" rel="nofollow" target="_blank">DS Algorithm series</a>.</p>
-
+          <span>07 August 2019</span>
+          
+        </div>
+        
+        <img src="https://mlwhiz.com/images/fs/1.png" class="img-fluid w-100 mb-4" alt="The 5 Feature Selection Algorithms every Data Scientist should know">
+        
+        <div class="content mb-5">
+          <p>Data Science is the study of algorithms.</p>
+<p>I grapple through with many algorithms on a day to day basis, so I thought of listing some of the most common and most used algorithms one will end up using in this new <a href="https://towardsdatascience.com/tagged/ds-algorithms">DS Algorithm series</a>.</p>
 <p>How many times it has happened when you create a lot of features and then you need to come up with ways to reduce the number of features.</p>
-
 <p>We sometimes end up using correlation or tree-based methods to find out the important features.</p>
-
 <p>Can we add some structure to it?</p>
-
-<p><strong><em>This post is about some of the most common feature selection techniques one can use while working with data.</em></strong></p>
-
-<hr />
-
+<p><em><strong>This post is about some of the most common feature selection techniques one can use while working with data.</strong></em></p>
+<hr>
 <h2 id="why-feature-selection">Why Feature Selection?</h2>
-
 <p>Before we proceed, we need to answer this question. Why don’t we give all the features to the ML algorithm and let it decide which feature is important?</p>
-
 <p>So there are three reasons why we don’t:</p>
+<h3 id="1-curse-of-dimensionality--overfitting">1. Curse of dimensionality — Overfitting</h3>
+<p>
+  <img src="/images/fs/2.png" alt="">
 
-<h3 id="1-curse-of-dimensionality-overfitting">1. Curse of dimensionality — Overfitting</h3>
 
-<p><img src="/images/fs/2.png" alt="" /></p>
 
+</p>
 <p>If we have more columns in the data than the number of rows, we will be able to fit our training data perfectly, but that won’t generalize to the new samples. And thus we learn absolutely nothing.</p>
-
-<h3 id="2-occam-s-razor">2. Occam’s Razor:</h3>
-
-<p>We want our <strong><em>models to be simple</em></strong> and explainable. We lose explainability when we have a lot of features.</p>
-
+<h3 id="2-occams-razor">2. Occam’s Razor:</h3>
+<p>We want our <em><strong>models to be simple</strong></em> and explainable. We lose explainability when we have a lot of features.</p>
 <h3 id="3-garbage-in-garbage-out">3. Garbage In Garbage out:</h3>
-
-<p>Most of the times, we will have many non-informative features. For Example, Name or ID variables. <strong><em>Poor-quality input will produce Poor-Quality output.</em></strong></p>
-
+<p>Most of the times, we will have many non-informative features. For Example, Name or ID variables. <em><strong>Poor-quality input will produce Poor-Quality output.</strong></em></p>
 <p>Also, a large number of features make a model bulky, time-taking, and harder to implement in production.</p>
-
-<hr />
-
+<hr>
 <h2 id="so-what-do-we-do">So What do we do?</h2>
+<p>
+  <img src="/images/fs/3.jpg" alt="">
 
-<p><img src="/images/fs/3.jpg" alt="" /></p>
 
+
+</p>
 <p>We select only useful features.</p>
-
 <p>Fortunately, Scikit-learn has made it pretty much easy for us to make the feature selection. There are a lot of ways in which we can think of feature selection, but most feature selection methods can be divided into three major buckets</p>
-
 <ul>
-<li><p><strong><em>Filter based:</em></strong> We specify some metric and based on that filter features. An example of such a metric could be correlation/chi-square.</p></li>
-
-<li><p><strong><em>Wrapper-based:</em></strong> Wrapper methods consider the selection of a set of features as a search problem. Example: Recursive Feature Elimination</p></li>
-
-<li><p><strong><em>Embedded:</em></strong> Embedded methods use algorithms that have built-in feature selection methods. For instance, Lasso and RF have their own feature selection methods.</p></li>
+<li>
+<p><em><strong>Filter based:</strong></em> We specify some metric and based on that filter features. An example of such a metric could be correlation/chi-square.</p>
+</li>
+<li>
+<p><em><strong>Wrapper-based:</strong></em> Wrapper methods consider the selection of a set of features as a search problem. Example: Recursive Feature Elimination</p>
+</li>
+<li>
+<p><em><strong>Embedded:</strong></em> Embedded methods use algorithms that have built-in feature selection methods. For instance, Lasso and RF have their own feature selection methods.</p>
+</li>
 </ul>
-
 <p>So enough of theory let us start with our five feature selection methods.</p>
-
 <p>We will try to do this using a dataset to understand it better.</p>
-
-<p>I am going to be using a football player dataset to find out <strong><em>what makes a good player great?</em></strong></p>
-
-<p><strong><em>Don’t worry if you don’t understand football terminologies. I will try to keep it at a minimum.</em></strong></p>
-
-<p>Here is the Kaggle <a href="https://www.kaggle.com/mlwhiz/feature-selection-using-football-data" rel="nofollow" target="_blank">Kernel</a> with the code to try out yourself.</p>
-
-<hr />
-
+<p>I am going to be using a football player dataset to find out <em><strong>what makes a good player great?</strong></em></p>
+<p><em><strong>Don’t worry if you don’t understand football terminologies. I will try to keep it at a minimum.</strong></em></p>
+<p>Here is the Kaggle <a href="https://www.kaggle.com/mlwhiz/feature-selection-using-football-data">Kernel</a> with the code to try out yourself.</p>
+<hr>
 <h2 id="some-simple-data-preprocessing">Some Simple Data Preprocessing</h2>
-
 <p>We have done some basic preprocessing such as removing Nulls and one hot encoding. And converting the problem to a classification problem using:</p>
-
 <pre><code>y = traindf['Overall']&gt;=87
 </code></pre>
-
 <p>Here we use High Overall as a proxy for a great player.</p>
-
 <p>Our dataset(X) looks like below and has 223 columns.</p>
+<p>
+  <img src="/images/fs/12.png" alt="">
 
-<p><img src="/images/fs/12.png" alt="" /></p>
 
-<hr />
 
+</p>
+<hr>
 <h2 id="1-pearson-correlation">1. Pearson Correlation</h2>
+<p>
+  <img src="/images/fs/4.png" alt="">
 
-<p><img src="/images/fs/4.png" alt="" /></p>
 
+
+</p>
 <p>This is a filter-based method.</p>
-
-<p>We check the <strong><em>absolute value of the Pearson’s correlation</em></strong> between the target and numerical features in our dataset. We keep the top n features based on this criterion.</p>
+<p>We check the <em><strong>absolute value of the Pearson’s correlation</strong></em> between the target and numerical features in our dataset. We keep the top n features based on this criterion.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">cor_selector</span>(X, y,num_feats):
     cor_list <span style="color:#f92672">=</span> []
     feature_name <span style="color:#f92672">=</span> X<span style="color:#f92672">.</span>columns<span style="color:#f92672">.</span>tolist()
@@ -489,39 +296,38 @@ if (!doNotTrack) {
     cor_support <span style="color:#f92672">=</span> [True <span style="color:#66d9ef">if</span> i <span style="color:#f92672">in</span> cor_feature <span style="color:#66d9ef">else</span> False <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> feature_name]
     <span style="color:#66d9ef">return</span> cor_support, cor_feature
 cor_support, cor_feature <span style="color:#f92672">=</span> cor_selector(X, y,num_feats)
-<span style="color:#66d9ef">print</span>(str(len(cor_feature)), <span style="color:#e6db74">&#39;selected features&#39;</span>)</code></pre></div>
-<hr />
-
+<span style="color:#66d9ef">print</span>(str(len(cor_feature)), <span style="color:#e6db74">&#39;selected features&#39;</span>)
+</code></pre></div><hr>
 <h2 id="2-chi-squared">2. Chi-Squared</h2>
-
 <p>This is another filter-based method.</p>
-
 <p>In this method, we calculate the chi-square metric between the target and the numerical variable and only select the variable with the maximum chi-squared values.</p>
+<p>
+  <img src="/images/fs/5.png" alt="">
 
-<p><img src="/images/fs/5.png" alt="" /></p>
 
+
+</p>
 <p>Let us create a small example of how we calculate the chi-squared statistic for a sample.</p>
-
 <p>So let’s say we have 75 Right-Forwards in our dataset and 25 Non-Right-Forwards. We observe that 40 of the Right-Forwards are good, and 35 are not good. Does this signify that the player being right forward affects the overall performance?</p>
+<p>
+  <img src="/images/fs/6.png" alt="Observed and Expected Counts">
 
-<p><img src="/images/fs/6.png" alt="Observed and Expected Counts" /></p>
 
+
+</p>
 <p>We calculate the chi-squared value:</p>
-
 <p>To do this, we first find out the values we would expect to be falling in each bucket if there was indeed independence between the two categorical variables.</p>
-
 <p>This is simple. We multiply the row sum and the column sum for each cell and divide it by total observations.</p>
-
 <p>so Good and NotRightforward Bucket Expected value= 25(Row Sum)*60(Column Sum)/100(Total Observations)</p>
-
 <p>Why is this expected? Since there are 25% notRightforwards in the data, we would expect 25% of the 60 good players we observed in that cell. Thus 15 players.</p>
-
 <p>Then we could just use the below formula to sum over all the 4 cells:</p>
+<p>
+  <img src="/images/fs/7.jpg" alt="">
 
-<p><img src="/images/fs/7.jpg" alt="" /></p>
 
+
+</p>
 <p>I won’t show it here, but the chi-squared statistic also works in a hand-wavy way with non-negative numerical and categorical features.</p>
-
 <p>We can get chi-squared features from our dataset as:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.feature_selection <span style="color:#f92672">import</span> SelectKBest
 <span style="color:#f92672">from</span> sklearn.feature_selection <span style="color:#f92672">import</span> chi2
@@ -531,21 +337,20 @@ chi_selector <span style="color:#f92672">=</span> SelectKBest(chi2, k<span style
 chi_selector<span style="color:#f92672">.</span>fit(X_norm, y)
 chi_support <span style="color:#f92672">=</span> chi_selector<span style="color:#f92672">.</span>get_support()
 chi_feature <span style="color:#f92672">=</span> X<span style="color:#f92672">.</span>loc[:,chi_support]<span style="color:#f92672">.</span>columns<span style="color:#f92672">.</span>tolist()
-<span style="color:#66d9ef">print</span>(str(len(chi_feature)), <span style="color:#e6db74">&#39;selected features&#39;</span>)</code></pre></div>
-<hr />
-
+<span style="color:#66d9ef">print</span>(str(len(chi_feature)), <span style="color:#e6db74">&#39;selected features&#39;</span>)
+</code></pre></div><hr>
 <h2 id="3-recursive-feature-elimination">3. Recursive Feature Elimination</h2>
+<p>
+  <img src="/images/fs/8.jpg" alt="">
 
-<p><img src="/images/fs/8.jpg" alt="" /></p>
 
+
+</p>
 <p>This is a wrapper based method. As I said before, wrapper methods consider the selection of a set of features as a search problem.</p>
-
 <p>From sklearn Documentation:</p>
-
 <blockquote>
 <p>The goal of recursive feature elimination (RFE) is to select features by <strong>recursively considering smaller and smaller sets of features.</strong> First, the estimator is trained on the initial set of features and the importance of each feature is obtained either through a <code>coef_</code> attribute or through a <code>feature_importances_</code> attribute. Then, the least important features are pruned from current set of features. That procedure is recursively repeated on the pruned set until the desired number of features to select is eventually reached.</p>
 </blockquote>
-
 <p>As you would have guessed, we could use any estimator with the method. In this case, we use <code>LogisticRegression</code>, and the RFE observes the <code>coef_</code> attribute of the <code>LogisticRegression</code> object</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.feature_selection <span style="color:#f92672">import</span> RFE
 <span style="color:#f92672">from</span> sklearn.linear_model <span style="color:#f92672">import</span> LogisticRegression
@@ -553,17 +358,17 @@ rfe_selector <span style="color:#f92672">=</span> RFE(estimator<span style="colo
 rfe_selector<span style="color:#f92672">.</span>fit(X_norm, y)
 rfe_support <span style="color:#f92672">=</span> rfe_selector<span style="color:#f92672">.</span>get_support()
 rfe_feature <span style="color:#f92672">=</span> X<span style="color:#f92672">.</span>loc[:,rfe_support]<span style="color:#f92672">.</span>columns<span style="color:#f92672">.</span>tolist()
-<span style="color:#66d9ef">print</span>(str(len(rfe_feature)), <span style="color:#e6db74">&#39;selected features&#39;</span>)</code></pre></div>
-<hr />
-
+<span style="color:#66d9ef">print</span>(str(len(rfe_feature)), <span style="color:#e6db74">&#39;selected features&#39;</span>)
+</code></pre></div><hr>
 <h2 id="4-lasso-selectfrommodel">4. Lasso: SelectFromModel</h2>
+<p>
+  <img src="/images/fs/9.png" alt="">
 
-<p><img src="/images/fs/9.png" alt="" /></p>
 
+
+</p>
 <p>This is an Embedded method. As said before, Embedded methods use algorithms that have built-in feature selection methods.</p>
-
 <p>For example, Lasso and RF have their own feature selection methods. Lasso Regularizer forces a lot of feature weights to be zero.</p>
-
 <p>Here we use Lasso to select variables.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.feature_selection <span style="color:#f92672">import</span> SelectFromModel
 <span style="color:#f92672">from</span> sklearn.linear_model <span style="color:#f92672">import</span> LogisticRegression
@@ -573,17 +378,17 @@ embeded_lr_selector<span style="color:#f92672">.</span>fit(X_norm, y)
 
 embeded_lr_support <span style="color:#f92672">=</span> embeded_lr_selector<span style="color:#f92672">.</span>get_support()
 embeded_lr_feature <span style="color:#f92672">=</span> X<span style="color:#f92672">.</span>loc[:,embeded_lr_support]<span style="color:#f92672">.</span>columns<span style="color:#f92672">.</span>tolist()
-<span style="color:#66d9ef">print</span>(str(len(embeded_lr_feature)), <span style="color:#e6db74">&#39;selected features&#39;</span>)</code></pre></div>
-<hr />
-
+<span style="color:#66d9ef">print</span>(str(len(embeded_lr_feature)), <span style="color:#e6db74">&#39;selected features&#39;</span>)
+</code></pre></div><hr>
 <h2 id="5-tree-based-selectfrommodel">5. Tree-based: SelectFromModel</h2>
+<p>
+  <img src="/images/fs/10.jpeg" alt="">
 
-<p><img src="/images/fs/10.jpeg" alt="" /></p>
 
+
+</p>
 <p>This is an Embedded method. As said before, Embedded methods use algorithms that have built-in feature selection methods.</p>
-
 <p>We can also use RandomForest to select features based on feature importance.</p>
-
 <p>We calculate feature importance using node impurities in each decision tree. In Random forest, the final feature importance is the average of all decision tree feature importance.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.feature_selection <span style="color:#f92672">import</span> SelectFromModel
 <span style="color:#f92672">from</span> sklearn.ensemble <span style="color:#f92672">import</span> RandomForestClassifier
@@ -593,8 +398,8 @@ embeded_rf_selector<span style="color:#f92672">.</span>fit(X, y)
 
 embeded_rf_support <span style="color:#f92672">=</span> embeded_rf_selector<span style="color:#f92672">.</span>get_support()
 embeded_rf_feature <span style="color:#f92672">=</span> X<span style="color:#f92672">.</span>loc[:,embeded_rf_support]<span style="color:#f92672">.</span>columns<span style="color:#f92672">.</span>tolist()
-<span style="color:#66d9ef">print</span>(str(len(embeded_rf_feature)), <span style="color:#e6db74">&#39;selected features&#39;</span>)</code></pre></div>
-<p>We could also have used a LightGBM. Or an XGBoost object as long it has a <code>feature_importances_</code> attribute.</p>
+<span style="color:#66d9ef">print</span>(str(len(embeded_rf_feature)), <span style="color:#e6db74">&#39;selected features&#39;</span>)
+</code></pre></div><p>We could also have used a LightGBM. Or an XGBoost object as long it has a <code>feature_importances_</code> attribute.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.feature_selection <span style="color:#f92672">import</span> SelectFromModel
 <span style="color:#f92672">from</span> lightgbm <span style="color:#f92672">import</span> LGBMClassifier
 
@@ -606,17 +411,17 @@ embeded_lgb_selector<span style="color:#f92672">.</span>fit(X, y)
 
 embeded_lgb_support <span style="color:#f92672">=</span> embeded_lgb_selector<span style="color:#f92672">.</span>get_support()
 embeded_lgb_feature <span style="color:#f92672">=</span> X<span style="color:#f92672">.</span>loc[:,embeded_lgb_support]<span style="color:#f92672">.</span>columns<span style="color:#f92672">.</span>tolist()
-<span style="color:#66d9ef">print</span>(str(len(embeded_lgb_feature)), <span style="color:#e6db74">&#39;selected features&#39;</span>)</code></pre></div>
-<hr />
-
+<span style="color:#66d9ef">print</span>(str(len(embeded_lgb_feature)), <span style="color:#e6db74">&#39;selected features&#39;</span>)
+</code></pre></div><hr>
 <h2 id="bonus">Bonus</h2>
+<p>
+  <img src="/images/fs/11.jpeg" alt="">
 
-<p><img src="/images/fs/11.jpeg" alt="" /></p>
 
-<p><strong><em>Why use one, when we can have all?</em></strong></p>
 
+</p>
+<p><em><strong>Why use one, when we can have all?</strong></em></p>
 <p>The answer is sometimes it won’t be possible with a lot of data and time crunch.</p>
-
 <p>But whenever possible, why not do this?</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># put all selection together</span>
 feature_selection_df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74">&#39;Feature&#39;</span>:feature_name, <span style="color:#e6db74">&#39;Pearson&#39;</span>:cor_support, <span style="color:#e6db74">&#39;Chi-2&#39;</span>:chi_support, <span style="color:#e6db74">&#39;RFE&#39;</span>:rfe_support, <span style="color:#e6db74">&#39;Logistics&#39;</span>:embeded_lr_support,
@@ -625,99 +430,334 @@ feature_selection_df <span style="color:#f92672">=</span> pd<span style="color:#
 feature_selection_df[<span style="color:#e6db74">&#39;Total&#39;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>sum(feature_selection_df, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
 <span style="color:#75715e"># display the top 100</span>
 feature_selection_df <span style="color:#f92672">=</span> feature_selection_df<span style="color:#f92672">.</span>sort_values([<span style="color:#e6db74">&#39;Total&#39;</span>,<span style="color:#e6db74">&#39;Feature&#39;</span>] , ascending<span style="color:#f92672">=</span>False)
-feature_selection_df<span style="color:#f92672">.</span>index <span style="color:#f92672">=</span> range(<span style="color:#ae81ff">1</span>, len(feature_selection_df)<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)</code></pre></div>
-<p><img src="/images/fs/13.png" alt="" /></p>
+feature_selection_df<span style="color:#f92672">.</span>index <span style="color:#f92672">=</span> range(<span style="color:#ae81ff">1</span>, len(feature_selection_df)<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)
+</code></pre></div><p>
+  <img src="/images/fs/13.png" alt="">
 
+
+
+</p>
 <p>We check if we get a feature based on all the methods. In this case, as we can see Reactions and LongPassing are excellent attributes to have in a high rated player. And as expected Ballcontrol and Finishing occupy the top spot too.</p>
-
-<hr />
-
+<hr>
 <h2 id="conclusion">Conclusion</h2>
-
-<p><a href="https://towardsdatascience.com/the-hitchhikers-guide-to-feature-extraction-b4c157e96631" rel="nofollow" target="_blank">Feature engineering</a> and feature selection are critical parts of any machine learning pipeline.</p>
-
+<p><a href="https://towardsdatascience.com/the-hitchhikers-guide-to-feature-extraction-b4c157e96631">Feature engineering</a> and feature selection are critical parts of any machine learning pipeline.</p>
 <p>We strive for accuracy in our models, and one cannot get to a good accuracy without revisiting these pieces again and again.</p>
-
 <p>In this article, I tried to explain some of the most used feature selection techniques as well as my workflow when it comes to feature selection.</p>
-
 <p>I also tried to provide some intuition into these methods, but you should probably try to see more into it and try to incorporate these methods into your work.</p>
+<p>Do read my <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-feature-extraction-b4c157e96631">post on feature engineering</a> too if you are interested.</p>
+<hr>
+<p>If you want to learn more about Data Science, I would like to call out this <a href="https://www.coursera.org/learn/machine-learning?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;siteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&amp;source=post_page---------------------------"><strong>excellent course</strong></a> by Andrew Ng. This was the one that got me started. Do check it out.</p>
+<hr>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c"><strong>blog</strong></a>.</p>
 
-<p>Do read my <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-feature-extraction-b4c157e96631" rel="nofollow" target="_blank">post on feature engineering</a> too if you are interested.</p>
 
-<hr />
 
-<p>If you want to learn more about Data Science, I would like to call out this <a href="https://www.coursera.org/learn/machine-learning?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;siteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&amp;source=post_page---------------------------" rel="nofollow" target="_blank"><strong>excellent course</strong></a> by Andrew Ng. This was the one that got me started. Do check it out.</p>
+        </div>
+      </div>
+      <div class="col-lg-4">
+  
 
-<hr />
+  <div class="widget">
+    
+<script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#00aaa1', 'S6S3NPCD');kofiwidget2.draw();</script>
 
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c" rel="nofollow" target="_blank"><strong>blog</strong></a>.</p>
-
-		</div>
-
-		 
-		<script async data-uid="8d7942551b" src="https://mlwhiz.ck.page/8d7942551b/index.js"></script>
-		<br>
-		
-		
-<div class="post__tags tags clearfix">
-	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
-	<ul class="tags__list">
-		<li class="tags__item"><a class="tags__link btn" href="/tags/machine-learning/" rel="tag">Machine Learning</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/data-science/" rel="tag">Data Science</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/statistics/" rel="tag">Statistics</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/awesome-guides/" rel="tag">Awesome Guides</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/best-content/" rel="tag">Best Content</a></li>
-	</ul>
 </div>
-		
+  <div class="widget">
+    
+    <h4 class="widget-title">About Me</h4>
+    
+    <img src="https://mlwhiz.com/images/author.jpg" alt=""
+      class="img-fluid author-thumb-sm d-block mx-auto rounded-circle mb-4">
+    
+    <p>I’m a data scientist consultant and big data engineer based in Bangalore, where I am currently working with WalmartLabs .</p>
+    <a href="https://mlwhiz.com/about/" class="btn btn-outline-primary">Know More</a>
+    
+  </div>
 
-<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+  
+  <div class="widget">
+    <h4 class="widget-title">Topics</h4>
+    <ul class="list-unstyled">
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/awesome-guides">Awesome Guides</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/big-data">Big Data</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/computer-vision">Computer Vision</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/data-science">Data Science</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/deep-learning">Deep Learning</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/learning-resources">Learning Resources</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/natural-language-processing">Natural Language Processing</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/programming">Programming</a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="widget">
+    <h4 class="widget-title">Tags</h4>
+    <ul class="list-inline">
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/algorithms">Algorithms</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/artificial-intelligence">Artificial Intelligence</a></li>
+          
+
+
+          
+
+
+          
+
+
+          
+
+
+          
+
+
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/dask">Dask</a></li>
+          
+
+
+          
+
+
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/deployment">Deployment</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/ec2">Ec2</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/generative-adversarial-networks">Generative Adversarial Networks</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/graphs">Graphs</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/image-classification">Image Classification</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/instance-segmentation">Instance Segmentation</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/interpretability">Interpretability</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/jobs">Jobs</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/kaggle">Kaggle</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/machine-learning">Machine Learning</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/math">Math</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/multiprocessing">Multiprocessing</a></li>
+          
+
+
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/object-detection">Object Detection</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/opinion">Opinion</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/pandas">Pandas</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/production">Production</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/productivity">Productivity</a></li>
+          
+
+
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/python">Python</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/pytorch">Pytorch</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/spark">Spark</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/sql">Sql</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/statistics">Statistics</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/streamlit">Streamlit</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/text-classification">Text Classification</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/timeseries">Timeseries</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/tools">Tools</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/visualization">Visualization</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/xgboost">Xgboost</a></li>
+          
+    </ul>
+  </div>
+  
+  <div class="widget">
+    <h4 class="widget-title">Connect With Me</h4>
+    <ul class="list-inline social-links">
+      
+      <li class="list-inline-item"><a href="https://www.linkedin.com/in/rahulagwl/"><i class="ti-linkedin"></i></a></li>
+      
+      <li class="list-inline-item"><a href="https://medium.com/@rahul_agarwal"><i class="ti-book"></i></a></li>
+      
+      <li class="list-inline-item"><a href="https://twitter.com/MLWhiz"><i class="ti-twitter-alt"></i></a></li>
+      
+      <li class="list-inline-item"><a href="https://www.facebook.com/mlwhizblog"><i class="ti-facebook"></i></a></li>
+      
+      <li class="list-inline-item"><a href="https://github.com/MLWhiz"><i class="ti-github"></i></a></li>
+      
+    </ul>
+  </div>
+  
+  
+<script async data-uid="bfe9f82f10" src="https://mlwhiz.ck.page/bfe9f82f10/index.js"></script>
+
+<script async data-uid="3452d924e2" src="https://mlwhiz.ck.page/3452d924e2/index.js"></script>
+
+</div>
+
+    </div>
+    
+<script async data-uid="8d7942551b" src="https://mlwhiz.ck.page/8d7942551b/index.js"></script>
+
+<div class="shareaholic-canvas col-lg-8 mb-5 mb-lg-0" data-app="share_buttons" data-app-id="28372088"></div>
 
 <a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	</article>
-</main>
-
-
-<nav class="post-nav flex">
-	<div class="post-nav__item post-nav__item--prev">
-		<a class="post-nav__link" href="/blog/2019/07/30/sampling/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">The 5 Sampling Algorithms every Data Scientist need to know</p></a>
-	</div>
-	<div class="post-nav__item post-nav__item--next">
-		<a class="post-nav__link" href="/blog/2019/08/12/resources/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">How did I learn Data Science?</p></a>
-	</div>
-</nav>
-
-<section class="comments">
-	<div id="disqus_thread"></div>
+<div id="disqus_thread"></div>
 <script type="application/javascript">
     var disqus_config = function () {
     
@@ -737,113 +777,131 @@ feature_selection_df<span style="color:#f92672">.</span>index <span style="color
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  </div>
 </section>
 
 
-			</div>
-			<style type="text/css">
 
-  .btn {
-    display: inline-block;
-    font-weight: 400;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    border: 1px solid transparent;
-    padding: .375rem .75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    border-radius: .25rem;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
-
-.btn-session {
-    color: #fff;
-    background-color: #28a745;
-    border-color: #28a745;
-}
-</style>
-
-
-<aside class="sidebar">
-  <div style="text-align:center">
-    
-  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-5">
+        <a href="https://mlwhiz.com/"><img src="https://mlwhiz.com/images/logo.png" class="img-fluid-custom-bottom" alt="MLWhiz"></a>
+      </div>
+      <div class="col-lg-3 col-sm-6 mb-5">
+        <h6 class="mb-4">Contact Me</h6>
+        <ul class="list-unstyled">
+          <li class="mb-3"><i class="ti-location-pin mr-3 text-primary"></i>India, Bangalore</li>
+          <li class="mb-3"><a class="text-dark" href="mailto:rahul@mlwhiz.com"><i
+                class="ti-email mr-3 text-primary"></i>rahul@mlwhiz.com</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-sm-6 mb-5">
+        <h6 class="mb-4">Social Contacts</h6>
+        <ul class="list-unstyled">
+          
+          <li class="mb-3"><a class="text-dark" href="https://www.linkedin.com/in/rahulagwl/">Linkedin</a></li>
+          
+          <li class="mb-3"><a class="text-dark" href="https://medium.com/@rahul_agarwal">Medium</a></li>
+          
+          <li class="mb-3"><a class="text-dark" href="https://twitter.com/MLWhiz">Twitter</a></li>
+          
+          <li class="mb-3"><a class="text-dark" href="https://www.facebook.com/mlwhizblog">Facebook</a></li>
+          
+          <li class="mb-3"><a class="text-dark" href="https://github.com/MLWhiz">Github</a></li>
+          
+        </ul>
+      </div>
+      <div class="col-lg-3 col-sm-6 mb-5">
+        <h6 class="mb-4">Categories</h6>
+        <ul class="list-unstyled">
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/awesome-guides">Awesome Guides</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/big-data">Big Data</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/computer-vision">Computer Vision</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/data-science">Data Science</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/deep-learning">Deep Learning</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/learning-resources">Learning Resources</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/natural-language-processing">Natural Language Processing</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/programming">Programming</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-sm-6 mb-5">
+        <h6 class="mb-4">Quick Links</h6>
+        <ul class="list-unstyled">
+          
+          <li class="mb-3"><a class="text-dark" href="https://mlwhiz.com/about">About</a></li>
+          
+          
+          <li class="mb-3"><a class="text-dark" href="https://mlwhiz.com/blog">Post</a></li>
+          
+          
+          
+        </ul>
+      </div>
+      <div class="col-12 border-top py-4 text-center">
+        Copyright © 2020 <a href="https://mlwhiz.com">MLWhiz</a> All Rights Reserved
+      </div>
+    </div>
   </div>
-  <br><div class="widget-search widget">
-	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
-		<label>
-			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
-		</label>
-		<input class="widget-search__submit" type="submit" value="Search">
-		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
-	</form>
-</div>
-<div class="widget-recent widget">
-	<h4 class="widget__title">Recent Posts</h4>
-	<div class="widget__content">
-		<ul class="widget__list">
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/09/09/pytorch_guide/">The Most Complete Guide to PyTorch for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/09/02/atom_for_data_science/">Create an Awesome Development Setup for Data Science using Atom</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/27/pyt_gan/">A Layman’s Introduction to GANs for Data Scientists using PyTorch</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/27/mlengineercourses/">Become an ML Engineer with these courses from Amazon and Google</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/27/pandasql/">How to use SQL with Pandas?</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/12/ctskills/">5 Essential Business-Oriented Critical Thinking Skills For Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/09/owndlrig/">Creating my First Deep Learning &#43; Data Science Workstation</a></li>
-		</ul>
-	</div>
-</div>
-
-<div style="text-align:center">
-    
-    <a class="btn btn-session" href="https://www.patreon.com/bePatron?u=28135435" role="button">1:1 Session</a>
-  </div>
-
-<br>
-
-
-
-
-<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
-
-<style type="text/css">
-.bookclass .shareaholic-share-buttons-heading .shareaholic-canvas{
-  font-family: montserrat,sans-serif;
-  font-size:.5em ;
-  font-weight: 500;
-  }
-</style>
-<center>
-
-
-
-
-<script async data-uid="bfe9f82f10" src="https://mlwhiz.ck.page/bfe9f82f10/index.js"></script>
-
-<script async data-uid="3452d924e2" src="https://mlwhiz.ck.page/3452d924e2/index.js"></script>
-
-
-</center>
-</aside>
-
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy;  2014-2020 Rahul Agarwal.
-			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
-		</div>
-	</div>
 </footer>
 
+<script>
+  var indexURL = "https://mlwhiz.com/index.json"
+</script>
 
+<!-- JS Plugins -->
 
-	</div>
-<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
-<script async defer src="/js/menu.js"></script></body>
+<script src="https://mlwhiz.com/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/slick/slick.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/search/fuse.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/search/mark.js"></script>
+
+<script src="https://mlwhiz.com/plugins/search/search.js"></script>
+
+<!-- Main Script -->
+
+<script src="https://mlwhiz.com/js/script.min.js"></script>
+<!-- google analitycs -->
+<script>
+  (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+  ga('create', 'UA-54777926-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
 </html>

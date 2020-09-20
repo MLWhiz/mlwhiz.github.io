@@ -1,92 +1,46 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en-us">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>4 Graph Algorithms on Steroids for data Scientists with cuGraph</title>
-	<script>(function(d,e){d[e]=d[e].replace("no-js","js");})(document.documentElement,"className");</script>
-	<meta name="description" content="This post is about automating hyperparameter tuning because our time is more important than the machine.">
-	
+<html lang="en-us"><head>
+  <meta charset="utf-8">
+  <title>MLWhiz</title>
 
-	
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="This post is about automating hyperparameter tuning because our time is more important than the machine.">
+  <meta name="author" content="Rahul Agarwal">
+  <meta name="generator" content="Hugo 0.74.3" />
+
+  
 	<link rel='preload' href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
 	<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
-
-	
-	<meta name="generator" content="Hugo 0.53" />
-	<meta property="og:title" content="4 Graph Algorithms on Steroids for data Scientists with cuGraph" />
-<meta property="og:description" content="This post is about automating hyperparameter tuning because our time is more important than the machine." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://mlwhiz.com/blog/2019/10/20/cugraph/" />
-<meta property="og:image" content="https://mlwhiz.com/images/cugraph/1.jpg" />
-<meta property="article:published_time" content="2019-11-06T00:00:00&#43;00:00"/>
-<meta property="article:modified_time" content="2020-02-21T12:53:40&#43;05:30"/>
-
-	<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://mlwhiz.com/images/cugraph/1.jpg"/>
-
-<meta name="twitter:title" content="4 Graph Algorithms on Steroids for data Scientists with cuGraph"/>
-<meta name="twitter:description" content="This post is about automating hyperparameter tuning because our time is more important than the machine."/>
-
-
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700">
-	<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,600,600i,700,700i%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
-	<link rel="stylesheet" href="/css/style.css">
-
-	<link rel="stylesheet" href="/css/custom.css">
-	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-
-	
-		
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-54777926-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
-
-	
-	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-	})(window,document,'script','dataLayer','GTM-NMQD44T');</script>
 	
 
-	
-	<script>
-	  !function(f,b,e,v,n,t,s)
-	  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-	  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-	  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-	  n.queue=[];t=b.createElement(e);t.async=!0;
-	  t.src=v;s=b.getElementsByTagName(e)[0];
-	  s.parentNode.insertBefore(t,s)}(window, document,'script',
-	  'https://connect.facebook.net/en_US/fbevents.js');
-	  fbq('init', '1062344757288542');
-	  fbq('track', 'PageView');
-	</script>
-	<noscript><img height="1" width="1" style="display:none"
-	  src="https://www.facebook.com/tr?id=1062344757288542&ev=PageView&noscript=1"
-	/></noscript>
-	
+  <!-- plugins -->
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/plugins/bootstrap/bootstrap.min.css ">
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/plugins/slick/slick.css ">
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/plugins/themify-icons/themify-icons.css ">
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/plugins/venobox/venobox.css ">
+  
+
+  <!-- Main Stylesheet -->
+  
+  <link rel="stylesheet" href="https://mlwhiz.com/scss/style.min.css" media="screen">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <link rel="stylesheet" type="text/css" href="/css/font/flaticon.css" >
+
+  <!--Favicon-->
+  <link rel="shortcut icon" href="https://mlwhiz.com/images/favicon-200x200.png " type="image/x-icon">
+  <link rel="icon" href="https://mlwhiz.com/images/favicon.png " type="image/x-icon">
 
 
-	
 
-<script async data-uid="a0ebaf958d" src="https://mlwhiz.ck.page/a0ebaf958d/index.js"></script>
-
-
-  	<script type="text/javascript" async
+  
+  <script async data-uid="a0ebaf958d" src="https://mlwhiz.ck.page/a0ebaf958d/index.js"></script>
+  <script type="text/javascript" async
   src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
   MathJax.Hub.Config({
   tex2jax: {
@@ -114,349 +68,197 @@ if (!doNotTrack) {
   TeX: { equationNumbers: { autoNumber: "AMS" } }
   });
 </script>
+
 </head>
-<body class="body">
-	  
-	  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
-	  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-	  
-	<div class="container container--outer">
-		<header class="header">
-	<div class="container">
-		<div class="logo">
+<body>
+      
+   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
+   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+   
+<!-- preloader start -->
+<div class="preloader">
+  
+</div>
+<!-- preloader end -->
+<!-- navigation -->
+<header class="navigation">
+  <div class="container">
+    
+    <nav class="navbar navbar-expand-lg navbar-white bg-transparent border-bottom pl-0">
+      <a class="navbar-brand mobile-view" href="https://mlwhiz.com/"><img class="img-fluid"
+          src="https://mlwhiz.com/images/logo.png" alt="MLWhiz"></a>
+      <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navigation">
+        <i class="ti-menu h3"></i>
+      </button>
 
-			<a class="logo__link" href="/" title="MLWhiz" rel="home">
+      <div class="collapse navbar-collapse text-center" id="navigation">
+        <div class="desktop-view">
+          <ul class="navbar-nav mr-auto">
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://www.linkedin.com/in/rahulagwl/"><i class="ti-linkedin"></i></a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://medium.com/@rahul_agarwal"><i class="ti-book"></i></a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://twitter.com/MLWhiz"><i class="ti-twitter-alt"></i></a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://www.facebook.com/mlwhizblog"><i class="ti-facebook"></i></a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/MLWhiz"><i class="ti-github"></i></a>
+            </li>
+            
+          </ul>
+        </div>
 
-				<div class="logo__title">MLWhiz</div>
-				<div class="logo__tagline">Deep Learning, Data Science and NLP Enthusiast</div>
-			</a>
-		</div>
-		
-<nav class="menu">
-	<button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-		<span class="menu__btn-title" tabindex="-1">Menu</span>
-	</button>
-	<ul class="menu__list">
-		<li class="menu__item">
-			<a class="menu__link" href="/">
-				
-				<span class="menu__text">Blog</span>
-				
-			</a>
-		</li>
-		<li class="menu__item menu__dropdown">
-			<a class="menu__link" href="/tags">
-				
-				<span class="menu__text">Topics</span>
-				<label class="drop-icon" for="Topics">▾</label>
-				
-			</a>
-			<input type="checkbox" id="Topics">
-			<ul class="submenu__list">
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/deep-learning">
-						
-						<span class="menu__text">Deep Learning</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/artificial-intelligence">
-						
-						<span class="menu__text">Artificial Intelligence</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/natural-language-processing">
-						
-						<span class="menu__text">Natural Language Processing</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/computer-vision">
-						
-						<span class="menu__text">Computer Vision</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/machine-learning">
-						
-						<span class="menu__text">Machine Learning</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/data-science">
-						
-						<span class="menu__text">Data Science</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/big-data">
-						
-						<span class="menu__text">Big Data</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/python">
-						
-						<span class="menu__text">Python</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/statistics">
-						
-						<span class="menu__text">Statistics</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/visualization">
-						
-						<span class="menu__text">Visualization</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/production">
-						
-						<span class="menu__text">Production</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/algorithms">
-						
-						<span class="menu__text">Algorithms</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/kaggle">
-						
-						<span class="menu__text">Kaggle</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/graphs">
-						
-						<span class="menu__text">Graphs</span>
-						
-					</a>
-					</li>
-				
-			</ul>
-		</li>
-		<li class="menu__item menu__dropdown">
-			<a class="menu__link" href="/resources/index.html">
-				
-				<span class="menu__text">Learning Resources</span>
-				<label class="drop-icon" for="Learning Resources">▾</label>
-				
-			</a>
-			<input type="checkbox" id="Learning Resources">
-			<ul class="submenu__list">
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/best-content">
-						
-						<span class="menu__text">Best Content</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/awesome-guides">
-						
-						<span class="menu__text">Awesome Guides</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/curated-resources">
-						
-						<span class="menu__text">Curated Resources</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/tools">
-						
-						<span class="menu__text">Tools</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/productivity">
-						
-						<span class="menu__text">Productivity</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/opinion">
-						
-						<span class="menu__text">Opinion</span>
-						
-					</a>
-					</li>
-				
-					<li class="menu__item">
-					<a class="menu__link" href="/tags/jobs">
-						
-						<span class="menu__text">Jobs</span>
-						
-					</a>
-					</li>
-				
-			</ul>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/about/">
-				
-				<span class="menu__text">About Me</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/archive">
-				
-				<span class="menu__text">Archive</span>
-				
-			</a>
-		</li>
-		<li class="menu__item">
-			<a class="menu__link" href="/atom.xml">
-				
-				<span class="menu__text">RSS</span>
-				
-			</a>
-		</li>
-	</ul>
-</nav>
+        <a class="navbar-brand mx-auto desktop-view" href="https://mlwhiz.com/"><img class="img-fluid-custom"
+            src="https://mlwhiz.com/images/logo.png" alt="MLWhiz"></a>
 
+        <ul class="navbar-nav">
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="https://mlwhiz.com/about">About</a>
+          </li>
+          
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" href="https://mlwhiz.com/blog">Blog</a>
+          </li>
+          
+          
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+              Topics
+            </a>
+            <div class="dropdown-menu">
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/natural-language-processing">NLP</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/deep-learning">Computer Vision</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/deep-learning">Deep Learning</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/data-science">DS/ML</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/big-data">Big Data</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/awesome-guides">My Best Content</a>
+              
+              <a class="dropdown-item" href="https://mlwhiz.com/categories/learning-resources">Learning Resources</a>
+              
+            </div>
+          </li>
+          
+          
+        </ul>
 
-	</div>
+        
+        <!-- search -->
+        <div class="search pl-lg-4">
+          <button id="searchOpen" class="search-btn"><i class="ti-search"></i></button>
+          <div class="search-wrapper">
+            <form action="https://mlwhiz.com//search" class="h-100">
+              <input class="search-box px-4" id="search-query" name="s" type="search" placeholder="Type & Hit Enter...">
+            </form>
+            <button id="searchClose" class="search-close"><i class="ti-close text-dark"></i></button>
+          </div>
+        </div>
+        
+
+        
+      </div>
+    </nav>
+  </div>
 </header>
+<!-- /navigation -->
 
 
-		<div class="wrapper flex">
-			<div class="primary">
-			
-<main class="main" role="main">
-	<article class="post">
-		<header class="post__header">
-			<h1 class="post__title">4 Graph Algorithms on Steroids for data Scientists with cuGraph</h1>
-			<div class="post__meta meta">
-<div class="meta__item-datetime meta__item">
-	<svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
-	<time class="meta__text" datetime="2019-11-06T00:00:00">November 06, 2019</time>
-	
-		
-</div>
-</div>
-		</header>
-		<div class="content post__content clearfix">
-			
+<section class="section-sm">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 mb-5 mb-lg-0">
+        
+        
+        <a href="/categories/data-science"
+          class="categoryStyle">Data Science</a>
+        
+        <h1>4 Graph Algorithms on Steroids for data Scientists with cuGraph</h1>
+        <div class="mb-3 post-meta">
+          <span>By Rahul Agarwal</span>
+          
+          <svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"></path></svg>
 
-<p><img src="/images/cugraph/1.jpg" alt="" /></p>
-
-<p>We, as data scientists have gotten quite comfortable with Pandas or SQL or any other relational database.</p>
-
+          <span>06 November 2019</span>
+          
+        </div>
+        
+        <img src="https://mlwhiz.com/images/cugraph/1.jpg" class="img-fluid w-100 mb-4" alt="4 Graph Algorithms on Steroids for data Scientists with cuGraph">
+        
+        <div class="content mb-5">
+          <p>We, as data scientists have gotten quite comfortable with Pandas or SQL or any other relational database.</p>
 <p>We are used to seeing our users in rows with their attributes as columns. But does the real world behave like that?</p>
-
 <p>In a connected world, users cannot be considered as independent entities. They have got certain relationships with each other, and we would sometimes like to include such relationships while building our machine learning models.</p>
-
 <p>Now while in a relational database, we cannot use such relations between different rows(users), in a graph database, it is relatively trivial to do that.</p>
-
 <p>Now, as we know, Python has a great package called Networkx to do this. But the problem with that is that it is not scalable.</p>
-
-<p><strong><em>A GPU can help solve our scalability problems with its many cores and parallelization. And that is where RAPIDS.ai CuGraph comes in.</em></strong></p>
-
+<p><em><strong>A GPU can help solve our scalability problems with its many cores and parallelization. And that is where RAPIDS.ai CuGraph comes in.</strong></em></p>
 <blockquote>
-<p>The <a href="https://rapids.ai/" rel="nofollow" target="_blank">RAPIDS</a> cuGraph library is a collection of graph analytics that process data found in GPU Dataframes — see <a href="https://github.com/rapidsai/cudf" rel="nofollow" target="_blank">cuDF</a>. cuGraph aims to provide a NetworkX-like API that will be familiar to data scientists, so they can now build GPU-accelerated workflows more easily.</p>
+<p>The <a href="https://rapids.ai/">RAPIDS</a> cuGraph library is a collection of graph analytics that process data found in GPU Dataframes — see <a href="https://github.com/rapidsai/cudf">cuDF</a>. cuGraph aims to provide a NetworkX-like API that will be familiar to data scientists, so they can now build GPU-accelerated workflows more easily.</p>
 </blockquote>
-
-<p><strong><em>In this post, I am going to be talking about some of the most essential graph algorithms you should know and how to implement them using Python with cuGraph.</em></strong></p>
-
-<hr />
-
+<p><em><strong>In this post, I am going to be talking about some of the most essential graph algorithms you should know and how to implement them using Python with cuGraph.</strong></em></p>
+<hr>
 <h2 id="installation">Installation</h2>
+<p>To install cuGraph you can just use the simple command that you can choose from <a href="https://rapids.ai/start.html">rapids.ai</a> based on your system and configuration.</p>
+<p>
+  <img src="/images/cugraph/2.png" alt="">
 
-<p>To install cuGraph you can just use the simple command that you can choose from <a href="https://rapids.ai/start.html" rel="nofollow" target="_blank">rapids.ai</a> based on your system and configuration.</p>
 
-<p><img src="/images/cugraph/2.png" alt="" /></p>
 
+</p>
 <p>The command I used is below and I used a nightly build(recommended):</p>
-
 <pre><code>conda install -c rapidsai-nightly -c nvidia -c numba -c conda-forge -c anaconda cudf=0.10 cuml=0.10 cugraph=0.10
 </code></pre>
-
-<hr />
-
+<hr>
 <h2 id="1-connected-components">1. Connected Components</h2>
+<p>
+  <img src="/images/cugraph/3.jpg" alt="">
 
-<p><img src="/images/cugraph/3.jpg" alt="" /></p>
 
+
+</p>
 <p>We all know how clustering works?</p>
-
 <p><em>You can think of Connected Components in very layman’s terms as a sort of a hard clustering algorithm which finds clusters/islands in related/connected data.</em></p>
-
-<p><em>As a concrete example:</em> <strong><em>Say you have data about roads joining any two cities in the world. And you need to find out all the continents in the world and which city they contain.</em></strong></p>
-
+<p><em>As a concrete example:</em> <em><strong>Say you have data about roads joining any two cities in the world. And you need to find out all the continents in the world and which city they contain.</strong></em></p>
 <p>How will you achieve that? Come on, give some thought.</p>
-
 <p>The connected components algorithm that we use to do this is based on a special case of <strong>BFS/DFS</strong>. I won’t talk much about how it works here, but we will see how to get the code up and running using Networkx as well as cuGraph.</p>
-
 <h3 id="applications">Applications</h3>
-
 <p>From a <strong>Retail Perspective</strong>: Let us say, we have a lot of customers using a lot of accounts. One way in which we can use the Connected components algorithm is to find out distinct families in our dataset.</p>
-
 <p>We can assume edges(roads) between CustomerIDs based on same credit card usage, or same address or same mobile number, etc. Once we have those connections, we can then run the connected component algorithm on the same to create individual clusters to which we can then assign a family ID.</p>
-
 <p>We can then use these family IDs to provide personalized recommendations based on family needs. We can also use this family ID to fuel our classification algorithms by creating grouped features based on family.</p>
-
 <p>From a <strong>Finance Perspective</strong>: Another use case would be to capture fraud using these family IDs. If an account has done fraud in the past, it is highly probable that the connected accounts are also susceptible to fraud.</p>
-
 <p>The possibilities are only limited by your imagination.</p>
-
 <h3 id="code">Code</h3>
-
 <p>We will be using the Networkx module in Python for creating and analyzing our graphs.</p>
-
 <p>Let us start with an example graph which we are using for our purpose. Contains cities and distance information between them.</p>
+<p>
+  <img src="/images/cugraph/3.png" alt="">
 
-<p><img src="/images/cugraph/3.png" alt="" /></p>
 
+
+</p>
 <p>We first start by creating a list of edges along with the distances which we will add as the weight of the edge:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">edgelist <span style="color:#f92672">=</span> [[<span style="color:#e6db74">&#39;Mannheim&#39;</span>, <span style="color:#e6db74">&#39;Frankfurt&#39;</span>, <span style="color:#ae81ff">85</span>], [<span style="color:#e6db74">&#39;Mannheim&#39;</span>, <span style="color:#e6db74">&#39;Karlsruhe&#39;</span>, <span style="color:#ae81ff">80</span>], [<span style="color:#e6db74">&#39;Erfurt&#39;</span>, <span style="color:#e6db74">&#39;Wurzburg&#39;</span>, <span style="color:#ae81ff">186</span>], [<span style="color:#e6db74">&#39;Munchen&#39;</span>, <span style="color:#e6db74">&#39;Numberg&#39;</span>, <span style="color:#ae81ff">167</span>], [<span style="color:#e6db74">&#39;Munchen&#39;</span>, <span style="color:#e6db74">&#39;Augsburg&#39;</span>, <span style="color:#ae81ff">84</span>], [<span style="color:#e6db74">&#39;Munchen&#39;</span>, <span style="color:#e6db74">&#39;Kassel&#39;</span>, <span style="color:#ae81ff">502</span>], [<span style="color:#e6db74">&#39;Numberg&#39;</span>, <span style="color:#e6db74">&#39;Stuttgart&#39;</span>, <span style="color:#ae81ff">183</span>], [<span style="color:#e6db74">&#39;Numberg&#39;</span>, <span style="color:#e6db74">&#39;Wurzburg&#39;</span>, <span style="color:#ae81ff">103</span>], [<span style="color:#e6db74">&#39;Numberg&#39;</span>, <span style="color:#e6db74">&#39;Munchen&#39;</span>, <span style="color:#ae81ff">167</span>], [<span style="color:#e6db74">&#39;Stuttgart&#39;</span>, <span style="color:#e6db74">&#39;Numberg&#39;</span>, <span style="color:#ae81ff">183</span>], [<span style="color:#e6db74">&#39;Augsburg&#39;</span>, <span style="color:#e6db74">&#39;Munchen&#39;</span>, <span style="color:#ae81ff">84</span>], [<span style="color:#e6db74">&#39;Augsburg&#39;</span>, <span style="color:#e6db74">&#39;Karlsruhe&#39;</span>, <span style="color:#ae81ff">250</span>], [<span style="color:#e6db74">&#39;Kassel&#39;</span>, <span style="color:#e6db74">&#39;Munchen&#39;</span>, <span style="color:#ae81ff">502</span>], [<span style="color:#e6db74">&#39;Kassel&#39;</span>, <span style="color:#e6db74">&#39;Frankfurt&#39;</span>, <span style="color:#ae81ff">173</span>], [<span style="color:#e6db74">&#39;Frankfurt&#39;</span>, <span style="color:#e6db74">&#39;Mannheim&#39;</span>, <span style="color:#ae81ff">85</span>], [<span style="color:#e6db74">&#39;Frankfurt&#39;</span>, <span style="color:#e6db74">&#39;Wurzburg&#39;</span>, <span style="color:#ae81ff">217</span>], [<span style="color:#e6db74">&#39;Frankfurt&#39;</span>, <span style="color:#e6db74">&#39;Kassel&#39;</span>, <span style="color:#ae81ff">173</span>], [<span style="color:#e6db74">&#39;Wurzburg&#39;</span>, <span style="color:#e6db74">&#39;Numberg&#39;</span>, <span style="color:#ae81ff">103</span>], [<span style="color:#e6db74">&#39;Wurzburg&#39;</span>, <span style="color:#e6db74">&#39;Erfurt&#39;</span>, <span style="color:#ae81ff">186</span>], [<span style="color:#e6db74">&#39;Wurzburg&#39;</span>, <span style="color:#e6db74">&#39;Frankfurt&#39;</span>, <span style="color:#ae81ff">217</span>], [<span style="color:#e6db74">&#39;Karlsruhe&#39;</span>, <span style="color:#e6db74">&#39;Mannheim&#39;</span>, <span style="color:#ae81ff">80</span>], [<span style="color:#e6db74">&#39;Karlsruhe&#39;</span>, <span style="color:#e6db74">&#39;Augsburg&#39;</span>, <span style="color:#ae81ff">250</span>],[<span style="color:#e6db74">&#34;Mumbai&#34;</span>, <span style="color:#e6db74">&#34;Delhi&#34;</span>,<span style="color:#ae81ff">400</span>],[<span style="color:#e6db74">&#34;Delhi&#34;</span>, <span style="color:#e6db74">&#34;Kolkata&#34;</span>,<span style="color:#ae81ff">500</span>],[<span style="color:#e6db74">&#34;Kolkata&#34;</span>, <span style="color:#e6db74">&#34;Bangalore&#34;</span>,<span style="color:#ae81ff">600</span>],[<span style="color:#e6db74">&#34;TX&#34;</span>, <span style="color:#e6db74">&#34;NY&#34;</span>,<span style="color:#ae81ff">1200</span>],[<span style="color:#e6db74">&#34;ALB&#34;</span>, <span style="color:#e6db74">&#34;NY&#34;</span>,<span style="color:#ae81ff">800</span>]]</code></pre></div>
-<p>Now <strong><em>we want to find out distinct continents and their cities from this graph.</em></strong></p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">edgelist <span style="color:#f92672">=</span> [[<span style="color:#e6db74">&#39;Mannheim&#39;</span>, <span style="color:#e6db74">&#39;Frankfurt&#39;</span>, <span style="color:#ae81ff">85</span>], [<span style="color:#e6db74">&#39;Mannheim&#39;</span>, <span style="color:#e6db74">&#39;Karlsruhe&#39;</span>, <span style="color:#ae81ff">80</span>], [<span style="color:#e6db74">&#39;Erfurt&#39;</span>, <span style="color:#e6db74">&#39;Wurzburg&#39;</span>, <span style="color:#ae81ff">186</span>], [<span style="color:#e6db74">&#39;Munchen&#39;</span>, <span style="color:#e6db74">&#39;Numberg&#39;</span>, <span style="color:#ae81ff">167</span>], [<span style="color:#e6db74">&#39;Munchen&#39;</span>, <span style="color:#e6db74">&#39;Augsburg&#39;</span>, <span style="color:#ae81ff">84</span>], [<span style="color:#e6db74">&#39;Munchen&#39;</span>, <span style="color:#e6db74">&#39;Kassel&#39;</span>, <span style="color:#ae81ff">502</span>], [<span style="color:#e6db74">&#39;Numberg&#39;</span>, <span style="color:#e6db74">&#39;Stuttgart&#39;</span>, <span style="color:#ae81ff">183</span>], [<span style="color:#e6db74">&#39;Numberg&#39;</span>, <span style="color:#e6db74">&#39;Wurzburg&#39;</span>, <span style="color:#ae81ff">103</span>], [<span style="color:#e6db74">&#39;Numberg&#39;</span>, <span style="color:#e6db74">&#39;Munchen&#39;</span>, <span style="color:#ae81ff">167</span>], [<span style="color:#e6db74">&#39;Stuttgart&#39;</span>, <span style="color:#e6db74">&#39;Numberg&#39;</span>, <span style="color:#ae81ff">183</span>], [<span style="color:#e6db74">&#39;Augsburg&#39;</span>, <span style="color:#e6db74">&#39;Munchen&#39;</span>, <span style="color:#ae81ff">84</span>], [<span style="color:#e6db74">&#39;Augsburg&#39;</span>, <span style="color:#e6db74">&#39;Karlsruhe&#39;</span>, <span style="color:#ae81ff">250</span>], [<span style="color:#e6db74">&#39;Kassel&#39;</span>, <span style="color:#e6db74">&#39;Munchen&#39;</span>, <span style="color:#ae81ff">502</span>], [<span style="color:#e6db74">&#39;Kassel&#39;</span>, <span style="color:#e6db74">&#39;Frankfurt&#39;</span>, <span style="color:#ae81ff">173</span>], [<span style="color:#e6db74">&#39;Frankfurt&#39;</span>, <span style="color:#e6db74">&#39;Mannheim&#39;</span>, <span style="color:#ae81ff">85</span>], [<span style="color:#e6db74">&#39;Frankfurt&#39;</span>, <span style="color:#e6db74">&#39;Wurzburg&#39;</span>, <span style="color:#ae81ff">217</span>], [<span style="color:#e6db74">&#39;Frankfurt&#39;</span>, <span style="color:#e6db74">&#39;Kassel&#39;</span>, <span style="color:#ae81ff">173</span>], [<span style="color:#e6db74">&#39;Wurzburg&#39;</span>, <span style="color:#e6db74">&#39;Numberg&#39;</span>, <span style="color:#ae81ff">103</span>], [<span style="color:#e6db74">&#39;Wurzburg&#39;</span>, <span style="color:#e6db74">&#39;Erfurt&#39;</span>, <span style="color:#ae81ff">186</span>], [<span style="color:#e6db74">&#39;Wurzburg&#39;</span>, <span style="color:#e6db74">&#39;Frankfurt&#39;</span>, <span style="color:#ae81ff">217</span>], [<span style="color:#e6db74">&#39;Karlsruhe&#39;</span>, <span style="color:#e6db74">&#39;Mannheim&#39;</span>, <span style="color:#ae81ff">80</span>], [<span style="color:#e6db74">&#39;Karlsruhe&#39;</span>, <span style="color:#e6db74">&#39;Augsburg&#39;</span>, <span style="color:#ae81ff">250</span>],[<span style="color:#e6db74">&#34;Mumbai&#34;</span>, <span style="color:#e6db74">&#34;Delhi&#34;</span>,<span style="color:#ae81ff">400</span>],[<span style="color:#e6db74">&#34;Delhi&#34;</span>, <span style="color:#e6db74">&#34;Kolkata&#34;</span>,<span style="color:#ae81ff">500</span>],[<span style="color:#e6db74">&#34;Kolkata&#34;</span>, <span style="color:#e6db74">&#34;Bangalore&#34;</span>,<span style="color:#ae81ff">600</span>],[<span style="color:#e6db74">&#34;TX&#34;</span>, <span style="color:#e6db74">&#34;NY&#34;</span>,<span style="color:#ae81ff">1200</span>],[<span style="color:#e6db74">&#34;ALB&#34;</span>, <span style="color:#e6db74">&#34;NY&#34;</span>,<span style="color:#ae81ff">800</span>]]
+</code></pre></div><p>Now <em><strong>we want to find out distinct continents and their cities from this graph.</strong></em></p>
 <p>First, we will need to create a cudf dataframe with edges in it. Right now, I am creating a pandas dataframe and converting it to cudf dataframe, but in a real-life scenario, we will read from a csv file of edges.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> cugraph
 <span style="color:#f92672">import</span> cudf
@@ -473,8 +275,8 @@ rev_pandas_df<span style="color:#f92672">.</span>columns <span style="color:#f92
 rev_pandas_df <span style="color:#f92672">=</span> rev_pandas_df[[<span style="color:#e6db74">&#39;src&#39;</span>,<span style="color:#e6db74">&#39;dst&#39;</span>,<span style="color:#e6db74">&#39;distance&#39;</span>]]
 
 <span style="color:#75715e"># concat all edges</span>
-pandas_df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat([pandas_df,rev_pandas_df])</code></pre></div>
-<p>Now our pandas df contains edges in both directions. And our node names in src and dst columns are in str format. Apparently, cuGraph doesn&rsquo;t like that and only works with integer node IDs.</p>
+pandas_df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat([pandas_df,rev_pandas_df])
+</code></pre></div><p>Now our pandas df contains edges in both directions. And our node names in src and dst columns are in str format. Apparently, cuGraph doesn&rsquo;t like that and only works with integer node IDs.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># CuGraph works with only integer node IDs</span>
 unique_destinations <span style="color:#f92672">=</span> set()
 <span style="color:#66d9ef">for</span> [src,dst,dis] <span style="color:#f92672">in</span> edgelist:
@@ -488,8 +290,8 @@ city_id_dict <span style="color:#f92672">=</span> {}
 
 <span style="color:#75715e"># create 2 columns that contain the integer IDs for src and dst</span>
 pandas_df[<span style="color:#e6db74">&#39;src_int&#39;</span>] <span style="color:#f92672">=</span> pandas_df[<span style="color:#e6db74">&#39;src&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x : city_id_dict[x])
-pandas_df[<span style="color:#e6db74">&#39;dst_int&#39;</span>] <span style="color:#f92672">=</span> pandas_df[<span style="color:#e6db74">&#39;dst&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x : city_id_dict[x])</code></pre></div>
-<p>Now comes the main part that we should focus on:</p>
+pandas_df[<span style="color:#e6db74">&#39;dst_int&#39;</span>] <span style="color:#f92672">=</span> pandas_df[<span style="color:#e6db74">&#39;dst&#39;</span>]<span style="color:#f92672">.</span>apply(<span style="color:#66d9ef">lambda</span> x : city_id_dict[x])
+</code></pre></div><p>Now comes the main part that we should focus on:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">cuda_g <span style="color:#f92672">=</span> cudf<span style="color:#f92672">.</span>DataFrame<span style="color:#f92672">.</span>from_pandas(pandas_df)
 
 <span style="color:#75715e"># cugraph needs node IDs to be int32 and weights to be float</span>
@@ -500,46 +302,49 @@ cuda_g[<span style="color:#e6db74">&#39;distance&#39;</span>] <span style="color
 G <span style="color:#f92672">=</span> cugraph<span style="color:#f92672">.</span>Graph()
 G<span style="color:#f92672">.</span>add_edge_list(cuda_g[<span style="color:#e6db74">&#34;src_int&#34;</span>],cuda_g[<span style="color:#e6db74">&#34;dst_int&#34;</span>] , cuda_g[<span style="color:#e6db74">&#39;distance&#39;</span>])
 
-cugraph<span style="color:#f92672">.</span>weakly_connected_components(G)</code></pre></div>
-<p>The output of the last call is a cudf dataframe.</p>
+cugraph<span style="color:#f92672">.</span>weakly_connected_components(G)
+</code></pre></div><p>The output of the last call is a cudf dataframe.</p>
+<p>
+  <img src="/images/cugraph/4.png" alt="">
 
-<p><img src="/images/cugraph/4.png" alt="" /></p>
 
+
+</p>
 <p>As we can see, the labels correspond to Connected Components ID.</p>
-
-<hr />
-
+<hr>
 <h2 id="2-shortest-path">2. Shortest Path</h2>
+<p>
+  <img src="/images/cugraph/5.jpg" alt="">
 
-<p><img src="/images/cugraph/5.jpg" alt="" /></p>
 
+
+</p>
 <p>Continuing with the above example only, we are given a graph with the cities of Germany and the respective distance between them.</p>
-
 <p><strong>You want to find out how to go from Frankfurt (The starting node) to Munchen by covering the shortest distance</strong>.</p>
-
 <p>The algorithm that we use for this problem is called <strong>Dijkstra</strong>. In Dijkstra’s own words:</p>
-
 <blockquote>
-<p>What is the shortest way to travel from <a href="https://en.wikipedia.org/wiki/Rotterdam" rel="nofollow" target="_blank">Rotterdam</a> to <a href="https://en.wikipedia.org/wiki/Groningen" rel="nofollow" target="_blank">Groningen</a>, in general: from given city to given city. <a href="https://en.wikipedia.org/wiki/Shortest_path_problem" rel="nofollow" target="_blank">It is the algorithm for the shortest path</a>, which I designed in about twenty minutes. One morning I was shopping in <a href="https://en.wikipedia.org/wiki/Amsterdam" rel="nofollow" target="_blank">Amsterdam</a> with my young fiancée, and tired, we sat down on the café terrace to drink a cup of coffee and I was just thinking about whether I could do this, and I then designed the algorithm for the shortest path. As I said, it was a twenty-minute invention. In fact, it was published in ’59, three years later. The publication is still readable, it is, in fact, quite nice. One of the reasons that it is so nice was that I designed it without pencil and paper. I learned later that one of the advantages of designing without pencil and paper is that you are almost forced to avoid all avoidable complexities. Eventually that algorithm became, to my great amazement, one of the cornerstones of my fame.
-— Edsger Dijkstra, in an interview with Philip L. Frana, Communications of the ACM, 2001<a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#cite_note-Dijkstra_Interview-3" rel="nofollow" target="_blank">[3]</a></p>
+<p>What is the shortest way to travel from <a href="https://en.wikipedia.org/wiki/Rotterdam">Rotterdam</a> to <a href="https://en.wikipedia.org/wiki/Groningen">Groningen</a>, in general: from given city to given city. <a href="https://en.wikipedia.org/wiki/Shortest_path_problem">It is the algorithm for the shortest path</a>, which I designed in about twenty minutes. One morning I was shopping in <a href="https://en.wikipedia.org/wiki/Amsterdam">Amsterdam</a> with my young fiancée, and tired, we sat down on the café terrace to drink a cup of coffee and I was just thinking about whether I could do this, and I then designed the algorithm for the shortest path. As I said, it was a twenty-minute invention. In fact, it was published in ’59, three years later. The publication is still readable, it is, in fact, quite nice. One of the reasons that it is so nice was that I designed it without pencil and paper. I learned later that one of the advantages of designing without pencil and paper is that you are almost forced to avoid all avoidable complexities. Eventually that algorithm became, to my great amazement, one of the cornerstones of my fame.
+— Edsger Dijkstra, in an interview with Philip L. Frana, Communications of the ACM, 2001<a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#cite_note-Dijkstra_Interview-3">[3]</a></p>
 </blockquote>
-
 <h3 id="applications-1">Applications</h3>
-
 <ul>
-<li><p>Variations of the Dijkstra algorithm is used extensively in Google Maps to find the shortest routes.</p></li>
-
-<li><p>You are in a Walmart Store. You have different Aisles and distance between all the aisles. You want to provide the shortest pathway to the customer from Aisle A to Aisle D.</p></li>
+<li>
+<p>Variations of the Dijkstra algorithm is used extensively in Google Maps to find the shortest routes.</p>
+</li>
+<li>
+<p>You are in a Walmart Store. You have different Aisles and distance between all the aisles. You want to provide the shortest pathway to the customer from Aisle A to Aisle D.</p>
+</li>
 </ul>
+<p>
+  <img src="/images/cugraph/6.png" alt="">
 
-<p><img src="/images/cugraph/6.png" alt="" /></p>
 
+
+</p>
 <ul>
 <li>You have seen how LinkedIn shows up 1st-degree connections, 2nd-degree connections. What goes on behind the scenes?</li>
 </ul>
-
 <h3 id="code-1">Code</h3>
-
 <p>We already have our Graph as before. We can find the shortest distance from a source node to all nodes in the graph.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># get distances from source node 0</span>
 distances <span style="color:#f92672">=</span> cugraph<span style="color:#f92672">.</span>sssp(G, <span style="color:#ae81ff">0</span>)
@@ -547,9 +352,13 @@ distances <span style="color:#f92672">=</span> cugraph<span style="color:#f92672
 <span style="color:#75715e"># filter infinite distances</span>
 distances <span style="color:#f92672">=</span> cugraph<span style="color:#f92672">.</span>traversal<span style="color:#f92672">.</span>filter_unreachable(distances)
 
-distances</code></pre></div>
-<p><img src="/images/cugraph/7.png" alt="" /></p>
+distances
+</code></pre></div><p>
+  <img src="/images/cugraph/7.png" alt="">
 
+
+
+</p>
 <p>Now if we have to find the path between node 0 and 14 we can use the distances cudf.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Getting the path is as simple as:</span>
 
@@ -561,34 +370,35 @@ dest <span style="color:#f92672">=</span> <span style="color:#ae81ff">14</span>
    path<span style="color:#f92672">.</span>append(dest)
 
 <span style="color:#75715e"># reverse the list and print</span>
-<span style="color:#66d9ef">print</span>(path[::<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])</code></pre></div>
-<pre><code>[0, 11, 9]
+<span style="color:#66d9ef">print</span>(path[::<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
+</code></pre></div><pre><code>[0, 11, 9]
 </code></pre>
-
-<hr />
-
+<hr>
 <h2 id="3-pagerank">3. Pagerank</h2>
+<p>
+  <img src="/images/cugraph/8.jpg" alt="">
 
-<p><img src="/images/cugraph/8.jpg" alt="" /></p>
 
+
+</p>
 <p>This is the page sorting algorithm that powered google for a long time. It assigns scores to pages based on the number and quality of incoming and outgoing links.</p>
-
 <h3 id="applications-2">Applications</h3>
-
 <p>Pagerank can be used anywhere where we want to estimate node importance in any network.</p>
-
 <ul>
-<li><p>It has been used for finding the most influential papers using citations.</p></li>
-
-<li><p>Has been used by Google to rank pages</p></li>
-
-<li><p>It can be used to rank tweets- User and Tweets as nodes. Create Link between user if user A follows user B and Link between user and Tweets if user tweets/retweets a tweet.</p></li>
-
-<li><p>Recommendation engines</p></li>
+<li>
+<p>It has been used for finding the most influential papers using citations.</p>
+</li>
+<li>
+<p>Has been used by Google to rank pages</p>
+</li>
+<li>
+<p>It can be used to rank tweets- User and Tweets as nodes. Create Link between user if user A follows user B and Link between user and Tweets if user tweets/retweets a tweet.</p>
+</li>
+<li>
+<p>Recommendation engines</p>
+</li>
 </ul>
-
 <h3 id="code-2">Code</h3>
-
 <p>For this exercise, we are going to be using Facebook social network data.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Loading the file as cudf</span>
 
@@ -597,57 +407,66 @@ fb_cudf <span style="color:#f92672">=</span> cudf<span style="color:#f92672">.</
 <span style="color:#75715e"># adding reverse edges also</span>
 rev_fb_cudf <span style="color:#f92672">=</span> fb_cudf[[<span style="color:#e6db74">&#39;dst&#39;</span>,<span style="color:#e6db74">&#39;src&#39;</span>]]
 rev_fb_cudf<span style="color:#f92672">.</span>columns <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;src&#39;</span>,<span style="color:#e6db74">&#39;dst&#39;</span>]
-fb_cudf <span style="color:#f92672">=</span> cudf<span style="color:#f92672">.</span>concat([fb_cudf,rev_fb_cudf])</code></pre></div>
-<p>Creating the graph</p>
+fb_cudf <span style="color:#f92672">=</span> cudf<span style="color:#f92672">.</span>concat([fb_cudf,rev_fb_cudf])
+</code></pre></div><p>Creating the graph</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># creating the graph</span>
 fb_G <span style="color:#f92672">=</span> cugraph<span style="color:#f92672">.</span>Graph()
-fb_G<span style="color:#f92672">.</span>add_edge_list(fb_cudf[<span style="color:#e6db74">&#34;src&#34;</span>],fb_cudf[<span style="color:#e6db74">&#34;dst&#34;</span>])</code></pre></div>
-<p><img src="/images/cugraph/9.png" alt="" /></p>
+fb_G<span style="color:#f92672">.</span>add_edge_list(fb_cudf[<span style="color:#e6db74">&#34;src&#34;</span>],fb_cudf[<span style="color:#e6db74">&#34;dst&#34;</span>])
+</code></pre></div><p>
+  <img src="/images/cugraph/9.png" alt="">
 
+
+
+</p>
 <p>Now we want to find the users having high influence capability.</p>
-
 <p>Intuitively, the Pagerank algorithm will give a higher score to a user who has a lot of friends who in turn have a lot of FB Friends.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Call cugraph.pagerank to get the pagerank scores</span>
 fb_pagerank <span style="color:#f92672">=</span> cugraph<span style="color:#f92672">.</span>pagerank(fb_G)
-fb_pagerank<span style="color:#f92672">.</span>sort_values(by<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;pagerank&#39;</span>,ascending<span style="color:#f92672">=</span>False)<span style="color:#f92672">.</span>head()</code></pre></div>
-<p><img src="/images/cugraph/10.png" alt="" /></p>
+fb_pagerank<span style="color:#f92672">.</span>sort_values(by<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;pagerank&#39;</span>,ascending<span style="color:#f92672">=</span>False)<span style="color:#f92672">.</span>head()
+</code></pre></div><p>
+  <img src="/images/cugraph/10.png" alt="">
 
-<hr />
 
+
+</p>
+<hr>
 <h2 id="4-link-prediction">4. Link Prediction</h2>
+<p>
+  <img src="/images/cugraph/11.jpg" alt="">
 
-<p><img src="/images/cugraph/11.jpg" alt="" /></p>
 
+
+</p>
 <p>Continuing along with our Facebook example. You might have seen recommended friends in your Facebook account. How can we create our small recommender?</p>
-
-<p><strong><em>Can we predict which edges will be connected in the future based on current edges?</em></strong></p>
-
+<p><em><strong>Can we predict which edges will be connected in the future based on current edges?</strong></em></p>
 <p>A straightforward and fast approach to do this is by using the Jaccard Coefficient.</p>
-
 <h3 id="applications-3">Applications</h3>
-
 <p>There could be many applications of link predictions. We could predict</p>
-
 <ul>
-<li><p>Authors who are going to connect for co-authorships in a citation network</p></li>
-
-<li><p>Who will become friends in a social network?</p></li>
+<li>
+<p>Authors who are going to connect for co-authorships in a citation network</p>
+</li>
+<li>
+<p>Who will become friends in a social network?</p>
+</li>
 </ul>
-
 <h3 id="idea">Idea</h3>
-
 <p>We calculate the Jaccard coefficient between two nodes i and j as :</p>
+<p>
+  <img src="/images/cugraph/12.png" alt="">
 
-<p><img src="/images/cugraph/12.png" alt="" /></p>
 
+
+</p>
 <p>Where the numerator is the number of common neighbors of i and j, and the denominator is the total number of distinct neighbors of i and j.</p>
+<p>
+  <img src="/images/cugraph/13.png" alt="">
 
-<p><img src="/images/cugraph/13.png" alt="" /></p>
 
-<p>So in the figure, the half red and green nodes are the common neighbors of both A and B. And they have a total of 5 distinct neighbors. So the JaccardCoeff(A, B) is <sup>2</sup>&frasl;<sub>5</sub></p>
 
+</p>
+<p>So in the figure, the half red and green nodes are the common neighbors of both A and B. And they have a total of 5 distinct neighbors. So the JaccardCoeff(A, B) is 2/5</p>
 <h3 id="code-3">Code</h3>
-
 <p>We first create a cudf_nodes cudf with all possible node combinations.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">max_vertex_id <span style="color:#f92672">=</span> fb_pagerank[<span style="color:#e6db74">&#39;vertex&#39;</span>]<span style="color:#f92672">.</span>max()
 data <span style="color:#f92672">=</span> []
@@ -658,183 +477,442 @@ cudf_nodes <span style="color:#f92672">=</span>cudf<span style="color:#f92672">.
 cudf_nodes<span style="color:#f92672">.</span>columns <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;src&#39;</span>,<span style="color:#e6db74">&#39;dst&#39;</span>]
 
 cudf_nodes[<span style="color:#e6db74">&#39;src&#39;</span>] <span style="color:#f92672">=</span> cudf_nodes[<span style="color:#e6db74">&#39;src&#39;</span>]<span style="color:#f92672">.</span>astype(np<span style="color:#f92672">.</span>int32)
-cudf_nodes[<span style="color:#e6db74">&#39;dst&#39;</span>] <span style="color:#f92672">=</span> cudf_nodes[<span style="color:#e6db74">&#39;dst&#39;</span>]<span style="color:#f92672">.</span>astype(np<span style="color:#f92672">.</span>int32)</code></pre></div>
-<p>We can then calculate the Jaccard coefficient between nodes as:</p>
+cudf_nodes[<span style="color:#e6db74">&#39;dst&#39;</span>] <span style="color:#f92672">=</span> cudf_nodes[<span style="color:#e6db74">&#39;dst&#39;</span>]<span style="color:#f92672">.</span>astype(np<span style="color:#f92672">.</span>int32)
+</code></pre></div><p>We can then calculate the Jaccard coefficient between nodes as:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">jaccard_coeff_between_nodes <span style="color:#f92672">=</span> cugraph<span style="color:#f92672">.</span>link_prediction<span style="color:#f92672">.</span>jaccard(fb_G,cudf_nodes[<span style="color:#e6db74">&#34;src&#34;</span>],cudf_nodes[<span style="color:#e6db74">&#34;dst&#34;</span>])
-jaccard_coeff_between_nodes<span style="color:#f92672">.</span>head()</code></pre></div>
-<p><img src="/images/cugraph/14.png" alt="" /></p>
+jaccard_coeff_between_nodes<span style="color:#f92672">.</span>head()
+</code></pre></div><p>
+  <img src="/images/cugraph/14.png" alt="">
 
-<p><strong><em>But we are still not done.</em></strong> We need to remove the edges where the source==destination and the edges which are already present in the graph. We will do this using simple join and filter operations which work particularly similar to pandas.</p>
+
+
+</p>
+<p><em><strong>But we are still not done.</strong></em> We need to remove the edges where the source==destination and the edges which are already present in the graph. We will do this using simple join and filter operations which work particularly similar to pandas.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">jaccard_coeff_between_nodes<span style="color:#f92672">=</span>jaccard_coeff_between_nodes[jaccard_coeff_between_nodes[<span style="color:#e6db74">&#39;source&#39;</span>]<span style="color:#f92672">!=</span>jaccard_coeff_between_nodes[<span style="color:#e6db74">&#39;destination&#39;</span>]]
 fb_cudf<span style="color:#f92672">.</span>columns <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;source&#39;</span>, <span style="color:#e6db74">&#39;destination&#39;</span>]
 fb_cudf[<span style="color:#e6db74">&#39;edgeflag&#39;</span>]<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
 jaccard_coeff_joined_with_edges <span style="color:#f92672">=</span> jaccard_coeff_between_nodes<span style="color:#f92672">.</span>merge(fb_cudf,on<span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;source&#39;</span>, <span style="color:#e6db74">&#39;destination&#39;</span>],how<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;left&#39;</span>)
 <span style="color:#75715e"># We just want to see the jaccard coeff of new edges</span>
-new_edges_jaccard_coeff <span style="color:#f92672">=</span> jaccard_coeff_joined_with_edges[jaccard_coeff_joined_with_edges[<span style="color:#e6db74">&#39;edgeflag&#39;</span>]<span style="color:#f92672">!=</span><span style="color:#ae81ff">1</span>]</code></pre></div>
-<p>This is our final sorted dataframe with the Jaccard coefficient between unconnected nodes. We know what friends to recommend to our platform users.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">new_edges_jaccard_coeff<span style="color:#f92672">.</span>sort_values(by<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;jaccard_coeff&#39;</span>,ascending<span style="color:#f92672">=</span>False)</code></pre></div>
-<p><img src="/images/cugraph/15.png" alt="" /></p>
+new_edges_jaccard_coeff <span style="color:#f92672">=</span> jaccard_coeff_joined_with_edges[jaccard_coeff_joined_with_edges[<span style="color:#e6db74">&#39;edgeflag&#39;</span>]<span style="color:#f92672">!=</span><span style="color:#ae81ff">1</span>]
+</code></pre></div><p>This is our final sorted dataframe with the Jaccard coefficient between unconnected nodes. We know what friends to recommend to our platform users.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">new_edges_jaccard_coeff<span style="color:#f92672">.</span>sort_values(by<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;jaccard_coeff&#39;</span>,ascending<span style="color:#f92672">=</span>False)
+</code></pre></div><p>
+  <img src="/images/cugraph/15.png" alt="">
 
-<hr />
 
+
+</p>
+<hr>
 <h2 id="basic-network-statistics">Basic Network Statistics</h2>
+<p>
+  <img src="/images/cugraph/16.jpg" alt="">
 
-<p><img src="/images/cugraph/16.jpg" alt="" /></p>
 
+
+</p>
 <p>There are a lot of basic measures which you want to know about your network.</p>
-
 <p>Here is how you get them in your network</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Number of Nodes&#34;</span>,fb_G<span style="color:#f92672">.</span>number_of_nodes())
-<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Number of Edges&#34;</span>,fb_G<span style="color:#f92672">.</span>number_of_edges())</code></pre></div>
-<pre><code>Number of Nodes 4039
+<span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Number of Edges&#34;</span>,fb_G<span style="color:#f92672">.</span>number_of_edges())
+</code></pre></div><pre><code>Number of Nodes 4039
 Number of Edges 176468
 </code></pre>
-
 <p>You can also compute the indegree and outdegree for each node.</p>
-
 <p>In a directed graph this corresponds to no of followers and no of follows.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">fb_G<span style="color:#f92672">.</span>degrees()<span style="color:#f92672">.</span>head()</code></pre></div>
-<p><img src="/images/cugraph/17.png" alt="" /></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">fb_G<span style="color:#f92672">.</span>degrees()<span style="color:#f92672">.</span>head()
+</code></pre></div><p>
+  <img src="/images/cugraph/17.png" alt="">
 
-<hr />
 
+
+</p>
+<hr>
 <h2 id="performance-benchmarks">Performance Benchmarks</h2>
-
 <p>I won’t do any justice to this post if I don’t add certain benchmarks for the different algorithms.</p>
-
 <p>In my benchmark study, I use three datasets in increasing order of scale from the Stanford Large Network Dataset Collection.</p>
-
 <ol>
-<li><p><a href="https://snap.stanford.edu/data/ego-Facebook.html" rel="nofollow" target="_blank">ego-Facebook</a>: Undirected graph with <strong><em>4 K nodes and 88 K edges</em></strong> from Facebook</p></li>
-
-<li><p><a href="https://snap.stanford.edu/data/ego-Twitter.html" rel="nofollow" target="_blank">ego-Twitter</a>: Directed graph with <strong><em>81 K nodes and 1.7 M</em></strong> edges from Twitter</p></li>
-
-<li><p><a href="https://snap.stanford.edu/data/ego-Gplus.html" rel="nofollow" target="_blank">ego-Gplus</a>: Directed graph with <strong><em>107 K nodes and 13.6 M</em></strong> edges from Google+</p></li>
+<li>
+<p><a href="https://snap.stanford.edu/data/ego-Facebook.html">ego-Facebook</a>: Undirected graph with <em><strong>4 K nodes and 88 K edges</strong></em> from Facebook</p>
+</li>
+<li>
+<p><a href="https://snap.stanford.edu/data/ego-Twitter.html">ego-Twitter</a>: Directed graph with <em><strong>81 K nodes and 1.7 M</strong></em> edges from Twitter</p>
+</li>
+<li>
+<p><a href="https://snap.stanford.edu/data/ego-Gplus.html">ego-Gplus</a>: Directed graph with <em><strong>107 K nodes and 13.6 M</strong></em> edges from Google+</p>
+</li>
 </ol>
+<p>Here are the results of the experiments I performed on NVIDIA <a href="https://amzn.to/2OaF9uq"><em><strong>Tesla V100 32 GB GPU</strong></em></a>. Thanks to Josh Patterson from NVIDIA and Richard Ulrich at Walmart Labs for arranging that for me. All the times are given in milliseconds:</p>
+<p>
+  <img src="/images/cugraph/18.png" alt="">
 
-<p>Here are the results of the experiments I performed on NVIDIA <a href="https://amzn.to/2OaF9uq" rel="nofollow" target="_blank"><strong><em>Tesla V100 32 GB GPU</em></strong></a>. Thanks to Josh Patterson from NVIDIA and Richard Ulrich at Walmart Labs for arranging that for me. All the times are given in milliseconds:</p>
 
-<p><img src="/images/cugraph/18.png" alt="" /></p>
 
+</p>
 <p>I didn’t add Jaccard coefficients in the results as it didn’t run even for facebook using networkX. For cuGraph it had millisecond-level latencies.</p>
-
 <p>Let us visualize these results:</p>
+<p>
+  <img src="/images/cugraph/cc.png" alt="">
 
-<p><img src="/images/cugraph/cc.png" alt="" /></p>
 
-<p><img src="/images/cugraph/sp.png" alt="" /></p>
 
-<p><img src="/images/cugraph/pr.png" alt="" /></p>
+</p>
+<p>
+  <img src="/images/cugraph/sp.png" alt="">
 
-<hr />
 
+
+</p>
+<p>
+  <img src="/images/cugraph/pr.png" alt="">
+
+
+
+</p>
+<hr>
 <h2 id="caveats">Caveats</h2>
-
 <p>Rapids cuGraph is an excellent library for graph analysis, but I feel some things are still missing. Maybe we will get them in the next version.</p>
-
 <ul>
-<li><p>A little bit of inconvenience that we have to use numbered nodes with data type int32 only. Renumbering helps with that. See my notebook for the <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/cuGraph_Benchmark" rel="nofollow" target="_blank">benchmark</a> for the exact code. Check the function cugraph.symmetrize_df too for creating undirected graphs.</p></li>
-
-<li><p>Some algorithms are still not implemented. For instance, I could not find MST, Centrality measures, etc.</p></li>
-
-<li><p>More example notebooks are needed to document best practices. I might be going to be work on some of those.</p></li>
-
-<li><p>No visualization component in the library. I have to go to networkx to plot graphs.</p></li>
+<li>
+<p>A little bit of inconvenience that we have to use numbered nodes with data type int32 only. Renumbering helps with that. See my notebook for the <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/cuGraph_Benchmark">benchmark</a> for the exact code. Check the function cugraph.symmetrize_df too for creating undirected graphs.</p>
+</li>
+<li>
+<p>Some algorithms are still not implemented. For instance, I could not find MST, Centrality measures, etc.</p>
+</li>
+<li>
+<p>More example notebooks are needed to document best practices. I might be going to be work on some of those.</p>
+</li>
+<li>
+<p>No visualization component in the library. I have to go to networkx to plot graphs.</p>
+</li>
 </ul>
-
-<p><strong><em>But despite that, I would also like to add that the idea to provide graph analysis with GPU is so great that I can live with these small problems.</em></strong> And the way they have made the API so similar to pandas and networkx adds to its value.</p>
-
-<p><strong><em>I remember how using GPU needed a lot of code in the past. RAPIDS has aimed to make GPU ubiquitous, and that is a fabulous initiative.</em></strong></p>
-
-<hr />
-
+<p><em><strong>But despite that, I would also like to add that the idea to provide graph analysis with GPU is so great that I can live with these small problems.</strong></em> And the way they have made the API so similar to pandas and networkx adds to its value.</p>
+<p><em><strong>I remember how using GPU needed a lot of code in the past. RAPIDS has aimed to make GPU ubiquitous, and that is a fabulous initiative.</strong></em></p>
+<hr>
 <h2 id="conclusion">Conclusion</h2>
+<p>
+  <img src="/images/cugraph/system.jpg" alt="">
 
-<p><img src="/images/cugraph/system.jpg" alt="" /></p>
 
-<p><strong><em>In this post, I talked about some of the most powerful graph algorithms that have changed the way we live and how to scale them with GPUs.</em></strong></p>
 
+</p>
+<p><em><strong>In this post, I talked about some of the most powerful graph algorithms that have changed the way we live and how to scale them with GPUs.</strong></em></p>
 <p>I love the way Rapids AI has been working to make GPUs accessible to the typical developer/data scientist and to think that we hadn’t heard about it till a year back. They have come a long way.</p>
-
-<p>Also, here are the newest version 0.9 documentation for <a href="https://docs.rapids.ai/api/cudf/stable/" rel="nofollow" target="_blank">cuDF</a> and <a href="https://docs.rapids.ai/api/cugraph/stable/" rel="nofollow" target="_blank">cuGraph</a>.</p>
-
-<p>You can get the running code in this <a href="https://colab.research.google.com/drive/1quS3-yg6frFo__4VyJTyUytHhqnBQ9j_" rel="nofollow" target="_blank">Google Colab Notebook</a>, and the code with benchmarks on my <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/cuGraph_Benchmark" rel="nofollow" target="_blank">Github repository</a> as Google Colab fell short on resources while benchmarking.</p>
-
-<hr />
-
+<p>Also, here are the newest version 0.9 documentation for <a href="https://docs.rapids.ai/api/cudf/stable/">cuDF</a> and <a href="https://docs.rapids.ai/api/cugraph/stable/">cuGraph</a>.</p>
+<p>You can get the running code in this <a href="https://colab.research.google.com/drive/1quS3-yg6frFo__4VyJTyUytHhqnBQ9j_">Google Colab Notebook</a>, and the code with benchmarks on my <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/cuGraph_Benchmark">Github repository</a> as Google Colab fell short on resources while benchmarking.</p>
+<hr>
 <h2 id="continue-learning">Continue Learning</h2>
-
-<p>If you want to read up more on Graph Algorithms here is a <a href="https://www.coursera.org/learn/big-data-graph-analytics?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;siteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" rel="nofollow" target="_blank">Graph Analytics for Big Data course on Coursera by UCSanDiego</a>, which I highly recommend to learn the basics of graph theory.</p>
-
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" rel="nofollow" target="_blank"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c" rel="nofollow" target="_blank"><strong>blog</strong></a>.</p>
-
+<p>If you want to read up more on Graph Algorithms here is a <a href="https://www.coursera.org/learn/big-data-graph-analytics?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;siteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Graph Analytics for Big Data course on Coursera by UCSanDiego</a>, which I highly recommend to learn the basics of graph theory.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c"><strong>blog</strong></a>.</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources as sharing knowledge is never a bad idea.</p>
 
-		</div>
 
-		 
-		<script async data-uid="8d7942551b" src="https://mlwhiz.ck.page/8d7942551b/index.js"></script>
-		<br>
-		
-		
-<div class="post__tags tags clearfix">
-	<svg class="icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
-	<ul class="tags__list">
-		<li class="tags__item"><a class="tags__link btn" href="/tags/graphs/" rel="tag">Graphs</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/artificial-intelligence/" rel="tag">Artificial Intelligence</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/machine-learning/" rel="tag">Machine Learning</a></li>
-		<li class="tags__item"><a class="tags__link btn" href="/tags/data-science/" rel="tag">Data Science</a></li>
-	</ul>
+
+        </div>
+      </div>
+      <div class="col-lg-4">
+  
+
+  <div class="widget">
+    
+<script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#00aaa1', 'S6S3NPCD');kofiwidget2.draw();</script>
+
 </div>
-		
+  <div class="widget">
+    
+    <h4 class="widget-title">About Me</h4>
+    
+    <img src="https://mlwhiz.com/images/author.jpg" alt=""
+      class="img-fluid author-thumb-sm d-block mx-auto rounded-circle mb-4">
+    
+    <p>I’m a data scientist consultant and big data engineer based in Bangalore, where I am currently working with WalmartLabs .</p>
+    <a href="https://mlwhiz.com/about/" class="btn btn-outline-primary">Know More</a>
+    
+  </div>
 
-<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088"></div>
+
+  
+  <div class="widget">
+    <h4 class="widget-title">Topics</h4>
+    <ul class="list-unstyled">
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/awesome-guides">Awesome Guides</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/big-data">Big Data</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/computer-vision">Computer Vision</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/data-science">Data Science</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/deep-learning">Deep Learning</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/learning-resources">Learning Resources</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/natural-language-processing">Natural Language Processing</a>
+      </li>
+      <li><a class="categoryStyle" style="color:#fff"
+          href="/categories/programming">Programming</a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="widget">
+    <h4 class="widget-title">Tags</h4>
+    <ul class="list-inline">
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/algorithms">Algorithms</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/artificial-intelligence">Artificial Intelligence</a></li>
+          
+
+
+          
+
+
+          
+
+
+          
+
+
+          
+
+
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/dask">Dask</a></li>
+          
+
+
+          
+
+
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/deployment">Deployment</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/ec2">Ec2</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/generative-adversarial-networks">Generative Adversarial Networks</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/graphs">Graphs</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/image-classification">Image Classification</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/instance-segmentation">Instance Segmentation</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/interpretability">Interpretability</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/jobs">Jobs</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/kaggle">Kaggle</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/machine-learning">Machine Learning</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/math">Math</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/multiprocessing">Multiprocessing</a></li>
+          
+
+
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/object-detection">Object Detection</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/opinion">Opinion</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/pandas">Pandas</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/production">Production</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/productivity">Productivity</a></li>
+          
+
+
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/python">Python</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/pytorch">Pytorch</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/spark">Spark</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/sql">Sql</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/statistics">Statistics</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/streamlit">Streamlit</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/text-classification">Text Classification</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/timeseries">Timeseries</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/tools">Tools</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/visualization">Visualization</a></li>
+          
+
+
+          
+          <li class="list-inline-item"><a class="tagStyle text-white"
+              href="/tags/xgboost">Xgboost</a></li>
+          
+    </ul>
+  </div>
+  
+  <div class="widget">
+    <h4 class="widget-title">Connect With Me</h4>
+    <ul class="list-inline social-links">
+      
+      <li class="list-inline-item"><a href="https://www.linkedin.com/in/rahulagwl/"><i class="ti-linkedin"></i></a></li>
+      
+      <li class="list-inline-item"><a href="https://medium.com/@rahul_agarwal"><i class="ti-book"></i></a></li>
+      
+      <li class="list-inline-item"><a href="https://twitter.com/MLWhiz"><i class="ti-twitter-alt"></i></a></li>
+      
+      <li class="list-inline-item"><a href="https://www.facebook.com/mlwhizblog"><i class="ti-facebook"></i></a></li>
+      
+      <li class="list-inline-item"><a href="https://github.com/MLWhiz"><i class="ti-github"></i></a></li>
+      
+    </ul>
+  </div>
+  
+  
+<script async data-uid="bfe9f82f10" src="https://mlwhiz.ck.page/bfe9f82f10/index.js"></script>
+
+<script async data-uid="3452d924e2" src="https://mlwhiz.ck.page/3452d924e2/index.js"></script>
+
+</div>
+
+    </div>
+    
+<script async data-uid="8d7942551b" src="https://mlwhiz.ck.page/8d7942551b/index.js"></script>
+
+<div class="shareaholic-canvas col-lg-8 mb-5 mb-lg-0" data-app="share_buttons" data-app-id="28372088"></div>
 
 <a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	</article>
-</main>
-
-
-<nav class="post-nav flex">
-	<div class="post-nav__item post-nav__item--prev">
-		<a class="post-nav__link" href="/blog/2019/10/10/hyperopt2/" rel="prev"><span class="post-nav__caption">«&thinsp;Previous</span><p class="post-nav__post-title">Automate Hyperparameter Tuning for your models</p></a>
-	</div>
-	<div class="post-nav__item post-nav__item--next">
-		<a class="post-nav__link" href="/blog/2019/11/07/eval_metrics/" rel="next"><span class="post-nav__caption">Next&thinsp;»</span><p class="post-nav__post-title">The 5 Classification Evaluation metrics every Data Scientist must know</p></a>
-	</div>
-</nav>
-
-<section class="comments">
-	<div id="disqus_thread"></div>
+<div id="disqus_thread"></div>
 <script type="application/javascript">
     var disqus_config = function () {
     
@@ -854,113 +932,131 @@ Number of Edges 176468
 </script>
 <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  </div>
 </section>
 
 
-			</div>
-			<style type="text/css">
 
-  .btn {
-    display: inline-block;
-    font-weight: 400;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    border: 1px solid transparent;
-    padding: .375rem .75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    border-radius: .25rem;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
-
-.btn-session {
-    color: #fff;
-    background-color: #28a745;
-    border-color: #28a745;
-}
-</style>
-
-
-<aside class="sidebar">
-  <div style="text-align:center">
-    
-  <a href='https://ko-fi.com/S6S3NPCD' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-5">
+        <a href="https://mlwhiz.com/"><img src="https://mlwhiz.com/images/logo.png" class="img-fluid-custom-bottom" alt="MLWhiz"></a>
+      </div>
+      <div class="col-lg-3 col-sm-6 mb-5">
+        <h6 class="mb-4">Contact Me</h6>
+        <ul class="list-unstyled">
+          <li class="mb-3"><i class="ti-location-pin mr-3 text-primary"></i>India, Bangalore</li>
+          <li class="mb-3"><a class="text-dark" href="mailto:rahul@mlwhiz.com"><i
+                class="ti-email mr-3 text-primary"></i>rahul@mlwhiz.com</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-sm-6 mb-5">
+        <h6 class="mb-4">Social Contacts</h6>
+        <ul class="list-unstyled">
+          
+          <li class="mb-3"><a class="text-dark" href="https://www.linkedin.com/in/rahulagwl/">Linkedin</a></li>
+          
+          <li class="mb-3"><a class="text-dark" href="https://medium.com/@rahul_agarwal">Medium</a></li>
+          
+          <li class="mb-3"><a class="text-dark" href="https://twitter.com/MLWhiz">Twitter</a></li>
+          
+          <li class="mb-3"><a class="text-dark" href="https://www.facebook.com/mlwhizblog">Facebook</a></li>
+          
+          <li class="mb-3"><a class="text-dark" href="https://github.com/MLWhiz">Github</a></li>
+          
+        </ul>
+      </div>
+      <div class="col-lg-3 col-sm-6 mb-5">
+        <h6 class="mb-4">Categories</h6>
+        <ul class="list-unstyled">
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/awesome-guides">Awesome Guides</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/big-data">Big Data</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/computer-vision">Computer Vision</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/data-science">Data Science</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/deep-learning">Deep Learning</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/learning-resources">Learning Resources</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/natural-language-processing">Natural Language Processing</a>
+          </li>
+          <li class="mb-3"><a class="text-dark"
+              href="/categories/programming">Programming</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-lg-3 col-sm-6 mb-5">
+        <h6 class="mb-4">Quick Links</h6>
+        <ul class="list-unstyled">
+          
+          <li class="mb-3"><a class="text-dark" href="https://mlwhiz.com/about">About</a></li>
+          
+          
+          <li class="mb-3"><a class="text-dark" href="https://mlwhiz.com/blog">Post</a></li>
+          
+          
+          
+        </ul>
+      </div>
+      <div class="col-12 border-top py-4 text-center">
+        Copyright © 2020 <a href="https://mlwhiz.com">MLWhiz</a> All Rights Reserved
+      </div>
+    </div>
   </div>
-  <br><div class="widget-search widget">
-	<form class="widget-search__form" role="search" method="get" action="https://google.com/search">
-		<label>
-			<input class="widget-search__field" type="search" placeholder="SEARCH..." value="" name="q" aria-label="SEARCH...">
-		</label>
-		<input class="widget-search__submit" type="submit" value="Search">
-		<input type="hidden" name="sitesearch" value="https://mlwhiz.com/" />
-	</form>
-</div>
-<div class="widget-recent widget">
-	<h4 class="widget__title">Recent Posts</h4>
-	<div class="widget__content">
-		<ul class="widget__list">
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/09/09/pytorch_guide/">The Most Complete Guide to PyTorch for Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/09/02/atom_for_data_science/">Create an Awesome Development Setup for Data Science using Atom</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/27/pyt_gan/">A Layman’s Introduction to GANs for Data Scientists using PyTorch</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/27/mlengineercourses/">Become an ML Engineer with these courses from Amazon and Google</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/27/pandasql/">How to use SQL with Pandas?</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/12/ctskills/">5 Essential Business-Oriented Critical Thinking Skills For Data Scientists</a></li>
-			<li class="widget__item"><a class="widget__link" href="/blog/2020/08/09/owndlrig/">Creating my First Deep Learning &#43; Data Science Workstation</a></li>
-		</ul>
-	</div>
-</div>
-
-<div style="text-align:center">
-    
-    <a class="btn btn-session" href="https://www.patreon.com/bePatron?u=28135435" role="button">1:1 Session</a>
-  </div>
-
-<br>
-
-
-
-
-<div class="shareaholic-canvas" data-app="follow_buttons" data-app-id="28033293" style="white-space: inherit;"></div>
-
-<style type="text/css">
-.bookclass .shareaholic-share-buttons-heading .shareaholic-canvas{
-  font-family: montserrat,sans-serif;
-  font-size:.5em ;
-  font-weight: 500;
-  }
-</style>
-<center>
-
-
-
-
-<script async data-uid="bfe9f82f10" src="https://mlwhiz.ck.page/bfe9f82f10/index.js"></script>
-
-<script async data-uid="3452d924e2" src="https://mlwhiz.ck.page/3452d924e2/index.js"></script>
-
-
-</center>
-</aside>
-
-		</div>
-		<footer class="footer">
-	<div class="container footer__container flex">
-		
-		<div class="footer__copyright">
-			&copy;  2014-2020 Rahul Agarwal.
-			<span class="footer__copyright-credits">Generated with <a href="https://gohugo.io/" rel="nofollow noopener" target="_blank">Hugo</a> and <a href="https://github.com/Vimux/Mainroad/" rel="nofollow noopener" target="_blank">Mainroad</a> theme.</span>
-		</div>
-	</div>
 </footer>
 
+<script>
+  var indexURL = "https://mlwhiz.com/index.json"
+</script>
 
+<!-- JS Plugins -->
 
-	</div>
-<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=93f2f4f9-cf51-415d-84af-08cbb74b178f"></script>
-<script async defer src="/js/menu.js"></script></body>
+<script src="https://mlwhiz.com/plugins/jQuery/jquery.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/bootstrap/bootstrap.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/slick/slick.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/venobox/venobox.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/search/fuse.min.js"></script>
+
+<script src="https://mlwhiz.com/plugins/search/mark.js"></script>
+
+<script src="https://mlwhiz.com/plugins/search/search.js"></script>
+
+<!-- Main Script -->
+
+<script src="https://mlwhiz.com/js/script.min.js"></script>
+<!-- google analitycs -->
+<script>
+  (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+  ga('create', 'UA-54777926-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
 </html>
