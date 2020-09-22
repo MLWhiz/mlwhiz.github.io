@@ -268,10 +268,8 @@
 <p>To install cuGraph you can just use the simple command that you can choose from <a href="https://rapids.ai/start.html">rapids.ai</a> based on your system and configuration.</p>
 <p>
   
-    <img src="/images/cugraph/2.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/2.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>The command I used is below and I used a nightly build(recommended):</p>
@@ -281,10 +279,8 @@
 <h2 id="1-connected-components">1. Connected Components</h2>
 <p>
   
-    <img src="/images/cugraph/3.jpg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/3.jpg" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>We all know how clustering works?</p>
@@ -303,10 +299,8 @@
 <p>Let us start with an example graph which we are using for our purpose. Contains cities and distance information between them.</p>
 <p>
   
-    <img src="/images/cugraph/3.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/3.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>We first start by creating a list of edges along with the distances which we will add as the weight of the edge:</p>
@@ -359,10 +353,8 @@ cugraph<span style="color:#f92672">.</span>weakly_connected_components(G)
 </code></pre></div><p>The output of the last call is a cudf dataframe.</p>
 <p>
   
-    <img src="/images/cugraph/4.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/4.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>As we can see, the labels correspond to Connected Components ID.</p>
@@ -370,10 +362,8 @@ cugraph<span style="color:#f92672">.</span>weakly_connected_components(G)
 <h2 id="2-shortest-path">2. Shortest Path</h2>
 <p>
   
-    <img src="/images/cugraph/5.jpg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/5.jpg" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Continuing with the above example only, we are given a graph with the cities of Germany and the respective distance between them.</p>
@@ -394,10 +384,8 @@ cugraph<span style="color:#f92672">.</span>weakly_connected_components(G)
 </ul>
 <p>
   
-    <img src="/images/cugraph/6.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/6.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <ul>
@@ -414,10 +402,8 @@ distances <span style="color:#f92672">=</span> cugraph<span style="color:#f92672
 distances
 </code></pre></div><p>
   
-    <img src="/images/cugraph/7.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/7.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Now if we have to find the path between node 0 and 14 we can use the distances cudf.</p>
@@ -438,10 +424,8 @@ dest <span style="color:#f92672">=</span> <span style="color:#ae81ff">14</span>
 <h2 id="3-pagerank">3. Pagerank</h2>
 <p>
   
-    <img src="/images/cugraph/8.jpg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/8.jpg" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>This is the page sorting algorithm that powered google for a long time. It assigns scores to pages based on the number and quality of incoming and outgoing links.</p>
@@ -477,10 +461,8 @@ fb_G <span style="color:#f92672">=</span> cugraph<span style="color:#f92672">.</
 fb_G<span style="color:#f92672">.</span>add_edge_list(fb_cudf[<span style="color:#e6db74">&#34;src&#34;</span>],fb_cudf[<span style="color:#e6db74">&#34;dst&#34;</span>])
 </code></pre></div><p>
   
-    <img src="/images/cugraph/9.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/9.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Now we want to find the users having high influence capability.</p>
@@ -490,20 +472,16 @@ fb_pagerank <span style="color:#f92672">=</span> cugraph<span style="color:#f926
 fb_pagerank<span style="color:#f92672">.</span>sort_values(by<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;pagerank&#39;</span>,ascending<span style="color:#f92672">=</span>False)<span style="color:#f92672">.</span>head()
 </code></pre></div><p>
   
-    <img src="/images/cugraph/10.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/10.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <hr>
 <h2 id="4-link-prediction">4. Link Prediction</h2>
 <p>
   
-    <img src="/images/cugraph/11.jpg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/11.jpg" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Continuing along with our Facebook example. You might have seen recommended friends in your Facebook account. How can we create our small recommender?</p>
@@ -523,19 +501,15 @@ fb_pagerank<span style="color:#f92672">.</span>sort_values(by<span style="color:
 <p>We calculate the Jaccard coefficient between two nodes i and j as :</p>
 <p>
   
-    <img src="/images/cugraph/12.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/12.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Where the numerator is the number of common neighbors of i and j, and the denominator is the total number of distinct neighbors of i and j.</p>
 <p>
   
-    <img src="/images/cugraph/13.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/13.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>So in the figure, the half red and green nodes are the common neighbors of both A and B. And they have a total of 5 distinct neighbors. So the JaccardCoeff(A, B) is 2/5</p>
@@ -556,10 +530,8 @@ cudf_nodes[<span style="color:#e6db74">&#39;dst&#39;</span>] <span style="color:
 jaccard_coeff_between_nodes<span style="color:#f92672">.</span>head()
 </code></pre></div><p>
   
-    <img src="/images/cugraph/14.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/14.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p><em><strong>But we are still not done.</strong></em> We need to remove the edges where the source==destination and the edges which are already present in the graph. We will do this using simple join and filter operations which work particularly similar to pandas.</p>
@@ -573,20 +545,16 @@ new_edges_jaccard_coeff <span style="color:#f92672">=</span> jaccard_coeff_joine
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">new_edges_jaccard_coeff<span style="color:#f92672">.</span>sort_values(by<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;jaccard_coeff&#39;</span>,ascending<span style="color:#f92672">=</span>False)
 </code></pre></div><p>
   
-    <img src="/images/cugraph/15.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/15.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <hr>
 <h2 id="basic-network-statistics">Basic Network Statistics</h2>
 <p>
   
-    <img src="/images/cugraph/16.jpg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/16.jpg" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>There are a lot of basic measures which you want to know about your network.</p>
@@ -601,10 +569,8 @@ Number of Edges 176468
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">fb_G<span style="color:#f92672">.</span>degrees()<span style="color:#f92672">.</span>head()
 </code></pre></div><p>
   
-    <img src="/images/cugraph/17.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/17.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <hr>
@@ -625,36 +591,28 @@ Number of Edges 176468
 <p>Here are the results of the experiments I performed on NVIDIA <a href="https://amzn.to/2OaF9uq"><em><strong>Tesla V100 32 GB GPU</strong></em></a>. Thanks to Josh Patterson from NVIDIA and Richard Ulrich at Walmart Labs for arranging that for me. All the times are given in milliseconds:</p>
 <p>
   
-    <img src="/images/cugraph/18.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/18.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>I didn’t add Jaccard coefficients in the results as it didn’t run even for facebook using networkX. For cuGraph it had millisecond-level latencies.</p>
 <p>Let us visualize these results:</p>
 <p>
   
-    <img src="/images/cugraph/cc.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/cc.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>
   
-    <img src="/images/cugraph/sp.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/sp.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>
   
-    <img src="/images/cugraph/pr.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/pr.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <hr>
@@ -680,10 +638,8 @@ Number of Edges 176468
 <h2 id="conclusion">Conclusion</h2>
 <p>
   
-    <img src="/images/cugraph/system.jpg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/cugraph/system.jpg" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p><em><strong>In this post, I talked about some of the most powerful graph algorithms that have changed the way we live and how to scale them with GPUs.</strong></em></p>

@@ -268,8 +268,6 @@
       <img src="/images/yolov5/0.png" alt="&lt;a href=&#34;https://github.com/ultralytics/yolov5&#34;&gt;Source&lt;/a&gt;: Ultralytics Yolov5">
   
 
-
-
 </p>
 <p>Since they <a href="https://github.com/ultralytics/yolov3">first ported YOLOv3</a>, Ultralytics has made it very simple to create and deploy models using Pytorch, so I was eager to try out YOLOv5. As it turns out, Ultralytics has further simplified the process, and the results speak for themselves.</p>
 <p><em><strong>In this article, we’ll create a detection model using YOLOv5, from creating our dataset and annotating it to training and inferencing using their remarkable library.</strong></em> This post focuses on the implementation of YOLOv5, including:</p>
@@ -306,8 +304,6 @@ pip install -r requirements.txt
       <img src="/images/yolov5/1.png" alt="OID directory structure. We will take only the image files(.jpgs) from here and not the labels as we will annotate manually to create our Custom Dataset, though we can use them if required for a different project.">
   
 
-
-
 <em>OID directory structure. We will take only the image files(.jpgs) from here and not the labels as we will annotate manually to create our Custom Dataset, though we can use them if required for a different project.</em></p>
 <p>Before we continue, we will need to copy all the images in the same folder to start our labeling exercise from Scratch. You can choose to do this manually, but this can also be quickly done programmatically using recursive glob function:</p>
 <pre><code>import os
@@ -329,8 +325,6 @@ for img in images:
   
       <img src="/images/yolov5/6.png" alt="5. Export">
   
-
-
 
 </p>
 <p>Exporting in Yolo format essentially creates a .txt file for each of our images, which contains the class_id, x_center, y_center, width, and the height of the image. It also creates a file named obj.names , which helps map the class_id to the class name. For example:</p>
@@ -394,10 +388,8 @@ for pathAndFilename in glob.iglob(os.path.join(dataset_path, &quot;*.jpg&quot;))
 <p>After running this, your data folder structure should look like below. It should have two directories images and labels.</p>
 <p>
   
-    <img src="/images/yolov5/10.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/yolov5/10.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>We now have to add two configuration files to training folder:</p>
@@ -423,10 +415,8 @@ width_multiple: 1.0  # layer channel multiple
 <p>At this point our training folder looks like:</p>
 <p>
   
-    <img src="/images/yolov5/11.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/yolov5/11.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Once we are done with the above steps, we can start training our model. This is as simple as running the below command, where we provide the locations of our config files and various other params. You can check out the different other options in train.py file, but these are the ones I found noteworthy.</p>
@@ -453,10 +443,8 @@ $ python train.py --img 640 --batch 16 --epochs 300--data training/dataset.yaml 
 <p>Here are the various validation metrics. These metrics also get saved in a file results.png at the end of the training run.</p>
 <p>
   
-    <img src="/images/yolov5/14.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/yolov5/14.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <hr>
@@ -470,8 +458,6 @@ $ python train.py --img 640 --batch 16 --epochs 300--data training/dataset.yaml 
       <img src="/images/yolov5/15.png" alt="Results">
   
 
-
-
 </p>
 <p>You can also detect in a video using the detect.py file:</p>
 <pre><code>python detect.py --weights weights/best.pt --source inference/videos/messi.mp4 --view-img --output inference/output
@@ -481,8 +467,6 @@ $ python train.py --img 640 --batch 16 --epochs 300--data training/dataset.yaml 
   
       <img src="https://miro.medium.com/max/595/1*QvCHyXdY36jpwoz-2_n9yQ.gif" alt="And, Here is Messi…..">
   
-
-
 
 </p>
 <p>You can also use the webcam as a source by specifying the &ndash;source as 0. You can check out the various other options in detect.py file.</p>

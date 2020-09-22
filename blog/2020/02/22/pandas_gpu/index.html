@@ -270,10 +270,8 @@
 <p>Before we go any further, here is a simple example of how cuDF could help you. Here I try to get means of all columns in my random data frame having 100 million rows and five columns.</p>
 <p>
   
-    <img src="/images/pandas_gpu/0.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pandas_gpu/0.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p><em><strong>That is a ~350x speedup using cuDF!!! And the code remains essentially the same. And remember, I am using a system with 128 GB RAM.</strong></em></p>
@@ -282,10 +280,8 @@
 <p>So now we are convinced that cuDF is beneficial, the simplest way to install RAPIDS is by just going to the <a href="https://rapids.ai/start.html">site</a> and check what you need using the release selector tool.</p>
 <p>
   
-    <img src="/images/pandas_gpu/1.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pandas_gpu/1.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>For me, the installation command was:</p>
@@ -302,10 +298,8 @@ gdf = cudf.read_csv('US_Accidents_May19.csv')
 <p>This command took around 1 second compared to 13 seconds when I read using pd.read_csv function</p>
 <p>
   
-    <img src="/images/pandas_gpu/2.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pandas_gpu/2.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>We could also have read from pandas Dataframes using:</p>
@@ -314,10 +308,8 @@ gdf = cudf.DataFrame.from_pandas(pdf)
 </code></pre>
 <p>
   
-    <img src="/images/pandas_gpu/3.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pandas_gpu/3.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>On that note, we can reconvert a cuDF dataframe back to a Pandas Dataframe to take advantage of the much more mature Pandas ecosystem whenever needed.</p>
@@ -345,10 +337,8 @@ gdf.describe()
 </code></pre>
 <p>
   
-    <img src="/images/pandas_gpu/4.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pandas_gpu/4.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>You can also use normal functions like:</p>
@@ -528,10 +518,8 @@ Not_df = gdf[~((gdf['hDistance']&gt;8) | (gdf['TMC']&gt;200))]
 </code></pre>
 <p>
   
-    <img src="/images/pandas_gpu/5.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pandas_gpu/5.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>***Caveat:***I tried the function np.mean first, which didn’t work. It provides only elementary functions sum,mean,min and max only.</p>
@@ -556,18 +544,14 @@ accident_locations_dataframe = gdf[['ID','Start_Lat','Start_Lng','End_Lat','End_
 </code></pre>
 <p>
   
-    <img src="/images/pandas_gpu/6.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pandas_gpu/6.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>
   
-    <img src="/images/pandas_gpu/7.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pandas_gpu/7.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>We need to have all this information in a single dataframe. How do we do this? This syntax is also the same as Pandas.</p>
@@ -575,20 +559,16 @@ accident_locations_dataframe = gdf[['ID','Start_Lat','Start_Lng','End_Lat','End_
 </code></pre>
 <p>
   
-    <img src="/images/pandas_gpu/8.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pandas_gpu/8.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>We provide this merge function with four attributes- 1st DF, 2nd DF, join on which column and the joining criteria:[&lsquo;left&rsquo;,&lsquo;right&rsquo;,&lsquo;inner&rsquo;,&lsquo;outer&rsquo;]</p>
 <p><em><strong>As far as timing is concerned, we again get a 10x speedup while doing Joins when we use cudf.</strong></em></p>
 <p>
   
-    <img src="/images/pandas_gpu/9.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pandas_gpu/9.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p><em><strong>Recommendation:</strong></em> I usually always end up using left join. You will rarely need to join using outer or right. Actually whenever you need to do a right join you actually just really need a left join with the order of dataframes reversed in the merge function.</p>

@@ -280,8 +280,6 @@
     <figcaption>From the Paper</figcaption>
   </figure>
 
-
-
 </p>
 <p>This is the picture of the full transformer as taken from the paper. And, it surely is intimidating. So, I will aim to demystify it in this post by going through each individual piece. So read ahead.</p>
 <hr>
@@ -298,8 +296,6 @@
     <figcaption>Transformer for Translation</figcaption>
   </figure>
 
-
-
 </p>
 <hr>
 <h2 id="the-building-blocks">The Building Blocks</h2>
@@ -314,8 +310,6 @@
     
     <figcaption>Data Flow in a Transformer</figcaption>
   </figure>
-
-
 
 </p>
 <hr>
@@ -338,8 +332,6 @@
     <figcaption>Very basic encoder Layer</figcaption>
   </figure>
 
-
-
 </p>
 <p>They are a mouthful. Right? Don’t lose me yet as I will explain both of them in the coming sections. Right now, just remember that the encoder layer incorporates attention and a position-wise feed-forward network.</p>
 <p><em><strong>Q: But, how does this layer expect its inputs to be?</strong></em></p>
@@ -351,8 +343,6 @@
     
     <figcaption>Encoder — Input and Output shapes are the same</figcaption>
   </figure>
-
-
 
 </p>
 <p>And what about the outputs of this layer? Remember that the encoder layers are stacked on top of each other. So, we want to be able to have an output of the same dimension as the input so that the output can flow easily into the next encoder. So the output is also of the shape, <code>SxD</code>.</p>
@@ -367,8 +357,6 @@
     <figcaption>How Self-Attention Works</figcaption>
   </figure>
 
-
-
 </p>
 <p>The above figure must look daunting but it is easy to understand. So just stay with me here.</p>
 <p>Deep Learning is essentially nothing but a lot of matrix calculations and what we are essentially doing in this layer is a lot of matrix calculations intelligently. The self-attention layer initializes with 3 weight matrices — Query($W_q$), Key($W_k$), and Value($W_v$). Each of these matrices has a size of (<code>Dxd</code>) where d is taken as 64 in the paper. The weights for these matrices will be trained when we train the model.</p>
@@ -382,8 +370,6 @@
     
     <figcaption>After Softmax</figcaption>
   </figure>
-
-
 
 </p>
 <p>As you can see the diagonal entries are big. This is because the word contribution to itself is high. That is reasonable. But we can see here that the word “quick” devolves into “quick” and “fox” and the word “brown” also devolves into “brown” and “fox”. That intuitively helps us to say that both the words — “quick” and “brown” each refers to the “fox”.</p>
@@ -402,8 +388,6 @@
     <figcaption>The Full multi-headed self-attention Layer</figcaption>
   </figure>
 
-
-
 </p>
 <p>Thus, we finally get the output Z of shape 4x512 as intended. But before it goes into another encoder we pass it through a Feed-Forward Network.</p>
 <h3 id="b-position-wise-feed-forward-network">B) Position-wise feed-forward network</h3>
@@ -416,8 +400,6 @@
     <figcaption>Each word goes into the feed-forward network</figcaption>
   </figure>
 
-
-
 </p>
 <p>The feed-forward network applies itself to each position in the output Z parallelly(Each position can be thought of as a word) and hence the name Position-wise feed-forward network. The feed-forward network also shares weight, so that the length of the source sentence doesn’t matter(Also, if it didn’t share weights, we would have to initialize a lot of such networks based on max source sentence length and that is not feasible)</p>
 <p>
@@ -427,8 +409,6 @@
     
     <figcaption>It is actually just a linear layer that gets applied to each position(or word)</figcaption>
   </figure>
-
-
 
 </p>
 <p>With this, we near an okayish understanding of the encoder part of the Transformer.</p>
@@ -440,8 +420,6 @@
     
     <figcaption>I am back again here so you don’t have to scroll</figcaption>
   </figure>
-
-
 
 </p>
 <p>Okay, These two concepts are pretty essential to this particular architecture. And I am glad you asked this one. So, we will discuss these steps before moving further to the decoder stack.</p>
@@ -455,26 +433,20 @@
     <figcaption>Add a static positional pattern to X</figcaption>
   </figure>
 
-
-
 </p>
 <p>In the paper, the authors used sine and cosine functions to create positional embeddings for different positions.</p>
 <p>
   
-    <img src="/images/transformers/12.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/transformers/12.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>This particular mathematical thing actually generates a 2d matrix which is added to the embedding vector that goes into the first encoder step.</p>
 <p>Put simply, it’s just a constant matrix that we add to the sentence so that the network could get the position of the word.</p>
 <p>
   
-    <img src="/images/transformers/13.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/transformers/13.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>
@@ -484,8 +456,6 @@
     
     <figcaption>Positional encoding matrix for the first 300 and 3000 positions</figcaption>
   </figure>
-
-
 
 </p>
 <p>Above is the heatmap of the position encoding matrix that we will add to the input that is to be given to the first encoder. I am showing the heatmap for the first 300 positions and the first 3000 positions. We can see that there is a distinct pattern that we provide to our Transformer to understand the position of each word. And since we are using a function comprised of sin and cos, we are able to embed positional embeddings for very high positions also pretty well as we can see in the second picture.</p>
@@ -499,8 +469,6 @@
     
     <figcaption>The Skip level connections help information flow in the network</figcaption>
   </figure>
-
-
 
 </p>
 <hr>
@@ -528,8 +496,6 @@
     <figcaption>Decoder Architecture</figcaption>
   </figure>
 
-
-
 </p>
 <p><em><strong>Q: Wait, but do I see the output we need flowing into the decoder as input? What? Why?</strong></em> 😖</p>
 <p>I am noticing that you are getting pretty good at asking questions. And that is a great question, something I even though myself a lot of times, and something that I hope will get much clearer by the time you reach the end of this post.</p>
@@ -545,10 +511,8 @@
 <p>So, In a masked layer, the function changes from:</p>
 <p>
   
-    <img src="/images/transformers/17.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/transformers/17.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p><em><strong>Q: I still don’t get it, what happens if we do that?</strong></em></p>
@@ -561,8 +525,6 @@
     <figcaption>Schnelle currently attends to both Braune and Fuchs</figcaption>
   </figure>
 
-
-
 </p>
 <p>The word Schnelle will now be composed of both Braune and Fuchs if we take the above matrix’s softmax and multiply it with the value matrix V. But we don’t want that, so we add the mask matrix to it to give:</p>
 <p>
@@ -573,8 +535,6 @@
     <figcaption>The mask operation applied to the matrix</figcaption>
   </figure>
 
-
-
 </p>
 <p>And, now what will happen after we do the softmax step?</p>
 <p>
@@ -584,8 +544,6 @@
     
     <figcaption>Schnelle never attends to any word after Schnelle</figcaption>
   </figure>
-
-
 
 </p>
 <p>Since $e^{-inf}$ = 0, all positions subsequent to Schnelle have been converted to 0. Now, if we multiply this matrix with the value matrix V, the vector corresponding to Schnelle’s position in the Z vector passing through the decoder would not contain any information of the subsequent words Braune and Fuchs just like we wanted.</p>
@@ -599,10 +557,8 @@
 <p>Here is a single attention layer(which will be part of a multi-head just like before):</p>
 <p>
   
-    <img src="/images/transformers/21.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/transformers/21.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p><em><strong>Q: But won’t the shapes of Q, K, and V be different this time?</strong></em></p>
@@ -614,10 +570,8 @@
 <p>We are actually very much there now friend. Once, we are done with the transformer, the next thing is to add a task-specific output head on the top of the decoder output. This can be done by adding some linear layers and softmax on top to get the probability <em>across all the words in the german vocab</em>. We can do something like this:</p>
 <p>
   
-    <img src="/images/transformers/22.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/transformers/22.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>As you can see we are able to generate probabilities. So far we know how to do a forward pass through this Transformer architecture. Let us see how we do the training of such a Neural Net Architecture.</p>
@@ -626,10 +580,8 @@
 <p>Till now, if we take a bird-eye view of the structure we have something like:</p>
 <p>
   
-    <img src="/images/transformers/23.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/transformers/23.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>We can give an English sentence and shifted output sentence and do a forward pass and get the probabilities over the German vocabulary. And thus we should be able to use a loss function like cross-entropy where the target could be the german word we want, and train the neural network using the Adam Optimizer. Just like any classification example. So, there is your German.</p>
@@ -640,10 +592,8 @@
 <p>KL Divergence is the information loss that happens when the distribution P is approximated by the distribution Q. When we use the KL Divergence loss, we try to estimate the target distribution(P) using the probabilities(Q) we generate from the model. And we try to minimize this information loss in the training.</p>
 <p>
   
-    <img src="/images/transformers/24.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/transformers/24.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>If you notice, in this form(without label smoothing which we will discuss) this is exactly the same as cross-entropy. Given two distributions like below.</p>
@@ -655,17 +605,13 @@
     <figcaption>Target distribution and probability distribution for a word(token)</figcaption>
   </figure>
 
-
-
 </p>
 <p>The KL Divergence formula just plain gives <code>-logq(oder)</code> and that is the cross-entropy loss.</p>
 <p>In the paper, though the authors used label smoothing with α = 0.1 and so the KL Divergence loss is not cross-entropy. What that means is that in the target distribution the output value is substituted by (1-α) and the remaining 0.1 is distributed across all the words. The authors say that this is so that the model is not too confident.</p>
 <p>
   
-    <img src="/images/transformers/sbs2.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/transformers/sbs2.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p><em><strong>Q: But, why do we make our models not confident? It seems absurd.</strong></em></p>
@@ -680,8 +626,6 @@
     <figcaption>Paper : https://arxiv.org/pdf/1706.03762.pdf</figcaption>
   </figure>
 
-
-
 </p>
 <p><em><strong>Q: But wait I just remembered that we won’t have the shifted output at the prediction time, would we? How do we do predictions then?</strong></em></p>
 <p>If you realize what we have at this point is a generative model and we will have to do the predictions in a generative way as we won’t know the output target vector when doing prediction. So predictions are still sequential.</p>
@@ -694,8 +638,6 @@
     
     <figcaption>Predicting with a greedy search using the Transformer</figcaption>
   </figure>
-
-
 
 </p>
 <p>This model does piece-wise predictions. In the original paper, they use the Beam Search to do prediction. But a greedy search would work fine as well for the purpose of explaining it. In the above example, I have shown how a greedy search would work exactly. The greedy search would start with:</p>

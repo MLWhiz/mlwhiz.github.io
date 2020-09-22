@@ -303,10 +303,8 @@ t <span style="color:#f92672">=</span> t<span style="color:#f92672">.</span>nump
 <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#34;Convert to Numpy Array From Tensor:</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">{t}&#34;</span>)
 </code></pre></div><p>
   
-    <img src="/images/pytorch_guide/0.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pytorch_guide/0.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <h3 id="2-tensor-operations">2. Tensor Operations</h3>
@@ -326,10 +324,8 @@ t <span style="color:#f92672">=</span> t<span style="color:#f92672">**</span><sp
 <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#34;Size of Tensor t using .size():</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">{t.size()}&#34;</span>)
 </code></pre></div><p>
   
-    <img src="/images/pytorch_guide/1.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pytorch_guide/1.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p><strong>Note:</strong> What are PyTorch Variables? In the previous versions of Pytorch, Tensor and Variables used to be different and provided different functionality, but now the Variable API is <a href="https://pytorch.org/docs/stable/autograd.html#variable-deprecated">deprecated</a>, and all methods for variables work with Tensors. So, if you don’t know about them, it’s fine as they re not needed, and if you know them, you can forget about them.</p>
@@ -339,8 +335,6 @@ t <span style="color:#f92672">=</span> t<span style="color:#f92672">**</span><sp
   
       <img src="/images/pytorch_guide/2.png" alt="Photo by &lt;a href=&#34;https://unsplash.com/@fernanddecanne?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Fernand De Canne&lt;/a&gt; on &lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Unsplash&lt;/a&gt;">
   
-
-
 
 </p>
 <p>Here comes the fun part as we are now going to talk about some of the most used constructs in Pytorch while creating deep learning projects. nn.Module lets you create your Deep Learning models as a class. You can inherit from nn.Moduleto define any model as a class. Every model class necessarily contains an<code> __init__</code> procedure block and a block for the <code>forward</code> pass.</p>
@@ -421,10 +415,8 @@ torch<span style="color:#f92672">.</span>Size([<span style="color:#ae81ff">100</
 <p>I have linked all the layers to their source where you could read all about them, but to show how I usually try to understand a layer and read the docs, I would try to look at a very simple convolutional layer here.</p>
 <p>
   
-    <img src="/images/pytorch_guide/3.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pytorch_guide/3.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>So, a Conv2d Layer needs as input an Image of height H and width W, with <code>Cin</code> channels. Now, for the first layer in a convnet, the number of <code>in_channels</code> would be 3(RGB), and the number of <code>out_channels</code> can be defined by the user. The <code>kernel_size</code> mostly used is 3x3, and the <code>stride</code> normally used is 1.</p>
@@ -459,10 +451,8 @@ train_dataset <span style="color:#f92672">=</span> ImageFolder(root<span style="
 <span style="color:#66d9ef">print</span>(<span style="color:#e6db74">&#34;Example Image and Label:&#34;</span>, train_dataset[<span style="color:#ae81ff">2</span>])
 </code></pre></div><p>
   
-    <img src="/images/pytorch_guide/4.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pytorch_guide/4.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>This dataset has 847 images, and we can get an image and its label using an index. Now we can pass images one by one to any image neural network using a for loop:</p>
@@ -615,8 +605,6 @@ y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>ran
       <img src="/images/pytorch_guide/5.png" alt="Example of one random sequence and label. Each integer in the sequence corresponds to a word in the sentence.">
   
 
-
-
 <em>Example of one random sequence and label. Each integer in the sequence corresponds to a word in the sentence.</em></p>
 <p>We can use the custom dataset now using:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">train_dataset <span style="color:#f92672">=</span> CustomTextDataset(X,y)
@@ -626,10 +614,8 @@ y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>ran
     <span style="color:#66d9ef">print</span>(xb<span style="color:#f92672">.</span>size(),yb<span style="color:#f92672">.</span>size())
 </code></pre></div><p>
   
-    <img src="/images/pytorch_guide/6.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pytorch_guide/6.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>This happens because the sequences have different lengths, and our data loader expects our sequences of the same length. Remember that in the previous image example, we resized all images to size 224 using the transforms, so we didn’t face this error.</p>
@@ -657,8 +643,6 @@ y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>ran
   
       <img src="/images/pytorch_guide/7.png" alt="See that the batches have different sequence lengths now">
   
-
-
 
 </p>
 <p>It will work this time as we have provided a custom <code>collate_fn</code>. And see that the batches have different sequence lengths now. Thus we would be able to train our BiLSTM using variable input sizes just like we wanted.</p>
@@ -710,10 +694,8 @@ y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>ran
 <p>Pytorch provides us with a variety of <a href="https://pytorch.org/docs/stable/nn.html#loss-functions">loss functions</a> for our most common tasks, like Classification and Regression. Some most used examples are <a href="https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html#torch.nn.CrossEntropyLoss">nn.CrossEntropyLoss</a> , <a href="https://pytorch.org/docs/stable/generated/torch.nn.NLLLoss.html#torch.nn.NLLLoss">nn.NLLLoss</a> , <a href="https://pytorch.org/docs/stable/generated/torch.nn.KLDivLoss.html#torch.nn.KLDivLoss">nn.KLDivLoss</a> and <a href="https://pytorch.org/docs/stable/generated/torch.nn.MSELoss.html#torch.nn.MSELoss">nn.MSELoss</a>. You can read the documentation of each loss function, but to explain how to use these loss functions, I will go through the example of <a href="https://pytorch.org/docs/stable/generated/torch.nn.NLLLoss.html#torch.nn.NLLLoss">nn.NLLLoss</a></p>
 <p>
   
-    <img src="/images/pytorch_guide/8.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pytorch_guide/8.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>The documentation for NLLLoss is pretty succinct. As in, this loss function is used for Multiclass classification, and based on the documentation:</p>
@@ -789,8 +771,6 @@ loss <span style="color:#f92672">=</span> criterion(preds,y)
   
       <img src="/images/pytorch_guide/9.png" alt="Other optimizers from &lt;a href=&#34;https://github.com/jettify/pytorch-optimizer&#34;&gt;pytorch-optimizer&lt;/a&gt; library">
   
-
-
 
 <em>Other optimizers from <a href="https://github.com/jettify/pytorch-optimizer">pytorch-optimizer</a> library</em></p>
 <hr>

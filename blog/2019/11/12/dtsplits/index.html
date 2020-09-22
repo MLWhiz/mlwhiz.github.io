@@ -270,10 +270,8 @@
 <p>In simple terms, Gini impurity is the <em><strong>measure of impurity in a node</strong></em>. Its formula is:</p>
 <p>
   
-    <img src="/images/dtsplits/0.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/dtsplits/0.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>where J is the number of classes present in the node and p is the distribution of the class in the node.</p>
@@ -282,20 +280,16 @@
 <p>I reckon you would say A or E and you are right. What is the worst situation to be in? C, I suppose as the data is precisely 50:50 in that node.</p>
 <p>
   
-    <img src="/images/dtsplits/1.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/dtsplits/1.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Now, this all looks good, intuitively. Gini Impurity gives us a way to quantify it.</p>
 <p>Let us calculate the Gini impurity for all five nodes separately and check the values.</p>
 <p>
   
-    <img src="/images/dtsplits/2.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/dtsplits/2.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>✅ Gini Impurity works as expected. Maximum for Node C and the minimum for both A and E. We need to choose the node with Minimum Gini Impurity.</p>
@@ -305,17 +299,13 @@
       <img src="/images/dtsplits/3.png" alt="Gini Impurity">
   
 
-
-
 </p>
 <p>❓So how do we exactly use it in a Decision Tree?</p>
 <p>Suppose, we have the UCI Heart Disease data. The “target” field refers to the presence of heart disease in the patient. It is 0 (no presence) or 1.</p>
 <p>
   
-    <img src="/images/dtsplits/4.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/dtsplits/4.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>We now already have a measure in place(Gini Impurity) using which we can evaluate a split on a particular variable with a certain threshold(continuous) or value(categorical).</p>
@@ -326,8 +316,6 @@
   
       <img src="/images/dtsplits/11.png" alt="If we split on Gender">
   
-
-
 
 </p>
 <p>Notice that we use Sex=0 and Sex!=0 so that this generalises well to categories with multiple levels. Our root node has 165 +ve examples and 138 -ve examples. And we get two child nodes when we split by sex.</p>
@@ -350,10 +338,8 @@ Right Node Impurity: 0.4948540222642302
 <p>We can split by a continuous variable too. Let us try to split using cholesterol feature in the dataset. We chose a threshold of 250 and created a tree.</p>
 <p>
   
-    <img src="/images/dtsplits/12.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/dtsplits/12.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">I_Left <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> (<span style="color:#ae81ff">58</span><span style="color:#f92672">/</span><span style="color:#ae81ff">126</span>)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span> <span style="color:#f92672">-</span> (<span style="color:#ae81ff">68</span><span style="color:#f92672">/</span><span style="color:#ae81ff">126</span>)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>
@@ -378,26 +364,20 @@ Right Node Impurity: 0.47815123368125373
       <img src="/images/dtsplits/7.png" alt="Entropy == Randomness">
   
 
-
-
 </p>
 <p>Another very popular way to split nodes in the decision tree is Entropy. Entropy is the measure of Randomness in the system. The formula for Entropy is:</p>
 <p>
   
-    <img src="/images/dtsplits/8.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/dtsplits/8.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>where C is the number of classes present in the node and p is the distribution of the class in the node.</p>
 <p>So again talking about the binary case we talked about before. What is the value of Entropy for all the 5 cases from A-E?</p>
 <p>
   
-    <img src="/images/dtsplits/9.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/dtsplits/9.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Entropy values work as expected. Maximum for Node C and the minimum for both A and E. We need to choose the node with Minimum Entropy.</p>
@@ -406,8 +386,6 @@ Right Node Impurity: 0.47815123368125373
   
       <img src="/images/dtsplits/10.png" alt="Entropy">
   
-
-
 
 </p>
 <p>So how do we exactly use Entropy in a Decision Tree?</p>
@@ -419,8 +397,6 @@ Right Node Impurity: 0.47815123368125373
   
       <img src="/images/dtsplits/11.png" alt="If we split on Gender">
   
-
-
 
 <em>If we split on Gender</em></p>
 <p>We already know how to calculate the randomness for a node. So we calculate the randomness of the left child as well as the right child.</p>
@@ -441,10 +417,8 @@ Right Node Randomness: 0.992563136012236
 <p>Again as before, we can split by a continuous variable too. Let us try to split using cholesterol feature in the dataset. We chose a threshold of 250 and create a tree.</p>
 <p>
   
-    <img src="/images/dtsplits/12.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/dtsplits/12.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">E_Left <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>(<span style="color:#ae81ff">58</span><span style="color:#f92672">/</span><span style="color:#ae81ff">126</span>)<span style="color:#f92672">*</span>np<span style="color:#f92672">.</span>log2(<span style="color:#ae81ff">58</span><span style="color:#f92672">/</span><span style="color:#ae81ff">126</span>) <span style="color:#f92672">-</span> (<span style="color:#ae81ff">68</span><span style="color:#f92672">/</span><span style="color:#ae81ff">126</span>)<span style="color:#f92672">*</span>np<span style="color:#f92672">.</span>log2(<span style="color:#ae81ff">68</span><span style="color:#f92672">/</span><span style="color:#ae81ff">126</span>)
@@ -468,19 +442,15 @@ Right Node Randomness: 0.9682452182690404
 <p>In the case of regression, the most common split measure used is just the weighted variance of the nodes. It makes sense too: We want minimum variation in the nodes after the split.</p>
 <p>
   
-    <img src="/images/dtsplits/13.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/dtsplits/13.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>We want a regression task for this. So, we have the data for 50 startups, and we want to predict Profit.</p>
 <p>
   
-    <img src="/images/dtsplits/14.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/dtsplits/14.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <h3 id="categorical-variable-splits-2">Categorical Variable Splits</h3>
@@ -488,10 +458,8 @@ Right Node Randomness: 0.9682452182690404
 <p>If we split by State=FL, our tree will look like below:</p>
 <p>
   
-    <img src="/images/dtsplits/15.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/dtsplits/15.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Overall Variance then is just the weighted sums of individual variances:</p>
@@ -506,8 +474,6 @@ Right Node Randomness: 0.9682452182690404
       <img src="/images/dtsplits/16.png" alt="Splitting on R&amp;amp;D">
   
 
-
-
 <em>Splitting on R&amp;D</em></p>
 <p>Just by looking at this, we can see it is better than our previous split. So, we find the overall variance in this case:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">overall_variance <span style="color:#f92672">=</span> <span style="color:#ae81ff">14</span><span style="color:#f92672">/</span>(<span style="color:#ae81ff">14</span><span style="color:#f92672">+</span><span style="color:#ae81ff">36</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">419828105</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">36</span><span style="color:#f92672">/</span>(<span style="color:#ae81ff">14</span><span style="color:#f92672">+</span><span style="color:#ae81ff">36</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">774641406</span>
@@ -518,10 +484,8 @@ Right Node Randomness: 0.9682452182690404
 <h2 id="continue-learning">Continue Learning</h2>
 <p>
   
-    <img src="/images/dtsplits/17.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/dtsplits/17.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>If you want to learn more about Data Science, I would like to call out this <a href="https://www.coursera.org/learn/machine-learning?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;siteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0"><em><strong>excellent course</strong></em></a> by Andrew Ng. This was the one that got me started. Do check it out.</p>

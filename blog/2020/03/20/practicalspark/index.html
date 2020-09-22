@@ -273,8 +273,6 @@
       <img src="/images/practicalspark/0.png" alt="Joining Dataframes">
   
 
-
-
 </p>
 <p>The syntax of joins in Spark is pretty similar to pandas:</p>
 <pre><code>df3 = df1.join(df2, df1.column == df2.column,how='left')
@@ -292,8 +290,6 @@ df3 = df1.join(broadcast(df2), df1.column == df2.column,how='left')
   
       <img src="/images/practicalspark/1.png" alt="Set the Parallelism and worker nodes based on your task size">
   
-
-
 
 <em>Set the Parallelism and worker nodes based on your task size</em></p>
 <p>What also made my life difficult while I was starting work with Spark was the way the Spark cluster needs to be configured. Your spark cluster might need a lot of custom configuration ad tuning based on the job you want to run.</p>
@@ -327,8 +323,6 @@ sqlContext.setConf( &quot;spark.default.parallelism&quot;, 800)
   
       <img src="/images/practicalspark/2.png" alt="Keeping the workers happy by having them handle an equal amount of data">
   
-
-
 
 <em>Keeping the workers happy by having them handle an equal amount of data</em></p>
 <p>You might want to repartition your data if you feel your data has been skewed while working with all the transformations and joins. The simplest way to do it is by using:</p>

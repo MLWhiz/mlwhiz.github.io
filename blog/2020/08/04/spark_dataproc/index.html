@@ -265,8 +265,6 @@
       <img src="/images/spark_dataproc/0.png" alt="&lt;a href=&#34;https://marketing.thepoweroftwo.solutions/acton/attachment/42621/f-0f867d92-c1d0-4112-afef-26f9cbb51499/1/-/-/-/-/NVIDIA%20&amp;amp;%20Google%20Cloud%20Dataproc%20ebook%20July2020.pdf&#34;&gt;Source&lt;/a&gt;">
   
 
-
-
 </p>
 <p>And that is where Spark 3.0 comes. It provides us with a way to add NVIDIA GPUs to our Spark cluster nodes. The work done by these nodes can now be parallelized using both the CPU+GPU using the software platform for GPU computing, <a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientist-on-gpu-d9a6c7759c7f?source=post_stats_page---------------------------">RAPIDS</a>.</p>
 <blockquote>
@@ -283,8 +281,6 @@
       <img src="/images/spark_dataproc/1.png" alt="Create a New Project">
   
 
-
-
 <em>Create a New Project</em></p>
 <hr>
 <h3 id="2-enable-the-apis-in-the-gcp-project">2. Enable the APIs in the GCP Project</h3>
@@ -293,8 +289,6 @@
   
       <img src="/images/spark_dataproc/2.png" alt="Activate &lt;strong&gt;Cloud Shell&lt;/strong&gt; for putting your commands">
   
-
-
 
 </p>
 <p>After this, we will need to run some commands to set up our project in the cloud shell. We start by enabling dataproc services within your project. Enable the Compute and Dataproc APIs to access Dataproc, and enable the Storage API as you’ll need a Google Cloud Storage bucket to house your data. We also set our default region. This may take several minutes:</p>
@@ -353,8 +347,6 @@ cores=8#spark:spark.task.cpus=1#spark:spark.yarn.unmanagedAM.enabled=false&quot;
       <img src="/images/spark_dataproc/3.png" alt="&lt;strong&gt;Cluster Architecture&lt;/strong&gt;">
   
 
-
-
 </p>
 <p>Our resulting Dataproc cluster has:</p>
 <ul>
@@ -398,16 +390,12 @@ cores=8#spark:spark.task.cpus=1#spark:spark.yarn.unmanagedAM.enabled=false&quot;
       <img src="/images/spark_dataproc/4.png" alt="Dataproc Clusters Page">
   
 
-
-
 </p>
 <p>Now, you would be able to open a web interface(Jupyter/JupyterLab/Zeppelin) if you click on the sparktestcluster and then “Web Interfaces”.</p>
 <p>
   
       <img src="/images/spark_dataproc/5.png" alt="Web Interface Page for our Cluster">
   
-
-
 
 </p>
 <p>After opening up your Jupyter Pyspark Notebook, here is some example code for you to run if you are following along with this tutorial. In this code, we load a small dataset, and we see that the df.count() function ran in 252ms which is indeed fast for Spark, but I would do a much detailed benchmarking post later so keep tuned.</p>
@@ -424,8 +412,6 @@ df.count()
       <img src="/images/spark_dataproc/6.png" alt="Yes Our &lt;strong&gt;Jupyter Notebook&lt;/strong&gt; Works">
   
 
-
-
 </p>
 <h3 id="6-access-the-spark-ui">6. Access the Spark UI</h3>
 <p>That is all well and done, but one major problem I faced was that I was not able to access the Spark UI using the link provided in the notebook. I found out that there were two ways to access the Spark UI for debugging purposes:</p>
@@ -436,16 +422,12 @@ df.count()
       <img src="/images/spark_dataproc/7.png" alt="Click on &lt;strong&gt;Application Master&lt;/strong&gt; in &lt;strong&gt;Tracking UI&lt;/strong&gt; Column to get Spark UI">
   
 
-
-
 </p>
 <p>And, you will arrive at the Spark UI Page:</p>
 <p>
   
       <img src="/images/spark_dataproc/8.png" alt="Yes! We get the Spark UI.">
   
-
-
 
 </p>
 <p>B. <strong>Using the SSH Tunneling option:</strong></p>
@@ -454,8 +436,6 @@ df.count()
   
       <img src="/images/spark_dataproc/9.png" alt="Spark Test Cluster Web Interface using SSH">
   
-
-
 
 </p>
 <p>This will give you two commands that you want to run on your <strong>local machine</strong> and not on Cloud shell. But before running them, you need to install google cloud SDK to your machine and set it up for your current project:</p>

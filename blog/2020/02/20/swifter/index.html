@@ -276,8 +276,6 @@ pdf = pd.DataFrame(np.random.randint(0,100,size=(25000000, 4)),columns=list('abc
       <img src="/images/swifter/0.png" alt="Data Sample">
   
 
-
-
 <em>Data Sample</em></p>
 <hr>
 <h2 id="parallelization-using-just-a-single-change">Parallelization using just a single change</h2>
@@ -285,8 +283,6 @@ pdf = pd.DataFrame(np.random.randint(0,100,size=(25000000, 4)),columns=list('abc
   
       <img src="/images/swifter/1.png" alt="Relax and Parallelize !!!">
   
-
-
 
 <em>Relax and Parallelize !!!</em></p>
 <p>Let’s set up a simple experiment.</p>
@@ -303,10 +299,8 @@ pdf['e'] = pdf.apply(lambda x : func(x['a'],x['b']),axis=1)
 </code></pre>
 <p>
   
-    <img src="/images/swifter/2.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/swifter/2.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>The above code takes ~10 Minutes to run. And we are just doing a simple calculation on 2 columns here.</p>
@@ -322,10 +316,8 @@ pdf['e'] = pdf.**swifter**.apply(lambda x : func(x['a'],x['b']),axis=1)
 <h3 id="so-does-this-work"><em><strong>So, Does this work?</strong></em></h3>
 <p>
   
-    <img src="/images/swifter/3.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/swifter/3.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Yes. It does. We get a 2x improvement in run time vs. just using the function as it is.</p>
@@ -335,8 +327,6 @@ pdf['e'] = pdf.**swifter**.apply(lambda x : func(x['a'],x['b']),axis=1)
       <img src="/images/swifter/4.png" alt="&lt;a href=&#34;https://github.com/jmcarpenter2/swifter&#34;&gt;Source&lt;/a&gt;: How increasing data size effects performances for Dask, Pandas and Swifter?">
   
 
-
-
 <em><a href="https://github.com/jmcarpenter2/swifter">Source</a>: How increasing data size effects performances for Dask, Pandas and Swifter?</em></p>
 <p><em><strong>Swifter chooses the best way to implement the apply possible for your function by either vectorizing your function or using Dask in the backend to parallelize your function or by maybe using simple pandas apply if the dataset is small.</strong></em></p>
 <p>In this particular case, Swifter is using Dask to parallelize our apply functions with the default value of npartitions = cpu_count()*2.</p>
@@ -345,10 +335,8 @@ pdf['e'] = pdf.**swifter**.apply(lambda x : func(x['a'],x['b']),axis=1)
 <p>For example: Below I set n_partitions=12 and we get a 2x speedup again. Here reducing our number of partitions results in smaller run times as the data movement cost between the partitions is high.</p>
 <p>
   
-    <img src="/images/swifter/5.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/swifter/5.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <hr>

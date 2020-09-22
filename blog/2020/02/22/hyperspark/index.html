@@ -271,8 +271,6 @@
       <img src="/images/hyperspark/0.png" alt="Starting with a 3×3 grid of parameters, we can see that Random search ends up doing more searches for the important parameter.">
   
 
-
-
 <em>Starting with a 3×3 grid of parameters, we can see that Random search ends up doing more searches for the important parameter.</em></p>
 <p>The figure above gives a definitive answer as to why Random search is better.</p>
 <p>Let’s say we have to tune two hyperparameters for our Machine Learning model. One is not important, and one is very important. In a grid search, we look at three settings for the important parameter. While in a randomized search, we search through 9 settings for the important parameter. And the amount of time we spent is the same.</p>
@@ -295,10 +293,8 @@ train_sp = train_sp.toDF(*['c0', 'c1', 'c2', 'c3', 'target'])
 <p>The train_sp spark dataset looks like:</p>
 <p>
   
-    <img src="/images/hyperspark/1.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/hyperspark/1.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <hr>
@@ -307,8 +303,6 @@ train_sp = train_sp.toDF(*['c0', 'c1', 'c2', 'c3', 'target'])
   
       <img src="/images/hyperspark/2.png" alt="Photo by &lt;a href=&#34;https://unsplash.com/@frankvex?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Frank Vessia&lt;/a&gt; on &lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Unsplash&lt;/a&gt;">
   
-
-
 
 <em>Photo by <a href="https://unsplash.com/@frankvex?utm_source=medium&amp;utm_medium=referral">Frank Vessia</a> on <a href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral">Unsplash</a></em></p>
 <p>So now we have got our training dataset in Spark. And we want to run multiple models on this DataFrame.</p>
@@ -331,8 +325,6 @@ replicated_train_df = train_sp.crossJoin(replication_df)
   
       <img src="/images/hyperspark/3.png" alt="Every row is replicated 100 times with different replication_id">
   
-
-
 
 </p>
 <p>We also define a function that takes as input a pandas dataframe, gets random hyperparameters using the python random module, runs a model on data(Here I am training a scikit model, but you can replace it with any model like XGBoost or Lightgbm as well) and returns the result in the form of a Pandas Dataframe. Do take a look at the function and the comments.</p>
@@ -375,8 +367,6 @@ outSchema <span style="color:#f92672">=</span> StructType([StructField(<span sty
   
       <img src="/images/hyperspark/4.png" alt="Results of our Hyperparameter search">
   
-
-
 
 </p>
 <p>For this toy example, the accuracy results may look pretty close to one another, but they will differ in the case of noisy real-world datasets. Since all of these 100 models run in parallel on different nodes, we can save a lot of time when doing random hyperparameter search.</p>

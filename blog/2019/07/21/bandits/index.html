@@ -261,10 +261,8 @@
 <p>You have to operate these slot machines one by one. How do you come up with a strategy to maximize your outcome from these slot machines in minimum time.</p>
 <p>
   
-    <img src="/images/bandits/2.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/bandits/2.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>You will most probably start by trying out some machines.</p>
@@ -294,10 +292,8 @@
 <h2 id="problem-statement">Problem Statement:</h2>
 <p>
   
-    <img src="/images/bandits/3.jpg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/bandits/3.jpg" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>The problem we have is that we have different assets which we want to show on our awesome website but we really don’t know which one to show.</p>
@@ -309,10 +305,8 @@
 <p>Before we delve down into the algorithm we will use to solve this, let us revisit the Bayes theorem.</p>
 <p>
   
-    <img src="/images/bandits/4.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/bandits/4.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Just remember that Bayes theorem says that Posterior ~ likelihood*Prior</p>
@@ -321,19 +315,15 @@
 <p>The <strong>beta distribution</strong> is a continuous probability distribution defined on the interval [0, 1] parametrized by two positive shape parameters, denoted by <em>α</em> and <em>β</em>.The PDF of the beta distribution is:</p>
 <p>
   
-    <img src="/images/bandits/5.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/bandits/5.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>And, the pdf looks like below for different values of <em>α</em> and <em>β</em>:</p>
 <p>
   
-    <img src="/images/bandits/6.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/bandits/6.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p><em><strong>The beta distribution is frequently applied to model the behavior of probabilities as it lies in the range [0,1]. The beta distribution is a suitable model for the random behavior of percentages and proportions too.</strong></em></p>
@@ -343,10 +333,8 @@
 <p>We have three assets.</p>
 <p>
   
-    <img src="/images/bandits/7.jpg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/bandits/7.jpg" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>For the sake of this problem, let&rsquo;s assume that we know the click probabilities of these assets also.</p>
@@ -379,10 +367,8 @@
 <p>The reason we took beta distribution to model our probabilities is because of its great mathematical properties.</p>
 <p>
   
-    <img src="/images/bandits/8.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/bandits/8.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>If the prior is f(α,β), then the posterior distribution is again beta, given by f(α+#success, β+#failures)</p>
@@ -391,10 +377,8 @@
 <h2 id="let-us-code">Let us Code</h2>
 <p>
   
-    <img src="/images/bandits/9.jpg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/bandits/9.jpg" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>We have every bit of knowledge we require for writing some code now. I will be using pretty much simple and standard Python functionality to do this but there exist tools like pyMC and such for this sort of problem formulations.</p>
@@ -461,10 +445,8 @@ data <span style="color:#f92672">=</span> [(<span style="color:#e6db74">&#34;_&#
 <p><em><strong>At the start, we have a uniform prior.</strong></em> As we go through with the runs we see that the “red” asset’s posterior distribution converges towards a higher mean and as such a higher probability of pick. But remember that doesn’t mean that the green asset and blue asset are not going to be picked ever.</p>
 <p>
   
-    <img src="/images/bandits/10.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/bandits/10.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Let us also see how many times each asset is picked in the 50 runs we did.</p>
@@ -473,10 +455,8 @@ data <span style="color:#f92672">=</span> [(<span style="color:#e6db74">&#34;_&#
 <p>We can see that although we are mostly picking R we still end up sometimes picking B(Pick 45) and G(Pick 44) in the later runs too. Overall we can see that in the first few runs, we are focussing on exploration and as we go towards later runs we focus on exploitation.</p>
 <p>
   
-    <img src="/images/bandits/11.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/bandits/11.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <h2 id="end-notes">End Notes:</h2>

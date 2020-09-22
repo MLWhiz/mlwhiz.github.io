@@ -270,10 +270,8 @@
 <h3 id="1-curse-of-dimensionality--overfitting">1. Curse of dimensionality — Overfitting</h3>
 <p>
   
-    <img src="/images/fs/2.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/fs/2.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>If we have more columns in the data than the number of rows, we will be able to fit our training data perfectly, but that won’t generalize to the new samples. And thus we learn absolutely nothing.</p>
@@ -286,10 +284,8 @@
 <h2 id="so-what-do-we-do">So What do we do?</h2>
 <p>
   
-    <img src="/images/fs/3.jpg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/fs/3.jpg" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>We select only useful features.</p>
@@ -319,20 +315,16 @@
 <p>Our dataset(X) looks like below and has 223 columns.</p>
 <p>
   
-    <img src="/images/fs/12.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/fs/12.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <hr>
 <h2 id="1-pearson-correlation">1. Pearson Correlation</h2>
 <p>
   
-    <img src="/images/fs/4.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/fs/4.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>This is a filter-based method.</p>
@@ -359,10 +351,8 @@ cor_support, cor_feature <span style="color:#f92672">=</span> cor_selector(X, y,
 <p>In this method, we calculate the chi-square metric between the target and the numerical variable and only select the variable with the maximum chi-squared values.</p>
 <p>
   
-    <img src="/images/fs/5.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/fs/5.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Let us create a small example of how we calculate the chi-squared statistic for a sample.</p>
@@ -371,8 +361,6 @@ cor_support, cor_feature <span style="color:#f92672">=</span> cor_selector(X, y,
   
       <img src="/images/fs/6.png" alt="Observed and Expected Counts">
   
-
-
 
 </p>
 <p>We calculate the chi-squared value:</p>
@@ -383,10 +371,8 @@ cor_support, cor_feature <span style="color:#f92672">=</span> cor_selector(X, y,
 <p>Then we could just use the below formula to sum over all the 4 cells:</p>
 <p>
   
-    <img src="/images/fs/7.jpg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/fs/7.jpg" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>I won’t show it here, but the chi-squared statistic also works in a hand-wavy way with non-negative numerical and categorical features.</p>
@@ -404,10 +390,8 @@ chi_feature <span style="color:#f92672">=</span> X<span style="color:#f92672">.<
 <h2 id="3-recursive-feature-elimination">3. Recursive Feature Elimination</h2>
 <p>
   
-    <img src="/images/fs/8.jpg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/fs/8.jpg" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>This is a wrapper based method. As I said before, wrapper methods consider the selection of a set of features as a search problem.</p>
@@ -427,10 +411,8 @@ rfe_feature <span style="color:#f92672">=</span> X<span style="color:#f92672">.<
 <h2 id="4-lasso-selectfrommodel">4. Lasso: SelectFromModel</h2>
 <p>
   
-    <img src="/images/fs/9.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/fs/9.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>This is an Embedded method. As said before, Embedded methods use algorithms that have built-in feature selection methods.</p>
@@ -449,10 +431,8 @@ embeded_lr_feature <span style="color:#f92672">=</span> X<span style="color:#f92
 <h2 id="5-tree-based-selectfrommodel">5. Tree-based: SelectFromModel</h2>
 <p>
   
-    <img src="/images/fs/10.jpeg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/fs/10.jpeg" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>This is an Embedded method. As said before, Embedded methods use algorithms that have built-in feature selection methods.</p>
@@ -484,10 +464,8 @@ embeded_lgb_feature <span style="color:#f92672">=</span> X<span style="color:#f9
 <h2 id="bonus">Bonus</h2>
 <p>
   
-    <img src="/images/fs/11.jpeg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/fs/11.jpeg" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p><em><strong>Why use one, when we can have all?</strong></em></p>
@@ -503,10 +481,8 @@ feature_selection_df <span style="color:#f92672">=</span> feature_selection_df<s
 feature_selection_df<span style="color:#f92672">.</span>index <span style="color:#f92672">=</span> range(<span style="color:#ae81ff">1</span>, len(feature_selection_df)<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)
 </code></pre></div><p>
   
-    <img src="/images/fs/13.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/fs/13.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>We check if we get a feature based on all the methods. In this case, as we can see Reactions and LongPassing are excellent attributes to have in a high rated player. And as expected Ballcontrol and Finishing occupy the top spot too.</p>

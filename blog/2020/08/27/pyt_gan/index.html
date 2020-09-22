@@ -292,8 +292,6 @@
       <img src="/images/pyt_gan/1.png" alt="&lt;a href=&#34;https://arxiv.org/pdf/1511.06434.pdf&#34;&gt;Source&lt;/a&gt;">
   
 
-
-
 </p>
 <p>Though it might look a little bit confusing, essentially you can think of a generator neural network as a black box which takes as input a 100 dimension normally generated vector of numbers and gives us an image:</p>
 <p>
@@ -301,24 +299,18 @@
       <img src="/images/pyt_gan/2.png" alt="Generator as a BlackBox">
   
 
-
-
 </p>
 <p>So how do we create such an architecture? Below, we use a dense layer of size 4x4x1024 to create a dense vector out of the 100-d vector. We then reshape the dense vector in the shape of an image of 4×4 with 1024 filters, as shown in the following figure:</p>
 <p>
   
-    <img src="/images/pyt_gan/3.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pyt_gan/3.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>
   
       <img src="/images/pyt_gan/4.png" alt="Generator Architecture">
   
-
-
 
 </p>
 <p>Note that we don’t have to worry about any weights right now as the network itself will learn those during training.</p>
@@ -331,8 +323,6 @@
       <img src="/images/pyt_gan/5.png" alt="Upsampling a 2x2 image to 4x4 image">
   
 
-
-
 </p>
 <p>Some of you may already know that unpooling is commonly used for upsampling input feature maps in convolutional neural networks (CNN). So why don’t we use unpooling here?</p>
 <p>The reason comes down to the fact that unpooling does not involve any learning. However, transposed convolution is learnable, so it’s preferred. Later in the article, we’ll see how the parameters can be learned by the generator.</p>
@@ -343,8 +333,6 @@
   
       <img src="/images/pyt_gan/6.png" alt="Discriminator as a Blackbox">
   
-
-
 
 </p>
 <p>Every image convolutional neural network works by taking an image as input, and predicting if it is real or fake using a sequence of convolutional layers.</p>
@@ -390,8 +378,6 @@ plt<span style="color:#f92672">.</span>imshow(np<span style="color:#f92672">.</s
     <figcaption>So Many different Characters — Can our Generator understand the patterns?</figcaption>
   </figure>
 
-
-
 </p>
 <hr>
 <h2 id="implementation-of-dcgan">Implementation of DCGAN</h2>
@@ -402,18 +388,14 @@ plt<span style="color:#f92672">.</span>imshow(np<span style="color:#f92672">.</s
 <p>We use a normal distribution</p>
 <p>
   
-    <img src="/images/pyt_gan/8.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pyt_gan/8.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>
   
-    <img src="/images/pyt_gan/9.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pyt_gan/9.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>to generate the noise vector:</p>
@@ -486,10 +468,8 @@ print(netG)
 <p>We can see the final generator model:</p>
 <p>
   
-    <img src="/images/pyt_gan/10.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pyt_gan/10.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <hr>
@@ -539,10 +519,8 @@ print(netD)
 <p>Here is the architecture of the discriminator:</p>
 <p>
   
-    <img src="/images/pyt_gan/11.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pyt_gan/11.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <hr>
@@ -725,8 +703,6 @@ batch_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">128<
       <img src="/images/pyt_gan/12.png" alt="ALL THESE IMAGES ARE FAKE">
   
 
-
-
 <em>ALL THESE IMAGES ARE FAKE</em></p>
 <hr>
 <h2 id="1-loss-over-the-training-period">1. Loss over the training period</h2>
@@ -745,8 +721,6 @@ plt.show()
       <img src="/images/pyt_gan/13.png" alt="Generator vs. Discriminator Loss">
   
 
-
-
 </p>
 <hr>
 <h2 id="2-image-animation-at-every-250th-iteration-in-jupyter-notebook">2. Image Animation at every 250th Iteration in Jupyter Notebook</h2>
@@ -762,8 +736,6 @@ ani = animation.ArtistAnimation(fig, ims, interval=1000, repeat_delay=1000, blit
       <img src="/images/pyt_gan/14.png" alt="You can check out the Progression of Training">
   
 
-
-
 </p>
 <p>You can choose to save an animation object as a gif as well if you want to send them to some friends.</p>
 <pre><code>ani.save('animation.gif', writer='imagemagick',fps=5)
@@ -773,8 +745,6 @@ Image(url='animation.gif')
   
       <img src="/images/pyt_gan/15.png" alt="Or Save the Output as a GIF Image as well.">
   
-
-
 
 </p>
 <hr>
@@ -806,10 +776,8 @@ plt.show()
 <p>Given below is the result of the GAN at different time steps:</p>
 <p>
   
-    <img src="/images/pyt_gan/16.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/pyt_gan/16.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <hr>

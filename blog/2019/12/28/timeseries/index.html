@@ -262,10 +262,8 @@
 <h2 id="dataset">Dataset</h2>
 <p>
   
-    <img src="https://cdn-images-1.medium.com/max/2000/0*gLUSm0_14D8A3NvR.jpg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="https://cdn-images-1.medium.com/max/2000/0*gLUSm0_14D8A3NvR.jpg" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Kaggle master Kazanova along with some of his friends released a <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">“How to win a data science competition”</a> Coursera course. The Course involved a final project which itself was a time series prediction problem.</p>
@@ -274,10 +272,8 @@
 <p>Here is how the data looks like:</p>
 <p>
   
-    <img src="https://cdn-images-1.medium.com/max/2072/1*hN1eF-iQzfTp6EGg3VBAlA.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="https://cdn-images-1.medium.com/max/2072/1*hN1eF-iQzfTp6EGg3VBAlA.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>We are given the data at a daily level, and we want to build a model which predicts total sales for every product and store in the next month.</p>
@@ -307,10 +303,8 @@ grid <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>
 grid<span style="color:#f92672">.</span>head()
 </code></pre></div><p>
   
-    <img src="https://cdn-images-1.medium.com/max/2000/1*yDLbk-d9EbYV7EG38MXYeg.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="https://cdn-images-1.medium.com/max/2000/1*yDLbk-d9EbYV7EG38MXYeg.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>The grid dataFrame contains all the shop, items and month combinations.</p>
@@ -324,10 +318,8 @@ sales_m <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</sp
 sales_m <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>merge(sales_m,items,on<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;item_id&#39;</span>],how<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;left&#39;</span>)
 </code></pre></div><p>
   
-    <img src="https://cdn-images-1.medium.com/max/3364/1*V_SzSZkoyGT7ce-FtPlLQw.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="https://cdn-images-1.medium.com/max/3364/1*V_SzSZkoyGT7ce-FtPlLQw.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <hr>
@@ -350,8 +342,6 @@ aggregationlist <span style="color:#f92672">=</span> [(<span style="color:#e6db7
   
       <img src="https://cdn-images-1.medium.com/max/2804/1*TNJdVv0Bka75S5QKHV0D-w.png" alt="We create the highlighted target encodings">
   
-
-
 
 </p>
 <p>We could also have used <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-feature-extraction-b4c157e96631">featuretools</a> for this. <strong>Featuretools</strong> is a framework to perform automated feature engineering. It excels at transforming temporal and relational datasets into feature matrices for machine learning.</p>
@@ -412,10 +402,8 @@ Y_cv <span style="color:#f92672">=</span> X_cv[<span style="color:#e6db74">&#39;
 </code></pre></div><h3 id="4-create-baseline">4. Create Baseline</h3>
 <p>
   
-    <img src="https://cdn-images-1.medium.com/max/2000/0*Ujr-irYHlXd0SAGP.jpg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="https://cdn-images-1.medium.com/max/2000/0*Ujr-irYHlXd0SAGP.jpg" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Before we proceed with modelling steps, lets check the RMSE of a naive model, as we want to <a href="https://towardsdatascience.com/take-your-machine-learning-models-to-production-with-these-5-simple-steps-35aa55e3a43c">have an RMSE to compare</a> to. We assume that we are going to predict the last month sales as current month sale for our baseline model. We can quantify the performance of our model using this baseline RMSE.</p>
@@ -459,10 +447,8 @@ model<span style="color:#f92672">.</span>fit(
     early_stopping_rounds <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>)
 </code></pre></div><p>
   
-    <img src="https://cdn-images-1.medium.com/max/2288/1*uK9IjFKLEWPGbbeDLc2hfg.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="https://cdn-images-1.medium.com/max/2288/1*uK9IjFKLEWPGbbeDLc2hfg.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>After running this, we can see RMSE in ranges of <em><strong>0.93</strong></em> on the CV set. And that is pretty impressive based on our baseline validation RMSE of <em><strong>1.13</strong></em>. And so we work on deploying this model as part of our <a href="https://towardsdatascience.com/take-your-machine-learning-models-to-production-with-these-5-simple-steps-35aa55e3a43c">continuous integration</a> effort.</p>
@@ -476,18 +462,14 @@ px<span style="color:#f92672">.</span>bar(feature_importances,x<span style="colo
       <img src="https://cdn-images-1.medium.com/max/3716/1*TZ_BawTl6O1kMuTUTMYoHw.png" alt="Feature importances">
   
 
-
-
 </p>
 <hr>
 <h2 id="conclusion">Conclusion</h2>
 <p>In this post, we talked about how we can use trees for even time series modelling. The purpose was not to get perfect scores on the kaggle leaderboard but to gain an understanding of how such models work.</p>
 <p>
   
-    <img src="https://cdn-images-1.medium.com/max/3004/0*vsyzeBzrG4q4Z33z.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="https://cdn-images-1.medium.com/max/3004/0*vsyzeBzrG4q4Z33z.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>When I took part in this competition as part of the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">course</a>, a couple of years back, using trees I reached near the top of the leaderboard.</p>

@@ -274,19 +274,15 @@
 <p>This is how the dataset looks:</p>
 <p>
   
-    <img src="/images/interpret/0.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/interpret/0.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>And given below is the distribution for different categories.</p>
 <p>
   
-    <img src="/images/interpret/1.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/interpret/1.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>This is a balanced dataset and thus suited well for our purpose of understanding.</p>
@@ -297,8 +293,6 @@
   
       <img src="/images/interpret/2.png" alt="&lt;a href=&#34;https://christophm.github.io/interpretable-ml-book/terminology.html&#34;&gt;Interpretable ML Book&lt;/a&gt;">
   
-
-
 
 </p>
 <p>Let us first try to use a simple scikit-learn pipeline to build our text classifier which we will try to interpret later. <em><strong>In this pipeline, I will be using a very simple count vectorizer along with Logistic regression.</strong></em></p>
@@ -331,10 +325,8 @@ pipe<span style="color:#f92672">.</span>fit(X_train<span style="color:#f92672">.
 print_report(pipe)
 </code></pre></div><p>
   
-    <img src="/images/interpret/3.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/interpret/3.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>The above is a pretty simple Logistic regression model and it performs pretty well. <em><strong>We can check out its weights using the below function:</strong></em></p>
@@ -371,10 +363,8 @@ Most Negative Coefficients:
 eli5<span style="color:#f92672">.</span>show_weights(clf, vec<span style="color:#f92672">=</span>vec, top<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)
 </code></pre></div><p>
   
-    <img src="/images/interpret/4.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/interpret/4.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Now as you can see the weights value for Python is the same as from the values we got from the function we wrote manually. And it is much prettier and wholesome to explore.</p>
@@ -390,18 +380,14 @@ misclassified_examples <span style="color:#f92672">=</span> sodata[(sodata[<span
 eli5<span style="color:#f92672">.</span>show_prediction(clf, misclassified_examples[<span style="color:#e6db74">&#39;post&#39;</span>]<span style="color:#f92672">.</span>values[<span style="color:#ae81ff">1</span>], vec<span style="color:#f92672">=</span>vec)
 </code></pre></div><p>
   
-    <img src="/images/interpret/5.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/interpret/5.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>
   
-    <img src="/images/interpret/6.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/interpret/6.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>In the above example, the classifier predicts Java with a low probability. And we can examine a lot of things going on in the above example to improve our model. For example:</p>
@@ -424,10 +410,8 @@ eli5<span style="color:#f92672">.</span>show_prediction(clf, misclassified_examp
 <p>This is all good and fine but*** what if models that we use don’t provide weights for the individual features like LSTM?*** It is with these models that explainability can play a very important role.</p>
 <p>
   
-    <img src="/images/interpret/7.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/interpret/7.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>To understand how to do this, we first create a TextCNN model on our data. <em>Not showing the model creation process in the interest of preserving space</em> but think of it as a series of preprocessing steps and then creating the deep learning model. If interested, you can check out the modelling steps in this <a href="https://www.kaggle.com/mlwhiz/interpreting-text-classification-models-with-eli5">Kaggle kernel</a>.</p>
@@ -453,10 +437,8 @@ te<span style="color:#f92672">.</span>fit(sodata[<span style="color:#e6db74">&#3
 te<span style="color:#f92672">.</span>show_prediction(target_names<span style="color:#f92672">=</span>list(encoder<span style="color:#f92672">.</span>classes_))
 </code></pre></div><p>
   
-    <img src="/images/interpret/8.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/interpret/8.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>This time it doesn’t get misclassified. You can see that the presence of keywords dict and list is what is influencing the decision of our classifier. One can try to see more examples to find more insights.</p>

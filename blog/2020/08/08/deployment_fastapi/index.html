@@ -297,10 +297,8 @@
 </ul>
 <p>
   
-    <img src="/images/deployment_fastapi/0.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/0.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <ul>
@@ -308,10 +306,8 @@
 </ul>
 <p>
   
-    <img src="/images/deployment_fastapi/1.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/1.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <ul>
@@ -319,10 +315,8 @@
 </ul>
 <p>
   
-    <img src="/images/deployment_fastapi/2.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/2.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <ul>
@@ -330,10 +324,8 @@
 </ul>
 <p>
   
-    <img src="/images/deployment_fastapi/3.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/3.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <ul>
@@ -341,10 +333,8 @@
 </ul>
 <p>
   
-    <img src="/images/deployment_fastapi/4.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/4.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <ul>
@@ -363,10 +353,8 @@ chmod 400 fastapi.pem
 ssh -i &quot;fastapi.pem&quot; ubuntu@&lt;Your Public DNS(IPv4) Address&gt;
 </code></pre><p>
   
-    <img src="/images/deployment_fastapi/5.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/5.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Now we have got our Amazon instance up and running. We can move on here to the real part of the post.</p>
@@ -382,8 +370,6 @@ ssh -i &quot;fastapi.pem&quot; ubuntu@&lt;Your Public DNS(IPv4) Address&gt;
       <img src="/images/deployment_fastapi/6.png" alt="dog_with_ball.jpg">
   
 
-
-
 </p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> base64
 
@@ -393,8 +379,6 @@ ssh -i &quot;fastapi.pem&quot; ubuntu@&lt;Your Public DNS(IPv4) Address&gt;
   
       <img src="/images/deployment_fastapi/7.png" alt="We can get a string representation of any image">
   
-
-
 
 </p>
 <p>Here I have got a string representation of a file named dog_with_ball.png on my laptop.</p>
@@ -413,10 +397,8 @@ ssh -i &quot;fastapi.pem&quot; ubuntu@&lt;Your Public DNS(IPv4) Address&gt;
 </code></pre></div><p>So does this function work? Let’s see for ourselves. We can use just the string to get back the image.</p>
 <p>
   
-    <img src="/images/deployment_fastapi/8.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/8.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>And we have our happy dog back again. Looks better than the string.</p>
@@ -515,10 +497,8 @@ model<span style="color:#f92672">.</span>eval()
 <p>You should see something like:</p>
 <p>
   
-    <img src="/images/deployment_fastapi/9.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/9.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>You can now try to access this API and see if it works using the requests module:</p>
@@ -533,10 +513,8 @@ response <span style="color:#f92672">=</span> requests<span style="color:#f92672
 data_dict <span style="color:#f92672">=</span> response<span style="color:#f92672">.</span>json()
 </code></pre></div><p>
   
-    <img src="/images/deployment_fastapi/10.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/10.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>And so we get our results using the API. This image contains a dog and a sports ball. We also have corner 1 (x1,y1) and corner 2 (x2,y2) coordinates of our bounding boxes.</p>
@@ -575,10 +553,8 @@ drawboundingbox(img, data_dict[<span style="color:#e6db74">&#39;boxes&#39;</span
 </code></pre></div><p>Here is the output:</p>
 <p>
   
-    <img src="/images/deployment_fastapi/11.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/11.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Here you will note that I got the image from the local file system, and that sort of can be considered as cheating as we don’t want to save every file that the user sends to us through a web UI. We should have been able to use the same base64string object that we also had to create this image. Right?</p>
@@ -588,10 +564,8 @@ drawboundingbox(img, data_dict['boxes'], data_dict['classes'])
 </code></pre>
 <p>
   
-    <img src="/images/deployment_fastapi/12.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/12.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>That looks great. We have our working FastAPI, and we also have our amazon instance. We can now move on to Deployment.</p>
@@ -634,10 +608,8 @@ RUN pip --no-cache-dir install -r requirements.txt
 <p><em><strong>How Docker works?:</strong></em> You can skip this section, but it will help to get some understanding of how docker works.</p>
 <p>
   
-    <img src="/images/deployment_fastapi/13.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/13.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>The dockerfile can be thought of something like a sh file,which contains commands to create a docker image that can be run in a container. One can think of a docker image as an environment where everything like Python and Python libraries is installed. A container is a unit which is just an isolated box in our system that uses a dockerimage. The advantage of using docker is that we can create multiple docker images and use them in multiple containers. For example, one image might contain python36, and another can contain python37. And we can spawn multiple containers in a single Linux server.</p>
@@ -662,10 +634,8 @@ RUN pip --no-cache-dir install -r requirements.txt
 <p>This downloads, copies and installs some files and libraries from tiangolo’s image and creates an image called myimage. This myimage has python37 and some python packages as specified by requirements.txt file.</p>
 <p>
   
-    <img src="/images/deployment_fastapi/14.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/14.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>We will then just need to start a container that runs this image. We can do this using:</p>
@@ -674,10 +644,8 @@ RUN pip --no-cache-dir install -r requirements.txt
 <p>This will create a container named mycontainer which runs our docker image myimage. The part 80:80 connects our docker container port 80 to our Linux machine port 80.</p>
 <p>
   
-    <img src="/images/deployment_fastapi/15.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/15.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>And actually that’s it. At this point, you should be able to open the below URL in your browser.</p>
@@ -686,10 +654,8 @@ URL: 18.237.28.174/docs
 </code></pre>
 <p>
   
-    <img src="/images/deployment_fastapi/16.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/16.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>And we can check our app programmatically using:</p>
@@ -704,10 +670,8 @@ data_dict <span style="color:#f92672">=</span> response<span style="color:#f9267
 
 </code></pre></div><p>
   
-    <img src="/images/deployment_fastapi/17.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/17.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <blockquote>
@@ -721,10 +685,8 @@ data_dict <span style="color:#f92672">=</span> response<span style="color:#f9267
 <pre><code>    sudo docker logs -f mycontainer
 </code></pre><p>
   
-    <img src="/images/deployment_fastapi/18.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/18.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <ul>
@@ -739,10 +701,8 @@ data_dict <span style="color:#f92672">=</span> response<span style="color:#f9267
     sudo docker image ls
 </code></pre><p>
   
-    <img src="/images/deployment_fastapi/19.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/19.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <ul>
@@ -765,10 +725,8 @@ data_dict <span style="color:#f92672">=</span> response<span style="color:#f9267
 <pre><code>    curl localhost
 </code></pre><p>
   
-    <img src="/images/deployment_fastapi/20.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/deployment_fastapi/20.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <ul>
@@ -781,8 +739,6 @@ data_dict <span style="color:#f92672">=</span> response<span style="color:#f9267
       <img src="/images/deployment_fastapi/21.png" alt="&lt;a href=&#34;http://dockerlabs.collabnix.com/docker/cheatsheet/&#34;&gt;Source&lt;/a&gt;">
   
 
-
-
 </p>
 <hr>
 <h2 id="4-an-end-to-end-app-with-ui">4. An End to End App with UI</h2>
@@ -793,8 +749,6 @@ data_dict <span style="color:#f92672">=</span> response<span style="color:#f9267
   
       <img src="/images/deployment_fastapi/22.png" alt="Project Architecture">
   
-
-
 
 <em>Project Architecture</em></p>
 <p>The most important problems we need to solve in our streamlit app are:</p>

@@ -263,10 +263,8 @@
         <div class="content mb-5">
           <p>
   
-    <img src="/images/multitextclass/main.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/multitextclass/main.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Have you ever thought about how toxic comments get flagged automatically on platforms like Quora or Reddit? Or how mail gets marked as spam? Or what decides which online ads are shown to you?</p>
@@ -288,19 +286,15 @@
 <p>So, our dataset mostly looks like this:</p>
 <p>
   
-    <img src="/images/multitextclass/0.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/multitextclass/0.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Task: We want to classify the top disease conditions based on the drug review.</p>
 <p>
   
-    <img src="/images/multitextclass/1.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/multitextclass/1.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <hr>
@@ -309,20 +303,16 @@
 <p>One way to achieve this goal is by using the one-hot encoding of word vectors, but this is not the right choice. Given a vast vocabulary, this representation would take a lot of space, and it cannot accurately express the similarity between different words, such as if we want to find the cosine similarity between numerical words x and y:</p>
 <p>
   
-    <img src="/images/multitextclass/2.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/multitextclass/2.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Given the structure of one-hot encoded vectors, the similarity is always going to be 0 between different words.</p>
 <p>Word2Vec overcomes the above difficulties by providing us with a fixed-length (usually much smaller than the vocabulary size) vector representation of words. It also captures the similarity and analogous relationships between different words.</p>
 <p>
   
-    <img src="/images/multitextclass/3.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/multitextclass/3.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Word2vec vectors of words are learned in such a way that they allow us to learn different analogies. This enables us to do algebraic manipulations on words that were not possible previously.</p>
@@ -387,10 +377,8 @@ lower=True, split=' ', char_level=False, oov_token=None, document_count=0, **kwa
 <p>Once fitted to the data, the tokenizer also keeps an index of words (a dictionary we can use to assign unique numbers to words), which can be accessed by tokenizer.word_index. The words in the indexed dictionary are ranked in order of frequency.</p>
 <p>
   
-    <img src="/images/multitextclass/4.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/multitextclass/4.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>So the whole code to use the tokenizer is as follows:</p>
@@ -408,10 +396,8 @@ test_X = tokenizer.texts_to_sequences(test_X)
 <p>For example:</p>
 <p>
   
-    <img src="/images/multitextclass/5.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/multitextclass/5.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <pre><code>train_X = pad_sequences(train_X, maxlen=maxlen)
@@ -456,10 +442,8 @@ embedding_matrix = load_glove(tokenizer.word_index)
 <p>Since we only want the embeddings of words that are in our word_index, we will create a matrix that just contains required embeddings using the word index from our tokenizer.</p>
 <p>
   
-    <img src="/images/multitextclass/6.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/multitextclass/6.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <hr>
@@ -469,10 +453,8 @@ embedding_matrix = load_glove(tokenizer.word_index)
 <p>Representation: The central concept of this idea is to see our documents as images. But how? Let’s say we have a sentence, and we have maxlen = 70 and embedding size = 300. We can create a matrix of numbers with the shape 70×300 to represent this sentence. Images also have a matrix where individual elements are pixel values. But instead of image pixels, the input to the task is sentences or documents represented as a matrix. Each row of the matrix corresponds to a one-word vector.</p>
 <p>
   
-    <img src="/images/multitextclass/7.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/multitextclass/7.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Convolution Idea: For images, we move our conv. filter both horizontally as well as vertically, but for text we fix kernel size to filter_size x embed_size, i.e. (3,300) we are just going to move vertically down the convolution looking at three words at once, since our filter size in this case is 3. This idea seems right since our convolution filter is not splitting word embedding; it gets to look at the full embedding of each word. Also, one can think of filter sizes as unigrams, bigrams, trigrams, etc. Since we are looking at a context window of 1, 2, 3, and 5 words respectively.</p>
@@ -506,19 +488,15 @@ def forward(self, x):
 <p>Long Short Term Memory networks (LSTM) are a subclass of RNN, specialized in remembering information for extended periods. Moreover, a bidirectional LSTM keeps the contextual information in both directions, which is pretty useful in text classification tasks (However, it won’t work for a time series prediction task as we don’t have visibility into the future in this case).</p>
 <p>
   
-    <img src="/images/multitextclass/8.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/multitextclass/8.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>For a simple explanation of a bidirectional RNN, think of an RNN cell as a black box taking as input a hidden state (a vector) and a word vector and giving out an output vector and the next hidden state. This box has some weights which need to be tuned using backpropagation of the losses. Also, the same cell is applied to all the words so that the weights are shared across the words in the sentence. This phenomenon is called weight-sharing.</p>
 <p>
   
-    <img src="/images/multitextclass/9.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/multitextclass/9.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Hidden state, Word vector -&gt;(RNN Cell) -&gt; Output Vector , Next Hidden state</p>
@@ -620,18 +598,14 @@ for epoch in range(n_epochs):
 <p>The training output looks like below:</p>
 <p>
   
-    <img src="/images/multitextclass/10.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/multitextclass/10.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>
   
-    <img src="/images/multitextclass/11.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/multitextclass/11.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <hr>
@@ -647,10 +621,8 @@ skplt.metrics.plot_confusion_matrix(
 <p>Below is the confusion matrix for the results of the BiLSTM model. We can see that our model does reasonably well, with an 87% accuracy on the validation dataset.</p>
 <p>
   
-    <img src="/images/multitextclass/12.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/multitextclass/12.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>What’s interesting is that even at points where the model performs poorly, it is quite understandable. For example, the model gets confused between weight loss and obesity, or between depression and anxiety, or between depression and bipolar disorder. I am not an expert, but these diseases do feel quite similar.</p>

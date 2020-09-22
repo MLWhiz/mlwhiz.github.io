@@ -276,19 +276,15 @@
 <p>Since we want to understand how it works and work with it, I would suggest that you use Spark on Databricks <a href="https://databricks.com/try-databricks?utm_source=databricks&amp;utm_medium=homev2tiletest"><strong>here</strong></a> online with the community edition. Don’t worry, it is free, albeit fewer resources, but that works for us right now for learning purposes.</p>
 <p>
   
-    <img src="/images/sparkcolumns/0.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/sparkcolumns/0.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Once you register and login will be presented with the following screen.</p>
 <p>
   
-    <img src="/images/sparkcolumns/1.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/sparkcolumns/1.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>You can start a new notebook here.</p>
@@ -299,10 +295,8 @@
 </code></pre>
 <p>
   
-    <img src="/images/sparkcolumns/2.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/sparkcolumns/2.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>This means that we are set up with a notebook where we can run Spark.</p>
@@ -312,10 +306,8 @@
 <p>If you want to upload this data or any data, you can click on the Data tab in the left and then Add Data by using the GUI provided.</p>
 <p>
   
-    <img src="/images/sparkcolumns/3.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/sparkcolumns/3.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>We can then load the data using the following commands:</p>
@@ -328,10 +320,8 @@ ratings = ratings.toDF(*['user_id', 'movie_id', 'rating', 'unix_timestamp'])
 </code></pre>
 <p>
   
-    <img src="/images/sparkcolumns/4.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/sparkcolumns/4.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Ok, so now we are set up to begin the part we are interested in finally. How to create a new column in PySpark Dataframe?</p>
@@ -341,8 +331,6 @@ ratings = ratings.toDF(*['user_id', 'movie_id', 'rating', 'unix_timestamp'])
   
       <img src="/images/sparkcolumns/5.png" alt="Photo by &lt;a href=&#34;https://unsplash.com/@andrewjamesphoto?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Andrew James&lt;/a&gt; on &lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Unsplash&lt;/a&gt;">
   
-
-
 
 </p>
 <p>The most pysparkish way to create a new column in a PySpark DataFrame is by using built-in functions. This is the most performant programmatical way to create a new column, so this is the first place I go whenever I want to do some column manipulation.</p>
@@ -356,10 +344,8 @@ ratings_with_scale10.show()
 </code></pre>
 <p>
   
-    <img src="/images/sparkcolumns/6.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/sparkcolumns/6.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>We can also use math functions like F.exp function:</p>
@@ -369,10 +355,8 @@ ratings_with_exp.show()
 </code></pre>
 <p>
   
-    <img src="/images/sparkcolumns/7.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/sparkcolumns/7.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>There are a lot of other functions provided in this module, which are enough for most simple use cases. You can check out the functions list <a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#module-pyspark.sql.functions">here</a>.</p>
@@ -382,8 +366,6 @@ ratings_with_exp.show()
   
       <img src="/images/sparkcolumns/8.png" alt="Photo by &lt;a href=&#34;https://unsplash.com/@divide_by_zero?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Divide By Zero&lt;/a&gt; on &lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Unsplash&lt;/a&gt;">
   
-
-
 
 </p>
 <p>Sometimes we want to do complicated things to a column or multiple columns. This could be thought of as a map operation on a PySpark Dataframe to a single column or multiple columns. While Spark SQL functions do solve many use cases when it comes to column creation, I use Spark UDF whenever I want to use the more matured Python functionality.</p>
@@ -407,10 +389,8 @@ ratings_with_high_low.show()
 </code></pre>
 <p>
   
-    <img src="/images/sparkcolumns/9.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/sparkcolumns/9.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <hr>
@@ -419,8 +399,6 @@ ratings_with_high_low.show()
   
       <img src="/images/sparkcolumns/10.png" alt="Photo by &lt;a href=&#34;https://unsplash.com/@ryanquintal?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Ryan Quintal&lt;/a&gt; on &lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Unsplash&lt;/a&gt;">
   
-
-
 
 </p>
 <p>Sometimes both the spark UDFs and SQL Functions are not enough for a particular use-case. You might want to utilize the better partitioning that you get with spark RDDs. Or you may want to use group functions in Spark RDDs. You can use this one, mainly when you need access to all the columns in the spark data frame inside a python function.</p>
@@ -450,10 +428,8 @@ ratings_new_df.show()
 </code></pre>
 <p>
   
-    <img src="/images/sparkcolumns/11.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/sparkcolumns/11.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <hr>
@@ -462,8 +438,6 @@ ratings_new_df.show()
   
       <img src="/images/sparkcolumns/12.png" alt="Photo by &lt;a href=&#34;https://unsplash.com/@pbernardon?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Pascal Bernardon&lt;/a&gt; on &lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Unsplash&lt;/a&gt;">
   
-
-
 
 </p>
 <p>This functionality was introduced in the Spark version 2.3.1. And this allows you to use pandas functionality with Spark. I generally use it when I have to run a groupby operation on a Spark dataframe or whenever I need to create rolling features and want to use Pandas rolling functions/window functions.</p>
@@ -487,10 +461,8 @@ rating_groupwise_normalization.show()
 </code></pre>
 <p>
   
-    <img src="/images/sparkcolumns/13.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/sparkcolumns/13.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>We can also make use of this to <em><strong>train multiple individual models on each spark node.</strong></em> For that, we replicate our data and give each replication a key and some training params like max_depth, etc. Our function then takes the pandas Dataframe, runs the required model, and returns the result. The structure would look something like below.</p>
@@ -527,10 +499,8 @@ newDF.show()
 </code></pre>
 <p>
   
-    <img src="/images/sparkcolumns/14.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/sparkcolumns/14.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <hr>
@@ -539,8 +509,6 @@ newDF.show()
   
       <img src="/images/sparkcolumns/15.png" alt="Photo by &lt;a href=&#34;https://unsplash.com/@kellysikkema?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Kelly Sikkema&lt;/a&gt; on &lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Unsplash&lt;/a&gt;">
   
-
-
 
 </p>
 <p>And that is the end of this column(pun intended)</p>

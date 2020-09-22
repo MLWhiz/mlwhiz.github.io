@@ -264,10 +264,8 @@
 <p>I can have a movie API, which returns me names of drama movies when I pass the “animation” genre as input.</p>
 <p>
   
-    <img src="/images/fastapi_for_data_scientists/0.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/fastapi_for_data_scientists/0.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>The advantage of using such a sort of mechanism is that the API user doesn’t get access to the whole dataset or source code and yet they can get all the information they need. <em>This is how many services on the internet like <a href="https://aws.amazon.com/rekognition/">Amazon Rekognition</a>, which is an image and video API, or <a href="https://cloud.google.com/natural-language/pricing">Google Natural Language API</a>, which is an NLP API works. They provide us access to some great functions without letting us have the source code, which is often valuable and kept hidden. For example, I can send an image to Amazon Rekognition API, and it can provide me with Face detection and Analysis.</em></p>
@@ -275,8 +273,6 @@
   
       <img src="/images/fastapi_for_data_scientists/1.png" alt="&lt;a href=&#34;https://aws.amazon.com/rekognition/?blog-cards.sort-by=item.additionalFields.createdDate&amp;amp;blog-cards.sort-order=desc&#34;&gt;Source&lt;/a&gt;">
   
-
-
 
 </p>
 <p>For example, here is a free API floated by Open Movie DB, which lets us search for movies using parameters:</p>
@@ -287,8 +283,6 @@
   
       <img src="/images/fastapi_for_data_scientists/2.png" alt="Output from OMDB">
   
-
-
 
 <em>Output from OMDB</em></p>
 <p>But before we go any further, let’s understand some terms:</p>
@@ -312,8 +306,6 @@
   
       <img src="/images/fastapi_for_data_scientists/3.png" alt="&lt;a href=&#34;https://www.techempower.com/benchmarks/#section=test&amp;amp;runid=7464e520-0dc2-473d-bd34-dbdfd7e85911&amp;amp;hw=ph&amp;amp;test=query&amp;amp;l=z8kflr-v&amp;amp;a=23&#34;&gt;Source&lt;/a&gt;">
   
-
-
 
 </p>
 <p>That is around a speedup by a factor of 2 when compared to Flask and that too without a lot of code change. This means a huge deal when it comes to building an API that can serve millions of customers as it can reduce production efforts and also use less expensive hardware to serve.</p>
@@ -349,10 +341,8 @@ def predict_complex_model(age: int,sex:str):
 </code></pre>
 <p>
   
-    <img src="/images/fastapi_for_data_scientists/4.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/fastapi_for_data_scientists/4.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>What happens is as you hit the command in your browser, it calls the <a href="http://127.0.0.1:8000/predict?age=10&amp;sex=M">http://127.0.0.1:8000/</a>predict endpoint which in turn calls the associated method predict_complex_model with the with params age=10 and sex='M&rsquo;</p>
@@ -368,10 +358,8 @@ output = response.json()
 </code></pre>
 <p>
   
-    <img src="/images/fastapi_for_data_scientists/5.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/fastapi_for_data_scientists/5.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>So we can get the output from the running API(on the server) into our Python Program. A Javascript user would use Javascript Request Library, and a nodeJS developer will use something similar to do this in nodeJS. We will just need to provide them with the endpoint and parameters required.</p>
@@ -381,10 +369,8 @@ output = response.json()
 <p>Where you will find a GUI way to test your API.</p>
 <p>
   
-    <img src="/images/fastapi_for_data_scientists/6.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/fastapi_for_data_scientists/6.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>But as we said earlier, <strong>THIS IS NOT SECURE</strong> as GET parameters are passed via URL. This means that parameters get stored in server logs and browser history. This is not intended. Further, this toy example just had two input parameters, so we were able to do it this way, think of a case where we need to provide many parameters to our predict function.</p>
@@ -411,10 +397,8 @@ def predict_complex_model(d:Input):
 <p>note that we use app.put here in place of app.get previously. We also needed to provide a new class Input , which uses a library called pydantic to validate the input data types that we will get from the API end-user while previously in GET, we validated the inputs using the function parameter list. Also, this time you won’t be able to see your content using a URL on the web. For example, using the browser to point to the endpoint location gives:</p>
 <p>
   
-    <img src="/images/fastapi_for_data_scientists/7.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/fastapi_for_data_scientists/7.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>So, we can check using the programmatic way using requests in Python again:</p>
@@ -428,10 +412,8 @@ response.json()
 </code></pre>
 <p>
   
-    <img src="/images/fastapi_for_data_scientists/8.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/fastapi_for_data_scientists/8.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Notice that we use requests.put here and we provide the payload using the data param in the requests.put function and we also make use of json library to convert our payload to JSON from a dict object.</p>
@@ -440,10 +422,8 @@ response.json()
 </code></pre>
 <p>
   
-    <img src="/images/fastapi_for_data_scientists/9.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/fastapi_for_data_scientists/9.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>And, we are done with creating our API. It was simple for a change.</p>

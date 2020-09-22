@@ -278,8 +278,6 @@
       <img src="/images/od/0.png" alt="&lt;a href=&#34;http://cs231n.github.io/transfer-learning/#tf&#34;&gt;Source&lt;/a&gt;">
   
 
-
-
 <em><a href="http://cs231n.github.io/transfer-learning/#tf">Source</a></em></p>
 <p>These problems can be divided into 4 major buckets. In the next few lines I would try to explain each of these problems concisely before we take a deeper dive:</p>
 <ol>
@@ -307,8 +305,6 @@
   
       <img src="/images/od/1.png" alt="&lt;a href=&#34;http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture11.pdf&#34;&gt;Source&lt;/a&gt;">
   
-
-
 
 </p>
 <h3 id="input-data"><strong>Input Data</strong></h3>
@@ -361,18 +357,14 @@
       <img src="/images/od/2.png" alt="&lt;a href=&#34;http://people.cs.uchicago.edu/~pff/papers/seg-ijcv.pdf&#34;&gt;Efficient graph-based Image Segmentation&lt;/a&gt; Example">
   
 
-
-
 </p>
 <p><em><strong>Put simply, they use graph-based methods to find connected components in an image and the edges are made on some measure of similarity between pixels.</strong></em></p>
 <p>As you can see if we create bounding boxes around these masks we will be losing a lot of regions. We want to have the whole baseball player in a single bounding box/frame. We need to somehow group these initial regions. And that is the second step.</p>
 <p>For that, the authors of <a href="http://www.huppelen.nl/publications/selectiveSearchDraft.pdf">Selective Search for Object Recognition</a> apply the Hierarchical Grouping algorithm to these initial regions. In this algorithm, they merge most similar regions together based on different notions of similarity based on colour, texture, size and fill to provide us with much better region proposals.</p>
 <p>
   
-    <img src="/images/od/3.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/od/3.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>
@@ -380,18 +372,14 @@
       <img src="/images/od/4.png" alt="The Algorithm for region Proposal used in RCNN">
   
 
-
-
 </p>
 <hr>
 <h2 id="1-r-cnn">1. R-CNN</h2>
 <p>So now we have our region proposals. How do we exactly use them in R-CNN?</p>
 <p>
   
-    <img src="/images/od/5.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/od/5.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <blockquote>
@@ -416,8 +404,6 @@
       <img src="/images/od/6.jpeg" alt="&lt;a href=&#34;https://www.pyimagesearch.com/wp-content/uploads/2014/10/hog_object_detection_nms.jpg&#34;&gt;https://www.pyimagesearch.com/wp-content/uploads/2014/10/hog_object_detection_nms.jpg&lt;/a&gt;">
   
 
-
-
 </p>
 <h3 id="problems-with-rcnn">Problems with RCNN:</h3>
 <ul>
@@ -437,10 +423,8 @@
 <p>Something like:</p>
 <p>
   
-    <img src="/images/od/7.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/od/7.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <blockquote>
@@ -459,16 +443,12 @@
       <img src="/images/od/8.png" alt="VGG 16 Architecture">
   
 
-
-
 </p>
 <p>The last pooling layer is 7x7x512. This is the layer the network authors intend to replace by the ROI pooling layers. This pooling layer has got as input the location of the region proposal(xmin_roi,ymin_roi,h_roi,w_roi) and the previous feature map(14x14x512).</p>
 <p>
   
       <img src="/images/od/9.png" alt="We need fixed-sized feature maps for the final classifier">
   
-
-
 
 </p>
 <p>Now the location of ROI coordinates is in the units of the input image i.e. 224x224 pixels. But the layer on which we have to apply the ROI pooling operation is 14x14x512.</p>
@@ -482,8 +462,6 @@
   
       <img src="/images/od/10.gif" alt="&lt;a href=&#34;https://deepsense.ai/region-of-interest-pooling-explained/&#34;&gt;Source&lt;/a&gt;">
   
-
-
 
 </p>
 <p>In the above image, our region proposal is (0,3,5,7) in x,y,w,h format.</p>
@@ -503,8 +481,6 @@
       <img src="/images/od/11.png" alt="Classification Loss &#43; regression Loss">
   
 
-
-
 </p>
 <p>Where Lcls is the softmax classification loss and Lloc is the regression loss. u=0 is for BG class and hence we add to loss only when we have a boundary box for any of the other class.</p>
 <h3 id="problem">Problem:</h3>
@@ -513,8 +489,6 @@
   
       <img src="/images/od/12.png" alt="Runtime dominated by region proposals!">
   
-
-
 
 </p>
 <hr>
@@ -525,10 +499,8 @@
 </blockquote>
 <p>
   
-    <img src="/images/od/13.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/od/13.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <h3 id="how-does-the-region-proposal-network-work">How does the Region Proposal Network work?</h3>
@@ -539,8 +511,6 @@
       <img src="/images/od/14.png" alt="Anchor centers throughout the original image">
   
 
-
-
 </p>
 <p>The anchor centres are separated by 16 px in case of VGG16 network as the final convolution layer of (14x14x512) subsamples the image by a factor of 16(224/14).</p>
 <p>This is how anchors look like:</p>
@@ -548,8 +518,6 @@
   
       <img src="/images/od/15.png" alt="Left: Anchors, Center: Anchor for a single point, Right: All anchors">
   
-
-
 
 </p>
 <ol>
@@ -588,8 +556,6 @@
       <img src="/images/od/16.png" alt="Results on VOC Dataset for the three different approaches">
   
 
-
-
 </p>
 <hr>
 <h2 id="instance-segmentation">Instance Segmentation</h2>
@@ -599,8 +565,6 @@
       <img src="/images/od/17.png" alt="Some images with masks from the paper">
   
 
-
-
 </p>
 <hr>
 <h2 id="mask-rcnn">Mask-RCNN</h2>
@@ -609,8 +573,6 @@
   
       <img src="/images/od/18.png" alt="&lt;a href=&#34;https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272&#34;&gt;Source:&lt;/a&gt; Everything remains the same. Just one more output layer to predict masks and ROI pooling replaced by ROIAlign">
   
-
-
 
 <em><a href="https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272">Source:</a> Everything remains the same. Just one more output layer to predict masks and ROI pooling replaced by ROIAlign</em></p>
 <p>Mask R-CNN adopts the same two-stage procedure, with an identical first stage (RPN).</p>
@@ -622,8 +584,6 @@
   
       <img src="/images/od/19.png" alt="&lt;a href=&#34;https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272&#34;&gt;Source&lt;/a&gt;">
   
-
-
 
 <em><a href="https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272">Source</a></em></p>
 <h3 id="training">Training</h3>
@@ -637,10 +597,8 @@
 <h2 id="conclusion">Conclusion</h2>
 <p>
   
-    <img src="/images/od/20.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    <img src="/images/od/20.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
-
-
 
 </p>
 <p>Congrats for reaching the end. This post was a long one.</p>
