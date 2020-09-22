@@ -267,7 +267,9 @@
 <h2 id="grid-vs-randomized">Grid vs Randomized?</h2>
 <p>Before we get to implementing the hyperparameter search, we have two options to set up the hyperparameter search — Grid Search or Random search.</p>
 <p>
-  <img src="/images/hyperspark/0.png" alt="Starting with a 3×3 grid of parameters, we can see that Random search ends up doing more searches for the important parameter.">
+  
+      <img src="/images/hyperspark/0.png" alt="Starting with a 3×3 grid of parameters, we can see that Random search ends up doing more searches for the important parameter.">
+  
 
 
 
@@ -292,7 +294,9 @@ train_sp = train_sp.toDF(*['c0', 'c1', 'c2', 'c3', 'target'])
 </code></pre>
 <p>The train_sp spark dataset looks like:</p>
 <p>
-  <img src="/images/hyperspark/1.png" alt="">
+  
+    <img src="/images/hyperspark/1.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -300,7 +304,9 @@ train_sp = train_sp.toDF(*['c0', 'c1', 'c2', 'c3', 'target'])
 <hr>
 <h2 id="the-idea--replicate-and-apply">The Idea — Replicate and Apply</h2>
 <p>
-  <img src="/images/hyperspark/2.png" alt="Photo by &lt;a href=&#34;https://unsplash.com/@frankvex?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Frank Vessia&lt;/a&gt; on &lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Unsplash&lt;/a&gt;">
+  
+      <img src="/images/hyperspark/2.png" alt="Photo by &lt;a href=&#34;https://unsplash.com/@frankvex?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Frank Vessia&lt;/a&gt; on &lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Unsplash&lt;/a&gt;">
+  
 
 
 
@@ -322,7 +328,9 @@ replication_df = spark.createDataFrame(pd.DataFrame(list(range(1,100)),columns=[
 replicated_train_df = train_sp.crossJoin(replication_df)
 </code></pre>
 <p>
-  <img src="/images/hyperspark/3.png" alt="Every row is replicated 100 times with different replication_id">
+  
+      <img src="/images/hyperspark/3.png" alt="Every row is replicated 100 times with different replication_id">
+  
 
 
 
@@ -364,7 +372,9 @@ outSchema <span style="color:#f92672">=</span> StructType([StructField(<span sty
 <pre><code>results.sort(F.desc(&quot;Accuracy&quot;)).show()
 </code></pre>
 <p>
-  <img src="/images/hyperspark/4.png" alt="Results of our Hyperparameter search">
+  
+      <img src="/images/hyperspark/4.png" alt="Results of our Hyperparameter search">
+  
 
 
 

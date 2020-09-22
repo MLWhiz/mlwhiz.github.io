@@ -350,7 +350,9 @@
 <li>Download the Spark Binary from Apache Spark <a href="http://spark.apache.org/downloads.html">Website</a>. And click on the Download Spark link to download Spark.</li>
 </ul>
 <p>
-  <img src="/images/spark_df_complete_guide/0.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/0.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -368,14 +370,18 @@ sudo update-alternatives --config java
 </code></pre>
 <p>You will need to manually select the Java version 8 by typing the selection number.</p>
 <p>
-  <img src="/images/spark_df_complete_guide/1.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/1.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
 </p>
 <p>Rechecking Java version should give something like:</p>
 <p>
-  <img src="/images/spark_df_complete_guide/2.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/2.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -403,7 +409,9 @@ $SPARK_PATH/bin/pyspark --master **local[10]**
 <pre><code>pysparknb
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/3.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/3.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -413,7 +421,9 @@ $SPARK_PATH/bin/pyspark --master **local[10]**
 <p>With the installation out of the way, we can move to the more interesting part of this post. I will be working with the <a href="https://www.kaggle.com/kimjihoo/coronavirusdataset">Data Science for COVID-19 in South Korea</a>, which is one of the most detailed datasets on the internet for COVID.</p>
 <p>Please note that I will be using this dataset to showcase some of the most useful functionalities of Spark, but this should not be in any way considered a data exploration exercise for this amazing dataset.</p>
 <p>
-  <img src="/images/spark_df_complete_guide/4.png" alt="Source: &lt;a href=&#34;https://www.kaggle.com/kimjihoo/coronavirusdataset?select=Case.csv&#34;&gt;Kaggle&lt;/a&gt;">
+  
+      <img src="/images/spark_df_complete_guide/4.png" alt="Source: &lt;a href=&#34;https://www.kaggle.com/kimjihoo/coronavirusdataset?select=Case.csv&#34;&gt;Kaggle&lt;/a&gt;">
+  
 
 
 
@@ -441,7 +451,9 @@ $SPARK_PATH/bin/pyspark --master **local[10]**
 <pre><code>cases.show()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/5.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/5.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -451,7 +463,9 @@ $SPARK_PATH/bin/pyspark --master **local[10]**
 <pre><code>cases.limit(10).toPandas()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/6.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/6.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -470,7 +484,9 @@ $SPARK_PATH/bin/pyspark --master **local[10]**
 cases.show()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/7.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/7.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -480,7 +496,9 @@ cases.show()
 <pre><code>cases.sort(&quot;confirmed&quot;).show()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/8.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/8.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -491,7 +509,9 @@ from pyspark.sql import functions as F
 cases.sort(F.desc(&quot;confirmed&quot;)).show()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/9.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/9.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -510,7 +530,9 @@ cases = cases.withColumn('city', F.col('city').cast(StringType()))
 <pre><code>cases.filter((cases.confirmed&gt;10) &amp; (cases.province=='Daegu')).show()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/10.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/10.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -522,7 +544,9 @@ cases = cases.withColumn('city', F.col('city').cast(StringType()))
 cases.groupBy([&quot;province&quot;,&quot;city&quot;]).agg(F.sum(&quot;confirmed&quot;) ,F.max(&quot;confirmed&quot;)).show()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/11.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/11.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -534,7 +558,9 @@ cases.groupBy([&quot;province&quot;,&quot;city&quot;]).agg(F.sum(&quot;confirmed
     ).show()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/12.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/12.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -545,7 +571,9 @@ cases.groupBy([&quot;province&quot;,&quot;city&quot;]).agg(F.sum(&quot;confirmed
 regions.limit(10).toPandas()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/13.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/13.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -555,7 +583,9 @@ regions.limit(10).toPandas()
 cases.limit(10).toPandas()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/14.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/14.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -564,7 +594,9 @@ cases.limit(10).toPandas()
 <h2 id="2-broadcastmap-side-joins">2. Broadcast/Map Side Joins</h2>
 <p>Sometimes you might face a scenario where you need to join a very big table(~1B Rows) with a very small table(~100–200 rows). The scenario might also involve increasing the size of your database like in the example below.</p>
 <p>
-  <img src="/images/spark_df_complete_guide/15.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/15.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -582,7 +614,9 @@ newDF = sqlContext.sql('select * from cases_table where confirmed&gt;100')
 newDF.show()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/16.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/16.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -600,7 +634,9 @@ casesWithNewConfirmed = cases.withColumn(&quot;NewConfirmed&quot;, 100 + F.col(&
 casesWithNewConfirmed.show()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/17.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/17.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -611,7 +647,9 @@ casesWithNewConfirmed.show()
 casesWithExpConfirmed.show()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/18.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/18.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -635,7 +673,9 @@ CasesWithHighLow = cases.withColumn(&quot;HighLow&quot;, casesHighLowUDF(&quot;c
 CasesWithHighLow.show()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/19.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/19.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -670,7 +710,9 @@ casesNewDf = sqlContext.createDataFrame(cases_rdd_new)
 casesNewDf.show()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/20.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/20.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -682,7 +724,9 @@ casesNewDf.show()
 <pre><code>cases.printSchema()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/21.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/21.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -717,7 +761,9 @@ confirmed_groupwise_normalization = cases.groupby(&quot;infection_case&quot;).ap
 confirmed_groupwise_normalization.limit(10).toPandas()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/22.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/22.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -727,7 +773,9 @@ confirmed_groupwise_normalization.limit(10).toPandas()
 <p>Window functions may make a whole blog post in itself. Here I will talk about some of the most important window functions available in spark.</p>
 <p>For this, I will also use one more data CSV, which has dates present as that will help with understanding Window functions much better. I will use the TimeProvince dataframe which contains daily case information for each province.</p>
 <p>
-  <img src="/images/spark_df_complete_guide/23.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/23.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -741,7 +789,9 @@ windowSpec = Window().partitionBy(['province']).orderBy(F.desc('confirmed'))
 cases.withColumn(&quot;rank&quot;,F.rank().over(windowSpec)).show()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/24.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/24.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -755,7 +805,9 @@ timeprovinceWithLag = timeprovince.withColumn(&quot;lag_7&quot;,F.lag(&quot;conf
 timeprovinceWithLag.filter(timeprovinceWithLag.date&gt;'2020-03-10').show()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/25.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/25.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -771,7 +823,9 @@ timeprovinceWithRoll = timeprovince.withColumn(&quot;roll_7_confirmed&quot;,F.me
 timeprovinceWithRoll.filter(timeprovinceWithLag.date&gt;'2020-03-10').show()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/26.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/26.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -787,7 +841,9 @@ timeprovinceWithRoll = timeprovince.withColumn(&quot;cumulative_confirmed&quot;,
 timeprovinceWithRoll.filter(timeprovinceWithLag.date&gt;'2020-03-10').show()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/27.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/27.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -800,7 +856,9 @@ timeprovinceWithRoll.filter(timeprovinceWithLag.date&gt;'2020-03-10').show()
 pivotedTimeprovince.limit(10).toPandas()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/28.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/28.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -840,7 +898,9 @@ expression = f&quot;stack({cnt}, {expression[:-1]}) as (Type,Value)&quot;
 <pre><code>unpivotedTimeprovince = pivotedTimeprovince.select('date',F.expr(exprs))
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/29.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/29.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -856,7 +916,9 @@ expression = f&quot;stack({cnt}, {expression[:-1]}) as (Type,Value)&quot;
 </code></pre>
 <p>This is how the table looks after the operation:</p>
 <p>
-  <img src="/images/spark_df_complete_guide/30.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/30.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -865,14 +927,18 @@ expression = f&quot;stack({cnt}, {expression[:-1]}) as (Type,Value)&quot;
 <pre><code>cases_temp = cases.groupBy([&quot;infection_case&quot;,&quot;salt_key&quot;]).agg(F.sum(&quot;confirmed&quot;)).show()
 </code></pre>
 <p>
-  <img src="/images/spark_df_complete_guide/31.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/31.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
 </p>
 <p><strong>3. Second Group On the original Key</strong></p>
 <p>
-  <img src="/images/spark_df_complete_guide/32.png" alt="">
+  
+    <img src="/images/spark_df_complete_guide/32.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -927,7 +993,9 @@ def load_df_from_parquet(parquet_directory):
 <hr>
 <h2 id="conclusion">Conclusion</h2>
 <p>
-  <img src="/images/spark_df_complete_guide/33.png" alt="Source: &lt;a href=&#34;https://pixabay.com/photos/dawn-graduates-throwing-hats-dusk-1840298/&#34;&gt;Pixabay&lt;/a&gt;">
+  
+      <img src="/images/spark_df_complete_guide/33.png" alt="Source: &lt;a href=&#34;https://pixabay.com/photos/dawn-graduates-throwing-hats-dusk-1840298/&#34;&gt;Pixabay&lt;/a&gt;">
+  
 
 
 

@@ -274,7 +274,9 @@
 </blockquote>
 <p>But there are lots of other interesting problems in the Image domain:</p>
 <p>
-  <img src="/images/od/0.png" alt="&lt;a href=&#34;http://cs231n.github.io/transfer-learning/#tf&#34;&gt;Source&lt;/a&gt;">
+  
+      <img src="/images/od/0.png" alt="&lt;a href=&#34;http://cs231n.github.io/transfer-learning/#tf&#34;&gt;Source&lt;/a&gt;">
+  
 
 
 
@@ -302,7 +304,9 @@
 <p><em>💡</em> Treat localization as a regression problem!</p>
 </blockquote>
 <p>
-  <img src="/images/od/1.png" alt="&lt;a href=&#34;http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture11.pdf&#34;&gt;Source&lt;/a&gt;">
+  
+      <img src="/images/od/1.png" alt="&lt;a href=&#34;http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture11.pdf&#34;&gt;Source&lt;/a&gt;">
+  
 
 
 
@@ -353,7 +357,9 @@
 <p>Each edge (vi , vj )∈ E has a corresponding weight w((vi , vj )), which is a non-negative <strong>measure of the similarity</strong> between neighboring elements vi and vj . In the graph-based approach, a segmentation S is a partition of V into components such that each component (or region) C ∈ S corresponds to a connected component in a graph.</p>
 </blockquote>
 <p>
-  <img src="/images/od/2.png" alt="&lt;a href=&#34;http://people.cs.uchicago.edu/~pff/papers/seg-ijcv.pdf&#34;&gt;Efficient graph-based Image Segmentation&lt;/a&gt; Example">
+  
+      <img src="/images/od/2.png" alt="&lt;a href=&#34;http://people.cs.uchicago.edu/~pff/papers/seg-ijcv.pdf&#34;&gt;Efficient graph-based Image Segmentation&lt;/a&gt; Example">
+  
 
 
 
@@ -362,13 +368,17 @@
 <p>As you can see if we create bounding boxes around these masks we will be losing a lot of regions. We want to have the whole baseball player in a single bounding box/frame. We need to somehow group these initial regions. And that is the second step.</p>
 <p>For that, the authors of <a href="http://www.huppelen.nl/publications/selectiveSearchDraft.pdf">Selective Search for Object Recognition</a> apply the Hierarchical Grouping algorithm to these initial regions. In this algorithm, they merge most similar regions together based on different notions of similarity based on colour, texture, size and fill to provide us with much better region proposals.</p>
 <p>
-  <img src="/images/od/3.png" alt="">
+  
+    <img src="/images/od/3.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
 </p>
 <p>
-  <img src="/images/od/4.png" alt="The Algorithm for region Proposal used in RCNN">
+  
+      <img src="/images/od/4.png" alt="The Algorithm for region Proposal used in RCNN">
+  
 
 
 
@@ -377,7 +387,9 @@
 <h2 id="1-r-cnn">1. R-CNN</h2>
 <p>So now we have our region proposals. How do we exactly use them in R-CNN?</p>
 <p>
-  <img src="/images/od/5.png" alt="">
+  
+    <img src="/images/od/5.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -400,7 +412,9 @@
 <p>First, it sorts all detection boxes on the basis of their scores. The detection box M with the maximum score is selected and all other detection boxes with a significant overlap (using a pre-defined threshold) with M are suppressed.</p>
 <p>This process is recursively applied on all the remaining boxes until we are left with good bounding boxes only.</p>
 <p>
-  <img src="/images/od/6.jpeg" alt="&lt;a href=&#34;https://www.pyimagesearch.com/wp-content/uploads/2014/10/hog_object_detection_nms.jpg&#34;&gt;https://www.pyimagesearch.com/wp-content/uploads/2014/10/hog_object_detection_nms.jpg&lt;/a&gt;">
+  
+      <img src="/images/od/6.jpeg" alt="&lt;a href=&#34;https://www.pyimagesearch.com/wp-content/uploads/2014/10/hog_object_detection_nms.jpg&#34;&gt;https://www.pyimagesearch.com/wp-content/uploads/2014/10/hog_object_detection_nms.jpg&lt;/a&gt;">
+  
 
 
 
@@ -422,7 +436,9 @@
 </blockquote>
 <p>Something like:</p>
 <p>
-  <img src="/images/od/7.png" alt="">
+  
+    <img src="/images/od/7.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -439,14 +455,18 @@
 </blockquote>
 <p>Don’t worry if you don’t understand the above. This obviously is a little confusing, so let us break this down. But for that, we need to see VGG16 architecture first.</p>
 <p>
-  <img src="/images/od/8.png" alt="VGG 16 Architecture">
+  
+      <img src="/images/od/8.png" alt="VGG 16 Architecture">
+  
 
 
 
 </p>
 <p>The last pooling layer is 7x7x512. This is the layer the network authors intend to replace by the ROI pooling layers. This pooling layer has got as input the location of the region proposal(xmin_roi,ymin_roi,h_roi,w_roi) and the previous feature map(14x14x512).</p>
 <p>
-  <img src="/images/od/9.png" alt="We need fixed-sized feature maps for the final classifier">
+  
+      <img src="/images/od/9.png" alt="We need fixed-sized feature maps for the final classifier">
+  
 
 
 
@@ -459,7 +479,9 @@
 <p>What is ROI pooling?</p>
 <p><em>Remember that the final classifier runs for each crop. And so each crop needs to be of the same size. And that is what ROI Pooling does.</em></p>
 <p>
-  <img src="/images/od/10.gif" alt="&lt;a href=&#34;https://deepsense.ai/region-of-interest-pooling-explained/&#34;&gt;Source&lt;/a&gt;">
+  
+      <img src="/images/od/10.gif" alt="&lt;a href=&#34;https://deepsense.ai/region-of-interest-pooling-explained/&#34;&gt;Source&lt;/a&gt;">
+  
 
 
 
@@ -477,7 +499,9 @@
 <p>The first outputs a <em><strong>discrete probability distribution</strong></em> (per RoI), p = (p0, . . . , pK), over K + 1 categories. As usual, p is computed by a softmax over the K+1 outputs of a fully connected layer.</p>
 <p>The second sibling layer outputs <em><strong>bounding-box regression offsets</strong></em>, t= (tx, ty, tw, th), for each of the K object classes. Each training RoI is labelled with a ground-truth class u and a ground-truth bounding-box regression target v. We use a multi-task loss L on each labelled RoI to jointly train for classification and bounding-box regression</p>
 <p>
-  <img src="/images/od/11.png" alt="Classification Loss &#43; regression Loss">
+  
+      <img src="/images/od/11.png" alt="Classification Loss &#43; regression Loss">
+  
 
 
 
@@ -486,7 +510,9 @@
 <h3 id="problem">Problem:</h3>
 <p>Region proposals are still taking up most of the time. Can we reduce the time taken for Region proposals?</p>
 <p>
-  <img src="/images/od/12.png" alt="Runtime dominated by region proposals!">
+  
+      <img src="/images/od/12.png" alt="Runtime dominated by region proposals!">
+  
 
 
 
@@ -498,7 +524,9 @@
 <p>The intuition is that: With FastRCNN we’re already computing an Activation Map in the CNN, why not run the Activation Map through a few more layers to find the interesting regions, and then finish off the forward pass by predicting the classes + bbox coordinates?</p>
 </blockquote>
 <p>
-  <img src="/images/od/13.png" alt="">
+  
+    <img src="/images/od/13.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -507,7 +535,9 @@
 <p>One of the main ideas in the paper is the idea of Anchors. <strong>Anchors</strong> are fixed bounding boxes that are placed throughout the image with different sizes and ratios that are going to be used for reference when first predicting object locations.</p>
 <p>So, first of all, we define anchor centres on the image.</p>
 <p>
-  <img src="/images/od/14.png" alt="Anchor centers throughout the original image">
+  
+      <img src="/images/od/14.png" alt="Anchor centers throughout the original image">
+  
 
 
 
@@ -515,7 +545,9 @@
 <p>The anchor centres are separated by 16 px in case of VGG16 network as the final convolution layer of (14x14x512) subsamples the image by a factor of 16(224/14).</p>
 <p>This is how anchors look like:</p>
 <p>
-  <img src="/images/od/15.png" alt="Left: Anchors, Center: Anchor for a single point, Right: All anchors">
+  
+      <img src="/images/od/15.png" alt="Left: Anchors, Center: Anchor for a single point, Right: All anchors">
+  
 
 
 
@@ -552,7 +584,9 @@
 </ol>
 <h3 id="performance">Performance</h3>
 <p>
-  <img src="/images/od/16.png" alt="Results on VOC Dataset for the three different approaches">
+  
+      <img src="/images/od/16.png" alt="Results on VOC Dataset for the three different approaches">
+  
 
 
 
@@ -561,7 +595,9 @@
 <h2 id="instance-segmentation">Instance Segmentation</h2>
 <p>Now comes the most interesting part — Instance segmentation. <em>Can we create</em> <em><strong>masks</strong></em> <em>for each individual object in the image? Specifically something like:</em></p>
 <p>
-  <img src="/images/od/17.png" alt="Some images with masks from the paper">
+  
+      <img src="/images/od/17.png" alt="Some images with masks from the paper">
+  
 
 
 
@@ -570,7 +606,9 @@
 <h2 id="mask-rcnn">Mask-RCNN</h2>
 <p>The same authors come to rescue again. The basic idea is to add another output layer that predicts the mask. And to use ROIAlign instead of ROIPooling.</p>
 <p>
-  <img src="/images/od/18.png" alt="&lt;a href=&#34;https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272&#34;&gt;Source:&lt;/a&gt; Everything remains the same. Just one more output layer to predict masks and ROI pooling replaced by ROIAlign">
+  
+      <img src="/images/od/18.png" alt="&lt;a href=&#34;https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272&#34;&gt;Source:&lt;/a&gt; Everything remains the same. Just one more output layer to predict masks and ROI pooling replaced by ROIAlign">
+  
 
 
 
@@ -581,7 +619,9 @@
 <p>In ROI pooling we lose the exact location-based information. See how we arbitrarily divided our region into 4 different sized boxes. For a classification task, it works well.</p>
 <p>But for providing masks on a pixel level, we don’t want to lose this information. And hence we don’t quantize the pooling layer and use bilinear interpolation to find out values that properly aligns the extracted features with the input. See how 0.8 differs from 0.88</p>
 <p>
-  <img src="/images/od/19.png" alt="&lt;a href=&#34;https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272&#34;&gt;Source&lt;/a&gt;">
+  
+      <img src="/images/od/19.png" alt="&lt;a href=&#34;https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272&#34;&gt;Source&lt;/a&gt;">
+  
 
 
 
@@ -596,7 +636,9 @@
 <hr>
 <h2 id="conclusion">Conclusion</h2>
 <p>
-  <img src="/images/od/20.png" alt="">
+  
+    <img src="/images/od/20.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 

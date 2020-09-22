@@ -274,7 +274,9 @@
 <p>I assume that you have a fresh Ubuntu 18.04 installation. I am taking inspiration from <a href="https://blog.slavv.com/@slavivanov?source=post_page-----148c5ebe6415----------------------">Slav Ivanov’s</a> excellent <a href="https://blog.slavv.com/the-1700-great-deep-learning-box-assembly-setup-and-benchmarks-148c5ebe6415">post</a> in 2017 on creating a Deep Learning box. You can call it the 2020 version for the same post from a setup perspective, but a lot of the things have changed from then, and there are a lot of caveats with specific CUDA versions not supported by Tensorflow and Pytorch.</p>
 <h2 id="starting-up">Starting up</h2>
 <p>
-  <img src="/images/dlrig/0.png" alt="">
+  
+    <img src="/images/dlrig/0.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -305,14 +307,18 @@ sudo apt-get --assume-yes install git
 <h3 id="1-gpu-drivers">1. GPU Drivers</h3>
 <p>The first step is to add the <a href="https://www.nvidia.com/Download/index.aspx">latest</a> NVIDIA drivers. You can choose the GPU product type, Linux 64 bit, and download Type as “Linux Long-Lived” for the 18.04 version.</p>
 <p>
-  <img src="/images/dlrig/1.png" alt="">
+  
+    <img src="/images/dlrig/1.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
 </p>
 <p>Clicking on search will take you to a downloads page:</p>
 <p>
-  <img src="/images/dlrig/2.png" alt="">
+  
+    <img src="/images/dlrig/2.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -336,7 +342,9 @@ sudo apt-get update &amp;&amp; sudo apt-get -o Dpkg::Options::=&quot;--force-ove
 <pre><code>nvcc --version
 </code></pre>
 <p>
-  <img src="/images/dlrig/3.png" alt="">
+  
+    <img src="/images/dlrig/3.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -346,7 +354,9 @@ sudo apt-get update &amp;&amp; sudo apt-get -o Dpkg::Options::=&quot;--force-ove
 </code></pre>
 <p>For me, it showed an error when I used it the first time, but a simple reboot solved the issue. And both my NVIDIA graphic cards show up in all their awesome glory. Don’t worry that the display says the CUDA version supported is 10.2. I was also <a href="https://stackoverflow.com/questions/53422407/different-cuda-versions-shown-by-nvcc-and-nvidia-smi">confused</a>, but it is just the maximum CUDA version supported by the graphics driver that is shown in nvidia-smi.</p>
 <p>
-  <img src="/images/dlrig/4.png" alt="">
+  
+    <img src="/images/dlrig/4.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -355,14 +365,18 @@ sudo apt-get update &amp;&amp; sudo apt-get -o Dpkg::Options::=&quot;--force-ove
 <p>What is the use of all these libraries if we are not going to train neural nets? CuDNN provides various primitives for Deep Learning, which are later used by PyTorch/TensorFlow.</p>
 <p>But we first need to get a <a href="https://developer.nvidia.com/rdp/form/cudnn-download-survey">developer account</a> first to install CuDNN. Once you fill-up the signup form, you will see the screen below. Select the cuDNN version that applies to your CUDA version. For me, the CUDA version is 10.1, so I select the second one.</p>
 <p>
-  <img src="/images/dlrig/5.png" alt="">
+  
+    <img src="/images/dlrig/5.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
 </p>
 <p>Once you select the appropriate CuDNN version the screen expands:</p>
 <p>
-  <img src="/images/dlrig/6.png" alt="">
+  
+    <img src="/images/dlrig/6.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -389,7 +403,9 @@ sudo dpkg -i libcudnn7-doc_7.6.5.32-1+cuda10.1_amd64.deb
 <p>We need to install Python with virtual environments. I have downloaded python3 as it is the most stable version as of now, and it is time to say goodbye to Python 2.7. It was great while it lasted. And we will also install Pytorch and Tensorflow. I prefer them both for specific tasks as applicable.</p>
 <p>You can go to the <a href="https://www.anaconda.com/distribution/">anaconda distribution</a> page and download the package.</p>
 <p>
-  <img src="/images/dlrig/7.png" alt="">
+  
+    <img src="/images/dlrig/7.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -413,7 +429,9 @@ conda upgrade -y --all
 </code></pre>
 <p>You should now be able to see something like:</p>
 <p>
-  <img src="/images/dlrig/8.png" alt="Notice the py37 at the start of command in terminal">
+  
+      <img src="/images/dlrig/8.png" alt="Notice the py37 at the start of command in terminal">
+  
 
 
 
@@ -421,7 +439,9 @@ conda upgrade -y --all
 <p>We can now add all our required packages to this environment using pip or conda. The latest version 1.3, as seen from the <a href="https://pytorch.org/get-started/locally/">pytorch site</a>, is not yet available for CUDA 10.2, as I already mentioned, so we are in luck with CUDA 10.1. Also, we will need to specify the version of TensorFlow as 2.1.0, as this version was built using 10.1 CUDA.</p>
 <p>I also install RAPIDS, which is a library to get your various data science workloads to GPUs. Why use GPUs only for deep learning and not for Data processing? You can get the command to install rapids from the <a href="https://rapids.ai/start.html">rapids release selector</a>:</p>
 <p>
-  <img src="/images/dlrig/9.png" alt="">
+  
+    <img src="/images/dlrig/9.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 

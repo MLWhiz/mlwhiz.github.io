@@ -261,7 +261,9 @@
 <p>As we moved towards bigger datasets, <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a">Apache Spark</a> came as a ray of hope. It gave us a scalable and distributed in-memory system to work with Big Data. By the by, we also saw frameworks like <a href="https://towardsdatascience.com/moving-from-keras-to-pytorch-f0d4fff4ce79">Pytorch</a> and Tensorflow that inherently parallelized matrix computations using thousands of GPU cores.</p>
 <p>But never did we see these two systems working in tandem in the past. We continued to use Spark for Big Data ETL tasks and GPUs for matrix intensive problems in <a href="https://towardsdatascience.com/stop-worrying-and-create-your-deep-learning-server-in-30-minutes-bb5bd956b8de">Deep Learning</a>.</p>
 <p>
-  <img src="/images/spark_dataproc/0.png" alt="&lt;a href=&#34;https://marketing.thepoweroftwo.solutions/acton/attachment/42621/f-0f867d92-c1d0-4112-afef-26f9cbb51499/1/-/-/-/-/NVIDIA%20&amp;amp;%20Google%20Cloud%20Dataproc%20ebook%20July2020.pdf&#34;&gt;Source&lt;/a&gt;">
+  
+      <img src="/images/spark_dataproc/0.png" alt="&lt;a href=&#34;https://marketing.thepoweroftwo.solutions/acton/attachment/42621/f-0f867d92-c1d0-4112-afef-26f9cbb51499/1/-/-/-/-/NVIDIA%20&amp;amp;%20Google%20Cloud%20Dataproc%20ebook%20July2020.pdf&#34;&gt;Source&lt;/a&gt;">
+  
 
 
 
@@ -277,7 +279,9 @@
 <h3 id="1-create-a-new-gcp-project">1. Create a New GCP Project</h3>
 <p>After the initial signup on the <a href="https://cloud.google.com/">Google Cloud Platform</a>, we can start a new project. Here I begin by creating a new project namedSparkDataProc.</p>
 <p>
-  <img src="/images/spark_dataproc/1.png" alt="Create a New Project">
+  
+      <img src="/images/spark_dataproc/1.png" alt="Create a New Project">
+  
 
 
 
@@ -286,7 +290,9 @@
 <h3 id="2-enable-the-apis-in-the-gcp-project">2. Enable the APIs in the GCP Project</h3>
 <p>Once we add this project, we can go to our new project and start a Cloud Shell instance by clicking the “Activate <strong>Cloud Shell</strong>” button at the top right corner. Doing so will open up a terminal window at the bottom of our screen where we can run our next commands to set up a data proc cluster:</p>
 <p>
-  <img src="/images/spark_dataproc/2.png" alt="Activate &lt;strong&gt;Cloud Shell&lt;/strong&gt; for putting your commands">
+  
+      <img src="/images/spark_dataproc/2.png" alt="Activate &lt;strong&gt;Cloud Shell&lt;/strong&gt; for putting your commands">
+  
 
 
 
@@ -343,7 +349,9 @@ gcloud beta dataproc clusters create ${CLUSTER_NAME} \
 cores=8#spark:spark.task.cpus=1#spark:spark.yarn.unmanagedAM.enabled=false&quot;
 </code></pre>
 <p>
-  <img src="/images/spark_dataproc/3.png" alt="&lt;strong&gt;Cluster Architecture&lt;/strong&gt;">
+  
+      <img src="/images/spark_dataproc/3.png" alt="&lt;strong&gt;Cluster Architecture&lt;/strong&gt;">
+  
 
 
 
@@ -386,14 +394,18 @@ cores=8#spark:spark.task.cpus=1#spark:spark.yarn.unmanagedAM.enabled=false&quot;
 <h3 id="5-run-jupyterlab-on-dataproc-rapids-cluster">5. Run JupyterLab on DataProc Rapids Cluster</h3>
 <p>Once your command succeeds(It might take 10–15 mins) you will be able to see your Dataproc cluster at <a href="https://console.cloud.google.com/dataproc/clusters">https://console.cloud.google.com/dataproc/clusters</a>. Or you can go to the Google Cloud Platform console on your browser and search for “Dataproc” and click on the “Dataproc” icon(It looks like three connected circles). This will navigate you to the Dataproc clusters page.</p>
 <p>
-  <img src="/images/spark_dataproc/4.png" alt="Dataproc Clusters Page">
+  
+      <img src="/images/spark_dataproc/4.png" alt="Dataproc Clusters Page">
+  
 
 
 
 </p>
 <p>Now, you would be able to open a web interface(Jupyter/JupyterLab/Zeppelin) if you click on the sparktestcluster and then “Web Interfaces”.</p>
 <p>
-  <img src="/images/spark_dataproc/5.png" alt="Web Interface Page for our Cluster">
+  
+      <img src="/images/spark_dataproc/5.png" alt="Web Interface Page for our Cluster">
+  
 
 
 
@@ -408,7 +420,9 @@ df = df.toDF(*colnames)
 df.count()
 </code></pre>
 <p>
-  <img src="/images/spark_dataproc/6.png" alt="Yes Our &lt;strong&gt;Jupyter Notebook&lt;/strong&gt; Works">
+  
+      <img src="/images/spark_dataproc/6.png" alt="Yes Our &lt;strong&gt;Jupyter Notebook&lt;/strong&gt; Works">
+  
 
 
 
@@ -418,14 +432,18 @@ df.count()
 <p><strong>A. Using the Web Interface option:</strong></p>
 <p>We can access Spark UI by clicking first on <strong>Yarn Resource Manager</strong> Link on the <strong>Web Interface</strong> and then on Application Master on the corresponding page:</p>
 <p>
-  <img src="/images/spark_dataproc/7.png" alt="Click on &lt;strong&gt;Application Master&lt;/strong&gt; in &lt;strong&gt;Tracking UI&lt;/strong&gt; Column to get Spark UI">
+  
+      <img src="/images/spark_dataproc/7.png" alt="Click on &lt;strong&gt;Application Master&lt;/strong&gt; in &lt;strong&gt;Tracking UI&lt;/strong&gt; Column to get Spark UI">
+  
 
 
 
 </p>
 <p>And, you will arrive at the Spark UI Page:</p>
 <p>
-  <img src="/images/spark_dataproc/8.png" alt="Yes! We get the Spark UI.">
+  
+      <img src="/images/spark_dataproc/8.png" alt="Yes! We get the Spark UI.">
+  
 
 
 
@@ -433,7 +451,9 @@ df.count()
 <p>B. <strong>Using the SSH Tunneling option:</strong></p>
 <p>Another option to access the Spark UI is using Tunneling. To do this, you need to go to the Web Interface Page and click on <em>“Create an SSH tunnel to connect to a web interface”.</em></p>
 <p>
-  <img src="/images/spark_dataproc/9.png" alt="Spark Test Cluster Web Interface using SSH">
+  
+      <img src="/images/spark_dataproc/9.png" alt="Spark Test Cluster Web Interface using SSH">
+  
 
 
 

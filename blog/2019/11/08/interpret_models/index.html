@@ -273,14 +273,18 @@
 <p>To explain how ELI5 works, I will be working with the stack overflow dataset on Kaggle. This dataset contains around 40000 posts and the corresponding tag for the post.</p>
 <p>This is how the dataset looks:</p>
 <p>
-  <img src="/images/interpret/0.png" alt="">
+  
+    <img src="/images/interpret/0.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
 </p>
 <p>And given below is the distribution for different categories.</p>
 <p>
-  <img src="/images/interpret/1.png" alt="">
+  
+    <img src="/images/interpret/1.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -290,7 +294,9 @@
 <hr>
 <h2 id="staring-simple">Staring Simple:</h2>
 <p>
-  <img src="/images/interpret/2.png" alt="&lt;a href=&#34;https://christophm.github.io/interpretable-ml-book/terminology.html&#34;&gt;Interpretable ML Book&lt;/a&gt;">
+  
+      <img src="/images/interpret/2.png" alt="&lt;a href=&#34;https://christophm.github.io/interpretable-ml-book/terminology.html&#34;&gt;Interpretable ML Book&lt;/a&gt;">
+  
 
 
 
@@ -324,7 +330,9 @@ pipe<span style="color:#f92672">.</span>fit(X_train<span style="color:#f92672">.
 
 print_report(pipe)
 </code></pre></div><p>
-  <img src="/images/interpret/3.png" alt="">
+  
+    <img src="/images/interpret/3.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -362,7 +370,9 @@ Most Negative Coefficients:
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> eli5
 eli5<span style="color:#f92672">.</span>show_weights(clf, vec<span style="color:#f92672">=</span>vec, top<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)
 </code></pre></div><p>
-  <img src="/images/interpret/4.png" alt="">
+  
+    <img src="/images/interpret/4.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -379,13 +389,17 @@ misclassified_examples <span style="color:#f92672">=</span> sodata[(sodata[<span
 
 eli5<span style="color:#f92672">.</span>show_prediction(clf, misclassified_examples[<span style="color:#e6db74">&#39;post&#39;</span>]<span style="color:#f92672">.</span>values[<span style="color:#ae81ff">1</span>], vec<span style="color:#f92672">=</span>vec)
 </code></pre></div><p>
-  <img src="/images/interpret/5.png" alt="">
+  
+    <img src="/images/interpret/5.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
 </p>
 <p>
-  <img src="/images/interpret/6.png" alt="">
+  
+    <img src="/images/interpret/6.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -409,7 +423,9 @@ eli5<span style="color:#f92672">.</span>show_prediction(clf, misclassified_examp
 <h2 id="going-deep-and-complex">Going Deep And Complex</h2>
 <p>This is all good and fine but*** what if models that we use don’t provide weights for the individual features like LSTM?*** It is with these models that explainability can play a very important role.</p>
 <p>
-  <img src="/images/interpret/7.png" alt="">
+  
+    <img src="/images/interpret/7.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -436,7 +452,9 @@ te <span style="color:#f92672">=</span> TextExplainer(random_state<span style="c
 te<span style="color:#f92672">.</span>fit(sodata[<span style="color:#e6db74">&#39;post&#39;</span>]<span style="color:#f92672">.</span>values[<span style="color:#ae81ff">0</span>], predict_complex)
 te<span style="color:#f92672">.</span>show_prediction(target_names<span style="color:#f92672">=</span>list(encoder<span style="color:#f92672">.</span>classes_))
 </code></pre></div><p>
-  <img src="/images/interpret/8.png" alt="">
+  
+    <img src="/images/interpret/8.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 

@@ -272,7 +272,9 @@ pdf = pd.DataFrame(np.random.randint(0,100,size=(25000000, 4)),columns=list('abc
 </code></pre>
 <p>The Data looks like:</p>
 <p>
-  <img src="/images/swifter/0.png" alt="Data Sample">
+  
+      <img src="/images/swifter/0.png" alt="Data Sample">
+  
 
 
 
@@ -280,7 +282,9 @@ pdf = pd.DataFrame(np.random.randint(0,100,size=(25000000, 4)),columns=list('abc
 <hr>
 <h2 id="parallelization-using-just-a-single-change">Parallelization using just a single change</h2>
 <p>
-  <img src="/images/swifter/1.png" alt="Relax and Parallelize !!!">
+  
+      <img src="/images/swifter/1.png" alt="Relax and Parallelize !!!">
+  
 
 
 
@@ -298,7 +302,9 @@ pdf = pd.DataFrame(np.random.randint(0,100,size=(25000000, 4)),columns=list('abc
 pdf['e'] = pdf.apply(lambda x : func(x['a'],x['b']),axis=1)
 </code></pre>
 <p>
-  <img src="/images/swifter/2.png" alt="">
+  
+    <img src="/images/swifter/2.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -315,7 +321,9 @@ pdf['e'] = pdf.**swifter**.apply(lambda x : func(x['a'],x['b']),axis=1)
 </code></pre>
 <h3 id="so-does-this-work"><em><strong>So, Does this work?</strong></em></h3>
 <p>
-  <img src="/images/swifter/3.png" alt="">
+  
+    <img src="/images/swifter/3.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -323,7 +331,9 @@ pdf['e'] = pdf.**swifter**.apply(lambda x : func(x['a'],x['b']),axis=1)
 <p>Yes. It does. We get a 2x improvement in run time vs. just using the function as it is.</p>
 <h3 id="so-what-exactly-is-happening-here"><em><strong>So what exactly is happening here?</strong></em></h3>
 <p>
-  <img src="/images/swifter/4.png" alt="&lt;a href=&#34;https://github.com/jmcarpenter2/swifter&#34;&gt;Source&lt;/a&gt;: How increasing data size effects performances for Dask, Pandas and Swifter?">
+  
+      <img src="/images/swifter/4.png" alt="&lt;a href=&#34;https://github.com/jmcarpenter2/swifter&#34;&gt;Source&lt;/a&gt;: How increasing data size effects performances for Dask, Pandas and Swifter?">
+  
 
 
 
@@ -334,7 +344,9 @@ pdf['e'] = pdf.**swifter**.apply(lambda x : func(x['a'],x['b']),axis=1)
 <p><em><strong>We could also choose to set n_partitions ourselves.</strong></em> Though I have observed the default value works just fine in most cases sometimes you might be able to tune this as well to gain additional speedups.</p>
 <p>For example: Below I set n_partitions=12 and we get a 2x speedup again. Here reducing our number of partitions results in smaller run times as the data movement cost between the partitions is high.</p>
 <p>
-  <img src="/images/swifter/5.png" alt="">
+  
+    <img src="/images/swifter/5.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 

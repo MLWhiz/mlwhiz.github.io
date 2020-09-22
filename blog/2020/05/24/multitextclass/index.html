@@ -262,7 +262,9 @@
         
         <div class="content mb-5">
           <p>
-  <img src="/images/multitextclass/main.png" alt="">
+  
+    <img src="/images/multitextclass/main.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -285,14 +287,18 @@
 <p>For this post, I am using the <a href="https://www.kaggle.com/jessicali9530/kuc-hackathon-winter-2018">UCI ML Drug Review dataset</a> from Kaggle. It contains over 200,000 patient drug reviews, along with related conditions. The dataset has many columns, but we will be using just two of them for our NLP Task.</p>
 <p>So, our dataset mostly looks like this:</p>
 <p>
-  <img src="/images/multitextclass/0.png" alt="">
+  
+    <img src="/images/multitextclass/0.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
 </p>
 <p>Task: We want to classify the top disease conditions based on the drug review.</p>
 <p>
-  <img src="/images/multitextclass/1.png" alt="">
+  
+    <img src="/images/multitextclass/1.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -302,7 +308,9 @@
 <p>Before we go any further into text classification, we need a way to represent words numerically in a vocabulary. Why? Because most of our ML models require numbers, not text.</p>
 <p>One way to achieve this goal is by using the one-hot encoding of word vectors, but this is not the right choice. Given a vast vocabulary, this representation would take a lot of space, and it cannot accurately express the similarity between different words, such as if we want to find the cosine similarity between numerical words x and y:</p>
 <p>
-  <img src="/images/multitextclass/2.png" alt="">
+  
+    <img src="/images/multitextclass/2.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -310,7 +318,9 @@
 <p>Given the structure of one-hot encoded vectors, the similarity is always going to be 0 between different words.</p>
 <p>Word2Vec overcomes the above difficulties by providing us with a fixed-length (usually much smaller than the vocabulary size) vector representation of words. It also captures the similarity and analogous relationships between different words.</p>
 <p>
-  <img src="/images/multitextclass/3.png" alt="">
+  
+    <img src="/images/multitextclass/3.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -376,7 +386,9 @@ lower=True, split=' ', char_level=False, oov_token=None, document_count=0, **kwa
 <p>The num_words parameter keeps only a pre-specified number of words in the text. This is helpful because we don’t want our model to get a lot of noise by considering words that occur infrequently. In real-world data, most of the words we leave using the num_words parameter are normally misspelled words. The tokenizer also filters some non-wanted tokens by default and converts the text into lowercase.</p>
 <p>Once fitted to the data, the tokenizer also keeps an index of words (a dictionary we can use to assign unique numbers to words), which can be accessed by tokenizer.word_index. The words in the indexed dictionary are ranked in order of frequency.</p>
 <p>
-  <img src="/images/multitextclass/4.png" alt="">
+  
+    <img src="/images/multitextclass/4.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -395,7 +407,9 @@ test_X = tokenizer.texts_to_sequences(test_X)
 <p>Normally our model expects that each text sequence (each training example) will be of the same length (the same number of words/tokens). We can control this using the maxlen parameter.</p>
 <p>For example:</p>
 <p>
-  <img src="/images/multitextclass/5.png" alt="">
+  
+    <img src="/images/multitextclass/5.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -441,7 +455,9 @@ embedding_matrix = load_glove(tokenizer.word_index)
 <p>Be sure to put the path of the folder where you download these GLoVE vectors. What does the embeddings_index contain? It’s a dictionary in which the key is the word, and the value is the word vector, a np.array of length 300. The length of this dictionary is somewhere around a billion.</p>
 <p>Since we only want the embeddings of words that are in our word_index, we will create a matrix that just contains required embeddings using the word index from our tokenizer.</p>
 <p>
-  <img src="/images/multitextclass/6.png" alt="">
+  
+    <img src="/images/multitextclass/6.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -452,7 +468,9 @@ embedding_matrix = load_glove(tokenizer.word_index)
 <p>The idea of using a CNN to classify text was first presented in the paper <a href="https://www.aclweb.org/anthology/D14-1181">Convolutional Neural Networks for Sentence Classification</a> by Yoon Kim.</p>
 <p>Representation: The central concept of this idea is to see our documents as images. But how? Let’s say we have a sentence, and we have maxlen = 70 and embedding size = 300. We can create a matrix of numbers with the shape 70×300 to represent this sentence. Images also have a matrix where individual elements are pixel values. But instead of image pixels, the input to the task is sentences or documents represented as a matrix. Each row of the matrix corresponds to a one-word vector.</p>
 <p>
-  <img src="/images/multitextclass/7.png" alt="">
+  
+    <img src="/images/multitextclass/7.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -487,14 +505,18 @@ def forward(self, x):
 <p>RNNs can help us with that. They can remember previous information using hidden states and connect it to the current task.</p>
 <p>Long Short Term Memory networks (LSTM) are a subclass of RNN, specialized in remembering information for extended periods. Moreover, a bidirectional LSTM keeps the contextual information in both directions, which is pretty useful in text classification tasks (However, it won’t work for a time series prediction task as we don’t have visibility into the future in this case).</p>
 <p>
-  <img src="/images/multitextclass/8.png" alt="">
+  
+    <img src="/images/multitextclass/8.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
 </p>
 <p>For a simple explanation of a bidirectional RNN, think of an RNN cell as a black box taking as input a hidden state (a vector) and a word vector and giving out an output vector and the next hidden state. This box has some weights which need to be tuned using backpropagation of the losses. Also, the same cell is applied to all the words so that the weights are shared across the words in the sentence. This phenomenon is called weight-sharing.</p>
 <p>
-  <img src="/images/multitextclass/9.png" alt="">
+  
+    <img src="/images/multitextclass/9.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -597,13 +619,17 @@ for epoch in range(n_epochs):
 </code></pre>
 <p>The training output looks like below:</p>
 <p>
-  <img src="/images/multitextclass/10.png" alt="">
+  
+    <img src="/images/multitextclass/10.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
 </p>
 <p>
-  <img src="/images/multitextclass/11.png" alt="">
+  
+    <img src="/images/multitextclass/11.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -620,7 +646,9 @@ skplt.metrics.plot_confusion_matrix(
 </code></pre>
 <p>Below is the confusion matrix for the results of the BiLSTM model. We can see that our model does reasonably well, with an 87% accuracy on the validation dataset.</p>
 <p>
-  <img src="/images/multitextclass/12.png" alt="">
+  
+    <img src="/images/multitextclass/12.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 

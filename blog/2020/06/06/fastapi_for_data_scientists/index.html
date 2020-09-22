@@ -263,14 +263,18 @@
 <p>For example:</p>
 <p>I can have a movie API, which returns me names of drama movies when I pass the “animation” genre as input.</p>
 <p>
-  <img src="/images/fastapi_for_data_scientists/0.png" alt="">
+  
+    <img src="/images/fastapi_for_data_scientists/0.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
 </p>
 <p>The advantage of using such a sort of mechanism is that the API user doesn’t get access to the whole dataset or source code and yet they can get all the information they need. <em>This is how many services on the internet like <a href="https://aws.amazon.com/rekognition/">Amazon Rekognition</a>, which is an image and video API, or <a href="https://cloud.google.com/natural-language/pricing">Google Natural Language API</a>, which is an NLP API works. They provide us access to some great functions without letting us have the source code, which is often valuable and kept hidden. For example, I can send an image to Amazon Rekognition API, and it can provide me with Face detection and Analysis.</em></p>
 <p>
-  <img src="/images/fastapi_for_data_scientists/1.png" alt="&lt;a href=&#34;https://aws.amazon.com/rekognition/?blog-cards.sort-by=item.additionalFields.createdDate&amp;amp;blog-cards.sort-order=desc&#34;&gt;Source&lt;/a&gt;">
+  
+      <img src="/images/fastapi_for_data_scientists/1.png" alt="&lt;a href=&#34;https://aws.amazon.com/rekognition/?blog-cards.sort-by=item.additionalFields.createdDate&amp;amp;blog-cards.sort-order=desc&#34;&gt;Source&lt;/a&gt;">
+  
 
 
 
@@ -280,7 +284,9 @@
 </code></pre>
 <p>Here I provided the IMDB id for the movie Guardians of the Galaxy 2, using the i parameter for the API. If you open this link in your browser, you will see the whole information of the movie as per the Open Movie Database</p>
 <p>
-  <img src="/images/fastapi_for_data_scientists/2.png" alt="Output from OMDB">
+  
+      <img src="/images/fastapi_for_data_scientists/2.png" alt="Output from OMDB">
+  
 
 
 
@@ -303,7 +309,9 @@
 <p>While Python has many frameworks to build APIs, the most common being Flask and Tornado, FastAPI is much better than available alternatives in its ease of usage as it seems much more pythonic in comparison with Flask.</p>
 <p>Also, FastAPI is fast. As the Github docs say, <strong>“Very high performance, on par with NodeJS and Go.”</strong> We can also check the latency <a href="https://www.techempower.com/benchmarks/#section=test&amp;runid=7464e520-0dc2-473d-bd34-dbdfd7e85911&amp;hw=ph&amp;test=query&amp;l=z8kflr-v&amp;a=2">benchmarks</a> for ourselves.</p>
 <p>
-  <img src="/images/fastapi_for_data_scientists/3.png" alt="&lt;a href=&#34;https://www.techempower.com/benchmarks/#section=test&amp;amp;runid=7464e520-0dc2-473d-bd34-dbdfd7e85911&amp;amp;hw=ph&amp;amp;test=query&amp;amp;l=z8kflr-v&amp;amp;a=23&#34;&gt;Source&lt;/a&gt;">
+  
+      <img src="/images/fastapi_for_data_scientists/3.png" alt="&lt;a href=&#34;https://www.techempower.com/benchmarks/#section=test&amp;amp;runid=7464e520-0dc2-473d-bd34-dbdfd7e85911&amp;amp;hw=ph&amp;amp;test=query&amp;amp;l=z8kflr-v&amp;amp;a=23&#34;&gt;Source&lt;/a&gt;">
+  
 
 
 
@@ -340,7 +348,9 @@ def predict_complex_model(age: int,sex:str):
 <pre><code>[http://127.0.0.1:8000/predict?age=10&amp;sex=M](http://127.0.0.1:8000/predict?age=10&amp;sex=M)
 </code></pre>
 <p>
-  <img src="/images/fastapi_for_data_scientists/4.png" alt="">
+  
+    <img src="/images/fastapi_for_data_scientists/4.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -357,7 +367,9 @@ response = requests.get(f&quot;[http://127.0.0.1:8000/predict?age={age}&amp;sex=
 output = response.json()
 </code></pre>
 <p>
-  <img src="/images/fastapi_for_data_scientists/5.png" alt="">
+  
+    <img src="/images/fastapi_for_data_scientists/5.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -368,7 +380,9 @@ output = response.json()
 </code></pre>
 <p>Where you will find a GUI way to test your API.</p>
 <p>
-  <img src="/images/fastapi_for_data_scientists/6.png" alt="">
+  
+    <img src="/images/fastapi_for_data_scientists/6.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -396,7 +410,9 @@ def predict_complex_model(d:Input):
 </code></pre>
 <p>note that we use app.put here in place of app.get previously. We also needed to provide a new class Input , which uses a library called pydantic to validate the input data types that we will get from the API end-user while previously in GET, we validated the inputs using the function parameter list. Also, this time you won’t be able to see your content using a URL on the web. For example, using the browser to point to the endpoint location gives:</p>
 <p>
-  <img src="/images/fastapi_for_data_scientists/7.png" alt="">
+  
+    <img src="/images/fastapi_for_data_scientists/7.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -411,7 +427,9 @@ response = requests.put(&quot;[http://127.0.0.1:8000/predict](http://127.0.0.1:8
 response.json()
 </code></pre>
 <p>
-  <img src="/images/fastapi_for_data_scientists/8.png" alt="">
+  
+    <img src="/images/fastapi_for_data_scientists/8.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -421,7 +439,9 @@ response.json()
 <pre><code>[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 </code></pre>
 <p>
-  <img src="/images/fastapi_for_data_scientists/9.png" alt="">
+  
+    <img src="/images/fastapi_for_data_scientists/9.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 

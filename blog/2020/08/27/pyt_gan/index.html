@@ -288,27 +288,35 @@
 <h2 id="the-generator-architecture">The Generator architecture</h2>
 <p>One of the main problems we face when working with GANs is that the training is not very stable. So we have to come up with a generator architecture that solves our problem and also results in stable training. The diagram below is taken from the paper <a href="https://arxiv.org/pdf/1511.06434.pdf">Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks</a>, which explains the DC-GAN generator architecture.</p>
 <p>
-  <img src="/images/pyt_gan/1.png" alt="&lt;a href=&#34;https://arxiv.org/pdf/1511.06434.pdf&#34;&gt;Source&lt;/a&gt;">
+  
+      <img src="/images/pyt_gan/1.png" alt="&lt;a href=&#34;https://arxiv.org/pdf/1511.06434.pdf&#34;&gt;Source&lt;/a&gt;">
+  
 
 
 
 </p>
 <p>Though it might look a little bit confusing, essentially you can think of a generator neural network as a black box which takes as input a 100 dimension normally generated vector of numbers and gives us an image:</p>
 <p>
-  <img src="/images/pyt_gan/2.png" alt="Generator as a BlackBox">
+  
+      <img src="/images/pyt_gan/2.png" alt="Generator as a BlackBox">
+  
 
 
 
 </p>
 <p>So how do we create such an architecture? Below, we use a dense layer of size 4x4x1024 to create a dense vector out of the 100-d vector. We then reshape the dense vector in the shape of an image of 4×4 with 1024 filters, as shown in the following figure:</p>
 <p>
-  <img src="/images/pyt_gan/3.png" alt="">
+  
+    <img src="/images/pyt_gan/3.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
 </p>
 <p>
-  <img src="/images/pyt_gan/4.png" alt="Generator Architecture">
+  
+      <img src="/images/pyt_gan/4.png" alt="Generator Architecture">
+  
 
 
 
@@ -319,7 +327,9 @@
 <h2 id="now-what-are-transpose-convolutions">Now, What are Transpose convolutions?</h2>
 <p>Put simply, transposing convolutions provides us with a way to upsample images. In a convolution operation, we try to go from a 4×4 image to a 2×2 image. But when we transpose convolutions, we convolve from 2×2 to 4×4 as shown in the following figure:</p>
 <p>
-  <img src="/images/pyt_gan/5.png" alt="Upsampling a 2x2 image to 4x4 image">
+  
+      <img src="/images/pyt_gan/5.png" alt="Upsampling a 2x2 image to 4x4 image">
+  
 
 
 
@@ -330,7 +340,9 @@
 <h2 id="the-discriminator-architecture">The Discriminator architecture</h2>
 <p>Now that we’ve covered the generator architecture, let’s look at the discriminator as a black box. In practice, it contains a series of convolutional layers with a dense layer at the end to predict if an image is fake or not. You can see an example in the figure below:</p>
 <p>
-  <img src="/images/pyt_gan/6.png" alt="Discriminator as a Blackbox">
+  
+      <img src="/images/pyt_gan/6.png" alt="Discriminator as a Blackbox">
+  
 
 
 
@@ -372,7 +384,9 @@ plt<span style="color:#f92672">.</span>imshow(np<span style="color:#f92672">.</s
 </code></pre></div><p>The resultant output of the code is as follows:</p>
 <p>
   <figure>
-    <img src="/images/pyt_gan/7.png" alt="So Many different Characters — Can our Generator understand the patterns?">
+    
+        <img src="/images/pyt_gan/7.png" alt="So Many different Characters — Can our Generator understand the patterns?">
+    
     <figcaption>So Many different Characters — Can our Generator understand the patterns?</figcaption>
   </figure>
 
@@ -387,13 +401,17 @@ plt<span style="color:#f92672">.</span>imshow(np<span style="color:#f92672">.</s
 <p>We need to generate the noise which we want to convert to an image using our generator architecture.</p>
 <p>We use a normal distribution</p>
 <p>
-  <img src="/images/pyt_gan/8.png" alt="">
+  
+    <img src="/images/pyt_gan/8.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
 </p>
 <p>
-  <img src="/images/pyt_gan/9.png" alt="">
+  
+    <img src="/images/pyt_gan/9.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -467,7 +485,9 @@ print(netG)
 </code></pre>
 <p>We can see the final generator model:</p>
 <p>
-  <img src="/images/pyt_gan/10.png" alt="">
+  
+    <img src="/images/pyt_gan/10.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -518,7 +538,9 @@ print(netD)
 </code></pre>
 <p>Here is the architecture of the discriminator:</p>
 <p>
-  <img src="/images/pyt_gan/11.png" alt="">
+  
+    <img src="/images/pyt_gan/11.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -699,7 +721,9 @@ batch_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">128<
 <p>The final output of our generator can be seen below. The GAN generates pretty good images for our content editor friends to work with.</p>
 <p>The images might be a little crude, but still, this project was a starter for our GAN journey. The field is constantly advancing with better and more complex GAN architectures, so we’ll likely see further increases in image quality from these architectures. Also, keep in mind that these images are generated from a noise vector only: this means the input is some noise, and the output is an image. It’s quite incredible.</p>
 <p>
-  <img src="/images/pyt_gan/12.png" alt="ALL THESE IMAGES ARE FAKE">
+  
+      <img src="/images/pyt_gan/12.png" alt="ALL THESE IMAGES ARE FAKE">
+  
 
 
 
@@ -717,7 +741,9 @@ plt.legend()
 plt.show()
 </code></pre>
 <p>
-  <img src="/images/pyt_gan/13.png" alt="Generator vs. Discriminator Loss">
+  
+      <img src="/images/pyt_gan/13.png" alt="Generator vs. Discriminator Loss">
+  
 
 
 
@@ -732,7 +758,9 @@ ims = [[plt.imshow(np.transpose(i,(1,2,0)), animated=True)] for i in img_list]
 ani = animation.ArtistAnimation(fig, ims, interval=1000, repeat_delay=1000, blit=True)HTML(ani.to_jshtml())
 </code></pre>
 <p>
-  <img src="/images/pyt_gan/14.png" alt="You can check out the Progression of Training">
+  
+      <img src="/images/pyt_gan/14.png" alt="You can check out the Progression of Training">
+  
 
 
 
@@ -742,7 +770,9 @@ ani = animation.ArtistAnimation(fig, ims, interval=1000, repeat_delay=1000, blit
 Image(url='animation.gif')
 </code></pre>
 <p>
-  <img src="/images/pyt_gan/15.png" alt="Or Save the Output as a GIF Image as well.">
+  
+      <img src="/images/pyt_gan/15.png" alt="Or Save the Output as a GIF Image as well.">
+  
 
 
 
@@ -775,7 +805,9 @@ plt.show()
 </code></pre>
 <p>Given below is the result of the GAN at different time steps:</p>
 <p>
-  <img src="/images/pyt_gan/16.png" alt="">
+  
+    <img src="/images/pyt_gan/16.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 

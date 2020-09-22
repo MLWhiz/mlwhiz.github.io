@@ -260,7 +260,9 @@
 <p><em><strong>Thought Experiment:</strong></em> Assume that we have infinite slot machines. Every slot machine has some win probability. But we don’t know these probability values.</p>
 <p>You have to operate these slot machines one by one. How do you come up with a strategy to maximize your outcome from these slot machines in minimum time.</p>
 <p>
-  <img src="/images/bandits/2.png" alt="">
+  
+    <img src="/images/bandits/2.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -291,7 +293,9 @@
 <hr>
 <h2 id="problem-statement">Problem Statement:</h2>
 <p>
-  <img src="/images/bandits/3.jpg" alt="">
+  
+    <img src="/images/bandits/3.jpg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -304,7 +308,9 @@
 <h2 id="bayes-everywhere">Bayes Everywhere:</h2>
 <p>Before we delve down into the algorithm we will use to solve this, let us revisit the Bayes theorem.</p>
 <p>
-  <img src="/images/bandits/4.png" alt="">
+  
+    <img src="/images/bandits/4.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -314,14 +320,18 @@
 <h2 id="beta-distribution">Beta Distribution</h2>
 <p>The <strong>beta distribution</strong> is a continuous probability distribution defined on the interval [0, 1] parametrized by two positive shape parameters, denoted by <em>α</em> and <em>β</em>.The PDF of the beta distribution is:</p>
 <p>
-  <img src="/images/bandits/5.png" alt="">
+  
+    <img src="/images/bandits/5.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
 </p>
 <p>And, the pdf looks like below for different values of <em>α</em> and <em>β</em>:</p>
 <p>
-  <img src="/images/bandits/6.png" alt="">
+  
+    <img src="/images/bandits/6.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -332,7 +342,9 @@
 <p>So after knowing the above concepts let us come back to our present problem.</p>
 <p>We have three assets.</p>
 <p>
-  <img src="/images/bandits/7.jpg" alt="">
+  
+    <img src="/images/bandits/7.jpg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -366,7 +378,9 @@
 <h3 id="updating-the-prior">Updating the Prior:</h3>
 <p>The reason we took beta distribution to model our probabilities is because of its great mathematical properties.</p>
 <p>
-  <img src="/images/bandits/8.png" alt="">
+  
+    <img src="/images/bandits/8.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -376,7 +390,9 @@
 <hr>
 <h2 id="let-us-code">Let us Code</h2>
 <p>
-  <img src="/images/bandits/9.jpg" alt="">
+  
+    <img src="/images/bandits/9.jpg" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -444,7 +460,9 @@ data <span style="color:#f92672">=</span> [(<span style="color:#e6db74">&#34;_&#
 </code></pre></div><p>This is the result of our runs. You can see the functions I used to visualize the posterior distributions here at <a href="https://www.kaggle.com/mlwhiz/bayesian-bandits?scriptVersionId=17478592">kaggle</a>. As you can see below, we have pretty much converged to the best asset by the end of 20 runs. And the probabilities are also estimated roughly what they should be.</p>
 <p><em><strong>At the start, we have a uniform prior.</strong></em> As we go through with the runs we see that the “red” asset’s posterior distribution converges towards a higher mean and as such a higher probability of pick. But remember that doesn’t mean that the green asset and blue asset are not going to be picked ever.</p>
 <p>
-  <img src="/images/bandits/10.png" alt="">
+  
+    <img src="/images/bandits/10.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
@@ -454,7 +472,9 @@ data <span style="color:#f92672">=</span> [(<span style="color:#e6db74">&#34;_&#
 </code></pre>
 <p>We can see that although we are mostly picking R we still end up sometimes picking B(Pick 45) and G(Pick 44) in the later runs too. Overall we can see that in the first few runs, we are focussing on exploration and as we go towards later runs we focus on exploitation.</p>
 <p>
-  <img src="/images/bandits/11.png" alt="">
+  
+    <img src="/images/bandits/11.png" alt="Data Science, Machine Learning, Artificial Intelligence">
+    
 
 
 
