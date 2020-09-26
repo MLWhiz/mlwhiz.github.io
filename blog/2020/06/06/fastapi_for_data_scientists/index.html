@@ -289,7 +289,10 @@
 <h2 id="what-is-an-api">What is an API?</h2>
 <p>Before we go any further, we need to understand what an API is. According to Wikipedia:</p>
 <blockquote>
-<p>An <strong>application programming interface</strong> (<strong>API</strong>) is a <a href="https://en.wikipedia.org/wiki/Interface_(computing)">computing interface</a> which defines interactions between multiple software intermediaries. It defines the kinds of calls or requests that can be made, how to make them, the data formats that should be used, the conventions to follow, etc.</p>
+<p>An <strong>application programming interface</strong> (<strong>API</strong>) is a 
+
+<a href="https://en.wikipedia.org/wiki/Interface_%28computing%29" target="_blank" rel="nofollow noopener">computing interface</a>
+ which defines interactions between multiple software intermediaries. It defines the kinds of calls or requests that can be made, how to make them, the data formats that should be used, the conventions to follow, etc.</p>
 </blockquote>
 <p><em>The way I like to understand an API is that it’s an “online function,” a function that I can call online.</em></p>
 <p>For example:</p>
@@ -300,10 +303,19 @@
     
 
 </p>
-<p>The advantage of using such a sort of mechanism is that the API user doesn’t get access to the whole dataset or source code and yet they can get all the information they need. <em>This is how many services on the internet like <a href="https://aws.amazon.com/rekognition/">Amazon Rekognition</a>, which is an image and video API, or <a href="https://cloud.google.com/natural-language/pricing">Google Natural Language API</a>, which is an NLP API works. They provide us access to some great functions without letting us have the source code, which is often valuable and kept hidden. For example, I can send an image to Amazon Rekognition API, and it can provide me with Face detection and Analysis.</em></p>
+<p>The advantage of using such a sort of mechanism is that the API user doesn’t get access to the whole dataset or source code and yet they can get all the information they need. <em>This is how many services on the internet like 
+
+<a href="https://aws.amazon.com/rekognition/" target="_blank" rel="nofollow noopener">Amazon Rekognition</a>
+, which is an image and video API, or 
+
+<a href="https://cloud.google.com/natural-language/pricing" target="_blank" rel="nofollow noopener">Google Natural Language API</a>
+, which is an NLP API works. They provide us access to some great functions without letting us have the source code, which is often valuable and kept hidden. For example, I can send an image to Amazon Rekognition API, and it can provide me with Face detection and Analysis.</em></p>
 <p>
   
-      <img src="/images/fastapi_for_data_scientists/1.png" alt="&lt;a href=&#34;https://aws.amazon.com/rekognition/?blog-cards.sort-by=item.additionalFields.createdDate&amp;amp;blog-cards.sort-order=desc&#34;&gt;Source&lt;/a&gt;">
+      <img src="/images/fastapi_for_data_scientists/1.png" alt="
+
+&lt;a href=&#34;https://aws.amazon.com/rekognition/?blog-cards.sort-by=item.additionalFields.createdDate&amp;amp;blog-cards.sort-order=desc&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Source&lt;/a&gt;
+">
   
 
 </p>
@@ -323,7 +335,10 @@
 <p><strong>Endpoint:</strong> In the above API call, the endpoint is : <a href="http://www.omdbapi.com/">http://www.omdbapi.com/</a> . Simply this is the location of where the function code is running.</p>
 </li>
 <li>
-<p><strong>API Access Key</strong>: Most of the public APIs will have some access key, which you can request. For OMDB API, I had to register and get the API key which is <a href="http://www.omdbapi.com/?i=tt3896198&amp;apikey=9ea43e94">9ea43e94</a>.</p>
+<p><strong>API Access Key</strong>: Most of the public APIs will have some access key, which you can request. For OMDB API, I had to register and get the API key which is 
+
+<a href="http://www.omdbapi.com/?i=tt3896198&amp;apikey=9ea43e94" target="_blank" rel="nofollow noopener">9ea43e94</a>
+.</p>
 </li>
 <li>
 <p>**? Operator:**This operator is used to specify the parameters we want to send to the API or our “online function.” Here we give two params to our API i.e., IMDB movie ID and API Access Key using the ? operator. Since there are multiple inputs, we use &amp; operator also.</p>
@@ -331,12 +346,21 @@
 </ul>
 <hr>
 <h2 id="why-fastapi">Why FastAPI?</h2>
-<p><em>“If you’re looking to learn one modern framework for building REST APIs, check out FastAPI […] It’s fast, easy to use and easy to learn […]”</em> — <a href="https://spacy.io/">spaCy</a> creators</p>
+<p><em>“If you’re looking to learn one modern framework for building REST APIs, check out FastAPI […] It’s fast, easy to use and easy to learn […]”</em> — 
+
+<a href="https://spacy.io/" target="_blank" rel="nofollow noopener">spaCy</a>
+ creators</p>
 <p>While Python has many frameworks to build APIs, the most common being Flask and Tornado, FastAPI is much better than available alternatives in its ease of usage as it seems much more pythonic in comparison with Flask.</p>
-<p>Also, FastAPI is fast. As the Github docs say, <strong>“Very high performance, on par with NodeJS and Go.”</strong> We can also check the latency <a href="https://www.techempower.com/benchmarks/#section=test&amp;runid=7464e520-0dc2-473d-bd34-dbdfd7e85911&amp;hw=ph&amp;test=query&amp;l=z8kflr-v&amp;a=2">benchmarks</a> for ourselves.</p>
+<p>Also, FastAPI is fast. As the Github docs say, <strong>“Very high performance, on par with NodeJS and Go.”</strong> We can also check the latency 
+
+<a href="https://www.techempower.com/benchmarks/#section=test&amp;runid=7464e520-0dc2-473d-bd34-dbdfd7e85911&amp;hw=ph&amp;test=query&amp;l=z8kflr-v&amp;a=2" target="_blank" rel="nofollow noopener">benchmarks</a>
+ for ourselves.</p>
 <p>
   
-      <img src="/images/fastapi_for_data_scientists/3.png" alt="&lt;a href=&#34;https://www.techempower.com/benchmarks/#section=test&amp;amp;runid=7464e520-0dc2-473d-bd34-dbdfd7e85911&amp;amp;hw=ph&amp;amp;test=query&amp;amp;l=z8kflr-v&amp;amp;a=23&#34;&gt;Source&lt;/a&gt;">
+      <img src="/images/fastapi_for_data_scientists/3.png" alt="
+
+&lt;a href=&#34;https://www.techempower.com/benchmarks/#section=test&amp;amp;runid=7464e520-0dc2-473d-bd34-dbdfd7e85911&amp;amp;hw=ph&amp;amp;test=query&amp;amp;l=z8kflr-v&amp;amp;a=23&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Source&lt;/a&gt;
+">
   
 
 </p>
@@ -377,7 +401,10 @@ def predict_complex_model(age: int,sex:str):
     
 
 </p>
-<p>What happens is as you hit the command in your browser, it calls the <a href="http://127.0.0.1:8000/predict?age=10&amp;sex=M">http://127.0.0.1:8000/</a>predict endpoint which in turn calls the associated method predict_complex_model with the with params age=10 and sex='M&rsquo;</p>
+<p>What happens is as you hit the command in your browser, it calls the 
+
+<a href="http://127.0.0.1:8000/predict?age=10&amp;sex=M" target="_blank" rel="nofollow noopener">http://127.0.0.1:8000/</a>
+predict endpoint which in turn calls the associated method predict_complex_model with the with params age=10 and sex='M&rsquo;</p>
 <p>So, it allows us to use our function from a browser, but that’s still not very helpful. Your developer friend needs to use your predict function to show output on a frontend website. How can you provide him with access to this function?</p>
 <p>It is pretty simple. If your developer friend also uses Python, for example, he can use the requests module like below:</p>
 <pre><code>import requests
@@ -460,11 +487,23 @@ response.json()
 </p>
 <p>And, we are done with creating our API. It was simple for a change.</p>
 <p>FastAPI makes the API creation, which used to be one of the dreaded parts of the Data Science process, much more intuitive, easy, and Fast.</p>
-<p>You can find the code for this post as well as all my posts at my <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/fastapi">GitHub</a> repository.</p>
+<p>You can find the code for this post as well as all my posts at my 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/fastapi" target="_blank" rel="nofollow noopener">GitHub</a>
+ repository.</p>
 <hr>
 <h2 id="continue-learning">Continue Learning</h2>
-<p>If you want to learn more about building and putting a Machine Learning model in production, this <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.14884356434&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Faws-machine-learning">course on AWS</a> for implementing Machine Learning applications promises just that.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------">Medium</a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c">blog</a></p>
+<p>If you want to learn more about building and putting a Machine Learning model in production, this 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.14884356434&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Faws-machine-learning" target="_blank" rel="nofollow noopener">course on AWS</a>
+ for implementing Machine Learning applications promises just that.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" target="_blank" rel="nofollow noopener">Medium</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">blog</a>
+</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 

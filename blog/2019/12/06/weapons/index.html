@@ -295,7 +295,10 @@
         <div class="content mb-5">
           <p>Object Detection is a helpful tool to have in your coding repository.</p>
 <p>It forms the backbone of many fantastic industrial applications. Some of them being self-driving cars, medical imaging and face detection.</p>
-<p>In my last <a href="https://towardsdatascience.com/a-hitchhikers-guide-to-object-detection-and-instance-segmentation-ac0146fe8e11">post</a> on Object detection, I talked about how Object detection models evolved.</p>
+<p>In my last 
+
+<a href="https://towardsdatascience.com/a-hitchhikers-guide-to-object-detection-and-instance-segmentation-ac0146fe8e11" target="_blank" rel="nofollow noopener">post</a>
+ on Object detection, I talked about how Object detection models evolved.</p>
 <p>But what good is theory, if we can’t implement it?</p>
 <p><em><strong>This post is about implementing and getting an object detector on our custom dataset of weapons.</strong></em></p>
 <p>The problem we will specifically solve today is that of Instance Segmentation using Mask-RCNN.</p>
@@ -311,10 +314,16 @@
 <p>The most common way to solve this problem is by using Mask-RCNN. The architecture of Mask-RCNN looks like below:</p>
 <p>
   
-      <img src="/images/weapons/1.png" alt="&lt;a href=&#34;https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272&#34;&gt;Source&lt;/a&gt;">
+      <img src="/images/weapons/1.png" alt="
+
+&lt;a href=&#34;https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Source&lt;/a&gt;
+">
   
 
-<em><a href="https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272">Source</a></em></p>
+<em>
+
+<a href="https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272" target="_blank" rel="nofollow noopener">Source</a>
+</em></p>
 <p>Essentially, it comprises of:</p>
 <ul>
 <li>
@@ -331,8 +340,14 @@
 </li>
 </ul>
 <p>There is a lot more to it. If you want to learn more about the theory, read my last post&ndash;
-<a href="https://towardsdatascience.com/a-hitchhikers-guide-to-object-detection-and-instance-segmentation-ac0146fe8e11">Demystifying Object Detection and Instance Segmentation for Data Scientists</a></p>
-<p>This post is mostly going to be about the <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/object_detection">code</a>.</p>
+
+
+<a href="https://towardsdatascience.com/a-hitchhikers-guide-to-object-detection-and-instance-segmentation-ac0146fe8e11" target="_blank" rel="nofollow noopener">Demystifying Object Detection and Instance Segmentation for Data Scientists</a>
+</p>
+<p>This post is mostly going to be about the 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/object_detection" target="_blank" rel="nofollow noopener">code</a>
+.</p>
 <hr>
 <h2 id="1-creating-your-custom-dataset-for-instance-segmentation">1. Creating your Custom Dataset for Instance Segmentation</h2>
 <p>
@@ -342,10 +357,16 @@
 
 </p>
 <p>The use case we will be working on is a weapon detector. A weapon detector is something that can be used in conjunction with street cameras as well as CCTV’s to fight crime. So it is pretty nifty.</p>
-<p>So, I started with downloading 40 images each of guns and swords from the <a href="https://storage.googleapis.com/openimages/web/index.html">open image dataset</a> and annotated them using the VIA tool. Now setting up the annotation project in VIA is petty important, so I will try to explain it step by step.</p>
+<p>So, I started with downloading 40 images each of guns and swords from the 
+
+<a href="https://storage.googleapis.com/openimages/web/index.html" target="_blank" rel="nofollow noopener">open image dataset</a>
+ and annotated them using the VIA tool. Now setting up the annotation project in VIA is petty important, so I will try to explain it step by step.</p>
 <h3 id="1-set-up-via">1. Set up VIA</h3>
 <p>VIA is an annotation tool, using which you can annotate images both bounding boxes as well as masks. I found it as one of the best tools to do annotation as it is online and runs in the browser itself.</p>
-<p>To use it, open <a href="http://www.robots.ox.ac.uk/~vgg/software/via/via.html">http://www.robots.ox.ac.uk/~vgg/software/via/via.html</a></p>
+<p>To use it, open 
+
+<a href="http://www.robots.ox.ac.uk/~vgg/software/via/via.html" target="_blank" rel="nofollow noopener">http://www.robots.ox.ac.uk/~vgg/software/via/via.html</a>
+</p>
 <p>You will see a page like:</p>
 <p>
   
@@ -427,7 +448,10 @@ valid_annotations <span style="color:#f92672">=</span> {}
 </code></pre>
 <hr>
 <h2 id="2-setup-the-coding-environment">2. Setup the Coding Environment</h2>
-<p>We will use the code from the <a href="https://github.com/matterport/Mask_RCNN">matterport/Mask_RCNN</a> GitHub repository. You can start by cloning the repository and installing the required libraries.</p>
+<p>We will use the code from the 
+
+<a href="https://github.com/matterport/Mask_RCNN" target="_blank" rel="nofollow noopener">matterport/Mask_RCNN</a>
+ GitHub repository. You can start by cloning the repository and installing the required libraries.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git clone https://github.com/matterport/Mask_RCNN
 cd Mask_RCNN
 pip install -r requirements.txt
@@ -447,7 +471,10 @@ pip install -r requirements.txt
 <p>And some changes in the train function</p>
 </li>
 </ol>
-<p>Showing only the changed <code>gnsConfig</code> here to get you an idea. You can take a look at the whole <a href="https://github.com/MLWhiz/data_science_blogs/blob/master/object_detection/guns_and_swords/gns.py">gns.py</a> code here.</p>
+<p>Showing only the changed <code>gnsConfig</code> here to get you an idea. You can take a look at the whole 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/blob/master/object_detection/guns_and_swords/gns.py" target="_blank" rel="nofollow noopener">gns.py</a>
+ code here.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">gnsConfig</span>(Config):
     <span style="color:#e6db74">&#34;&#34;&#34;Configuration for training on the toy  dataset.
 </span><span style="color:#e6db74">    Derives from the base Config class and overrides some values.
@@ -462,7 +489,10 @@ pip install -r requirements.txt
     <span style="color:#75715e"># Number of training steps per epoch</span>
 </code></pre></div><hr>
 <h2 id="3-visualizing-images-and-masks">3. Visualizing Images and Masks</h2>
-<p>Once we are done with changing the <code>gns.py</code> file,we can visualize our masks and images. You can do simply by following this <a href="hhttps://github.com/MLWhiz/data_science_blogs/blob/master/object_detection/guns_and_swords/1.%20Visualize%20Dataset.ipynb">Visualize Dataset.ipynb</a> notebook.</p>
+<p>Once we are done with changing the <code>gns.py</code> file,we can visualize our masks and images. You can do simply by following this 
+
+<a href="hhttps://github.com/MLWhiz/data_science_blogs/blob/master/object_detection/guns_and_swords/1.%20Visualize%20Dataset.ipynb">Visualize Dataset.ipynb</a>
+ notebook.</p>
 <p>
   
     <img src="/images/weapons/a.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
@@ -504,7 +534,10 @@ pip install -r requirements.txt
 <p>We can see that the validation loss is performing pretty abruptly. This is expected as we only have kept 20 images in the validation set.</p>
 <hr>
 <h2 id="5-prediction-on-new-images">5. Prediction on New Images</h2>
-<p>Predicting a new image is also pretty easy. Just follow the <a href="https://github.com/MLWhiz/data_science_blogs/blob/master/object_detection/guns_and_swords/2.%20predict.ipynb">prediction.ipynb</a> notebook for a minimal example using our trained model. Below is the main part of the code.</p>
+<p>Predicting a new image is also pretty easy. Just follow the 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/blob/master/object_detection/guns_and_swords/2.%20predict.ipynb" target="_blank" rel="nofollow noopener">prediction.ipynb</a>
+ notebook for a minimal example using our trained model. Below is the main part of the code.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Function taken from utils.dataset</span>
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">load_image</span>(image_path):
     <span style="color:#e6db74">&#34;&#34;&#34;Load the specified image and return a [H,W,3] Numpy array.
@@ -561,9 +594,24 @@ RPN_ANCHOR_RATIOS <span style="color:#f92672">=</span> [<span style="color:#ae81
 <h2 id="conclusion">Conclusion</h2>
 <p><em><strong>In this post, I talked about how to implement Instance segmentation using Mask-RCNN for a custom dataset.</strong></em></p>
 <p>I tried to make the coding part as simple as possible and hope you find the code useful. In the next part of this post, I will deploy this model using a web app. So stay tuned.</p>
-<p>You can download the annotated weapons data as well as the code at <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/object_detection">Github</a>.</p>
-<p>If you want to know more about various <em><strong>Object Detection techniques, motion estimation, object tracking in video etc</strong></em>., I would like to recommend this awesome course on <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Deep Learning in Computer Vision</a> in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a>.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c"><strong>blog</strong></a>.</p>
+<p>You can download the annotated weapons data as well as the code at 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/object_detection" target="_blank" rel="nofollow noopener">Github</a>
+.</p>
+<p>If you want to know more about various <em><strong>Object Detection techniques, motion estimation, object tracking in video etc</strong></em>., I would like to recommend this awesome course on 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Deep Learning in Computer Vision</a>
+ in the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Advanced machine learning specialization</a>
+.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal" target="_blank" rel="nofollow noopener">&lt;strong&gt;Medium&lt;/strong&gt;</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">&lt;strong&gt;blog&lt;/strong&gt;</a>
+.</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources as sharing knowledge is never a bad idea.</p>
 
 

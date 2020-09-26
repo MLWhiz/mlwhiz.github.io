@@ -294,7 +294,13 @@
         
         <div class="content mb-5">
           <p>Kaggle is an excellent place for learning. And I learned a lot of things from the recently concluded competition on <strong>Quora Insincere questions classification</strong> in which I got a rank of <strong><code>182/4037</code></strong>. In this post, I will try to provide a summary of the things I tried. I will also try to summarize the ideas which I missed but were a part of other winning solutions.</p>
-<p><strong>As a side note</strong>: if you want to know more about NLP, I would like to <strong>recommend this awesome course</strong> on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing">Natural Language Processing</a> in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a>. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few. You can start for free with the 7-day Free Trial.</p>
+<p><strong>As a side note</strong>: if you want to know more about NLP, I would like to <strong>recommend this awesome course</strong> on 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target="_blank" rel="nofollow noopener">Natural Language Processing</a>
+ in the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Advanced machine learning specialization</a>
+. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few. You can start for free with the 7-day Free Trial.</p>
 <p>So first a little bit of summary about the competition for the uninitiated. In this competition, we had to develop models that identify and flag insincere questions. <em><strong>The challenge was not only a test for performance but also a test of efficient code writing skills.</strong></em> As it was a kernel competition with limited outside data options, competitors were limited to use only the word embeddings provided by the competition organizers. That means we were not allowed to use State of the art models like BERT. We were also limited in the sense that all our models should run in a time of 2 hours. So say bye bye to stacking and monster ensembles though some solutions were able to do this by making their code ultra-efficient. More on this later.</p>
 <h2 id="some-kaggle-learnings">Some Kaggle Learnings:</h2>
 <p>There were a couple of <strong>learnings about kaggle as a whole</strong> that I would like to share before jumping into my final solution:</p>
@@ -312,7 +318,16 @@
 <p>Luckily I didn&rsquo;t end up making the mistake of not trusting my CV score. Owing to a lot of excellent posts on Kaggle discussion board, <em><strong>I selected a kernel with Public LB score of 0.697 and a Local CV of 0.701, which was around &gt;1200 rank on Public LB as of the final submission. It achieved a score of 0.702 and ranked 182 on the private LB.</strong></em></p>
 <p>While this seems like a straightforward choice post-facto, it was a hard decision to make at a time when you have at your disposal some public kernels having Public LB score &gt;= 0.70</p>
 <h3 id="2-use-the-code-from-public-kernels-but-check-for-errors">2. Use the code from public kernels but check for errors</h3>
-<p><a href="https://www.kaggle.com/bminixhofer/deterministic-neural-networks-using-pytorch">This</a> Pytorch kernel by Benjamin Minixhofer is awesome. It made the base of many of my submissions for this competition. But this kernel had a mistake. It didn&rsquo;t implement spatial dropout in the right way. You can find the correct implementation of spatial dropout in my post <a href="/blog/2019/01/06/pytorch_keras_conversion/">here</a> or on my <a href="https://www.kaggle.com/mlwhiz/third-place-model-for-toxic-spatial-dropout">kernel</a>. Implementing spatial dropout in the right way gave a boost of around 0.004 to the local CV.</p>
+<p>
+
+<a href="https://www.kaggle.com/bminixhofer/deterministic-neural-networks-using-pytorch" target="_blank" rel="nofollow noopener">This</a>
+ Pytorch kernel by Benjamin Minixhofer is awesome. It made the base of many of my submissions for this competition. But this kernel had a mistake. It didn&rsquo;t implement spatial dropout in the right way. You can find the correct implementation of spatial dropout in my post 
+
+<a href="/blog/2019/01/06/pytorch_keras_conversion/">here</a>
+ or on my 
+
+<a href="https://www.kaggle.com/mlwhiz/third-place-model-for-toxic-spatial-dropout" target="_blank" rel="nofollow noopener">kernel</a>
+. Implementing spatial dropout in the right way gave a boost of around 0.004 to the local CV.</p>
 <p>Nonetheless, I learned pytorch using this kernel, and I am grateful to him for the same.</p>
 <h3 id="3-dont-trust-everything-that-goes-on-the-discussion-forums">3. Don&rsquo;t trust everything that goes on the discussion forums</h3>
 <div style="margin-top: 9px; margin-bottom: 10px;">
@@ -328,14 +343,38 @@
 </li>
 </ul>
 <h3 id="4-on-that-note-be-active-on-discussion-forums-and-check-public-kernels-regularly">4. On that note, be active on Discussion forums and check public kernels regularly</h3>
-<p>You can learn a lot just by being part of discussion forums and following public kernels. This competition had a lot of excellent public kernels on embeddings by <a href="https://www.kaggle.com/sudalairajkumar/a-look-at-different-embeddings">SRK</a>, Models by <a href="https://www.kaggle.com/shujian/mix-of-nn-models-based-on-meta-embedding">Shujian</a>, and Preprocessing by <a href="https://www.kaggle.com/theoviel/improve-your-score-with-text-preprocessing-v2">Theo Viel</a> which gave everyone a headstart. As the competition progressed, the discussions also evolved. There were discussions on speeding up the code, working approaches, F1 threshold finders, and other exciting topics which kept me occupied with new ideas and improvements.</p>
+<p>You can learn a lot just by being part of discussion forums and following public kernels. This competition had a lot of excellent public kernels on embeddings by 
+
+<a href="https://www.kaggle.com/sudalairajkumar/a-look-at-different-embeddings" target="_blank" rel="nofollow noopener">SRK</a>
+, Models by 
+
+<a href="https://www.kaggle.com/shujian/mix-of-nn-models-based-on-meta-embedding" target="_blank" rel="nofollow noopener">Shujian</a>
+, and Preprocessing by 
+
+<a href="https://www.kaggle.com/theoviel/improve-your-score-with-text-preprocessing-v2" target="_blank" rel="nofollow noopener">Theo Viel</a>
+ which gave everyone a headstart. As the competition progressed, the discussions also evolved. There were discussions on speeding up the code, working approaches, F1 threshold finders, and other exciting topics which kept me occupied with new ideas and improvements.</p>
 <p>Even after the end, while reading up discussions on solutions overview, I learned a lot. And I would say it is very ** vital to check out the winning solutions.**</p>
 <h3 id="5-share-a-lot">5. Share a lot</h3>
-<p>Sharing is everything on Kaggle. People have shared their codes as well as their ideas while competing as well as after the competition ended. It is only together that we can go forward. I like blogging, so I am sharing the knowledge via a series of blog posts on text classification. The <a href="/blog/2019/01/17/deeplearning_nlp_preprocess/">first post</a> talked about the different <strong>preprocessing techniques that work with Deep learning models</strong> and <strong>increasing embeddings coverage</strong>. In the <a href="/blog/2019/02/08/deeplearning_nlp_conventional_methods/">second post</a>, I talked through some <strong>basic conventional models</strong> like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and tried to access their performance to create a baseline. In the third post, I will delve deeper into <strong>Deep learning models and the various architectures</strong> we could use to solve the text Classification problem. To make this post platform generic I will try to write code in both Keras and Pytorch. We will try to use various other models which we were not able to use in this competition like <strong>ULMFit transfer learning</strong> approaches in the fourth post in the series.</p>
-<p>It might take me a little time to write the whole series. Till then you can take a look at my other posts too: <a href="/blog/2018/12/17/text_classification/">What Kagglers are using for Text Classification</a>, which talks about various deep learning models in use in NLP and <a href="/blog/2019/01/06/pytorch_keras_conversion/">how to switch from Keras to Pytorch</a>.</p>
+<p>Sharing is everything on Kaggle. People have shared their codes as well as their ideas while competing as well as after the competition ended. It is only together that we can go forward. I like blogging, so I am sharing the knowledge via a series of blog posts on text classification. The 
+
+<a href="/blog/2019/01/17/deeplearning_nlp_preprocess/">first post</a>
+ talked about the different <strong>preprocessing techniques that work with Deep learning models</strong> and <strong>increasing embeddings coverage</strong>. In the 
+
+<a href="/blog/2019/02/08/deeplearning_nlp_conventional_methods/">second post</a>
+, I talked through some <strong>basic conventional models</strong> like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and tried to access their performance to create a baseline. In the third post, I will delve deeper into <strong>Deep learning models and the various architectures</strong> we could use to solve the text Classification problem. To make this post platform generic I will try to write code in both Keras and Pytorch. We will try to use various other models which we were not able to use in this competition like <strong>ULMFit transfer learning</strong> approaches in the fourth post in the series.</p>
+<p>It might take me a little time to write the whole series. Till then you can take a look at my other posts too: 
+
+<a href="/blog/2018/12/17/text_classification/">What Kagglers are using for Text Classification</a>
+, which talks about various deep learning models in use in NLP and 
+
+<a href="/blog/2019/01/06/pytorch_keras_conversion/">how to switch from Keras to Pytorch</a>
+.</p>
 <h3 id="6-beware-of-trolls-">6. Beware of trolls :)</h3>
 <p>We were going along happily towards the end of the competition with two weeks left. Scores were increasing slowly. The top players were somewhat stagnant. <em><strong>And then came Pavel and team with a Public LB score of 0.782.</strong></em> The next group had an LB score of 0.713. Such a huge difference. I was so sure that there was some leakage in the data which nobody has caught yet except for Pavel. I spent nearly half a day to do EDA again.</p>
-<p>In the end, it turned out that what they did was <a href="https://www.kaggle.com/c/quora-insincere-questions-classification/discussion/80665">scraping</a> — nicely played!</p>
+<p>In the end, it turned out that what they did was 
+
+<a href="https://www.kaggle.com/c/quora-insincere-questions-classification/discussion/80665" target="_blank" rel="nofollow noopener">scraping</a>
+ — nicely played!</p>
 <p>They also have some pretty awesome ideas around including additional data, which could have worked but did not in this competition.</p>
 <hr>
 <h2 id="my-final-solution">My Final Solution:</h2>
@@ -350,11 +389,17 @@
 <li>Other features that I used include <code>total_length</code>,<code>capitals</code>,<code>words_vs_unique</code> as well as some engineered features like <code>sum_feat</code>(sum of expletives), <code>question_start_with_why</code>, <code>question_start_with_how_or_what</code>, <code>question_start_with_do_or_are</code>. Might not have added much value but still kept them.</li>
 <li>My final solution consisted of a <strong>stacked ensemble for four models</strong>. I stacked the four models using Logistic regression(with positive weights and 0 intercept) and gave the weights as a list in the final kernel.</li>
 </ul>
-<p>You can find the kernel for my final submission <a href="https://www.kaggle.com/mlwhiz/multimodel-ensemble-clean-kernel?scriptVersionId=10279838">here</a>.</p>
+<p>You can find the kernel for my final submission 
+
+<a href="https://www.kaggle.com/mlwhiz/multimodel-ensemble-clean-kernel?scriptVersionId=10279838" target="_blank" rel="nofollow noopener">here</a>
+.</p>
 <hr>
 <h2 id="tips-and-tricks-used-in-other-solutions">Tips and Tricks used in other solutions:</h2>
 <h3 id="1-increasing-embeddings-coverage">1. Increasing Embeddings Coverage:</h3>
-<p>In the third place solution <a href="https://www.kaggle.com/wowfattie/3rd-place">kernel</a>, wowfattie uses stemming, lemmatization, capitalize, lower, uppercase, as well as embedding of the nearest word using a spell checker to get embeddings for all words in his vocab. Such a great idea. <strong>I liked this solution the best as it can do what I was trying to do and finished at a pretty good place.</strong> Also, the code is very clean.</p>
+<p>In the third place solution 
+
+<a href="https://www.kaggle.com/wowfattie/3rd-place" target="_blank" rel="nofollow noopener">kernel</a>
+, wowfattie uses stemming, lemmatization, capitalize, lower, uppercase, as well as embedding of the nearest word using a spell checker to get embeddings for all words in his vocab. Such a great idea. <strong>I liked this solution the best as it can do what I was trying to do and finished at a pretty good place.</strong> Also, the code is very clean.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> nltk.stem <span style="color:#f92672">import</span> PorterStemmer
 ps <span style="color:#f92672">=</span> PorterStemmer()
 <span style="color:#f92672">from</span> nltk.stem.lancaster <span style="color:#f92672">import</span> LancasterStemmer
@@ -425,7 +470,10 @@ sb <span style="color:#f92672">=</span> SnowballStemmer(<span style="color:#e6db
 <h3 id="3-meta-embeddings">3. Meta Embeddings:</h3>
 <p>A lot of winning solutions ended up using <strong>weighted meta embeddings</strong> where they provided a higher weight to the Glove embedding. Some solutions also used <strong>concatenated embeddings</strong>.</p>
 <h3 id="4-model-architecture">4. Model Architecture:</h3>
-<p>One surprising thing I saw people doing was to use a <strong>1Dconv layer just after the Bidirectional layer</strong>. For example, This is the <a href="https://www.kaggle.com/c/quora-insincere-questions-classification/discussion/80568">architecture</a> used by the team that placed first in the competition.</p>
+<p>One surprising thing I saw people doing was to use a <strong>1Dconv layer just after the Bidirectional layer</strong>. For example, This is the 
+
+<a href="https://www.kaggle.com/c/quora-insincere-questions-classification/discussion/80568" target="_blank" rel="nofollow noopener">architecture</a>
+ used by the team that placed first in the competition.</p>
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/silver/arch_1_place.png"  style="height:50%;width:50%"></center>
 </div>
@@ -434,7 +482,10 @@ sb <span style="color:#f92672">=</span> SnowballStemmer(<span style="color:#e6db
 <blockquote>
 <p>We do not pad sequences to the same length based on the whole data, but just on a batch level. That means we conduct <strong>padding and truncation on the data generator level for each batch separately</strong>, so that length of the sentences in a batch can vary in size. Additionally, we further improved this by not truncating based on the length of the longest sequence in the batch but based on the 95% percentile of lengths within the sequence. This improved runtime heavily and kept accuracy quite robust on single model level, and improved it by being able to average more models.</p>
 </blockquote>
-<p>Also from 7th place <a href="https://www.kaggle.com/c/quora-insincere-questions-classification/discussion/80561">discussion</a>:</p>
+<p>Also from 7th place 
+
+<a href="https://www.kaggle.com/c/quora-insincere-questions-classification/discussion/80561" target="_blank" rel="nofollow noopener">discussion</a>
+:</p>
 <blockquote>
 <p>Bucketing is to make a minibatch from instances that have similar lengths to alleviate the cost of padding. This makes the training speed more than <strong>3x faster, and thus I can run 9 epochs for each split of 5-fold.</strong></p>
 </blockquote>
@@ -444,12 +495,18 @@ sb <span style="color:#f92672">=</span> SnowballStemmer(<span style="color:#e6db
 <h3 id="7-time-taking-modelscomplex-architectures-like-capsule-were-mostly-not-used">7. Time taking models/complex architectures like Capsule were mostly not used:</h3>
 <p>Most of the winning solutions didn&rsquo;t use capsule networks as they took a lot of time to train.</p>
 <h3 id="8-backprop-errors-on-embeddings-weights-in-last-few-epochs">8. Backprop errors on embeddings weights in last few epochs:</h3>
-<p>Another thing I saw was in the <a href="https://www.kaggle.com/kentaronakanishi/18th-place-solution">18th place kernel</a> which uses a single model</p>
+<p>Another thing I saw was in the 
+
+<a href="https://www.kaggle.com/kentaronakanishi/18th-place-solution" target="_blank" rel="nofollow noopener">18th place kernel</a>
+ which uses a single model</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">if</span> epoch <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">3</span>:
     model<span style="color:#f92672">.</span>embedding<span style="color:#f92672">.</span>embeddings<span style="color:#f92672">.</span>weight<span style="color:#f92672">.</span>requires_grad <span style="color:#f92672">=</span> True
 </code></pre></div><hr>
 <h2 id="conclusion">Conclusion:</h2>
-<p>It was a good and long 2-month competition, and I learned a lot about Text and NLP during this time. I want to emphasize here is that <strong>I ended up trying a lot of things that didn&rsquo;t work before reaching my final solution</strong>. It was a little frustrating at times, but in the end, I was happy that I ended up with the best data science practices. Would also like to thank Kaggle master Kazanova who along with some of his friends released a <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">“How to win a data science competition”</a> Coursera course. I learned a lot from this course.</p>
+<p>It was a good and long 2-month competition, and I learned a lot about Text and NLP during this time. I want to emphasize here is that <strong>I ended up trying a lot of things that didn&rsquo;t work before reaching my final solution</strong>. It was a little frustrating at times, but in the end, I was happy that I ended up with the best data science practices. Would also like to thank Kaggle master Kazanova who along with some of his friends released a 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">“How to win a data science competition”</a>
+ Coursera course. I learned a lot from this course.</p>
 <p>Let me know in the comments if you think something is missing/wrong or if I could add more tips/tricks for this competition.</p>
 
 

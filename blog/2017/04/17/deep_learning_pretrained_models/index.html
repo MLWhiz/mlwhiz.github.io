@@ -289,7 +289,13 @@
         <img src="https://mlwhiz.com/images/category_bgs/default_bg.jpg" class="img-fluid w-100 mb-4" alt="Today I Learned This Part 2: Pretrained Neural Networks What are they?">
         
         <div class="content mb-5">
-          <p>Deeplearning is the buzz word right now. I was working on the <a href="http://www.fast.ai/">course</a> for deep learning by Jeremy Howard and one thing I noticed were pretrained deep Neural Networks. In the first lesson he used the pretrained NN to predict on the <a href="https://www.kaggle.com/c/dogs-vs-cats">Dogs vs Cats</a> competition on Kaggle to achieve very good results.</p>
+          <p>Deeplearning is the buzz word right now. I was working on the 
+
+<a href="http://www.fast.ai/" target="_blank" rel="nofollow noopener">course</a>
+ for deep learning by Jeremy Howard and one thing I noticed were pretrained deep Neural Networks. In the first lesson he used the pretrained NN to predict on the 
+
+<a href="https://www.kaggle.com/c/dogs-vs-cats" target="_blank" rel="nofollow noopener">Dogs vs Cats</a>
+ competition on Kaggle to achieve very good results.</p>
 <h2 id="what-are-pretrained-neural-networks">What are pretrained Neural Networks?</h2>
 <p>So let me tell you about the background a little bit. There is a challenge that happens every year in the visual recognition community - The Imagenet Challenge. The task there is to classify the images in 1000 categories using Image training data. People train big convolutional deep learning models for this challenge.</p>
 <p>Now what does training a neural model actually mean? It just means that they learn the weights for a NN. What if we can get the weights they learn? We can use those weights to load them into our own NN model and predict on the test dataset. Right?</p>
@@ -366,7 +372,10 @@ vgg_mean <span style="color:#f92672">=</span> np<span style="color:#f92672">.</s
                 batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span>, class_mode<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;categorical&#39;</span>):
     <span style="color:#66d9ef">return</span> gen<span style="color:#f92672">.</span>flow_from_directory(path<span style="color:#f92672">+</span>dirname, target_size<span style="color:#f92672">=</span>(<span style="color:#ae81ff">224</span>,<span style="color:#ae81ff">224</span>),
                 class_mode<span style="color:#f92672">=</span>class_mode, shuffle<span style="color:#f92672">=</span>shuffle, batch_size<span style="color:#f92672">=</span>batch_size)
-</code></pre></div><p>The hard part is done now. Just create a VGG object and load the weights.We will need to load pretrained weights into the model too. You can download the &ldquo;VGG16_weights.h5&rdquo; file <a href="https://drive.google.com/file/d/0Bz7KyqmuGsilT0J5dmRCM0ROVHc/view">here</a></p>
+</code></pre></div><p>The hard part is done now. Just create a VGG object and load the weights.We will need to load pretrained weights into the model too. You can download the &ldquo;VGG16_weights.h5&rdquo; file 
+
+<a href="https://drive.google.com/file/d/0Bz7KyqmuGsilT0J5dmRCM0ROVHc/view" target="_blank" rel="nofollow noopener">here</a>
+</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">model <span style="color:#f92672">=</span> VGG_16()
 model<span style="color:#f92672">.</span>load_weights(<span style="color:#e6db74">&#39;VGG16_weights.h5&#39;</span>)
 <span style="color:#75715e"># Since our dogs vs cat dataset is binary classification model</span>

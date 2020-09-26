@@ -298,7 +298,10 @@
     
 
 </p>
-<p>Kaggle master Kazanova along with some of his friends released a <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">“How to win a data science competition”</a> Coursera course. The Course involved a final project which itself was a time series prediction problem.</p>
+<p>Kaggle master Kazanova along with some of his friends released a 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">“How to win a data science competition”</a>
+ Coursera course. The Course involved a final project which itself was a time series prediction problem.</p>
 <p>In this competition, we are given a challenging time-series dataset consisting of daily sales data, provided by one of the largest Russian software firms — 1C Company.</p>
 <p>We have to predict total sales for every product and store in the next month.</p>
 <p>Here is how the data looks like:</p>
@@ -313,7 +316,10 @@
 <p><em><strong>So how do we approach this sort of a problem?</strong></em></p>
 <hr>
 <h2 id="data-preparation">Data Preparation</h2>
-<p>The main thing that I noticed is that the data preparation and <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-feature-extraction-b4c157e96631">feature generation</a> aspect is by far the most important thing when we attempt to solve the time series problem using regression.</p>
+<p>The main thing that I noticed is that the data preparation and 
+
+<a href="https://towardsdatascience.com/the-hitchhikers-guide-to-feature-extraction-b4c157e96631" target="_blank" rel="nofollow noopener">feature generation</a>
+ aspect is by far the most important thing when we attempt to solve the time series problem using regression.</p>
 <h3 id="1-do-basic-eda-and-remove-outliers">1. Do Basic EDA and remove outliers</h3>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">sales <span style="color:#f92672">=</span> sales[sales[<span style="color:#e6db74">&#39;item_price&#39;</span>]<span style="color:#f92672">&lt;</span><span style="color:#ae81ff">100000</span>]
 sales <span style="color:#f92672">=</span> sales[sales[<span style="color:#e6db74">&#39;item_cnt_day&#39;</span>]<span style="color:#f92672">&lt;=</span><span style="color:#ae81ff">1000</span>]
@@ -376,7 +382,10 @@ aggregationlist <span style="color:#f92672">=</span> [(<span style="color:#e6db7
   
 
 </p>
-<p>We could also have used <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-feature-extraction-b4c157e96631">featuretools</a> for this. <strong>Featuretools</strong> is a framework to perform automated feature engineering. It excels at transforming temporal and relational datasets into feature matrices for machine learning.</p>
+<p>We could also have used 
+
+<a href="https://towardsdatascience.com/the-hitchhikers-guide-to-feature-extraction-b4c157e96631" target="_blank" rel="nofollow noopener">featuretools</a>
+ for this. <strong>Featuretools</strong> is a framework to perform automated feature engineering. It excels at transforming temporal and relational datasets into feature matrices for machine learning.</p>
 <hr>
 <h3 id="4-create-lag-features">4. Create Lag Features</h3>
 <p>The next set of features our model needs are the lag based Features.</p>
@@ -438,7 +447,10 @@ Y_cv <span style="color:#f92672">=</span> X_cv[<span style="color:#e6db74">&#39;
     
 
 </p>
-<p>Before we proceed with modelling steps, lets check the RMSE of a naive model, as we want to <a href="https://towardsdatascience.com/take-your-machine-learning-models-to-production-with-these-5-simple-steps-35aa55e3a43c">have an RMSE to compare</a> to. We assume that we are going to predict the last month sales as current month sale for our baseline model. We can quantify the performance of our model using this baseline RMSE.</p>
+<p>Before we proceed with modelling steps, lets check the RMSE of a naive model, as we want to 
+
+<a href="https://towardsdatascience.com/take-your-machine-learning-models-to-production-with-these-5-simple-steps-35aa55e3a43c" target="_blank" rel="nofollow noopener">have an RMSE to compare</a>
+ to. We assume that we are going to predict the last month sales as current month sale for our baseline model. We can quantify the performance of our model using this baseline RMSE.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> mean_squared_error
 sales_m_test <span style="color:#f92672">=</span> sales_m[sales_m[<span style="color:#e6db74">&#39;date_block_num&#39;</span>]<span style="color:#f92672">==</span><span style="color:#ae81ff">33</span>]
 
@@ -458,7 +470,13 @@ baseline_rmse <span style="color:#f92672">=</span> np<span style="color:#f92672"
 </code></pre>
 <hr>
 <h3 id="5-train-xgb">5. Train XGB</h3>
-<p>We use the XGBRegressor object from the xgboost scikit API to build our model. Parameters are taken from this <a href="https://www.kaggle.com/dlarionov/feature-engineering-xgboost">kaggle kernel</a>. If you have time, you can use hyperopt to <a href="https://towardsdatascience.com/automate-hyperparameter-tuning-for-your-models-71b18f819604">automatically find out the hyperparameters</a> yourself.</p>
+<p>We use the XGBRegressor object from the xgboost scikit API to build our model. Parameters are taken from this 
+
+<a href="https://www.kaggle.com/dlarionov/feature-engineering-xgboost" target="_blank" rel="nofollow noopener">kaggle kernel</a>
+. If you have time, you can use hyperopt to 
+
+<a href="https://towardsdatascience.com/automate-hyperparameter-tuning-for-your-models-71b18f819604" target="_blank" rel="nofollow noopener">automatically find out the hyperparameters</a>
+ yourself.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> xgboost <span style="color:#f92672">import</span> XGBRegressor
 
 model <span style="color:#f92672">=</span> XGBRegressor(
@@ -483,7 +501,10 @@ model<span style="color:#f92672">.</span>fit(
     
 
 </p>
-<p>After running this, we can see RMSE in ranges of <em><strong>0.93</strong></em> on the CV set. And that is pretty impressive based on our baseline validation RMSE of <em><strong>1.13</strong></em>. And so we work on deploying this model as part of our <a href="https://towardsdatascience.com/take-your-machine-learning-models-to-production-with-these-5-simple-steps-35aa55e3a43c">continuous integration</a> effort.</p>
+<p>After running this, we can see RMSE in ranges of <em><strong>0.93</strong></em> on the CV set. And that is pretty impressive based on our baseline validation RMSE of <em><strong>1.13</strong></em>. And so we work on deploying this model as part of our 
+
+<a href="https://towardsdatascience.com/take-your-machine-learning-models-to-production-with-these-5-simple-steps-35aa55e3a43c" target="_blank" rel="nofollow noopener">continuous integration</a>
+ effort.</p>
 <h3 id="5-plot-feature-importance">5. Plot Feature Importance</h3>
 <p>We can also see the important features that come from XGB.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">feature_importances <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({<span style="color:#e6db74">&#39;col&#39;</span>: columns,<span style="color:#e6db74">&#39;imp&#39;</span>:model<span style="color:#f92672">.</span>feature_importances_})
@@ -504,11 +525,29 @@ px<span style="color:#f92672">.</span>bar(feature_importances,x<span style="colo
     
 
 </p>
-<p>When I took part in this competition as part of the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">course</a>, a couple of years back, using trees I reached near the top of the leaderboard.</p>
+<p>When I took part in this competition as part of the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">course</a>
+, a couple of years back, using trees I reached near the top of the leaderboard.</p>
 <p>Over time people have worked a lot on tweaking the model, hyperparameter tuning and creating even more informative features. But the basic approach has remained the same.</p>
-<p>You can find the whole running code on <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/time_series_xgb">GitHub</a>.</p>
-<p>Take a look at the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">How to Win a Data Science Competition: Learn from Top Kagglers</a> course in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a> by Kazanova. This course talks about a lot of ways to improve your models using feature engineering and hyperparameter tuning.</p>
-<p>I am going to be writing more beginner-friendly posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c"><strong>blog</strong></a>.</p>
+<p>You can find the whole running code on 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/time_series_xgb" target="_blank" rel="nofollow noopener">GitHub</a>
+.</p>
+<p>Take a look at the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">How to Win a Data Science Competition: Learn from Top Kagglers</a>
+ course in the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Advanced machine learning specialization</a>
+ by Kazanova. This course talks about a lot of ways to improve your models using feature engineering and hyperparameter tuning.</p>
+<p>I am going to be writing more beginner-friendly posts in the future too. Let me know what you think about the series. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal" target="_blank" rel="nofollow noopener">&lt;strong&gt;Medium&lt;/strong&gt;</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">&lt;strong&gt;blog&lt;/strong&gt;</a>
+.</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 

@@ -297,11 +297,17 @@
 <p>Now, Ultralytics has released YOLOv5, with comparable AP and faster inference times than YOLOv4. This has left many asking: is a new version warranted given similar accuracy to YOLOv4? Whatever the answer may be, it’s definitely a sign of how quickly the detection community is evolving.</p>
 <p>
   
-      <img src="/images/yolov5/0.png" alt="&lt;a href=&#34;https://github.com/ultralytics/yolov5&#34;&gt;Source&lt;/a&gt;: Ultralytics Yolov5">
+      <img src="/images/yolov5/0.png" alt="
+
+&lt;a href=&#34;https://github.com/ultralytics/yolov5&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Source&lt;/a&gt;
+: Ultralytics Yolov5">
   
 
 </p>
-<p>Since they <a href="https://github.com/ultralytics/yolov3">first ported YOLOv3</a>, Ultralytics has made it very simple to create and deploy models using Pytorch, so I was eager to try out YOLOv5. As it turns out, Ultralytics has further simplified the process, and the results speak for themselves.</p>
+<p>Since they 
+
+<a href="https://github.com/ultralytics/yolov3" target="_blank" rel="nofollow noopener">first ported YOLOv3</a>
+, Ultralytics has made it very simple to create and deploy models using Pytorch, so I was eager to try out YOLOv5. As it turns out, Ultralytics has further simplified the process, and the results speak for themselves.</p>
 <p><em><strong>In this article, we’ll create a detection model using YOLOv5, from creating our dataset and annotating it to training and inferencing using their remarkable library.</strong></em> This post focuses on the implementation of YOLOv5, including:</p>
 <ul>
 <li>
@@ -319,9 +325,15 @@
 </ul>
 <hr>
 <h2 id="creating-custom-dataset">Creating Custom Dataset</h2>
-<p>You can forgo the first step if you have your image Dataset. Since I don’t have images, I am downloading data from the Open Image Dataset(OID), which is an excellent resource for getting annotated image data that can be used for <a href="https://lionbridge.ai/articles/end-to-end-multiclass-image-classification-using-pytorch-and-transfer-learning/">classification</a> as well as detection. Note that we won’t be using the provided annotations from OID and create our own for the sake of learning.</p>
+<p>You can forgo the first step if you have your image Dataset. Since I don’t have images, I am downloading data from the Open Image Dataset(OID), which is an excellent resource for getting annotated image data that can be used for 
+
+<a href="https://lionbridge.ai/articles/end-to-end-multiclass-image-classification-using-pytorch-and-transfer-learning/" target="_blank" rel="nofollow noopener">classification</a>
+ as well as detection. Note that we won’t be using the provided annotations from OID and create our own for the sake of learning.</p>
 <h3 id="1-oidv4-download-images">1. OIDv4 Download Images:</h3>
-<p>To download images from the Open Image dataset, we start by cloning the <a href="https://github.com/EscVM/OIDv4_ToolKit">OIDv4_ToolKit</a> and installing all requirements.</p>
+<p>To download images from the Open Image dataset, we start by cloning the 
+
+<a href="https://github.com/EscVM/OIDv4_ToolKit" target="_blank" rel="nofollow noopener">OIDv4_ToolKit</a>
+ and installing all requirements.</p>
 <pre><code>git clone [https://github.com/EscVM/OIDv4_ToolKit](https://github.com/EscVM/OIDv4_ToolKit)
 cd [OIDv4_ToolKit](https://github.com/EscVM/OIDv4_ToolKit)
 pip install -r requirements.txt
@@ -506,9 +518,30 @@ $ python train.py --img 640 --batch 16 --epochs 300--data training/dataset.yaml 
 <h2 id="conclusion">Conclusion</h2>
 <p><em><strong>In this post, I talked about how to create a Yolov5 object detection model using a Custom Dataset.</strong></em> I love the way Ultralytics has made it so easy to create an object detection model.</p>
 <p>Additionally, the various ways that they have provided to see the model results make it a complete package I have seen in a long time.</p>
-<p>If you would like to experiment with the custom dataset yourself, you can download the annotated data on <a href="https://www.kaggle.com/mlwhiz/detection-footballvscricketball">Kaggle</a> and the code at <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/yolov5CustomData">Github</a>.</p>
-<p>If you want to know more about various <em><strong>Object Detection techniques, motion estimation, object tracking in video, etc</strong></em>., I would like to recommend this excellent course on <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Deep Learning in Computer Vision</a> in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a>. If you wish to know more about how the object detection field has evolved over the years, you can also take a look at my last <a href="https://towardsdatascience.com/a-hitchhikers-guide-to-object-detection-and-instance-segmentation-ac0146fe8e11">post</a> on Object detection.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal">Medium</a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c">blog</a></p>
+<p>If you would like to experiment with the custom dataset yourself, you can download the annotated data on 
+
+<a href="https://www.kaggle.com/mlwhiz/detection-footballvscricketball" target="_blank" rel="nofollow noopener">Kaggle</a>
+ and the code at 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/yolov5CustomData" target="_blank" rel="nofollow noopener">Github</a>
+.</p>
+<p>If you want to know more about various <em><strong>Object Detection techniques, motion estimation, object tracking in video, etc</strong></em>., I would like to recommend this excellent course on 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Deep Learning in Computer Vision</a>
+ in the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Advanced machine learning specialization</a>
+. If you wish to know more about how the object detection field has evolved over the years, you can also take a look at my last 
+
+<a href="https://towardsdatascience.com/a-hitchhikers-guide-to-object-detection-and-instance-segmentation-ac0146fe8e11" target="_blank" rel="nofollow noopener">post</a>
+ on Object detection.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal" target="_blank" rel="nofollow noopener">Medium</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">blog</a>
+</p>
 
 
         

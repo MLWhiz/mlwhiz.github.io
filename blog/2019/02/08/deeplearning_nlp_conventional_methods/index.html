@@ -293,9 +293,24 @@
         <img src="https://mlwhiz.com/images/tfidf.png" class="img-fluid w-100 mb-4" alt="NLP  Learning Series: Part 2 - Conventional Methods for Text Classification">
         
         <div class="content mb-5">
-          <p>This is the second post of the NLP Text classification series. To give you a recap, recently I started up with an NLP text classification competition on Kaggle called Quora Question insincerity challenge. And I thought to share the knowledge via a series of blog posts on text classification. The <a href="/blog/2019/01/17/deeplearning_nlp_preprocess/">first post</a> talked about the various <strong>preprocessing techniques that work with Deep learning models</strong> and <strong>increasing embeddings coverage</strong>. In this post, I will try to take you through some <strong>basic conventional models</strong> like TFIDF, Count Vectorizer, Hashing etc. that have been used in text classification and try to access their performance to create a baseline. We will delve deeper into <strong>Deep learning models</strong> in the third post which will focus on different architectures for solving the text classification problem. We will try to use various other models which we were not able to use in this competition like <strong>ULMFit transfer learning</strong> approaches in the fourth post in the series.</p>
-<p><strong>As a side note</strong>: if you want to know more about NLP, I would like to <strong>recommend this awesome course</strong> on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing">Natural Language Processing</a> in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a>. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few. You can start for free with the 7-day Free Trial.</p>
-<p>It might take me a little time to write the whole series. Till then you can take a look at my other posts too: <a href="/blog/2018/12/17/text_classification/">What Kagglers are using for Text Classification</a>, which talks about various deep learning models in use in NLP and <a href="/blog/2019/01/06/pytorch_keras_conversion/">how to switch from Keras to Pytorch</a>.</p>
+          <p>This is the second post of the NLP Text classification series. To give you a recap, recently I started up with an NLP text classification competition on Kaggle called Quora Question insincerity challenge. And I thought to share the knowledge via a series of blog posts on text classification. The 
+
+<a href="/blog/2019/01/17/deeplearning_nlp_preprocess/">first post</a>
+ talked about the various <strong>preprocessing techniques that work with Deep learning models</strong> and <strong>increasing embeddings coverage</strong>. In this post, I will try to take you through some <strong>basic conventional models</strong> like TFIDF, Count Vectorizer, Hashing etc. that have been used in text classification and try to access their performance to create a baseline. We will delve deeper into <strong>Deep learning models</strong> in the third post which will focus on different architectures for solving the text classification problem. We will try to use various other models which we were not able to use in this competition like <strong>ULMFit transfer learning</strong> approaches in the fourth post in the series.</p>
+<p><strong>As a side note</strong>: if you want to know more about NLP, I would like to <strong>recommend this awesome course</strong> on 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target="_blank" rel="nofollow noopener">Natural Language Processing</a>
+ in the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Advanced machine learning specialization</a>
+. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few. You can start for free with the 7-day Free Trial.</p>
+<p>It might take me a little time to write the whole series. Till then you can take a look at my other posts too: 
+
+<a href="/blog/2018/12/17/text_classification/">What Kagglers are using for Text Classification</a>
+, which talks about various deep learning models in use in NLP and 
+
+<a href="/blog/2019/01/06/pytorch_keras_conversion/">how to switch from Keras to Pytorch</a>
+.</p>
 <p>So again we start with the first step: Preprocessing.</p>
 <hr>
 <h2 id="basic-preprocessing-techniques-for-text-datacontinued">Basic Preprocessing Techniques for text data(Continued)</h2>
@@ -382,7 +397,10 @@ For example:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Fitting a simple Logistic Regression on CV Feats</span>
 clf <span style="color:#f92672">=</span> LogisticRegression(C<span style="color:#f92672">=</span><span style="color:#ae81ff">1.0</span>)
 clf<span style="color:#f92672">.</span>fit(xtrain_cntv,y_train)
-</code></pre></div><p><a href="https://www.kaggle.com/mlwhiz/conventional-methods-for-quora-classification/">Here</a> is a link to a kernel where I tried these features on the Quora Dataset. If you like it please don&rsquo;t forget to upvote.</p>
+</code></pre></div><p>
+
+<a href="https://www.kaggle.com/mlwhiz/conventional-methods-for-quora-classification/" target="_blank" rel="nofollow noopener">Here</a>
+ is a link to a kernel where I tried these features on the Quora Dataset. If you like it please don&rsquo;t forget to upvote.</p>
 <hr>
 <h3 id="b-tfidf-features">b) TFIDF Features</h3>
 <p>TFIDF is a simple technique to find features from sentences. While in Count features we take count of all the words/ngrams present in a document, with TFIDF we take features only for the significant words. How do we do that? If you think of a document in a corpus, we will consider two things about any word in that document:</p>
@@ -416,7 +434,10 @@ tfv<span style="color:#f92672">.</span>fit(list(train_df<span style="color:#f926
 xtrain_tfv <span style="color:#f92672">=</span>  tfv<span style="color:#f92672">.</span>transform(train_df<span style="color:#f92672">.</span>cleaned_text<span style="color:#f92672">.</span>values)
 xvalid_tfv <span style="color:#f92672">=</span> tfv<span style="color:#f92672">.</span>transform(test_df<span style="color:#f92672">.</span>cleaned_text<span style="color:#f92672">.</span>values)
 
-</code></pre></div><p>Again, we could use these features with any machine learning classification model like Logistic Regression, Naive Bayes, SVM or LightGBM as we would like. <a href="https://www.kaggle.com/mlwhiz/conventional-methods-for-quora-classification/">Here</a> is a link to a kernel where I tried these features on the Quora Dataset. If you like it please don&rsquo;t forget to upvote.</p>
+</code></pre></div><p>Again, we could use these features with any machine learning classification model like Logistic Regression, Naive Bayes, SVM or LightGBM as we would like. 
+
+<a href="https://www.kaggle.com/mlwhiz/conventional-methods-for-quora-classification/" target="_blank" rel="nofollow noopener">Here</a>
+ is a link to a kernel where I tried these features on the Quora Dataset. If you like it please don&rsquo;t forget to upvote.</p>
 <hr>
 <h3 id="c-hashing-features">c) Hashing Features</h3>
 <p>Normally there will be a lot of ngrams in a document corpus. The number of features that our TFIDFVectorizer generated was in excess of 2,00,000 features. This might lead to a problem on very large datasets as we have to hold a very large vocabulary dictionary in memory. One way to counter this is to use the Hash Trick.</p>
@@ -439,7 +460,10 @@ hv<span style="color:#f92672">.</span>fit(list(train_df<span style="color:#f9267
 xtrain_hv <span style="color:#f92672">=</span>  hv<span style="color:#f92672">.</span>transform(train_df<span style="color:#f92672">.</span>cleaned_text<span style="color:#f92672">.</span>values)
 xvalid_hv <span style="color:#f92672">=</span> hv<span style="color:#f92672">.</span>transform(test_df<span style="color:#f92672">.</span>cleaned_text<span style="color:#f92672">.</span>values)
 y_train <span style="color:#f92672">=</span> train_df<span style="color:#f92672">.</span>target<span style="color:#f92672">.</span>values
-</code></pre></div><p><a href="https://www.kaggle.com/mlwhiz/conventional-methods-for-quora-classification/">Here</a> is a link to a kernel where I tried these features on the Quora Dataset. If you like it please don&rsquo;t forget to upvote.</p>
+</code></pre></div><p>
+
+<a href="https://www.kaggle.com/mlwhiz/conventional-methods-for-quora-classification/" target="_blank" rel="nofollow noopener">Here</a>
+ is a link to a kernel where I tried these features on the Quora Dataset. If you like it please don&rsquo;t forget to upvote.</p>
 <hr>
 <h3 id="d-word2vec-features">d) Word2vec Features</h3>
 <p>We already talked a little about word2vec in the previous post. We can use the word to vec features to create sentence level feats also. We want to create a <code>d</code> dimensional vector for sentence. For doing this, we will simply average the word embedding of all the words in a sentence.</p>
@@ -480,24 +504,42 @@ stop_words <span style="color:#f92672">=</span> stopwords<span style="color:#f92
 <span style="color:#75715e"># create glove features</span>
 xtrain_glove <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([sent2vec(x) <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> tqdm(train_df<span style="color:#f92672">.</span>cleaned_text<span style="color:#f92672">.</span>values)])
 xtest_glove <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([sent2vec(x) <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> tqdm(test_df<span style="color:#f92672">.</span>cleaned_text<span style="color:#f92672">.</span>values)])
-</code></pre></div><p><a href="https://www.kaggle.com/mlwhiz/conventional-methods-for-quora-classification/">Here</a> is a link to a kernel where I tried these features on the Quora Dataset. If you like it please don&rsquo;t forget to upvote.</p>
+</code></pre></div><p>
+
+<a href="https://www.kaggle.com/mlwhiz/conventional-methods-for-quora-classification/" target="_blank" rel="nofollow noopener">Here</a>
+ is a link to a kernel where I tried these features on the Quora Dataset. If you like it please don&rsquo;t forget to upvote.</p>
 <hr>
 <h2 id="results">Results</h2>
 <p>Here are the results of different approaches on the Kaggle Dataset. I ran a 5 fold Stratified CV.</p>
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/results_conv.png"  style="height:40%;width:40%"></center>
 </div>
-<p><a href="https://www.kaggle.com/mlwhiz/conventional-methods-for-quora-classification/">Here</a> is the code. If you like it please don&rsquo;t forget to upvote.
-Also note that I didn&rsquo;t work on tuning the models, so these results are only cursory. You can try to squeeze more performance by performing hyperparams tuning <a href="/blog/2017/12/28/hyperopt_tuning_ml_model/">using hyperopt</a> or just old fashioned Grid-search and the performance of models may change after that substantially.</p>
+<p>
+
+<a href="https://www.kaggle.com/mlwhiz/conventional-methods-for-quora-classification/" target="_blank" rel="nofollow noopener">Here</a>
+ is the code. If you like it please don&rsquo;t forget to upvote.
+Also note that I didn&rsquo;t work on tuning the models, so these results are only cursory. You can try to squeeze more performance by performing hyperparams tuning 
+
+<a href="/blog/2017/12/28/hyperopt_tuning_ml_model/">using hyperopt</a>
+ or just old fashioned Grid-search and the performance of models may change after that substantially.</p>
 <hr>
 <h2 id="conclusion">Conclusion</h2>
-<p>While Deep Learning works a lot better for NLP classification task, it still makes sense to have an understanding of how these problems were solved in the past, so that we can appreciate the nature of the problem. I have tried to provide a perspective on the conventional methods and one should experiment with them too to create baselines before moving to Deep Learning methods. If you want to <strong>learn more about NLP</strong> <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing">here</a> is an awesome course. You can start for free with the 7-day Free Trial. If you think I can add something to the flow, do mention it in the comments.</p>
+<p>While Deep Learning works a lot better for NLP classification task, it still makes sense to have an understanding of how these problems were solved in the past, so that we can appreciate the nature of the problem. I have tried to provide a perspective on the conventional methods and one should experiment with them too to create baselines before moving to Deep Learning methods. If you want to <strong>learn more about NLP</strong> 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target="_blank" rel="nofollow noopener">here</a>
+ is an awesome course. You can start for free with the 7-day Free Trial. If you think I can add something to the flow, do mention it in the comments.</p>
 <hr>
 <h2 id="endnotes-and-references">Endnotes and References</h2>
 <p>This post is a result of an effort of a lot of excellent Kagglers and I will try to reference them in this section. If I leave out someone, do understand that it was not my intention to do so.</p>
 <ul>
-<li><a href="https://www.kaggle.com/abhishek/approaching-almost-any-nlp-problem-on-kaggle">Approaching (Almost) Any NLP Problem on Kaggle</a></li>
-<li><a href="https://www.kaggle.com/christofhenkel/how-to-preprocessing-when-using-embeddings">How to: Preprocessing when using embeddings</a></li>
+<li>
+
+<a href="https://www.kaggle.com/abhishek/approaching-almost-any-nlp-problem-on-kaggle" target="_blank" rel="nofollow noopener">Approaching (Almost) Any NLP Problem on Kaggle</a>
+</li>
+<li>
+
+<a href="https://www.kaggle.com/christofhenkel/how-to-preprocessing-when-using-embeddings" target="_blank" rel="nofollow noopener">How to: Preprocessing when using embeddings</a>
+</li>
 </ul>
 <hr>
 

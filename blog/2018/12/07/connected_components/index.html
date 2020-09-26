@@ -290,7 +290,10 @@
         
         <div class="content mb-5">
           <p>Graphs provide us with a very useful data structure. They can help us to find structure within our data. With the advent of Machine learning and big data we need to get as much information as possible about our data. Learning a little bit of graph theory can certainly help us with that.</p>
-<p>Here is a <a href="https://www.coursera.org/learn/big-data-graph-analytics?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;siteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Graph Analytics for Big Data course on Coursera by UCSanDiego</a> which I highly recommend to learn the basics of graph theory. You can start for free with the 7-day Free Trial.</p>
+<p>Here is a 
+
+<a href="https://www.coursera.org/learn/big-data-graph-analytics?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;siteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Graph Analytics for Big Data course on Coursera by UCSanDiego</a>
+ which I highly recommend to learn the basics of graph theory. You can start for free with the 7-day Free Trial.</p>
 <p>One of the algorithms I am going to focus in the current post is called <strong>Connected Components</strong>. Why it is important. We all know clustering.</p>
 <p><em>You can think of Connected Components in very layman&rsquo;s terms as sort of a hard clustering algorithm which finds clusters/islands in related/connected data. As a concrete example: Say you have data about roads joining any two cities in the world. And you need to find out all the continents in the world and which city they contain.</em></p>
 <p>How will you achieve that? Come on give some thought.</p>
@@ -471,7 +474,10 @@ We start with Frankfurt as starting node.
 We loop through its neighbouring cities(Menheim, Wurzburg and Kassel) and push them into the queue.
 We keep track of what level they are at and also the path through which we reached them.
 Since we are popping a first element of a queue we are sure we will visit cities in the order of their level.</p>
-<p>Checkout this good <a href="https://medium.com/basecs/breaking-down-breadth-first-search-cebe696709d9">post</a> about BFS to understand more about queues and BFS.</p>
+<p>Checkout this good 
+
+<a href="https://medium.com/basecs/breaking-down-breadth-first-search-cebe696709d9" target="_blank" rel="nofollow noopener">post</a>
+ about BFS to understand more about queues and BFS.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">min_num_edges_between_nodes(g,<span style="color:#e6db74">&#39;Frankfurt&#39;</span>)
 </code></pre></div><pre style="font-family:courier new,monospace; background-color:#f6c6529c; color:#000000">
   ({'Augsburg': 3,
@@ -551,8 +557,11 @@ g <span style="color:#f92672">=</span> graph<span style="color:#f92672">.</span>
 <p>As you can see we are able to find distinct components in our data. Just by using Edges and Vertices. This algorithm could be run on different data to satisfy any use case I presented above.</p>
 <p>But Normally using Connected Components for a retail case will involve a lot of data and you will need to scale this algorithm.</p>
 <h2 id="connected-components-in-pyspark">Connected Components in PySpark</h2>
-<p>Below is an implementation from this paper on <a href="https://ai.google/research/pubs/pub43122">Connected Components in
-MapReduce and Beyond</a> from Google Research. Read the PPT to understand the implementation better.
+<p>Below is an implementation from this paper on 
+
+<a href="https://ai.google/research/pubs/pub43122" target="_blank" rel="nofollow noopener">Connected Components in
+MapReduce and Beyond</a>
+ from Google Research. Read the PPT to understand the implementation better.
 Some ready to use code for you.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create_edges</span>(line):
     a <span style="color:#f92672">=</span> [int(x) <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> line<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34; &#34;</span>)]
@@ -635,7 +644,10 @@ answer <span style="color:#f92672">=</span> single_vertex_rdd<span style="color:
 <p>To Install graphframes:</p>
 <p>I ran on command line: pyspark &ndash;packages graphframes:graphframes:0.5.0-spark2.1-s_2.11 which opened up my notebook and installed graphframes after i try to import in my notebook.</p>
 <p>The string to be formatted as : graphframes:(latest version)-spark(your spark version)-s_(your scala version).</p>
-<p><em>Checkout</em> <a href="http://go.databricks.com/hubfs/notebooks/3-GraphFrames-User-Guide-python.html">this guide on how to use GraphFrames</a> for more information.</p>
+<p><em>Checkout</em> 
+
+<a href="http://go.databricks.com/hubfs/notebooks/3-GraphFrames-User-Guide-python.html" target="_blank" rel="nofollow noopener">this guide on how to use GraphFrames</a>
+ for more information.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> graphframes <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">vertices</span>(line):
     vert <span style="color:#f92672">=</span> [int(x) <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> line<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34; &#34;</span>)]
@@ -666,12 +678,24 @@ cc <span style="color:#f92672">=</span> g<span style="color:#f92672">.</span>con
 <span style="color:#66d9ef">print</span> cc<span style="color:#f92672">.</span>show()
 </code></pre></div><p>The GraphFrames library implements the CC algorithm as well as a variety of other graph algorithms.</p>
 <p>The above post was a lot of code but hope it was helpful. It took me a lot of time to implement the algorithm so wanted to make it easy for the folks.</p>
-<p>If you want to read up more on Graph Algorithms here is an <a href="https://www.coursera.org/learn/big-data-graph-analytics?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;siteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Graph Analytics for Big Data course on Coursera by UCSanDiego</a> which I highly recommend to learn the basics of graph theory.</p>
+<p>If you want to read up more on Graph Algorithms here is an 
+
+<a href="https://www.coursera.org/learn/big-data-graph-analytics?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;siteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Graph Analytics for Big Data course on Coursera by UCSanDiego</a>
+ which I highly recommend to learn the basics of graph theory.</p>
 <h2 id="references">References</h2>
 <ol>
-<li><a href="https://www.python-course.eu/graphs_python.php">Graphs in Python</a></li>
-<li><a href="https://medium.com/basecs/a-gentle-introduction-to-graph-theory-77969829ead8">A Gentle Intoduction to Graph Theory Blog</a></li>
-<li><a href="https://www.coursera.org/learn/big-data-graph-analytics?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;siteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Graph Analytics for Big Data course on Coursera by UCSanDiego</a></li>
+<li>
+
+<a href="https://www.python-course.eu/graphs_python.php" target="_blank" rel="nofollow noopener">Graphs in Python</a>
+</li>
+<li>
+
+<a href="https://medium.com/basecs/a-gentle-introduction-to-graph-theory-77969829ead8" target="_blank" rel="nofollow noopener">A Gentle Intoduction to Graph Theory Blog</a>
+</li>
+<li>
+
+<a href="https://www.coursera.org/learn/big-data-graph-analytics?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;siteID=lVarvwc5BD0-uD3tAFL0mCUdzcfwDd6FTQ&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Graph Analytics for Big Data course on Coursera by UCSanDiego</a>
+</li>
 </ol>
 
 

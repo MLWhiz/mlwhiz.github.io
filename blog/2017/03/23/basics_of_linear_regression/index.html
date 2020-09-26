@@ -353,7 +353,10 @@ Waist_AT <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">re
 </div>
 <p>Any observations from above plot?</p>
 <p>Now the objective is to find a linear relation between <code>Waist</code> and <code>AT</code>. In otherwords, finding the amount of change in <code>AT</code> per one unit change (increment/decrement) in <code>Waist</code>.</p>
-<p>In SLR, it is equivalent to finding an optimal straight line equation such that the sum of squares of differences between straight line and the points will be minimum. This method of estimation is called as <a href="https://en.wikipedia.org/wiki/Ordinary_least_squares">Ordiany Least Squares (OLS)</a>.</p>
+<p>In SLR, it is equivalent to finding an optimal straight line equation such that the sum of squares of differences between straight line and the points will be minimum. This method of estimation is called as 
+
+<a href="https://en.wikipedia.org/wiki/Ordinary_least_squares" target="_blank" rel="nofollow noopener">Ordiany Least Squares (OLS)</a>
+.</p>
 <p>$$AT  = \beta_0 + \beta_1 \ Waist + \epsilon$$</p>
 <div>$$Min_{\beta_0 , \beta_1} \ \ \epsilon^\intercal \epsilon \implies Min_{\beta_0 , \beta_1} \ \ (AT  - \beta_0 - \beta_1 \ Waist)^\intercal (AT  - \beta_0 - \beta_1 \ Waist)$$</div>
 <p>Where, $\beta_1$ represents the amount of change in <code>AT</code> per one unit change in <code>Waist</code>.</p>
@@ -373,7 +376,10 @@ $$</p>
 $$\hat{\beta} = (X^\intercal X)^{-1} X^\intercal AT $$</p>
 <p>Now we can find the fitted values of model by substituting $\hat{\beta}$ in above regression equation
 $$\hat{AT} = X \hat{\beta}=X(X^\intercal X)^{-1} X^\intercal AT$$</p>
-<p><strong>Note:</strong> We are arriving to above equation through an assumption<a href="#Assumptions">$^1$</a> of $E(\epsilon)=0$. What happens if this assumption violates?</p>
+<p><strong>Note:</strong> We are arriving to above equation through an assumption
+
+<a href="#Assumptions">$^1$</a>
+ of $E(\epsilon)=0$. What happens if this assumption violates?</p>
 <p>Let, $X(X^\intercal X)^{-1} X^\intercal = H$
 $$\hat{AT} = H \ AT$$</p>
 <p>We call H as an hat matrix, because it transforms $AT$ into $\hat{AT}$ :D</p>
@@ -432,8 +438,20 @@ Therefore, there is a 3.458859 increment in AT per one unit change in Waist
 <p>$$ Alternative \ Hypothesis: \beta_{1} \neq 0$$</p>
 <p>Test Statistic for these hypotheses is,</p>
 <p>$$t = \frac{\hat{\beta_{i}}}{\sqrt{Var(\hat{\beta_{i}})}}$$</p>
-<p>Test statistic <code>t</code> follows <code>t-distribution</code>, assuming<a href="#Assumptions">$^2$</a> dependent variable follows <code>normal distribution</code></p>
-<p><strong>Suggestion:</strong> If your not aware of <a href="https://en.wikipedia.org/wiki/Statistical_hypothesis_testing">testing of hypothesis</a>, <a href="https://en.wikipedia.org/wiki/Probability_distribution">probability distributions</a> and <a href="https://en.wikipedia.org/wiki/P-value">p-values</a> please browse through the Google.</p>
+<p>Test statistic <code>t</code> follows <code>t-distribution</code>, assuming
+
+<a href="#Assumptions">$^2$</a>
+ dependent variable follows <code>normal distribution</code></p>
+<p><strong>Suggestion:</strong> If your not aware of 
+
+<a href="https://en.wikipedia.org/wiki/Statistical_hypothesis_testing" target="_blank" rel="nofollow noopener">testing of hypothesis</a>
+, 
+
+<a href="https://en.wikipedia.org/wiki/Probability_distribution" target="_blank" rel="nofollow noopener">probability distributions</a>
+ and 
+
+<a href="https://en.wikipedia.org/wiki/P-value" target="_blank" rel="nofollow noopener">p-values</a>
+ please browse through the Google.</p>
 <p>Let&rsquo;s recall that,  $\hat{\beta} = (X^\intercal X)^{-1} X^\intercal AT$</p>
 <p>$$\begin{equation}
 \begin{split}
@@ -444,7 +462,10 @@ Var(\hat{\beta}) &amp; = Var((X^\intercal X)^{-1} X^\intercal AT) \<br>
 \end{split}
 \end{equation}
 $$</p>
-<p><strong>Note:</strong> In the above calculations we assumed<a href="#Assumptions">$^3$</a> $Var(AT) = \sigma^2$ (Constant). Where, $\sigma^2$ is variation in population AT.</p>
+<p><strong>Note:</strong> In the above calculations we assumed
+
+<a href="#Assumptions">$^3$</a>
+ $Var(AT) = \sigma^2$ (Constant). Where, $\sigma^2$ is variation in population AT.</p>
 <p><strong>Suggestion:</strong> Try solving $(X^\intercal X)^{-1}$ with $X = [1, \  x]$ where $x = (x_1, x_2, x_3 &hellip; x_n)$. You will get the following expression.</p>
 <div>$$
 \
@@ -538,7 +559,10 @@ $$
 $$Multiple \ R-squared = \frac{\sum_{i = 1}^n (\hat{AT_i} - \bar{AT})^2}{\sum_{i=1}^n (AT_i - \bar{AT})^2}$$
 </div>
 <p><strong>Interesting facts:</strong> Multiple R-squared value in SLR is equals to $r^2$ and (1 - Multiple R-squared) is equals to the variance in residuals.</p>
-<p>Where, r is <a href="https://en.wikipedia.org/wiki/Pearson_correlation_coefficient">pearson&rsquo;s correlation coefficient</a> between dependent and independent variable.</p>
+<p>Where, r is 
+
+<a href="https://en.wikipedia.org/wiki/Pearson_correlation_coefficient" target="_blank" rel="nofollow noopener">pearson&amp;rsquo;s correlation coefficient</a>
+ between dependent and independent variable.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># Let&#39;s compute Multiple R-squared measure for our example</span>
 SSR <span style="color:#f92672">=</span> <span style="color:#a6e22e">sum</span>((AThat <span style="color:#f92672">-</span> <span style="color:#a6e22e">mean</span>(Waist_AT<span style="color:#f92672">$</span>AT))^2)
 SST <span style="color:#f92672">=</span> <span style="color:#a6e22e">sum</span>((Waist_AT<span style="color:#f92672">$</span>AT <span style="color:#f92672">-</span> <span style="color:#a6e22e">mean</span>(Waist_AT<span style="color:#f92672">$</span>AT))^2)
@@ -659,7 +683,10 @@ car <span style="color:#f92672">=</span> <span style="color:#a6e22e">read.csv</s
 <p><strong>Case1:</strong> HP = 49; VOL = 89; SP = 104.1854; WT = 28.76206 =&gt; MPG = 104.1854</p>
 <p><strong>Case2:</strong> HP = 49; VOL = 90; SP = 104.1854; WT = 28.76206 =&gt; MPG = 105.2453</p>
 <p>then $\beta_1 = 105.2453 - 104.1854 = 1.0599$. Similarly, $\beta_2, \beta_3, \beta_4$</p>
-<p>The above effect is called as <a href="https://en.wikipedia.org/wiki/Ceteris_paribus"><code>Ceteris Paribus Effect</code></a>.</p>
+<p>The above effect is called as 
+
+<a href="https://en.wikipedia.org/wiki/Ceteris_paribus" target="_blank" rel="nofollow noopener">&lt;code&gt;Ceteris Paribus Effect&lt;/code&gt;</a>
+.</p>
 <p>But in real world it is very difficult to collect records in above manner. That&rsquo;s why we compute (function of) partial correlation coefficients to quantify the effect of one variable, keeping others constant.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#75715e"># Let&#39;s build MLR model to predict MPG based using other variables</span>
 fit_mlr_actual <span style="color:#f92672">=</span> <span style="color:#a6e22e">lm</span>(MPG <span style="color:#f92672">~</span> ., data <span style="color:#f92672">=</span> car)
@@ -716,7 +743,10 @@ Residual standard error: 0.04033 on 77 degrees of freedom
 Multiple R-squared:  0.9984,  Adjusted R-squared:  0.9984
 F-statistic: 1.637e+04 on 3 and 77 DF,  p-value: &lt; 2.2e-16
 </code></pre>
-<p>It&rsquo;s surprising that, $R_{VOL}^2$ is 0.9984 and also only <code>WT</code> is significant. That is, these two predictors (<code>VOL</code> and <code>WT</code>) are highly correlated. This inflates $Var(\hat{\beta_{VOL}})$ and thus <code>t value</code>. We might be missing some of the important information because of high correlation between predictors. This problem is called as <a href="https://en.wikipedia.org/wiki/Multicollinearity">Multicollinearity</a>.</p>
+<p>It&rsquo;s surprising that, $R_{VOL}^2$ is 0.9984 and also only <code>WT</code> is significant. That is, these two predictors (<code>VOL</code> and <code>WT</code>) are highly correlated. This inflates $Var(\hat{\beta_{VOL}})$ and thus <code>t value</code>. We might be missing some of the important information because of high correlation between predictors. This problem is called as 
+
+<a href="https://en.wikipedia.org/wiki/Multicollinearity" target="_blank" rel="nofollow noopener">Multicollinearity</a>
+.</p>
 <p>One quick solution for this problem is to remove either <code>VOL</code> or <code>WT</code> from the model. Let&rsquo;s compute partial correlation coeficient between <code>MPG</code> and <code>VOL</code> by removing the effect of <code>WT</code> (say, $r_{MV.W}$) and partial correlation coeficient between <code>MPG</code> and <code>WT</code> by removing the effect of <code>VOL</code> (say, $r_{MW.V}$).</p>
 <p>To compute $r_{MV.W}$ we need to compute the correlation between (a) part of <code>VOL</code> which cannot be explained by <code>WT</code> (regress <code>VOL</code> on <code>WT</code> and take the residuals) and (b) the part of <code>MPG</code> which cannot be explained by <code>WT</code> (regress <code>MPG</code> on <code>WT</code> and take the residuals)</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">fit_partial <span style="color:#f92672">=</span> <span style="color:#a6e22e">lm</span>(VOL <span style="color:#f92672">~</span> WT, data <span style="color:#f92672">=</span> car)
@@ -757,7 +787,10 @@ Residual standard error: 0.4884 on 77 degrees of freedom
 Multiple R-squared:  0.7704,  Adjusted R-squared:  0.7614
 F-statistic: 86.11 on 3 and 77 DF,  p-value: &lt; 2.2e-16
 </code></pre>
-<p>After eliminating <code>WT</code> from the model there is an increment of ~0.3% in Adjusted R-squared and more importantly, <code>VOL</code> becomes significant at 0 <a href="https://en.wikipedia.org/wiki/Statistical_significance">los</a> (level of significance)</p>
+<p>After eliminating <code>WT</code> from the model there is an increment of ~0.3% in Adjusted R-squared and more importantly, <code>VOL</code> becomes significant at 0 
+
+<a href="https://en.wikipedia.org/wiki/Statistical_significance" target="_blank" rel="nofollow noopener">los</a>
+ (level of significance)</p>
 <p><a id='Assumptions'></a></p>
 <h2 id="3-assumptions">3. Assumptions</h2>
 <p><strong>Linear in Parameters:</strong> We assume that there is a linear relation between dependent and set of independent variables</p>

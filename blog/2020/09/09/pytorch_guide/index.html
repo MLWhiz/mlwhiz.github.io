@@ -298,7 +298,10 @@
         
         <div class="content mb-5">
           <p><em><strong>PyTorch</strong></em> has sort of became one of the de facto standards for creating Neural Networks now, and I love its interface. Yet, it is somehow a little difficult for beginners to get a hold of.</p>
-<p>I remember picking PyTorch up only after some extensive experimentation a couple of years back. To tell you the truth, it took me a lot of time to pick it up but am I glad that I moved from <a href="https://towardsdatascience.com/moving-from-keras-to-pytorch-f0d4fff4ce79">Keras to PyTorch</a>.  With its high customizability and pythonic syntax,PyTorch is just a joy to work with, and I would recommend it to anyone who wants to do some heavy lifting with Deep Learning.</p>
+<p>I remember picking PyTorch up only after some extensive experimentation a couple of years back. To tell you the truth, it took me a lot of time to pick it up but am I glad that I moved from 
+
+<a href="https://towardsdatascience.com/moving-from-keras-to-pytorch-f0d4fff4ce79" target="_blank" rel="nofollow noopener">Keras to PyTorch</a>
+.  With its high customizability and pythonic syntax,PyTorch is just a joy to work with, and I would recommend it to anyone who wants to do some heavy lifting with Deep Learning.</p>
 <p>So, in this PyTorch guide, <em><strong>I will try to ease some of the pain with PyTorch for starters</strong></em> and go through some of the most important classes and modules that you will require while creating any Neural Network with Pytorch.</p>
 <p>But, that is not to say that this is aimed at beginners only as <em><strong>I will also talk about the</strong></em> <em><strong>high customizability PyTorch provides and will talk about custom Layers, Datasets, Dataloaders, and Loss functions</strong></em>.</p>
 <p>So let’s get some coffee ☕ ️and start it up.</p>
@@ -306,7 +309,10 @@
 <h2 id="tensors">Tensors</h2>
 <p>Tensors are the basic building blocks in PyTorch and put very simply, they are NumPy arrays but on GPU. In this part, I will list down some of the most used operations we can use while working with Tensors. This is by no means an exhaustive list of operations you can do with Tensors, but it is helpful to understand what tensors are before going towards the more exciting parts.</p>
 <h3 id="1-create-a-tensor">1. Create a Tensor</h3>
-<p>We can create a PyTorch tensor in multiple ways. This includes converting to tensor from a NumPy array. Below is just a small gist with some examples to start with, but you can do a whole lot of <a href="https://pytorch.org/docs/stable/tensors.html">more things</a> with tensors just like you can do with NumPy arrays.</p>
+<p>We can create a PyTorch tensor in multiple ways. This includes converting to tensor from a NumPy array. Below is just a small gist with some examples to start with, but you can do a whole lot of 
+
+<a href="https://pytorch.org/docs/stable/tensors.html" target="_blank" rel="nofollow noopener">more things</a>
+ with tensors just like you can do with NumPy arrays.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Using torch.Tensor</span>
 t <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>Tensor([[<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>],[<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">5</span>]])
 <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#34;Created Tensor Using torch.Tensor:</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">{t}&#34;</span>)
@@ -340,7 +346,10 @@ t <span style="color:#f92672">=</span> t<span style="color:#f92672">.</span>nump
 
 </p>
 <h3 id="2-tensor-operations">2. Tensor Operations</h3>
-<p>Again, there are a lot of operations you can do on these tensors. The full list of functions can be found <a href="https://pytorch.org/docs/stable/torch.html?highlight=mm#math-operations">here</a>.</p>
+<p>Again, there are a lot of operations you can do on these tensors. The full list of functions can be found 
+
+<a href="https://pytorch.org/docs/stable/torch.html?highlight=mm#math-operations" target="_blank" rel="nofollow noopener">here</a>
+.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">A <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>)
 W <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">2</span>)
 <span style="color:#75715e"># Multiply Matrix A and W</span>
@@ -360,12 +369,21 @@ t <span style="color:#f92672">=</span> t<span style="color:#f92672">**</span><sp
     
 
 </p>
-<p><strong>Note:</strong> What are PyTorch Variables? In the previous versions of Pytorch, Tensor and Variables used to be different and provided different functionality, but now the Variable API is <a href="https://pytorch.org/docs/stable/autograd.html#variable-deprecated">deprecated</a>, and all methods for variables work with Tensors. So, if you don’t know about them, it’s fine as they re not needed, and if you know them, you can forget about them.</p>
+<p><strong>Note:</strong> What are PyTorch Variables? In the previous versions of Pytorch, Tensor and Variables used to be different and provided different functionality, but now the Variable API is 
+
+<a href="https://pytorch.org/docs/stable/autograd.html#variable-deprecated" target="_blank" rel="nofollow noopener">deprecated</a>
+, and all methods for variables work with Tensors. So, if you don’t know about them, it’s fine as they re not needed, and if you know them, you can forget about them.</p>
 <hr>
 <h2 id="the-nnmodule">The nn.Module</h2>
-<p>
+<p>Photo by 
+
+<a href="https://unsplash.com/@fernanddecanne?utm_source=medium&amp;utm_medium=referral" target="_blank" rel="nofollow noopener">Fernand De Canne</a>
+ on 
   
-      <img src="/images/pytorch_guide/2.png" alt="Photo by &lt;a href=&#34;https://unsplash.com/@fernanddecanne?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Fernand De Canne&lt;/a&gt; on &lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Unsplash&lt;/a&gt;">
+      <img src="/images/pytorch_guide/2.png" alt="
+
+&lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Unsplash&lt;/a&gt;
+">
   
 
 </p>
@@ -422,9 +440,15 @@ torch<span style="color:#f92672">.</span>Size([<span style="color:#ae81ff">100</
         self<span style="color:#f92672">.</span>bias <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Parameter(torch<span style="color:#f92672">.</span>zeros(out_size))
     <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
         <span style="color:#66d9ef">return</span> x<span style="color:#f92672">.</span>mm(self<span style="color:#f92672">.</span>weights) <span style="color:#f92672">+</span> self<span style="color:#f92672">.</span>bias
-</code></pre></div><p>You can see how we wrap our weights tensor in nn.Parameter. This is done to make the tensor to be considered as a model parameter. From PyTorch <a href="https://pytorch.org/docs/stable/generated/torch.nn.parameter.Parameter.html#parameter">docs</a>:</p>
+</code></pre></div><p>You can see how we wrap our weights tensor in nn.Parameter. This is done to make the tensor to be considered as a model parameter. From PyTorch 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.parameter.Parameter.html#parameter" target="_blank" rel="nofollow noopener">docs</a>
+:</p>
 <blockquote>
-<p>Parameters are <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor"><code>*Tensor*</code></a> subclasses, that have a very special property when used with <em>Module</em> - when they’re assigned as Module attributes they are automatically added to the list of its parameters, and will appear in <em><code>parameters()</code></em> iterator</p>
+<p>Parameters are 
+
+<a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" target="_blank" rel="nofollow noopener">&lt;code&gt;*Tensor*&lt;/code&gt;</a>
+ subclasses, that have a very special property when used with <em>Module</em> - when they’re assigned as Module attributes they are automatically added to the list of its parameters, and will appear in <em><code>parameters()</code></em> iterator</p>
 </blockquote>
 <p>As you will later see, the <code>model.parameters()</code> iterator will be an input to the optimizer. But more on that later.</p>
 <p>Right now, we can now use this custom layer in any PyTorch network, just like any other layer.</p>
@@ -443,7 +467,49 @@ model <span style="color:#f92672">=</span> myCustomNeuralNet()
 model(x)<span style="color:#f92672">.</span>size()
 <span style="color:#f92672">------------------------------------------</span>
 torch<span style="color:#f92672">.</span>Size([<span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">10</span>])
-</code></pre></div><p>But then again, Pytorch would not be so widely used if it didn’t provide a lot of ready to made layers used very frequently in wide varieties of Neural Network architectures. Some examples are: <a href="https://pytorch.org/docs/stable/generated/torch.nn.Linear.html#torch.nn.Linear">nn.Linear</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html#torch.nn.Conv2d">nn.Conv2d</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.MaxPool2d.html#torch.nn.MaxPool2d">nn.MaxPool2d</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.ReLU.html#torch.nn.ReLU">nn.ReLU</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.BatchNorm2d.html#torch.nn.BatchNorm2d">nn.BatchNorm2d</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.Dropout.html#torch.nn.Dropout">nn.Dropout</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.Embedding.html#torch.nn.Embedding">nn.Embedding</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.GRU.html#torch.nn.GRU">nn.GRU</a>/<a href="https://pytorch.org/docs/stable/generated/torch.nn.LSTM.html#torch.nn.LSTM">nn.LSTM</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.Softmax.html#torch.nn.Softmax">nn.Softmax</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.LogSoftmax.html#torch.nn.LogSoftmax">nn.LogSoftmax</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.MultiheadAttention.html#torch.nn.MultiheadAttention">nn.MultiheadAttention</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.TransformerEncoder.html#torch.nn.TransformerEncoder">nn.TransformerEncoder</a>, <a href="https://pytorch.org/docs/stable/generated/torch.nn.TransformerDecoder.html#torch.nn.TransformerDecoder">nn.TransformerDecoder</a></p>
+</code></pre></div><p>But then again, Pytorch would not be so widely used if it didn’t provide a lot of ready to made layers used very frequently in wide varieties of Neural Network architectures. Some examples are: 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.Linear.html#torch.nn.Linear" target="_blank" rel="nofollow noopener">nn.Linear</a>
+, 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html#torch.nn.Conv2d" target="_blank" rel="nofollow noopener">nn.Conv2d</a>
+, 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.MaxPool2d.html#torch.nn.MaxPool2d" target="_blank" rel="nofollow noopener">nn.MaxPool2d</a>
+, 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.ReLU.html#torch.nn.ReLU" target="_blank" rel="nofollow noopener">nn.ReLU</a>
+, 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.BatchNorm2d.html#torch.nn.BatchNorm2d" target="_blank" rel="nofollow noopener">nn.BatchNorm2d</a>
+, 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.Dropout.html#torch.nn.Dropout" target="_blank" rel="nofollow noopener">nn.Dropout</a>
+, 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.Embedding.html#torch.nn.Embedding" target="_blank" rel="nofollow noopener">nn.Embedding</a>
+, 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.GRU.html#torch.nn.GRU" target="_blank" rel="nofollow noopener">nn.GRU</a>
+/
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.LSTM.html#torch.nn.LSTM" target="_blank" rel="nofollow noopener">nn.LSTM</a>
+, 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.Softmax.html#torch.nn.Softmax" target="_blank" rel="nofollow noopener">nn.Softmax</a>
+, 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.LogSoftmax.html#torch.nn.LogSoftmax" target="_blank" rel="nofollow noopener">nn.LogSoftmax</a>
+, 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.MultiheadAttention.html#torch.nn.MultiheadAttention" target="_blank" rel="nofollow noopener">nn.MultiheadAttention</a>
+, 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.TransformerEncoder.html#torch.nn.TransformerEncoder" target="_blank" rel="nofollow noopener">nn.TransformerEncoder</a>
+, 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.TransformerDecoder.html#torch.nn.TransformerDecoder" target="_blank" rel="nofollow noopener">nn.TransformerDecoder</a>
+</p>
 <p>I have linked all the layers to their source where you could read all about them, but to show how I usually try to understand a layer and read the docs, I would try to look at a very simple convolutional layer here.</p>
 <p>
   
@@ -462,7 +528,13 @@ torch<span style="color:#f92672">.</span>Size([<span style="color:#ae81ff">100</
 </code></pre></div><p>So, we get the output from the convolution operation as required, and I have sufficient information on how to use this layer in any Neural Network I design.</p>
 <hr>
 <h2 id="datasets-and-dataloaders">Datasets and DataLoaders</h2>
-<p>How would we pass data to our Neural nets while training or while testing? We can definitely pass tensors as we have done above, but Pytorch also provides us with pre-built Datasets to make it easier for us to pass data to our neural nets. You can check out the complete list of datasets provided at <a href="https://pytorch.org/docs/stable/torchvision/datasets.html">torchvision.datasets</a> and <a href="https://pytorch.org/text/datasets.html">torchtext.datasets</a>. But, to give a concrete example for datasets, let’s say we had to pass images to an Image Neural net using a folder which has images in this structure:</p>
+<p>How would we pass data to our Neural nets while training or while testing? We can definitely pass tensors as we have done above, but Pytorch also provides us with pre-built Datasets to make it easier for us to pass data to our neural nets. You can check out the complete list of datasets provided at 
+
+<a href="https://pytorch.org/docs/stable/torchvision/datasets.html" target="_blank" rel="nofollow noopener">torchvision.datasets</a>
+ and 
+
+<a href="https://pytorch.org/text/datasets.html" target="_blank" rel="nofollow noopener">torchtext.datasets</a>
+. But, to give a concrete example for datasets, let’s say we had to pass images to an Image Neural net using a folder which has images in this structure:</p>
 <pre><code>data
     train
         sailboat
@@ -510,7 +582,10 @@ train_dataloader <span style="color:#f92672">=</span> DataLoader(train_dataset,b
 
 <span style="color:#66d9ef">for</span> image_batch, label_batch <span style="color:#f92672">in</span> train_dataloader:
     pred <span style="color:#f92672">=</span> myImageNeuralNet(image_batch)
-</code></pre></div><p>You can look at this particular example in action in my previous blogpost on Image classification using Deep Learning <a href="https://towardsdatascience.com/end-to-end-pipeline-for-setting-up-multiclass-image-classification-for-data-scientists-2e051081d41c">here</a>.</p>
+</code></pre></div><p>You can look at this particular example in action in my previous blogpost on Image classification using Deep Learning 
+
+<a href="https://towardsdatascience.com/end-to-end-pipeline-for-setting-up-multiclass-image-classification-for-data-scientists-2e051081d41c" target="_blank" rel="nofollow noopener">here</a>
+.</p>
 <p>This is great, and Pytorch does provide a lot of functionality out of the box. But the main power of Pytorch comes with its immense customization. We can also create our own custom datasets if the datasets provided by PyTorch don’t fit our use case.</p>
 <hr>
 <h3 id="understanding-custom-datasets">Understanding Custom Datasets</h3>
@@ -723,7 +798,25 @@ y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>ran
 <p>Till now, we have talked about how to use <code>nn.Module</code> to create networks and how to use Custom Datasets and Dataloaders with Pytorch. So let&rsquo;s talk about the various options available for Loss Functions and Optimizers.</p>
 <hr>
 <h2 id="loss-functions">Loss functions</h2>
-<p>Pytorch provides us with a variety of <a href="https://pytorch.org/docs/stable/nn.html#loss-functions">loss functions</a> for our most common tasks, like Classification and Regression. Some most used examples are <a href="https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html#torch.nn.CrossEntropyLoss">nn.CrossEntropyLoss</a> , <a href="https://pytorch.org/docs/stable/generated/torch.nn.NLLLoss.html#torch.nn.NLLLoss">nn.NLLLoss</a> , <a href="https://pytorch.org/docs/stable/generated/torch.nn.KLDivLoss.html#torch.nn.KLDivLoss">nn.KLDivLoss</a> and <a href="https://pytorch.org/docs/stable/generated/torch.nn.MSELoss.html#torch.nn.MSELoss">nn.MSELoss</a>. You can read the documentation of each loss function, but to explain how to use these loss functions, I will go through the example of <a href="https://pytorch.org/docs/stable/generated/torch.nn.NLLLoss.html#torch.nn.NLLLoss">nn.NLLLoss</a></p>
+<p>Pytorch provides us with a variety of 
+
+<a href="https://pytorch.org/docs/stable/nn.html#loss-functions" target="_blank" rel="nofollow noopener">loss functions</a>
+ for our most common tasks, like Classification and Regression. Some most used examples are 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html#torch.nn.CrossEntropyLoss" target="_blank" rel="nofollow noopener">nn.CrossEntropyLoss</a>
+ , 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.NLLLoss.html#torch.nn.NLLLoss" target="_blank" rel="nofollow noopener">nn.NLLLoss</a>
+ , 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.KLDivLoss.html#torch.nn.KLDivLoss" target="_blank" rel="nofollow noopener">nn.KLDivLoss</a>
+ and 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.MSELoss.html#torch.nn.MSELoss" target="_blank" rel="nofollow noopener">nn.MSELoss</a>
+. You can read the documentation of each loss function, but to explain how to use these loss functions, I will go through the example of 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.NLLLoss.html#torch.nn.NLLLoss" target="_blank" rel="nofollow noopener">nn.NLLLoss</a>
+</p>
 <p>
   
     <img src="/images/pytorch_guide/8.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
@@ -742,7 +835,10 @@ y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>ran
 <p>The target needs to be a tensor of classes with class numbers in the range(0, C-1) where C is the number of classes.</p>
 </li>
 </ul>
-<p>So, we can try to use this Loss function for a simple classification network. Please note the LogSoftmax layer after the final linear layer. If you don&rsquo;t want to use this LogSoftmax layer, you could have just used <a href="https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html#torch.nn.CrossEntropyLoss"><code>nn.CrossEntropyLoss</code></a></p>
+<p>So, we can try to use this Loss function for a simple classification network. Please note the LogSoftmax layer after the final linear layer. If you don&rsquo;t want to use this LogSoftmax layer, you could have just used 
+
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html#torch.nn.CrossEntropyLoss" target="_blank" rel="nofollow noopener">&lt;code&gt;nn.CrossEntropyLoss&lt;/code&gt;</a>
+</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">myClassificationNet</span>(nn<span style="color:#f92672">.</span>Module):
     <span style="color:#66d9ef">def</span> __init__(self):
         super()<span style="color:#f92672">.</span>__init__()
@@ -794,17 +890,44 @@ loss <span style="color:#f92672">=</span> criterion(preds,y)
 
 </code></pre></div><hr>
 <h2 id="optimizers">Optimizers</h2>
-<p>Once we get gradients using the loss.backward() call, we need to take an optimizer step to change the weights in the whole network. Pytorch provides a variety of different ready to use optimizers using the torch.optim module. For example: <a href="https://pytorch.org/docs/stable/optim.html#torch.optim.Adadelta">torch.optim.Adadelta</a> , <a href="https://pytorch.org/docs/stable/optim.html#torch.optim.Adagrad">torch.optim.Adagrad</a> , <a href="https://pytorch.org/docs/stable/optim.html#torch.optim.RMSprop">torch.optim.RMSprop</a> and the most widely used <a href="https://pytorch.org/docs/stable/optim.html#torch.optim.Adam">torch.optim.Adam</a>.</p>
+<p>Once we get gradients using the loss.backward() call, we need to take an optimizer step to change the weights in the whole network. Pytorch provides a variety of different ready to use optimizers using the torch.optim module. For example: 
+
+<a href="https://pytorch.org/docs/stable/optim.html#torch.optim.Adadelta" target="_blank" rel="nofollow noopener">torch.optim.Adadelta</a>
+ , 
+
+<a href="https://pytorch.org/docs/stable/optim.html#torch.optim.Adagrad" target="_blank" rel="nofollow noopener">torch.optim.Adagrad</a>
+ , 
+
+<a href="https://pytorch.org/docs/stable/optim.html#torch.optim.RMSprop" target="_blank" rel="nofollow noopener">torch.optim.RMSprop</a>
+ and the most widely used 
+
+<a href="https://pytorch.org/docs/stable/optim.html#torch.optim.Adam" target="_blank" rel="nofollow noopener">torch.optim.Adam</a>
+.</p>
 <p>To use the most used Adam optimizer from PyTorch, we can simply instantiate it with:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">optimizer <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>optim<span style="color:#f92672">.</span>Adam(model<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, betas<span style="color:#f92672">=</span>(<span style="color:#ae81ff">0.9</span>, <span style="color:#ae81ff">0.999</span>))
 </code></pre></div><p>And then use <code>optimizer.zero_grad()</code> and <code>optimizer.step()</code> while training the model.</p>
-<p>I am not discussing how to write custom optimizers as it is an infrequent use case, but if you want to have more optimizers, do check out the <a href="https://pytorch-optimizer.readthedocs.io/en/latest/">pytorch-optimizer</a> library, which provides a lot of other optimizers used in research papers. Also, if you anyhow want to create your own optimizers, you can take inspiration using the source code of implemented optimizers in <a href="https://github.com/pytorch/pytorch/tree/master/torch/optim">PyTorch</a> or <a href="https://github.com/jettify/pytorch-optimizer/tree/master/torch_optimizer">pytorch-optimizers</a>.</p>
-<p>
+<p>I am not discussing how to write custom optimizers as it is an infrequent use case, but if you want to have more optimizers, do check out the 
+
+<a href="https://pytorch-optimizer.readthedocs.io/en/latest/" target="_blank" rel="nofollow noopener">pytorch-optimizer</a>
+ library, which provides a lot of other optimizers used in research papers. Also, if you anyhow want to create your own optimizers, you can take inspiration using the source code of implemented optimizers in 
+
+<a href="https://github.com/pytorch/pytorch/tree/master/torch/optim" target="_blank" rel="nofollow noopener">PyTorch</a>
+ or 
+
+<a href="https://github.com/jettify/pytorch-optimizer/tree/master/torch_optimizer" target="_blank" rel="nofollow noopener">pytorch-optimizers</a>
+.</p>
+<p>Other optimizers from 
   
-      <img src="/images/pytorch_guide/9.png" alt="Other optimizers from &lt;a href=&#34;https://github.com/jettify/pytorch-optimizer&#34;&gt;pytorch-optimizer&lt;/a&gt; library">
+      <img src="/images/pytorch_guide/9.png" alt="
+
+&lt;a href=&#34;https://github.com/jettify/pytorch-optimizer&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;pytorch-optimizer&lt;/a&gt;
+ library">
   
 
-<em>Other optimizers from <a href="https://github.com/jettify/pytorch-optimizer">pytorch-optimizer</a> library</em></p>
+<em>Other optimizers from 
+
+<a href="https://github.com/jettify/pytorch-optimizer" target="_blank" rel="nofollow noopener">pytorch-optimizer</a>
+ library</em></p>
 <hr>
 <h2 id="using-gpumultiple-gpus">Using GPU/Multiple GPUs</h2>
 <p>Till now, whatever we have done is on the CPU. If you want to use a GPU, you can put your model to GPU using <code>model.to('cuda')</code>. Or if you want to use multiple GPUs, you can use <code>nn.DataParallel</code>. Here is a utility function that checks the number of GPUs in the machine and sets up parallel training automatically using <code>DataParallel</code> if needed.</p>
@@ -843,9 +966,27 @@ train_on_gpu <span style="color:#f92672">=</span> torch<span style="color:#f9267
 </code></pre></div><hr>
 <h2 id="conclusion">Conclusion</h2>
 <p>Pytorch provides a lot of customizability with minimal code. While at first, it might be hard to understand how the whole ecosystem is structured with classes, in the end, it is simple Python. In this post, I have tried to break down most of the parts you might need while using Pytorch, and I hope it makes a little more sense for you after reading this.</p>
-<p>You can find the code for this post here on my <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/pytorch_guide">GitHub</a> repo, where I keep codes for all my blogs.</p>
-<p>If you want to learn more about Pytorch using a course based structure, take a look at the <a href="https://www.coursera.org/learn/deep-neural-networks-with-pytorch?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-Mh_whR0Q06RCh47zsaMVBQ&amp;siteID=lVarvwc5BD0-Mh_whR0Q06RCh47zsaMVBQ&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Deep Neural Networks with PyTorch</a> course by IBM on Coursera. Also, if you want to know more about Deep Learning, I would like to recommend this excellent course on <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Deep Learning in Computer Vision</a> in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a>.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------">Medium</a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c">blog</a></p>
+<p>You can find the code for this post here on my 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/pytorch_guide" target="_blank" rel="nofollow noopener">GitHub</a>
+ repo, where I keep codes for all my blogs.</p>
+<p>If you want to learn more about Pytorch using a course based structure, take a look at the 
+
+<a href="https://www.coursera.org/learn/deep-neural-networks-with-pytorch?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-Mh_whR0Q06RCh47zsaMVBQ&amp;siteID=lVarvwc5BD0-Mh_whR0Q06RCh47zsaMVBQ&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Deep Neural Networks with PyTorch</a>
+ course by IBM on Coursera. Also, if you want to know more about Deep Learning, I would like to recommend this excellent course on 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Deep Learning in Computer Vision</a>
+ in the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Advanced machine learning specialization</a>
+.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" target="_blank" rel="nofollow noopener">Medium</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">blog</a>
+</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 

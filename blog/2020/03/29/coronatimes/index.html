@@ -291,8 +291,17 @@
         <div class="content mb-5">
           <p>It seems that the way that I consume information has changed a lot. I have become quite a news junkie recently. One thing, in particular, is that I have been reading quite a lot of international news to determine the stages of Covid-19 in my country.</p>
 <p>To do this, I generally visit a lot of news media sites in various countries to read up on the news. This gave me an idea. Why not create an international news dashboard for Corona? And here it is.</p>
-<p>This post is about how I created the news dashboard using Streamlit and data from <a href="https://newsapi.org/">NewsApi</a> and <a href="https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide">European CDC</a>.</p>
-<p><em><strong>TLDR;</strong></em> Link to the App <a href="http://54.149.204.138:8501/">here</a>.</p>
+<p>This post is about how I created the news dashboard using Streamlit and data from 
+
+<a href="https://newsapi.org/" target="_blank" rel="nofollow noopener">NewsApi</a>
+ and 
+
+<a href="https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide" target="_blank" rel="nofollow noopener">European CDC</a>
+.</p>
+<p><em><strong>TLDR;</strong></em> Link to the App 
+
+<a href="http://54.149.204.138:8501/" target="_blank" rel="nofollow noopener">here</a>
+.</p>
 <hr>
 <h2 id="getting-the-data">Getting The Data</h2>
 <p>The most important thing while creating this Dashboard was acquiring the data. I am using two data sources:</p>
@@ -312,7 +321,10 @@
     <span style="color:#66d9ef">return</span> casedata
 </code></pre></div><hr>
 <h3 id="2-news-api">2. News API</h3>
-<p>The second source of data comes from the <a href="https://newsapi.org/">News API</a>, which lets me access articles from leading news outlets from various countries for free. The only caveat is that I could only hit the API 500 times a day, and there is a result limit of 100 results for a particular query for free accounts.</p>
+<p>The second source of data comes from the 
+
+<a href="https://newsapi.org/" target="_blank" rel="nofollow noopener">News API</a>
+, which lets me access articles from leading news outlets from various countries for free. The only caveat is that I could only hit the API 500 times a day, and there is a result limit of 100 results for a particular query for free accounts.</p>
 <p>I tried to get around those limit barriers by using streamlit caching(So I don’t hit the API a lot). I also tried to get news data from last month using multiple filters to get a lot of data.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> newsapi <span style="color:#f92672">import</span> NewsApiClient
 newsapi <span style="color:#f92672">=</span> NewsApiClient(api_key<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;aedb6aa9bebb4011a4eb5447019dd592&#39;</span>)
@@ -327,7 +339,10 @@ data<span style="color:#f92672">.</span>head()
     
 
 </p>
-<p>b) A function to get <strong>“Everything”</strong> related to a query from the country. You can see the descriptions of <a href="https://newsapi.org/docs/endpoints/everything">API parameters</a> here:</p>
+<p>b) A function to get <strong>“Everything”</strong> related to a query from the country. You can see the descriptions of 
+
+<a href="https://newsapi.org/docs/endpoints/everything" target="_blank" rel="nofollow noopener">API parameters</a>
+ here:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">json_data <span style="color:#f92672">=</span> newsapi<span style="color:#f92672">.</span>get_everything(q<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;corona&#39;</span>,
                                     language<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;en&#39;</span>,
                                     from_param<span style="color:#f92672">=</span>str(date<span style="color:#f92672">.</span>today() <span style="color:#f92672">-</span>timedelta(days<span style="color:#f92672">=</span><span style="color:#ae81ff">29</span>)),
@@ -370,7 +385,10 @@ sources <span style="color:#f92672">=</span> get_sources(country<span style="col
 </p>
 <p><em><strong>Technical Details</strong></em> — To create this part of the Dashboard, I used the ECDC data. I also used a lot of HTML hacks with Streamlit, where I used bootstrap widgets as well as custom HTML to get data in the way I wanted to display it. Here are a few of the hacks:</p>
 <ul>
-<li><strong>Using Bootstrap Cards:</strong> You can use <a href="https://getbootstrap.com/docs/4.0/components/card/">bootstrap</a> or, in that case, any HTML element in Streamlit if you change the parameter unsafe_allow_html to True. Do note that I am also using python f string formatting here.</li>
+<li><strong>Using Bootstrap Cards:</strong> You can use 
+
+<a href="https://getbootstrap.com/docs/4.0/components/card/" target="_blank" rel="nofollow noopener">bootstrap</a>
+ or, in that case, any HTML element in Streamlit if you change the parameter unsafe_allow_html to True. Do note that I am also using python f string formatting here.</li>
 </ul>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">st.sidebar.markdown(f&#39;&#39;&#39;&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;card text-white bg-info mb-3&#34;</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;width: 18rem&#34;</span>&gt;
   &lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;card-body&#34;</span>&gt;
@@ -388,7 +406,10 @@ sources <span style="color:#f92672">=</span> get_sources(country<span style="col
 <ul>
 <li><strong>Changed the width of the streamlit main page:</strong></li>
 </ul>
-<p>Again, there was no parameter given by streamlit to do this, and I was finding the page width a little too small for my use case. Adding the above <a href="https://discuss.streamlit.io/t/custom-render-widths/81/4">code</a> at the start of the app solved the issue.</p>
+<p>Again, there was no parameter given by streamlit to do this, and I was finding the page width a little too small for my use case. Adding the above 
+
+<a href="https://discuss.streamlit.io/t/custom-render-widths/81/4" target="_blank" rel="nofollow noopener">code</a>
+ at the start of the app solved the issue.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">st.markdown(
         f&#34;&#34;&#34;
 &lt;<span style="color:#f92672">style</span>&gt;
@@ -520,7 +541,13 @@ st<span style="color:#f92672">.</span>pyplot(create_wc_by(source),use_container_
 </code></pre></div><hr>
 <h2 id="other-technical-considerations">Other Technical Considerations</h2>
 <h3 id="1-advanced-caching">1. Advanced Caching:</h3>
-<p>In new streamlit release notes for <a href="https://discuss.streamlit.io/t/version-0-57-0/2301">0.57.0</a> which just came out yesterday, streamlit has made updates to st.cache. One notable change to this release is the “ability to set expiration options for cached functions by setting the max_entries and ttl arguments”. From the <a href="https://docs.streamlit.io/api.html?highlight=cache#streamlit.cache">documentation</a>:</p>
+<p>In new streamlit release notes for 
+
+<a href="https://discuss.streamlit.io/t/version-0-57-0/2301" target="_blank" rel="nofollow noopener">0.57.0</a>
+ which just came out yesterday, streamlit has made updates to st.cache. One notable change to this release is the “ability to set expiration options for cached functions by setting the max_entries and ttl arguments”. From the 
+
+<a href="https://docs.streamlit.io/api.html?highlight=cache#streamlit.cache" target="_blank" rel="nofollow noopener">documentation</a>
+:</p>
 <ul>
 <li>
 <p><strong>max_entries</strong> (<em>int or None</em>) — The maximum number of entries to keep in the <strong>cache</strong>, or None for an unbounded cache. (When a new entry is added to a full cache, the oldest cached entry will be removed.) The default is None.</p>
@@ -548,7 +575,13 @@ st<span style="color:#f92672">.</span>pyplot(create_wc_by(source),use_container_
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create_dataframe_last_30d</span>(queries, sources):
     <span style="color:#75715e"># hits API</span>
 </code></pre></div><h3 id="2-deployment">2. Deployment:</h3>
-<p>I used the amazon free ec2 instance to deploy this app at <a href="http://54.149.204.138:8501/">http://54.149.204.138:8501/</a>. If you want to know the steps,read my post on <a href="https://towardsdatascience.com/how-to-deploy-a-streamlit-app-using-an-amazon-free-ec2-instance-416a41f69dc3">How to Deploy a Streamlit App using an Amazon Free ec2 instance?</a></p>
+<p>I used the amazon free ec2 instance to deploy this app at 
+
+<a href="http://54.149.204.138:8501/" target="_blank" rel="nofollow noopener">http://54.149.204.138:8501/</a>
+. If you want to know the steps,read my post on 
+
+<a href="https://towardsdatascience.com/how-to-deploy-a-streamlit-app-using-an-amazon-free-ec2-instance-416a41f69dc3" target="_blank" rel="nofollow noopener">How to Deploy a Streamlit App using an Amazon Free ec2 instance?</a>
+</p>
 <p>There are also a few caveats:</p>
 <ul>
 <li>
@@ -564,17 +597,41 @@ st<span style="color:#f92672">.</span>pyplot(create_wc_by(source),use_container_
 <h3 id="3-learning">3. Learning</h3>
 <p>For folks who are lost, you might like to start with the basics first. Here is my introductory posts on Streamlit and Plotly express.</p>
 <ul>
-<li><a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582">How to write Web apps using simple Python for Data Scientists?</a></li>
-<li><a href="https://towardsdatascience.com/pythons-one-liner-graph-creation-library-with-animations-hans-rosling-style-f2cb50490396">Python’s One Liner graph creation library with animations Hans Rosling Style</a></li>
+<li>
+
+<a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582" target="_blank" rel="nofollow noopener">How to write Web apps using simple Python for Data Scientists?</a>
+</li>
+<li>
+
+<a href="https://towardsdatascience.com/pythons-one-liner-graph-creation-library-with-animations-hans-rosling-style-f2cb50490396" target="_blank" rel="nofollow noopener">Python’s One Liner graph creation library with animations Hans Rosling Style</a>
+</li>
 </ul>
 <hr>
 <h2 id="conclusion">Conclusion</h2>
 <p>Here I have tried creating a dashboard for news on Coronavirus, but it is still in a nascent stage, and a lot needs to be done.</p>
 <p>For one, it needs a large server. For another, a lot of time to improve the visualization and layouts. And also a lot of testing.</p>
 <p>Also, we have done a few things in a roundabout way using HTML and few hacks. There are still a lot of things that I will love to have in Streamlit. I have been in talks with the Streamlit team over the new functionality that they are going to introduce, and I will try to keep you updated on the same. The good news is that Layout options are a part of the new functionality that Streamlit is working on.</p>
-<p>You can find the full code for the final app <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/coronadash">here</a> at my Github repo. And here is the full <a href="http://54.149.204.138:8501/">app</a> on the web.</p>
-<p>If you want to learn about the best strategies for creating Visualizations, I would like to call out an excellent course about <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Data Visualization and applied plotting</a> from the University of Michigan, which is a part of a pretty good <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Data Science Specialization with Python</a> in itself. Do check it out.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal">Medium</a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c">blog</a>.</p>
+<p>You can find the full code for the final app 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/coronadash" target="_blank" rel="nofollow noopener">here</a>
+ at my Github repo. And here is the full 
+
+<a href="http://54.149.204.138:8501/" target="_blank" rel="nofollow noopener">app</a>
+ on the web.</p>
+<p>If you want to learn about the best strategies for creating Visualizations, I would like to call out an excellent course about 
+
+<a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Data Visualization and applied plotting</a>
+ from the University of Michigan, which is a part of a pretty good 
+
+<a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Data Science Specialization with Python</a>
+ in itself. Do check it out.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal" target="_blank" rel="nofollow noopener">Medium</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">blog</a>
+.</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 

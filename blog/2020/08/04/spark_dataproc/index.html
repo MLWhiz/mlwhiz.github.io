@@ -290,24 +290,45 @@
         
         <div class="content mb-5">
           <p>Data Exploration is a key part of Data Science. And does it take long? Ahh. Don’t even ask. Preparing a data set for ML not only requires understanding the data set, cleaning, and creating new features, it also involves doing these steps repeatedly until we have a fine-tuned system.</p>
-<p>As we moved towards bigger datasets, <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a">Apache Spark</a> came as a ray of hope. It gave us a scalable and distributed in-memory system to work with Big Data. By the by, we also saw frameworks like <a href="https://towardsdatascience.com/moving-from-keras-to-pytorch-f0d4fff4ce79">Pytorch</a> and Tensorflow that inherently parallelized matrix computations using thousands of GPU cores.</p>
-<p>But never did we see these two systems working in tandem in the past. We continued to use Spark for Big Data ETL tasks and GPUs for matrix intensive problems in <a href="https://towardsdatascience.com/stop-worrying-and-create-your-deep-learning-server-in-30-minutes-bb5bd956b8de">Deep Learning</a>.</p>
+<p>As we moved towards bigger datasets, 
+
+<a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" target="_blank" rel="nofollow noopener">Apache Spark</a>
+ came as a ray of hope. It gave us a scalable and distributed in-memory system to work with Big Data. By the by, we also saw frameworks like 
+
+<a href="https://towardsdatascience.com/moving-from-keras-to-pytorch-f0d4fff4ce79" target="_blank" rel="nofollow noopener">Pytorch</a>
+ and Tensorflow that inherently parallelized matrix computations using thousands of GPU cores.</p>
+<p>But never did we see these two systems working in tandem in the past. We continued to use Spark for Big Data ETL tasks and GPUs for matrix intensive problems in 
+
+<a href="https://towardsdatascience.com/stop-worrying-and-create-your-deep-learning-server-in-30-minutes-bb5bd956b8de" target="_blank" rel="nofollow noopener">Deep Learning</a>
+.</p>
 <p>
   
-      <img src="/images/spark_dataproc/0.png" alt="&lt;a href=&#34;https://marketing.thepoweroftwo.solutions/acton/attachment/42621/f-0f867d92-c1d0-4112-afef-26f9cbb51499/1/-/-/-/-/NVIDIA%20&amp;amp;%20Google%20Cloud%20Dataproc%20ebook%20July2020.pdf&#34;&gt;Source&lt;/a&gt;">
+      <img src="/images/spark_dataproc/0.png" alt="
+
+&lt;a href=&#34;https://marketing.thepoweroftwo.solutions/acton/attachment/42621/f-0f867d92-c1d0-4112-afef-26f9cbb51499/1/-/-/-/-/NVIDIA%20&amp;amp;%20Google%20Cloud%20Dataproc%20ebook%20July2020.pdf&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Source&lt;/a&gt;
+">
   
 
 </p>
-<p>And that is where Spark 3.0 comes. It provides us with a way to add NVIDIA GPUs to our Spark cluster nodes. The work done by these nodes can now be parallelized using both the CPU+GPU using the software platform for GPU computing, <a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientist-on-gpu-d9a6c7759c7f?source=post_stats_page---------------------------">RAPIDS</a>.</p>
+<p>And that is where Spark 3.0 comes. It provides us with a way to add NVIDIA GPUs to our Spark cluster nodes. The work done by these nodes can now be parallelized using both the CPU+GPU using the software platform for GPU computing, 
+
+<a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientist-on-gpu-d9a6c7759c7f?source=post_stats_page---------------------------" target="_blank" rel="nofollow noopener">RAPIDS</a>
+.</p>
 <blockquote>
 <h1 id="spark--gpu--rapids--spark-30">Spark + GPU + RAPIDS = Spark 3.0</h1>
 </blockquote>
-<p>As per <a href="https://www.nvidia.com/en-in/deep-learning-ai/solutions/data-science/apache-spark-3/">NVIDIA</a>, the early adopters of Spark 3.0 already see a significantly faster performance with their current data loads. Such reductions in processing times can allow Data Scientists to perform more iterations on much bigger datasets, allowing Retailers to improve their forecasting, finance companies to enhance their credit models, and ad tech firms to improve their ability to predict click-through rates.</p>
+<p>As per 
+
+<a href="https://www.nvidia.com/en-in/deep-learning-ai/solutions/data-science/apache-spark-3/" target="_blank" rel="nofollow noopener">NVIDIA</a>
+, the early adopters of Spark 3.0 already see a significantly faster performance with their current data loads. Such reductions in processing times can allow Data Scientists to perform more iterations on much bigger datasets, allowing Retailers to improve their forecasting, finance companies to enhance their credit models, and ad tech firms to improve their ability to predict click-through rates.</p>
 <p>Excited yet. So how can you start using Spark 3.0? Luckily, Google Cloud, Spark, and NVIDIA have come together and simplified the cluster creation process for us. With Dataproc on Google Cloud, we can have a fully-managed Apache Spark cluster with GPUs in a few minutes.</p>
 <p><em><strong>This post is about setting up your own Dataproc Spark Cluster with NVIDIA GPUs on Google Cloud.</strong></em></p>
 <hr>
 <h3 id="1-create-a-new-gcp-project">1. Create a New GCP Project</h3>
-<p>After the initial signup on the <a href="https://cloud.google.com/">Google Cloud Platform</a>, we can start a new project. Here I begin by creating a new project namedSparkDataProc.</p>
+<p>After the initial signup on the 
+
+<a href="https://cloud.google.com/" target="_blank" rel="nofollow noopener">Google Cloud Platform</a>
+, we can start a new project. Here I begin by creating a new project namedSparkDataProc.</p>
 <p>
   
       <img src="/images/spark_dataproc/1.png" alt="Create a New Project">
@@ -349,14 +370,23 @@ gsutil cp ~/data/CaliforniaHousing/cal_housing.data gs://${BUCKET_NAME}/data/cal
 </code></pre>
 <hr>
 <h3 id="4-setup-the-dataproc-rapids-cluster">4. Setup the DataProc Rapids Cluster</h3>
-<p>To create a DataProc RAPIDS cluster that uses NVIDIA T4 GPUs, we need to get some initialization scripts that are used to instantiate our cluster. These scripts will install the GPU drivers(<a href="https://raw.githubusercontent.com/GoogleCloudDataproc/initialization-actions/master/gpu/install_gpu_driver.sh">install_gpu_driver.sh</a>) and create the Rapids conda environment(<a href="https://raw.githubusercontent.com/GoogleCloudDataproc/initialization-actions/master/rapids/rapids.sh">rapids.sh</a>) automatically for us. Since these scripts are in the development phase, the best way is to get the scripts from the GitHub source. We can do this using the below commands in our cloud shell in which we get the initialization scripts and copy them into our GS Bucket:</p>
+<p>To create a DataProc RAPIDS cluster that uses NVIDIA T4 GPUs, we need to get some initialization scripts that are used to instantiate our cluster. These scripts will install the GPU drivers(
+
+<a href="https://raw.githubusercontent.com/GoogleCloudDataproc/initialization-actions/master/gpu/install_gpu_driver.sh" target="_blank" rel="nofollow noopener">install_gpu_driver.sh</a>
+) and create the Rapids conda environment(
+
+<a href="https://raw.githubusercontent.com/GoogleCloudDataproc/initialization-actions/master/rapids/rapids.sh" target="_blank" rel="nofollow noopener">rapids.sh</a>
+) automatically for us. Since these scripts are in the development phase, the best way is to get the scripts from the GitHub source. We can do this using the below commands in our cloud shell in which we get the initialization scripts and copy them into our GS Bucket:</p>
 <pre><code>wget https://raw.githubusercontent.com/GoogleCloudDataproc/initialization-actions/master/rapids/rapids.sh
 wget https://raw.githubusercontent.com/GoogleCloudDataproc/initialization-actions/master/gpu/install_gpu_driver.sh
 
 gsutil cp rapids.sh gs://$BUCKET_NAME
 gsutil cp install_gpu_driver.sh gs://$BUCKET_NAME
 </code></pre>
-<p>We can now create our cluster using the below command in the Cloud Shell. In the below command, we are using a predefined image version(2.0.0-RC2-ubuntu18) which has Spark 3.0 and python 3.7 to create our dataproc cluster. I am using a previous version of this image since the newest version has some issues with running Jupyter and Jupyter Lab. You can get a list of all versions <a href="https://cloud.google.com/dataproc/docs/release-notes">here</a>.</p>
+<p>We can now create our cluster using the below command in the Cloud Shell. In the below command, we are using a predefined image version(2.0.0-RC2-ubuntu18) which has Spark 3.0 and python 3.7 to create our dataproc cluster. I am using a previous version of this image since the newest version has some issues with running Jupyter and Jupyter Lab. You can get a list of all versions 
+
+<a href="https://cloud.google.com/dataproc/docs/release-notes" target="_blank" rel="nofollow noopener">here</a>
+.</p>
 <pre><code>CLUSTER_NAME=sparktestcluster
 REGION=us-central1
 gcloud beta dataproc clusters create ${CLUSTER_NAME} \
@@ -398,7 +428,10 @@ cores=8#spark:spark.task.cpus=1#spark:spark.yarn.unmanagedAM.enabled=false&quot;
 <p>Extra Spark config tuning suitable for a notebook environment set using the properties flag. Specifically, we set spark.executor.cores=8 for improved parallelization and spark.yarn.unmanagedAM.enabled=false since it currently breaks <em><strong>SparkUI</strong></em>.</p>
 </li>
 </ul>
-<p><em><strong>Troubleshooting:</strong></em> If you get errors regarding limits after this command, you might want to change some of the quotas in your default <a href="https://console.cloud.google.com/iam-admin/quotas?project=sparkdataproc">Google Console Quotas Page</a>. The limits I ended up changing were:</p>
+<p><em><strong>Troubleshooting:</strong></em> If you get errors regarding limits after this command, you might want to change some of the quotas in your default 
+
+<a href="https://console.cloud.google.com/iam-admin/quotas?project=sparkdataproc" target="_blank" rel="nofollow noopener">Google Console Quotas Page</a>
+. The limits I ended up changing were:</p>
 <ul>
 <li>
 <p><strong>GPUs (all regions)</strong> to 12 (Minimum:4)</p>
@@ -416,7 +449,10 @@ cores=8#spark:spark.task.cpus=1#spark:spark.yarn.unmanagedAM.enabled=false&quot;
 <p>I actually requested more limits than I required as the limit increase process might take a little longer and I will spin up some larger clusters later.</p>
 <hr>
 <h3 id="5-run-jupyterlab-on-dataproc-rapids-cluster">5. Run JupyterLab on DataProc Rapids Cluster</h3>
-<p>Once your command succeeds(It might take 10–15 mins) you will be able to see your Dataproc cluster at <a href="https://console.cloud.google.com/dataproc/clusters">https://console.cloud.google.com/dataproc/clusters</a>. Or you can go to the Google Cloud Platform console on your browser and search for “Dataproc” and click on the “Dataproc” icon(It looks like three connected circles). This will navigate you to the Dataproc clusters page.</p>
+<p>Once your command succeeds(It might take 10–15 mins) you will be able to see your Dataproc cluster at 
+
+<a href="https://console.cloud.google.com/dataproc/clusters" target="_blank" rel="nofollow noopener">https://console.cloud.google.com/dataproc/clusters</a>
+. Or you can go to the Google Cloud Platform console on your browser and search for “Dataproc” and click on the “Dataproc” icon(It looks like three connected circles). This will navigate you to the Dataproc clusters page.</p>
 <p>
   
       <img src="/images/spark_dataproc/4.png" alt="Dataproc Clusters Page">
@@ -490,8 +526,20 @@ gcloud config set project sparkdataproc
 <p>I am totally amazed by the concept of using a GPU on Spark and the different streams of experiments it opens up. Will be working on a lot of these in the coming weeks not only to benchmark but also because it is fun. So stay tuned.</p>
 <hr>
 <h2 id="continue-learning">Continue Learning</h2>
-<p>Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out these excellent courses on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293556&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-essentials">Big Data Essentials: HDFS, MapReduce, and Spark RDD</a> and <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293488&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-analysis">Big Data Analysis: Hive, Spark SQL, DataFrames and GraphFrames</a> by Yandex on Coursera.</p>
-<p>I am going to be writing more of such posts in the future too. Let me know what you think about them. Follow me up at <a href="https://medium.com/@rahul_agarwal">Medium</a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c">blog</a>.</p>
+<p>Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out these excellent courses on 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293556&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-essentials" target="_blank" rel="nofollow noopener">Big Data Essentials: HDFS, MapReduce, and Spark RDD</a>
+ and 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293488&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-analysis" target="_blank" rel="nofollow noopener">Big Data Analysis: Hive, Spark SQL, DataFrames and GraphFrames</a>
+ by Yandex on Coursera.</p>
+<p>I am going to be writing more of such posts in the future too. Let me know what you think about them. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal" target="_blank" rel="nofollow noopener">Medium</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">blog</a>
+.</p>
 
 
         

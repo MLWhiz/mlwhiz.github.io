@@ -286,9 +286,15 @@
         
         <div class="content mb-5">
           <p>Data Science is the study of algorithms.</p>
-<p>I grapple through with many algorithms on a day to day basis, so I thought of listing some of the most common and most used algorithms one will end up using in this new <a href="https://towardsdatascience.com/tagged/ds-algorithms">DS Algorithm series</a>.</p>
+<p>I grapple through with many algorithms on a day to day basis, so I thought of listing some of the most common and most used algorithms one will end up using in this new 
+
+<a href="https://towardsdatascience.com/tagged/ds-algorithms" target="_blank" rel="nofollow noopener">DS Algorithm series</a>
+.</p>
 <p>How many times it has happened when you create a lot of features and then you need to come up with ways to reduce the number of features?</p>
-<p>Last time I wrote a post titled “<a href="https://towardsdatascience.com/the-5-feature-selection-algorithms-every-data-scientist-need-to-know-3a6b566efd2">The 5 Feature Selection Algorithms every Data Scientist should know</a>” in which I talked about using correlation or tree-based methods and adding some structure to the process of feature selection.</p>
+<p>Last time I wrote a post titled “
+
+<a href="https://towardsdatascience.com/the-5-feature-selection-algorithms-every-data-scientist-need-to-know-3a6b566efd2" target="_blank" rel="nofollow noopener">The 5 Feature Selection Algorithms every Data Scientist should know</a>
+” in which I talked about using correlation or tree-based methods and adding some structure to the process of feature selection.</p>
 <p>Recently I got introduced to another novel way of feature selection called <em><strong>Permutation Importance</strong></em> and really liked it.</p>
 <p><em><strong>So, this post is explaining how permutation importance works and how we can code it using ELI5.</strong></em></p>
 <hr>
@@ -298,10 +304,16 @@
 <p>So we fit our model at least n times, where n is the number of features in the model. It is so much work and computation. <em><strong>Can we do better?</strong></em></p>
 <p>
   
-      <img src="/images/blackbox/0.png" alt="&lt;a href=&#34;https://www.kaggle.com/dansbecker/permutation-importance&#34;&gt;Source&lt;/a&gt;: We permute a feature and predict using the updated dataset. Intuitively, if our accuracy or any evaluation metric doesn’t take a hit, we can say that the feature is not important. If our accuracy does take a hit, we consider this feature important.">
+      <img src="/images/blackbox/0.png" alt="
+
+&lt;a href=&#34;https://www.kaggle.com/dansbecker/permutation-importance&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Source&lt;/a&gt;
+: We permute a feature and predict using the updated dataset. Intuitively, if our accuracy or any evaluation metric doesn’t take a hit, we can say that the feature is not important. If our accuracy does take a hit, we consider this feature important.">
   
 
-<em><a href="https://www.kaggle.com/dansbecker/permutation-importance">Source</a>: We permute a feature and predict using the updated dataset. Intuitively, if our accuracy or any evaluation metric doesn’t take a hit, we can say that the feature is not important. If our accuracy does take a hit, we consider this feature important.</em></p>
+<em>
+
+<a href="https://www.kaggle.com/dansbecker/permutation-importance" target="_blank" rel="nofollow noopener">Source</a>
+: We permute a feature and predict using the updated dataset. Intuitively, if our accuracy or any evaluation metric doesn’t take a hit, we can say that the feature is not important. If our accuracy does take a hit, we consider this feature important.</em></p>
 <p>Yes, we can. To calculate permutation importance, we shuffle/permute the values for a single feature and make predictions using the resulting dataset.</p>
 <p>The predictions are then used to calculate our evaluation metric. Intuitively, if our accuracy or any evaluation metric doesn’t take a hit, we can say that the feature is not important. If our accuracy does take a hit, we consider this feature important.</p>
 <hr>
@@ -315,7 +327,10 @@
 
 </p>
 <p>Don’t worry if you don’t understand football terminologies. I will try to keep it at a minimum.</p>
-<p>You can see the full code here in this <a href="https://www.kaggle.com/mlwhiz/permutation-feature-selection-using-football-data">Kaggle Kernel</a>.</p>
+<p>You can see the full code here in this 
+
+<a href="https://www.kaggle.com/mlwhiz/permutation-feature-selection-using-football-data" target="_blank" rel="nofollow noopener">Kaggle Kernel</a>
+.</p>
 <h3 id="some-simple-data-preprocessing">Some simple Data Preprocessing</h3>
 <p>We have done some basic preprocessing such as removing nulls and one hot encoding. We also convert the problem to a classification problem using:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">y <span style="color:#f92672">=</span> traindf[<span style="color:#e6db74">&#39;Overall&#39;</span>]<span style="color:#f92672">&gt;=</span><span style="color:#ae81ff">80</span>
@@ -390,11 +405,29 @@ feature_importances <span style="color:#f92672">=</span> np<span style="color:#f
 </code></pre>
 <hr>
 <h2 id="conclusion">Conclusion</h2>
-<p><a href="https://towardsdatascience.com/the-hitchhikers-guide-to-feature-extraction-b4c157e96631">Feature engineering</a> and feature selection are critical parts of any machine learning pipeline.</p>
+<p>
+
+<a href="https://towardsdatascience.com/the-hitchhikers-guide-to-feature-extraction-b4c157e96631" target="_blank" rel="nofollow noopener">Feature engineering</a>
+ and feature selection are critical parts of any machine learning pipeline.</p>
 <p>We strive for accuracy in our models, and one cannot get to a good accuracy without revisiting these pieces again and again.</p>
-<p>In this post, I tried to explain Permutation importance as a feature selection method. It helps us find feature importance for any BlackBox model, unlike the techniques in my previous <a href="https://towardsdatascience.com/the-5-feature-selection-algorithms-every-data-scientist-need-to-know-3a6b566efd2">post</a> on feature selection.</p>
-<p>If you want to learn more about feature engineering/selection, I would like to call out the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">How to Win a Data Science Competition: Learn from Top Kagglers</a> course in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a> by Kazanova. This course talks about a lot of intuitive ways to improve your model using useful feature engineering/selection techniques. Definitely recommended.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c"><strong>blog</strong></a>.</p>
+<p>In this post, I tried to explain Permutation importance as a feature selection method. It helps us find feature importance for any BlackBox model, unlike the techniques in my previous 
+
+<a href="https://towardsdatascience.com/the-5-feature-selection-algorithms-every-data-scientist-need-to-know-3a6b566efd2" target="_blank" rel="nofollow noopener">post</a>
+ on feature selection.</p>
+<p>If you want to learn more about feature engineering/selection, I would like to call out the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">How to Win a Data Science Competition: Learn from Top Kagglers</a>
+ course in the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Advanced machine learning specialization</a>
+ by Kazanova. This course talks about a lot of intuitive ways to improve your model using useful feature engineering/selection techniques. Definitely recommended.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" target="_blank" rel="nofollow noopener">&lt;strong&gt;Medium&lt;/strong&gt;</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">&lt;strong&gt;blog&lt;/strong&gt;</a>
+.</p>
 
 
         

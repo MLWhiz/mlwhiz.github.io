@@ -392,7 +392,13 @@ y_true <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span
 y_pred <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>]
 
 fbeta_score(y_true, y_pred,beta<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
-</code></pre></div><p>F1 Score can also be used for Multiclass problems. See <a href="https://towardsdatascience.com/multi-class-metrics-made-simple-part-ii-the-f1-score-ebe8b2c2ca1">this</a> awesome blog post by <a href="undefined">Boaz Shmueli</a> for details.</p>
+</code></pre></div><p>F1 Score can also be used for Multiclass problems. See 
+
+<a href="https://towardsdatascience.com/multi-class-metrics-made-simple-part-ii-the-f1-score-ebe8b2c2ca1" target="_blank" rel="nofollow noopener">this</a>
+ awesome blog post by 
+
+<a href="undefined">Boaz Shmueli</a>
+ for details.</p>
 <hr>
 <h2 id="3-log-lossbinary-crossentropy">3. Log Loss/Binary Crossentropy</h2>
 <p>Log loss is a pretty good evaluation metric for binary classifiers and it is sometimes the optimization objective as well in case of Logistic regression and Neural Networks.</p>
@@ -418,7 +424,10 @@ fbeta_score(y_true, y_pred,beta<span style="color:#f92672">=</span><span style="
 <span style="color:#75715e"># where y_pred are probabilities and y_true are binary class labels</span>
 log_loss(y_true, y_pred, eps<span style="color:#f92672">=</span><span style="color:#ae81ff">1e-15</span>)
 </code></pre></div><h4 id="caveats-4">Caveats</h4>
-<p>It is susceptible in case of <a href="https://towardsdatascience.com/the-5-sampling-algorithms-every-data-scientist-need-to-know-43c7bc11d17c">imbalanced</a> datasets. You might have to introduce class weights to penalize minority errors more or you may use this after balancing your dataset.</p>
+<p>It is susceptible in case of 
+
+<a href="https://towardsdatascience.com/the-5-sampling-algorithms-every-data-scientist-need-to-know-43c7bc11d17c" target="_blank" rel="nofollow noopener">imbalanced</a>
+ datasets. You might have to introduce class weights to penalize minority errors more or you may use this after balancing your dataset.</p>
 <hr>
 <h2 id="4-categorical-crossentropy">4. Categorical Crossentropy</h2>
 <p>The log loss also generalizes to the multiclass problem. The classifier in a multiclass setting must assign a probability to each class for all examples. If there are N samples belonging to M classes, then the <em>Categorical Crossentropy</em> is the summation of -ylogp values:</p>
@@ -438,7 +447,10 @@ log_loss(y_true, y_pred, eps<span style="color:#f92672">=</span><span style="col
 <span style="color:#75715e"># Where y_pred is a matrix of probabilities with shape ***= (n_samples, n_classes)*** and y_true is an array of class labels</span>
 log_loss(y_true, y_pred, eps<span style="color:#f92672">=</span><span style="color:#ae81ff">1e-15</span>)
 </code></pre></div><h4 id="caveats-5">Caveats:</h4>
-<p>It is susceptible in case of <a href="https://towardsdatascience.com/the-5-sampling-algorithms-every-data-scientist-need-to-know-43c7bc11d17c">imbalanced</a> datasets.</p>
+<p>It is susceptible in case of 
+
+<a href="https://towardsdatascience.com/the-5-sampling-algorithms-every-data-scientist-need-to-know-43c7bc11d17c" target="_blank" rel="nofollow noopener">imbalanced</a>
+ datasets.</p>
 <hr>
 <h2 id="5-auc">5. AUC</h2>
 <p>AUC is the area under the ROC curve.</p>
@@ -479,12 +491,30 @@ y_scores <span style="color:#f92672">=</span> np<span style="color:#f92672">.</s
 <p>Sometimes we will need well-calibrated probability outputs from our models and AUC doesn’t help with that.</p>
 <hr>
 <h2 id="conclusion">Conclusion</h2>
-<p>An important step while creating our <a href="https://towardsdatascience.com/6-important-steps-to-build-a-machine-learning-system-d75e3b83686">machine learning pipeline</a> is evaluating our different models against each other. A bad choice of an evaluation metric could wreak havoc to your whole system.</p>
+<p>An important step while creating our 
+
+<a href="https://towardsdatascience.com/6-important-steps-to-build-a-machine-learning-system-d75e3b83686" target="_blank" rel="nofollow noopener">machine learning pipeline</a>
+ is evaluating our different models against each other. A bad choice of an evaluation metric could wreak havoc to your whole system.</p>
 <p><em><strong>So, always be watchful of what you are predicting and how the choice of evaluation metric might affect/alter your final predictions.</strong></em></p>
 <p>Also, the choice of an evaluation metric should be well aligned with the business objective and hence it is a bit subjective. And you can come up with your own evaluation metric as well.</p>
 <h2 id="continue-learning">Continue Learning</h2>
-<p>If you want to <a href="https://towardsdatascience.com/how-did-i-start-with-data-science-3f4de6b501b0?source=---------8------------------">learn</a> more about how to structure a Machine Learning project and the best practices, I would like to call out his awesome <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11421702016&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fmachine-learning-projects">third course</a> named Structuring Machine learning projects in the Coursera <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdeep-learning">Deep Learning Specialization</a>. Do check it out. It talks about the pitfalls and a lot of basic ideas to improve your models.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c"><strong>blog</strong></a></p>
+<p>If you want to 
+
+<a href="https://towardsdatascience.com/how-did-i-start-with-data-science-3f4de6b501b0?source=---------8------------------" target="_blank" rel="nofollow noopener">learn</a>
+ more about how to structure a Machine Learning project and the best practices, I would like to call out his awesome 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11421702016&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fmachine-learning-projects" target="_blank" rel="nofollow noopener">third course</a>
+ named Structuring Machine learning projects in the Coursera 
+
+<a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdeep-learning" target="_blank" rel="nofollow noopener">Deep Learning Specialization</a>
+. Do check it out. It talks about the pitfalls and a lot of basic ideas to improve your models.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" target="_blank" rel="nofollow noopener">&lt;strong&gt;Medium&lt;/strong&gt;</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">&lt;strong&gt;blog&lt;/strong&gt;</a>
+</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources as sharing knowledge is never a bad idea.</p>
 
 

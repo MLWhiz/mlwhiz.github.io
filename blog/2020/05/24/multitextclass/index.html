@@ -300,7 +300,10 @@
 
 </p>
 <p>Have you ever thought about how toxic comments get flagged automatically on platforms like Quora or Reddit? Or how mail gets marked as spam? Or what decides which online ads are shown to you?</p>
-<p>All of the above are examples of how text classification is used in different areas. <a href="https://lionbridge.ai/services/text-classification/">Text classification</a> is a common task in natural language processing (NLP) which transforms a sequence of a text of indefinite length into a single category.</p>
+<p>All of the above are examples of how text classification is used in different areas. 
+
+<a href="https://lionbridge.ai/services/text-classification/" target="_blank" rel="nofollow noopener">Text classification</a>
+ is a common task in natural language processing (NLP) which transforms a sequence of a text of indefinite length into a single category.</p>
 <p>One theme that emerges from the above examples is that all have a binary target class. For example, either the comment is toxic or not toxic, or the review is fake or not fake. In short, there are only two target classes, hence the term binary.</p>
 <p>But this is not always the case, and some problems might have more than two target classes. These problems are conveniently termed multiclass classifications, and it is these problems we’ll focus on in this post. Some examples of multiclass classification include:</p>
 <ul>
@@ -314,7 +317,10 @@
 <p><em><strong>In this post, we will go through a multiclass text classification problem using various Deep Learning Methods.</strong></em></p>
 <hr>
 <h2 id="dataset--problem-description">Dataset / Problem Description</h2>
-<p>For this post, I am using the <a href="https://www.kaggle.com/jessicali9530/kuc-hackathon-winter-2018">UCI ML Drug Review dataset</a> from Kaggle. It contains over 200,000 patient drug reviews, along with related conditions. The dataset has many columns, but we will be using just two of them for our NLP Task.</p>
+<p>For this post, I am using the 
+
+<a href="https://www.kaggle.com/jessicali9530/kuc-hackathon-winter-2018" target="_blank" rel="nofollow noopener">UCI ML Drug Review dataset</a>
+ from Kaggle. It contains over 200,000 patient drug reviews, along with related conditions. The dataset has many columns, but we will be using just two of them for our NLP Task.</p>
 <p>So, our dataset mostly looks like this:</p>
 <p>
   
@@ -351,7 +357,10 @@
 <p>For example: What is king — man + woman? The result is Queen.</p>
 <p>Word2Vec vectors also help us to find the similarity between words. If we look for similar words to “good”, we will find awesome, great, etc. It is this property of word2vec that makes it invaluable for text classification. With this, our deep learning network understands that “good” and “great” are words with similar meanings.</p>
 <p>In simple terms, word2vec creates fixed-length vectors for words, giving us a d dimensional vector for every word (and common bigrams) in a dictionary.</p>
-<p>These word vectors are usually pre-trained, and provided by others after training on large corpora of texts like Wikipedia, Twitter, etc. The most commonly used pre-trained word vectors are <a href="https://www.kaggle.com/takuok/glove840b300dtxt">Glove</a> and Fast text with 300-dimensional word vectors. In this post, we will use the Glove word vectors.</p>
+<p>These word vectors are usually pre-trained, and provided by others after training on large corpora of texts like Wikipedia, Twitter, etc. The most commonly used pre-trained word vectors are 
+
+<a href="https://www.kaggle.com/takuok/glove840b300dtxt" target="_blank" rel="nofollow noopener">Glove</a>
+ and Fast text with 300-dimensional word vectors. In this post, we will use the Glove word vectors.</p>
 <hr>
 <h2 id="data-preprocessing">Data Preprocessing</h2>
 <p>In most cases, text data is not entirely clean. Data coming from different sources have different characteristics, and this makes text preprocessing one of the most critical steps in the classification pipeline. For example, Text data from Twitter is different from the text data found on Quora or other news/blogging platforms, and each needs to be treated differently. However, the techniques we’ll cover in this post are generic enough for almost any kind of data you might encounter in the jungles of NLP.</p>
@@ -481,7 +490,10 @@ embedding_matrix = load_glove(tokenizer.word_index)
 <hr>
 <h2 id="deep-learning-models">Deep Learning Models</h2>
 <h3 id="1-textcnn">1. TextCNN</h3>
-<p>The idea of using a CNN to classify text was first presented in the paper <a href="https://www.aclweb.org/anthology/D14-1181">Convolutional Neural Networks for Sentence Classification</a> by Yoon Kim.</p>
+<p>The idea of using a CNN to classify text was first presented in the paper 
+
+<a href="https://www.aclweb.org/anthology/D14-1181" target="_blank" rel="nofollow noopener">Convolutional Neural Networks for Sentence Classification</a>
+ by Yoon Kim.</p>
 <p>Representation: The central concept of this idea is to see our documents as images. But how? Let’s say we have a sentence, and we have maxlen = 70 and embedding size = 300. We can create a matrix of numbers with the shape 70×300 to represent this sentence. Images also have a matrix where individual elements are pixel values. But instead of image pixels, the input to the task is sentences or documents represented as a matrix. Each row of the matrix corresponds to a one-word vector.</p>
 <p>
   
@@ -490,7 +502,10 @@ embedding_matrix = load_glove(tokenizer.word_index)
 
 </p>
 <p>Convolution Idea: For images, we move our conv. filter both horizontally as well as vertically, but for text we fix kernel size to filter_size x embed_size, i.e. (3,300) we are just going to move vertically down the convolution looking at three words at once, since our filter size in this case is 3. This idea seems right since our convolution filter is not splitting word embedding; it gets to look at the full embedding of each word. Also, one can think of filter sizes as unigrams, bigrams, trigrams, etc. Since we are looking at a context window of 1, 2, 3, and 5 words respectively.</p>
-<p>Here is the text classification CNN network coded in <a href="https://towardsdatascience.com/moving-from-keras-to-pytorch-f0d4fff4ce79%EF%BF%BD">Pytorch</a>.</p>
+<p>Here is the text classification CNN network coded in 
+
+<a href="https://towardsdatascience.com/moving-from-keras-to-pytorch-f0d4fff4ce79%EF%BF%BD" target="_blank" rel="nofollow noopener">Pytorch</a>
+.</p>
 <pre><code>class CNN_Text(nn.Module):    
     def __init__(self):
         super(CNN_Text, self).__init__()
@@ -569,7 +584,10 @@ def forward(self, x):
 </code></pre>
 <hr>
 <h2 id="training">Training</h2>
-<p>Below is the code we use to train our BiLSTM Model. The code is well commented, so please go through the code to understand it. You might also want to look at my post on <a href="https://towardsdatascience.com/moving-from-keras-to-pytorch-f0d4fff4ce79">Pytorch</a>.</p>
+<p>Below is the code we use to train our BiLSTM Model. The code is well commented, so please go through the code to understand it. You might also want to look at my post on 
+
+<a href="https://towardsdatascience.com/moving-from-keras-to-pytorch-f0d4fff4ce79" target="_blank" rel="nofollow noopener">Pytorch</a>
+.</p>
 <pre><code>n_epochs = 6
 model = BiLSTM()
 loss_fn = nn.CrossEntropyLoss(reduction='sum')
@@ -662,12 +680,33 @@ skplt.metrics.plot_confusion_matrix(
 <h2 id="conclusion">Conclusion</h2>
 <p>In this post, we covered deep learning architectures like LSTM and CNN for text classification and explained the different steps used in deep learning for NLP.</p>
 <p>There is still a lot that can be done to improve this model’s performance. Changing the learning rates, using learning rate schedules, using extra features, enriching embeddings, removing misspellings, etc. I hope this boilerplate code provides a go-to baseline for any text classification problem you might face.</p>
-<p>You can find the full working code here on <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/multiclass">Github</a>, or this <a href="https://www.kaggle.com/mlwhiz/multiclass-text-classification-pytorch?scriptVersionId=30273958">Kaggle Kernel</a>.</p>
-<p>Also, if you want to learn more about NLP, <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing">here</a> is an excellent course.</p>
-<p>If you want to learn more about NLP, I would like to call out an excellent course on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing">Natural Language Processing</a> from the Advanced Machine Learning Specialization. Do check it out.</p>
-<p>I am going to be writing more of such posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal">Medium</a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c">blog</a>.</p>
+<p>You can find the full working code here on 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/multiclass" target="_blank" rel="nofollow noopener">Github</a>
+, or this 
+
+<a href="https://www.kaggle.com/mlwhiz/multiclass-text-classification-pytorch?scriptVersionId=30273958" target="_blank" rel="nofollow noopener">Kaggle Kernel</a>
+.</p>
+<p>Also, if you want to learn more about NLP, 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target="_blank" rel="nofollow noopener">here</a>
+ is an excellent course.</p>
+<p>If you want to learn more about NLP, I would like to call out an excellent course on 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target="_blank" rel="nofollow noopener">Natural Language Processing</a>
+ from the Advanced Machine Learning Specialization. Do check it out.</p>
+<p>I am going to be writing more of such posts in the future too. Let me know what you think about the series. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal" target="_blank" rel="nofollow noopener">Medium</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">blog</a>
+.</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
-<p>This story was first published <a href="https://lionbridge.ai/articles/using-deep-learning-for-end-to-end-multiclass-text-classification/">here</a>.</p>
+<p>This story was first published 
+
+<a href="https://lionbridge.ai/articles/using-deep-learning-for-end-to-end-multiclass-text-classification/" target="_blank" rel="nofollow noopener">here</a>
+.</p>
 
 
         

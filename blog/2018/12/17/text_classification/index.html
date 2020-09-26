@@ -304,11 +304,26 @@ of text of indefinite length into a category of text. How could you use that?</p
 </ul>
 <p>And much more. The whole internet is filled with text and to categorise that information algorithmically will only give us incremental benefits to say the least in the field of AI.</p>
 <p>Here I am going to use the data from Quora&rsquo;s Insincere questions to talk about the different models that people are building and sharing to perform this task. Obviously these standalone models are not going to put you on the top of the leaderboard, yet I hope that this ensuing discussion would be helpful for people who want to learn more about text classification. This is going to be a long post in that regard.</p>
-<p>As a side note: if you want to know more about NLP, I would like to recommend this awesome course on <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Natural Language Processing</a> in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a>. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few.</p>
-<p>Also take a look at my other post: <a href="/blog/2019/01/17/deeplearning_nlp_preprocess/">Text Preprocessing Methods for Deep Learning</a>, which talks about different preprocessing techniques you can use for your NLP task and <a href="/blog/2019/01/06/pytorch_keras_conversion/">how to switch from Keras to Pytorch</a>.</p>
+<p>As a side note: if you want to know more about NLP, I would like to recommend this awesome course on 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Natural Language Processing</a>
+ in the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Advanced machine learning specialization</a>
+. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few.</p>
+<p>Also take a look at my other post: 
+
+<a href="/blog/2019/01/17/deeplearning_nlp_preprocess/">Text Preprocessing Methods for Deep Learning</a>
+, which talks about different preprocessing techniques you can use for your NLP task and 
+
+<a href="/blog/2019/01/06/pytorch_keras_conversion/">how to switch from Keras to Pytorch</a>
+.</p>
 <p>So let me try to go through some of the models which people are using to perform text classification and try to provide a brief intuition for them.</p>
 <h2 id="1-textcnn">1. TextCNN:</h2>
-<p>The idea of using a CNN to classify text was first presented in the paper <a href="https://www.aclweb.org/anthology/D14-1181">Convolutional Neural Networks for Sentence Classification</a> by Yoon Kim. Instead of image pixels, the input to the tasks are sentences or documents represented as a matrix. Each row of the matrix corresponds to one word vector. That is, each row is word-vector that represents a word. Thus a sequence of max length 70 gives us a image of 70(max sequence length)x300(embedding size)</p>
+<p>The idea of using a CNN to classify text was first presented in the paper 
+
+<a href="https://www.aclweb.org/anthology/D14-1181" target="_blank" rel="nofollow noopener">Convolutional Neural Networks for Sentence Classification</a>
+ by Yoon Kim. Instead of image pixels, the input to the tasks are sentences or documents represented as a matrix. Each row of the matrix corresponds to one word vector. That is, each row is word-vector that represents a word. Thus a sequence of max length 70 gives us a image of 70(max sequence length)x300(embedding size)</p>
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/text_convolution.png"  height="400" width="700" ></center>
 </div>
@@ -338,7 +353,10 @@ of text of indefinite length into a category of text. How could you use that?</p
     model<span style="color:#f92672">.</span>compile(loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;binary_crossentropy&#39;</span>, optimizer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;adam&#39;</span>, metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>])
 
     <span style="color:#66d9ef">return</span> model
-</code></pre></div><p>I have written a simplified and well commented code to run this network(taking input from a lot of other kernels) on a <a href="https://www.kaggle.com/mlwhiz/learning-text-classification-textcnn">kaggle kernel</a> for this competition. Do take a look there to learn the preprocessing steps, and the word to vec embeddings usage in this model. You will learn something. Please do upvote the kernel if you find it helpful. This kernel scored around 0.661 on the public leaderboard.</p>
+</code></pre></div><p>I have written a simplified and well commented code to run this network(taking input from a lot of other kernels) on a 
+
+<a href="https://www.kaggle.com/mlwhiz/learning-text-classification-textcnn" target="_blank" rel="nofollow noopener">kaggle kernel</a>
+ for this competition. Do take a look there to learn the preprocessing steps, and the word to vec embeddings usage in this model. You will learn something. Please do upvote the kernel if you find it helpful. This kernel scored around 0.661 on the public leaderboard.</p>
 <h2 id="2-bidirectional-rnnlstmgru">2. BiDirectional RNN(LSTM/GRU):</h2>
 <p>TextCNN takes care of a lot of things. For example it takes care of words in close range. It is able to see &ldquo;new york&rdquo; together. But it still can&rsquo;t take care of all the context provided in a particular text sequence. It still does not learn the seem to learn the sequential structure of the data, where every word is dependednt on the previous word. Or a word in the previous sentence.</p>
 <p>RNN help us with that. <em>They are able to remember previous information using hidden states and connect it to the current task.</em></p>
@@ -372,9 +390,15 @@ of text of indefinite length into a category of text. How could you use that?</p
     model <span style="color:#f92672">=</span> Model(inputs<span style="color:#f92672">=</span>inp, outputs<span style="color:#f92672">=</span>outp)
     model<span style="color:#f92672">.</span>compile(loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;binary_crossentropy&#39;</span>, optimizer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;adam&#39;</span>, metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>])
     <span style="color:#66d9ef">return</span> model
-</code></pre></div><p>I have written a simplified and well commented code to run this network(taking input from a lot of other kernels) on a <a href="https://www.kaggle.com/mlwhiz/learning-text-classification-bidirectionalrnn">kaggle kernel</a> for this competition. Do take a look there to learn the preprocessing steps, and the word to vec embeddings usage in this model. You will learn something. Please do upvote the kernel if you find it helpful. This kernel scored around 0.671 on the public leaderboard.</p>
+</code></pre></div><p>I have written a simplified and well commented code to run this network(taking input from a lot of other kernels) on a 
+
+<a href="https://www.kaggle.com/mlwhiz/learning-text-classification-bidirectionalrnn" target="_blank" rel="nofollow noopener">kaggle kernel</a>
+ for this competition. Do take a look there to learn the preprocessing steps, and the word to vec embeddings usage in this model. You will learn something. Please do upvote the kernel if you find it helpful. This kernel scored around 0.671 on the public leaderboard.</p>
 <h2 id="3-attention-models">3. Attention Models</h2>
-<p>The concept of Attention is relatively new as it comes from <a href="https://www.cs.cmu.edu/~diyiy/docs/naacl16.pdf">Hierarchical Attention Networks for Document Classification</a> paper written jointly by CMU and Microsoft guys in 2016.</p>
+<p>The concept of Attention is relatively new as it comes from 
+
+<a href="https://www.cs.cmu.edu/~diyiy/docs/naacl16.pdf" target="_blank" rel="nofollow noopener">Hierarchical Attention Networks for Document Classification</a>
+ paper written jointly by CMU and Microsoft guys in 2016.</p>
 <p>So in the past we used to find features from text by doing a keyword extraction. Some word are more helpful in determining the category of a text than others. But in this method we sort of lost the sequential structure of text. With LSTM and deep learning methods while we are able to take case of the sequence structure we lose the ability to give higher weightage to more important words.
 Can we have the best of both worlds?</p>
 <p>And that is attention for you. In the author&rsquo;s words:</p>
@@ -512,17 +536,35 @@ such words that are important to the meaning of the sentence and aggregate the r
     model<span style="color:#f92672">.</span>compile(loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;binary_crossentropy&#39;</span>, optimizer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;adam&#39;</span>, metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>])
     <span style="color:#66d9ef">return</span> model
 
-</code></pre></div><p>I have written a simplified and well commented code to run this network(taking input from a lot of other kernels) on a <a href="https://www.kaggle.com/mlwhiz/learning-text-classification-attention">kaggle kernel</a> for this competition. Do take a look there to learn the preprocessing steps, and the word to vec embeddings usage in this model. You will learn something. Please do upvote the kernel if you find it helpful. This kernel scored around 0.682 on the public leaderboard.</p>
+</code></pre></div><p>I have written a simplified and well commented code to run this network(taking input from a lot of other kernels) on a 
+
+<a href="https://www.kaggle.com/mlwhiz/learning-text-classification-attention" target="_blank" rel="nofollow noopener">kaggle kernel</a>
+ for this competition. Do take a look there to learn the preprocessing steps, and the word to vec embeddings usage in this model. You will learn something. Please do upvote the kernel if you find it helpful. This kernel scored around 0.682 on the public leaderboard.</p>
 <p>Hope that Helps! Do checkout the kernels for all the networks and see the comments too. I will try to write a part 2 of this post where I would like to talk about capsule networks and more techniques as they get used in this competition.</p>
-<p>Here are the kernel links again: <a href="https://www.kaggle.com/mlwhiz/learning-text-classification-textcnn">TextCNN</a>,<a href="https://www.kaggle.com/mlwhiz/learning-text-classification-bidirectionalrnn">BiLSTM/GRU</a>,<a href="https://www.kaggle.com/mlwhiz/learning-text-classification-attention">Attention</a></p>
+<p>Here are the kernel links again: 
+
+<a href="https://www.kaggle.com/mlwhiz/learning-text-classification-textcnn" target="_blank" rel="nofollow noopener">TextCNN</a>
+,
+
+<a href="https://www.kaggle.com/mlwhiz/learning-text-classification-bidirectionalrnn" target="_blank" rel="nofollow noopener">BiLSTM/GRU</a>
+,
+
+<a href="https://www.kaggle.com/mlwhiz/learning-text-classification-attention" target="_blank" rel="nofollow noopener">Attention</a>
+</p>
 <p>Do upvote the kenels if you find them helpful.</p>
 <h2 id="references">References:</h2>
 <ul>
-<li><a href="http://www.wildml.com/2015/11/understanding-convolutional-neural-networks-for-nlp/">CNN for NLP</a></li>
+<li>
+
+<a href="http://www.wildml.com/2015/11/understanding-convolutional-neural-networks-for-nlp/" target="_blank" rel="nofollow noopener">CNN for NLP</a>
+</li>
 <li><a href="https://en.diveintodeeplearning.org/d2l-en.pdf">https://en.diveintodeeplearning.org/d2l-en.pdf</a></li>
 <li><a href="https://gist.github.com/cbaziotis/7ef97ccf71cbc14366835198c09809d2">https://gist.github.com/cbaziotis/7ef97ccf71cbc14366835198c09809d2</a></li>
 <li><a href="http://univagora.ro/jour/index.php/ijccc/article/view/3142">http://univagora.ro/jour/index.php/ijccc/article/view/3142</a></li>
-<li><a href="https://www.kaggle.com/shujian/fork-of-mix-of-nn-models">Shujian&rsquo;s kernel on Kaggle</a></li>
+<li>
+
+<a href="https://www.kaggle.com/shujian/fork-of-mix-of-nn-models" target="_blank" rel="nofollow noopener">Shujian&amp;rsquo;s kernel on Kaggle</a>
+</li>
 </ul>
 
 

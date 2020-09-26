@@ -293,8 +293,23 @@
         <img src="https://mlwhiz.com/images/nlp_tl/spiderman.jpeg" class="img-fluid w-100 mb-4" alt="NLP  Learning Series: Part 4 - Transfer Learning Intuition for Text Classification">
         
         <div class="content mb-5">
-          <p>This post is the fourth post of the NLP Text classification series. To give you a recap, I started up with an NLP text classification competition on Kaggle called Quora Question insincerity challenge. So I thought to share the knowledge via a series of blog posts on text classification. The <a href="/blog/2019/01/17/deeplearning_nlp_preprocess/">first post</a> talked about the different <strong>preprocessing techniques that work with Deep learning models</strong> and <strong>increasing embeddings coverage</strong>. In the <a href="/blog/2019/02/08/deeplearning_nlp_conventional_methods/">second post</a>, I talked through some <strong>basic conventional models</strong> like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and tried to access their performance to create a baseline. In the <a href="/blog/2019/03/09/deeplearning_architectures_text_classification/">third post</a>, I delved deeper into <strong>Deep learning models and the various architectures</strong> we could use to solve the text Classification problem. In this post, I will try to use ULMFit model which is a transfer learning approach to this data.</p>
-<p><strong>As a side note</strong>: if you want to know more about NLP, I would like to <strong>recommend this excellent course</strong> on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing">Natural Language Processing</a> in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a>. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few. You can start for free with the 7-day Free Trial.</p>
+          <p>This post is the fourth post of the NLP Text classification series. To give you a recap, I started up with an NLP text classification competition on Kaggle called Quora Question insincerity challenge. So I thought to share the knowledge via a series of blog posts on text classification. The 
+
+<a href="/blog/2019/01/17/deeplearning_nlp_preprocess/">first post</a>
+ talked about the different <strong>preprocessing techniques that work with Deep learning models</strong> and <strong>increasing embeddings coverage</strong>. In the 
+
+<a href="/blog/2019/02/08/deeplearning_nlp_conventional_methods/">second post</a>
+, I talked through some <strong>basic conventional models</strong> like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and tried to access their performance to create a baseline. In the 
+
+<a href="/blog/2019/03/09/deeplearning_architectures_text_classification/">third post</a>
+, I delved deeper into <strong>Deep learning models and the various architectures</strong> we could use to solve the text Classification problem. In this post, I will try to use ULMFit model which is a transfer learning approach to this data.</p>
+<p><strong>As a side note</strong>: if you want to know more about NLP, I would like to <strong>recommend this excellent course</strong> on 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target="_blank" rel="nofollow noopener">Natural Language Processing</a>
+ in the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Advanced machine learning specialization</a>
+. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few. You can start for free with the 7-day Free Trial.</p>
 <p>Before introducing the notion of transfer learning to NLP applications, we will first need to understand a little bit about Language models.</p>
 <hr>
 <h2 id="language-models-and-nlp-transfer-learning-intuition">Language Models And NLP Transfer Learning Intuition:</h2>
@@ -317,7 +332,10 @@
 <h2 id="ulmfit">ULMFit:</h2>
 <p>Now the concept of Transfer learning in NLP is not entirely new and people already used Language models for transfer learning back in 2015-16 without good result. So what has changed now?</p>
 <p>The thing that has changed is that people like Jeremy Howard and Sebastian Ruder have done a lot of research on how to train these networks. And so we have achieved state of the art results on many text datasets with Transfer Learning approaches.</p>
-<p>Let&rsquo;s follow up with the key research findings in the <a href="https://arxiv.org/pdf/1801.06146.pdf">ULMFit paper</a> written by them along with the code.</p>
+<p>Let&rsquo;s follow up with the key research findings in the 
+
+<a href="https://arxiv.org/pdf/1801.06146.pdf" target="_blank" rel="nofollow noopener">ULMFit paper</a>
+ written by them along with the code.</p>
 <hr>
 <h2 id="change-in-the-way-transfer-learning-networks-are-trained">Change in the way Transfer Learning networks are trained:</h2>
 <div style="margin-top: 9px; margin-bottom: 10px;">
@@ -425,7 +443,10 @@ learn<span style="color:#f92672">.</span>fit_one_cycle(<span style="color:#ae81f
 <p>Rather than fine-tuning all layers at once, which risks catastrophic forgetting(Forgetting everything we have learned so far from language models), the authors propose to gradually unfreeze the model starting from the last layer as this contains the least general knowledge. The Authors first unfreeze the last layer and fine-tune all unfrozen layers for one epoch. They then unfreeze the next lower frozen layer and repeat, until they finetune all layers until convergence at the last iteration. The function <code>slice(2e-3/100, 2e-3)</code> means that we train every layer with different learning rates ranging from max to min value.</p>
 <p>One can get the predictions for the test data at once using:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">test_preds <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array(learn<span style="color:#f92672">.</span>get_preds(DatasetType<span style="color:#f92672">.</span>Test, ordered<span style="color:#f92672">=</span>True)[<span style="color:#ae81ff">0</span>])[:,<span style="color:#ae81ff">1</span>]
-</code></pre></div><p>I am a big fan of Kaggle Kernels. One could not have imagined having all that compute for free. You can find a running version of the above code in this <a href="https://www.kaggle.com/mlwhiz/ulmfit">kaggle kernel</a>. Do try to experiment with it after forking and running the code. Also please upvote the kernel if you find it helpful.</p>
+</code></pre></div><p>I am a big fan of Kaggle Kernels. One could not have imagined having all that compute for free. You can find a running version of the above code in this 
+
+<a href="https://www.kaggle.com/mlwhiz/ulmfit" target="_blank" rel="nofollow noopener">kaggle kernel</a>
+. Do try to experiment with it after forking and running the code. Also please upvote the kernel if you find it helpful.</p>
 <hr>
 <h2 id="results">Results:</h2>
 <p>Here are the final results of all the different approaches I have tried on the Kaggle Dataset. I ran a 5 fold Stratified CV.</p>
@@ -443,11 +464,20 @@ learn<span style="color:#f92672">.</span>fit_one_cycle(<span style="color:#ae81f
 </div>
 <p>The results achieved were not very good compared to deep learning methods, but I still liked the idea of the transfer learning approach, and it was so easy to implement it using fastAI. Also running the code took a lot of time at 9 hours, compared to other methods which got over in 2 hours.</p>
 <p>Even if this approach didn&rsquo;t work well for this dataset, it is a valid approach for other datasets, as the Authors of the paper have achieved pretty good results on different datasets — definitely a genuine method to try out.</p>
-<p><strong>PS:</strong> Note that I didn&rsquo;t work on tuning the above models, so these results are only cursory. You can try to squeeze more performance by performing hyperparams tuning <a href="/blog/2017/12/28/hyperopt_tuning_ml_model/">using hyperopt</a> or just old fashioned Grid-search.</p>
+<p><strong>PS:</strong> Note that I didn&rsquo;t work on tuning the above models, so these results are only cursory. You can try to squeeze more performance by performing hyperparams tuning 
+
+<a href="/blog/2017/12/28/hyperopt_tuning_ml_model/">using hyperopt</a>
+ or just old fashioned Grid-search.</p>
 <hr>
 <h2 id="conclusion">Conclusion:</h2>
-<p>Finally, this post concludes my NLP Learning series. It took a lot of time to write, but the effort was well worth it. I hope you found it helpful in your work. I will try to write some more on this topic when I get some time. Follow me up at <a href="https://medium.com/@rahul_agarwal">Medium</a> or Subscribe to my blog to be informed about my next posts.</p>
-<p>Also if you want to <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing"><strong>learn more about NLP</strong> here</a> is an excellent course. You can start for free with the 7-day Free Trial.</p>
+<p>Finally, this post concludes my NLP Learning series. It took a lot of time to write, but the effort was well worth it. I hope you found it helpful in your work. I will try to write some more on this topic when I get some time. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal" target="_blank" rel="nofollow noopener">Medium</a>
+ or Subscribe to my blog to be informed about my next posts.</p>
+<p>Also if you want to 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target="_blank" rel="nofollow noopener">&lt;strong&gt;learn more about NLP&lt;/strong&gt; here</a>
+ is an excellent course. You can start for free with the 7-day Free Trial.</p>
 <p>Let me know if you think I can add something more to the post; I will try to incorporate it.</p>
 <p>Cheers!!!</p>
 

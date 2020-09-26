@@ -618,12 +618,18 @@ new_train[[<span style="color:#e6db74">&#39;Pclass_Kfold_Target_Enc&#39;</span>,
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">df<span style="color:#f92672">.</span>to_csv(<span style="color:#960050;background-color:#1e0010">‘</span>submission<span style="color:#f92672">.</span>csv<span style="color:#f92672">.</span>gz<span style="color:#960050;background-color:#1e0010">’</span>, index<span style="color:#f92672">=</span>False, compression<span style="color:#f92672">=</span><span style="color:#960050;background-color:#1e0010">’</span>gzip<span style="color:#960050;background-color:#1e0010">’</span>)
 </code></pre></div><h2 id="4-using-latitude-and-longitude-features">4. Using Latitude and Longitude features:</h2>
 <p>This part will tread upon how to use Latitude and Longitude features well.</p>
-<p>For this task, I will be using Data from the Playground competition: <a href="https://www.kaggle.com/c/nyc-taxi-trip-duration/data">New York City Taxi Trip Duration</a></p>
+<p>For this task, I will be using Data from the Playground competition: 
+
+<a href="https://www.kaggle.com/c/nyc-taxi-trip-duration/data" target="_blank" rel="nofollow noopener">New York City Taxi Trip Duration</a>
+</p>
 <p>The train data looks like:</p>
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/features/taxi.png"></center>
 </div>
-<p>Most of the functions I am going to write here are inspired by a <a href="https://www.kaggle.com/gaborfodor/from-eda-to-the-top-lb-0-368">Kernel</a> on Kaggle written by Beluga.</p>
+<p>Most of the functions I am going to write here are inspired by a 
+
+<a href="https://www.kaggle.com/gaborfodor/from-eda-to-the-top-lb-0-368" target="_blank" rel="nofollow noopener">Kernel</a>
+ on Kaggle written by Beluga.</p>
 <p>In this competition, we had to predict the trip duration. We were given many features in which Latitude and Longitude of pickup and Dropoff were also there. We created features like:</p>
 <h3 id="a-haversine-distance-between-the-two-latlons">A. Haversine Distance Between the Two Lat/Lons:</h3>
 <blockquote>
@@ -717,7 +723,10 @@ train<span style="color:#f92672">.</span>loc[:, <span style="color:#e6db74">&#39
     </figure>
 </center>
 </div>
-<p>Suppose you have got some shopping cart data and you want to categorize the TripType. It was the exact problem in Walmart Recruiting: Trip Type Classification on <a href="https://www.kaggle.com/c/walmart-recruiting-trip-type-classification/">Kaggle</a>.</p>
+<p>Suppose you have got some shopping cart data and you want to categorize the TripType. It was the exact problem in Walmart Recruiting: Trip Type Classification on 
+
+<a href="https://www.kaggle.com/c/walmart-recruiting-trip-type-classification/" target="_blank" rel="nofollow noopener">Kaggle</a>
+.</p>
 <p>Some examples of trip types: a customer may make a small daily dinner trip, a weekly large grocery trip, a trip to buy gifts for an upcoming holiday, or a seasonal trip to buy clothes.</p>
 <p>To solve this problem, you could think of creating a feature like “Stylish” where you create this variable by adding together the number of items that belong to category Men’s Fashion, Women’s Fashion, Teens Fashion.</p>
 <p><em><strong>Or you could create a feature like “Rare”</strong></em> which is created by tagging some items as rare, based on the data we have and then counting the number of those rare items in the shopping cart.</p>
@@ -740,11 +749,29 @@ train<span style="color:#f92672">.</span>loc[:, <span style="color:#e6db74">&#39
 <p><em><strong>But there is surely no limit when it comes to feature engineering, and it is only your imagination that limits you.</strong></em></p>
 <p>On that note, I always think about feature engineering while keeping what model I am going to use in mind. Features that work in a random forest may not work well with Logistic Regression.</p>
 <p>Feature creation is the territory of trial and error. You won’t be able to know what transformation works or what encoding works best before trying it. It is always a trade-off between time and utility.</p>
-<p>Sometimes the feature creation process might take a lot of time. In such cases, you might want to <a href="https://medium.com/me/stats/post/1c04f41944a1">parallelize your Pandas function</a>.</p>
+<p>Sometimes the feature creation process might take a lot of time. In such cases, you might want to 
+
+<a href="https://medium.com/me/stats/post/1c04f41944a1" target="_blank" rel="nofollow noopener">parallelize your Pandas function</a>
+.</p>
 <p>While I have tried to keep this post as exhaustive as possible, I might have missed some of the useful methods. Let me know about them in the comments.</p>
-<p>You can find all the code for this post and run it yourself in this <a href="https://www.kaggle.com/mlwhiz/feature-creation/">Kaggle Kernel</a></p>
-<p>Take a look at the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">How to Win a Data Science Competition: Learn from Top Kagglers</a> course in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a> by Kazanova. This course talks about a lot of intuitive ways to improve your model. Definitely recommended.</p>
-<p>I am going to be writing more beginner friendly posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c"><strong>blog</strong></a>.</p>
+<p>You can find all the code for this post and run it yourself in this 
+
+<a href="https://www.kaggle.com/mlwhiz/feature-creation/" target="_blank" rel="nofollow noopener">Kaggle Kernel</a>
+</p>
+<p>Take a look at the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">How to Win a Data Science Competition: Learn from Top Kagglers</a>
+ course in the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Advanced machine learning specialization</a>
+ by Kazanova. This course talks about a lot of intuitive ways to improve your model. Definitely recommended.</p>
+<p>I am going to be writing more beginner friendly posts in the future too. Let me know what you think about the series. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal" target="_blank" rel="nofollow noopener">&lt;strong&gt;Medium&lt;/strong&gt;</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">&lt;strong&gt;blog&lt;/strong&gt;</a>
+.</p>
 
 
         

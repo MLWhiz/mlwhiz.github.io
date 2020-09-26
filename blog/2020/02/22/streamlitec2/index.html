@@ -296,7 +296,10 @@
 <p>And Web frameworks are hard to learn. I still get confused in all that HTML, CSS, and Javascript with all the hit and trials, for something seemingly simple to do.</p>
 <p>Not to mention the many ways to do the same thing, making it confusing for us data science folks for whom web development is a secondary skill.</p>
 <p>This is where <em><strong>StreamLit</strong></em> comes in and delivers on its promise to create web apps just using Python.</p>
-<p>In my <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582">last post on Streamlit</a>, I talked about how to write Web apps using simple Python for Data Scientists.</p>
+<p>In my 
+
+<a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582" target="_blank" rel="nofollow noopener">last post on Streamlit</a>
+, I talked about how to write Web apps using simple Python for Data Scientists.</p>
 <p><em><strong>But still, a major complaint, if you would check out the comment section of that post, was regarding the inability to deploy Streamlit apps over the web.</strong></em></p>
 <p>And it was a valid complaint.</p>
 <blockquote>
@@ -305,10 +308,16 @@
 <p><em><strong>So in this post, we will go one step further deploy our Streamlit app over the Web using an Amazon Free ec2 instance.</strong></em></p>
 <hr>
 <h2 id="setting-up-the-amazon-instance">Setting up the Amazon Instance</h2>
-<p>Before we start with using the amazon ec2 instance, we need to set one up. You might need to sign up with your email ID and set up the payment information on the <a href="https://aws.amazon.com">AWS website</a>. Works just like a simple sign-on. From here, I will assume that you have an AWS account and so I am going to explain the next essential parts so you can follow through.</p>
+<p>Before we start with using the amazon ec2 instance, we need to set one up. You might need to sign up with your email ID and set up the payment information on the 
+
+<a href="https://aws.amazon.com" target="_blank" rel="nofollow noopener">AWS website</a>
+. Works just like a simple sign-on. From here, I will assume that you have an AWS account and so I am going to explain the next essential parts so you can follow through.</p>
 <ul>
 <li>
-<p>Go to AWS Management Console using <a href="https://us-west-2.console.aws.amazon.com/console">https://us-west-2.console.aws.amazon.com/console</a>.</p>
+<p>Go to AWS Management Console using 
+
+<a href="https://us-west-2.console.aws.amazon.com/console" target="_blank" rel="nofollow noopener">https://us-west-2.console.aws.amazon.com/console</a>
+.</p>
 </li>
 <li>
 <p>On the AWS Management Console, you can select “Launch a Virtual Machine”. Here we are trying to set up the machine where we will deploy our Streamlit app.</p>
@@ -378,7 +387,10 @@
 </p>
 <hr>
 <h2 id="installing-required-libraries">Installing Required Libraries</h2>
-<p>Whoa, that was a handful. After all the above steps you should be able to see the ubuntu prompt for the virtual machine. We will need to set up this machine to run our app. I am going to be using the same streamlit_football_demo app that I used in my <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582">previous post</a>.</p>
+<p>Whoa, that was a handful. After all the above steps you should be able to see the ubuntu prompt for the virtual machine. We will need to set up this machine to run our app. I am going to be using the same streamlit_football_demo app that I used in my 
+
+<a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582" target="_blank" rel="nofollow noopener">previous post</a>
+.</p>
 <p>We start by installing miniconda and adding its path to the environment variable.</p>
 <pre><code>sudo apt-get update
 
@@ -390,14 +402,20 @@ echo &quot;PATH=$PATH:$HOME/miniconda/bin&quot; &gt;&gt; ~/.bashrc
 
 source ~/.bashrc
 </code></pre>
-<p>We then install additional dependencies for our app to run. That means I install streamlit and <a href="https://towardsdatascience.com/pythons-one-liner-graph-creation-library-with-animations-hans-rosling-style-f2cb50490396">plotly_express</a>.</p>
+<p>We then install additional dependencies for our app to run. That means I install streamlit and 
+
+<a href="https://towardsdatascience.com/pythons-one-liner-graph-creation-library-with-animations-hans-rosling-style-f2cb50490396" target="_blank" rel="nofollow noopener">plotly_express</a>
+.</p>
 <pre><code>pip install streamlit
 pip install plotly_express
 </code></pre>
 <p>And our machine is now prepped and ready to run.</p>
 <hr>
 <h2 id="running-streamlit-on-amazon-ec2">Running Streamlit on Amazon ec2</h2>
-<p>As I am set up with the instance, I can get the code for my demo app from <a href="https://github.com/MLWhiz/streamlit_football_demo.git">Github</a>. Or you can choose to create or copy another app as you wish.</p>
+<p>As I am set up with the instance, I can get the code for my demo app from 
+
+<a href="https://github.com/MLWhiz/streamlit_football_demo.git" target="_blank" rel="nofollow noopener">Github</a>
+. Or you can choose to create or copy another app as you wish.</p>
 <pre><code>git clone https://github.com/MLWhiz/streamlit_football_demo.git
 
 cd streamlit_football_demo
@@ -409,7 +427,10 @@ streamlit run helloworld.py
     
 
 </p>
-<p>Now you can go to a browser and type the external URL to access your app. In my case the address is <a href="http://35.167.158.251:8501">http://35.167.158.251:8501</a>. Here is the output. This app will be up right now if you want to play with it.</p>
+<p>Now you can go to a browser and type the external URL to access your app. In my case the address is 
+
+<a href="http://35.167.158.251:8501" target="_blank" rel="nofollow noopener">http://35.167.158.251:8501</a>
+. Here is the output. This app will be up right now if you want to play with it.</p>
 <p>
   
     <img src="/images/streamlitec2/7.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
@@ -442,7 +463,10 @@ streamlit run helloworld.py
     
 
 </p>
-<p>You will be able to see your app at the <a href="http://35.167.158.251:8501/">External URL</a>. The <em><strong>next step is to detach our TMUX session</strong></em> so that it continues running in the background when you leave the SSH shell. To do this just press Ctrl+B and then D (Don’t press Ctrl when pressing D)</p>
+<p>You will be able to see your app at the 
+
+<a href="http://35.167.158.251:8501/" target="_blank" rel="nofollow noopener">External URL</a>
+. The <em><strong>next step is to detach our TMUX session</strong></em> so that it continues running in the background when you leave the SSH shell. To do this just press Ctrl+B and then D (Don’t press Ctrl when pressing D)</p>
 <p>
   
     <img src="/images/streamlitec2/10.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
@@ -473,15 +497,36 @@ streamlit run helloworld.py
   
 
 </p>
-<p>Streamlit has democratized the whole process to create apps, and I couldn’t recommend it more. If you want to learn more about how to create awesome web apps with Streamlit then read up my <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582">last</a> post.</p>
-<p><em><strong>In this post, we <a href="https://towardsdatascience.com/take-your-machine-learning-models-to-production-with-these-5-simple-steps-35aa55e3a43c">deployed</a> a simple web app on AWS using amazon ec2.</strong></em></p>
+<p>Streamlit has democratized the whole process to create apps, and I couldn’t recommend it more. If you want to learn more about how to create awesome web apps with Streamlit then read up my 
+
+<a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582" target="_blank" rel="nofollow noopener">last</a>
+ post.</p>
+<p><em><strong>In this post, we 
+
+<a href="https://towardsdatascience.com/take-your-machine-learning-models-to-production-with-these-5-simple-steps-35aa55e3a43c" target="_blank" rel="nofollow noopener">deployed</a>
+ a simple web app on AWS using amazon ec2.</strong></em></p>
 <p>In the process of doing this, we created our own Amazon ec2 instance, logged into the SSH shell, installed miniconda and dependencies, ran our Streamlit application and learned about TMUX. Enough learning for a day?</p>
-<p>So go and show on these Mad skills. To end on a lighter note, as Sten Sootla says in his <a href="https://towardsdatascience.com/how-to-fake-being-a-good-programmer-cbef2c39764c">satire piece</a> which I thoroughly enjoyed:</p>
+<p>So go and show on these Mad skills. To end on a lighter note, as Sten Sootla says in his 
+
+<a href="https://towardsdatascience.com/how-to-fake-being-a-good-programmer-cbef2c39764c" target="_blank" rel="nofollow noopener">satire piece</a>
+ which I thoroughly enjoyed:</p>
 <blockquote>
 <p>The secret: it’s not what you know, it’s what you show.</p>
 </blockquote>
-<p>If you want to learn more about how to structure a Machine Learning project and the best practices, I would like to call out his excellent <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11421702016&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fmachine-learning-projects">third course</a> named Structuring Machine learning projects in the Coursera <a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdeep-learning">Deep Learning Specialization</a>. Do check it out.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------">Medium</a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c">blog</a></p>
+<p>If you want to learn more about how to structure a Machine Learning project and the best practices, I would like to call out his excellent 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11421702016&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fmachine-learning-projects" target="_blank" rel="nofollow noopener">third course</a>
+ named Structuring Machine learning projects in the Coursera 
+
+<a href="https://click.linksynergy.com/deeplink?id=lVarvwc5BD0&amp;mid=40328&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fdeep-learning" target="_blank" rel="nofollow noopener">Deep Learning Specialization</a>
+. Do check it out.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" target="_blank" rel="nofollow noopener">Medium</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">blog</a>
+</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 

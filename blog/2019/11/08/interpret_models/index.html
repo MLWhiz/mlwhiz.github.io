@@ -318,12 +318,18 @@
 
 </p>
 <p>This is a balanced dataset and thus suited well for our purpose of understanding.</p>
-<p>So let us start. You can follow along with the code in this <a href="https://www.kaggle.com/mlwhiz/interpreting-text-classification-models-with-eli5">Kaggle Kernel</a></p>
+<p>So let us start. You can follow along with the code in this 
+
+<a href="https://www.kaggle.com/mlwhiz/interpreting-text-classification-models-with-eli5" target="_blank" rel="nofollow noopener">Kaggle Kernel</a>
+</p>
 <hr>
 <h2 id="staring-simple">Staring Simple:</h2>
 <p>
   
-      <img src="/images/interpret/2.png" alt="&lt;a href=&#34;https://christophm.github.io/interpretable-ml-book/terminology.html&#34;&gt;Interpretable ML Book&lt;/a&gt;">
+      <img src="/images/interpret/2.png" alt="
+
+&lt;a href=&#34;https://christophm.github.io/interpretable-ml-book/terminology.html&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Interpretable ML Book&lt;/a&gt;
+">
   
 
 </p>
@@ -446,10 +452,19 @@ eli5<span style="color:#f92672">.</span>show_prediction(clf, misclassified_examp
     
 
 </p>
-<p>To understand how to do this, we first create a TextCNN model on our data. <em>Not showing the model creation process in the interest of preserving space</em> but think of it as a series of preprocessing steps and then creating the deep learning model. If interested, you can check out the modelling steps in this <a href="https://www.kaggle.com/mlwhiz/interpreting-text-classification-models-with-eli5">Kaggle kernel</a>.</p>
+<p>To understand how to do this, we first create a TextCNN model on our data. <em>Not showing the model creation process in the interest of preserving space</em> but think of it as a series of preprocessing steps and then creating the deep learning model. If interested, you can check out the modelling steps in this 
+
+<a href="https://www.kaggle.com/mlwhiz/interpreting-text-classification-models-with-eli5" target="_blank" rel="nofollow noopener">Kaggle kernel</a>
+.</p>
 <p><em><strong>Things get interesting from our point of view when we have a trained black-box model object.</strong></em></p>
 <p>ELI5 provides us with the <code>eli5.lime.TextExplainer</code> to debug our prediction - to check what was important in the document to make a prediction decision.</p>
-<p>To use <a href="https://eli5.readthedocs.io/en/latest/autodocs/lime.html#eli5.lime.lime.TextExplainer"><strong>TextExplainer</strong></a> instance, we pass a document to explain and a black-box classifier (a predict function which returns probabilities) to the <a href="https://eli5.readthedocs.io/en/latest/autodocs/lime.html#eli5.lime.lime.TextExplainer.fit"><strong>fit()</strong></a> method. From the documentation this is how our predict function should look like:</p>
+<p>To use 
+
+<a href="https://eli5.readthedocs.io/en/latest/autodocs/lime.html#eli5.lime.lime.TextExplainer" target="_blank" rel="nofollow noopener">&lt;strong&gt;TextExplainer&lt;/strong&gt;</a>
+ instance, we pass a document to explain and a black-box classifier (a predict function which returns probabilities) to the 
+
+<a href="https://eli5.readthedocs.io/en/latest/autodocs/lime.html#eli5.lime.lime.TextExplainer.fit" target="_blank" rel="nofollow noopener">&lt;strong&gt;fit()&lt;/strong&gt;</a>
+ method. From the documentation this is how our predict function should look like:</p>
 <blockquote>
 <p><strong>predict</strong> (<em>callable</em>) — Black-box classification pipeline. <em><strong>predict</strong></em> should be a function which takes a list of strings (documents) and return a matrix of shape <em><strong>(n_samples, n_classes)</strong></em> with probability values - a row per document and a column per output label.</p>
 </blockquote>
@@ -475,19 +490,46 @@ te<span style="color:#f92672">.</span>show_prediction(target_names<span style="c
 </p>
 <p>This time it doesn’t get misclassified. You can see that the presence of keywords dict and list is what is influencing the decision of our classifier. One can try to see more examples to find more insights.</p>
 <p><em><strong>So how does this work exactly?</strong></em></p>
-<p><a href="https://eli5.readthedocs.io/en/latest/autodocs/lime.html#eli5.lime.lime.TextExplainer"><strong>TextExplainer</strong></a> generates a lot of texts similar to the document by removing some of the words, and then trains a white-box classifier which predicts the output of the black-box classifier and not the true labels. The explanation we see is for this white-box classifier.</p>
+<p>
+
+<a href="https://eli5.readthedocs.io/en/latest/autodocs/lime.html#eli5.lime.lime.TextExplainer" target="_blank" rel="nofollow noopener">&lt;strong&gt;TextExplainer&lt;/strong&gt;</a>
+ generates a lot of texts similar to the document by removing some of the words, and then trains a white-box classifier which predicts the output of the black-box classifier and not the true labels. The explanation we see is for this white-box classifier.</p>
 <p>This is, in essence, a little bit similar to the Teacher-Student model distillation, where we use a simpler model to predict outputs from a much more complex teacher model.</p>
 <p>Put simply, it tries to create a simpler model that emulates a complex model and then shows us the simpler model weights.</p>
 <h2 id="conclusion">Conclusion</h2>
 <blockquote>
 <p>Understanding is crucial. Being able to interpret our models can help us to understand our models better and in turn, explain them better.</p>
 </blockquote>
-<p>ELI5 provides us with a good way to do this. It works for a variety of models and the <a href="https://eli5.readthedocs.io/en/latest/index.html">documentation</a> for this library is one of the best I have ever seen.</p>
+<p>ELI5 provides us with a good way to do this. It works for a variety of models and the 
+
+<a href="https://eli5.readthedocs.io/en/latest/index.html" target="_blank" rel="nofollow noopener">documentation</a>
+ for this library is one of the best I have ever seen.</p>
 <p>Also, I love the decorated output the ELI5 library provides with the simple and fast way it provides to interpret my models. And debug them too.</p>
-<p>To use ELI5 with your models you can follow along with the code in this <a href="https://www.kaggle.com/mlwhiz/interpreting-text-classification-models-with-eli5">Kaggle Kernel</a></p>
+<p>To use ELI5 with your models you can follow along with the code in this 
+
+<a href="https://www.kaggle.com/mlwhiz/interpreting-text-classification-models-with-eli5" target="_blank" rel="nofollow noopener">Kaggle Kernel</a>
+</p>
 <h2 id="continue-learning">Continue Learning</h2>
-<p>If you want to <a href="https://towardsdatascience.com/how-did-i-start-with-data-science-3f4de6b501b0?source=---------8------------------">learn</a> more about NLP and how to create Text Classification models, I would like to call out the <a href="https://www.coursera.org/learn/language-processing?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-HcQgnbxBjnlE7bTEy2jJRw&amp;siteID=lVarvwc5BD0-HcQgnbxBjnlE7bTEy2jJRw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0"><em><strong>Natural Language Processing</strong></em></a> course in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0"><strong>Advanced machine learning specialization</strong></a>. Do check it out. It talks about a lot of beginners to advanced level topics in NLP. You might also like to take a look at some of my <a href="https://towardsdatascience.com/tagged/nlp-learning-series">posts on NLP</a> in the NLP Learning series.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c"><strong>blog</strong></a></p>
+<p>If you want to 
+
+<a href="https://towardsdatascience.com/how-did-i-start-with-data-science-3f4de6b501b0?source=---------8------------------" target="_blank" rel="nofollow noopener">learn</a>
+ more about NLP and how to create Text Classification models, I would like to call out the 
+
+<a href="https://www.coursera.org/learn/language-processing?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-HcQgnbxBjnlE7bTEy2jJRw&amp;siteID=lVarvwc5BD0-HcQgnbxBjnlE7bTEy2jJRw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">&lt;em&gt;&lt;strong&gt;Natural Language Processing&lt;/strong&gt;&lt;/em&gt;</a>
+ course in the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">&lt;strong&gt;Advanced machine learning specialization&lt;/strong&gt;</a>
+. Do check it out. It talks about a lot of beginners to advanced level topics in NLP. You might also like to take a look at some of my 
+
+<a href="https://towardsdatascience.com/tagged/nlp-learning-series" target="_blank" rel="nofollow noopener">posts on NLP</a>
+ in the NLP Learning series.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" target="_blank" rel="nofollow noopener">&lt;strong&gt;Medium&lt;/strong&gt;</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">&lt;strong&gt;blog&lt;/strong&gt;</a>
+</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources as sharing knowledge is never a bad idea.</p>
 
 

@@ -290,7 +290,10 @@
         
         <div class="content mb-5">
           <p>Recently I was working on tuning hyperparameters for a huge Machine Learning model.</p>
-<p>Manual tuning was not an option since I had to tweak a lot of parameters. <a href="https://towardsdatascience.com/automate-hyperparameter-tuning-for-your-models-71b18f819604">Hyperopt</a> was also not an option as it works serially i.e. at a time, only a single model is being built. So it was taking up a lot of time to train each model and I was pretty short on time.</p>
+<p>Manual tuning was not an option since I had to tweak a lot of parameters. 
+
+<a href="https://towardsdatascience.com/automate-hyperparameter-tuning-for-your-models-71b18f819604" target="_blank" rel="nofollow noopener">Hyperopt</a>
+ was also not an option as it works serially i.e. at a time, only a single model is being built. So it was taking up a lot of time to train each model and I was pretty short on time.</p>
 <p>I had to come up with a better more efficient approach if I were to meet the deadline. So I thought of the one thing that helps us data scientists in many such scenarios — <em><strong>Parallelization.</strong></em></p>
 <p><em><strong>Can I parallelize my model hyperparameter search process?</strong></em></p>
 <p>As you would have guessed, the answer is Yes.</p>
@@ -309,7 +312,10 @@
 <p>Since, Randomized search, searches more thoroughly through the whole space and provides us with better hyperparameters, we will go with it in our example.</p>
 <hr>
 <h2 id="setting-up-our-example">Setting Up Our Example</h2>
-<p>At my workplace, I have access to a pretty darn big cluster with 100s of nodes. It is a data Scientist’s dream. But in this post, I am going to be using the Databricks Community Edition Free server with a toy example. If you want to set up this small server for yourself for practice, check out my <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a">post</a> on Spark.</p>
+<p>At my workplace, I have access to a pretty darn big cluster with 100s of nodes. It is a data Scientist’s dream. But in this post, I am going to be using the Databricks Community Edition Free server with a toy example. If you want to set up this small server for yourself for practice, check out my 
+
+<a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" target="_blank" rel="nofollow noopener">post</a>
+ on Spark.</p>
 <p>You can choose to load your data using Spark, but here I start by creating our own classification data to set up a minimal example which we can work with.</p>
 <pre><code>X,y = datasets.make_classification(n_samples=10000, n_features=4, n_informative=2, n_classes=2, random_state=1,shuffle=True)
 
@@ -331,12 +337,24 @@ train_sp = train_sp.toDF(*['c0', 'c1', 'c2', 'c3', 'target'])
 </p>
 <hr>
 <h2 id="the-idea--replicate-and-apply">The Idea — Replicate and Apply</h2>
-<p>
+<p>Photo by 
+
+<a href="https://unsplash.com/@frankvex?utm_source=medium&amp;utm_medium=referral" target="_blank" rel="nofollow noopener">Frank Vessia</a>
+ on 
   
-      <img src="/images/hyperspark/2.png" alt="Photo by &lt;a href=&#34;https://unsplash.com/@frankvex?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Frank Vessia&lt;/a&gt; on &lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Unsplash&lt;/a&gt;">
+      <img src="/images/hyperspark/2.png" alt="
+
+&lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Unsplash&lt;/a&gt;
+">
   
 
-<em>Photo by <a href="https://unsplash.com/@frankvex?utm_source=medium&amp;utm_medium=referral">Frank Vessia</a> on <a href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral">Unsplash</a></em></p>
+<em>Photo by 
+
+<a href="https://unsplash.com/@frankvex?utm_source=medium&amp;utm_medium=referral" target="_blank" rel="nofollow noopener">Frank Vessia</a>
+ on 
+
+<a href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" target="_blank" rel="nofollow noopener">Unsplash</a>
+</em></p>
 <p>So now we have got our training dataset in Spark. And we want to run multiple models on this DataFrame.</p>
 <p>Spark is inherently good with Key-Value pairs. That is all data with a particular key could be sent to a single machine. And we can apply functions to that data.</p>
 <p>But we want all our data on every machine. How do we do that?</p>
@@ -403,11 +421,26 @@ outSchema <span style="color:#f92672">=</span> StructType([StructField(<span sty
 </p>
 <p>For this toy example, the accuracy results may look pretty close to one another, but they will differ in the case of noisy real-world datasets. Since all of these 100 models run in parallel on different nodes, we can save a lot of time when doing random hyperparameter search.</p>
 <p>The speedup factor certainly depends on how many nodes you have in your cluster. For me, I had 100 machines at my disposal, so I got ~ 100x speedup.</p>
-<p>You can get the full code in this Databricks <a href="https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/7664398068420572/3438177909678058/3797400441762013/latest.html">Notebook</a> or get it from my <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/spark_hyperparams_tuning">GitHub</a> repository where I keep codes for all my posts.</p>
+<p>You can get the full code in this Databricks 
+
+<a href="https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/7664398068420572/3438177909678058/3797400441762013/latest.html" target="_blank" rel="nofollow noopener">Notebook</a>
+ or get it from my 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/spark_hyperparams_tuning" target="_blank" rel="nofollow noopener">GitHub</a>
+ repository where I keep codes for all my posts.</p>
 <hr>
 <h2 id="continue-learning">Continue Learning</h2>
-<p>If you want to learn more about practical data science, do take a look at the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">“How to win a data science competition”</a> Coursera course. I learned a lot of new things from this course taught by one of the most prolific Kaggler.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------">Medium</a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c">blog</a>.</p>
+<p>If you want to learn more about practical data science, do take a look at the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">“How to win a data science competition”</a>
+ Coursera course. I learned a lot of new things from this course taught by one of the most prolific Kaggler.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" target="_blank" rel="nofollow noopener">Medium</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">blog</a>
+.</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources as sharing knowledge is never a bad idea.</p>
 
 

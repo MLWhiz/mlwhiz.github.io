@@ -296,18 +296,27 @@
           <p>Transformers have become the defacto standard for NLP tasks nowadays.</p>
 <p>While the Transformer architecture was introduced with NLP, they are now being used in Computer Vision and to generate music as well. I am sure you would all have heard about the GPT3 Transformer and its applications thereof.</p>
 <p><em><strong>But all these things aside, they are still hard to understand as ever.</strong></em></p>
-<p>It has taken me multiple readings through the Google research <a href="https://arxiv.org/pdf/1706.03762.pdf">paper</a> that first introduced transformers along with just so many blog posts to really understand how a transformer works.</p>
+<p>It has taken me multiple readings through the Google research 
+
+<a href="https://arxiv.org/pdf/1706.03762.pdf" target="_blank" rel="nofollow noopener">paper</a>
+ that first introduced transformers along with just so many blog posts to really understand how a transformer works.</p>
 <p>So, I thought of putting the whole idea down in as simple words as possible and with some very basic Math and some puns as I am a proponent of having some fun while learning. I will try to keep both the jargon and the technicality to a minimum, yet it is such a topic that I could only do so much. And my goal is to make the reader understand even the most gory details of Transformer by the end of this post.</p>
 <p><em><strong>Also, this is officially my longest post both in terms of time taken to write it as well as length of the post. Hence, I will advice you to Grab A Coffee.</strong></em> ☕️</p>
 <p>So, here goes — This post will be a highly conversational one and it is about “<em><strong>Decoding The Transformer”.</strong></em></p>
 <hr>
 <p><em><strong>Q: So, Why should I even understand Transformer?</strong></em></p>
-<p>In the past, the LSTM and GRU architecture(as explained here in my past <a href="https://towardsdatascience.com/nlp-learning-series-part-3-attention-cnn-and-what-not-for-text-classification-4313930ed566">post</a> on NLP) along with attention mechanism used to be the State of the Art Approach for Language modeling problems (put very simply, predict the next word) and Translation systems. But, the main problem with these architectures is that they are recurrent in nature, and the runtime increases as the sequence length increases. That is, these architectures take a sentence and process each word in a <em><strong>sequential</strong></em> way, and hence with the increase in sentence length the whole runtime increases.</p>
+<p>In the past, the LSTM and GRU architecture(as explained here in my past 
+
+<a href="https://towardsdatascience.com/nlp-learning-series-part-3-attention-cnn-and-what-not-for-text-classification-4313930ed566" target="_blank" rel="nofollow noopener">post</a>
+ on NLP) along with attention mechanism used to be the State of the Art Approach for Language modeling problems (put very simply, predict the next word) and Translation systems. But, the main problem with these architectures is that they are recurrent in nature, and the runtime increases as the sequence length increases. That is, these architectures take a sentence and process each word in a <em><strong>sequential</strong></em> way, and hence with the increase in sentence length the whole runtime increases.</p>
 <p>Transformer, a model architecture first explained in the paper Attention is all you need, lets go of this recurrence and instead relies entirely on an attention mechanism to draw global dependencies between input and output. And that makes it FAST.</p>
 <p>
   <figure>
     
-        <img src="/images/transformers/0.png" alt="&lt;a href=&#34;https://arxiv.org/pdf/1706.03762.pdf&#34;&gt;Source&lt;/a&gt;">
+        <img src="/images/transformers/0.png" alt="
+
+&lt;a href=&#34;https://arxiv.org/pdf/1706.03762.pdf&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Source&lt;/a&gt;
+">
     
     <figcaption>From the Paper</figcaption>
   </figure>
@@ -650,10 +659,13 @@
 <p>Yes, it does but intuitively, you can think of it as when we give the target as 1 to our loss function, we have no doubts that the true label is True and others are not. But vocabulary is inherently a non-standardized target. For example, who is to say that you cannot use good in place of great? So we add some confusion in our labels so our model is not too rigid.</p>
 <h3 id="b-a-particular-learning-rate-schedule-with-adam">B) A particular Learning Rate schedule with Adam</h3>
 <p>The authors use a learning rate scheduler to increase the learning rate until warmup steps and then decrease it using the below function. And they used the Adam optimizer with $\beta_1$ = 0.9, $\beta_2$ = 0.98. Nothing too interesting here just some learning choices.</p>
-<p>
+<p>Source: 
   <figure>
     
-        <img src="/images/transformers/29.png" alt="Source: &lt;a href=&#34;https://arxiv.org/pdf/1706.03762.pdf&#34;&gt;Paper&lt;/a&gt;">
+        <img src="/images/transformers/29.png" alt="
+
+&lt;a href=&#34;https://arxiv.org/pdf/1706.03762.pdf&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Paper&lt;/a&gt;
+">
     
     <figcaption>Paper : https://arxiv.org/pdf/1706.03762.pdf</figcaption>
   </figure>
@@ -711,16 +723,28 @@
 <h2 id="references">References</h2>
 <ul>
 <li>
-<p><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a>: The Paper which started it all.</p>
+<p>
+
+<a href="https://arxiv.org/abs/1706.03762" target="_blank" rel="nofollow noopener">Attention Is All You Need</a>
+: The Paper which started it all.</p>
 </li>
 <li>
-<p><a href="https://nlp.seas.harvard.edu/2018/04/03/attention.html">The Annotated Transformer</a>: This one has all the code. Although I will write a simple transformer in the next post too.</p>
+<p>
+
+<a href="https://nlp.seas.harvard.edu/2018/04/03/attention.html" target="_blank" rel="nofollow noopener">The Annotated Transformer</a>
+: This one has all the code. Although I will write a simple transformer in the next post too.</p>
 </li>
 <li>
-<p><a href="http://jalammar.github.io/illustrated-transformer/">The Illustrated Transformer</a>: This is one of the best posts on transformers.</p>
+<p>
+
+<a href="http://jalammar.github.io/illustrated-transformer/" target="_blank" rel="nofollow noopener">The Illustrated Transformer</a>
+: This is one of the best posts on transformers.</p>
 </li>
 </ul>
-<p>In this post, I covered how the Transformer architecture works. If you’re interested in more technical machine learning articles, you can check out my other articles in the related resources section below. And if you’d like machine learning articles delivered directly to your inbox, you can subscribe to the Lionbridge AI newsletter <a href="https://lionbridge.ai/ai-newsletter-subscription/">here</a>.</p>
+<p>In this post, I covered how the Transformer architecture works. If you’re interested in more technical machine learning articles, you can check out my other articles in the related resources section below. And if you’d like machine learning articles delivered directly to your inbox, you can subscribe to the Lionbridge AI newsletter 
+
+<a href="https://lionbridge.ai/ai-newsletter-subscription/" target="_blank" rel="nofollow noopener">here</a>
+.</p>
 
 
         

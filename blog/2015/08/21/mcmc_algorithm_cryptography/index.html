@@ -294,7 +294,10 @@
 </div>
 <p>Last time I wrote an article on MCMC and how they could be useful. We learned how MCMC chains could be used to simulate from a random variable whose distribution is partially known i.e. we don&rsquo;t know the normalizing constant.</p>
 <p>So MCMC Methods may sound interesting to some (for these what follows is a treat) and for those who don&rsquo;t really appreciate MCMC till now, I hope I will be able to pique your interest by the end of this blog post.</p>
-<p>So here goes. This time we will cover some applications of MCMC in various areas of Computer Science using Python. If you feel the problems difficult to follow with, I would advice you to go back and read the <a href="/blog/2015/08/19/mcmc_algorithms_beta_distribution/">previous post</a>, which tries to explain MCMC Methods. We Will try to solve the following two problems:</p>
+<p>So here goes. This time we will cover some applications of MCMC in various areas of Computer Science using Python. If you feel the problems difficult to follow with, I would advice you to go back and read the 
+
+<a href="/blog/2015/08/19/mcmc_algorithms_beta_distribution/">previous post</a>
+, which tries to explain MCMC Methods. We Will try to solve the following two problems:</p>
 <ol>
 <li>
 <p><strong>Breaking the Code</strong> - This problem has got somewhat of a great pedigree as this method was suggested by Persi Diaconis- The Mathemagician. So Someone comes to you with the below text. This text looks like gibberish but this is a code, Could you decrypyt it?<br><br>
@@ -506,7 +509,10 @@ This array needs to follow the constraint $WX^T &lt; w_{MAX}$ and we want to max
 We need to give high values to states with high gold value. We will use:
 <br></p>
 <div>$$Score(X)=e^{\beta GX^T}$$</div>
-<p>We give exponentially more value to higher score. The Beta here is a +ve constant. But how to choose it? If $\beta$ is big we will give very high score to good solutions and the chain will not be able to try new solutions as it can get stuck in local optimas. If we give a small value the chain will not converge to very good solutions. So weuse an Optimization Technique called <strong><a href="https://en.wikipedia.org/wiki/Simulated_annealing">Simulated Annealing</a></strong> i.e. we will start with a small value of $\beta$ and increase as no of iterations go up.
+<p>We give exponentially more value to higher score. The Beta here is a +ve constant. But how to choose it? If $\beta$ is big we will give very high score to good solutions and the chain will not be able to try new solutions as it can get stuck in local optimas. If we give a small value the chain will not converge to very good solutions. So weuse an Optimization Technique called <strong>
+
+<a href="https://en.wikipedia.org/wiki/Simulated_annealing" target="_blank" rel="nofollow noopener">Simulated Annealing</a>
+</strong> i.e. we will start with a small value of $\beta$ and increase as no of iterations go up.
 That way the chain will explore in the starting stages and stay at the best solution in the later stages.</p>
 <p>So now we have everything we need to get started</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
@@ -578,7 +584,10 @@ MCMC Solution is : [0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0] with Gold Value: 2
 <p>Now I won&rsquo;t say that this is the best solution. The deterministic solution using DP will be the best for such use case but sometimes when the problems gets large, having such techniques at disposal becomes invaluable.</p>
 <p>So tell me What do you think about MCMC Methods?</p>
 <p>Also, If you find any good applications or would like to apply these techniques to some area, I would really be glad to know about them and help if possible.</p>
-<p>The codes for both examples are sourced at <a href="https://github.com/MLWhiz/MCMC_Project">Github</a></p>
+<p>The codes for both examples are sourced at 
+
+<a href="https://github.com/MLWhiz/MCMC_Project" target="_blank" rel="nofollow noopener">Github</a>
+</p>
 <h2 id="references-and-sources">References and Sources:</h2>
 <ol>
 <li><a href="http://www.amazon.com/Introduction-Probability-Chapman-Statistical-Science-ebook/dp/B00MMOJ19I" target="_blank" rel="nofollow">Introduction to Probability Joseph K Blitzstein, Jessica Hwang</a></li>

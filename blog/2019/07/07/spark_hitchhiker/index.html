@@ -362,7 +362,10 @@
 <hr>
 <h2 id="getting-started-with-spark">Getting Started with Spark</h2>
 <p>Installing Spark is actually a headache of its own.</p>
-<p>Since we want to understand how it works and really work with it, I would suggest that you use Sparks on Databricks <a href="https://databricks.com/try-databricks?utm_source=databricks&amp;utm_medium=homev2tiletest">here</a> online with the community edition. Don’t worry it is free.</p>
+<p>Since we want to understand how it works and really work with it, I would suggest that you use Sparks on Databricks 
+
+<a href="https://databricks.com/try-databricks?utm_source=databricks&amp;utm_medium=homev2tiletest" target="_blank" rel="nofollow noopener">here</a>
+ online with the community edition. Don’t worry it is free.</p>
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/spark/db.png" "></center>
 </div>
@@ -383,7 +386,10 @@
 <h2 id="load-some-data">Load Some Data</h2>
 <p>The next step is to upload some data we will use to learn Spark. Just click on ‘Import and Explore Data’ on the home tab.</p>
 <p>I will end up using multiple datasets by the end of this post but let us start with something very simple.</p>
-<p>Let us add the file <code>shakespeare.txt</code> which you can download from <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/spark_post">here</a>.</p>
+<p>Let us add the file <code>shakespeare.txt</code> which you can download from 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/spark_post" target="_blank" rel="nofollow noopener">here</a>
+.</p>
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/spark/load.png" "></center>
 </div>
@@ -508,7 +514,10 @@ ParallelCollectionRDD[<span style="color:#ae81ff">22</span>] at parallelize at P
 <p>To requote your data is now accessible to the worker machines. You want to do some transformations on the data now.</p>
 <p>You may want to filter, apply some function, etc.</p>
 <p>In Spark, this is done using Transformation functions.</p>
-<p>Spark provides many transformation functions. You can see a comprehensive list <a href="http://spark.apache.org/docs/latest/rdd-programming-guide.html#transformations"><strong>here</strong></a>. Some of the main ones that I use frequently are:</p>
+<p>Spark provides many transformation functions. You can see a comprehensive list 
+
+<a href="http://spark.apache.org/docs/latest/rdd-programming-guide.html#transformations" target="_blank" rel="nofollow noopener">&lt;strong&gt;here&lt;/strong&gt;</a>
+. Some of the main ones that I use frequently are:</p>
 <h3 id="1-map-1">1. Map:</h3>
 <p>Applies a given function to an RDD.</p>
 <p>Note that the syntax is a little bit different from Python, but it necessarily does the same thing. Don’t worry about <code>collect</code> yet. For now, just think of it as a function that collects the data in squared_rdd back to a list.</p>
@@ -588,7 +597,10 @@ Fruit [<span style="color:#e6db74">&#39;Apple&#39;</span>, <span style="color:#e
 </div>
 <p>You have filtered your data, mapped some functions on it. Done your computation.</p>
 <p>Now you want to get the data on your local machine or save it to a file or show the results in the form of some graphs in excel or any visualization tool.</p>
-<p>You will need actions for that. A comprehensive list of actions is provided <a href="http://spark.apache.org/docs/latest/rdd-programming-guide.html#actions"><strong>here</strong></a>.</p>
+<p>You will need actions for that. A comprehensive list of actions is provided 
+
+<a href="http://spark.apache.org/docs/latest/rdd-programming-guide.html#actions" target="_blank" rel="nofollow noopener">&lt;strong&gt;here&lt;/strong&gt;</a>
+.</p>
 <p>Some of the most common actions that I tend to use are:</p>
 <h3 id="1-collect">1. collect:</h3>
 <p>We have already used this action many times. It takes the whole RDD and brings it back to the driver program.</p>
@@ -671,7 +683,10 @@ rdd<span style="color:#f92672">.</span>takeOrdered(<span style="color:#ae81ff">3
 <center><img src="/images/spark/action.jpeg" "></center>
 </div>
 <p>Let us work with a concrete example which takes care of some usual transformations.</p>
-<p>We will work on Movielens <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/spark_post">ml-100k.zip</a> dataset which is a stable benchmark dataset. 100,000 ratings from 1000 users on 1700 movies. Released 4/1998.</p>
+<p>We will work on Movielens 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/spark_post" target="_blank" rel="nofollow noopener">ml-100k.zip</a>
+ dataset which is a stable benchmark dataset. 100,000 ratings from 1000 users on 1700 movies. Released 4/1998.</p>
 <p>The Movielens dataset contains a lot of files but we are going to be working with 3 files only:</p>
 <ol>
 <li>
@@ -794,7 +809,10 @@ rdd_title_rating_rating_count_gt_100: [('Butch Cassidy and the Sundance Kid (196
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/spark/df.png" "></center>
 </div>
-<p>Spark has provided DataFrame API for us Data Scientists to work with relational data. Here is the <a href="https://docs.databricks.com/spark/latest/dataframes-datasets/introduction-to-dataframes-python.html#">documentation</a> for the adventurous folks.</p>
+<p>Spark has provided DataFrame API for us Data Scientists to work with relational data. Here is the 
+
+<a href="https://docs.databricks.com/spark/latest/dataframes-datasets/introduction-to-dataframes-python.html#" target="_blank" rel="nofollow noopener">documentation</a>
+ for the adventurous folks.</p>
 <p>Remember that in the background it still is all RDDs and that is why the starting part of this post focussed on RDDs.</p>
 <p>I will start with some common functionalities you will need to work with Spark DataFrames. Would look a lot like Pandas with some syntax changes.</p>
 <h3 id="1-reading-the-file">1. Reading the File</h3>
@@ -946,9 +964,24 @@ display(rdd_as_df)
 <p>This was a big post and congratulations if you reached the end.</p>
 <p>Spark has provided us with an interface where we could use transformations and actions on our data. Spark also has the Dataframe API to ease the transition of Data scientists to Big Data.</p>
 <p>Hopefully, I’ve covered the basics well enough to pique your interest and help you get started with Spark.</p>
-<p><em><strong>You can find all the code at the <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/spark_post">GitHub</a> repository.</strong></em></p>
-<p>Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out an excellent course on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293556&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-essentials">Big Data Essentials</a> which is part of the <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293466&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fbig-data-engineering">Big Data Specialization</a> provided by Yandex.</p>
-<p>I am going to be writing more of such posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c"><strong>blog</strong></a>.</p>
+<p><em><strong>You can find all the code at the 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/spark_post" target="_blank" rel="nofollow noopener">GitHub</a>
+ repository.</strong></em></p>
+<p>Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out an excellent course on 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293556&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-essentials" target="_blank" rel="nofollow noopener">Big Data Essentials</a>
+ which is part of the 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293466&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fbig-data-engineering" target="_blank" rel="nofollow noopener">Big Data Specialization</a>
+ provided by Yandex.</p>
+<p>I am going to be writing more of such posts in the future too. Let me know what you think about the series. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal" target="_blank" rel="nofollow noopener">&lt;strong&gt;Medium&lt;/strong&gt;</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">&lt;strong&gt;blog&lt;/strong&gt;</a>
+.</p>
 
 
         

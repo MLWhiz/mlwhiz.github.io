@@ -293,10 +293,16 @@
         <img src="https://mlwhiz.com/images/deployment_fastapi/main.png" class="img-fluid w-100 mb-4" alt="Deployment could be easy — A Data Scientist’s Guide to deploy an Image detection FastAPI API using Amazon ec2">
         
         <div class="content mb-5">
-          <p>Just recently, I had written a simple <a href="https://towardsdatascience.com/a-layman-guide-for-data-scientists-to-create-apis-in-minutes-31e6f451cd2f">tutorial</a> on FastAPI, which was about simplifying and understanding how APIs work, and creating a simple API using the framework.</p>
+          <p>Just recently, I had written a simple 
+
+<a href="https://towardsdatascience.com/a-layman-guide-for-data-scientists-to-create-apis-in-minutes-31e6f451cd2f" target="_blank" rel="nofollow noopener">tutorial</a>
+ on FastAPI, which was about simplifying and understanding how APIs work, and creating a simple API using the framework.</p>
 <p>That post got quite a good response, but the most asked question was how to deploy the FastAPI API on ec2 and how to use images data rather than simple strings, integers, and floats as input to the API.</p>
 <p>I scoured the net for this, but all I could find was some undercooked documentation and a lot of different ways people were taking to deploy using NGINX or ECS. None of those seemed particularly great or complete to me.</p>
-<p>So, I tried to do this myself using some help from <a href="https://fastapi.tiangolo.com/deployment/">FastAPI documentation</a>. In this post, we will look at predominantly four things:</p>
+<p>So, I tried to do this myself using some help from 
+
+<a href="https://fastapi.tiangolo.com/deployment/" target="_blank" rel="nofollow noopener">FastAPI documentation</a>
+. In this post, we will look at predominantly four things:</p>
 <ul>
 <li>
 <p>Setting Up an Amazon Instance</p>
@@ -315,10 +321,16 @@
 <p>You can skip any part you feel you are versed with though I would expect you to go through the whole post, long as it may be, as there’s a lot of interconnection between concepts.</p>
 <hr>
 <h2 id="1-setting-up-amazon-instance">1. Setting Up Amazon Instance</h2>
-<p>Before we start with using the Amazon ec2 instance, we need to set one up. You might need to sign up with your email ID and set up the payment information on the <a href="https://aws.amazon.com/">AWS website</a>. Works just like a single sign-on. From here, I will assume that you have an AWS account and so I am going to explain the next essential parts so you can follow through.</p>
+<p>Before we start with using the Amazon ec2 instance, we need to set one up. You might need to sign up with your email ID and set up the payment information on the 
+
+<a href="https://aws.amazon.com/" target="_blank" rel="nofollow noopener">AWS website</a>
+. Works just like a single sign-on. From here, I will assume that you have an AWS account and so I am going to explain the next essential parts so you can follow through.</p>
 <ul>
 <li>
-<p>Go to AWS Management Console using <a href="https://us-west-2.console.aws.amazon.com/console">https://us-west-2.console.aws.amazon.com/console</a>.</p>
+<p>Go to AWS Management Console using 
+
+<a href="https://us-west-2.console.aws.amazon.com/console" target="_blank" rel="nofollow noopener">https://us-west-2.console.aws.amazon.com/console</a>
+.</p>
 </li>
 <li>
 <p>On the AWS Management Console, you can select “Launch a Virtual Machine.” Here we are trying to set up the machine where we will deploy our FastAPI API.</p>
@@ -392,7 +404,10 @@ ssh -i &quot;fastapi.pem&quot; ubuntu@&lt;Your Public DNS(IPv4) Address&gt;
 <p>Now we have got our Amazon instance up and running. We can move on here to the real part of the post.</p>
 <hr>
 <h2 id="2-creating-a-fastapi-api-for-object-detection">2. Creating a FastAPI API for Object Detection</h2>
-<p>Before we deploy an API, we need to have an API with us, right? In one of my last posts, I had written a simple <a href="https://towardsdatascience.com/a-layman-guide-for-data-scientists-to-create-apis-in-minutes-31e6f451cd2f">tutorial to understand FastAPI</a> and API basics. Do read the post if you want to understand FastAPI basics.</p>
+<p>Before we deploy an API, we need to have an API with us, right? In one of my last posts, I had written a simple 
+
+<a href="https://towardsdatascience.com/a-layman-guide-for-data-scientists-to-create-apis-in-minutes-31e6f451cd2f" target="_blank" rel="nofollow noopener">tutorial to understand FastAPI</a>
+ and API basics. Do read the post if you want to understand FastAPI basics.</p>
 <p>So, here I will try to create an Image detection API. As for how to pass the Image data to the API? The idea is — <em><strong>What is an image but a string?</strong></em> An image is just made up of bytes, and we can encode these bytes as a string. We will use the base64 string representation, which is a popular way to get binary data to ASCII characters. And, we will pass this string representation to give an image to our API.</p>
 <h3 id="a-some-image-basics-what-is-image-but-a-string">A. Some Image Basics: What is Image, But a String?</h3>
 <p>So, let us first see how we can convert an Image to a String. We read the binary data from an image file using the ‘rb’ flag and turn it into a base64 encoded data representation using the base64.b64encode function. We then use the decode to utf-8 function to get the base encoded data into human-readable characters. Don’t worry if it doesn’t make a lot of sense right now. <em><strong>Just understand that any data is binary, and we can convert binary data to its string representation using a series of steps.</strong></em></p>
@@ -436,14 +451,23 @@ ssh -i &quot;fastapi.pem&quot; ubuntu@&lt;Your Public DNS(IPv4) Address&gt;
 <p>And we have our happy dog back again. Looks better than the string.</p>
 <h3 id="b-writing-the-actual-fastapi-code">B. Writing the Actual FastAPI code</h3>
 <p>So, as now we understand that our API can get an image as a string from our user, let’s create an object detection API that makes use of this image as a string and outputs the bounding boxes for the object with the object classes as well.</p>
-<p>Here, I will be using a Pytorch pre-trained fasterrcnn_resnet50_fpn detection model from the torchvision.models for object detection, which is trained on the COCO dataset to keep the code simple, but one can use any model. You can look at these posts if you want to train your custom <a href="https://towardsdatascience.com/end-to-end-pipeline-for-setting-up-multiclass-image-classification-for-data-scientists-2e051081d41c">image classification</a> or <a href="https://lionbridge.ai/articles/create-an-end-to-end-object-detection-pipeline-using-yolov5/">image detection</a> model using Pytorch.</p>
+<p>Here, I will be using a Pytorch pre-trained fasterrcnn_resnet50_fpn detection model from the torchvision.models for object detection, which is trained on the COCO dataset to keep the code simple, but one can use any model. You can look at these posts if you want to train your custom 
+
+<a href="https://towardsdatascience.com/end-to-end-pipeline-for-setting-up-multiclass-image-classification-for-data-scientists-2e051081d41c" target="_blank" rel="nofollow noopener">image classification</a>
+ or 
+
+<a href="https://lionbridge.ai/articles/create-an-end-to-end-object-detection-pipeline-using-yolov5/" target="_blank" rel="nofollow noopener">image detection</a>
+ model using Pytorch.</p>
 <p>Below is the full code for the FastAPI. Although it may look long, we already know all the parts. In this code, we essentially do the following steps:</p>
 <ul>
 <li>
 <p>Create our fast API app using the FastAPI() constructor.</p>
 </li>
 <li>
-<p>Load our model and the classes it was trained on. I got the list of classes from the PyTorch <a href="https://pytorch.org/docs/stable/torchvision/models.html">docs</a>.</p>
+<p>Load our model and the classes it was trained on. I got the list of classes from the PyTorch 
+
+<a href="https://pytorch.org/docs/stable/torchvision/models.html" target="_blank" rel="nofollow noopener">docs</a>
+.</p>
 </li>
 <li>
 <p>We also defined a new class Input , which uses a library called pydantic to validate the input data types that we will get from the API end-user. Here the end-user gives the base64str and some score threshold for object detection prediction.</p>
@@ -452,7 +476,13 @@ ssh -i &quot;fastapi.pem&quot; ubuntu@&lt;Your Public DNS(IPv4) Address&gt;
 <p>We add a function called base64str_to_PILImage which does just what it is named.</p>
 </li>
 <li>
-<p>And we write a predict function called get_predictionbase64 which returns a dict of bounding boxes and classes using a base64 string representation of an image and a threshold as an input. We also add <a href="http://twitter.com/app">@app</a>.put(“/predict”) on top of this function to define our endpoint. If you need to understand put and endpoint refer to my previous <a href="https://towardsdatascience.com/a-layman-guide-for-data-scientists-to-create-apis-in-minutes-31e6f451cd2f">post</a> on FastAPI.</p>
+<p>And we write a predict function called get_predictionbase64 which returns a dict of bounding boxes and classes using a base64 string representation of an image and a threshold as an input. We also add 
+
+<a href="http://twitter.com/app" target="_blank" rel="nofollow noopener">@app</a>
+.put(“/predict”) on top of this function to define our endpoint. If you need to understand put and endpoint refer to my previous 
+
+<a href="https://towardsdatascience.com/a-layman-guide-for-data-scientists-to-create-apis-in-minutes-31e6f451cd2f" target="_blank" rel="nofollow noopener">post</a>
+ on FastAPI.</p>
 </li>
 </ul>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> fastapi <span style="color:#f92672">import</span> FastAPI
@@ -648,7 +678,13 @@ RUN pip --no-cache-dir install -r requirements.txt
 <p>Our Dockerfile contains a few things:</p>
 <ul>
 <li>
-<p>FROM command: Here the first line FROM specifies that we start with tiangolo’s (FastAPI creator) Docker image. As per his site: “<em>This image has an “auto-tuning” mechanism included so that you can just add your code and get that same high performance automatically. And without making sacrifices”</em>. What we are doing is just starting from an image that installs python3.7 for us along with some added configurations for uvicorn and gunicorn ASGI servers and a start.sh file for ASGI servers automatically. For adventurous souls, particularly <a href="https://github.com/tiangolo/uvicorn-gunicorn-fastapi-docker/blob/master/docker-images/python3.7.dockerfile">commandset</a>1 and <a href="https://github.com/tiangolo/uvicorn-gunicorn-docker/blob/master/docker-images/python3.7.dockerfile">commandset2</a> get executed through a sort of a daisy-chaining of commands.</p>
+<p>FROM command: Here the first line FROM specifies that we start with tiangolo’s (FastAPI creator) Docker image. As per his site: “<em>This image has an “auto-tuning” mechanism included so that you can just add your code and get that same high performance automatically. And without making sacrifices”</em>. What we are doing is just starting from an image that installs python3.7 for us along with some added configurations for uvicorn and gunicorn ASGI servers and a start.sh file for ASGI servers automatically. For adventurous souls, particularly 
+
+<a href="https://github.com/tiangolo/uvicorn-gunicorn-fastapi-docker/blob/master/docker-images/python3.7.dockerfile" target="_blank" rel="nofollow noopener">commandset</a>
+1 and 
+
+<a href="https://github.com/tiangolo/uvicorn-gunicorn-docker/blob/master/docker-images/python3.7.dockerfile" target="_blank" rel="nofollow noopener">commandset2</a>
+ get executed through a sort of a daisy-chaining of commands.</p>
 </li>
 <li>
 <p>COPY command: We can think of a docker image also as a folder that contains files and such. Here we copy our app folder and the requirements.txt file, which we created earlier to our docker image.</p>
@@ -768,14 +804,26 @@ data_dict <span style="color:#f92672">=</span> response<span style="color:#f9267
 </code></pre><p>If this doesn’t seem sufficient, adding here a docker cheat sheet containing useful docker commands:</p>
 <p>
   
-      <img src="/images/deployment_fastapi/21.png" alt="&lt;a href=&#34;http://dockerlabs.collabnix.com/docker/cheatsheet/&#34;&gt;Source&lt;/a&gt;">
+      <img src="/images/deployment_fastapi/21.png" alt="
+
+&lt;a href=&#34;http://dockerlabs.collabnix.com/docker/cheatsheet/&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Source&lt;/a&gt;
+">
   
 
 </p>
 <hr>
 <h2 id="4-an-end-to-end-app-with-ui">4. An End to End App with UI</h2>
-<p>We are done here with our API creation, but we can also create a UI based app using <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582">Streamlit</a> using our FastAPI API. This is not how you will do it in a production setting (where you might have developers making apps using react, node.js or javascript)but is mostly here to check the end-to-end flow of how to use an image API. I will host this barebones Streamlit app on local rather than the ec2 server, and it will get the bounding box info and classes from the FastAPI API hosted on ec2.</p>
-<p>If you need to learn more about how streamlit works, you can check out this <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582">post</a>. Also, if you would want to deploy this streamlit app also to ec2, here is a <a href="https://towardsdatascience.com/how-to-deploy-a-streamlit-app-using-an-amazon-free-ec2-instance-416a41f69dc3">tutorial</a> again.</p>
+<p>We are done here with our API creation, but we can also create a UI based app using 
+
+<a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582" target="_blank" rel="nofollow noopener">Streamlit</a>
+ using our FastAPI API. This is not how you will do it in a production setting (where you might have developers making apps using react, node.js or javascript)but is mostly here to check the end-to-end flow of how to use an image API. I will host this barebones Streamlit app on local rather than the ec2 server, and it will get the bounding box info and classes from the FastAPI API hosted on ec2.</p>
+<p>If you need to learn more about how streamlit works, you can check out this 
+
+<a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582" target="_blank" rel="nofollow noopener">post</a>
+. Also, if you would want to deploy this streamlit app also to ec2, here is a 
+
+<a href="https://towardsdatascience.com/how-to-deploy-a-streamlit-app-using-an-amazon-free-ec2-instance-416a41f69dc3" target="_blank" rel="nofollow noopener">tutorial</a>
+ again.</p>
 <p>Here is the flow of the whole app with UI and FastAPI API on ec2:</p>
 <p>
   
@@ -891,12 +939,24 @@ url <span style="color:#f92672">=</span> st<span style="color:#f92672">.</span>t
 </code></pre>
 <p>And we can see our app running on our localhost:8501. Works well with user-uploaded images as well as URL based images. Here is a cat image for some of you cat enthusiasts as well.</p>
 <table><tr><td><img src='/images/deployment_fastapi/23.png'></td><td><img src='/images/deployment_fastapi/24.png'></td></tr></table>
-<p>So that’s it. We have created a whole workflow here to deploy image detection models through FastAPI on ec2 and utilizing those results in Streamlit. I hope this helps your woes around deploying models in production. You can find the code for this post as well as all my posts at my <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/deployFastApi">GitHub</a> repository.</p>
+<p>So that’s it. We have created a whole workflow here to deploy image detection models through FastAPI on ec2 and utilizing those results in Streamlit. I hope this helps your woes around deploying models in production. You can find the code for this post as well as all my posts at my 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/deployFastApi" target="_blank" rel="nofollow noopener">GitHub</a>
+ repository.</p>
 <p>Let me know if you like this post and if you would like to include Docker or FastAPI or Streamlit in your day to day deployment needs. I am also looking to create a much detailed post on Docker so follow me up to stay tuned with my writing as well. Details below.</p>
 <hr>
 <h2 id="continue-learning">Continue Learning</h2>
-<p>If you want to learn more about building and putting a Machine Learning model in production, this <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.14884356434&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Faws-machine-learning">course on AWS</a> for implementing Machine Learning applications promises just that.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------">Medium</a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c">blog</a></p>
+<p>If you want to learn more about building and putting a Machine Learning model in production, this 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.14884356434&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Faws-machine-learning" target="_blank" rel="nofollow noopener">course on AWS</a>
+ for implementing Machine Learning applications promises just that.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" target="_blank" rel="nofollow noopener">Medium</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">blog</a>
+</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 

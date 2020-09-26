@@ -299,8 +299,26 @@ Are they hard to create? What technologies should I know before attempting to wo
 <center><img src="/images/chatbot/dvader.jpeg"  style="height:60%;width:60%"></center>
 </div>
 <p>Let me assure you this is not going to be <em>&ldquo;that kind of a post&rdquo;</em>.</p>
-<p>I will try to distill some of the knowledge I acquired while working through a project in the <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing">Natural Language Processing</a> course in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a>.</p>
-<p>So before I start, let me first say it for once that don&rsquo;t be intimidated by the hype and the enigma surrounding Chatbots. They are pretty much using pretty simple NLP techniques which most of us already know. If you don&rsquo;t, you are welcome to check out my <a href="https://towardsdatascience.com/tagged/nlp-learning-series">NLP Learning Series</a>, where I go through the problem of text classification in fair detail using <a href="/blog/2019/02/08/deeplearning_nlp_conventional_methods/">Conventional</a>, <a href="/blog/2019/03/09/deeplearning_architectures_text_classification/">Deep Learning</a> and <a href="/blog/2019/03/30/transfer_learning_text_classification/">Transfer Learning</a> methods.</p>
+<p>I will try to distill some of the knowledge I acquired while working through a project in the 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target="_blank" rel="nofollow noopener">Natural Language Processing</a>
+ course in the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Advanced machine learning specialization</a>
+.</p>
+<p>So before I start, let me first say it for once that don&rsquo;t be intimidated by the hype and the enigma surrounding Chatbots. They are pretty much using pretty simple NLP techniques which most of us already know. If you don&rsquo;t, you are welcome to check out my 
+
+<a href="https://towardsdatascience.com/tagged/nlp-learning-series" target="_blank" rel="nofollow noopener">NLP Learning Series</a>
+, where I go through the problem of text classification in fair detail using 
+
+<a href="/blog/2019/02/08/deeplearning_nlp_conventional_methods/">Conventional</a>
+, 
+
+<a href="/blog/2019/03/09/deeplearning_architectures_text_classification/">Deep Learning</a>
+ and 
+
+<a href="/blog/2019/03/30/transfer_learning_text_classification/">Transfer Learning</a>
+ methods.</p>
 <h2 id="a-very-brief-intro-to-chatbots">A Very brief Intro to Chatbots</h2>
 <p>We can logically divide of Chatbots in the following two categories.</p>
 <ul>
@@ -326,7 +344,10 @@ Are they hard to create? What technologies should I know before attempting to wo
 <p>We will be taking help of resources like Telegram and Chatterbot to build our Chatbot. So before we start, I think I should get you up and running with these two tools.</p>
 <hr>
 <h2 id="1-telegram">1. Telegram:</h2>
-<p>From the <a href="https://telegram.org/faq#q-what-is-telegram-what-do-i-do-here">website</a>:</p>
+<p>From the 
+
+<a href="https://telegram.org/faq#q-what-is-telegram-what-do-i-do-here" target="_blank" rel="nofollow noopener">website</a>
+:</p>
 <blockquote>
 <p>Telegram is a messaging app with a focus on speed and security, it’s super-fast, simple and free. You can use Telegram on all your devices at the same time — your messages sync seamlessly across any number of your phones, tablets or computers.</p>
 </blockquote>
@@ -335,10 +356,16 @@ Are they hard to create? What technologies should I know before attempting to wo
 <p>Don&rsquo;t worry if you don&rsquo;t understand how it works yet; I will try to give step by step instructions as we go forward.</p>
 <ul>
 <li>
-<p>Step 1: <a href="https://macos.telegram.org/">Download and Install</a> Telegram App on your Laptop.</p>
+<p>Step 1: 
+
+<a href="https://macos.telegram.org/" target="_blank" rel="nofollow noopener">Download and Install</a>
+ Telegram App on your Laptop.</p>
 </li>
 <li>
-<p>Step 2: Talk with BotFather by opening this <a href="https://telegram.me/BotFather">link</a> in Chrome and subsequently your Telegram App.</p>
+<p>Step 2: Talk with BotFather by opening this 
+
+<a href="https://telegram.me/BotFather" target="_blank" rel="nofollow noopener">link</a>
+ in Chrome and subsequently your Telegram App.</p>
 </li>
 <li>
 <p>Step 3: The above steps will take you to a Chatbot called Botfather which can help you create a new bot. Inception Anyone? It will look something like this.</p>
@@ -489,7 +516,13 @@ Are they hard to create? What technologies should I know before attempting to wo
     <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generate_answer</span>(self, question):
         response <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>chitchat_bot<span style="color:#f92672">.</span>get_response(question)
         <span style="color:#66d9ef">return</span> response
-</code></pre></div><p>The code in <code>init</code> instantiates a chatbot using chatterbot and trains it on the <a href="https://github.com/gunthercox/chatterbot-corpus/tree/master/chatterbot_corpus/data/english">provided english corpus</a> data. The data is pretty small, but you can always train it on your dataset too. Just see the <a href="https://chatterbot.readthedocs.io/en/stable/training.html">documentation</a>. We can then give our responses using the Chatterbot chatbot in the <code>generate_answer</code> function.</p>
+</code></pre></div><p>The code in <code>init</code> instantiates a chatbot using chatterbot and trains it on the 
+
+<a href="https://github.com/gunthercox/chatterbot-corpus/tree/master/chatterbot_corpus/data/english" target="_blank" rel="nofollow noopener">provided english corpus</a>
+ data. The data is pretty small, but you can always train it on your dataset too. Just see the 
+
+<a href="https://chatterbot.readthedocs.io/en/stable/training.html" target="_blank" rel="nofollow noopener">documentation</a>
+. We can then give our responses using the Chatterbot chatbot in the <code>generate_answer</code> function.</p>
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/chatbot/telegram_chatterbot.png"  style="height:80%;width:80%"></center>
 </div>
@@ -511,7 +544,13 @@ Are they hard to create? What technologies should I know before attempting to wo
 </ol>
 <p>To keep it simple we will create simple TFIDF models. We will need to save these TFIDF vectorizers.</p>
 <p>We will also need to store word vectors for every question for similarity calculations later.</p>
-<p>Let us go through the process step by step. You can get the full code in this <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/chatbot/Model%20Creation.ipynb">jupyter notebook</a> in my <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/chatbot">project repository</a>.</p>
+<p>Let us go through the process step by step. You can get the full code in this 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/chatbot/Model%20Creation.ipynb" target="_blank" rel="nofollow noopener">jupyter notebook</a>
+ in my 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/chatbot" target="_blank" rel="nofollow noopener">project repository</a>
+.</p>
 <h4 id="step-1-reading-and-visualizing-the-data">Step 1. Reading and Visualizing the Data</h4>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">dialogues <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;data/dialogues.tsv&#34;</span>,sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">&#34;</span>)
 posts <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>read_csv(<span style="color:#e6db74">&#34;data/tagged_posts.tsv&#34;</span>,sep<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">&#34;</span>)
@@ -715,7 +754,10 @@ test_accuracy <span style="color:#f92672">=</span> accuracy_score(y_test, y_test
 </code></pre>
 <p>Not Bad again.</p>
 <h4 id="step-5-store-question-database-embeddings">Step 5: Store Question database Embeddings</h4>
-<p>One can use <a href="https://code.google.com/archive/p/word2vec/">pre-trained word vectors</a> from Google or get a better result by training their embeddings using their data. Since again accuracy and precision is not the primary goal of this post, we will use pretrained vectors.</p>
+<p>One can use 
+
+<a href="https://code.google.com/archive/p/word2vec/" target="_blank" rel="nofollow noopener">pre-trained word vectors</a>
+ from Google or get a better result by training their embeddings using their data. Since again accuracy and precision is not the primary goal of this post, we will use pretrained vectors.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Load Google&#39;s pre-trained Word2Vec model.</span>
 model <span style="color:#f92672">=</span> gensim<span style="color:#f92672">.</span>models<span style="color:#f92672">.</span>KeyedVectors<span style="color:#f92672">.</span>load_word2vec_format(<span style="color:#e6db74">&#39;GoogleNews-vectors-negative300.bin&#39;</span>, binary<span style="color:#f92672">=</span>True)
 </code></pre></div><p>We want to convert every question to an embedding and store them so that we don&rsquo;t calculate the embeddings for the whole dataset every time. In essence, whenever the user asks a Stack Overflow question, we want to use some distance similarity measure to get the most similar question.</p>
@@ -782,7 +824,10 @@ get_similar_question(<span style="color:#e6db74">&#34;how to use list comprehens
 </code></pre>
 <p>we can use this post ID and find this question at <a href="https://stackoverflow.com/questions/5947137">https://stackoverflow.com/questions/5947137</a></p>
 <p>The question the similarity checker suggested has the actual text: &ldquo;How can I use a list comprehension to extend a list in python? [duplicate]&rdquo;</p>
-<p>Not too bad. It could have been better if we train our embeddings or use <a href="https://github.com/facebookresearch/StarSpace">starspace</a> embeddings.</p>
+<p>Not too bad. It could have been better if we train our embeddings or use 
+
+<a href="https://github.com/facebookresearch/StarSpace" target="_blank" rel="nofollow noopener">starspace</a>
+ embeddings.</p>
 <h2 id="assemble-the-puzzle---simpledialoguemanager-class">Assemble the Puzzle - SimpleDialogueManager Class</h2>
 <p>Finally, we have reached the end of the whole exercise, and we have to fit all the pieces in the puzzle in our <code>SimpleDialogueManager</code> Class. Here is the code for that. Go in the <code>main.py</code> file again to paste this code and see if it works or not.</p>
 <p>Go through the comments to understand how the pieces are fitting together to build one wholesome logic.</p>
@@ -895,10 +940,16 @@ get_similar_question(<span style="color:#e6db74">&#34;how to use list comprehens
             response <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;I think its about </span><span style="color:#e6db74">%s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">This thread might help you: https://stackoverflow.com/questions/</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">&#39;</span> <span style="color:#f92672">%</span> (tag, post_id)
         <span style="color:#66d9ef">return</span> response
 
-</code></pre></div><p>Here is the code for the whole <a href="https://github.com/MLWhiz/data_science_blogs/blob/master/chatbot/main.py"><code>main.py</code></a> for you to use and see. Just run the whole <code>main.py</code> using</p>
+</code></pre></div><p>Here is the code for the whole 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/blob/master/chatbot/main.py" target="_blank" rel="nofollow noopener">&lt;code&gt;main.py&lt;/code&gt;</a>
+ for you to use and see. Just run the whole <code>main.py</code> using</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ python main.py
 </code></pre></div><p>And we will have our bot up and running.</p>
-<p>Again, here is the link to the github <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/chatbot">repository</a></p>
+<p>Again, here is the link to the github 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/chatbot" target="_blank" rel="nofollow noopener">repository</a>
+</p>
 <h2 id="the-possibilities-are-really-endless">The possibilities are really endless</h2>
 <p>This is just a small demo project of what you can do with the chatbots. You can do a whole lot more once you recognize that the backend is just python.</p>
 <ul>
@@ -909,7 +960,10 @@ get_similar_question(<span style="color:#e6db74">&#34;how to use list comprehens
 <p>You can <strong>make chatbots to do some daily tasks by using simple keyword-based intents</strong>. It is just simple logic. Find out the weather, find out cricket scores or maybe newly released movies. Whatever floats your boat.</p>
 </li>
 <li>
-<p>Or maybe try to integrate Telegram based Chatbot in your website. See <a href="https://livechatbot.net/#">livechatbot</a></p>
+<p>Or maybe try to integrate Telegram based Chatbot in your website. See 
+
+<a href="https://livechatbot.net/#" target="_blank" rel="nofollow noopener">livechatbot</a>
+</p>
 </li>
 <li>
 <p>Or maybe just try to have fun with it.</p>
@@ -920,8 +974,17 @@ get_similar_question(<span style="color:#e6db74">&#34;how to use list comprehens
 </div>
 <h2 id="conclusion">Conclusion</h2>
 <p>Here we learned how to create a simple chatbot. And it works well. We can improve a whole lot on this present chatbot by increasing classifier accuracy, handling edge cases, making it respond faster or maybe adding more logic to handle more use cases. But the fact remains the same. The AI in chatbots is just simple human logic and nothing magic.</p>
-<p>In this post, I closely followed one of the projects from this <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing">course</a> to create this chatbot. Do check out this course if you get confused, or tell me your problems in the comments I will certainly try to help.</p>
-<p>Follow me up at <a href="https://medium.com/@rahul_agarwal">Medium</a> or Subscribe to my <a href="https://mlwhiz.com">blog</a> to be informed about my next posts.</p>
+<p>In this post, I closely followed one of the projects from this 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target="_blank" rel="nofollow noopener">course</a>
+ to create this chatbot. Do check out this course if you get confused, or tell me your problems in the comments I will certainly try to help.</p>
+<p>Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal" target="_blank" rel="nofollow noopener">Medium</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.com">blog</a>
+ to be informed about my next posts.</p>
 <p>Till then Ciao!!</p>
 
 

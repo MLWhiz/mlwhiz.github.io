@@ -299,7 +299,13 @@
 <p>Zen of Python: Simple is better than complex and Streamlit makes it dead simple to create apps.</p>
 </blockquote>
 <p><em><strong>This post is about understanding how to create apps that support data science projects using Streamlit.</strong></em></p>
-<p>To understand more about the architecture and the thought process that led to streamlit, have a look at this excellent <a href="https://towardsdatascience.com/coding-ml-tools-like-you-code-ml-models-ddba3357eace">post</a> by one of the original developers/founder <a href="undefined">Adrien Treuille</a>.</p>
+<p>To understand more about the architecture and the thought process that led to streamlit, have a look at this excellent 
+
+<a href="https://towardsdatascience.com/coding-ml-tools-like-you-code-ml-models-ddba3357eace" target="_blank" rel="nofollow noopener">post</a>
+ by one of the original developers/founder 
+
+<a href="undefined">Adrien Treuille</a>
+.</p>
 <hr>
 <h2 id="installation">Installation</h2>
 <p>Installation is as simple as running the command:</p>
@@ -350,7 +356,10 @@ st<span style="color:#f92672">.</span>write(x, <span style="color:#e6db74">&#39;
 <p><em><strong>Important: Remember that every time we change the widget value, the whole app runs from top to bottom.</strong></em></p>
 <hr>
 <h2 id="streamlit-widgets">Streamlit Widgets</h2>
-<p>Widgets provide us a way to control our app. The best place to read about the widgets is the <a href="https://streamlit.io/docs/api.html">API reference</a> documentation itself but I will describe some most prominent ones that you might end up using.</p>
+<p>Widgets provide us a way to control our app. The best place to read about the widgets is the 
+
+<a href="https://streamlit.io/docs/api.html" target="_blank" rel="nofollow noopener">API reference</a>
+ documentation itself but I will describe some most prominent ones that you might end up using.</p>
 <h3 id="1-slider">1. Slider</h3>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">streamlit<span style="color:#f92672">.</span>slider(label, min_value<span style="color:#f92672">=</span>None, max_value<span style="color:#f92672">=</span>None, value<span style="color:#f92672">=</span>None, step<span style="color:#f92672">=</span>None, format<span style="color:#f92672">=</span>None)
 </code></pre></div><p>We already saw st.slider in action above. It can be used with min_value,max_value, and step for getting inputs in a range.</p>
@@ -369,7 +378,10 @@ st<span style="color:#f92672">.</span>write(<span style="color:#e6db74">&#39;The
 </p>
 <p><strong>Tip:</strong> You can just change the file <code>helloworld.py</code> and refresh the browser. The way I work is to open and change <code>helloworld.py</code> in sublime text and see the changes in the browser side by side.</p>
 <h3 id="3-checkbox">3. Checkbox</h3>
-<p>One use case for checkboxes is to hide or show/hide a specific section in an app. Another could be setting up a boolean value in the parameters for a function.<a href="https://streamlit.io/docs/api.html#streamlit.checkbox">st.checkbox()</a> takes a single argument, which is the widget label. In this app, the checkbox is used to toggle a conditional statement.</p>
+<p>One use case for checkboxes is to hide or show/hide a specific section in an app. Another could be setting up a boolean value in the parameters for a function.
+
+<a href="https://streamlit.io/docs/api.html#streamlit.checkbox" target="_blank" rel="nofollow noopener">st.checkbox()</a>
+ takes a single argument, which is the widget label. In this app, the checkbox is used to toggle a conditional statement.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> streamlit <span style="color:#f92672">as</span> st
 <span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
 <span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
@@ -384,7 +396,10 @@ df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>re
 
 </p>
 <h3 id="4-selectbox">4. SelectBox</h3>
-<p>We can use <a href="https://streamlit.io/docs/api.html#streamlit.selectbox">st.selectbox</a> to choose from a series or a list. Normally a use case is to use it as a simple dropdown to select values from a list.</p>
+<p>We can use 
+
+<a href="https://streamlit.io/docs/api.html#streamlit.selectbox" target="_blank" rel="nofollow noopener">st.selectbox</a>
+ to choose from a series or a list. Normally a use case is to use it as a simple dropdown to select values from a list.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> streamlit <span style="color:#f92672">as</span> st
 <span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
 <span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
@@ -522,7 +537,10 @@ st<span style="color:#f92672">.</span>plotly_chart(fig)
 </p>
 <h3 id="3-markdown">3. Markdown?</h3>
 <p>I love writing in Markdown. I find it less verbose than HTML and much more suited for data science work. So, can we use Markdown with the streamlit app?</p>
-<p>Yes, we can. There are a couple of ways to do this. In my view, the best one is to use <a href="https://streamlit.io/docs/api.html#id1">Magic commands</a>. Magic commands allow you to write markdown as easily as comments. You could also have used the command <code>st.markdown</code></p>
+<p>Yes, we can. There are a couple of ways to do this. In my view, the best one is to use 
+
+<a href="https://streamlit.io/docs/api.html#id1" target="_blank" rel="nofollow noopener">Magic commands</a>
+. Magic commands allow you to write markdown as easily as comments. You could also have used the command <code>st.markdown</code></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> streamlit <span style="color:#f92672">as</span> st
 <span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
 <span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
@@ -558,23 +576,44 @@ st<span style="color:#f92672">.</span>plotly_chart(fig)
 <hr>
 <h2 id="conclusion">Conclusion</h2>
 <p>Streamlit has democratized the whole process to create apps, and I couldn’t recommend it more.</p>
-<p>In this post, we created a simple web app. But the possibilities are endless. To give an example here is <a href="https://research.nvidia.com/publication/2017-10_Progressive-Growing-of">face GAN</a> from the streamlit site. And it works by just using the same guiding ideas of widgets and caching.</p>
+<p>In this post, we created a simple web app. But the possibilities are endless. To give an example here is 
+
+<a href="https://research.nvidia.com/publication/2017-10_Progressive-Growing-of" target="_blank" rel="nofollow noopener">face GAN</a>
+ from the streamlit site. And it works by just using the same guiding ideas of widgets and caching.</p>
 <p>
   
     <img src="/images/streamlit/11.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
     
 
 </p>
-<p>I love the default colors and styles that the developers have used, and I found it much more comfortable than using Dash, which I was using until now for my demos. You can also include <a href="https://streamlit.io/docs/api.html#display-interactive-widgets">audio</a> and video in your streamlit apps.</p>
+<p>I love the default colors and styles that the developers have used, and I found it much more comfortable than using Dash, which I was using until now for my demos. You can also include 
+
+<a href="https://streamlit.io/docs/api.html#display-interactive-widgets" target="_blank" rel="nofollow noopener">audio</a>
+ and video in your streamlit apps.</p>
 <p><strong>On top of that, Streamlit is a free and open-source rather than a proprietary web app that just works out of the box.</strong></p>
 <p>In the past, I had to reach out to my developer friends for any single change in a demo or presentation; now it is relatively trivial to do that.</p>
 <blockquote>
 <p>I aim to use it more in my workflow from now on, and considering the capabilities it provides without all the hard work, I think you should too.</p>
 </blockquote>
 <p>I don’t have an idea if it will perform well in a production environment yet, but its a boon for the small proof of concept projects and demos. I aim to use it more in my workflow from now on, and considering the capabilities it provides without all the hard work, I think you should too.</p>
-<p>You can find the full code for the final app <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/streamlit_football_demo">here</a>.</p>
-<p>If you want to learn about the best strategies for creating Visualizations, I would like to call out an excellent course about <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0"><strong>Data Visualization and applied plotting</strong></a> from the University of Michigan, which is a part of a pretty good <a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0"><strong>Data Science Specialization with Python</strong></a> in itself. Do check it out.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c"><strong>blog</strong></a>.</p>
+<p>You can find the full code for the final app 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/streamlit_football_demo" target="_blank" rel="nofollow noopener">here</a>
+.</p>
+<p>If you want to learn about the best strategies for creating Visualizations, I would like to call out an excellent course about 
+
+<a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">&lt;strong&gt;Data Visualization and applied plotting&lt;/strong&gt;</a>
+ from the University of Michigan, which is a part of a pretty good 
+
+<a href="https://www.coursera.org/specializations/data-science-python?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;siteID=lVarvwc5BD0-SAQTYQNKSERwaOgd07RrHg&amp;utm_content=3&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">&lt;strong&gt;Data Science Specialization with Python&lt;/strong&gt;</a>
+ in itself. Do check it out.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal" target="_blank" rel="nofollow noopener">&lt;strong&gt;Medium&lt;/strong&gt;</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">&lt;strong&gt;blog&lt;/strong&gt;</a>
+.</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 

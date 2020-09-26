@@ -323,7 +323,10 @@
     
 
 
-<em><a href="https://www.kaggle.com/rafjaa/resampling-strategies-for-imbalanced-datasets#t1">Source</a></em></p>
+<em>
+
+<a href="https://www.kaggle.com/rafjaa/resampling-strategies-for-imbalanced-datasets#t1" target="_blank" rel="nofollow noopener">Source</a>
+</em></p>
 <p>A widely adopted and perhaps the most straightforward method for dealing with highly imbalanced datasets is called resampling. It consists of removing samples from the majority class (under-sampling) and/or adding more examples from the minority class (over-sampling).</p>
 <p>Let us first create some example imbalanced data.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> sklearn.datasets <span style="color:#f92672">import</span> make_classification
@@ -369,7 +372,10 @@ oversampled_data <span style="color:#f92672">=</span> pd<span style="color:#f926
     
 
 </p>
-<p><em><a href="https://www.kaggle.com/rafjaa/resampling-strategies-for-imbalanced-datasets#t1">Source</a></em></p>
+<p><em>
+
+<a href="https://www.kaggle.com/rafjaa/resampling-strategies-for-imbalanced-datasets#t1" target="_blank" rel="nofollow noopener">Source</a>
+</em></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> imblearn.under_sampling <span style="color:#f92672">import</span> TomekLinks
 
 tl <span style="color:#f92672">=</span> TomekLinks(return_indices<span style="color:#f92672">=</span>True, ratio<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;majority&#39;</span>)
@@ -383,13 +389,19 @@ X_tl, y_tl, id_tl <span style="color:#f92672">=</span> tl<span style="color:#f92
     
 
 </p>
-<p><em><a href="https://www.kaggle.com/rafjaa/resampling-strategies-for-imbalanced-datasets#t1">Source</a></em></p>
+<p><em>
+
+<a href="https://www.kaggle.com/rafjaa/resampling-strategies-for-imbalanced-datasets#t1" target="_blank" rel="nofollow noopener">Source</a>
+</em></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> imblearn.over_sampling <span style="color:#f92672">import</span> SMOTE
 
 smote <span style="color:#f92672">=</span> SMOTE(ratio<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;minority&#39;</span>)
 
 X_sm, y_sm <span style="color:#f92672">=</span> smote<span style="color:#f92672">.</span>fit_sample(X, y)
-</code></pre></div><p>There are a variety of other methods in the <a href="https://github.com/scikit-learn-contrib/imbalanced-learn#id3">imblearn</a> package for both undersampling(Cluster Centroids, NearMiss, etc.) and oversampling(ADASYN and bSMOTE) that you can check out.</p>
+</code></pre></div><p>There are a variety of other methods in the 
+
+<a href="https://github.com/scikit-learn-contrib/imbalanced-learn#id3" target="_blank" rel="nofollow noopener">imblearn</a>
+ package for both undersampling(Cluster Centroids, NearMiss, etc.) and oversampling(ADASYN and bSMOTE) that you can check out.</p>
 <hr>
 <h2 id="3-class-weights-in-the-models">3. Class weights in the models</h2>
 <p>
@@ -431,7 +443,10 @@ class_weights <span style="color:#f92672">=</span> compute_class_weight(<span st
     
 
 </p>
-<p>Choosing the right evaluation metric is pretty essential whenever we work with imbalanced datasets. Generally, in such cases, the F1 Score is what I want as my <a href="https://towardsdatascience.com/the-5-classification-evaluation-metrics-you-must-know-aa97784ff226"><em><strong>evaluation metric</strong></em></a>.</p>
+<p>Choosing the right evaluation metric is pretty essential whenever we work with imbalanced datasets. Generally, in such cases, the F1 Score is what I want as my 
+
+<a href="https://towardsdatascience.com/the-5-classification-evaluation-metrics-you-must-know-aa97784ff226" target="_blank" rel="nofollow noopener">&lt;em&gt;&lt;strong&gt;evaluation metric&lt;/strong&gt;&lt;/em&gt;</a>
+.</p>
 <p>The F1 score is a number between 0 and 1 and is the harmonic mean of precision and recall.</p>
 <p>
   
@@ -497,8 +512,20 @@ f1_score(y_true, y_pred)
 <p>There is no one size fits all when working with imbalanced datasets. You will have to try multiple things based on your problem.</p>
 <p>In this post, I talked about the usual suspects that come to my mind whenever I face such a problem.</p>
 <p>A suggestion would be to try using all of the above approaches and try to see whatever works best for your use case.</p>
-<p>If you want to <a href="https://towardsdatascience.com/how-did-i-start-with-data-science-3f4de6b501b0?source=---------8------------------">learn</a> more about imbalanced datasets and the problems they pose, I would like to call out this <a href="https://www.coursera.org/learn/machine-learning?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;siteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&amp;source=post_page---------------------------"><em><strong>excellent course</strong></em></a> by Andrew Ng. This was the one that got me started. Do check it out.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c"><strong>blog</strong></a>.</p>
+<p>If you want to 
+
+<a href="https://towardsdatascience.com/how-did-i-start-with-data-science-3f4de6b501b0?source=---------8------------------" target="_blank" rel="nofollow noopener">learn</a>
+ more about imbalanced datasets and the problems they pose, I would like to call out this 
+
+<a href="https://www.coursera.org/learn/machine-learning?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;siteID=lVarvwc5BD0-btd7XBdF681VKxRe2H_Oyg&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0&amp;source=post_page---------------------------" target="_blank" rel="nofollow noopener">&lt;em&gt;&lt;strong&gt;excellent course&lt;/strong&gt;&lt;/em&gt;</a>
+ by Andrew Ng. This was the one that got me started. Do check it out.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" target="_blank" rel="nofollow noopener">&lt;strong&gt;Medium&lt;/strong&gt;</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">&lt;strong&gt;blog&lt;/strong&gt;</a>
+.</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 

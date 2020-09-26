@@ -286,15 +286,24 @@
         
         <div class="content mb-5">
           <p>Data manipulation is a breeze with pandas, and it has become such a standard for it that a lot of parallelization libraries like Rapids and Dask are being created in line with Pandas syntax.</p>
-<p>Sometimes back, I wrote about the <a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientists-6355059629ae">subset</a> of Pandas functionality I end up using often. <em><strong>In this post, I will talk about handling most of those data manipulation cases in Python on a GPU using cuDF.</strong></em></p>
+<p>Sometimes back, I wrote about the 
+
+<a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientists-6355059629ae" target="_blank" rel="nofollow noopener">subset</a>
+ of Pandas functionality I end up using often. <em><strong>In this post, I will talk about handling most of those data manipulation cases in Python on a GPU using cuDF.</strong></em></p>
 <p>With a sprinkling of some recommendations throughout.</p>
 <p><em><strong>PS:</strong></em> for benchmarking, all the experiments below are done on a Machine with 128 GB RAM and a Titan RTX GPU with 24 GB RAM.</p>
 <hr>
 <h2 id="what-is-rapids-cudf-and-why-to-use-it">What is Rapids CuDF, and why to use it?</h2>
 <blockquote>
-<p>Built based on the <a href="http://arrow.apache.org/">Apache Arrow</a> columnar memory format, cuDF is a GPU DataFrame library for loading, joining, aggregating, filtering, and otherwise manipulating data.</p>
+<p>Built based on the 
+
+<a href="http://arrow.apache.org/" target="_blank" rel="nofollow noopener">Apache Arrow</a>
+ columnar memory format, cuDF is a GPU DataFrame library for loading, joining, aggregating, filtering, and otherwise manipulating data.</p>
 </blockquote>
-<p>Simply, Rapids CuDF is a library that aims to bring pandas functionality to GPU. Apart from CuDF, Rapids also provides access to cuML and cuGraph as well, which are used to work with Machine Learning algorithms and <a href="https://towardsdatascience.com/4-graph-algorithms-on-steroids-for-data-scientists-with-cugraph-43d784de8d0e">graphs on GPU</a>, respectively.</p>
+<p>Simply, Rapids CuDF is a library that aims to bring pandas functionality to GPU. Apart from CuDF, Rapids also provides access to cuML and cuGraph as well, which are used to work with Machine Learning algorithms and 
+
+<a href="https://towardsdatascience.com/4-graph-algorithms-on-steroids-for-data-scientists-with-cugraph-43d784de8d0e" target="_blank" rel="nofollow noopener">graphs on GPU</a>
+, respectively.</p>
 <p>Now, what is the advantage of this?</p>
 <p>A typical GPU has over 2000 CUDA cores. Pandas, when parallelized using Dask or multiprocessing, can use eight cores or 16 CPU cores that your machine has. Now, these CPU cores are different in their power, but the CUDA cores can do easy calculations fast and thus can provide us with significant speedups.</p>
 <p>My GPU Titan RTX has around 4600 cores. That means I should be able to parallelize my computations using GPU.</p>
@@ -309,7 +318,10 @@
 <p><em><strong>That is a ~350x speedup using cuDF!!! And the code remains essentially the same. And remember, I am using a system with 128 GB RAM.</strong></em></p>
 <hr>
 <h2 id="installation--rapids-cudf">Installation — RAPIDS cuDF</h2>
-<p>So now we are convinced that cuDF is beneficial, the simplest way to install RAPIDS is by just going to the <a href="https://rapids.ai/start.html">site</a> and check what you need using the release selector tool.</p>
+<p>So now we are convinced that cuDF is beneficial, the simplest way to install RAPIDS is by just going to the 
+
+<a href="https://rapids.ai/start.html" target="_blank" rel="nofollow noopener">site</a>
+ and check what you need using the release selector tool.</p>
 <p>
   
     <img src="/images/pandas_gpu/1.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
@@ -320,7 +332,10 @@
 <pre><code>conda install -c rapidsai -c nvidia -c conda-forge -c defaults rapids=0.11 python=3.7 cudatoolkit=10.1
 </code></pre>
 <p>For starting up or learning, you could also get started with the Google Colab notebook, which comes pre-installed with the required RAPIDS environment.</p>
-<p>I will use the <a href="https://www.kaggle.com/sobhanmoosavi/us-accidents">US Accidents dataset</a> in this post to show the capability of CuDF Dataframes.</p>
+<p>I will use the 
+
+<a href="https://www.kaggle.com/sobhanmoosavi/us-accidents" target="_blank" rel="nofollow noopener">US Accidents dataset</a>
+ in this post to show the capability of CuDF Dataframes.</p>
 <hr>
 <h2 id="reading-data-with-cudf">Reading Data with CuDF</h2>
 <p>The first thing we do is reading the data source. We can read data in cudf from the local file system</p>
@@ -454,7 +469,10 @@ gdf['Somecol'] = gdf['TMC'].applymap(somefunc)
 <p>But sometimes we may need to build complex logic around the creation of new columns using multiple columns.</p>
 <p>To give you an example, let’s say that we want to calculate the Haversine distance based on Lats and Longs.</p>
 <p><em><strong>How do we do that?</strong></em></p>
-<p>Whenever I get a hold of such problems, I use apply/lambda. Let me first show you how I will do this with pandas. A lot of the code here is taken from this <a href="https://medium.com/rapids-ai/user-defined-functions-in-rapids-cudf-2d7c3fc2728d">post</a>.</p>
+<p>Whenever I get a hold of such problems, I use apply/lambda. Let me first show you how I will do this with pandas. A lot of the code here is taken from this 
+
+<a href="https://medium.com/rapids-ai/user-defined-functions-in-rapids-cudf-2d7c3fc2728d" target="_blank" rel="nofollow noopener">post</a>
+.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> math <span style="color:#f92672">import</span> cos, sin, asin, sqrt, pi
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">haversine_distance</span>(lat1, lon1, lat2, lon2):
     <span style="color:#e6db74">&#34;&#34;&#34;Haversine distance formula taken from Michael Dunn&#39;s StackOverflow post:
@@ -508,7 +526,10 @@ gdf <span style="color:#f92672">=</span> gdf<span style="color:#f92672">.</span>
 <p>It doesn’t take as input strings, so if you wanted to use a string column, you couldn’t. This is something that CuDF has in its features list.</p>
 </li>
 <li>
-<p>Only a few functions supported by CUDA python could be used, and not all python functions. The full list of supported functions is <a href="https://numba.pydata.org/numba-doc/dev/cuda/cudapysupported.html">here</a>.</p>
+<p>Only a few functions supported by CUDA python could be used, and not all python functions. The full list of supported functions is 
+
+<a href="https://numba.pydata.org/numba-doc/dev/cuda/cudapysupported.html" target="_blank" rel="nofollow noopener">here</a>
+.</p>
 </li>
 </ul>
 <p>So why do we use it? In this particular case, it took 48 Seconds for Pandas while only 295ms for CuDF. <em><strong>That is a 160x Speedup.</strong></em></p>
@@ -607,14 +628,32 @@ accident_locations_dataframe = gdf[['ID','Start_Lat','Start_Lng','End_Lat','End_
 <hr>
 <h2 id="conclusion">Conclusion</h2>
 <p><em><strong>CuDF is a step in the right direction as it provides GPU for Data Processing, which takes up a lot of time in the data science pipeline.</strong></em></p>
-<p><em><strong>Here I tried to talk about some functionality in cuDF I use often.</strong></em> There is quite a bit more the folks at NVIDIA are trying to implement, so do take a look at the <a href="https://docs.rapids.ai/api/cudf/stable/">documentation</a>.</p>
+<p><em><strong>Here I tried to talk about some functionality in cuDF I use often.</strong></em> There is quite a bit more the folks at NVIDIA are trying to implement, so do take a look at the 
+
+<a href="https://docs.rapids.ai/api/cudf/stable/" target="_blank" rel="nofollow noopener">documentation</a>
+.</p>
 <p><em><strong>Although some of the pandas’ functionality is not yet implemented,</strong></em> that shouldn’t stop us from making use of the functions already implemented for time-critical applications and Kaggle.</p>
 <p>I, for myself, switch between cudf and pandas dataframes multiple times in my data preparation notebooks.</p>
 <p>It does help a lot whenever I am a little tied up on time.</p>
 <p>I hope you found this post useful and worth your time. I tried to make this as simple as possible, but you may always <strong>ask me</strong> or see the documentation for doubts.</p>
-<p>The whole code is posted in my <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/cudf">Github Repo</a>, where I keep codes for all my posts. You can find the data at <a href="https://www.kaggle.com/sobhanmoosavi/us-accidents">Kaggle</a>.</p>
-<p>Also, if you want to learn more about Python 3, I would like to call out an excellent course on Learn <a href="https://bit.ly/2XshreA">Intermediate level Python</a> from the University of Michigan. Do check it out.</p>
-<p>I am going to be writing more of such posts in the future too. Let me know what you think about them. Follow me up at <a href="https://medium.com/@rahul_agarwal"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c"><strong>blog</strong>)</a>.</p>
+<p>The whole code is posted in my 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/cudf" target="_blank" rel="nofollow noopener">Github Repo</a>
+, where I keep codes for all my posts. You can find the data at 
+
+<a href="https://www.kaggle.com/sobhanmoosavi/us-accidents" target="_blank" rel="nofollow noopener">Kaggle</a>
+.</p>
+<p>Also, if you want to learn more about Python 3, I would like to call out an excellent course on Learn 
+
+<a href="https://bit.ly/2XshreA" target="_blank" rel="nofollow noopener">Intermediate level Python</a>
+ from the University of Michigan. Do check it out.</p>
+<p>I am going to be writing more of such posts in the future too. Let me know what you think about them. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal" target="_blank" rel="nofollow noopener">&lt;strong&gt;Medium&lt;/strong&gt;</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">&lt;strong&gt;blog&lt;/strong&gt;)</a>
+.</p>
 
 
         

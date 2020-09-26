@@ -289,7 +289,10 @@
 <p>With so many ways to do the same thing, I get spoiled by choice and end up doing absolutely nothing.</p>
 <p>And then for a beginner, the problem is just the opposite as in how to do even a simple thing is not appropriately documented. Understanding Pandas syntax can be a hard thing for the uninitiated.</p>
 <p>So what should one do?</p>
-<p><em><strong>The creators of <a href="http://bamboolib.8080labs.com">Bamboolib</a> had an idea that solved this problem — Why not add a GUI to pandas?</strong></em></p>
+<p><em><strong>The creators of 
+
+<a href="http://bamboolib.8080labs.com" target="_blank" rel="nofollow noopener">Bamboolib</a>
+ had an idea that solved this problem — Why not add a GUI to pandas?</strong></em></p>
 <p>The idea is to <em><strong>“Learn and use pandas without coding.”</strong></em> Now the idea may have started simple, but I found Bamboolib to be so much more when it comes to data exploration and data cleaning.</p>
 <p><em><strong>This post is about setting up and using Bamboolib for your data.</strong></em></p>
 <hr>
@@ -303,7 +306,10 @@ jupyter nbextension enable --py widgetsnbextension --sys-prefix
 jupyter nbextension install --py bamboolib --sys-prefix
 jupyter nbextension enable --py bamboolib --sys-prefix
 </code></pre>
-<p>If you want the process to install for Jupyterlab, here is the <a href="https://github.com/tkrabel/bamboolib/blob/master/installation/conda_venv/setup_and_installation.md#installing-bamboolib-using-conda-environment">process</a>.</p>
+<p>If you want the process to install for Jupyterlab, here is the 
+
+<a href="https://github.com/tkrabel/bamboolib/blob/master/installation/conda_venv/setup_and_installation.md#installing-bamboolib-using-conda-environment" target="_blank" rel="nofollow noopener">process</a>
+.</p>
 <hr>
 <h2 id="verifying-bamboolib-installation">Verifying Bamboolib Installation</h2>
 <p>To check if everything works as intended, you can open up a Jupyter notebook, and execute the following commands:</p>
@@ -312,7 +318,16 @@ import pandas as pd
 data = pd.read_csv(bam.titanic_csv)
 bam.show(data)
 </code></pre>
-<p>The first time you run this command, you will be asked to provide a Licence key. The key is needed if you want to use bamboolib over your own data. Since I wanted to use bamboolib for my own project, I got the key from one of Bamboolib founder <a href="undefined">Tobias Krabel</a> who was gracious enough to provide it to me to review. You can, however, buy your own from <a href="https://bamboolib.8080labs.com/pricing/">https://bamboolib.8080labs.com/pricing/</a>. If you want to see the library in action before purchasing the key, you can try out the <a href="https://mybinder.org/v2/gh/8080labs/bamboolib_binder_template/master?filepath=bamboolib_demo_titanic.ipynb">live demo</a>.</p>
+<p>The first time you run this command, you will be asked to provide a Licence key. The key is needed if you want to use bamboolib over your own data. Since I wanted to use bamboolib for my own project, I got the key from one of Bamboolib founder 
+
+<a href="undefined">Tobias Krabel</a>
+ who was gracious enough to provide it to me to review. You can, however, buy your own from 
+
+<a href="https://bamboolib.8080labs.com/pricing/" target="_blank" rel="nofollow noopener">https://bamboolib.8080labs.com/pricing/</a>
+. If you want to see the library in action before purchasing the key, you can try out the 
+
+<a href="https://mybinder.org/v2/gh/8080labs/bamboolib_binder_template/master?filepath=bamboolib_demo_titanic.ipynb" target="_blank" rel="nofollow noopener">live demo</a>
+.</p>
 <p>
   
     <img src="/images/bamboo/0.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
@@ -327,7 +342,10 @@ bam.show(data)
 
 </p>
 <p>So let’s try Bamboolib with our exciting data source, we all have seen Titanic data aplenty.</p>
-<p>To do this, I will be using the <a href="https://www.kaggle.com/iabhishekofficial/mobile-price-classification">Mobile Price Classification data</a> from Kaggle. In this problem, we have to create a classifier that predicts the price range of mobile phones based on the features of a mobile phone. So lets start this up with Bamboolib.</p>
+<p>To do this, I will be using the 
+
+<a href="https://www.kaggle.com/iabhishekofficial/mobile-price-classification" target="_blank" rel="nofollow noopener">Mobile Price Classification data</a>
+ from Kaggle. In this problem, we have to create a classifier that predicts the price range of mobile phones based on the features of a mobile phone. So lets start this up with Bamboolib.</p>
 <pre><code>train = pd.read_csv(&quot;../Downloads/mobile-price-classification/train.csv&quot;)
 bam.show(train)
 </code></pre>
@@ -359,7 +377,10 @@ bam.show(train)
     
 
 </p>
-<p>Getting such beautiful plots with standard Python libraries like seaborn or plotly usually takes some amount of code. Although <a href="https://towardsdatascience.com/pythons-one-liner-graph-creation-library-with-animations-hans-rosling-style-f2cb50490396">plotly_express</a> helps a lot in this by giving simple functions for most charts, Bamboolib creates a lot of important charts for us automatically.</p>
+<p>Getting such beautiful plots with standard Python libraries like seaborn or plotly usually takes some amount of code. Although 
+
+<a href="https://towardsdatascience.com/pythons-one-liner-graph-creation-library-with-animations-hans-rosling-style-f2cb50490396" target="_blank" rel="nofollow noopener">plotly_express</a>
+ helps a lot in this by giving simple functions for most charts, Bamboolib creates a lot of important charts for us automatically.</p>
 <p>Above, we can see that as RAM increases, the price range increases. We also see a weighted F1 Score of 0.676 for the RAM Variable. You can do this for every variable in your dataset and try to get a sense of your data.</p>
 <p><em><strong>One can also export the code of these charts</strong></em> to use in some presentation/ export these charts as PNG.</p>
 <p>To do this just copy the code fragment that shows above each graph. For example, you can copy and run the code to see price_range vs ram, and you will see an option to download these graphs as PNG. In the backend, they are all plotly graphs.</p>
@@ -373,7 +394,10 @@ bam.show(train)
 </p>
 <hr>
 <h2 id="gui-based-data-munging">GUI Based Data Munging</h2>
-<p>Have you ever faced the problem of forgetting pandas code to do something and going to stack overflow and getting lost in various threads? If yes, here is a <a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientists-6355059629ae">Minimal</a> Pandas refresher. Or you can use Bamboolib as per your preference.</p>
+<p>Have you ever faced the problem of forgetting pandas code to do something and going to stack overflow and getting lost in various threads? If yes, here is a 
+
+<a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientists-6355059629ae" target="_blank" rel="nofollow noopener">Minimal</a>
+ Pandas refresher. Or you can use Bamboolib as per your preference.</p>
 <p>Bamboolib makes it so easy to do things and not get lost in the code. You can <em><strong>drop columns, filter, sort, join, groupby, pivot, melt (Mostly everything you would like to do with a dataset) all by using the simple GUI provided.</strong></em></p>
 <p>For example, here I am dropping the missing values from the target column, if any. You can add multiple conditions, as well.</p>
 <p>
@@ -406,8 +430,20 @@ train = train.reset_index()
 <p><em><strong>I can surely say that this library is pretty useful for beginners who want to learn to code in Pandas as it provides them access to all the necessary functions without being bothersome.</strong></em></p>
 <p>While I will still focus on understanding the basics of Pandas and would advise looking at the output of Bamboolib to learn Pandas as well, I would like to see how the adoption of Bamboolib happens in the future.</p>
 <p>Let me know your thoughts as well in the comments.</p>
-<p>If you want to learn more about Pandas, I would like to call out an excellent course on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.6355988048&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fpython-data-analysis">Introduction to Data Science in Python</a> from the University of Michigan or check out my previous post on how to work with <a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientists-6355059629ae">Pandas</a>.</p>
-<p>I am going to be writing more of such posts in the future too. Let me know what you think about them. Follow me up at <a href="https://medium.com/@rahul_agarwal"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c"><strong>blog</strong></a></p>
+<p>If you want to learn more about Pandas, I would like to call out an excellent course on 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.6355988048&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fpython-data-analysis" target="_blank" rel="nofollow noopener">Introduction to Data Science in Python</a>
+ from the University of Michigan or check out my previous post on how to work with 
+
+<a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientists-6355059629ae" target="_blank" rel="nofollow noopener">Pandas</a>
+.</p>
+<p>I am going to be writing more of such posts in the future too. Let me know what you think about them. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal" target="_blank" rel="nofollow noopener">&lt;strong&gt;Medium&lt;/strong&gt;</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">&lt;strong&gt;blog&lt;/strong&gt;</a>
+</p>
 
 
         

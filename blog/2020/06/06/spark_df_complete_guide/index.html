@@ -295,8 +295,17 @@
         <div class="content mb-5">
           <p>Big Data has become synonymous with Data engineering. But the line between Data Engineering and Data scientists is blurring day by day. At this point in time, I think that Big Data must be in the repertoire of all data scientists.</p>
 <p>Reason: <em><strong>Too much data is getting generated day by day</strong></em></p>
-<p>And that brings us to <a href="https://amzn.to/2JZBgou">Spark</a> which is one of the most used tools when it comes to working with Big Data.</p>
-<p>While once upon a time Spark used to be heavily reliant on <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a">RDD manipulations</a>, Spark has now provided a DataFrame API for us Data Scientists to work with. Here is the <a href="https://docs.databricks.com/spark/latest/dataframes-datasets/introduction-to-dataframes-python.html#">documentation</a> for the adventurous folks. But while the documentation is good, it does not explain it from the perspective of a Data Scientist. Neither does it properly document the most common use cases for Data Science.</p>
+<p>And that brings us to 
+
+<a href="https://amzn.to/2JZBgou" target="_blank" rel="nofollow noopener">Spark</a>
+ which is one of the most used tools when it comes to working with Big Data.</p>
+<p>While once upon a time Spark used to be heavily reliant on 
+
+<a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" target="_blank" rel="nofollow noopener">RDD manipulations</a>
+, Spark has now provided a DataFrame API for us Data Scientists to work with. Here is the 
+
+<a href="https://docs.databricks.com/spark/latest/dataframes-datasets/introduction-to-dataframes-python.html#" target="_blank" rel="nofollow noopener">documentation</a>
+ for the adventurous folks. But while the documentation is good, it does not explain it from the perspective of a Data Scientist. Neither does it properly document the most common use cases for Data Science.</p>
 <p><em><strong>In this post, I will talk about installing Spark, standard Spark functionalities you will need to work with DataFrames, and finally some tips to handle the inevitable errors you will face.</strong></em></p>
 <p>This post is going to be quite long. Actually one of my longest posts on medium, so go on and pick up a Coffee.</p>
 <p>Also here is the Table of Contents, if you want to skip to a specific section:</p>
@@ -379,7 +388,10 @@
 <h2 id="installation">Installation</h2>
 <p>I am working on installing Spark on Ubuntu 18.04, but the steps should remain the same for MAC too. I am assuming that you already have Anaconda and Python3 installed. After that, you can just go through these steps:</p>
 <ul>
-<li>Download the Spark Binary from Apache Spark <a href="http://spark.apache.org/downloads.html">Website</a>. And click on the Download Spark link to download Spark.</li>
+<li>Download the Spark Binary from Apache Spark 
+
+<a href="http://spark.apache.org/downloads.html" target="_blank" rel="nofollow noopener">Website</a>
+. And click on the Download Spark link to download Spark.</li>
 </ul>
 <p>
   
@@ -442,11 +454,17 @@ $SPARK_PATH/bin/pyspark --master **local[10]**
 </p>
 <hr>
 <h2 id="data">Data</h2>
-<p>With the installation out of the way, we can move to the more interesting part of this post. I will be working with the <a href="https://www.kaggle.com/kimjihoo/coronavirusdataset">Data Science for COVID-19 in South Korea</a>, which is one of the most detailed datasets on the internet for COVID.</p>
+<p>With the installation out of the way, we can move to the more interesting part of this post. I will be working with the 
+
+<a href="https://www.kaggle.com/kimjihoo/coronavirusdataset" target="_blank" rel="nofollow noopener">Data Science for COVID-19 in South Korea</a>
+, which is one of the most detailed datasets on the internet for COVID.</p>
 <p>Please note that I will be using this dataset to showcase some of the most useful functionalities of Spark, but this should not be in any way considered a data exploration exercise for this amazing dataset.</p>
-<p>
+<p>Source: 
   
-      <img src="/images/spark_df_complete_guide/4.png" alt="Source: &lt;a href=&#34;https://www.kaggle.com/kimjihoo/coronavirusdataset?select=Case.csv&#34;&gt;Kaggle&lt;/a&gt;">
+      <img src="/images/spark_df_complete_guide/4.png" alt="
+
+&lt;a href=&#34;https://www.kaggle.com/kimjihoo/coronavirusdataset?select=Case.csv&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Kaggle&lt;/a&gt;
+">
   
 
 </p>
@@ -462,7 +480,10 @@ $SPARK_PATH/bin/pyspark --master **local[10]**
 <p>TimeProvince</p>
 </li>
 </ul>
-<p><em><strong>You can find all the code at the <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/sparkdf">GitHub</a> repository.</strong></em></p>
+<p><em><strong>You can find all the code at the 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/sparkdf" target="_blank" rel="nofollow noopener">GitHub</a>
+ repository.</strong></em></p>
 <hr>
 <h2 id="1-basic-functions">1. Basic Functions</h2>
 <h3 id="read">Read</h3>
@@ -548,7 +569,10 @@ cases = cases.withColumn('city', F.col('city').cast(StringType()))
 
 </p>
 <h3 id="groupby">GroupBy</h3>
-<p>We can use groupBy function with a spark DataFrame too. Pretty much same as the pandas groupBy with the exception that you will need to import pyspark.sql.functions. <a href="https://people.eecs.berkeley.edu/~jegonzal/pyspark/pyspark.sql.html#module-pyspark.sql.functions">Here</a> is the list of functions you can use with this function module.</p>
+<p>We can use groupBy function with a spark DataFrame too. Pretty much same as the pandas groupBy with the exception that you will need to import pyspark.sql.functions. 
+
+<a href="https://people.eecs.berkeley.edu/~jegonzal/pyspark/pyspark.sql.html#module-pyspark.sql.functions" target="_blank" rel="nofollow noopener">Here</a>
+ is the list of functions you can use with this function module.</p>
 <pre><code>from pyspark.sql import functions as F
 
 cases.groupBy([&quot;province&quot;,&quot;city&quot;]).agg(F.sum(&quot;confirmed&quot;) ,F.max(&quot;confirmed&quot;)).show()
@@ -648,7 +672,10 @@ casesWithExpConfirmed.show()
     
 
 </p>
-<p>There are a lot of other functions provided in this module, which are enough for most simple use cases. You can check out the functions list <a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#module-pyspark.sql.functions">here</a>.</p>
+<p>There are a lot of other functions provided in this module, which are enough for most simple use cases. You can check out the functions list 
+
+<a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#module-pyspark.sql.functions" target="_blank" rel="nofollow noopener">here</a>
+.</p>
 <h3 id="using-spark-udfs">Using Spark UDFs</h3>
 <p>Sometimes we want to do complicated things to a column or multiple columns. This could be thought of as a map operation on a PySpark Dataframe to a single column or multiple columns. While Spark SQL functions do solve many use cases when it comes to column creation, I use Spark UDF whenever I need more matured Python functionality.</p>
 <p>To use Spark UDFs, we need to use the F.udf function to convert a regular python function to a Spark UDF. We also need to specify the return type of the function. In this example the return type is StringType()</p>
@@ -958,18 +985,39 @@ def load_df_from_parquet(parquet_directory):
 </code></pre>
 <hr>
 <h2 id="conclusion">Conclusion</h2>
-<p>
+<p>Source: 
   
-      <img src="/images/spark_df_complete_guide/33.png" alt="Source: &lt;a href=&#34;https://pixabay.com/photos/dawn-graduates-throwing-hats-dusk-1840298/&#34;&gt;Pixabay&lt;/a&gt;">
+      <img src="/images/spark_df_complete_guide/33.png" alt="
+
+&lt;a href=&#34;https://pixabay.com/photos/dawn-graduates-throwing-hats-dusk-1840298/&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Pixabay&lt;/a&gt;
+">
   
 
 </p>
 <p>This was a big post and congratulations on you reaching the end. These are the most common functionalities I end up using in my day to day job.</p>
-<p>Hopefully, I’ve covered the Dataframe basics well enough to pique your interest and help you get started with Spark. If you want to learn more about how Spark Started or RDD basics take a look at this <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a">post</a></p>
-<p><em><strong>You can find all the code at this <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/sparkdf">GitHub</a> repository where I keep code for all my posts.</strong></em></p>
+<p>Hopefully, I’ve covered the Dataframe basics well enough to pique your interest and help you get started with Spark. If you want to learn more about how Spark Started or RDD basics take a look at this 
+
+<a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" target="_blank" rel="nofollow noopener">post</a>
+</p>
+<p><em><strong>You can find all the code at this 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/sparkdf" target="_blank" rel="nofollow noopener">GitHub</a>
+ repository where I keep code for all my posts.</strong></em></p>
 <h3 id="continue-learning">Continue Learning</h3>
-<p>Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out these excellent courses on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293556&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-essentials">Big Data Essentials: HDFS, MapReduce and Spark RDD</a> and <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293488&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-analysis">Big Data Analysis: Hive, Spark SQL, DataFrames and GraphFrames</a> by Yandex on Coursera.</p>
-<p>I am going to be writing more of such posts in the future too. Let me know what you think about the series. Follow me up at <a href="https://medium.com/@rahul_agarwal">Medium</a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c">blog</a>.</p>
+<p>Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out these excellent courses on 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293556&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-essentials" target="_blank" rel="nofollow noopener">Big Data Essentials: HDFS, MapReduce and Spark RDD</a>
+ and 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293488&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-analysis" target="_blank" rel="nofollow noopener">Big Data Analysis: Hive, Spark SQL, DataFrames and GraphFrames</a>
+ by Yandex on Coursera.</p>
+<p>I am going to be writing more of such posts in the future too. Let me know what you think about the series. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal" target="_blank" rel="nofollow noopener">Medium</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">blog</a>
+.</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 

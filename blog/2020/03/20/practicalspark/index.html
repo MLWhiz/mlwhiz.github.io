@@ -294,8 +294,23 @@
         
         <div class="content mb-5">
           <p><em><strong>I know — Spark is sometimes frustrating to work with.</strong></em></p>
-<p><em><strong>Although sometimes we can manage our big data using tools like <a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientist-on-gpu-d9a6c7759c7f?source=---------5------------------">Rapids</a> or <a href="https://towardsdatascience.com/add-this-single-word-to-make-your-pandas-apply-faster-90ee2fffe9e8?source=---------11------------------">Parallelization</a>,</strong></em> there is no way around using Spark if you are working with Terabytes of data.</p>
-<p>In my <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a">l</a>ast few posts on Spark, I explained how to work with <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a">PySpark RDDs</a> and <a href="https://towardsdatascience.com/5-ways-to-add-a-new-column-in-a-pyspark-dataframe-4e75c2fd8c08">Dataframes</a>. Although these posts explain a lot on how to work with RDDs and Dataframe operations, they still are not quite enough.</p>
+<p><em><strong>Although sometimes we can manage our big data using tools like 
+
+<a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientist-on-gpu-d9a6c7759c7f?source=---------5------------------" target="_blank" rel="nofollow noopener">Rapids</a>
+ or 
+
+<a href="https://towardsdatascience.com/add-this-single-word-to-make-your-pandas-apply-faster-90ee2fffe9e8?source=---------11------------------" target="_blank" rel="nofollow noopener">Parallelization</a>
+,</strong></em> there is no way around using Spark if you are working with Terabytes of data.</p>
+<p>In my 
+
+<a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" target="_blank" rel="nofollow noopener">l</a>
+ast few posts on Spark, I explained how to work with 
+
+<a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" target="_blank" rel="nofollow noopener">PySpark RDDs</a>
+ and 
+
+<a href="https://towardsdatascience.com/5-ways-to-add-a-new-column-in-a-pyspark-dataframe-4e75c2fd8c08" target="_blank" rel="nofollow noopener">Dataframes</a>
+. Although these posts explain a lot on how to work with RDDs and Dataframe operations, they still are not quite enough.</p>
 <p>Why? Because Spark gives memory errors a lot of times, and it is only when you genuinely work on big datasets with spark, would you be able to truly work with Spark.</p>
 <p><strong>This post is going to be about — “Practical Spark and memory management tips for Data Scientists.”</strong></p>
 <hr>
@@ -348,7 +363,10 @@ sqlContext.setConf( &quot;spark.default.parallelism&quot;, 800)
 <p>yarn.nodemanager.vmem-check-enabled: False</p>
 </li>
 </ul>
-<p>There are a lot of configurations that you might want to tune while setting up your spark cluster. You can take a look at them in the <a href="https://spark.apache.org/docs/latest/configuration.html">official docs</a>.</p>
+<p>There are a lot of configurations that you might want to tune while setting up your spark cluster. You can take a look at them in the 
+
+<a href="https://spark.apache.org/docs/latest/configuration.html" target="_blank" rel="nofollow noopener">official docs</a>
+.</p>
 <hr>
 <h2 id="3-repartitioning">3. Repartitioning</h2>
 <p>
@@ -374,10 +392,25 @@ sqlContext.setConf( &quot;spark.default.parallelism&quot;, 800)
 <p>There are a lot of things we don’t know, we don’t know. These are called unknown unknowns. It is only by multiple code failures and reading up on multiple stack overflow threads that we understand what we need.</p>
 <p>Here I have tried to summarize a few of the problems that I faced around memory issues and configurations while working with Spark and how to solve them. There are a lot of other configuration options in Spark, which I have not covered, but I hope this post gave you some clarity on how to set these and use them.</p>
 <p>Now, if you need to learn Spark basics, take a look at my previous post:
-<a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a"><strong>The Hitchhikers guide to handle Big Data using Spark</strong>
-<em>Not just an Introduction</em>towardsdatascience.com</a></p>
-<p>Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out these excellent courses on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293556&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-essentials">Big Data Essentials: HDFS, MapReduce and Spark RDD</a> and <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293488&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-analysis">Big Data Analysis: Hive, Spark SQL, DataFrames and GraphFrames</a> by Yandex on Coursera.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------">Medium</a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c">blog</a></p>
+
+
+<a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" target="_blank" rel="nofollow noopener">&lt;strong&gt;The Hitchhikers guide to handle Big Data using Spark&lt;/strong&gt;
+&lt;em&gt;Not just an Introduction&lt;/em&gt;towardsdatascience.com</a>
+</p>
+<p>Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out these excellent courses on 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293556&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-essentials" target="_blank" rel="nofollow noopener">Big Data Essentials: HDFS, MapReduce and Spark RDD</a>
+ and 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293488&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-analysis" target="_blank" rel="nofollow noopener">Big Data Analysis: Hive, Spark SQL, DataFrames and GraphFrames</a>
+ by Yandex on Coursera.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" target="_blank" rel="nofollow noopener">Medium</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">blog</a>
+</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 

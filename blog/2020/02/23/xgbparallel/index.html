@@ -304,12 +304,18 @@
   
 
 </p>
-<p>We are going to be using the <a href="https://archive.ics.uci.edu/ml/datasets/HIGGS">UCI Higgs dataset</a>. This is a binary classification problem with 11M rows and 29 columns and can take a considerable time to solve.</p>
+<p>We are going to be using the 
+
+<a href="https://archive.ics.uci.edu/ml/datasets/HIGGS" target="_blank" rel="nofollow noopener">UCI Higgs dataset</a>
+. This is a binary classification problem with 11M rows and 29 columns and can take a considerable time to solve.</p>
 <p>From the UCI Site:</p>
 <blockquote>
 <p>The data has been produced using Monte Carlo simulations. The first 21 features (columns 2–22) are kinematic properties measured by the particle detectors in the accelerator. The last seven features are functions of the first 21 features; these are high-level features derived by physicists to help discriminate between the two classes. There is an interest in using deep learning methods to obviate the need for physicists to manually develop such features. Benchmark results using Bayesian Decision Trees from a standard physics package and 5-layer neural networks are presented in the original paper. The last 500,000 examples are used as a test set.</p>
 </blockquote>
-<p>We can load this dataset into memory by using the nifty function that I borrow from <a href="https://devblogs.nvidia.com/gradient-boosting-decision-trees-xgboost-cuda/">this NVidia post</a>.</p>
+<p>We can load this dataset into memory by using the nifty function that I borrow from 
+
+<a href="https://devblogs.nvidia.com/gradient-boosting-decision-trees-xgboost-cuda/" target="_blank" rel="nofollow noopener">this NVidia post</a>
+.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">if</span> sys<span style="color:#f92672">.</span>version_info[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">3</span>:
     <span style="color:#f92672">from</span> urllib.request <span style="color:#f92672">import</span> urlretrieve
 <span style="color:#66d9ef">else</span>:
@@ -356,7 +362,10 @@ dtrain, dtest <span style="color:#f92672">=</span> load_higgs()
 <h2 id="xgboost-the-cpu-method">XGBoost: The CPU Method</h2>
 <p>
   
-      <img src="/images/xgbparallel/1.png" alt="&lt;a href=&#34;https://pixabay.com/illustrations/processor-cpu-computer-chip-board-2217771/&#34;&gt;Source&lt;/a&gt;">
+      <img src="/images/xgbparallel/1.png" alt="
+
+&lt;a href=&#34;https://pixabay.com/illustrations/processor-cpu-computer-chip-board-2217771/&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Source&lt;/a&gt;
+">
   
 
 </p>
@@ -384,7 +393,10 @@ CPU Training Time: 717.6483490467072 seconds
 <h2 id="xgboost-the-single-gpu-method">XGBoost: The Single GPU Method</h2>
 <p>
   
-      <img src="/images/xgbparallel/2.png" alt="&lt;a href=&#34;https://www.google.com/url?sa=i&amp;amp;rct=j&amp;amp;q=&amp;amp;esrc=s&amp;amp;source=images&amp;amp;cd=&amp;amp;cad=rja&amp;amp;uact=8&amp;amp;ved=2ahUKEwiKwMPphI3nAhXtzzgGHeLNB1QQjhx6BAgBEAI&amp;amp;url=https%3A%2F%2Fwww.nvidia.com%2Fen-us%2Fdeep-learning-ai%2Fproducts%2Ftitan-rtx%2F&amp;amp;psig=AOvVaw3QFPz_lTQrqraHJQz_ewwh&amp;amp;ust=1579433051897517&#34;&gt;Source&lt;/a&gt;">
+      <img src="/images/xgbparallel/2.png" alt="
+
+&lt;a href=&#34;https://www.google.com/url?sa=i&amp;amp;rct=j&amp;amp;q=&amp;amp;esrc=s&amp;amp;source=images&amp;amp;cd=&amp;amp;cad=rja&amp;amp;uact=8&amp;amp;ved=2ahUKEwiKwMPphI3nAhXtzzgGHeLNB1QQjhx6BAgBEAI&amp;amp;url=https%3A%2F%2Fwww.nvidia.com%2Fen-us%2Fdeep-learning-ai%2Fproducts%2Ftitan-rtx%2F&amp;amp;psig=AOvVaw3QFPz_lTQrqraHJQz_ewwh&amp;amp;ust=1579433051897517&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Source&lt;/a&gt;
+">
   
 
 </p>
@@ -416,7 +428,10 @@ GPU Training Time: 78.2187008857727 seconds
 <h2 id="xgboost-the-multi-gpu-method">XGBoost: The Multi GPU Method</h2>
 <p>
   
-      <img src="/images/xgbparallel/3.png" alt="&lt;a href=&#34;https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.nvidia.com%2Fcontent%2Fdam%2Fen-zz%2FSolutions%2Ftitan%2Ftitan-rtx%2Fnvidia-titan-rtx-nvlink-300-t%402x.jpg&amp;amp;imgrefurl=https%3A%2F%2Fwww.nvidia.com%2Fen-us%2Fdeep-learning-ai%2Fproducts%2Ftitan-rtx%2F&amp;amp;docid=LXUW4PiXbaOvoM&amp;amp;tbnid=2aobaeCTl1m0CM%3A&amp;amp;vet=10ahUKEwi2uovhhI3nAhXVcn0KHf9pB_YQMwhLKAIwAg..i&amp;amp;w=600&amp;amp;h=408&amp;amp;client=ubuntu&amp;amp;bih=2025&amp;amp;biw=1879&amp;amp;q=gpu%20titan%20rtx%20dual&amp;amp;ved=0ahUKEwi2uovhhI3nAhXVcn0KHf9pB_YQMwhLKAIwAg&amp;amp;iact=mrc&amp;amp;uact=8&#34;&gt;Source&lt;/a&gt;">
+      <img src="/images/xgbparallel/3.png" alt="
+
+&lt;a href=&#34;https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.nvidia.com%2Fcontent%2Fdam%2Fen-zz%2FSolutions%2Ftitan%2Ftitan-rtx%2Fnvidia-titan-rtx-nvlink-300-t%402x.jpg&amp;amp;imgrefurl=https%3A%2F%2Fwww.nvidia.com%2Fen-us%2Fdeep-learning-ai%2Fproducts%2Ftitan-rtx%2F&amp;amp;docid=LXUW4PiXbaOvoM&amp;amp;tbnid=2aobaeCTl1m0CM%3A&amp;amp;vet=10ahUKEwi2uovhhI3nAhXVcn0KHf9pB_YQMwhLKAIwAg..i&amp;amp;w=600&amp;amp;h=408&amp;amp;client=ubuntu&amp;amp;bih=2025&amp;amp;biw=1879&amp;amp;q=gpu%20titan%20rtx%20dual&amp;amp;ved=0ahUKEwi2uovhhI3nAhXVcn0KHf9pB_YQMwhLKAIwAg&amp;amp;iact=mrc&amp;amp;uact=8&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Source&lt;/a&gt;
+">
   
 
 </p>
@@ -495,14 +510,32 @@ Multi GPU Training Time: 50.08211898803711 seconds
     
 
 </p>
-<p>Although the difference between Multi and Single CPU looks redundant right now, it will be pretty considerable while running <a href="https://towardsdatascience.com/automate-hyperparameter-tuning-for-your-models-71b18f819604">multiple hyperparameter tuning tasks</a> at hand where one might need to run multiple GBM Models with different Hyperparams.</p>
+<p>Although the difference between Multi and Single CPU looks redundant right now, it will be pretty considerable while running 
+
+<a href="https://towardsdatascience.com/automate-hyperparameter-tuning-for-your-models-71b18f819604" target="_blank" rel="nofollow noopener">multiple hyperparameter tuning tasks</a>
+ at hand where one might need to run multiple GBM Models with different Hyperparams.</p>
 <p>Also, this result can change when we scale it to many GPUs.</p>
 <p>So keep scaling.</p>
-<p>You can find the complete code for this post on <a href="https://github.com/MLWhiz/data_science_blogs/blob/master/xgb_dask/XGB%20with%20Dask%2BGPU.ipynb">Github</a>.</p>
+<p>You can find the complete code for this post on 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/blob/master/xgb_dask/XGB%20with%20Dask%2BGPU.ipynb" target="_blank" rel="nofollow noopener">Github</a>
+.</p>
 <hr>
 <h2 id="continue-learning">Continue Learning</h2>
-<p>If you are interested in Deep Learning and want to use your GPU for that, I would like to recommend this excellent course on <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Deep Learning in Computer Vision</a> in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a>.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------"><strong>Medium</strong></a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c"><strong>blog</strong></a></p>
+<p>If you are interested in Deep Learning and want to use your GPU for that, I would like to recommend this excellent course on 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Deep Learning in Computer Vision</a>
+ in the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Advanced machine learning specialization</a>
+.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" target="_blank" rel="nofollow noopener">&lt;strong&gt;Medium&lt;/strong&gt;</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">&lt;strong&gt;blog&lt;/strong&gt;</a>
+</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 

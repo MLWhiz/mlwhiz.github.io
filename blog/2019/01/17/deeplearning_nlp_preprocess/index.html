@@ -294,9 +294,24 @@
         
         <div class="content mb-5">
           <p>Recently, I started up with an NLP competition on Kaggle called Quora Question insincerity challenge. It is an NLP Challenge on text classification and as the problem has become more clear after working through the competition as well as by going through the invaluable kernels put up by the kaggle experts, I thought of sharing the knowledge.</p>
-<p>Since we have a large amount of material to cover, I am splitting this post into a series of posts. The first post i.e. this one will be based on <strong>preprocessing techniques that work with Deep learning models</strong> and we will also talk about <strong>increasing embeddings coverage</strong>. In the <a href="/blog/2019/02/08/deeplearning_nlp_conventional_methods/">second post</a>, I will try to take you through some <strong>basic conventional models</strong> like TFIDF, Count Vectorizer, Hashing etc. that have been used in text classification and try to access their performance to create a baseline. We will delve deeper into <strong>Deep learning models</strong> in the third post which will focus on different architectures for solving the text classification problem. We will try to use various other models which we were not able to use in this competition like <strong>ULMFit transfer learning</strong> approaches in the fourth post in the series.</p>
-<p><strong>As a side note</strong>: if you want to know more about NLP, I would like to recommend this awesome course on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing">Natural Language Processing</a> in the <a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a>. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few. You can start for free with the 7-day Free Trial.</p>
-<p>It might take me a little time to write the whole series. Till then you can take a look at my other posts: <a href="/blog/2018/12/17/text_classification/">What Kagglers are using for Text Classification</a>, which talks about various deep learning models in use in NLP and <a href="/blog/2019/01/06/pytorch_keras_conversion/">how to switch from Keras to Pytorch</a>.</p>
+<p>Since we have a large amount of material to cover, I am splitting this post into a series of posts. The first post i.e. this one will be based on <strong>preprocessing techniques that work with Deep learning models</strong> and we will also talk about <strong>increasing embeddings coverage</strong>. In the 
+
+<a href="/blog/2019/02/08/deeplearning_nlp_conventional_methods/">second post</a>
+, I will try to take you through some <strong>basic conventional models</strong> like TFIDF, Count Vectorizer, Hashing etc. that have been used in text classification and try to access their performance to create a baseline. We will delve deeper into <strong>Deep learning models</strong> in the third post which will focus on different architectures for solving the text classification problem. We will try to use various other models which we were not able to use in this competition like <strong>ULMFit transfer learning</strong> approaches in the fourth post in the series.</p>
+<p><strong>As a side note</strong>: if you want to know more about NLP, I would like to recommend this awesome course on 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target="_blank" rel="nofollow noopener">Natural Language Processing</a>
+ in the 
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Advanced machine learning specialization</a>
+. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few. You can start for free with the 7-day Free Trial.</p>
+<p>It might take me a little time to write the whole series. Till then you can take a look at my other posts: 
+
+<a href="/blog/2018/12/17/text_classification/">What Kagglers are using for Text Classification</a>
+, which talks about various deep learning models in use in NLP and 
+
+<a href="/blog/2019/01/06/pytorch_keras_conversion/">how to switch from Keras to Pytorch</a>
+.</p>
 <p>So first let me start with explaining a little more about the text classification problem. <strong>Text classification</strong> is a common task in natural language processing, which transforms a sequence of a text of indefinite length into a category of text. How could you use that?</p>
 <ul>
 <li>To find the sentiment of a review.</li>
@@ -497,7 +512,10 @@ test_X <span style="color:#f92672">=</span> tokenizer<span style="color:#f92672"
 test_X <span style="color:#f92672">=</span> pad_sequences(test_X, maxlen<span style="color:#f92672">=</span>maxlen)
 </code></pre></div><p>Now our train data contains a list of list of numbers. Each list has the same length. And we also have the <code>word_index</code> which is a dictionary of most occuring words in the text corpus.</p>
 <h2 id="embedding-enrichment">Embedding Enrichment:</h2>
-<p>As I said I will be using GLoVE Word2Vec embeddings to explain the enrichment. GLoVE pretrained vectors are trained on the Wikipedia corpus. (You can <a href="https://nlp.stanford.edu/projects/glove/">download them here</a>). That means some of the words that might be present in your data might not be present in the embeddings. How could we deal with that? Let&rsquo;s first load the Glove Embeddings first.</p>
+<p>As I said I will be using GLoVE Word2Vec embeddings to explain the enrichment. GLoVE pretrained vectors are trained on the Wikipedia corpus. (You can 
+
+<a href="https://nlp.stanford.edu/projects/glove/" target="_blank" rel="nofollow noopener">download them here</a>
+). That means some of the words that might be present in your data might not be present in the embeddings. How could we deal with that? Let&rsquo;s first load the Glove Embeddings first.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">load_glove_index</span>():
     EMBEDDING_FILE <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;../input/embeddings/glove.840B.300d/glove.840B.300d.txt&#39;</span>
     <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_coefs</span>(word,<span style="color:#f92672">*</span>arr): <span style="color:#66d9ef">return</span> word, np<span style="color:#f92672">.</span>asarray(arr, dtype<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;float32&#39;</span>)[:<span style="color:#ae81ff">300</span>]
@@ -605,14 +623,29 @@ One can always add sentence specific features like sentence length, number of un
     <span style="color:#66d9ef">return</span> df
 
 </code></pre></div><h2 id="conclusion">Conclusion:</h2>
-<p>NLP is still a very interesting problem in Deep Learning space and thus I would encourage you to do a lot of experimentation to see what works and what doesn&rsquo;t. I have tried to provide a wholesome perspective of the preprocessing steps for a Deep Learning Neural network for any NLP problem. But that doesn&rsquo;t mean it is definitive. If you want to learn more about NLP <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing">here</a> is an awesome course. You can start for free with the 7-day Free Trial. If you think we can add something to the flow, do mention it in the comments.</p>
+<p>NLP is still a very interesting problem in Deep Learning space and thus I would encourage you to do a lot of experimentation to see what works and what doesn&rsquo;t. I have tried to provide a wholesome perspective of the preprocessing steps for a Deep Learning Neural network for any NLP problem. But that doesn&rsquo;t mean it is definitive. If you want to learn more about NLP 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target="_blank" rel="nofollow noopener">here</a>
+ is an awesome course. You can start for free with the 7-day Free Trial. If you think we can add something to the flow, do mention it in the comments.</p>
 <h2 id="endnotes-and-references">Endnotes and References</h2>
 <p>This post is a result of an effort of a lot of excellent Kagglers and I will try to reference them in this section. If I leave out someone, do understand that it was not my intention to do so.</p>
 <ul>
-<li><a href="https://www.kaggle.com/christofhenkel/how-to-preprocessing-when-using-embeddings">How to: Preprocessing when using embeddings</a></li>
-<li><a href="https://www.kaggle.com/theoviel/improve-your-score-with-some-text-preprocessing">Improve your Score with some Text Preprocessing</a></li>
-<li><a href="https://www.kaggle.com/ziliwang/baseline-pytorch-bilstm">Pytorch baseline</a></li>
-<li><a href="https://www.kaggle.com/hengzheng/pytorch-starter">Pytorch starter</a></li>
+<li>
+
+<a href="https://www.kaggle.com/christofhenkel/how-to-preprocessing-when-using-embeddings" target="_blank" rel="nofollow noopener">How to: Preprocessing when using embeddings</a>
+</li>
+<li>
+
+<a href="https://www.kaggle.com/theoviel/improve-your-score-with-some-text-preprocessing" target="_blank" rel="nofollow noopener">Improve your Score with some Text Preprocessing</a>
+</li>
+<li>
+
+<a href="https://www.kaggle.com/ziliwang/baseline-pytorch-bilstm" target="_blank" rel="nofollow noopener">Pytorch baseline</a>
+</li>
+<li>
+
+<a href="https://www.kaggle.com/hengzheng/pytorch-starter" target="_blank" rel="nofollow noopener">Pytorch starter</a>
+</li>
 </ul>
 
 

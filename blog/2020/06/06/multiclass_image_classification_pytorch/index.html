@@ -294,39 +294,63 @@
         
         <div class="content mb-5">
           <p><em>Have you ever wondered how Facebook takes care of the abusive and inappropriate images shared by some of its users? Or how Facebook’s tagging feature works? Or how Google Lens recognizes products through images?</em></p>
-<p>All of the above are examples of <a href="https://lionbridge.ai/services/image-annotation/">image classification</a> in different settings. Multiclass image classification is a common task in computer vision, where we categorize an image into three or more classes.</p>
-<p>In the past, I always used Keras for computer vision projects. However, recently when the opportunity to work on multiclass image classification presented itself, I decided to use PyTorch. I have already moved from Keras to PyTorch for all <a href="https://mlwhiz.com/blog/2019/01/06/pytorch_keras_conversion/">NLP tasks</a>, so why not vision, too?</p>
+<p>All of the above are examples of 
+
+<a href="https://lionbridge.ai/services/image-annotation/" target="_blank" rel="nofollow noopener">image classification</a>
+ in different settings. Multiclass image classification is a common task in computer vision, where we categorize an image into three or more classes.</p>
+<p>In the past, I always used Keras for computer vision projects. However, recently when the opportunity to work on multiclass image classification presented itself, I decided to use PyTorch. I have already moved from Keras to PyTorch for all 
+
+<a href="https://mlwhiz.com/blog/2019/01/06/pytorch_keras_conversion/">NLP tasks</a>
+, so why not vision, too?</p>
 <blockquote>
-<p><a href="https://redirect.viglink.com/?format=go&amp;jsonp=vglnk_159220215223010&amp;key=0d3176c012db018d69225ad1c36210fa&amp;libId=kbg41t7r0102t244000DAap2a6q0u&amp;subId=fd1ffa7fd7152e4e20568fbe49a489d0&amp;cuid=fd1ffa7fd7152e4e20568fbe49a489d0&amp;loc=https%3A%2F%2Fmlwhiz.com%2Fblog%2F2020%2F02%2F21%2Fds2020%2F&amp;v=1&amp;out=https%3A%2F%2Fclick.linksynergy.com%2Flink%3Fid%3DlVarvwc5BD0%26offerid%3D467035.14805039480%26type%3D2%26murl%3Dhttps%253A%252F%252Fwww.coursera.org%252Flearn%252Fdeep-neural-networks-with-pytorch&amp;ref=https%3A%2F%2Fwww.google.com%2F&amp;title=Become%20a%20Data%20Scientist%20in%202020%20with%20these%2010%20resources&amp;txt=Deep%20Neural%20Networks%20with%20Pytorch">PyTorch</a> is powerful, and I also like its more pythonic structure.</p>
+<p>
+
+<a href="https://redirect.viglink.com/?format=go&amp;jsonp=vglnk_159220215223010&amp;key=0d3176c012db018d69225ad1c36210fa&amp;libId=kbg41t7r0102t244000DAap2a6q0u&amp;subId=fd1ffa7fd7152e4e20568fbe49a489d0&amp;cuid=fd1ffa7fd7152e4e20568fbe49a489d0&amp;loc=https%3A%2F%2Fmlwhiz.com%2Fblog%2F2020%2F02%2F21%2Fds2020%2F&amp;v=1&amp;out=https%3A%2F%2Fclick.linksynergy.com%2Flink%3Fid%3DlVarvwc5BD0%26offerid%3D467035.14805039480%26type%3D2%26murl%3Dhttps%253A%252F%252Fwww.coursera.org%252Flearn%252Fdeep-neural-networks-with-pytorch&amp;ref=https%3A%2F%2Fwww.google.com%2F&amp;title=Become%20a%20Data%20Scientist%20in%202020%20with%20these%2010%20resources&amp;txt=Deep%20Neural%20Networks%20with%20Pytorch" target="_blank" rel="nofollow noopener">PyTorch</a>
+ is powerful, and I also like its more pythonic structure.</p>
 </blockquote>
 <p><em><strong>In this post, we’ll create an end to end pipeline for image multiclass classification using Pytorch.</strong></em> This will include training the model, putting the model’s results in a form that can be shown to business partners, and functions to help deploy the model easily. As an added feature we will look at Test Time Augmentation using Pytorch also.</p>
 <p>But before we learn how to do image classification, let’s first look at transfer learning, the most common method for dealing with such problems.</p>
 <hr>
 <h2 id="what-is-transfer-learning">What is Transfer Learning?</h2>
 <p>Transfer learning is the process of repurposing knowledge from one task to another. From a modelling perspective, this means using a model trained on one dataset and fine-tuning it for use with another. But why does it work?</p>
-<p>Let’s start with some background. Every year the visual recognition community comes together for a very particular challenge: <a href="http://image-net.org/explore">The Imagenet Challenge</a>. The task in this challenge is to classify 1,000,000 images into 1,000 categories.</p>
+<p>Let’s start with some background. Every year the visual recognition community comes together for a very particular challenge: 
+
+<a href="http://image-net.org/explore" target="_blank" rel="nofollow noopener">The Imagenet Challenge</a>
+. The task in this challenge is to classify 1,000,000 images into 1,000 categories.</p>
 <p>This challenge has already resulted in researchers training big convolutional deep learning models. The results have included great models like Resnet50 and Inception.</p>
 <p>But, what does it mean to train a neural model? Essentially, it means the researchers have learned the weights for a neural network after training the model on a million images.</p>
 <p>So, what if we could get those weights? We could then use them and load them into our own neural networks model to predict on the test dataset, right? Actually, we can go even further than that; we can add an extra layer on top of the neural network these researchers have prepared to classify our own dataset.</p>
 <blockquote>
 <p>While the exact workings of these complex models is still a mystery, we do know that the lower convolutional layers capture low-level image features like edges and gradients. In comparison, higher convolutional layers capture more and more intricate details, such as body parts, faces, and other compositional features.</p>
 </blockquote>
-<p>
+<p>Source: 
   
-      <img src="/images/multiclass_image_classification_pytorch/0.png" alt="Source: &lt;a href=&#34;https://arxiv.org/pdf/1311.2901.pdf&#34;&gt;Visualizing and Understanding Convolutional Networks&lt;/a&gt;. You can see how the first few layers capture basic shapes, and the shapes become more and more complex in the later layers.">
+      <img src="/images/multiclass_image_classification_pytorch/0.png" alt="
+
+&lt;a href=&#34;https://arxiv.org/pdf/1311.2901.pdf&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Visualizing and Understanding Convolutional Networks&lt;/a&gt;
+. You can see how the first few layers capture basic shapes, and the shapes become more and more complex in the later layers.">
   
 
-<em>Source: <a href="https://arxiv.org/pdf/1311.2901.pdf">Visualizing and Understanding Convolutional Networks</a>. You can see how the first few layers capture basic shapes, and the shapes become more and more complex in the later layers.</em></p>
+<em>Source: 
+
+<a href="https://arxiv.org/pdf/1311.2901.pdf" target="_blank" rel="nofollow noopener">Visualizing and Understanding Convolutional Networks</a>
+. You can see how the first few layers capture basic shapes, and the shapes become more and more complex in the later layers.</em></p>
 <p>In the example above from ZFNet (a variant of Alexnet), one of the first convolutional neural networks to achieve success on the Imagenet task, you can see how the lower layers capture lines and edges, and the later layers capture more complex features. The final fully-connected layers are generally assumed to capture information that is relevant for solving the respective task, e.g. ZFNet’s fully-connected layers indicate which features are relevant for classifying an image into one of 1,000 object categories.</p>
 <p>For a new vision task, it is possible for us to simply use the off-the-shelf features of a state-of-the-art CNN pre-trained on ImageNet, and train a new model on these extracted features.</p>
 <p>The intuition behind this idea is that a model trained to recognize animals might also be used to recognize cats vs dogs. In our case,</p>
 <blockquote>
 <p>a model that has been trained on 1000 different categories has seen a lot of real-world information, and we can use this information to create our own custom classifier.</p>
 </blockquote>
-<p><em><strong>So that’s the theory and intuition. How do we get it to actually work? Let’s look at some code. You can find the complete code for this post on <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/compvisblog">Github</a>.</strong></em></p>
+<p><em><strong>So that’s the theory and intuition. How do we get it to actually work? Let’s look at some code. You can find the complete code for this post on 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/compvisblog" target="_blank" rel="nofollow noopener">Github</a>
+.</strong></em></p>
 <hr>
 <h2 id="data-exploration">Data Exploration</h2>
-<p>We will start with the <a href="https://www.kaggle.com/clorichel/boat-types-recognition/version/1">Boat Dataset</a> from Kaggle to understand the multiclass image classification problem. This dataset contains about 1,500 pictures of boats of different types: buoys, cruise ships, ferry boats, freight boats, gondolas, inflatable boats, kayaks, paper boats, and sailboats. Our goal is to create a model that looks at a boat image and classifies it into the correct category.</p>
+<p>We will start with the 
+
+<a href="https://www.kaggle.com/clorichel/boat-types-recognition/version/1" target="_blank" rel="nofollow noopener">Boat Dataset</a>
+ from Kaggle to understand the multiclass image classification problem. This dataset contains about 1,500 pictures of boats of different types: buoys, cruise ships, ferry boats, freight boats, gondolas, inflatable boats, kayaks, paper boats, and sailboats. Our goal is to create a model that looks at a boat image and classifies it into the correct category.</p>
 <p>Here’s a sample of images from the dataset:</p>
 <p>
   
@@ -370,7 +394,10 @@
         .
         .
 </code></pre>
-<p>You might have your data in a different format, but I have found that apart from the usual libraries, the glob.glob and os.system functions are very helpful. Here you can find the complete <a href="https://github.com/MLWhiz/data_science_blogs/blob/master/compvisblog/Boats_DataExploration.ipynb">data preparation code</a>. Now let’s take a quick look at some of the not-so-used libraries that I found useful while doing data prep.</p>
+<p>You might have your data in a different format, but I have found that apart from the usual libraries, the glob.glob and os.system functions are very helpful. Here you can find the complete 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/blob/master/compvisblog/Boats_DataExploration.ipynb" target="_blank" rel="nofollow noopener">data preparation code</a>
+. Now let’s take a quick look at some of the not-so-used libraries that I found useful while doing data prep.</p>
 <h3 id="what-is-globglob">What is glob.glob?</h3>
 <p>Simply, glob lets you get names of files or folders in a directory using a regex. For example, you can do something like:</p>
 <pre><code>from glob import glob
@@ -380,7 +407,13 @@ print(categories)
 ['images/kayak', 'images/boats', 'images/gondola', 'images/sailboat', 'images/inflatable boat', 'images/paper boat', 'images/buoy', 'images/cruise ship', 'images/freight boat', 'images/ferry boat']
 </code></pre>
 <h3 id="what-is-ossystem">What is os.system?</h3>
-<p>os.system is a function in os library which lets you run any command-line function in python itself. I generally use it to run Linux functions, but it can also be used to run R scripts within python as shown <a href="https://towardsdatascience.com/python-pro-tip-want-to-use-r-java-c-or-any-language-in-python-d304be3a0559">here</a>. For example, I use it in my data preparation to copy files from one directory to another after getting the information from a pandas data frame. I also use <a href="https://towardsdatascience.com/how-and-why-to-use-f-strings-in-python3-adbba724b251">f string formatting</a>.</p>
+<p>os.system is a function in os library which lets you run any command-line function in python itself. I generally use it to run Linux functions, but it can also be used to run R scripts within python as shown 
+
+<a href="https://towardsdatascience.com/python-pro-tip-want-to-use-r-java-c-or-any-language-in-python-d304be3a0559" target="_blank" rel="nofollow noopener">here</a>
+. For example, I use it in my data preparation to copy files from one directory to another after getting the information from a pandas data frame. I also use 
+
+<a href="https://towardsdatascience.com/how-and-why-to-use-f-strings-in-python3-adbba724b251" target="_blank" rel="nofollow noopener">f string formatting</a>
+.</p>
 <pre><code>import os
 
 for i,row in fulldf.iterrows():
@@ -400,7 +433,10 @@ for i,row in fulldf.iterrows():
 <h2 id="data-preprocessing">Data Preprocessing</h2>
 <h3 id="transforms">Transforms:</h3>
 <p><strong>1. Imagenet Preprocessing</strong></p>
-<p>In order to use our images with a network trained on the Imagenet dataset, we need to preprocess our images in the same way as the Imagenet network. For that, we need to rescale the images to 224×224 and normalize them as per Imagenet standards. We can use the torchvision transforms library to do that. Here we take a CenterCrop of 224×224 and normalize as per Imagenet standards. The operations defined below happen sequentially. You can find a list of all transforms provided by <a href="https://pytorch.org/docs/stable/torchvision/transforms.html">PyTorch here</a>.</p>
+<p>In order to use our images with a network trained on the Imagenet dataset, we need to preprocess our images in the same way as the Imagenet network. For that, we need to rescale the images to 224×224 and normalize them as per Imagenet standards. We can use the torchvision transforms library to do that. Here we take a CenterCrop of 224×224 and normalize as per Imagenet standards. The operations defined below happen sequentially. You can find a list of all transforms provided by 
+
+<a href="https://pytorch.org/docs/stable/torchvision/transforms.html" target="_blank" rel="nofollow noopener">PyTorch here</a>
+.</p>
 <pre><code>transforms.Compose([
         transforms.CenterCrop(size=224),  
         transforms.ToTensor(),
@@ -409,8 +445,14 @@ for i,row in fulldf.iterrows():
     ])
 </code></pre>
 <p><strong>2. Data Augmentations</strong></p>
-<p>We can do a lot more preprocessing for data augmentations. Neural networks work better with a lot of data. <a href="https://lionbridge.ai/articles/data-augmentation-with-machine-learning-an-overview/">Data augmentation</a> is a strategy which we use at training time to increase the amount of data we have.</p>
-<p>For example, we can flip the image of a boat horizontally, and it will still be a boat. Or we can randomly crop images or add color jitters. Here is the image transforms dictionary I have used that applies to both the Imagenet preprocessing as well as augmentations. This dictionary contains the various transforms we have for the train, test and validation data as used in this <a href="https://towardsdatascience.com/transfer-learning-with-convolutional-neural-networks-in-pytorch-dd09190245ce">great post</a>. As you’d expect, we don’t apply the horizontal flips or other data augmentation transforms to the test data and validation data because we don’t want to get predictions on an augmented image.</p>
+<p>We can do a lot more preprocessing for data augmentations. Neural networks work better with a lot of data. 
+
+<a href="https://lionbridge.ai/articles/data-augmentation-with-machine-learning-an-overview/" target="_blank" rel="nofollow noopener">Data augmentation</a>
+ is a strategy which we use at training time to increase the amount of data we have.</p>
+<p>For example, we can flip the image of a boat horizontally, and it will still be a boat. Or we can randomly crop images or add color jitters. Here is the image transforms dictionary I have used that applies to both the Imagenet preprocessing as well as augmentations. This dictionary contains the various transforms we have for the train, test and validation data as used in this 
+
+<a href="https://towardsdatascience.com/transfer-learning-with-convolutional-neural-networks-in-pytorch-dd09190245ce" target="_blank" rel="nofollow noopener">great post</a>
+. As you’d expect, we don’t apply the horizontal flips or other data augmentation transforms to the test data and validation data because we don’t want to get predictions on an augmented image.</p>
 <pre><code># Image transformations
 image_transforms = {
     # Train uses data augmentation
@@ -496,40 +538,76 @@ for ii, (data, target) in enumerate(train_loader):
 <p>Right now these following pre-trained models are available to use in the torchvision library:</p>
 <ul>
 <li>
-<p><a href="https://arxiv.org/abs/1404.5997">AlexNet</a></p>
+<p>
+
+<a href="https://arxiv.org/abs/1404.5997" target="_blank" rel="nofollow noopener">AlexNet</a>
+</p>
 </li>
 <li>
-<p><a href="https://arxiv.org/abs/1409.1556">VGG</a></p>
+<p>
+
+<a href="https://arxiv.org/abs/1409.1556" target="_blank" rel="nofollow noopener">VGG</a>
+</p>
 </li>
 <li>
-<p><a href="https://arxiv.org/abs/1512.03385">ResNet</a></p>
+<p>
+
+<a href="https://arxiv.org/abs/1512.03385" target="_blank" rel="nofollow noopener">ResNet</a>
+</p>
 </li>
 <li>
-<p><a href="https://arxiv.org/abs/1602.07360">SqueezeNet</a></p>
+<p>
+
+<a href="https://arxiv.org/abs/1602.07360" target="_blank" rel="nofollow noopener">SqueezeNet</a>
+</p>
 </li>
 <li>
-<p><a href="https://arxiv.org/abs/1608.06993">DenseNet</a></p>
+<p>
+
+<a href="https://arxiv.org/abs/1608.06993" target="_blank" rel="nofollow noopener">DenseNet</a>
+</p>
 </li>
 <li>
-<p><a href="https://arxiv.org/abs/1512.00567">Inception</a> v3</p>
+<p>
+
+<a href="https://arxiv.org/abs/1512.00567" target="_blank" rel="nofollow noopener">Inception</a>
+ v3</p>
 </li>
 <li>
-<p><a href="https://arxiv.org/abs/1409.4842">GoogLeNet</a></p>
+<p>
+
+<a href="https://arxiv.org/abs/1409.4842" target="_blank" rel="nofollow noopener">GoogLeNet</a>
+</p>
 </li>
 <li>
-<p><a href="https://arxiv.org/abs/1807.11164">ShuffleNet</a> v2</p>
+<p>
+
+<a href="https://arxiv.org/abs/1807.11164" target="_blank" rel="nofollow noopener">ShuffleNet</a>
+ v2</p>
 </li>
 <li>
-<p><a href="https://arxiv.org/abs/1801.04381">MobileNet</a> v2</p>
+<p>
+
+<a href="https://arxiv.org/abs/1801.04381" target="_blank" rel="nofollow noopener">MobileNet</a>
+ v2</p>
 </li>
 <li>
-<p><a href="https://arxiv.org/abs/1611.05431">ResNeXt</a></p>
+<p>
+
+<a href="https://arxiv.org/abs/1611.05431" target="_blank" rel="nofollow noopener">ResNeXt</a>
+</p>
 </li>
 <li>
-<p><a href="https://pytorch.org/docs/stable/torchvision/models.html#wide-resnet">Wide ResNet</a></p>
+<p>
+
+<a href="https://pytorch.org/docs/stable/torchvision/models.html#wide-resnet" target="_blank" rel="nofollow noopener">Wide ResNet</a>
+</p>
 </li>
 <li>
-<p><a href="https://arxiv.org/abs/1807.11626">MNASNet</a></p>
+<p>
+
+<a href="https://arxiv.org/abs/1807.11626" target="_blank" rel="nofollow noopener">MNASNet</a>
+</p>
 </li>
 </ul>
 <p>Here I will be using resnet50 on our dataset, but you can effectively use any other model too as per your choice.</p>
@@ -595,7 +673,10 @@ if multi_gpu:
     model = nn.DataParallel(model)
 </code></pre>
 <h3 id="3-define-criterion-and-optimizers">3. Define criterion and optimizers</h3>
-<p>One of the most important things to notice when you are training any model is the choice of loss-function and the optimizer used. Here we want to use categorical cross-entropy as we have got a multiclass classification problem and the <a href="https://cs231n.github.io/neural-networks-3/#ada">Adam</a> optimizer, which is the most commonly used optimizer. But since we are applying a LogSoftmax operation on the output of our model, we will be using the NLL loss.</p>
+<p>One of the most important things to notice when you are training any model is the choice of loss-function and the optimizer used. Here we want to use categorical cross-entropy as we have got a multiclass classification problem and the 
+
+<a href="https://cs231n.github.io/neural-networks-3/#ada" target="_blank" rel="nofollow noopener">Adam</a>
+ optimizer, which is the most commonly used optimizer. But since we are applying a LogSoftmax operation on the output of our model, we will be using the NLL loss.</p>
 <pre><code>from torch import optim
 
 criteration = nn.NLLLoss()
@@ -984,12 +1065,33 @@ ttadataloader = {
 <p>In this small dataset, the TTA might not seem to add much value, but I have noticed that it adds value with big datasets.</p>
 <hr>
 <h2 id="conclusion">Conclusion</h2>
-<p>In this post, I talked about the end to end pipeline for working on a multiclass image classification project using PyTorch. We worked on creating some readymade code to train a model using transfer learning, visualize the results, use Test time augmentation, and got predictions for a single image so that we can deploy our model when needed using any tool like <a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582">Streamlit</a>.</p>
-<p>You can find the complete code for this post on <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/compvisblog">Github</a>.</p>
-<p>If you would like to learn more about Image Classification and Convolutional Neural Networks take a look at the <a href="https://www.coursera.org/specializations/deep-learning?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-qdJc22ApgTq6oWNEbD8fdw&amp;siteID=lVarvwc5BD0-qdJc22ApgTq6oWNEbD8fdw&amp;utm_content=10&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Deep Learning Specialization</a> from Andrew Ng. Also, to learn more about PyTorch and start from the basics, you can take a look at the <a href="https://www.coursera.org/learn/deep-neural-networks-with-pytorch?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-qRrseBA2NWUg_WxbnxmDwQ&amp;siteID=lVarvwc5BD0-qRrseBA2NWUg_WxbnxmDwQ&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Deep Neural Networks with PyTorch</a> course offered by IBM.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal">Medium</a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c">blog</a>.</p>
+<p>In this post, I talked about the end to end pipeline for working on a multiclass image classification project using PyTorch. We worked on creating some readymade code to train a model using transfer learning, visualize the results, use Test time augmentation, and got predictions for a single image so that we can deploy our model when needed using any tool like 
+
+<a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582" target="_blank" rel="nofollow noopener">Streamlit</a>
+.</p>
+<p>You can find the complete code for this post on 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/compvisblog" target="_blank" rel="nofollow noopener">Github</a>
+.</p>
+<p>If you would like to learn more about Image Classification and Convolutional Neural Networks take a look at the 
+
+<a href="https://www.coursera.org/specializations/deep-learning?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-qdJc22ApgTq6oWNEbD8fdw&amp;siteID=lVarvwc5BD0-qdJc22ApgTq6oWNEbD8fdw&amp;utm_content=10&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Deep Learning Specialization</a>
+ from Andrew Ng. Also, to learn more about PyTorch and start from the basics, you can take a look at the 
+
+<a href="https://www.coursera.org/learn/deep-neural-networks-with-pytorch?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-qRrseBA2NWUg_WxbnxmDwQ&amp;siteID=lVarvwc5BD0-qRrseBA2NWUg_WxbnxmDwQ&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Deep Neural Networks with PyTorch</a>
+ course offered by IBM.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal" target="_blank" rel="nofollow noopener">Medium</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">blog</a>
+.</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
-<p><em>This post was first published <a href="https://lionbridge.ai/articles/end-to-end-multiclass-image-classification-using-pytorch-and-transfer-learning/">here</a>.</em></p>
+<p><em>This post was first published 
+
+<a href="https://lionbridge.ai/articles/end-to-end-multiclass-image-classification-using-pytorch-and-transfer-learning/" target="_blank" rel="nofollow noopener">here</a>
+.</em></p>
 
 
         

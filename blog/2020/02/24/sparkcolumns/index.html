@@ -294,8 +294,17 @@
         
         <div class="content mb-5">
           <p><em><strong>Too much data is getting generated day by day.</strong></em></p>
-<p>Although sometimes we can manage our big data using tools like <a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientist-on-gpu-d9a6c7759c7f?source=---------5------------------">Rapids</a> or <a href="https://towardsdatascience.com/add-this-single-word-to-make-your-pandas-apply-faster-90ee2fffe9e8?source=---------11------------------">Parallelization</a>, Spark is an excellent tool to have in your repertoire if you are working with Terabytes of data.</p>
-<p>In my <a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a">last post</a> on Spark, I explained how to work with PySpark RDDs and Dataframes.</p>
+<p>Although sometimes we can manage our big data using tools like 
+
+<a href="https://towardsdatascience.com/minimal-pandas-subset-for-data-scientist-on-gpu-d9a6c7759c7f?source=---------5------------------" target="_blank" rel="nofollow noopener">Rapids</a>
+ or 
+
+<a href="https://towardsdatascience.com/add-this-single-word-to-make-your-pandas-apply-faster-90ee2fffe9e8?source=---------11------------------" target="_blank" rel="nofollow noopener">Parallelization</a>
+, Spark is an excellent tool to have in your repertoire if you are working with Terabytes of data.</p>
+<p>In my 
+
+<a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" target="_blank" rel="nofollow noopener">last post</a>
+ on Spark, I explained how to work with PySpark RDDs and Dataframes.</p>
 <p>Although this post explains a lot on how to work with RDDs and basic Dataframe operations, I missed quite a lot when it comes to working with PySpark Dataframes.</p>
 <p>And it is only when I required more functionality that I read up and came up with multiple solutions to do one single thing.</p>
 <p><em><strong>How to create a new column in spark?</strong></em></p>
@@ -305,7 +314,10 @@
 <hr>
 <h2 id="getting-started-with-spark">Getting Started with Spark</h2>
 <p>I know that a lot of you won’t have spark installed in your system to try and learn. But installing Spark is a headache of its own.</p>
-<p>Since we want to understand how it works and work with it, I would suggest that you use Spark on Databricks <a href="https://databricks.com/try-databricks?utm_source=databricks&amp;utm_medium=homev2tiletest"><strong>here</strong></a> online with the community edition. Don’t worry, it is free, albeit fewer resources, but that works for us right now for learning purposes.</p>
+<p>Since we want to understand how it works and work with it, I would suggest that you use Spark on Databricks 
+
+<a href="https://databricks.com/try-databricks?utm_source=databricks&amp;utm_medium=homev2tiletest" target="_blank" rel="nofollow noopener">&lt;strong&gt;here&lt;/strong&gt;</a>
+ online with the community edition. Don’t worry, it is free, albeit fewer resources, but that works for us right now for learning purposes.</p>
 <p>
   
     <img src="/images/sparkcolumns/0.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
@@ -334,7 +346,10 @@
 <p>This means that we are set up with a notebook where we can run Spark.</p>
 <hr>
 <h2 id="data">Data</h2>
-<p>Here, I will work on the Movielens <a href="https://github.com/MLWhiz/data_science_blogs/tree/master/spark_post"><strong>ml-100k.zip</strong></a> dataset. 100,000 ratings from 1000 users on 1700 movies. In this zipped folder, the file we will specifically work with is the rating file. This filename is kept as “u.data”</p>
+<p>Here, I will work on the Movielens 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/spark_post" target="_blank" rel="nofollow noopener">&lt;strong&gt;ml-100k.zip&lt;/strong&gt;</a>
+ dataset. 100,000 ratings from 1000 users on 1700 movies. In this zipped folder, the file we will specifically work with is the rating file. This filename is kept as “u.data”</p>
 <p>If you want to upload this data or any data, you can click on the Data tab in the left and then Add Data by using the GUI provided.</p>
 <p>
   
@@ -359,9 +374,15 @@ ratings = ratings.toDF(*['user_id', 'movie_id', 'rating', 'unix_timestamp'])
 <p>Ok, so now we are set up to begin the part we are interested in finally. How to create a new column in PySpark Dataframe?</p>
 <hr>
 <h2 id="1-using-spark-native-functions">1. Using Spark Native Functions</h2>
-<p>
+<p>Photo by 
+
+<a href="https://unsplash.com/@andrewjamesphoto?utm_source=medium&amp;utm_medium=referral" target="_blank" rel="nofollow noopener">Andrew James</a>
+ on 
   
-      <img src="/images/sparkcolumns/5.png" alt="Photo by &lt;a href=&#34;https://unsplash.com/@andrewjamesphoto?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Andrew James&lt;/a&gt; on &lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Unsplash&lt;/a&gt;">
+      <img src="/images/sparkcolumns/5.png" alt="
+
+&lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Unsplash&lt;/a&gt;
+">
   
 
 </p>
@@ -391,12 +412,21 @@ ratings_with_exp.show()
     
 
 </p>
-<p>There are a lot of other functions provided in this module, which are enough for most simple use cases. You can check out the functions list <a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#module-pyspark.sql.functions">here</a>.</p>
+<p>There are a lot of other functions provided in this module, which are enough for most simple use cases. You can check out the functions list 
+
+<a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#module-pyspark.sql.functions" target="_blank" rel="nofollow noopener">here</a>
+.</p>
 <hr>
 <h2 id="2-spark-udfs">2. Spark UDFs</h2>
-<p>
+<p>Photo by 
+
+<a href="https://unsplash.com/@divide_by_zero?utm_source=medium&amp;utm_medium=referral" target="_blank" rel="nofollow noopener">Divide By Zero</a>
+ on 
   
-      <img src="/images/sparkcolumns/8.png" alt="Photo by &lt;a href=&#34;https://unsplash.com/@divide_by_zero?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Divide By Zero&lt;/a&gt; on &lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Unsplash&lt;/a&gt;">
+      <img src="/images/sparkcolumns/8.png" alt="
+
+&lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Unsplash&lt;/a&gt;
+">
   
 
 </p>
@@ -427,9 +457,15 @@ ratings_with_high_low.show()
 </p>
 <hr>
 <h2 id="3-using-rdds">3. Using RDDs</h2>
-<p>
+<p>Photo by 
+
+<a href="https://unsplash.com/@ryanquintal?utm_source=medium&amp;utm_medium=referral" target="_blank" rel="nofollow noopener">Ryan Quintal</a>
+ on 
   
-      <img src="/images/sparkcolumns/10.png" alt="Photo by &lt;a href=&#34;https://unsplash.com/@ryanquintal?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Ryan Quintal&lt;/a&gt; on &lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Unsplash&lt;/a&gt;">
+      <img src="/images/sparkcolumns/10.png" alt="
+
+&lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Unsplash&lt;/a&gt;
+">
   
 
 </p>
@@ -466,9 +502,15 @@ ratings_new_df.show()
 </p>
 <hr>
 <h2 id="4-pandas-udf">4. Pandas UDF</h2>
-<p>
+<p>Photo by 
+
+<a href="https://unsplash.com/@pbernardon?utm_source=medium&amp;utm_medium=referral" target="_blank" rel="nofollow noopener">Pascal Bernardon</a>
+ on 
   
-      <img src="/images/sparkcolumns/12.png" alt="Photo by &lt;a href=&#34;https://unsplash.com/@pbernardon?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Pascal Bernardon&lt;/a&gt; on &lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Unsplash&lt;/a&gt;">
+      <img src="/images/sparkcolumns/12.png" alt="
+
+&lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Unsplash&lt;/a&gt;
+">
   
 
 </p>
@@ -524,7 +566,10 @@ results = replicated_data.groupby(&quot;replication_id&quot;).apply(run_model)
 <p>Above is just an idea and not a working code. Though it should work with minor modifications.</p>
 <hr>
 <h2 id="5-using-sql">5. Using SQL</h2>
-<p>For people who like <a href="https://towardsdatascience.com/learning-sql-the-hard-way-4173f11b26f1?source=---------10------------------">SQL</a>, there is a way even to create columns using SQL. For this, we need to register a temporary SQL table and then use simple select queries with an additional column. One might also use it to do joins.</p>
+<p>For people who like 
+
+<a href="https://towardsdatascience.com/learning-sql-the-hard-way-4173f11b26f1?source=---------10------------------" target="_blank" rel="nofollow noopener">SQL</a>
+, there is a way even to create columns using SQL. For this, we need to register a temporary SQL table and then use simple select queries with an additional column. One might also use it to do joins.</p>
 <pre><code>ratings.registerTempTable('ratings_table')
 newDF = sqlContext.sql('select *, 2*rating as newCol from ratings_table')
 newDF.show()
@@ -537,18 +582,45 @@ newDF.show()
 </p>
 <hr>
 <h2 id="conclusion">Conclusion</h2>
-<p>
+<p>Photo by 
+
+<a href="https://unsplash.com/@kellysikkema?utm_source=medium&amp;utm_medium=referral" target="_blank" rel="nofollow noopener">Kelly Sikkema</a>
+ on 
   
-      <img src="/images/sparkcolumns/15.png" alt="Photo by &lt;a href=&#34;https://unsplash.com/@kellysikkema?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Kelly Sikkema&lt;/a&gt; on &lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34;&gt;Unsplash&lt;/a&gt;">
+      <img src="/images/sparkcolumns/15.png" alt="
+
+&lt;a href=&#34;https://unsplash.com?utm_source=medium&amp;amp;utm_medium=referral&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Unsplash&lt;/a&gt;
+">
   
 
 </p>
 <p>And that is the end of this column(pun intended)</p>
 <p>Hopefully, I’ve covered the column creation process well to help you with your Spark problems. If you need to learn more of spark basics, take a look at:</p>
-<p><a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a"><strong>The Hitchhikers guide to handle Big Data using Spark</strong></a></p>
-<p><em><strong>You can find all the code for this post at the <a href="https://github.com/MLWhiz/data_science_blogs/blob/master/spark_columns/Columns.ipynb">GitHub repository</a> or the <a href="https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/7664398068420572/312750581110937/3797400441762013/latest.html">published notebook</a> on databricks.</strong></em></p>
-<p>Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out an excellent course on <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293556&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-essentials"><strong>Big Data Essentials</strong></a>, which is part of the <a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293466&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fbig-data-engineering">Big Data Specialization</a> provided by Yandex.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at <a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------">Medium</a> or Subscribe to my <a href="https://mlwhiz.ck.page/a9b8bda70c">blog</a></p>
+<p>
+
+<a href="https://towardsdatascience.com/the-hitchhikers-guide-to-handle-big-data-using-spark-90b9be0fe89a" target="_blank" rel="nofollow noopener">&lt;strong&gt;The Hitchhikers guide to handle Big Data using Spark&lt;/strong&gt;</a>
+</p>
+<p><em><strong>You can find all the code for this post at the 
+
+<a href="https://github.com/MLWhiz/data_science_blogs/blob/master/spark_columns/Columns.ipynb" target="_blank" rel="nofollow noopener">GitHub repository</a>
+ or the 
+
+<a href="https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/7664398068420572/312750581110937/3797400441762013/latest.html" target="_blank" rel="nofollow noopener">published notebook</a>
+ on databricks.</strong></em></p>
+<p>Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out an excellent course on 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293556&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-essentials" target="_blank" rel="nofollow noopener">&lt;strong&gt;Big Data Essentials&lt;/strong&gt;</a>
+, which is part of the 
+
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11468293466&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fbig-data-engineering" target="_blank" rel="nofollow noopener">Big Data Specialization</a>
+ provided by Yandex.</p>
+<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
+
+<a href="https://medium.com/@rahul_agarwal?source=post_page---------------------------" target="_blank" rel="nofollow noopener">Medium</a>
+ or Subscribe to my 
+
+<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">blog</a>
+</p>
 <p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
 
 

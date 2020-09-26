@@ -301,8 +301,20 @@
 <center><img src="/images/artificial-neural-network.png"  height="350" width="700" ></center>
 </div>
 <p>Recently I started up with a competition on kaggle on text classification, and as a part of the competition, I had to somehow move to Pytorch to get deterministic results. Now I have always worked with Keras in the past and it has given me pretty good results, but somehow I got to know that the <strong>CuDNNGRU/CuDNNLSTM layers in keras are not deterministic</strong>, even after setting the seeds. So Pytorch did come to rescue. And am  I  glad that I moved.</p>
-<p>As a <strong>side note</strong>: if you want to know more about <strong>NLP</strong>, I would like to recommend this awesome course on <strong><a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Natural Language Processing</a></strong> in the <strong><a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0">Advanced machine learning specialization</a></strong>. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: Sentiment Analysis, summarization, dialogue state tracking, to name a few.</p>
-<p>Also take a look at my other post: <a href="/blog/2019/01/17/deeplearning_nlp_preprocess/">Text Preprocessing Methods for Deep Learning</a>, which talks about different preprocessing techniques you can use for your NLP task and <a href="/blog/2018/12/17/text_classification/">What Kagglers are using for Text Classification</a>, which talks about various deep learning models in use in NLP.</p>
+<p>As a <strong>side note</strong>: if you want to know more about <strong>NLP</strong>, I would like to recommend this awesome course on <strong>
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Natural Language Processing</a>
+</strong> in the <strong>
+
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Advanced machine learning specialization</a>
+</strong>. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: Sentiment Analysis, summarization, dialogue state tracking, to name a few.</p>
+<p>Also take a look at my other post: 
+
+<a href="/blog/2019/01/17/deeplearning_nlp_preprocess/">Text Preprocessing Methods for Deep Learning</a>
+, which talks about different preprocessing techniques you can use for your NLP task and 
+
+<a href="/blog/2018/12/17/text_classification/">What Kagglers are using for Text Classification</a>
+, which talks about various deep learning models in use in NLP.</p>
 <p>Ok back to the task at hand. <em>While Keras is great to start with deep learning, with time you are going to resent some of its limitations.</em> I sort of thought about moving to Tensorflow. It seemed like a good transition as TF is the backend of Keras. But was it hard? With the whole <code>session.run</code> commands and tensorflow sessions, I was sort of confused. It was not Pythonic at all.</p>
 <p>Pytorch helps in that since it seems like the <strong>python way to do things</strong>. You have things under your control and you are not losing anything on the performance front. In the words of Andrej Karpathy:</p>
 <center><blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">I&#39;ve been using PyTorch a few months now and I&#39;ve never felt better. I have more energy. My skin is clearer. My eye sight has improved.</p>&mdash; Andrej Karpathy (@karpathy) <a href="https://twitter.com/karpathy/status/868178954032513024?ref_src=twsrc%5Etfw">May 26, 2017</a></blockquote>
@@ -312,7 +324,10 @@
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/structured.jpeg"  height="400" width="700" ></center>
 </div>
-<p>Ok, let us create an example network in keras first which we will try to port into Pytorch. Here I would like to give a piece of advice too. When you try to move from Keras to Pytorch <strong>take any network you have and try porting it to Pytorch</strong>. It will make you understand Pytorch in a much better way. Here I am trying to write one of the networks that gave pretty good results in the Quora Insincere questions classification challenge for me. This model has all the bells and whistles which at least any Text Classification deep learning network could contain with its GRU, LSTM and embedding layers and also a meta input layer. And thus would serve as a good example. Also if you want to read up more on how the BiLSTM/GRU and Attention model work do visit my post <a href="/blog/2018/12/17/text_classification/">here</a>.</p>
+<p>Ok, let us create an example network in keras first which we will try to port into Pytorch. Here I would like to give a piece of advice too. When you try to move from Keras to Pytorch <strong>take any network you have and try porting it to Pytorch</strong>. It will make you understand Pytorch in a much better way. Here I am trying to write one of the networks that gave pretty good results in the Quora Insincere questions classification challenge for me. This model has all the bells and whistles which at least any Text Classification deep learning network could contain with its GRU, LSTM and embedding layers and also a meta input layer. And thus would serve as a good example. Also if you want to read up more on how the BiLSTM/GRU and Attention model work do visit my post 
+
+<a href="/blog/2018/12/17/text_classification/">here</a>
+.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_model</span>(features,clipvalue<span style="color:#f92672">=</span><span style="color:#ae81ff">1.</span>,num_filters<span style="color:#f92672">=</span><span style="color:#ae81ff">40</span>,dropout<span style="color:#f92672">=</span><span style="color:#ae81ff">0.1</span>,embed_size<span style="color:#f92672">=</span><span style="color:#ae81ff">501</span>):
     features_input <span style="color:#f92672">=</span> Input(shape<span style="color:#f92672">=</span>(features<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>],))
     inp <span style="color:#f92672">=</span> Input(shape<span style="color:#f92672">=</span>(maxlen, ))
@@ -637,18 +652,45 @@
 <div style="margin-top: 9px; margin-bottom: 10px;">
 <center><img src="/images/tools.jpg" alt="You have all the tools it seems" height="400" width="700" ></center>
 </div>
-<p>So another small confession here. The code above will not run as is as there are some code artifacts which I have not shown here. I did this in favor of making the post more readable. Like you see the <code>seed_everything</code>, <code>MyDataset</code> and <code>CyclicLR</code> (From Jeremy Howard Course) functions and classes in the code above which are not really included with Pytorch. But fret not my friend. I have tried to write a <a href="https://www.kaggle.com/mlwhiz/third-place-model-for-toxic-comments-in-pytorch/edit">Kaggle Kernel</a> with the whole running code. You can see the code here and include it in your projects.</p>
-<p>If you liked this post, <strong>please don&rsquo;t forget to upvote the <a href="https://www.kaggle.com/mlwhiz/third-place-model-for-toxic-comments-in-pytorch/edit">Kernel</a> too.</strong> I will be obliged.</p>
+<p>So another small confession here. The code above will not run as is as there are some code artifacts which I have not shown here. I did this in favor of making the post more readable. Like you see the <code>seed_everything</code>, <code>MyDataset</code> and <code>CyclicLR</code> (From Jeremy Howard Course) functions and classes in the code above which are not really included with Pytorch. But fret not my friend. I have tried to write a 
+
+<a href="https://www.kaggle.com/mlwhiz/third-place-model-for-toxic-comments-in-pytorch/edit" target="_blank" rel="nofollow noopener">Kaggle Kernel</a>
+ with the whole running code. You can see the code here and include it in your projects.</p>
+<p>If you liked this post, <strong>please don&rsquo;t forget to upvote the 
+
+<a href="https://www.kaggle.com/mlwhiz/third-place-model-for-toxic-comments-in-pytorch/edit" target="_blank" rel="nofollow noopener">Kernel</a>
+ too.</strong> I will be obliged.</p>
 <h2 id="endnotes-and-references">Endnotes and References</h2>
 <p>This post is a result of an effort of a lot of excellent Kagglers and I will try to reference them in this section. If I leave out someone, do understand that it was not my intention to do so.</p>
 <ul>
-<li><a href="https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/discussion/52644">Discussion on 3rd Place winner model in Toxic comment</a></li>
-<li><a href="https://www.kaggle.com/larryfreeman/toxic-comments-code-for-alexander-s-9872-model">3rd Place model in Keras by Larry Freeman</a></li>
-<li><a href="https://www.kaggle.com/spirosrap/bilstm-attention-kfold-clr-extra-features-capsule">Pytorch starter Capsule model</a></li>
-<li><a href="https://www.kaggle.com/christofhenkel/how-to-preprocessing-when-using-embeddings">How to: Preprocessing when using embeddings</a></li>
-<li><a href="https://www.kaggle.com/theoviel/improve-your-score-with-some-text-preprocessing">Improve your Score with some Text Preprocessing</a></li>
-<li><a href="https://www.kaggle.com/ziliwang/baseline-pytorch-bilstm">Pytorch baseline</a></li>
-<li><a href="https://www.kaggle.com/hengzheng/pytorch-starter">Pytorch starter</a></li>
+<li>
+
+<a href="https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/discussion/52644" target="_blank" rel="nofollow noopener">Discussion on 3rd Place winner model in Toxic comment</a>
+</li>
+<li>
+
+<a href="https://www.kaggle.com/larryfreeman/toxic-comments-code-for-alexander-s-9872-model" target="_blank" rel="nofollow noopener">3rd Place model in Keras by Larry Freeman</a>
+</li>
+<li>
+
+<a href="https://www.kaggle.com/spirosrap/bilstm-attention-kfold-clr-extra-features-capsule" target="_blank" rel="nofollow noopener">Pytorch starter Capsule model</a>
+</li>
+<li>
+
+<a href="https://www.kaggle.com/christofhenkel/how-to-preprocessing-when-using-embeddings" target="_blank" rel="nofollow noopener">How to: Preprocessing when using embeddings</a>
+</li>
+<li>
+
+<a href="https://www.kaggle.com/theoviel/improve-your-score-with-some-text-preprocessing" target="_blank" rel="nofollow noopener">Improve your Score with some Text Preprocessing</a>
+</li>
+<li>
+
+<a href="https://www.kaggle.com/ziliwang/baseline-pytorch-bilstm" target="_blank" rel="nofollow noopener">Pytorch baseline</a>
+</li>
+<li>
+
+<a href="https://www.kaggle.com/hengzheng/pytorch-starter" target="_blank" rel="nofollow noopener">Pytorch starter</a>
+</li>
 </ul>
 
 
