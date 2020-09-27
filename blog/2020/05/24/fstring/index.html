@@ -20,12 +20,16 @@ age = 20
 print(&quot;I am &quot; + name + &quot;. I am &quot; + str(age) + &quot; years old&quot;)
 ----------------------------------------------------------------
 I am Andy. I am 20 years old
-</code></pre><p><img src=/images/fstring/0.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><p><strong>b) % Format:</strong> The second option is to use % formatting. But it also has its problems. For one, it is not readable. You would need to look at the first %s and try to find the corresponding variable in the list at the end. And imagine if you have a long list of variables that you may want to print.</p><pre><code>print(&quot;I am %s. I am %s years old&quot; % (name, age))
+</code></pre><p><img sizes="(min-width: 35em) 1200px, 100vw" srcset="/images/fstring/0_hu30499ab01e85f695346481e72b09bc71_169101_500x0_resize_box_2.png 500w
+, /images/fstring/0_hu30499ab01e85f695346481e72b09bc71_169101_800x0_resize_box_2.png 800w" src=/images/fstring/0.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><p><strong>b) % Format:</strong> The second option is to use % formatting. But it also has its problems. For one, it is not readable. You would need to look at the first %s and try to find the corresponding variable in the list at the end. And imagine if you have a long list of variables that you may want to print.</p><pre><code>print(&quot;I am %s. I am %s years old&quot; % (name, age))
 </code></pre><p><strong>c) str.format():</strong> Next comes the way that has been used in most Python 3 codes and has become the standard of printing in Python. Using str.format()</p><pre><code>print(&quot;I am {}. I am {} years old&quot;.format(name, age))
 </code></pre><p>Here we use {} to denote the placeholder of the object in the list. It still has the same problem of readability, but we can also use str.format :</p><pre><code>print(&quot;I am {name}. I am {age} years old&quot;.format(name = name, age = age))
 </code></pre><p>If this seems a little too repetitive, we can use dictionaries too:</p><pre><code>data = {'name':'Andy','age':20}
 print(&quot;I am {name}. I am {age} years old&quot;.format(**data))
-</code></pre><hr><h2 id=the-fourth-way-with-f>The Fourth Way with f</h2><p><img src=/images/fstring/1.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><p>Since Python 3.6, we have a new formatting option, which makes it even more trivial. We could simply use:</p><pre><code>print(f&quot;I am {name}. I am {age} years old&quot;)
+</code></pre><hr><h2 id=the-fourth-way-with-f>The Fourth Way with f</h2><p><img sizes="(min-width: 35em) 1200px, 100vw" srcset="/images/fstring/1_hu24d451b54fd3e355bd5e081d2f692b21_2962926_500x0_resize_box_2.png 500w
+, /images/fstring/1_hu24d451b54fd3e355bd5e081d2f692b21_2962926_800x0_resize_box_2.png 800w
+, /images/fstring/1_hu24d451b54fd3e355bd5e081d2f692b21_2962926_1200x0_resize_box_2.png 1200w
+, /images/fstring/1_hu24d451b54fd3e355bd5e081d2f692b21_2962926_1500x0_resize_box_2.png 1500w" src=/images/fstring/1.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><p>Since Python 3.6, we have a new formatting option, which makes it even more trivial. We could simply use:</p><pre><code>print(f&quot;I am {name}. I am {age} years old&quot;)
 </code></pre><p>We just append f at the start of the string and use {} to include our variable name, and we get the required results.</p><p>An added functionality that f string provides is that <strong>we can put expressions</strong> in the {} brackets. For Example:</p><pre><code>num1 = 4
 num2 = 5
 print(f&quot;The sum of {num1} and {num2} is {num1+num2}.&quot;)
