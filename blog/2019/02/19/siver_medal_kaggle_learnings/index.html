@@ -1,969 +1,117 @@
-<!DOCTYPE html>
-<html lang="en-us"><head>
-  <meta charset="utf-8">
-  <title>MLWhiz: Helping You Learn Data Science!</title>
-
-  <!-- mobile responsive meta -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Kaggle is an excellent place for education. And I learned a lot of things from the recently concluded competition on Quora Insincere questions classification in which I got a rank of 182⁄4037. In this post, I will try to provide a summary of the things I tried. I will also try to summarize the ideas which I missed but were a part of other winning solution">
-  <meta name="author" content="Rahul Agarwal">
-  <meta name="generator" content="Hugo 0.74.3" />
-  <!-- plugins -->
-  
-  <link rel="stylesheet" href="https://mlwhiz.com/plugins/compressjscss/main.css ">
-  
-
-	<meta property="og:title" content="What my first Silver Medal taught me about Text Classification and Kaggle in general?" />
-<meta property="og:description" content="Kaggle is an excellent place for education. And I learned a lot of things from the recently concluded competition on Quora Insincere questions classification in which I got a rank of 182⁄4037. In this post, I will try to provide a summary of the things I tried. I will also try to summarize the ideas which I missed but were a part of other winning solution" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://mlwhiz.com/blog/2019/02/19/siver_medal_kaggle_learnings/" />
-
-<meta property="og:image" content="https://mlwhiz.com/images/silver/CV_vs_LB.png" />
-<meta property="og:image:secure_url" content="https://mlwhiz.com/images/silver/CV_vs_LB.png" />
-<meta property="article:published_time" content="2019-02-19T00:00:00+00:00" />
-<meta property="article:modified_time" content="2020-09-26T16:23:35+05:30" />
-<meta property="article:tag" content="Natural Language Processing" />
-<meta property="article:tag" content="Deep Learning" />
-<meta property="article:tag" content="Awesome Guides" />
-
-	<meta name="twitter:card" content="summary"/>
-<meta name="twitter:image" content="https://mlwhiz.com/images/silver/CV_vs_LB.png"/>
-
-<meta name="twitter:title" content="What my first Silver Medal taught me about Text Classification and Kaggle in general?"/>
-<meta name="twitter:description" content="Kaggle is an excellent place for education. And I learned a lot of things from the recently concluded competition on Quora Insincere questions classification in which I got a rank of 182⁄4037. In this post, I will try to provide a summary of the things I tried. I will also try to summarize the ideas which I missed but were a part of other winning solution"/>
-<meta name="twitter:site" content="@mlwhiz"/>
-<meta name="twitter:creator" content="@mlwhiz"/>
-
-
-
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-
-	<!-- Main Stylesheet -->
-  
-  <link rel="stylesheet" href="https://mlwhiz.com/scss/style.min.css" media="screen">
-  <link rel="stylesheet" href="/css/style.css">
-
-  <link rel="stylesheet" type="text/css" href="/css/font/flaticon.css" >
-
-  <!--Favicon-->
-  <link rel="shortcut icon" href="https://mlwhiz.com/images/favicon-200x200.png " type="image/x-icon">
-  <link rel="icon" href="https://mlwhiz.com/images/favicon.png " type="image/x-icon">
-
-
-    <link rel="canonical" href="https://mlwhiz.com/blog/2019/02/19/siver_medal_kaggle_learnings/" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-
-
-<script type = 'application/ld+json'> {
-    "@context": "https://schema.org",
-    "@graph": [{
-        "@type": "WebSite",
-        "@id": "https://www.mlwhiz.com/#website",
-        "url": "https://www.mlwhiz.com/",
-        "name": "MLWhiz",
-        "description": "Want to Learn Computer Vision and NLP? - MLWhiz",
-        "potentialAction": {
-            "@type": "SearchAction",
-            "target": "https://www.mlwhiz.com/search?s={search_term_string}",
-            "query-input": "required name=search_term_string"
-        }
-    }, {
-        "@type": "ImageObject",
-        "@id": "https://mlwhiz.com/blog/2019/02/19/siver_medal_kaggle_learnings/#primaryimage",
-        "url": "https://mlwhiz.com/images/silver/CV_vs_LB.png",
-        "width": 700,
-        "height": 450
-    }, {
-        "@type": "WebPage",
-        "@id": "https://mlwhiz.com/blog/2019/02/19/siver_medal_kaggle_learnings/#webpage",
-        "url": "https://mlwhiz.com/blog/2019/02/19/siver_medal_kaggle_learnings/",
-        "inLanguage": "en-US",
-        "name": "What my first Silver Medal taught me about Text Classification and Kaggle in general? - MLWhiz",
-        "isPartOf": {
-            "@id": "https://www.mlwhiz.com/#website"
-        },
-        "primaryImageOfPage": {
-            "@id": "https://mlwhiz.com/blog/2019/02/19/siver_medal_kaggle_learnings/#primaryimage"
-        },
-        "datePublished":"2019-02-19T00:00:00.00Z",
-        "dateModified": "2020-09-26T16:23:35.00Z",
-        "author": {
-            "@id": "https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca"
-        },
-        "description": "Kaggle is an excellent place for education. And I learned a lot of things from the recently concluded competition on Quora Insincere questions classification in which I got a rank of 182⁄4037. In this post, I will try to provide a summary of the things I tried. I will also try to summarize the ideas which I missed but were a part of other winning solution"
-    },
-
-
-    {
-        "@type": ["Person"],
-        "@id": "https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca",
-        "name": "Rahul Agarwal",
-        "image": {
-            "@type": "ImageObject",
-            "@id": "https://www.mlwhiz.com/#authorlogo",
-            "url": "https://mlwhiz.com/images/author.jpg",
-            "caption": "Rahul Agarwal"
-        },
-        "description": "Hi there, I\u2019m Rahul Agarwal. I\u2019m a data scientist consultant and big data engineer based in Bangalore. I see a lot of times  students and even professionals wasting their time and struggling to get started with Computer Vision, Deep Learning, and NLP. I Started this Site with a purpose to augment my own understanding about new things while helping others learn about them in the best possible way.",
-        "sameAs": ["https://www.linkedin.com/in/rahulagwl/",
-          "https://medium.com/@rahul_agarwal",
-          "https://twitter.com/MLWhiz","https://www.facebook.com/mlwhizblog","https://github.com/MLWhiz","https://www.instagram.com/itsmlwhiz"]
-    }]
-} </script>
-
-
-
-<script async data-uid="a0ebaf958d" src="https://mlwhiz.ck.page/a0ebaf958d/index.js"></script>
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-  MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [['$','$'], ['\\(','\\)']],
-    displayMath: [['$$','$$']],
-    processEscapes: true,
-    processEnvironments: true,
-    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-    TeX: { equationNumbers: { autoNumber: "AMS" },
-         extensions: ["AMSmath.js", "AMSsymbols.js"] }
-  }
-  });
-  MathJax.Hub.Queue(function() {
-    
-    
-    
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-
-  MathJax.Hub.Config({
-  
-  TeX: { equationNumbers: { autoNumber: "AMS" } }
-  });
-</script>
-
-
-
-<link href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
-<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
-
-
-</head>
-<body>
-      
-   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
-   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-   
-<!-- preloader start -->
-<div class="preloader">
-  
-</div>
-<!-- preloader end -->
-<!-- navigation -->
-<header class="navigation">
-  <div class="container">
-    
-    <nav class="navbar navbar-expand-lg navbar-white bg-transparent border-bottom pl-0">
-      <a class="navbar-brand mobile-view" href="https://mlwhiz.com/"><img class="img-fluid"
-          src="https://mlwhiz.com/images/logo.png" alt="MLWhiz: Helping You Learn Data Science!"></a>
-      <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navigation">
-        <i class="ti-menu h3"></i>
-      </button>
-
-      <div class="collapse navbar-collapse text-center" id="navigation">
-        <div class="desktop-view">
-          <ul class="navbar-nav mr-auto">
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://www.linkedin.com/in/rahulagwl/"><i class="ti-linkedin"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://medium.com/@rahul_agarwal"><i class="ti-book"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://twitter.com/MLWhiz"><i class="ti-twitter-alt"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://www.facebook.com/mlwhizblog"><i class="ti-facebook"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://github.com/MLWhiz"><i class="ti-github"></i></a>
-            </li>
-            
-          </ul>
-        </div>
-
-        <a class="navbar-brand mx-auto desktop-view" href="https://mlwhiz.com/"><img class="img-fluid-custom"
-            src="https://mlwhiz.com/images/logo.png" alt="MLWhiz: Helping You Learn Data Science!"></a>
-
-        <ul class="navbar-nav">
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="https://mlwhiz.com/about">About</a>
-          </li>
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="https://mlwhiz.com/blog">Blog</a>
-          </li>
-          
-          
-          
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">
-              Topics
-            </a>
-            <div class="dropdown-menu">
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/natural-language-processing">NLP</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/computer-vision">Computer Vision</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/deep-learning">Deep Learning</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/data-science">DS/ML</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/big-data">Big Data</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/awesome-guides">My Best Content</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/learning-resources">Learning Resources</a>
-              
-            </div>
-          </li>
-          
-          
-        </ul>
-
-        
-        <!-- search -->
-        <div class="search pl-lg-4">
-          <button id="searchOpen" class="search-btn"><i class="ti-search"></i></button>
-          <div class="search-wrapper">
-            <form action="https://mlwhiz.com//search" class="h-100">
-              <input class="search-box px-4" id="search-query" name="s" type="search" placeholder="Type & Hit Enter...">
-            </form>
-            <button id="searchClose" class="search-close"><i class="ti-close text-dark"></i></button>
-          </div>
-        </div>
-        
-
-        
-      </div>
-    </nav>
-  </div>
-</header>
-<!-- /navigation -->
-
-
-<section class="section-sm">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 mb-5 mb-lg-0">
-        
-        
-        <a href="/categories/natural-language-processing"
-          class="categoryStyle">Natural Language Processing</a>
-        
-        <a href="/categories/deep-learning"
-          class="categoryStyle">Deep Learning</a>
-        
-        <a href="/categories/awesome-guides"
-          class="categoryStyle">Awesome Guides</a>
-        
-        <h1>What my first Silver Medal taught me about Text Classification and Kaggle in general?</h1>
-        <div class="mb-3 post-meta">
-          <span>By Rahul Agarwal</span>
-          
-          <svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"></path></svg>
-
-          <span>19 February 2019</span>
-          
-        </div>
-        
-        <img src="https://mlwhiz.com/images/silver/CV_vs_LB.png" class="img-fluid w-100 mb-4" alt="What my first Silver Medal taught me about Text Classification and Kaggle in general?">
-        
-        <div class="content mb-5">
-          <p>Kaggle is an excellent place for learning. And I learned a lot of things from the recently concluded competition on <strong>Quora Insincere questions classification</strong> in which I got a rank of <strong><code>182/4037</code></strong>. In this post, I will try to provide a summary of the things I tried. I will also try to summarize the ideas which I missed but were a part of other winning solutions.</p>
-<p><strong>As a side note</strong>: if you want to know more about NLP, I would like to <strong>recommend this awesome course</strong> on 
-
-<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target="_blank" rel="nofollow noopener">Natural Language Processing</a>
- in the 
-
-<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Advanced machine learning specialization</a>
-. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few. You can start for free with the 7-day Free Trial.</p>
-<p>So first a little bit of summary about the competition for the uninitiated. In this competition, we had to develop models that identify and flag insincere questions. <em><strong>The challenge was not only a test for performance but also a test of efficient code writing skills.</strong></em> As it was a kernel competition with limited outside data options, competitors were limited to use only the word embeddings provided by the competition organizers. That means we were not allowed to use State of the art models like BERT. We were also limited in the sense that all our models should run in a time of 2 hours. So say bye bye to stacking and monster ensembles though some solutions were able to do this by making their code ultra-efficient. More on this later.</p>
-<h2 id="some-kaggle-learnings">Some Kaggle Learnings:</h2>
-<p>There were a couple of <strong>learnings about kaggle as a whole</strong> that I would like to share before jumping into my final solution:</p>
-<h3 id="1-always-trust-your-cv">1. Always trust your CV</h3>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/silver/CV_vs_LB.png"  style="height:50%;width:50%"></center>
-</div>
-<p>One of the things that genuinely baffled a lot of people in this competition was that a good CV score did not necessarily translate well to a good LB score. The main reason for this was <strong>small test dataset</strong>(only 65k rows) in the first stage(around 15% of total test data).</p>
-<p>A common theme on discussion forums was focussing on which submissions we should select as the final submission:</p>
-<ul>
-<li>The one having the best local CV? or</li>
-<li>The one having the best LB?</li>
-</ul>
-<p>And while it seems simple to say to trust your CV, common sense goes for a toss when you see that your LB score is going down or remaining constant whenever your Local CV score increases.</p>
-<p>Luckily I didn&rsquo;t end up making the mistake of not trusting my CV score. Owing to a lot of excellent posts on Kaggle discussion board, <em><strong>I selected a kernel with Public LB score of 0.697 and a Local CV of 0.701, which was around &gt;1200 rank on Public LB as of the final submission. It achieved a score of 0.702 and ranked 182 on the private LB.</strong></em></p>
-<p>While this seems like a straightforward choice post-facto, it was a hard decision to make at a time when you have at your disposal some public kernels having Public LB score &gt;= 0.70</p>
-<h3 id="2-use-the-code-from-public-kernels-but-check-for-errors">2. Use the code from public kernels but check for errors</h3>
-<p>
-
-<a href="https://www.kaggle.com/bminixhofer/deterministic-neural-networks-using-pytorch" target="_blank" rel="nofollow noopener">This</a>
- Pytorch kernel by Benjamin Minixhofer is awesome. It made the base of many of my submissions for this competition. But this kernel had a mistake. It didn&rsquo;t implement spatial dropout in the right way. You can find the correct implementation of spatial dropout in my post 
-
-<a href="/blog/2019/01/06/pytorch_keras_conversion/">here</a>
- or on my 
-
-<a href="https://www.kaggle.com/mlwhiz/third-place-model-for-toxic-spatial-dropout" target="_blank" rel="nofollow noopener">kernel</a>
-. Implementing spatial dropout in the right way gave a boost of around 0.004 to the local CV.</p>
-<p>Nonetheless, I learned pytorch using this kernel, and I am grateful to him for the same.</p>
-<h3 id="3-dont-trust-everything-that-goes-on-the-discussion-forums">3. Don&rsquo;t trust everything that goes on the discussion forums</h3>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/silver/read-what-the-smart-people-are-saying.png"  style="height:90%;width:90%"></center>
-</div>
-<p>I will talk about two things here:</p>
-<ul>
-<li>
-<p><strong>Seed tuning</strong>: While in the middle of the competition, everyone was trying to get the best possible rank on the public LB. It is just human nature. A lot of discussions was around good seeds and bad seeds for neural network initialization. While it seems okay in the first look, the conversation went a stage further where <strong>people started tuning seeds in the kernel as a hyper param</strong>. Some discussions even went on to say that it was a valid strategy. And that is where a large amount of overfitting to public LB started happening. The same submission would score 0.704 from 0.699 just by changing the seed. For a reference, that meant you could go from anywhere near 400-500 rank to top 50 only by changing seed in a public kernel. And that spelled disaster. Some people did that. They went up the public LB. Went crashing out at the private stage.</p>
-</li>
-<li>
-<p><strong>CV score disclosure on discussion forums</strong>: We always try to gauge our performance against other people. In a lot of discussions, people provided their CV scores and corresponding Public LB scores. The scores were all over the place and not comparable due to Different CV schemes, No of folds in CV, Metric reported, Overfitting or just plain Wrong implementation of Cross-Validation. But they ended up influencing a lot of starters and newcomers.</p>
-</li>
-</ul>
-<h3 id="4-on-that-note-be-active-on-discussion-forums-and-check-public-kernels-regularly">4. On that note, be active on Discussion forums and check public kernels regularly</h3>
-<p>You can learn a lot just by being part of discussion forums and following public kernels. This competition had a lot of excellent public kernels on embeddings by 
-
-<a href="https://www.kaggle.com/sudalairajkumar/a-look-at-different-embeddings" target="_blank" rel="nofollow noopener">SRK</a>
-, Models by 
-
-<a href="https://www.kaggle.com/shujian/mix-of-nn-models-based-on-meta-embedding" target="_blank" rel="nofollow noopener">Shujian</a>
-, and Preprocessing by 
-
-<a href="https://www.kaggle.com/theoviel/improve-your-score-with-text-preprocessing-v2" target="_blank" rel="nofollow noopener">Theo Viel</a>
- which gave everyone a headstart. As the competition progressed, the discussions also evolved. There were discussions on speeding up the code, working approaches, F1 threshold finders, and other exciting topics which kept me occupied with new ideas and improvements.</p>
-<p>Even after the end, while reading up discussions on solutions overview, I learned a lot. And I would say it is very ** vital to check out the winning solutions.**</p>
-<h3 id="5-share-a-lot">5. Share a lot</h3>
-<p>Sharing is everything on Kaggle. People have shared their codes as well as their ideas while competing as well as after the competition ended. It is only together that we can go forward. I like blogging, so I am sharing the knowledge via a series of blog posts on text classification. The 
-
-<a href="/blog/2019/01/17/deeplearning_nlp_preprocess/">first post</a>
- talked about the different <strong>preprocessing techniques that work with Deep learning models</strong> and <strong>increasing embeddings coverage</strong>. In the 
-
-<a href="/blog/2019/02/08/deeplearning_nlp_conventional_methods/">second post</a>
-, I talked through some <strong>basic conventional models</strong> like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and tried to access their performance to create a baseline. In the third post, I will delve deeper into <strong>Deep learning models and the various architectures</strong> we could use to solve the text Classification problem. To make this post platform generic I will try to write code in both Keras and Pytorch. We will try to use various other models which we were not able to use in this competition like <strong>ULMFit transfer learning</strong> approaches in the fourth post in the series.</p>
-<p>It might take me a little time to write the whole series. Till then you can take a look at my other posts too: 
-
-<a href="/blog/2018/12/17/text_classification/">What Kagglers are using for Text Classification</a>
-, which talks about various deep learning models in use in NLP and 
-
-<a href="/blog/2019/01/06/pytorch_keras_conversion/">how to switch from Keras to Pytorch</a>
-.</p>
-<h3 id="6-beware-of-trolls-">6. Beware of trolls :)</h3>
-<p>We were going along happily towards the end of the competition with two weeks left. Scores were increasing slowly. The top players were somewhat stagnant. <em><strong>And then came Pavel and team with a Public LB score of 0.782.</strong></em> The next group had an LB score of 0.713. Such a huge difference. I was so sure that there was some leakage in the data which nobody has caught yet except for Pavel. I spent nearly half a day to do EDA again.</p>
-<p>In the end, it turned out that what they did was 
-
-<a href="https://www.kaggle.com/c/quora-insincere-questions-classification/discussion/80665" target="_blank" rel="nofollow noopener">scraping</a>
- — nicely played!</p>
-<p>They also have some pretty awesome ideas around including additional data, which could have worked but did not in this competition.</p>
-<hr>
-<h2 id="my-final-solution">My Final Solution:</h2>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/silver/lb2.png"  style="height:90%;width:90%"></center>
-</div>
-<p>My main focus was on <em>meta-feature engineering</em> and on <em>increasing embedding coverage and quality</em>. That means I did not play much with various Neural Net architectures. Here are the things that I included in my final submission:</p>
-<ul>
-<li>I noticed that Glove embeddings were doing good on the local CV but not on LB, while meta embeddings(mean of glove and paragram) were doing good on LB but not that good on the CV. I took a mixed approach so <strong>some of my models are trained with only glove embedding and some on meta embeddings</strong>.</li>
-<li><strong>Included four more features in embedding</strong>. Thus my embedding was a 304-dimensional vector. The four new values corresponded to title case flag, uppercase flag, Textblob word polarity, textblob word subjectivity</li>
-<li>Found out <strong>NER tokens from the whole train and test data using spacy</strong> and kept the tokens and the entities in a dict. I used this dict to create extra features like counts of <code>GPE</code>, <code>PERSON</code>, <code>ORG</code>, <code>NORP</code>, <code>WORK_OF_ART</code>.Added some value and were highly correlated with the target.</li>
-<li>Other features that I used include <code>total_length</code>,<code>capitals</code>,<code>words_vs_unique</code> as well as some engineered features like <code>sum_feat</code>(sum of expletives), <code>question_start_with_why</code>, <code>question_start_with_how_or_what</code>, <code>question_start_with_do_or_are</code>. Might not have added much value but still kept them.</li>
-<li>My final solution consisted of a <strong>stacked ensemble for four models</strong>. I stacked the four models using Logistic regression(with positive weights and 0 intercept) and gave the weights as a list in the final kernel.</li>
-</ul>
-<p>You can find the kernel for my final submission 
-
-<a href="https://www.kaggle.com/mlwhiz/multimodel-ensemble-clean-kernel?scriptVersionId=10279838" target="_blank" rel="nofollow noopener">here</a>
-.</p>
-<hr>
-<h2 id="tips-and-tricks-used-in-other-solutions">Tips and Tricks used in other solutions:</h2>
-<h3 id="1-increasing-embeddings-coverage">1. Increasing Embeddings Coverage:</h3>
-<p>In the third place solution 
-
-<a href="https://www.kaggle.com/wowfattie/3rd-place" target="_blank" rel="nofollow noopener">kernel</a>
-, wowfattie uses stemming, lemmatization, capitalize, lower, uppercase, as well as embedding of the nearest word using a spell checker to get embeddings for all words in his vocab. Such a great idea. <strong>I liked this solution the best as it can do what I was trying to do and finished at a pretty good place.</strong> Also, the code is very clean.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> nltk.stem <span style="color:#f92672">import</span> PorterStemmer
-ps <span style="color:#f92672">=</span> PorterStemmer()
-<span style="color:#f92672">from</span> nltk.stem.lancaster <span style="color:#f92672">import</span> LancasterStemmer
-lc <span style="color:#f92672">=</span> LancasterStemmer()
-<span style="color:#f92672">from</span> nltk.stem <span style="color:#f92672">import</span> SnowballStemmer
-sb <span style="color:#f92672">=</span> SnowballStemmer(<span style="color:#e6db74">&#34;english&#34;</span>)
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">load_glove</span>(word_dict, lemma_dict):
-    EMBEDDING_FILE <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;../input/embeddings/glove.840B.300d/glove.840B.300d.txt&#39;</span>
-    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_coefs</span>(word,<span style="color:#f92672">*</span>arr): <span style="color:#66d9ef">return</span> word, np<span style="color:#f92672">.</span>asarray(arr, dtype<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;float32&#39;</span>)
-    embeddings_index <span style="color:#f92672">=</span> dict(get_coefs(<span style="color:#f92672">*</span>o<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34; &#34;</span>)) <span style="color:#66d9ef">for</span> o <span style="color:#f92672">in</span> open(EMBEDDING_FILE))
-    embed_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">300</span>
-    nb_words <span style="color:#f92672">=</span> len(word_dict)<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>
-    embedding_matrix <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros((nb_words, embed_size), dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>float32)
-    unknown_vector <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros((embed_size,), dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>float32) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1.</span>
-    <span style="color:#66d9ef">print</span>(unknown_vector[:<span style="color:#ae81ff">5</span>])
-    <span style="color:#66d9ef">for</span> key <span style="color:#f92672">in</span> tqdm(word_dict):
-        word <span style="color:#f92672">=</span> key
-        embedding_vector <span style="color:#f92672">=</span> embeddings_index<span style="color:#f92672">.</span>get(word)
-        <span style="color:#66d9ef">if</span> embedding_vector <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None:
-            embedding_matrix[word_dict[key]] <span style="color:#f92672">=</span> embedding_vector
-            <span style="color:#66d9ef">continue</span>
-        word <span style="color:#f92672">=</span> key<span style="color:#f92672">.</span>lower()
-        embedding_vector <span style="color:#f92672">=</span> embeddings_index<span style="color:#f92672">.</span>get(word)
-        <span style="color:#66d9ef">if</span> embedding_vector <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None:
-            embedding_matrix[word_dict[key]] <span style="color:#f92672">=</span> embedding_vector
-            <span style="color:#66d9ef">continue</span>
-        word <span style="color:#f92672">=</span> key<span style="color:#f92672">.</span>upper()
-        embedding_vector <span style="color:#f92672">=</span> embeddings_index<span style="color:#f92672">.</span>get(word)
-        <span style="color:#66d9ef">if</span> embedding_vector <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None:
-            embedding_matrix[word_dict[key]] <span style="color:#f92672">=</span> embedding_vector
-            <span style="color:#66d9ef">continue</span>
-        word <span style="color:#f92672">=</span> key<span style="color:#f92672">.</span>capitalize()
-        embedding_vector <span style="color:#f92672">=</span> embeddings_index<span style="color:#f92672">.</span>get(word)
-        <span style="color:#66d9ef">if</span> embedding_vector <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None:
-            embedding_matrix[word_dict[key]] <span style="color:#f92672">=</span> embedding_vector
-            <span style="color:#66d9ef">continue</span>
-        word <span style="color:#f92672">=</span> ps<span style="color:#f92672">.</span>stem(key)
-        embedding_vector <span style="color:#f92672">=</span> embeddings_index<span style="color:#f92672">.</span>get(word)
-        <span style="color:#66d9ef">if</span> embedding_vector <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None:
-            embedding_matrix[word_dict[key]] <span style="color:#f92672">=</span> embedding_vector
-            <span style="color:#66d9ef">continue</span>
-        word <span style="color:#f92672">=</span> lc<span style="color:#f92672">.</span>stem(key)
-        embedding_vector <span style="color:#f92672">=</span> embeddings_index<span style="color:#f92672">.</span>get(word)
-        <span style="color:#66d9ef">if</span> embedding_vector <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None:
-            embedding_matrix[word_dict[key]] <span style="color:#f92672">=</span> embedding_vector
-            <span style="color:#66d9ef">continue</span>
-        word <span style="color:#f92672">=</span> sb<span style="color:#f92672">.</span>stem(key)
-        embedding_vector <span style="color:#f92672">=</span> embeddings_index<span style="color:#f92672">.</span>get(word)
-        <span style="color:#66d9ef">if</span> embedding_vector <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None:
-            embedding_matrix[word_dict[key]] <span style="color:#f92672">=</span> embedding_vector
-            <span style="color:#66d9ef">continue</span>
-        word <span style="color:#f92672">=</span> lemma_dict[key]
-        embedding_vector <span style="color:#f92672">=</span> embeddings_index<span style="color:#f92672">.</span>get(word)
-        <span style="color:#66d9ef">if</span> embedding_vector <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None:
-            embedding_matrix[word_dict[key]] <span style="color:#f92672">=</span> embedding_vector
-            <span style="color:#66d9ef">continue</span>
-        <span style="color:#66d9ef">if</span> len(key) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>:
-            word <span style="color:#f92672">=</span> correction(key)
-            embedding_vector <span style="color:#f92672">=</span> embeddings_index<span style="color:#f92672">.</span>get(word)
-            <span style="color:#66d9ef">if</span> embedding_vector <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None:
-                embedding_matrix[word_dict[key]] <span style="color:#f92672">=</span> embedding_vector
-                <span style="color:#66d9ef">continue</span>
-        embedding_matrix[word_dict[key]] <span style="color:#f92672">=</span> unknown_vector                    
-    <span style="color:#66d9ef">return</span> embedding_matrix, nb_words
-</code></pre></div><h3 id="2-checkpoint-ensembling">2. Checkpoint Ensembling:</h3>
-<p><strong>Get a lot of models at no cost</strong>. Most of the winning solutions have some version of checkpoint ensembling. For the third place solution, the predictions are a weighted average of predictions after the 4th epoch and predictions after the 5th epoch. I got this idea but forgot to implement it in my ensemble based kernel submission.</p>
-<h3 id="3-meta-embeddings">3. Meta Embeddings:</h3>
-<p>A lot of winning solutions ended up using <strong>weighted meta embeddings</strong> where they provided a higher weight to the Glove embedding. Some solutions also used <strong>concatenated embeddings</strong>.</p>
-<h3 id="4-model-architecture">4. Model Architecture:</h3>
-<p>One surprising thing I saw people doing was to use a <strong>1Dconv layer just after the Bidirectional layer</strong>. For example, This is the 
-
-<a href="https://www.kaggle.com/c/quora-insincere-questions-classification/discussion/80568" target="_blank" rel="nofollow noopener">architecture</a>
- used by the team that placed first in the competition.</p>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/silver/arch_1_place.png"  style="height:50%;width:50%"></center>
-</div>
-<h3 id="5-bucketingvariable-sequence-length-and-increased-hidden-units">5. Bucketing/Variable Sequence Length and increased hidden units:</h3>
-<p>Another thing I noticed is the increased number of hidden units as compared to many public kernels. Most of the public kernels used a hidden unit size of 60 due to time constraints. I used 80 units at the cost of training one less network. A lot of high scoring kernels were able to use a higher number of hidden units owing to variable sequence length idea or bucketing. From the 1st place kernel discussion:</p>
-<blockquote>
-<p>We do not pad sequences to the same length based on the whole data, but just on a batch level. That means we conduct <strong>padding and truncation on the data generator level for each batch separately</strong>, so that length of the sentences in a batch can vary in size. Additionally, we further improved this by not truncating based on the length of the longest sequence in the batch but based on the 95% percentile of lengths within the sequence. This improved runtime heavily and kept accuracy quite robust on single model level, and improved it by being able to average more models.</p>
-</blockquote>
-<p>Also from 7th place 
-
-<a href="https://www.kaggle.com/c/quora-insincere-questions-classification/discussion/80561" target="_blank" rel="nofollow noopener">discussion</a>
-:</p>
-<blockquote>
-<p>Bucketing is to make a minibatch from instances that have similar lengths to alleviate the cost of padding. This makes the training speed more than <strong>3x faster, and thus I can run 9 epochs for each split of 5-fold.</strong></p>
-</blockquote>
-<p>Thus the use of this technique also allowed some competitors to fit many more epochs in less time and run more models at the same time. Pretty Neat!</p>
-<h3 id="6-for-those-winners-who-didnt-use-bucketing-maxlen--72-was-too-large">6. For those winners who didn&rsquo;t use bucketing, Maxlen = 72 was too large:</h3>
-<p>Most of us saw a distribution of question length and took the length that covered maximum questions fully as the maxlen parameter. I never tried to tune it, but it seems like it could have been tuned. <strong>One of the tricks was to use maxlen ranging from 35 to 60.</strong> This made the kernels run a lot faster.</p>
-<h3 id="7-time-taking-modelscomplex-architectures-like-capsule-were-mostly-not-used">7. Time taking models/complex architectures like Capsule were mostly not used:</h3>
-<p>Most of the winning solutions didn&rsquo;t use capsule networks as they took a lot of time to train.</p>
-<h3 id="8-backprop-errors-on-embeddings-weights-in-last-few-epochs">8. Backprop errors on embeddings weights in last few epochs:</h3>
-<p>Another thing I saw was in the 
-
-<a href="https://www.kaggle.com/kentaronakanishi/18th-place-solution" target="_blank" rel="nofollow noopener">18th place kernel</a>
- which uses a single model</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">if</span> epoch <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">3</span>:
-    model<span style="color:#f92672">.</span>embedding<span style="color:#f92672">.</span>embeddings<span style="color:#f92672">.</span>weight<span style="color:#f92672">.</span>requires_grad <span style="color:#f92672">=</span> True
-</code></pre></div><hr>
-<h2 id="conclusion">Conclusion:</h2>
-<p>It was a good and long 2-month competition, and I learned a lot about Text and NLP during this time. I want to emphasize here is that <strong>I ended up trying a lot of things that didn&rsquo;t work before reaching my final solution</strong>. It was a little frustrating at times, but in the end, I was happy that I ended up with the best data science practices. Would also like to thank Kaggle master Kazanova who along with some of his friends released a 
-
-<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">“How to win a data science competition”</a>
- Coursera course. I learned a lot from this course.</p>
-<p>Let me know in the comments if you think something is missing/wrong or if I could add more tips/tricks for this competition.</p>
-
-
-        
-<script async data-uid="8d7942551b" src="https://mlwhiz.ck.page/8d7942551b/index.js"></script>
-
-
-<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088" style="margin-bottom: 1px;"></div>
-
-<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
-
-<div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-        </div>
-      </div>
-      <div class="col-lg-4">
-  
-
-  <div class="widget">
-    
-<script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#00aaa1', 'S6S3NPCD');kofiwidget2.draw();</script>
-
-</div>
-  <div class="widget">
-    
-    <h4 class="widget-title">About Me</h4>
-    
-    <img src="https://mlwhiz.com/images/author.jpg" alt=""
-      class="img-fluid author-thumb-sm d-block mx-auto rounded-circle mb-4">
-    
-    <p>I’m a data scientist consultant and big data engineer based in Bangalore, where I am currently working with WalmartLabs .</p>
-    <a href="https://mlwhiz.com/about/" class="btn btn-outline-primary">Know More</a>
-    
-  </div>
-
-
-  
-  <div class="widget">
-    <h4 class="widget-title">Topics</h4>
-    <ul class="list-unstyled">
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/awesome-guides">Awesome Guides</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/big-data">Big Data</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/computer-vision">Computer Vision</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/data-science">Data Science</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/deep-learning">Deep Learning</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/learning-resources">Learning Resources</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/natural-language-processing">Natural Language Processing</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/programming">Programming</a>
-      </li>
-    </ul>
-  </div>
-  
-  <div class="widget">
-    <h4 class="widget-title">Tags</h4>
-    <ul class="list-inline">
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/algorithms">Algorithms</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/artificial-intelligence">Artificial Intelligence</a></li>
-          
-
-
-          
-
-
-          
-
-
-          
-
-
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/dask">Dask</a></li>
-          
-
-
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/deployment">Deployment</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/ec2">Ec2</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/generative-adversarial-networks">Generative Adversarial Networks</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/graphs">Graphs</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/image-classification">Image Classification</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/instance-segmentation">Instance Segmentation</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/interpretability">Interpretability</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/jobs">Jobs</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/kaggle">Kaggle</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/language-modeling">Language Modeling</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/machine-learning">Machine Learning</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/math">Math</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/multiprocessing">Multiprocessing</a></li>
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/object-detection">Object Detection</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/opinion">Opinion</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/pandas">Pandas</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/production">Production</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/productivity">Productivity</a></li>
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/python">Python</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/pytorch">Pytorch</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/spark">Spark</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/sql">Sql</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/statistics">Statistics</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/streamlit">Streamlit</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/text-classification">Text Classification</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/timeseries">Timeseries</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/tools">Tools</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/translation">Translation</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/visualization">Visualization</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/xgboost">Xgboost</a></li>
-          
-    </ul>
-  </div>
-  
-  <div class="widget">
-    <h4 class="widget-title">Connect With Me</h4>
-    <ul class="list-inline social-links">
-      
-      <li class="list-inline-item"><a href="https://www.linkedin.com/in/rahulagwl/"><i class="ti-linkedin"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://medium.com/@rahul_agarwal"><i class="ti-book"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://twitter.com/MLWhiz"><i class="ti-twitter-alt"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://www.facebook.com/mlwhizblog"><i class="ti-facebook"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://github.com/MLWhiz"><i class="ti-github"></i></a></li>
-      
-    </ul>
-  </div>
-  
-  
-<script async data-uid="bfe9f82f10" src="https://mlwhiz.ck.page/bfe9f82f10/index.js"></script>
-
-<script async data-uid="3452d924e2" src="https://mlwhiz.ck.page/3452d924e2/index.js"></script>
-
-</div>
-
-    </div>
-
-
-  </div>
-</section>
-
-
-
-<footer>
-  <div class="container">
-    <div class="row">
-      <div class="col-12 text-center mb-5">
-        <a href="https://mlwhiz.com/"><img src="https://mlwhiz.com/images/logo.png" class="img-fluid-custom-bottom" alt="MLWhiz: Helping You Learn Data Science!"></a>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Contact Me</h6>
-        <ul class="list-unstyled">
-          <li class="mb-3"><i class="ti-location-pin mr-3 text-primary"></i>India, Bangalore</li>
-          <li class="mb-3"><a class="text-dark" href="mailto:rahul@mlwhiz.com"><i
-                class="ti-email mr-3 text-primary"></i>rahul@mlwhiz.com</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Social Contacts</h6>
-        <ul class="list-unstyled">
-          
-          <li class="mb-3"><a class="text-dark" href="https://www.linkedin.com/in/rahulagwl/">Linkedin</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://medium.com/@rahul_agarwal">Medium</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://twitter.com/MLWhiz">Twitter</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://www.facebook.com/mlwhizblog">Facebook</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://github.com/MLWhiz">Github</a></li>
-          
-        </ul>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Categories</h6>
-        <ul class="list-unstyled">
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/awesome-guides">Awesome Guides</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/big-data">Big Data</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/computer-vision">Computer Vision</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/data-science">Data Science</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/deep-learning">Deep Learning</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/learning-resources">Learning Resources</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/natural-language-processing">Natural Language Processing</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/programming">Programming</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Quick Links</h6>
-        <ul class="list-unstyled">
-          
-          <li class="mb-3"><a class="text-dark" href="https://mlwhiz.com/about">About</a></li>
-          
-          
-          <li class="mb-3"><a class="text-dark" href="https://mlwhiz.com/blog">Post</a></li>
-          
-          
-          
-        </ul>
-      </div>
-      <div class="col-12 border-top py-4 text-center">
-        Copyright © 2020 <a href="https://mlwhiz.com">MLWhiz</a> All Rights Reserved
-      </div>
-    </div>
-  </div>
-</footer>
-
-
-
-<script>
-  var indexURL = "https://mlwhiz.com/index.json"
-</script>
-
-<!-- JS Plugins -->
-
-<script src="https://mlwhiz.com/plugins/compressjscss/main.js"></script>
-
-<!-- Main Script -->
-
-<script src="https://mlwhiz.com/js/script.min.js"></script>
-<!-- google analitycs -->
-<script>
-  (function (i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r;
-    i[r] = i[r] || function () {
-      (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date();
-    a = s.createElement(o),
-      m = s.getElementsByTagName(o)[0];
-    a.async = 1;
-    a.src = g;
-    m.parentNode.insertBefore(a, m)
-  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-  ga('create', 'UA-54777926-1', 'auto');
-  ga('send', 'pageview');
-</script>
-</body>
-</html>
+<!doctype html><html lang=en-us><head><meta charset=utf-8><title>MLWhiz: Helping You Learn Data Science!</title><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta name=description content="Kaggle is an excellent place for education. And I learned a lot of things from the recently concluded competition on Quora Insincere questions classification in which I got a rank of 182⁄4037. In this post, I will try to provide a summary of the things I tried. I will also try to summarize the ideas which I missed but were a part of other winning solution"><meta name=author content="Rahul Agarwal"><meta name=generator content="Hugo 0.74.3"><link rel=stylesheet href=https://mlwhiz.com/plugins/compressjscss/main.css><meta property="og:title" content="What my first Silver Medal taught me about Text Classification and Kaggle in general?"><meta property="og:description" content="Kaggle is an excellent place for education. And I learned a lot of things from the recently concluded competition on Quora Insincere questions classification in which I got a rank of 182⁄4037. In this post, I will try to provide a summary of the things I tried. I will also try to summarize the ideas which I missed but were a part of other winning solution"><meta property="og:type" content="article"><meta property="og:url" content="https://mlwhiz.com/blog/2019/02/19/siver_medal_kaggle_learnings/"><meta property="og:image" content="https://mlwhiz.com/images/silver/CV_vs_LB.png"><meta property="og:image:secure_url" content="https://mlwhiz.com/images/silver/CV_vs_LB.png"><meta property="article:published_time" content="2019-02-19T00:00:00+00:00"><meta property="article:modified_time" content="2020-09-26T16:23:35+05:30"><meta property="article:tag" content="Natural Language Processing"><meta property="article:tag" content="Deep Learning"><meta property="article:tag" content="Awesome Guides"><meta name=twitter:card content="summary"><meta name=twitter:image content="https://mlwhiz.com/images/silver/CV_vs_LB.png"><meta name=twitter:title content="What my first Silver Medal taught me about Text Classification and Kaggle in general?"><meta name=twitter:description content="Kaggle is an excellent place for education. And I learned a lot of things from the recently concluded competition on Quora Insincere questions classification in which I got a rank of 182⁄4037. In this post, I will try to provide a summary of the things I tried. I will also try to summarize the ideas which I missed but were a part of other winning solution"><meta name=twitter:site content="@mlwhiz"><meta name=twitter:creator content="@mlwhiz"><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href=https://mlwhiz.com/scss/style.min.css media=screen><link rel=stylesheet href=/css/style.css><link rel=stylesheet type=text/css href=/css/font/flaticon.css><link rel="shortcut icon" href=https://mlwhiz.com/images/favicon-200x200.png type=image/x-icon><link rel=icon href=https://mlwhiz.com/images/favicon.png type=image/x-icon><link rel=canonical href=https://mlwhiz.com/blog/2019/02/19/siver_medal_kaggle_learnings/><script src=https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js></script><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.mlwhiz.com/#website","url":"https://www.mlwhiz.com/","name":"MLWhiz","description":"Want to Learn Computer Vision and NLP? - MLWhiz","potentialAction":{"@type":"SearchAction","target":"https://www.mlwhiz.com/search?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"ImageObject","@id":"https://mlwhiz.com/blog/2019/02/19/siver_medal_kaggle_learnings/#primaryimage","url":"https://mlwhiz.com/images/silver/CV_vs_LB.png","width":700,"height":450},{"@type":"WebPage","@id":"https://mlwhiz.com/blog/2019/02/19/siver_medal_kaggle_learnings/#webpage","url":"https://mlwhiz.com/blog/2019/02/19/siver_medal_kaggle_learnings/","inLanguage":"en-US","name":"What my first Silver Medal taught me about Text Classification and Kaggle in general? - MLWhiz","isPartOf":{"@id":"https://www.mlwhiz.com/#website"},"primaryImageOfPage":{"@id":"https://mlwhiz.com/blog/2019/02/19/siver_medal_kaggle_learnings/#primaryimage"},"datePublished":"2019-02-19T00:00:00.00Z","dateModified":"2020-09-26T16:23:35.00Z","author":{"@id":"https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca"},"description":"Kaggle is an excellent place for education. And I learned a lot of things from the recently concluded competition on Quora Insincere questions classification in which I got a rank of 182⁄4037. In this post, I will try to provide a summary of the things I tried. I will also try to summarize the ideas which I missed but were a part of other winning solution"},{"@type":["Person"],"@id":"https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca","name":"Rahul Agarwal","image":{"@type":"ImageObject","@id":"https://www.mlwhiz.com/#authorlogo","url":"https://mlwhiz.com/images/author.jpg","caption":"Rahul Agarwal"},"description":"Hi there, I\u2019m Rahul Agarwal. I\u2019m a data scientist consultant and big data engineer based in Bangalore. I see a lot of times  students and even professionals wasting their time and struggling to get started with Computer Vision, Deep Learning, and NLP. I Started this Site with a purpose to augment my own understanding about new things while helping others learn about them in the best possible way.","sameAs":["https://www.linkedin.com/in/rahulagwl/","https://medium.com/@rahul_agarwal","https://twitter.com/MLWhiz","https://www.facebook.com/mlwhizblog","https://github.com/MLWhiz","https://www.instagram.com/itsmlwhiz"]}]}</script><script async data-uid=a0ebaf958d src=https://mlwhiz.ck.page/a0ebaf958d/index.js></script><script type=text/javascript async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">MathJax.Hub.Config({tex2jax:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$']],processEscapes:true,processEnvironments:true,skipTags:['script','noscript','style','textarea','pre'],TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["AMSmath.js","AMSsymbols.js"]}}});MathJax.Hub.Queue(function(){var all=MathJax.Hub.getAllJax(),i;for(i=0;i<all.length;i+=1){all[i].SourceElement().parentNode.className+=' has-jax';}});MathJax.Hub.Config({TeX:{equationNumbers:{autoNumber:"AMS"}}});</script><link href=//apps.shareaholic.com/assets/pub/shareaholic.js as=script><script type=text/javascript data-cfasync=false async src=//apps.shareaholic.com/assets/pub/shareaholic.js data-shr-siteid=fd1ffa7fd7152e4e20568fbe49a489d0></script></head><body><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T" height=0 width=0 style=display:none;visibility:hidden></iframe></noscript><div class=preloader></div><header class=navigation><div class=container><nav class="navbar navbar-expand-lg navbar-white bg-transparent border-bottom pl-0"><a class="navbar-brand mobile-view" href=https://mlwhiz.com/><img class=img-fluid src=https://mlwhiz.com/images/logo.png alt="MLWhiz: Helping You Learn Data Science!"></a>
+<button class="navbar-toggler border-0" type=button data-toggle=collapse data-target=#navigation>
+<i class="ti-menu h3"></i></button><div class="collapse navbar-collapse text-center" id=navigation><div class=desktop-view><ul class="navbar-nav mr-auto"><li class=nav-item><a class=nav-link href=https://www.linkedin.com/in/rahulagwl/><i class=ti-linkedin></i></a></li><li class=nav-item><a class=nav-link href=https://medium.com/@rahul_agarwal><i class=ti-book></i></a></li><li class=nav-item><a class=nav-link href=https://twitter.com/MLWhiz><i class=ti-twitter-alt></i></a></li><li class=nav-item><a class=nav-link href=https://www.facebook.com/mlwhizblog><i class=ti-facebook></i></a></li><li class=nav-item><a class=nav-link href=https://github.com/MLWhiz><i class=ti-github></i></a></li></ul></div><a class="navbar-brand mx-auto desktop-view" href=https://mlwhiz.com/><img class=img-fluid-custom src=https://mlwhiz.com/images/logo.png alt="MLWhiz: Helping You Learn Data Science!"></a><ul class=navbar-nav><li class=nav-item><a class=nav-link href=https://mlwhiz.com/about>About</a></li><li class=nav-item><a class=nav-link href=https://mlwhiz.com/blog>Blog</a></li><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href=# role=button data-toggle=dropdown aria-haspopup=true aria-expanded=false>Topics</a><div class=dropdown-menu><a class=dropdown-item href=https://mlwhiz.com/categories/natural-language-processing>NLP</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/computer-vision>Computer Vision</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/deep-learning>Deep Learning</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/data-science>DS/ML</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/big-data>Big Data</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/awesome-guides>My Best Content</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/learning-resources>Learning Resources</a></div></li></ul><div class="search pl-lg-4"><button id=searchOpen class=search-btn><i class=ti-search></i></button><div class=search-wrapper><form action=https://mlwhiz.com//search class=h-100><input class="search-box px-4" id=search-query name=s type=search placeholder="Type & Hit Enter..."></form><button id=searchClose class=search-close><i class="ti-close text-dark"></i></button></div></div></div></nav></div></header><section class=section-sm><div class=container><div class=row><div class="col-lg-8 mb-5 mb-lg-0"><a href=/categories/natural-language-processing class=categoryStyle>Natural Language Processing</a>
+<a href=/categories/deep-learning class=categoryStyle>Deep Learning</a>
+<a href=/categories/awesome-guides class=categoryStyle>Awesome Guides</a><h1>What my first Silver Medal taught me about Text Classification and Kaggle in general?</h1><div class="mb-3 post-meta"><span>By Rahul Agarwal</span><svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+<span>19 February 2019</span></div><img src=https://mlwhiz.com/images/silver/CV_vs_LB.png class="img-fluid w-100 mb-4" alt="What my first Silver Medal taught me about Text Classification and Kaggle in general?"><div class="content mb-5"><p>Kaggle is an excellent place for learning. And I learned a lot of things from the recently concluded competition on <strong>Quora Insincere questions classification</strong> in which I got a rank of <strong><code>182/4037</code></strong>. In this post, I will try to provide a summary of the things I tried. I will also try to summarize the ideas which I missed but were a part of other winning solutions.</p><p><strong>As a side note</strong>: if you want to know more about NLP, I would like to <strong>recommend this awesome course</strong> on
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&offerid=467035.11503135394&type=2&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target=_blank rel="nofollow noopener">Natural Language Processing</a>
+in the
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&utm_content=2&utm_medium=partners&utm_source=linkshare&utm_campaign=lVarvwc5BD0" target=_blank rel="nofollow noopener">Advanced machine learning specialization</a>
+. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few. You can start for free with the 7-day Free Trial.</p><p>So first a little bit of summary about the competition for the uninitiated. In this competition, we had to develop models that identify and flag insincere questions. <em><strong>The challenge was not only a test for performance but also a test of efficient code writing skills.</strong></em> As it was a kernel competition with limited outside data options, competitors were limited to use only the word embeddings provided by the competition organizers. That means we were not allowed to use State of the art models like BERT. We were also limited in the sense that all our models should run in a time of 2 hours. So say bye bye to stacking and monster ensembles though some solutions were able to do this by making their code ultra-efficient. More on this later.</p><h2 id=some-kaggle-learnings>Some Kaggle Learnings:</h2><p>There were a couple of <strong>learnings about kaggle as a whole</strong> that I would like to share before jumping into my final solution:</p><h3 id=1-always-trust-your-cv>1. Always trust your CV</h3><div style=margin-top:9px;margin-bottom:10px><center><img src=/images/silver/CV_vs_LB.png style=height:50%;width:50%></center></div><p>One of the things that genuinely baffled a lot of people in this competition was that a good CV score did not necessarily translate well to a good LB score. The main reason for this was <strong>small test dataset</strong>(only 65k rows) in the first stage(around 15% of total test data).</p><p>A common theme on discussion forums was focussing on which submissions we should select as the final submission:</p><ul><li>The one having the best local CV? or</li><li>The one having the best LB?</li></ul><p>And while it seems simple to say to trust your CV, common sense goes for a toss when you see that your LB score is going down or remaining constant whenever your Local CV score increases.</p><p>Luckily I didn&rsquo;t end up making the mistake of not trusting my CV score. Owing to a lot of excellent posts on Kaggle discussion board, <em><strong>I selected a kernel with Public LB score of 0.697 and a Local CV of 0.701, which was around >1200 rank on Public LB as of the final submission. It achieved a score of 0.702 and ranked 182 on the private LB.</strong></em></p><p>While this seems like a straightforward choice post-facto, it was a hard decision to make at a time when you have at your disposal some public kernels having Public LB score >= 0.70</p><h3 id=2-use-the-code-from-public-kernels-but-check-for-errors>2. Use the code from public kernels but check for errors</h3><p><a href=https://www.kaggle.com/bminixhofer/deterministic-neural-networks-using-pytorch target=_blank rel="nofollow noopener">This</a>
+Pytorch kernel by Benjamin Minixhofer is awesome. It made the base of many of my submissions for this competition. But this kernel had a mistake. It didn&rsquo;t implement spatial dropout in the right way. You can find the correct implementation of spatial dropout in my post
+<a href=/blog/2019/01/06/pytorch_keras_conversion/>here</a>
+or on my
+<a href=https://www.kaggle.com/mlwhiz/third-place-model-for-toxic-spatial-dropout target=_blank rel="nofollow noopener">kernel</a>
+. Implementing spatial dropout in the right way gave a boost of around 0.004 to the local CV.</p><p>Nonetheless, I learned pytorch using this kernel, and I am grateful to him for the same.</p><h3 id=3-dont-trust-everything-that-goes-on-the-discussion-forums>3. Don&rsquo;t trust everything that goes on the discussion forums</h3><div style=margin-top:9px;margin-bottom:10px><center><img src=/images/silver/read-what-the-smart-people-are-saying.png style=height:90%;width:90%></center></div><p>I will talk about two things here:</p><ul><li><p><strong>Seed tuning</strong>: While in the middle of the competition, everyone was trying to get the best possible rank on the public LB. It is just human nature. A lot of discussions was around good seeds and bad seeds for neural network initialization. While it seems okay in the first look, the conversation went a stage further where <strong>people started tuning seeds in the kernel as a hyper param</strong>. Some discussions even went on to say that it was a valid strategy. And that is where a large amount of overfitting to public LB started happening. The same submission would score 0.704 from 0.699 just by changing the seed. For a reference, that meant you could go from anywhere near 400-500 rank to top 50 only by changing seed in a public kernel. And that spelled disaster. Some people did that. They went up the public LB. Went crashing out at the private stage.</p></li><li><p><strong>CV score disclosure on discussion forums</strong>: We always try to gauge our performance against other people. In a lot of discussions, people provided their CV scores and corresponding Public LB scores. The scores were all over the place and not comparable due to Different CV schemes, No of folds in CV, Metric reported, Overfitting or just plain Wrong implementation of Cross-Validation. But they ended up influencing a lot of starters and newcomers.</p></li></ul><h3 id=4-on-that-note-be-active-on-discussion-forums-and-check-public-kernels-regularly>4. On that note, be active on Discussion forums and check public kernels regularly</h3><p>You can learn a lot just by being part of discussion forums and following public kernels. This competition had a lot of excellent public kernels on embeddings by
+<a href=https://www.kaggle.com/sudalairajkumar/a-look-at-different-embeddings target=_blank rel="nofollow noopener">SRK</a>
+, Models by
+<a href=https://www.kaggle.com/shujian/mix-of-nn-models-based-on-meta-embedding target=_blank rel="nofollow noopener">Shujian</a>
+, and Preprocessing by
+<a href=https://www.kaggle.com/theoviel/improve-your-score-with-text-preprocessing-v2 target=_blank rel="nofollow noopener">Theo Viel</a>
+which gave everyone a headstart. As the competition progressed, the discussions also evolved. There were discussions on speeding up the code, working approaches, F1 threshold finders, and other exciting topics which kept me occupied with new ideas and improvements.</p><p>Even after the end, while reading up discussions on solutions overview, I learned a lot. And I would say it is very ** vital to check out the winning solutions.**</p><h3 id=5-share-a-lot>5. Share a lot</h3><p>Sharing is everything on Kaggle. People have shared their codes as well as their ideas while competing as well as after the competition ended. It is only together that we can go forward. I like blogging, so I am sharing the knowledge via a series of blog posts on text classification. The
+<a href=/blog/2019/01/17/deeplearning_nlp_preprocess/>first post</a>
+talked about the different <strong>preprocessing techniques that work with Deep learning models</strong> and <strong>increasing embeddings coverage</strong>. In the
+<a href=/blog/2019/02/08/deeplearning_nlp_conventional_methods/>second post</a>
+, I talked through some <strong>basic conventional models</strong> like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and tried to access their performance to create a baseline. In the third post, I will delve deeper into <strong>Deep learning models and the various architectures</strong> we could use to solve the text Classification problem. To make this post platform generic I will try to write code in both Keras and Pytorch. We will try to use various other models which we were not able to use in this competition like <strong>ULMFit transfer learning</strong> approaches in the fourth post in the series.</p><p>It might take me a little time to write the whole series. Till then you can take a look at my other posts too:
+<a href=/blog/2018/12/17/text_classification/>What Kagglers are using for Text Classification</a>
+, which talks about various deep learning models in use in NLP and
+<a href=/blog/2019/01/06/pytorch_keras_conversion/>how to switch from Keras to Pytorch</a>
+.</p><h3 id=6-beware-of-trolls->6. Beware of trolls :)</h3><p>We were going along happily towards the end of the competition with two weeks left. Scores were increasing slowly. The top players were somewhat stagnant. <em><strong>And then came Pavel and team with a Public LB score of 0.782.</strong></em> The next group had an LB score of 0.713. Such a huge difference. I was so sure that there was some leakage in the data which nobody has caught yet except for Pavel. I spent nearly half a day to do EDA again.</p><p>In the end, it turned out that what they did was
+<a href=https://www.kaggle.com/c/quora-insincere-questions-classification/discussion/80665 target=_blank rel="nofollow noopener">scraping</a>
+— nicely played!</p><p>They also have some pretty awesome ideas around including additional data, which could have worked but did not in this competition.</p><hr><h2 id=my-final-solution>My Final Solution:</h2><div style=margin-top:9px;margin-bottom:10px><center><img src=/images/silver/lb2.png style=height:90%;width:90%></center></div><p>My main focus was on <em>meta-feature engineering</em> and on <em>increasing embedding coverage and quality</em>. That means I did not play much with various Neural Net architectures. Here are the things that I included in my final submission:</p><ul><li>I noticed that Glove embeddings were doing good on the local CV but not on LB, while meta embeddings(mean of glove and paragram) were doing good on LB but not that good on the CV. I took a mixed approach so <strong>some of my models are trained with only glove embedding and some on meta embeddings</strong>.</li><li><strong>Included four more features in embedding</strong>. Thus my embedding was a 304-dimensional vector. The four new values corresponded to title case flag, uppercase flag, Textblob word polarity, textblob word subjectivity</li><li>Found out <strong>NER tokens from the whole train and test data using spacy</strong> and kept the tokens and the entities in a dict. I used this dict to create extra features like counts of <code>GPE</code>, <code>PERSON</code>, <code>ORG</code>, <code>NORP</code>, <code>WORK_OF_ART</code>.Added some value and were highly correlated with the target.</li><li>Other features that I used include <code>total_length</code>,<code>capitals</code>,<code>words_vs_unique</code> as well as some engineered features like <code>sum_feat</code>(sum of expletives), <code>question_start_with_why</code>, <code>question_start_with_how_or_what</code>, <code>question_start_with_do_or_are</code>. Might not have added much value but still kept them.</li><li>My final solution consisted of a <strong>stacked ensemble for four models</strong>. I stacked the four models using Logistic regression(with positive weights and 0 intercept) and gave the weights as a list in the final kernel.</li></ul><p>You can find the kernel for my final submission
+<a href="https://www.kaggle.com/mlwhiz/multimodel-ensemble-clean-kernel?scriptVersionId=10279838" target=_blank rel="nofollow noopener">here</a>
+.</p><hr><h2 id=tips-and-tricks-used-in-other-solutions>Tips and Tricks used in other solutions:</h2><h3 id=1-increasing-embeddings-coverage>1. Increasing Embeddings Coverage:</h3><p>In the third place solution
+<a href=https://www.kaggle.com/wowfattie/3rd-place target=_blank rel="nofollow noopener">kernel</a>
+, wowfattie uses stemming, lemmatization, capitalize, lower, uppercase, as well as embedding of the nearest word using a spell checker to get embeddings for all words in his vocab. Such a great idea. <strong>I liked this solution the best as it can do what I was trying to do and finished at a pretty good place.</strong> Also, the code is very clean.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>from</span> nltk.stem <span style=color:#f92672>import</span> PorterStemmer
+ps <span style=color:#f92672>=</span> PorterStemmer()
+<span style=color:#f92672>from</span> nltk.stem.lancaster <span style=color:#f92672>import</span> LancasterStemmer
+lc <span style=color:#f92672>=</span> LancasterStemmer()
+<span style=color:#f92672>from</span> nltk.stem <span style=color:#f92672>import</span> SnowballStemmer
+sb <span style=color:#f92672>=</span> SnowballStemmer(<span style=color:#e6db74>&#34;english&#34;</span>)
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>load_glove</span>(word_dict, lemma_dict):
+    EMBEDDING_FILE <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;../input/embeddings/glove.840B.300d/glove.840B.300d.txt&#39;</span>
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_coefs</span>(word,<span style=color:#f92672>*</span>arr): <span style=color:#66d9ef>return</span> word, np<span style=color:#f92672>.</span>asarray(arr, dtype<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;float32&#39;</span>)
+    embeddings_index <span style=color:#f92672>=</span> dict(get_coefs(<span style=color:#f92672>*</span>o<span style=color:#f92672>.</span>split(<span style=color:#e6db74>&#34; &#34;</span>)) <span style=color:#66d9ef>for</span> o <span style=color:#f92672>in</span> open(EMBEDDING_FILE))
+    embed_size <span style=color:#f92672>=</span> <span style=color:#ae81ff>300</span>
+    nb_words <span style=color:#f92672>=</span> len(word_dict)<span style=color:#f92672>+</span><span style=color:#ae81ff>1</span>
+    embedding_matrix <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>zeros((nb_words, embed_size), dtype<span style=color:#f92672>=</span>np<span style=color:#f92672>.</span>float32)
+    unknown_vector <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>zeros((embed_size,), dtype<span style=color:#f92672>=</span>np<span style=color:#f92672>.</span>float32) <span style=color:#f92672>-</span> <span style=color:#ae81ff>1.</span>
+    <span style=color:#66d9ef>print</span>(unknown_vector[:<span style=color:#ae81ff>5</span>])
+    <span style=color:#66d9ef>for</span> key <span style=color:#f92672>in</span> tqdm(word_dict):
+        word <span style=color:#f92672>=</span> key
+        embedding_vector <span style=color:#f92672>=</span> embeddings_index<span style=color:#f92672>.</span>get(word)
+        <span style=color:#66d9ef>if</span> embedding_vector <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+            embedding_matrix[word_dict[key]] <span style=color:#f92672>=</span> embedding_vector
+            <span style=color:#66d9ef>continue</span>
+        word <span style=color:#f92672>=</span> key<span style=color:#f92672>.</span>lower()
+        embedding_vector <span style=color:#f92672>=</span> embeddings_index<span style=color:#f92672>.</span>get(word)
+        <span style=color:#66d9ef>if</span> embedding_vector <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+            embedding_matrix[word_dict[key]] <span style=color:#f92672>=</span> embedding_vector
+            <span style=color:#66d9ef>continue</span>
+        word <span style=color:#f92672>=</span> key<span style=color:#f92672>.</span>upper()
+        embedding_vector <span style=color:#f92672>=</span> embeddings_index<span style=color:#f92672>.</span>get(word)
+        <span style=color:#66d9ef>if</span> embedding_vector <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+            embedding_matrix[word_dict[key]] <span style=color:#f92672>=</span> embedding_vector
+            <span style=color:#66d9ef>continue</span>
+        word <span style=color:#f92672>=</span> key<span style=color:#f92672>.</span>capitalize()
+        embedding_vector <span style=color:#f92672>=</span> embeddings_index<span style=color:#f92672>.</span>get(word)
+        <span style=color:#66d9ef>if</span> embedding_vector <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+            embedding_matrix[word_dict[key]] <span style=color:#f92672>=</span> embedding_vector
+            <span style=color:#66d9ef>continue</span>
+        word <span style=color:#f92672>=</span> ps<span style=color:#f92672>.</span>stem(key)
+        embedding_vector <span style=color:#f92672>=</span> embeddings_index<span style=color:#f92672>.</span>get(word)
+        <span style=color:#66d9ef>if</span> embedding_vector <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+            embedding_matrix[word_dict[key]] <span style=color:#f92672>=</span> embedding_vector
+            <span style=color:#66d9ef>continue</span>
+        word <span style=color:#f92672>=</span> lc<span style=color:#f92672>.</span>stem(key)
+        embedding_vector <span style=color:#f92672>=</span> embeddings_index<span style=color:#f92672>.</span>get(word)
+        <span style=color:#66d9ef>if</span> embedding_vector <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+            embedding_matrix[word_dict[key]] <span style=color:#f92672>=</span> embedding_vector
+            <span style=color:#66d9ef>continue</span>
+        word <span style=color:#f92672>=</span> sb<span style=color:#f92672>.</span>stem(key)
+        embedding_vector <span style=color:#f92672>=</span> embeddings_index<span style=color:#f92672>.</span>get(word)
+        <span style=color:#66d9ef>if</span> embedding_vector <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+            embedding_matrix[word_dict[key]] <span style=color:#f92672>=</span> embedding_vector
+            <span style=color:#66d9ef>continue</span>
+        word <span style=color:#f92672>=</span> lemma_dict[key]
+        embedding_vector <span style=color:#f92672>=</span> embeddings_index<span style=color:#f92672>.</span>get(word)
+        <span style=color:#66d9ef>if</span> embedding_vector <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+            embedding_matrix[word_dict[key]] <span style=color:#f92672>=</span> embedding_vector
+            <span style=color:#66d9ef>continue</span>
+        <span style=color:#66d9ef>if</span> len(key) <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>1</span>:
+            word <span style=color:#f92672>=</span> correction(key)
+            embedding_vector <span style=color:#f92672>=</span> embeddings_index<span style=color:#f92672>.</span>get(word)
+            <span style=color:#66d9ef>if</span> embedding_vector <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+                embedding_matrix[word_dict[key]] <span style=color:#f92672>=</span> embedding_vector
+                <span style=color:#66d9ef>continue</span>
+        embedding_matrix[word_dict[key]] <span style=color:#f92672>=</span> unknown_vector                    
+    <span style=color:#66d9ef>return</span> embedding_matrix, nb_words
+</code></pre></div><h3 id=2-checkpoint-ensembling>2. Checkpoint Ensembling:</h3><p><strong>Get a lot of models at no cost</strong>. Most of the winning solutions have some version of checkpoint ensembling. For the third place solution, the predictions are a weighted average of predictions after the 4th epoch and predictions after the 5th epoch. I got this idea but forgot to implement it in my ensemble based kernel submission.</p><h3 id=3-meta-embeddings>3. Meta Embeddings:</h3><p>A lot of winning solutions ended up using <strong>weighted meta embeddings</strong> where they provided a higher weight to the Glove embedding. Some solutions also used <strong>concatenated embeddings</strong>.</p><h3 id=4-model-architecture>4. Model Architecture:</h3><p>One surprising thing I saw people doing was to use a <strong>1Dconv layer just after the Bidirectional layer</strong>. For example, This is the
+<a href=https://www.kaggle.com/c/quora-insincere-questions-classification/discussion/80568 target=_blank rel="nofollow noopener">architecture</a>
+used by the team that placed first in the competition.</p><div style=margin-top:9px;margin-bottom:10px><center><img src=/images/silver/arch_1_place.png style=height:50%;width:50%></center></div><h3 id=5-bucketingvariable-sequence-length-and-increased-hidden-units>5. Bucketing/Variable Sequence Length and increased hidden units:</h3><p>Another thing I noticed is the increased number of hidden units as compared to many public kernels. Most of the public kernels used a hidden unit size of 60 due to time constraints. I used 80 units at the cost of training one less network. A lot of high scoring kernels were able to use a higher number of hidden units owing to variable sequence length idea or bucketing. From the 1st place kernel discussion:</p><blockquote><p>We do not pad sequences to the same length based on the whole data, but just on a batch level. That means we conduct <strong>padding and truncation on the data generator level for each batch separately</strong>, so that length of the sentences in a batch can vary in size. Additionally, we further improved this by not truncating based on the length of the longest sequence in the batch but based on the 95% percentile of lengths within the sequence. This improved runtime heavily and kept accuracy quite robust on single model level, and improved it by being able to average more models.</p></blockquote><p>Also from 7th place
+<a href=https://www.kaggle.com/c/quora-insincere-questions-classification/discussion/80561 target=_blank rel="nofollow noopener">discussion</a>
+:</p><blockquote><p>Bucketing is to make a minibatch from instances that have similar lengths to alleviate the cost of padding. This makes the training speed more than <strong>3x faster, and thus I can run 9 epochs for each split of 5-fold.</strong></p></blockquote><p>Thus the use of this technique also allowed some competitors to fit many more epochs in less time and run more models at the same time. Pretty Neat!</p><h3 id=6-for-those-winners-who-didnt-use-bucketing-maxlen--72-was-too-large>6. For those winners who didn&rsquo;t use bucketing, Maxlen = 72 was too large:</h3><p>Most of us saw a distribution of question length and took the length that covered maximum questions fully as the maxlen parameter. I never tried to tune it, but it seems like it could have been tuned. <strong>One of the tricks was to use maxlen ranging from 35 to 60.</strong> This made the kernels run a lot faster.</p><h3 id=7-time-taking-modelscomplex-architectures-like-capsule-were-mostly-not-used>7. Time taking models/complex architectures like Capsule were mostly not used:</h3><p>Most of the winning solutions didn&rsquo;t use capsule networks as they took a lot of time to train.</p><h3 id=8-backprop-errors-on-embeddings-weights-in-last-few-epochs>8. Backprop errors on embeddings weights in last few epochs:</h3><p>Another thing I saw was in the
+<a href=https://www.kaggle.com/kentaronakanishi/18th-place-solution target=_blank rel="nofollow noopener">18th place kernel</a>
+which uses a single model</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#66d9ef>if</span> epoch <span style=color:#f92672>&gt;=</span> <span style=color:#ae81ff>3</span>:
+    model<span style=color:#f92672>.</span>embedding<span style=color:#f92672>.</span>embeddings<span style=color:#f92672>.</span>weight<span style=color:#f92672>.</span>requires_grad <span style=color:#f92672>=</span> True
+</code></pre></div><hr><h2 id=conclusion>Conclusion:</h2><p>It was a good and long 2-month competition, and I learned a lot about Text and NLP during this time. I want to emphasize here is that <strong>I ended up trying a lot of things that didn&rsquo;t work before reaching my final solution</strong>. It was a little frustrating at times, but in the end, I was happy that I ended up with the best data science practices. Would also like to thank Kaggle master Kazanova who along with some of his friends released a
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-BShznKdc3CUauhfsM7_8xw&utm_content=2&utm_medium=partners&utm_source=linkshare&utm_campaign=lVarvwc5BD0" target=_blank rel="nofollow noopener">“How to win a data science competition”</a>
+Coursera course. I learned a lot from this course.</p><p>Let me know in the comments if you think something is missing/wrong or if I could add more tips/tricks for this competition.</p><script async data-uid=8d7942551b src=https://mlwhiz.ck.page/8d7942551b/index.js></script><div class=shareaholic-canvas data-app=share_buttons data-app-id=28372088 style=margin-bottom:1px></div><a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel=nofollow><img border=0 alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a><div id=disqus_thread></div><script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return;}
+var d=document,s=d.createElement('script');s.async=true;s.src='//'+"mlwhiz"+'.disqus.com/embed.js';s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div></div><div class=col-lg-4><div class=widget><script type=text/javascript src=https://ko-fi.com/widgets/widget_2.js></script><script type=text/javascript>kofiwidget2.init('Support Me on Ko-fi','#00aaa1','S6S3NPCD');kofiwidget2.draw();</script></div><div class=widget><h4 class=widget-title>About Me</h4><img src=https://mlwhiz.com/images/author.jpg alt class="img-fluid author-thumb-sm d-block mx-auto rounded-circle mb-4"><p>I’m a data scientist consultant and big data engineer based in Bangalore, where I am currently working with WalmartLabs .</p><a href=https://mlwhiz.com/about/ class="btn btn-outline-primary">Know More</a></div><div class=widget><h4 class=widget-title>Topics</h4><ul class=list-unstyled><li><a class=categoryStyle style=color:#fff href=/categories/awesome-guides>Awesome Guides</a></li><li><a class=categoryStyle style=color:#fff href=/categories/big-data>Big Data</a></li><li><a class=categoryStyle style=color:#fff href=/categories/computer-vision>Computer Vision</a></li><li><a class=categoryStyle style=color:#fff href=/categories/data-science>Data Science</a></li><li><a class=categoryStyle style=color:#fff href=/categories/deep-learning>Deep Learning</a></li><li><a class=categoryStyle style=color:#fff href=/categories/learning-resources>Learning Resources</a></li><li><a class=categoryStyle style=color:#fff href=/categories/natural-language-processing>Natural Language Processing</a></li><li><a class=categoryStyle style=color:#fff href=/categories/programming>Programming</a></li></ul></div><div class=widget><h4 class=widget-title>Tags</h4><ul class=list-inline><li class=list-inline-item><a class="tagStyle text-white" href=/tags/algorithms>Algorithms</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/artificial-intelligence>Artificial Intelligence</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/dask>Dask</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/deployment>Deployment</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/ec2>Ec2</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/generative-adversarial-networks>Generative Adversarial Networks</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/graphs>Graphs</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/image-classification>Image Classification</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/instance-segmentation>Instance Segmentation</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/interpretability>Interpretability</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/jobs>Jobs</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/kaggle>Kaggle</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/language-modeling>Language Modeling</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/machine-learning>Machine Learning</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/math>Math</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/multiprocessing>Multiprocessing</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/object-detection>Object Detection</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/opinion>Opinion</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/pandas>Pandas</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/production>Production</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/productivity>Productivity</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/python>Python</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/pytorch>Pytorch</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/spark>Spark</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/sql>Sql</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/statistics>Statistics</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/streamlit>Streamlit</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/text-classification>Text Classification</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/timeseries>Timeseries</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/tools>Tools</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/translation>Translation</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/visualization>Visualization</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/xgboost>Xgboost</a></li></ul></div><div class=widget><h4 class=widget-title>Connect With Me</h4><ul class="list-inline social-links"><li class=list-inline-item><a href=https://www.linkedin.com/in/rahulagwl/><i class=ti-linkedin></i></a></li><li class=list-inline-item><a href=https://medium.com/@rahul_agarwal><i class=ti-book></i></a></li><li class=list-inline-item><a href=https://twitter.com/MLWhiz><i class=ti-twitter-alt></i></a></li><li class=list-inline-item><a href=https://www.facebook.com/mlwhizblog><i class=ti-facebook></i></a></li><li class=list-inline-item><a href=https://github.com/MLWhiz><i class=ti-github></i></a></li></ul></div><script async data-uid=bfe9f82f10 src=https://mlwhiz.ck.page/bfe9f82f10/index.js></script><script async data-uid=3452d924e2 src=https://mlwhiz.ck.page/3452d924e2/index.js></script></div></div></div></section><footer><div class=container><div class=row><div class="col-12 text-center mb-5"><a href=https://mlwhiz.com/><img src=https://mlwhiz.com/images/logo.png class=img-fluid-custom-bottom alt="MLWhiz: Helping You Learn Data Science!"></a></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Contact Me</h6><ul class=list-unstyled><li class=mb-3><i class="ti-location-pin mr-3 text-primary"></i>India, Bangalore</li><li class=mb-3><a class=text-dark href=mailto:rahul@mlwhiz.com><i class="ti-email mr-3 text-primary"></i>rahul@mlwhiz.com</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Social Contacts</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=https://www.linkedin.com/in/rahulagwl/>Linkedin</a></li><li class=mb-3><a class=text-dark href=https://medium.com/@rahul_agarwal>Medium</a></li><li class=mb-3><a class=text-dark href=https://twitter.com/MLWhiz>Twitter</a></li><li class=mb-3><a class=text-dark href=https://www.facebook.com/mlwhizblog>Facebook</a></li><li class=mb-3><a class=text-dark href=https://github.com/MLWhiz>Github</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Categories</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=/categories/awesome-guides>Awesome Guides</a></li><li class=mb-3><a class=text-dark href=/categories/big-data>Big Data</a></li><li class=mb-3><a class=text-dark href=/categories/computer-vision>Computer Vision</a></li><li class=mb-3><a class=text-dark href=/categories/data-science>Data Science</a></li><li class=mb-3><a class=text-dark href=/categories/deep-learning>Deep Learning</a></li><li class=mb-3><a class=text-dark href=/categories/learning-resources>Learning Resources</a></li><li class=mb-3><a class=text-dark href=/categories/natural-language-processing>Natural Language Processing</a></li><li class=mb-3><a class=text-dark href=/categories/programming>Programming</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Quick Links</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=https://mlwhiz.com/about>About</a></li><li class=mb-3><a class=text-dark href=https://mlwhiz.com/blog>Post</a></li></ul></div><div class="col-12 border-top py-4 text-center">Copyright © 2020 <a href=https://mlwhiz.com>MLWhiz</a> All Rights Reserved</div></div></div></footer><script>var indexURL="https://mlwhiz.com/index.json"</script><script src=https://mlwhiz.com/plugins/compressjscss/main.js></script><script src=https://mlwhiz.com/js/script.min.js></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-54777926-1','auto');ga('send','pageview');</script></body></html>

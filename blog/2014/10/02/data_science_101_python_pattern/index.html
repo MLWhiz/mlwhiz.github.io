@@ -1,877 +1,112 @@
-<!DOCTYPE html>
-<html lang="en-us"><head>
-  <meta charset="utf-8">
-  <title>MLWhiz: Helping You Learn Data Science!</title>
-
-  <!-- mobile responsive meta -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="This is a simple illustration of using Pattern Module to scrape web data using Python. We will be scraping the data from imdb for the top TV Series along with their ratings">
-  <meta name="author" content="Rahul Agarwal">
-  <meta name="generator" content="Hugo 0.74.3" />
-  <!-- plugins -->
-  
-  <link rel="stylesheet" href="https://mlwhiz.com/plugins/compressjscss/main.css ">
-  
-
-	<meta property="og:title" content="Data Science 101 : Playing with Scraping in Python" />
-<meta property="og:description" content="This is a simple illustration of using Pattern Module to scrape web data using Python. We will be scraping the data from imdb for the top TV Series along with their ratings" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://mlwhiz.com/blog/2014/10/02/data_science_101_python_pattern/" />
-
-<meta property="og:image" content="https://mlwhiz.com/images/category_bgs/default_bg.jpg" />
-<meta property="og:image:secure_url" content="https://mlwhiz.com/images/category_bgs/default_bg.jpg" />
-<meta property="article:published_time" content="2014-10-02T00:00:00+00:00" />
-<meta property="article:modified_time" content="2020-09-26T16:23:35+05:30" />
-<meta property="article:tag" content="Data Science" />
-
-	<meta name="twitter:card" content="summary"/>
-<meta name="twitter:image" content="https://mlwhiz.com/images/category_bgs/default_bg.jpg"/>
-
-<meta name="twitter:title" content="Data Science 101 : Playing with Scraping in Python"/>
-<meta name="twitter:description" content="This is a simple illustration of using Pattern Module to scrape web data using Python. We will be scraping the data from imdb for the top TV Series along with their ratings"/>
-<meta name="twitter:site" content="@mlwhiz"/>
-<meta name="twitter:creator" content="@mlwhiz"/>
-
-
-
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-
-	<!-- Main Stylesheet -->
-  
-  <link rel="stylesheet" href="https://mlwhiz.com/scss/style.min.css" media="screen">
-  <link rel="stylesheet" href="/css/style.css">
-
-  <link rel="stylesheet" type="text/css" href="/css/font/flaticon.css" >
-
-  <!--Favicon-->
-  <link rel="shortcut icon" href="https://mlwhiz.com/images/favicon-200x200.png " type="image/x-icon">
-  <link rel="icon" href="https://mlwhiz.com/images/favicon.png " type="image/x-icon">
-
-
-    <link rel="canonical" href="https://mlwhiz.com/blog/2014/10/02/data_science_101_python_pattern/" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-
-
-<script type = 'application/ld+json'> {
-    "@context": "https://schema.org",
-    "@graph": [{
-        "@type": "WebSite",
-        "@id": "https://www.mlwhiz.com/#website",
-        "url": "https://www.mlwhiz.com/",
-        "name": "MLWhiz",
-        "description": "Want to Learn Computer Vision and NLP? - MLWhiz",
-        "potentialAction": {
-            "@type": "SearchAction",
-            "target": "https://www.mlwhiz.com/search?s={search_term_string}",
-            "query-input": "required name=search_term_string"
-        }
-    }, {
-        "@type": "ImageObject",
-        "@id": "https://mlwhiz.com/blog/2014/10/02/data_science_101_python_pattern/#primaryimage",
-        "url": "https://mlwhiz.com/images/category_bgs/default_bg.jpg",
-        "width": 700,
-        "height": 450
-    }, {
-        "@type": "WebPage",
-        "@id": "https://mlwhiz.com/blog/2014/10/02/data_science_101_python_pattern/#webpage",
-        "url": "https://mlwhiz.com/blog/2014/10/02/data_science_101_python_pattern/",
-        "inLanguage": "en-US",
-        "name": "Data Science 101 : Playing with Scraping in Python - MLWhiz",
-        "isPartOf": {
-            "@id": "https://www.mlwhiz.com/#website"
-        },
-        "primaryImageOfPage": {
-            "@id": "https://mlwhiz.com/blog/2014/10/02/data_science_101_python_pattern/#primaryimage"
-        },
-        "datePublished":"2014-10-02T00:00:00.00Z",
-        "dateModified": "2020-09-26T16:23:35.00Z",
-        "author": {
-            "@id": "https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca"
-        },
-        "description": "This is a simple illustration of using Pattern Module to scrape web data using Python. We will be scraping the data from imdb for the top TV Series along with their ratings"
-    },
-
-
-    {
-        "@type": ["Person"],
-        "@id": "https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca",
-        "name": "Rahul Agarwal",
-        "image": {
-            "@type": "ImageObject",
-            "@id": "https://www.mlwhiz.com/#authorlogo",
-            "url": "https://mlwhiz.com/images/author.jpg",
-            "caption": "Rahul Agarwal"
-        },
-        "description": "Hi there, I\u2019m Rahul Agarwal. I\u2019m a data scientist consultant and big data engineer based in Bangalore. I see a lot of times  students and even professionals wasting their time and struggling to get started with Computer Vision, Deep Learning, and NLP. I Started this Site with a purpose to augment my own understanding about new things while helping others learn about them in the best possible way.",
-        "sameAs": ["https://www.linkedin.com/in/rahulagwl/",
-          "https://medium.com/@rahul_agarwal",
-          "https://twitter.com/MLWhiz","https://www.facebook.com/mlwhizblog","https://github.com/MLWhiz","https://www.instagram.com/itsmlwhiz"]
-    }]
-} </script>
-
-
-
-<script async data-uid="a0ebaf958d" src="https://mlwhiz.ck.page/a0ebaf958d/index.js"></script>
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-  MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [['$','$'], ['\\(','\\)']],
-    displayMath: [['$$','$$']],
-    processEscapes: true,
-    processEnvironments: true,
-    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-    TeX: { equationNumbers: { autoNumber: "AMS" },
-         extensions: ["AMSmath.js", "AMSsymbols.js"] }
-  }
-  });
-  MathJax.Hub.Queue(function() {
-    
-    
-    
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-
-  MathJax.Hub.Config({
-  
-  TeX: { equationNumbers: { autoNumber: "AMS" } }
-  });
-</script>
-
-
-
-<link href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
-<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
-
-
-</head>
-<body>
-      
-   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
-   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-   
-<!-- preloader start -->
-<div class="preloader">
-  
-</div>
-<!-- preloader end -->
-<!-- navigation -->
-<header class="navigation">
-  <div class="container">
-    
-    <nav class="navbar navbar-expand-lg navbar-white bg-transparent border-bottom pl-0">
-      <a class="navbar-brand mobile-view" href="https://mlwhiz.com/"><img class="img-fluid"
-          src="https://mlwhiz.com/images/logo.png" alt="MLWhiz: Helping You Learn Data Science!"></a>
-      <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navigation">
-        <i class="ti-menu h3"></i>
-      </button>
-
-      <div class="collapse navbar-collapse text-center" id="navigation">
-        <div class="desktop-view">
-          <ul class="navbar-nav mr-auto">
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://www.linkedin.com/in/rahulagwl/"><i class="ti-linkedin"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://medium.com/@rahul_agarwal"><i class="ti-book"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://twitter.com/MLWhiz"><i class="ti-twitter-alt"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://www.facebook.com/mlwhizblog"><i class="ti-facebook"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://github.com/MLWhiz"><i class="ti-github"></i></a>
-            </li>
-            
-          </ul>
-        </div>
-
-        <a class="navbar-brand mx-auto desktop-view" href="https://mlwhiz.com/"><img class="img-fluid-custom"
-            src="https://mlwhiz.com/images/logo.png" alt="MLWhiz: Helping You Learn Data Science!"></a>
-
-        <ul class="navbar-nav">
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="https://mlwhiz.com/about">About</a>
-          </li>
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="https://mlwhiz.com/blog">Blog</a>
-          </li>
-          
-          
-          
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">
-              Topics
-            </a>
-            <div class="dropdown-menu">
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/natural-language-processing">NLP</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/computer-vision">Computer Vision</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/deep-learning">Deep Learning</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/data-science">DS/ML</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/big-data">Big Data</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/awesome-guides">My Best Content</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/learning-resources">Learning Resources</a>
-              
-            </div>
-          </li>
-          
-          
-        </ul>
-
-        
-        <!-- search -->
-        <div class="search pl-lg-4">
-          <button id="searchOpen" class="search-btn"><i class="ti-search"></i></button>
-          <div class="search-wrapper">
-            <form action="https://mlwhiz.com//search" class="h-100">
-              <input class="search-box px-4" id="search-query" name="s" type="search" placeholder="Type & Hit Enter...">
-            </form>
-            <button id="searchClose" class="search-close"><i class="ti-close text-dark"></i></button>
-          </div>
-        </div>
-        
-
-        
-      </div>
-    </nav>
-  </div>
-</header>
-<!-- /navigation -->
-
-
-<section class="section-sm">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 mb-5 mb-lg-0">
-        
-        
-        <a href="/categories/data-science"
-          class="categoryStyle">Data Science</a>
-        
-        <h1>Data Science 101 : Playing with Scraping in Python</h1>
-        <div class="mb-3 post-meta">
-          <span>By Rahul Agarwal</span>
-          
-          <svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"></path></svg>
-
-          <span>02 October 2014</span>
-          
-        </div>
-        
-        <img src="https://mlwhiz.com/images/category_bgs/default_bg.jpg" class="img-fluid w-100 mb-4" alt="Data Science 101 : Playing with Scraping in Python">
-        
-        <div class="content mb-5">
-          <p>This is a simple illustration of using Pattern Module to scrape web data using Python. We will be scraping the data from imdb for the top TV Series along with their ratings</p>
-<p>We will be using this link for this:</p>
-<pre style="font-family:courier new,monospace; background-color:#f6c6529c; color:#000000">
+<!doctype html><html lang=en-us><head><meta charset=utf-8><title>MLWhiz: Helping You Learn Data Science!</title><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta name=description content="This is a simple illustration of using Pattern Module to scrape web data using Python. We will be scraping the data from imdb for the top TV Series along with their ratings"><meta name=author content="Rahul Agarwal"><meta name=generator content="Hugo 0.74.3"><link rel=stylesheet href=https://mlwhiz.com/plugins/compressjscss/main.css><meta property="og:title" content="Data Science 101 : Playing with Scraping in Python"><meta property="og:description" content="This is a simple illustration of using Pattern Module to scrape web data using Python. We will be scraping the data from imdb for the top TV Series along with their ratings"><meta property="og:type" content="article"><meta property="og:url" content="https://mlwhiz.com/blog/2014/10/02/data_science_101_python_pattern/"><meta property="og:image" content="https://mlwhiz.com/images/category_bgs/default_bg.jpg"><meta property="og:image:secure_url" content="https://mlwhiz.com/images/category_bgs/default_bg.jpg"><meta property="article:published_time" content="2014-10-02T00:00:00+00:00"><meta property="article:modified_time" content="2020-09-26T16:23:35+05:30"><meta property="article:tag" content="Data Science"><meta name=twitter:card content="summary"><meta name=twitter:image content="https://mlwhiz.com/images/category_bgs/default_bg.jpg"><meta name=twitter:title content="Data Science 101 : Playing with Scraping in Python"><meta name=twitter:description content="This is a simple illustration of using Pattern Module to scrape web data using Python. We will be scraping the data from imdb for the top TV Series along with their ratings"><meta name=twitter:site content="@mlwhiz"><meta name=twitter:creator content="@mlwhiz"><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href=https://mlwhiz.com/scss/style.min.css media=screen><link rel=stylesheet href=/css/style.css><link rel=stylesheet type=text/css href=/css/font/flaticon.css><link rel="shortcut icon" href=https://mlwhiz.com/images/favicon-200x200.png type=image/x-icon><link rel=icon href=https://mlwhiz.com/images/favicon.png type=image/x-icon><link rel=canonical href=https://mlwhiz.com/blog/2014/10/02/data_science_101_python_pattern/><script src=https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js></script><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.mlwhiz.com/#website","url":"https://www.mlwhiz.com/","name":"MLWhiz","description":"Want to Learn Computer Vision and NLP? - MLWhiz","potentialAction":{"@type":"SearchAction","target":"https://www.mlwhiz.com/search?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"ImageObject","@id":"https://mlwhiz.com/blog/2014/10/02/data_science_101_python_pattern/#primaryimage","url":"https://mlwhiz.com/images/category_bgs/default_bg.jpg","width":700,"height":450},{"@type":"WebPage","@id":"https://mlwhiz.com/blog/2014/10/02/data_science_101_python_pattern/#webpage","url":"https://mlwhiz.com/blog/2014/10/02/data_science_101_python_pattern/","inLanguage":"en-US","name":"Data Science 101 : Playing with Scraping in Python - MLWhiz","isPartOf":{"@id":"https://www.mlwhiz.com/#website"},"primaryImageOfPage":{"@id":"https://mlwhiz.com/blog/2014/10/02/data_science_101_python_pattern/#primaryimage"},"datePublished":"2014-10-02T00:00:00.00Z","dateModified":"2020-09-26T16:23:35.00Z","author":{"@id":"https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca"},"description":"This is a simple illustration of using Pattern Module to scrape web data using Python. We will be scraping the data from imdb for the top TV Series along with their ratings"},{"@type":["Person"],"@id":"https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca","name":"Rahul Agarwal","image":{"@type":"ImageObject","@id":"https://www.mlwhiz.com/#authorlogo","url":"https://mlwhiz.com/images/author.jpg","caption":"Rahul Agarwal"},"description":"Hi there, I\u2019m Rahul Agarwal. I\u2019m a data scientist consultant and big data engineer based in Bangalore. I see a lot of times  students and even professionals wasting their time and struggling to get started with Computer Vision, Deep Learning, and NLP. I Started this Site with a purpose to augment my own understanding about new things while helping others learn about them in the best possible way.","sameAs":["https://www.linkedin.com/in/rahulagwl/","https://medium.com/@rahul_agarwal","https://twitter.com/MLWhiz","https://www.facebook.com/mlwhizblog","https://github.com/MLWhiz","https://www.instagram.com/itsmlwhiz"]}]}</script><script async data-uid=a0ebaf958d src=https://mlwhiz.ck.page/a0ebaf958d/index.js></script><script type=text/javascript async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">MathJax.Hub.Config({tex2jax:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$']],processEscapes:true,processEnvironments:true,skipTags:['script','noscript','style','textarea','pre'],TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["AMSmath.js","AMSsymbols.js"]}}});MathJax.Hub.Queue(function(){var all=MathJax.Hub.getAllJax(),i;for(i=0;i<all.length;i+=1){all[i].SourceElement().parentNode.className+=' has-jax';}});MathJax.Hub.Config({TeX:{equationNumbers:{autoNumber:"AMS"}}});</script><link href=//apps.shareaholic.com/assets/pub/shareaholic.js as=script><script type=text/javascript data-cfasync=false async src=//apps.shareaholic.com/assets/pub/shareaholic.js data-shr-siteid=fd1ffa7fd7152e4e20568fbe49a489d0></script></head><body><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T" height=0 width=0 style=display:none;visibility:hidden></iframe></noscript><div class=preloader></div><header class=navigation><div class=container><nav class="navbar navbar-expand-lg navbar-white bg-transparent border-bottom pl-0"><a class="navbar-brand mobile-view" href=https://mlwhiz.com/><img class=img-fluid src=https://mlwhiz.com/images/logo.png alt="MLWhiz: Helping You Learn Data Science!"></a>
+<button class="navbar-toggler border-0" type=button data-toggle=collapse data-target=#navigation>
+<i class="ti-menu h3"></i></button><div class="collapse navbar-collapse text-center" id=navigation><div class=desktop-view><ul class="navbar-nav mr-auto"><li class=nav-item><a class=nav-link href=https://www.linkedin.com/in/rahulagwl/><i class=ti-linkedin></i></a></li><li class=nav-item><a class=nav-link href=https://medium.com/@rahul_agarwal><i class=ti-book></i></a></li><li class=nav-item><a class=nav-link href=https://twitter.com/MLWhiz><i class=ti-twitter-alt></i></a></li><li class=nav-item><a class=nav-link href=https://www.facebook.com/mlwhizblog><i class=ti-facebook></i></a></li><li class=nav-item><a class=nav-link href=https://github.com/MLWhiz><i class=ti-github></i></a></li></ul></div><a class="navbar-brand mx-auto desktop-view" href=https://mlwhiz.com/><img class=img-fluid-custom src=https://mlwhiz.com/images/logo.png alt="MLWhiz: Helping You Learn Data Science!"></a><ul class=navbar-nav><li class=nav-item><a class=nav-link href=https://mlwhiz.com/about>About</a></li><li class=nav-item><a class=nav-link href=https://mlwhiz.com/blog>Blog</a></li><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href=# role=button data-toggle=dropdown aria-haspopup=true aria-expanded=false>Topics</a><div class=dropdown-menu><a class=dropdown-item href=https://mlwhiz.com/categories/natural-language-processing>NLP</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/computer-vision>Computer Vision</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/deep-learning>Deep Learning</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/data-science>DS/ML</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/big-data>Big Data</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/awesome-guides>My Best Content</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/learning-resources>Learning Resources</a></div></li></ul><div class="search pl-lg-4"><button id=searchOpen class=search-btn><i class=ti-search></i></button><div class=search-wrapper><form action=https://mlwhiz.com//search class=h-100><input class="search-box px-4" id=search-query name=s type=search placeholder="Type & Hit Enter..."></form><button id=searchClose class=search-close><i class="ti-close text-dark"></i></button></div></div></div></nav></div></header><section class=section-sm><div class=container><div class=row><div class="col-lg-8 mb-5 mb-lg-0"><a href=/categories/data-science class=categoryStyle>Data Science</a><h1>Data Science 101 : Playing with Scraping in Python</h1><div class="mb-3 post-meta"><span>By Rahul Agarwal</span><svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+<span>02 October 2014</span></div><img src=https://mlwhiz.com/images/category_bgs/default_bg.jpg class="img-fluid w-100 mb-4" alt="Data Science 101 : Playing with Scraping in Python"><div class="content mb-5"><p>This is a simple illustration of using Pattern Module to scrape web data using Python. We will be scraping the data from imdb for the top TV Series along with their ratings</p><p>We will be using this link for this:</p><pre style="font-family:courier new,monospace;background-color:#f6c6529c;color:#000">
 http://www.imdb.com/search/title?count=100&num_votes=5000,&ref_=gnr_tv_hr&sort=user_rating,desc&start=1&title_type=tv_series,mini_series
-</pre>
-<p>This URL gives a list of top Rated TV Series which have number of votes atleast 5000. The Thing to note in this URL is the &ldquo;&amp;start=&rdquo; parameter where we can specify which review should the list begin with. If we specify 1 we will get reviews starting from 1-100, if we specify 101 we get reviews from 101-200 and so on.</p>
-<p>Lets Start by importing some Python Modules that will be needed for Scraping Data:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> requests                     <span style="color:#75715e"># This is a module that is used for getting html data from a webpage in the text format</span>
-<span style="color:#f92672">from</span> pattern <span style="color:#f92672">import</span> web             <span style="color:#75715e"># We use this module to parse through the dtaa that we loaded using requests</span>
-</code></pre></div><h2 id="loading-the-data-using-requests-and-pattern">Loading the data using requests and pattern</h2>
-<p>So the modules are loaded at this point, next we will try to catch the url using python and put this into a dict in python. We will start with a single URL and then try to parse it using pattern module</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">url<span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://www.imdb.com/search/title?count=100&amp;num_votes=5000,&amp;ref_=gnr_tv_hr&amp;sort=user_rating,desc&amp;start=1&amp;title_type=tv_series,mini_series&#34;</span>
-html_data <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url)<span style="color:#f92672">.</span>text
-dom<span style="color:#f92672">=</span>web<span style="color:#f92672">.</span>Element(html_data)
-</code></pre></div><h2 id="parsing-the-data">Parsing the data</h2>
-<p>This is the data of Interest found out after some nspection of the html code. This is for a single TV Series Band of brothers, but if you are able to parse this you just have to move hrough a loop.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#f92672">html</span>&gt;
-&lt;<span style="color:#f92672">td</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;title&#34;</span>&gt;
-&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;wlb_wrapper&#34;</span> <span style="color:#a6e22e">data-tconst</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;tt0185906&#34;</span> <span style="color:#a6e22e">data-size</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;small&#34;</span> <span style="color:#a6e22e">data-caller-name</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;search&#34;</span>&gt;&lt;/<span style="color:#f92672">span</span>&gt;
-&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/title/tt0185906/&#34;</span>&gt;Band of Brothers&lt;/<span style="color:#f92672">a</span>&gt;
-&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;year_type&#34;</span>&gt;(2001 Mini-Series)&lt;/<span style="color:#f92672">span</span>&gt;&lt;<span style="color:#f92672">br</span> /&gt;
-&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;user_rating&#34;</span>&gt;
-&lt;<span style="color:#f92672">div</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;rating rating-list&#34;</span> <span style="color:#a6e22e">data-auth</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;BCYm-Mk2Ros7BTxsLNL2XJX_icfZVahNr1bE9-5Ajb2N3381yxcaNN4ZQqyrX7KgEFGqHWmwv10lv7lAnXyC8CCkh9hPqQfzwVTumCeRzjpnndW4_ft97qQkBYLUvFxYnFgR&#34;</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;tt0185906|imdb|9.6|9.6|advsearch&#34;</span> <span style="color:#a6e22e">data-ga-identifier</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;advsearch&#34;</span> <span style="color:#a6e22e">title</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Users rated this 9.6/10 (156,073 votes) - click stars to rate&#34;</span>&gt;
-&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;rating-bg&#34;</span>&gt;&amp;nbsp;&lt;/<span style="color:#f92672">span</span>&gt;
-&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;rating-imdb&#34;</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;width: 134px&#34;</span>&gt;&amp;nbsp;&lt;/<span style="color:#f92672">span</span>&gt;
-&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;rating-stars&#34;</span>&gt;
-&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/register/login?why=vote&#34;</span> <span style="color:#a6e22e">title</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Register or login to rate this title&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;nofollow&#34;</span>&gt;&lt;<span style="color:#f92672">span</span>&gt;1&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">a</span>&gt;
-&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/register/login?why=vote&#34;</span> <span style="color:#a6e22e">title</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Register or login to rate this title&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;nofollow&#34;</span>&gt;&lt;<span style="color:#f92672">span</span>&gt;2&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">a</span>&gt;
-&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/register/login?why=vote&#34;</span> <span style="color:#a6e22e">title</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Register or login to rate this title&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;nofollow&#34;</span>&gt;&lt;<span style="color:#f92672">span</span>&gt;3&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">a</span>&gt;
-&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/register/login?why=vote&#34;</span> <span style="color:#a6e22e">title</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Register or login to rate this title&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;nofollow&#34;</span>&gt;&lt;<span style="color:#f92672">span</span>&gt;4&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">a</span>&gt;
-&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/register/login?why=vote&#34;</span> <span style="color:#a6e22e">title</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Register or login to rate this title&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;nofollow&#34;</span>&gt;&lt;<span style="color:#f92672">span</span>&gt;5&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">a</span>&gt;
-&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/register/login?why=vote&#34;</span> <span style="color:#a6e22e">title</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Register or login to rate this title&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;nofollow&#34;</span>&gt;&lt;<span style="color:#f92672">span</span>&gt;6&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">a</span>&gt;
-&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/register/login?why=vote&#34;</span> <span style="color:#a6e22e">title</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Register or login to rate this title&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;nofollow&#34;</span>&gt;&lt;<span style="color:#f92672">span</span>&gt;7&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">a</span>&gt;
-&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/register/login?why=vote&#34;</span> <span style="color:#a6e22e">title</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Register or login to rate this title&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;nofollow&#34;</span>&gt;&lt;<span style="color:#f92672">span</span>&gt;8&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">a</span>&gt;
-&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/register/login?why=vote&#34;</span> <span style="color:#a6e22e">title</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Register or login to rate this title&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;nofollow&#34;</span>&gt;&lt;<span style="color:#f92672">span</span>&gt;9&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">a</span>&gt;
-&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/register/login?why=vote&#34;</span> <span style="color:#a6e22e">title</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Register or login to rate this title&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;nofollow&#34;</span>&gt;&lt;<span style="color:#f92672">span</span>&gt;10&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">a</span>&gt;
-&lt;/<span style="color:#f92672">span</span>&gt;
-&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;rating-rating&#34;</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;value&#34;</span>&gt;9.6&lt;/<span style="color:#f92672">span</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;grey&#34;</span>&gt;/&lt;/<span style="color:#f92672">span</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;grey&#34;</span>&gt;10&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">span</span>&gt;
-&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;rating-cancel&#34;</span>&gt;&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/title/tt0185906/vote?v=X;k=BCYm-Mk2Ros7BTxsLNL2XJX_icfZVahNr1bE9-5Ajb2N3381yxcaNN4ZQqyrX7KgEFGqHWmwv10lv7lAnXyC8CCkh9hPqQfzwVTumCeRzjpnndW4_ft97qQkBYLUvFxYnFgR&#34;</span> <span style="color:#a6e22e">title</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Delete&#34;</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;nofollow&#34;</span>&gt;&lt;<span style="color:#f92672">span</span>&gt;X&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">a</span>&gt;&lt;/<span style="color:#f92672">span</span>&gt;
-&amp;nbsp;&lt;/<span style="color:#f92672">div</span>&gt;
-&lt;/<span style="color:#f92672">div</span>&gt;
-&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;outline&#34;</span>&gt;The story of Easy Company of the US Army 101st Airborne division and their mission in WWII Europe from Operation Overlord through V-J Day.&lt;/<span style="color:#f92672">span</span>&gt;
-&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;credit&#34;</span>&gt;
-    With: &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/name/nm0342241/&#34;</span>&gt;Scott Grimes&lt;/<span style="color:#f92672">a</span>&gt;, &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/name/nm0500614/&#34;</span>&gt;Matthew Leitch&lt;/<span style="color:#f92672">a</span>&gt;, &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/name/nm0507073/&#34;</span>&gt;Damian Lewis&lt;/<span style="color:#f92672">a</span>&gt;
-&lt;/<span style="color:#f92672">span</span>&gt;
-&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;genre&#34;</span>&gt;&lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/genre/action&#34;</span>&gt;Action&lt;/<span style="color:#f92672">a</span>&gt; | &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/genre/drama&#34;</span>&gt;Drama&lt;/<span style="color:#f92672">a</span>&gt; | &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/genre/history&#34;</span>&gt;History&lt;/<span style="color:#f92672">a</span>&gt; | &lt;<span style="color:#f92672">a</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/genre/war&#34;</span>&gt;War&lt;/<span style="color:#f92672">a</span>&gt;&lt;/<span style="color:#f92672">span</span>&gt;
-&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;certificate&#34;</span>&gt;&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">title</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;TV_MA&#34;</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;us_tv_ma titlePageSprite&#34;</span>&gt;&lt;/<span style="color:#f92672">span</span>&gt;&lt;/<span style="color:#f92672">span</span>&gt;
-&lt;<span style="color:#f92672">span</span> <span style="color:#a6e22e">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;runtime&#34;</span>&gt;705 mins.&lt;/<span style="color:#f92672">span</span>&gt;
-&lt;/<span style="color:#f92672">td</span>&gt;
+</pre><p>This URL gives a list of top Rated TV Series which have number of votes atleast 5000. The Thing to note in this URL is the &ldquo;&start=&rdquo; parameter where we can specify which review should the list begin with. If we specify 1 we will get reviews starting from 1-100, if we specify 101 we get reviews from 101-200 and so on.</p><p>Lets Start by importing some Python Modules that will be needed for Scraping Data:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>import</span> requests                     <span style=color:#75715e># This is a module that is used for getting html data from a webpage in the text format</span>
+<span style=color:#f92672>from</span> pattern <span style=color:#f92672>import</span> web             <span style=color:#75715e># We use this module to parse through the dtaa that we loaded using requests</span>
+</code></pre></div><h2 id=loading-the-data-using-requests-and-pattern>Loading the data using requests and pattern</h2><p>So the modules are loaded at this point, next we will try to catch the url using python and put this into a dict in python. We will start with a single URL and then try to parse it using pattern module</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py>url<span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;http://www.imdb.com/search/title?count=100&amp;num_votes=5000,&amp;ref_=gnr_tv_hr&amp;sort=user_rating,desc&amp;start=1&amp;title_type=tv_series,mini_series&#34;</span>
+html_data <span style=color:#f92672>=</span> requests<span style=color:#f92672>.</span>get(url)<span style=color:#f92672>.</span>text
+dom<span style=color:#f92672>=</span>web<span style=color:#f92672>.</span>Element(html_data)
+</code></pre></div><h2 id=parsing-the-data>Parsing the data</h2><p>This is the data of Interest found out after some nspection of the html code. This is for a single TV Series Band of brothers, but if you are able to parse this you just have to move hrough a loop.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html>&lt;<span style=color:#f92672>html</span>&gt;
+&lt;<span style=color:#f92672>td</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;title&#34;</span>&gt;
+&lt;<span style=color:#f92672>span</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;wlb_wrapper&#34;</span> <span style=color:#a6e22e>data-tconst</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;tt0185906&#34;</span> <span style=color:#a6e22e>data-size</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;small&#34;</span> <span style=color:#a6e22e>data-caller-name</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;search&#34;</span>&gt;&lt;/<span style=color:#f92672>span</span>&gt;
+&lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/title/tt0185906/&#34;</span>&gt;Band of Brothers&lt;/<span style=color:#f92672>a</span>&gt;
+&lt;<span style=color:#f92672>span</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;year_type&#34;</span>&gt;(2001 Mini-Series)&lt;/<span style=color:#f92672>span</span>&gt;&lt;<span style=color:#f92672>br</span> /&gt;
+&lt;<span style=color:#f92672>div</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;user_rating&#34;</span>&gt;
+&lt;<span style=color:#f92672>div</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;rating rating-list&#34;</span> <span style=color:#a6e22e>data-auth</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;BCYm-Mk2Ros7BTxsLNL2XJX_icfZVahNr1bE9-5Ajb2N3381yxcaNN4ZQqyrX7KgEFGqHWmwv10lv7lAnXyC8CCkh9hPqQfzwVTumCeRzjpnndW4_ft97qQkBYLUvFxYnFgR&#34;</span> <span style=color:#a6e22e>id</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;tt0185906|imdb|9.6|9.6|advsearch&#34;</span> <span style=color:#a6e22e>data-ga-identifier</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;advsearch&#34;</span> <span style=color:#a6e22e>title</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;Users rated this 9.6/10 (156,073 votes) - click stars to rate&#34;</span>&gt;
+&lt;<span style=color:#f92672>span</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;rating-bg&#34;</span>&gt;&amp;nbsp;&lt;/<span style=color:#f92672>span</span>&gt;
+&lt;<span style=color:#f92672>span</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;rating-imdb&#34;</span> <span style=color:#a6e22e>style</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;width: 134px&#34;</span>&gt;&amp;nbsp;&lt;/<span style=color:#f92672>span</span>&gt;
+&lt;<span style=color:#f92672>span</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;rating-stars&#34;</span>&gt;
+&lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/register/login?why=vote&#34;</span> <span style=color:#a6e22e>title</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;Register or login to rate this title&#34;</span> <span style=color:#a6e22e>rel</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;nofollow&#34;</span>&gt;&lt;<span style=color:#f92672>span</span>&gt;1&lt;/<span style=color:#f92672>span</span>&gt;&lt;/<span style=color:#f92672>a</span>&gt;
+&lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/register/login?why=vote&#34;</span> <span style=color:#a6e22e>title</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;Register or login to rate this title&#34;</span> <span style=color:#a6e22e>rel</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;nofollow&#34;</span>&gt;&lt;<span style=color:#f92672>span</span>&gt;2&lt;/<span style=color:#f92672>span</span>&gt;&lt;/<span style=color:#f92672>a</span>&gt;
+&lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/register/login?why=vote&#34;</span> <span style=color:#a6e22e>title</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;Register or login to rate this title&#34;</span> <span style=color:#a6e22e>rel</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;nofollow&#34;</span>&gt;&lt;<span style=color:#f92672>span</span>&gt;3&lt;/<span style=color:#f92672>span</span>&gt;&lt;/<span style=color:#f92672>a</span>&gt;
+&lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/register/login?why=vote&#34;</span> <span style=color:#a6e22e>title</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;Register or login to rate this title&#34;</span> <span style=color:#a6e22e>rel</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;nofollow&#34;</span>&gt;&lt;<span style=color:#f92672>span</span>&gt;4&lt;/<span style=color:#f92672>span</span>&gt;&lt;/<span style=color:#f92672>a</span>&gt;
+&lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/register/login?why=vote&#34;</span> <span style=color:#a6e22e>title</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;Register or login to rate this title&#34;</span> <span style=color:#a6e22e>rel</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;nofollow&#34;</span>&gt;&lt;<span style=color:#f92672>span</span>&gt;5&lt;/<span style=color:#f92672>span</span>&gt;&lt;/<span style=color:#f92672>a</span>&gt;
+&lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/register/login?why=vote&#34;</span> <span style=color:#a6e22e>title</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;Register or login to rate this title&#34;</span> <span style=color:#a6e22e>rel</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;nofollow&#34;</span>&gt;&lt;<span style=color:#f92672>span</span>&gt;6&lt;/<span style=color:#f92672>span</span>&gt;&lt;/<span style=color:#f92672>a</span>&gt;
+&lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/register/login?why=vote&#34;</span> <span style=color:#a6e22e>title</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;Register or login to rate this title&#34;</span> <span style=color:#a6e22e>rel</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;nofollow&#34;</span>&gt;&lt;<span style=color:#f92672>span</span>&gt;7&lt;/<span style=color:#f92672>span</span>&gt;&lt;/<span style=color:#f92672>a</span>&gt;
+&lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/register/login?why=vote&#34;</span> <span style=color:#a6e22e>title</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;Register or login to rate this title&#34;</span> <span style=color:#a6e22e>rel</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;nofollow&#34;</span>&gt;&lt;<span style=color:#f92672>span</span>&gt;8&lt;/<span style=color:#f92672>span</span>&gt;&lt;/<span style=color:#f92672>a</span>&gt;
+&lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/register/login?why=vote&#34;</span> <span style=color:#a6e22e>title</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;Register or login to rate this title&#34;</span> <span style=color:#a6e22e>rel</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;nofollow&#34;</span>&gt;&lt;<span style=color:#f92672>span</span>&gt;9&lt;/<span style=color:#f92672>span</span>&gt;&lt;/<span style=color:#f92672>a</span>&gt;
+&lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/register/login?why=vote&#34;</span> <span style=color:#a6e22e>title</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;Register or login to rate this title&#34;</span> <span style=color:#a6e22e>rel</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;nofollow&#34;</span>&gt;&lt;<span style=color:#f92672>span</span>&gt;10&lt;/<span style=color:#f92672>span</span>&gt;&lt;/<span style=color:#f92672>a</span>&gt;
+&lt;/<span style=color:#f92672>span</span>&gt;
+&lt;<span style=color:#f92672>span</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;rating-rating&#34;</span>&gt;&lt;<span style=color:#f92672>span</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;value&#34;</span>&gt;9.6&lt;/<span style=color:#f92672>span</span>&gt;&lt;<span style=color:#f92672>span</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;grey&#34;</span>&gt;/&lt;/<span style=color:#f92672>span</span>&gt;&lt;<span style=color:#f92672>span</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;grey&#34;</span>&gt;10&lt;/<span style=color:#f92672>span</span>&gt;&lt;/<span style=color:#f92672>span</span>&gt;
+&lt;<span style=color:#f92672>span</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;rating-cancel&#34;</span>&gt;&lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/title/tt0185906/vote?v=X;k=BCYm-Mk2Ros7BTxsLNL2XJX_icfZVahNr1bE9-5Ajb2N3381yxcaNN4ZQqyrX7KgEFGqHWmwv10lv7lAnXyC8CCkh9hPqQfzwVTumCeRzjpnndW4_ft97qQkBYLUvFxYnFgR&#34;</span> <span style=color:#a6e22e>title</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;Delete&#34;</span> <span style=color:#a6e22e>rel</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;nofollow&#34;</span>&gt;&lt;<span style=color:#f92672>span</span>&gt;X&lt;/<span style=color:#f92672>span</span>&gt;&lt;/<span style=color:#f92672>a</span>&gt;&lt;/<span style=color:#f92672>span</span>&gt;
+&amp;nbsp;&lt;/<span style=color:#f92672>div</span>&gt;
+&lt;/<span style=color:#f92672>div</span>&gt;
+&lt;<span style=color:#f92672>span</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;outline&#34;</span>&gt;The story of Easy Company of the US Army 101st Airborne division and their mission in WWII Europe from Operation Overlord through V-J Day.&lt;/<span style=color:#f92672>span</span>&gt;
+&lt;<span style=color:#f92672>span</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;credit&#34;</span>&gt;
+    With: &lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/name/nm0342241/&#34;</span>&gt;Scott Grimes&lt;/<span style=color:#f92672>a</span>&gt;, &lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/name/nm0500614/&#34;</span>&gt;Matthew Leitch&lt;/<span style=color:#f92672>a</span>&gt;, &lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/name/nm0507073/&#34;</span>&gt;Damian Lewis&lt;/<span style=color:#f92672>a</span>&gt;
+&lt;/<span style=color:#f92672>span</span>&gt;
+&lt;<span style=color:#f92672>span</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;genre&#34;</span>&gt;&lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/genre/action&#34;</span>&gt;Action&lt;/<span style=color:#f92672>a</span>&gt; | &lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/genre/drama&#34;</span>&gt;Drama&lt;/<span style=color:#f92672>a</span>&gt; | &lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/genre/history&#34;</span>&gt;History&lt;/<span style=color:#f92672>a</span>&gt; | &lt;<span style=color:#f92672>a</span> <span style=color:#a6e22e>href</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/genre/war&#34;</span>&gt;War&lt;/<span style=color:#f92672>a</span>&gt;&lt;/<span style=color:#f92672>span</span>&gt;
+&lt;<span style=color:#f92672>span</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;certificate&#34;</span>&gt;&lt;<span style=color:#f92672>span</span> <span style=color:#a6e22e>title</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;TV_MA&#34;</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;us_tv_ma titlePageSprite&#34;</span>&gt;&lt;/<span style=color:#f92672>span</span>&gt;&lt;/<span style=color:#f92672>span</span>&gt;
+&lt;<span style=color:#f92672>span</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;runtime&#34;</span>&gt;705 mins.&lt;/<span style=color:#f92672>span</span>&gt;
+&lt;/<span style=color:#f92672>td</span>&gt;
 </code></pre></div><p>Now we have loaded the data we need to parse it using the functions from pattern module.
 The main function in pattern module is the by_tag() function which lets you get all the elements with that particular tagname.
-For us the main interest is this &ldquo;td&rdquo; tag with class as &ldquo;title&rdquo;. This &ldquo;td&rdquo; tag contains:</p>
-<ol>
-<li>Title in the &ldquo;a&rdquo; tag</li>
-<li>Rating in the &ldquo;span&rdquo; tag with class &ldquo;value&rdquo;</li>
-<li>Genres in the &ldquo;span&rdquo; tag with class &ldquo;genre&rdquo; and then looping through the &ldquo;a&rdquo; tags</li>
-<li>Runtime in &ldquo;span&rdquo; tag with class &ldquo;runtime&rdquo;</li>
-<li>Artists in &ldquo;span&rdquo; tag with class &ldquo;credit&rdquo; loop through &ldquo;a&rdquo; tags</li>
-</ol>
-<p>Now lets write some code to parse this data.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">for</span> tv_series <span style="color:#f92672">in</span> dom<span style="color:#f92672">.</span>by_tag(<span style="color:#e6db74">&#39;td.title&#39;</span>):    
-    title <span style="color:#f92672">=</span> tv_series<span style="color:#f92672">.</span>by_tag(<span style="color:#e6db74">&#39;a&#39;</span>)[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>content
-    genres <span style="color:#f92672">=</span> tv_series<span style="color:#f92672">.</span>by_tag(<span style="color:#e6db74">&#39;span.genre&#39;</span>)[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>by_tag(<span style="color:#e6db74">&#39;a&#39;</span>)
-    genres <span style="color:#f92672">=</span> [g<span style="color:#f92672">.</span>content <span style="color:#66d9ef">for</span> g <span style="color:#f92672">in</span> genres]
-    <span style="color:#66d9ef">try</span>:
-        runtime <span style="color:#f92672">=</span> tv_series<span style="color:#f92672">.</span>by_tag(<span style="color:#e6db74">&#39;span.runtime&#39;</span>)[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>content
-    <span style="color:#66d9ef">except</span>:
-        runtime <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;NA&#34;</span>
-    rating <span style="color:#f92672">=</span> tv_series<span style="color:#f92672">.</span>by_tag(<span style="color:#e6db74">&#39;span.value&#39;</span>)[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>content
-    artists <span style="color:#f92672">=</span> tv_series<span style="color:#f92672">.</span>by_tag(<span style="color:#e6db74">&#39;span.credit&#39;</span>)[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>by_tag(<span style="color:#e6db74">&#39;a&#39;</span>)
-    artists <span style="color:#f92672">=</span> [a<span style="color:#f92672">.</span>content <span style="color:#66d9ef">for</span> a <span style="color:#f92672">in</span> artists]
-    <span style="color:#66d9ef">print</span> title, genres, runtime, rating, artists
+For us the main interest is this &ldquo;td&rdquo; tag with class as &ldquo;title&rdquo;. This &ldquo;td&rdquo; tag contains:</p><ol><li>Title in the &ldquo;a&rdquo; tag</li><li>Rating in the &ldquo;span&rdquo; tag with class &ldquo;value&rdquo;</li><li>Genres in the &ldquo;span&rdquo; tag with class &ldquo;genre&rdquo; and then looping through the &ldquo;a&rdquo; tags</li><li>Runtime in &ldquo;span&rdquo; tag with class &ldquo;runtime&rdquo;</li><li>Artists in &ldquo;span&rdquo; tag with class &ldquo;credit&rdquo; loop through &ldquo;a&rdquo; tags</li></ol><p>Now lets write some code to parse this data.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#66d9ef>for</span> tv_series <span style=color:#f92672>in</span> dom<span style=color:#f92672>.</span>by_tag(<span style=color:#e6db74>&#39;td.title&#39;</span>):    
+    title <span style=color:#f92672>=</span> tv_series<span style=color:#f92672>.</span>by_tag(<span style=color:#e6db74>&#39;a&#39;</span>)[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>content
+    genres <span style=color:#f92672>=</span> tv_series<span style=color:#f92672>.</span>by_tag(<span style=color:#e6db74>&#39;span.genre&#39;</span>)[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>by_tag(<span style=color:#e6db74>&#39;a&#39;</span>)
+    genres <span style=color:#f92672>=</span> [g<span style=color:#f92672>.</span>content <span style=color:#66d9ef>for</span> g <span style=color:#f92672>in</span> genres]
+    <span style=color:#66d9ef>try</span>:
+        runtime <span style=color:#f92672>=</span> tv_series<span style=color:#f92672>.</span>by_tag(<span style=color:#e6db74>&#39;span.runtime&#39;</span>)[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>content
+    <span style=color:#66d9ef>except</span>:
+        runtime <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;NA&#34;</span>
+    rating <span style=color:#f92672>=</span> tv_series<span style=color:#f92672>.</span>by_tag(<span style=color:#e6db74>&#39;span.value&#39;</span>)[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>content
+    artists <span style=color:#f92672>=</span> tv_series<span style=color:#f92672>.</span>by_tag(<span style=color:#e6db74>&#39;span.credit&#39;</span>)[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>by_tag(<span style=color:#e6db74>&#39;a&#39;</span>)
+    artists <span style=color:#f92672>=</span> [a<span style=color:#f92672>.</span>content <span style=color:#66d9ef>for</span> a <span style=color:#f92672>in</span> artists]
+    <span style=color:#66d9ef>print</span> title, genres, runtime, rating, artists
 
-</code></pre></div><pre style="font-family:courier new,monospace; background-color:#f6c6529c; color:#000000">Band of Brothers [u'Action', u'Drama', u'History', u'War'] 705 mins. 9.6 [u'Scott Grimes', u'Matthew Leitch', u'Damian Lewis']
+</code></pre></div><pre style="font-family:courier new,monospace;background-color:#f6c6529c;color:#000">Band of Brothers [u'Action', u'Drama', u'History', u'War'] 705 mins. 9.6 [u'Scott Grimes', u'Matthew Leitch', u'Damian Lewis']
 
 Breaking Bad [u'Crime', u'Drama', u'Thriller'] 45 mins. 9.6 [u'Bryan Cranston', u'Aaron Paul', u'Anna Gunn']
 
-Game of Thrones [u'Adventure', u'Drama', u'Fantasy'] 55 mins. 9.5 [u'Lena Headey', u'Peter Dinklage', u'Maisie Williams']</pre>
-<p>So finally we are OK with parsing. We have understood the structure of the webpage, the tags and classes we will need to use and how to use pattern module to find data for a single page. Now lets use the power of for loops to get all the data.</p>
-<h3 id="getting-whole-data">Getting Whole Data</h3>
-<p>Lets Go through it the pythonic way. We will create functions and try to execute small chunks of code rather than doing it all at once.
-Lets first create a funcion that takes a start_val(for the start parameter) and returns a dom element.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_dom</span>(start_val):
-    url<span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;http://www.imdb.com/search/title?count=100&amp;num_votes=5000,&amp;ref_=gnr_tv_hr&amp;sort=user_rating,desc&amp;start=&#34;</span><span style="color:#f92672">+</span>str(start_val)<span style="color:#f92672">+</span><span style="color:#e6db74">&#34;&amp;title_type=tv_series,mini_series&#34;</span>
-    html_data <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>get(url)<span style="color:#f92672">.</span>text
-    dom<span style="color:#f92672">=</span>web<span style="color:#f92672">.</span>Element(html_data)
-    <span style="color:#66d9ef">return</span> dom
-</code></pre></div><p>Now lets create a function parse_dom that takes as input dom an throws out a list containing all the data. The list is like this :</p>
-<pre style="font-family:courier new,monospace; background-color:#f6c6529c; color:#000000">
+Game of Thrones [u'Adventure', u'Drama', u'Fantasy'] 55 mins. 9.5 [u'Lena Headey', u'Peter Dinklage', u'Maisie Williams']</pre><p>So finally we are OK with parsing. We have understood the structure of the webpage, the tags and classes we will need to use and how to use pattern module to find data for a single page. Now lets use the power of for loops to get all the data.</p><h3 id=getting-whole-data>Getting Whole Data</h3><p>Lets Go through it the pythonic way. We will create functions and try to execute small chunks of code rather than doing it all at once.
+Lets first create a funcion that takes a start_val(for the start parameter) and returns a dom element.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>get_dom</span>(start_val):
+    url<span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;http://www.imdb.com/search/title?count=100&amp;num_votes=5000,&amp;ref_=gnr_tv_hr&amp;sort=user_rating,desc&amp;start=&#34;</span><span style=color:#f92672>+</span>str(start_val)<span style=color:#f92672>+</span><span style=color:#e6db74>&#34;&amp;title_type=tv_series,mini_series&#34;</span>
+    html_data <span style=color:#f92672>=</span> requests<span style=color:#f92672>.</span>get(url)<span style=color:#f92672>.</span>text
+    dom<span style=color:#f92672>=</span>web<span style=color:#f92672>.</span>Element(html_data)
+    <span style=color:#66d9ef>return</span> dom
+</code></pre></div><p>Now lets create a function parse_dom that takes as input dom an throws out a list containing all the data. The list is like this :</p><pre style="font-family:courier new,monospace;background-color:#f6c6529c;color:#000">
 [
 ['Band of Brothers','Action|Drama|History|War','705 mins.','9.6','Scott Grimes|Matthew Leitch|Damian Lewis'],
 ['Breaking Bad','Crime|Drama|Thriller','45 mins.', '9.6' ,'Bryan Cranston|Aaron Paul|Anna Gunn'],.....
 ]
-</pre>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">parse_dom</span>(dom):
-    result<span style="color:#f92672">=</span>[]
-    <span style="color:#66d9ef">for</span> tv_series <span style="color:#f92672">in</span> dom<span style="color:#f92672">.</span>by_tag(<span style="color:#e6db74">&#39;td.title&#39;</span>):    
-        title <span style="color:#f92672">=</span> tv_series<span style="color:#f92672">.</span>by_tag(<span style="color:#e6db74">&#39;a&#39;</span>)[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>content
-        genres <span style="color:#f92672">=</span> tv_series<span style="color:#f92672">.</span>by_tag(<span style="color:#e6db74">&#39;span.genre&#39;</span>)[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>by_tag(<span style="color:#e6db74">&#39;a&#39;</span>)
-        genres <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;|&#34;</span><span style="color:#f92672">.</span>join([g<span style="color:#f92672">.</span>content <span style="color:#66d9ef">for</span> g <span style="color:#f92672">in</span> genres])
-        <span style="color:#66d9ef">try</span>:
-            runtime <span style="color:#f92672">=</span> tv_series<span style="color:#f92672">.</span>by_tag(<span style="color:#e6db74">&#39;span.runtime&#39;</span>)[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>content
-        <span style="color:#66d9ef">except</span>:
-            runtime <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;NA&#34;</span>
-        rating <span style="color:#f92672">=</span> tv_series<span style="color:#f92672">.</span>by_tag(<span style="color:#e6db74">&#39;span.value&#39;</span>)[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>content
-        artists <span style="color:#f92672">=</span> tv_series<span style="color:#f92672">.</span>by_tag(<span style="color:#e6db74">&#39;span.credit&#39;</span>)[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>by_tag(<span style="color:#e6db74">&#39;a&#39;</span>)
-        artists <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;|&#34;</span><span style="color:#f92672">.</span>join([a<span style="color:#f92672">.</span>content <span style="color:#66d9ef">for</span> a <span style="color:#f92672">in</span> artists])
-        temp_res<span style="color:#f92672">=</span>[]
-        temp_res<span style="color:#f92672">.</span>extend([title, genres, runtime, rating, artists])
-        result<span style="color:#f92672">.</span>append(temp_res)
-    <span style="color:#66d9ef">return</span> result
-</code></pre></div><p>Now Lets Use these functions and a simple while loop to scrap all the pages</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py">i<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
-all_data <span style="color:#f92672">=</span> []
-<span style="color:#66d9ef">while</span> True:
-    dom <span style="color:#f92672">=</span> get_dom(i)
-    datalist<span style="color:#f92672">=</span>parse_dom(dom)
-    <span style="color:#66d9ef">if</span> len(datalist)<span style="color:#f92672">==</span><span style="color:#ae81ff">0</span>:
-        <span style="color:#66d9ef">break</span>
-    all_data <span style="color:#f92672">=</span> all_data <span style="color:#f92672">+</span> parse_dom(dom)
-    i <span style="color:#f92672">+=</span> <span style="color:#ae81ff">100</span>
+</pre><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>parse_dom</span>(dom):
+    result<span style=color:#f92672>=</span>[]
+    <span style=color:#66d9ef>for</span> tv_series <span style=color:#f92672>in</span> dom<span style=color:#f92672>.</span>by_tag(<span style=color:#e6db74>&#39;td.title&#39;</span>):    
+        title <span style=color:#f92672>=</span> tv_series<span style=color:#f92672>.</span>by_tag(<span style=color:#e6db74>&#39;a&#39;</span>)[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>content
+        genres <span style=color:#f92672>=</span> tv_series<span style=color:#f92672>.</span>by_tag(<span style=color:#e6db74>&#39;span.genre&#39;</span>)[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>by_tag(<span style=color:#e6db74>&#39;a&#39;</span>)
+        genres <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;|&#34;</span><span style=color:#f92672>.</span>join([g<span style=color:#f92672>.</span>content <span style=color:#66d9ef>for</span> g <span style=color:#f92672>in</span> genres])
+        <span style=color:#66d9ef>try</span>:
+            runtime <span style=color:#f92672>=</span> tv_series<span style=color:#f92672>.</span>by_tag(<span style=color:#e6db74>&#39;span.runtime&#39;</span>)[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>content
+        <span style=color:#66d9ef>except</span>:
+            runtime <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;NA&#34;</span>
+        rating <span style=color:#f92672>=</span> tv_series<span style=color:#f92672>.</span>by_tag(<span style=color:#e6db74>&#39;span.value&#39;</span>)[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>content
+        artists <span style=color:#f92672>=</span> tv_series<span style=color:#f92672>.</span>by_tag(<span style=color:#e6db74>&#39;span.credit&#39;</span>)[<span style=color:#ae81ff>0</span>]<span style=color:#f92672>.</span>by_tag(<span style=color:#e6db74>&#39;a&#39;</span>)
+        artists <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;|&#34;</span><span style=color:#f92672>.</span>join([a<span style=color:#f92672>.</span>content <span style=color:#66d9ef>for</span> a <span style=color:#f92672>in</span> artists])
+        temp_res<span style=color:#f92672>=</span>[]
+        temp_res<span style=color:#f92672>.</span>extend([title, genres, runtime, rating, artists])
+        result<span style=color:#f92672>.</span>append(temp_res)
+    <span style=color:#66d9ef>return</span> result
+</code></pre></div><p>Now Lets Use these functions and a simple while loop to scrap all the pages</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py>i<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>
+all_data <span style=color:#f92672>=</span> []
+<span style=color:#66d9ef>while</span> True:
+    dom <span style=color:#f92672>=</span> get_dom(i)
+    datalist<span style=color:#f92672>=</span>parse_dom(dom)
+    <span style=color:#66d9ef>if</span> len(datalist)<span style=color:#f92672>==</span><span style=color:#ae81ff>0</span>:
+        <span style=color:#66d9ef>break</span>
+    all_data <span style=color:#f92672>=</span> all_data <span style=color:#f92672>+</span> parse_dom(dom)
+    i <span style=color:#f92672>+=</span> <span style=color:#ae81ff>100</span>
 
-<span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;Total Elements:&#34;</span> <span style="color:#f92672">+</span> str(len(all_data))
-<span style="color:#66d9ef">print</span> <span style="color:#e6db74">&#34;First Five Elements :&#34;</span> <span style="color:#f92672">+</span> str(all_data[<span style="color:#ae81ff">1</span>:<span style="color:#ae81ff">5</span>])
-</code></pre></div><pre style="font-family:courier new,monospace; background-color:#f6c6529c; color:#000000">    Total Elements:898
+<span style=color:#66d9ef>print</span> <span style=color:#e6db74>&#34;Total Elements:&#34;</span> <span style=color:#f92672>+</span> str(len(all_data))
+<span style=color:#66d9ef>print</span> <span style=color:#e6db74>&#34;First Five Elements :&#34;</span> <span style=color:#f92672>+</span> str(all_data[<span style=color:#ae81ff>1</span>:<span style=color:#ae81ff>5</span>])
+</code></pre></div><pre style="font-family:courier new,monospace;background-color:#f6c6529c;color:#000">    Total Elements:898
     First Five Elements :[[u'Breaking Bad', u'Crime|Drama|Thriller', u'45 mins.', u'9.6', u'Bryan Cranston|Aaron Paul|Anna Gunn'], [u'Game of Thrones', u'Adventure|Drama|Fantasy', u'55 mins.', u'9.5', u'Lena Headey|Peter Dinklage|Maisie Williams'], [u'Planet Earth', u'Documentary', u'570 mins.', u'9.5', u'David Attenborough|Sigourney Weaver|Huw Cordey'], [u'Cosmos: A SpaceTime Odyssey', u'Documentary', u'60 mins.', u'9.5', u'Neil deGrasse Tyson|Stoney Emshwiller|Piotr Michael']]
-</pre>
-<p>Voila!!! The number of elements we had to scrap were 898 and We got all of them. And to tell you, IMDB is one of the worst written HTML&rsquo;s. So that&rsquo;s Great.</p>
-<p>In the next part of the tutorial we will run exploratory data analysis on this data using pandas and maplotlib.</p>
-<p>Till then keep learning.</p>
-<script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script>
-
-
-        
-<script async data-uid="8d7942551b" src="https://mlwhiz.ck.page/8d7942551b/index.js"></script>
-
-
-<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088" style="margin-bottom: 1px;"></div>
-
-<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
-
-<div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-        </div>
-      </div>
-      <div class="col-lg-4">
-  
-
-  <div class="widget">
-    
-<script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#00aaa1', 'S6S3NPCD');kofiwidget2.draw();</script>
-
-</div>
-  <div class="widget">
-    
-    <h4 class="widget-title">About Me</h4>
-    
-    <img src="https://mlwhiz.com/images/author.jpg" alt=""
-      class="img-fluid author-thumb-sm d-block mx-auto rounded-circle mb-4">
-    
-    <p>I’m a data scientist consultant and big data engineer based in Bangalore, where I am currently working with WalmartLabs .</p>
-    <a href="https://mlwhiz.com/about/" class="btn btn-outline-primary">Know More</a>
-    
-  </div>
-
-
-  
-  <div class="widget">
-    <h4 class="widget-title">Topics</h4>
-    <ul class="list-unstyled">
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/awesome-guides">Awesome Guides</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/big-data">Big Data</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/computer-vision">Computer Vision</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/data-science">Data Science</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/deep-learning">Deep Learning</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/learning-resources">Learning Resources</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/natural-language-processing">Natural Language Processing</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/programming">Programming</a>
-      </li>
-    </ul>
-  </div>
-  
-  <div class="widget">
-    <h4 class="widget-title">Tags</h4>
-    <ul class="list-inline">
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/algorithms">Algorithms</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/artificial-intelligence">Artificial Intelligence</a></li>
-          
-
-
-          
-
-
-          
-
-
-          
-
-
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/dask">Dask</a></li>
-          
-
-
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/deployment">Deployment</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/ec2">Ec2</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/generative-adversarial-networks">Generative Adversarial Networks</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/graphs">Graphs</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/image-classification">Image Classification</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/instance-segmentation">Instance Segmentation</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/interpretability">Interpretability</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/jobs">Jobs</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/kaggle">Kaggle</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/language-modeling">Language Modeling</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/machine-learning">Machine Learning</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/math">Math</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/multiprocessing">Multiprocessing</a></li>
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/object-detection">Object Detection</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/opinion">Opinion</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/pandas">Pandas</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/production">Production</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/productivity">Productivity</a></li>
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/python">Python</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/pytorch">Pytorch</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/spark">Spark</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/sql">Sql</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/statistics">Statistics</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/streamlit">Streamlit</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/text-classification">Text Classification</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/timeseries">Timeseries</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/tools">Tools</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/translation">Translation</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/visualization">Visualization</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/xgboost">Xgboost</a></li>
-          
-    </ul>
-  </div>
-  
-  <div class="widget">
-    <h4 class="widget-title">Connect With Me</h4>
-    <ul class="list-inline social-links">
-      
-      <li class="list-inline-item"><a href="https://www.linkedin.com/in/rahulagwl/"><i class="ti-linkedin"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://medium.com/@rahul_agarwal"><i class="ti-book"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://twitter.com/MLWhiz"><i class="ti-twitter-alt"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://www.facebook.com/mlwhizblog"><i class="ti-facebook"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://github.com/MLWhiz"><i class="ti-github"></i></a></li>
-      
-    </ul>
-  </div>
-  
-  
-<script async data-uid="bfe9f82f10" src="https://mlwhiz.ck.page/bfe9f82f10/index.js"></script>
-
-<script async data-uid="3452d924e2" src="https://mlwhiz.ck.page/3452d924e2/index.js"></script>
-
-</div>
-
-    </div>
-
-
-  </div>
-</section>
-
-
-
-<footer>
-  <div class="container">
-    <div class="row">
-      <div class="col-12 text-center mb-5">
-        <a href="https://mlwhiz.com/"><img src="https://mlwhiz.com/images/logo.png" class="img-fluid-custom-bottom" alt="MLWhiz: Helping You Learn Data Science!"></a>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Contact Me</h6>
-        <ul class="list-unstyled">
-          <li class="mb-3"><i class="ti-location-pin mr-3 text-primary"></i>India, Bangalore</li>
-          <li class="mb-3"><a class="text-dark" href="mailto:rahul@mlwhiz.com"><i
-                class="ti-email mr-3 text-primary"></i>rahul@mlwhiz.com</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Social Contacts</h6>
-        <ul class="list-unstyled">
-          
-          <li class="mb-3"><a class="text-dark" href="https://www.linkedin.com/in/rahulagwl/">Linkedin</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://medium.com/@rahul_agarwal">Medium</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://twitter.com/MLWhiz">Twitter</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://www.facebook.com/mlwhizblog">Facebook</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://github.com/MLWhiz">Github</a></li>
-          
-        </ul>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Categories</h6>
-        <ul class="list-unstyled">
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/awesome-guides">Awesome Guides</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/big-data">Big Data</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/computer-vision">Computer Vision</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/data-science">Data Science</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/deep-learning">Deep Learning</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/learning-resources">Learning Resources</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/natural-language-processing">Natural Language Processing</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/programming">Programming</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Quick Links</h6>
-        <ul class="list-unstyled">
-          
-          <li class="mb-3"><a class="text-dark" href="https://mlwhiz.com/about">About</a></li>
-          
-          
-          <li class="mb-3"><a class="text-dark" href="https://mlwhiz.com/blog">Post</a></li>
-          
-          
-          
-        </ul>
-      </div>
-      <div class="col-12 border-top py-4 text-center">
-        Copyright © 2020 <a href="https://mlwhiz.com">MLWhiz</a> All Rights Reserved
-      </div>
-    </div>
-  </div>
-</footer>
-
-
-
-<script>
-  var indexURL = "https://mlwhiz.com/index.json"
-</script>
-
-<!-- JS Plugins -->
-
-<script src="https://mlwhiz.com/plugins/compressjscss/main.js"></script>
-
-<!-- Main Script -->
-
-<script src="https://mlwhiz.com/js/script.min.js"></script>
-<!-- google analitycs -->
-<script>
-  (function (i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r;
-    i[r] = i[r] || function () {
-      (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date();
-    a = s.createElement(o),
-      m = s.getElementsByTagName(o)[0];
-    a.async = 1;
-    a.src = g;
-    m.parentNode.insertBefore(a, m)
-  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-  ga('create', 'UA-54777926-1', 'auto');
-  ga('send', 'pageview');
-</script>
-</body>
-</html>
+</pre><p>Voila!!! The number of elements we had to scrap were 898 and We got all of them. And to tell you, IMDB is one of the worst written HTML&rsquo;s. So that&rsquo;s Great.</p><p>In the next part of the tutorial we will run exploratory data analysis on this data using pandas and maplotlib.</p><p>Till then keep learning.</p><script src="//z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&adInstanceId=c4ca54df-6d53-4362-92c0-13cb9977639e"></script><script async data-uid=8d7942551b src=https://mlwhiz.ck.page/8d7942551b/index.js></script><div class=shareaholic-canvas data-app=share_buttons data-app-id=28372088 style=margin-bottom:1px></div><a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel=nofollow><img border=0 alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a><div id=disqus_thread></div><script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return;}
+var d=document,s=d.createElement('script');s.async=true;s.src='//'+"mlwhiz"+'.disqus.com/embed.js';s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div></div><div class=col-lg-4><div class=widget><script type=text/javascript src=https://ko-fi.com/widgets/widget_2.js></script><script type=text/javascript>kofiwidget2.init('Support Me on Ko-fi','#00aaa1','S6S3NPCD');kofiwidget2.draw();</script></div><div class=widget><h4 class=widget-title>About Me</h4><img src=https://mlwhiz.com/images/author.jpg alt class="img-fluid author-thumb-sm d-block mx-auto rounded-circle mb-4"><p>I’m a data scientist consultant and big data engineer based in Bangalore, where I am currently working with WalmartLabs .</p><a href=https://mlwhiz.com/about/ class="btn btn-outline-primary">Know More</a></div><div class=widget><h4 class=widget-title>Topics</h4><ul class=list-unstyled><li><a class=categoryStyle style=color:#fff href=/categories/awesome-guides>Awesome Guides</a></li><li><a class=categoryStyle style=color:#fff href=/categories/big-data>Big Data</a></li><li><a class=categoryStyle style=color:#fff href=/categories/computer-vision>Computer Vision</a></li><li><a class=categoryStyle style=color:#fff href=/categories/data-science>Data Science</a></li><li><a class=categoryStyle style=color:#fff href=/categories/deep-learning>Deep Learning</a></li><li><a class=categoryStyle style=color:#fff href=/categories/learning-resources>Learning Resources</a></li><li><a class=categoryStyle style=color:#fff href=/categories/natural-language-processing>Natural Language Processing</a></li><li><a class=categoryStyle style=color:#fff href=/categories/programming>Programming</a></li></ul></div><div class=widget><h4 class=widget-title>Tags</h4><ul class=list-inline><li class=list-inline-item><a class="tagStyle text-white" href=/tags/algorithms>Algorithms</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/artificial-intelligence>Artificial Intelligence</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/dask>Dask</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/deployment>Deployment</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/ec2>Ec2</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/generative-adversarial-networks>Generative Adversarial Networks</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/graphs>Graphs</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/image-classification>Image Classification</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/instance-segmentation>Instance Segmentation</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/interpretability>Interpretability</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/jobs>Jobs</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/kaggle>Kaggle</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/language-modeling>Language Modeling</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/machine-learning>Machine Learning</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/math>Math</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/multiprocessing>Multiprocessing</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/object-detection>Object Detection</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/opinion>Opinion</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/pandas>Pandas</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/production>Production</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/productivity>Productivity</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/python>Python</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/pytorch>Pytorch</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/spark>Spark</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/sql>Sql</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/statistics>Statistics</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/streamlit>Streamlit</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/text-classification>Text Classification</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/timeseries>Timeseries</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/tools>Tools</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/translation>Translation</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/visualization>Visualization</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/xgboost>Xgboost</a></li></ul></div><div class=widget><h4 class=widget-title>Connect With Me</h4><ul class="list-inline social-links"><li class=list-inline-item><a href=https://www.linkedin.com/in/rahulagwl/><i class=ti-linkedin></i></a></li><li class=list-inline-item><a href=https://medium.com/@rahul_agarwal><i class=ti-book></i></a></li><li class=list-inline-item><a href=https://twitter.com/MLWhiz><i class=ti-twitter-alt></i></a></li><li class=list-inline-item><a href=https://www.facebook.com/mlwhizblog><i class=ti-facebook></i></a></li><li class=list-inline-item><a href=https://github.com/MLWhiz><i class=ti-github></i></a></li></ul></div><script async data-uid=bfe9f82f10 src=https://mlwhiz.ck.page/bfe9f82f10/index.js></script><script async data-uid=3452d924e2 src=https://mlwhiz.ck.page/3452d924e2/index.js></script></div></div></div></section><footer><div class=container><div class=row><div class="col-12 text-center mb-5"><a href=https://mlwhiz.com/><img src=https://mlwhiz.com/images/logo.png class=img-fluid-custom-bottom alt="MLWhiz: Helping You Learn Data Science!"></a></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Contact Me</h6><ul class=list-unstyled><li class=mb-3><i class="ti-location-pin mr-3 text-primary"></i>India, Bangalore</li><li class=mb-3><a class=text-dark href=mailto:rahul@mlwhiz.com><i class="ti-email mr-3 text-primary"></i>rahul@mlwhiz.com</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Social Contacts</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=https://www.linkedin.com/in/rahulagwl/>Linkedin</a></li><li class=mb-3><a class=text-dark href=https://medium.com/@rahul_agarwal>Medium</a></li><li class=mb-3><a class=text-dark href=https://twitter.com/MLWhiz>Twitter</a></li><li class=mb-3><a class=text-dark href=https://www.facebook.com/mlwhizblog>Facebook</a></li><li class=mb-3><a class=text-dark href=https://github.com/MLWhiz>Github</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Categories</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=/categories/awesome-guides>Awesome Guides</a></li><li class=mb-3><a class=text-dark href=/categories/big-data>Big Data</a></li><li class=mb-3><a class=text-dark href=/categories/computer-vision>Computer Vision</a></li><li class=mb-3><a class=text-dark href=/categories/data-science>Data Science</a></li><li class=mb-3><a class=text-dark href=/categories/deep-learning>Deep Learning</a></li><li class=mb-3><a class=text-dark href=/categories/learning-resources>Learning Resources</a></li><li class=mb-3><a class=text-dark href=/categories/natural-language-processing>Natural Language Processing</a></li><li class=mb-3><a class=text-dark href=/categories/programming>Programming</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Quick Links</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=https://mlwhiz.com/about>About</a></li><li class=mb-3><a class=text-dark href=https://mlwhiz.com/blog>Post</a></li></ul></div><div class="col-12 border-top py-4 text-center">Copyright © 2020 <a href=https://mlwhiz.com>MLWhiz</a> All Rights Reserved</div></div></div></footer><script>var indexURL="https://mlwhiz.com/index.json"</script><script src=https://mlwhiz.com/plugins/compressjscss/main.js></script><script src=https://mlwhiz.com/js/script.min.js></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-54777926-1','auto');ga('send','pageview');</script></body></html>

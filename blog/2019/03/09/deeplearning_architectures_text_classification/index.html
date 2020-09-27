@@ -1,1168 +1,337 @@
-<!DOCTYPE html>
-<html lang="en-us"><head>
-  <meta charset="utf-8">
-  <title>MLWhiz: Helping You Learn Data Science!</title>
-
-  <!-- mobile responsive meta -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Recently, I started up with an NLP competition on Kaggle called Quora Question insincerity challenge. It is an NLP Challenge on text classification, and as the problem has become more clear after working through the competition as well as by going through the invaluable kernels put up by the kaggle experts, I thought of sharing the knowledge. In this post, I will try to take you through some basic conventional models like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and try to access their performance to create a baseline.">
-  <meta name="author" content="Rahul Agarwal">
-  <meta name="generator" content="Hugo 0.74.3" />
-  <!-- plugins -->
-  
-  <link rel="stylesheet" href="https://mlwhiz.com/plugins/compressjscss/main.css ">
-  
-
-	<meta property="og:title" content="NLP  Learning Series: Part 3 - Attention, CNN and what not for Text Classification" />
-<meta property="og:description" content="Recently, I started up with an NLP competition on Kaggle called Quora Question insincerity challenge. It is an NLP Challenge on text classification, and as the problem has become more clear after working through the competition as well as by going through the invaluable kernels put up by the kaggle experts, I thought of sharing the knowledge. In this post, I will try to take you through some basic conventional models like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and try to access their performance to create a baseline." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://mlwhiz.com/blog/2019/03/09/deeplearning_architectures_text_classification/" />
-
-<meta property="og:image" content="https://mlwhiz.com/images/birnn.png" />
-<meta property="og:image:secure_url" content="https://mlwhiz.com/images/birnn.png" />
-<meta property="article:published_time" content="2019-03-09T00:00:00+00:00" />
-<meta property="article:modified_time" content="2020-09-26T16:23:35+05:30" />
-<meta property="article:tag" content="Natural Language Processing" />
-<meta property="article:tag" content="Deep Learning" />
-<meta property="article:tag" content="Awesome Guides" />
-
-	<meta name="twitter:card" content="summary"/>
-<meta name="twitter:image" content="https://mlwhiz.com/images/birnn.png"/>
-
-<meta name="twitter:title" content="NLP  Learning Series: Part 3 - Attention, CNN and what not for Text Classification"/>
-<meta name="twitter:description" content="Recently, I started up with an NLP competition on Kaggle called Quora Question insincerity challenge. It is an NLP Challenge on text classification, and as the problem has become more clear after working through the competition as well as by going through the invaluable kernels put up by the kaggle experts, I thought of sharing the knowledge. In this post, I will try to take you through some basic conventional models like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and try to access their performance to create a baseline."/>
-<meta name="twitter:site" content="@mlwhiz"/>
-<meta name="twitter:creator" content="@mlwhiz"/>
-
-
-
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-
-	<!-- Main Stylesheet -->
-  
-  <link rel="stylesheet" href="https://mlwhiz.com/scss/style.min.css" media="screen">
-  <link rel="stylesheet" href="/css/style.css">
-
-  <link rel="stylesheet" type="text/css" href="/css/font/flaticon.css" >
-
-  <!--Favicon-->
-  <link rel="shortcut icon" href="https://mlwhiz.com/images/favicon-200x200.png " type="image/x-icon">
-  <link rel="icon" href="https://mlwhiz.com/images/favicon.png " type="image/x-icon">
-
-
-    <link rel="canonical" href="https://mlwhiz.com/blog/2019/03/09/deeplearning_architectures_text_classification/" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-
-
-<script type = 'application/ld+json'> {
-    "@context": "https://schema.org",
-    "@graph": [{
-        "@type": "WebSite",
-        "@id": "https://www.mlwhiz.com/#website",
-        "url": "https://www.mlwhiz.com/",
-        "name": "MLWhiz",
-        "description": "Want to Learn Computer Vision and NLP? - MLWhiz",
-        "potentialAction": {
-            "@type": "SearchAction",
-            "target": "https://www.mlwhiz.com/search?s={search_term_string}",
-            "query-input": "required name=search_term_string"
-        }
-    }, {
-        "@type": "ImageObject",
-        "@id": "https://mlwhiz.com/blog/2019/03/09/deeplearning_architectures_text_classification/#primaryimage",
-        "url": "https://mlwhiz.com/images/birnn.png",
-        "width": 700,
-        "height": 450
-    }, {
-        "@type": "WebPage",
-        "@id": "https://mlwhiz.com/blog/2019/03/09/deeplearning_architectures_text_classification/#webpage",
-        "url": "https://mlwhiz.com/blog/2019/03/09/deeplearning_architectures_text_classification/",
-        "inLanguage": "en-US",
-        "name": "NLP  Learning Series: Part 3 - Attention, CNN and what not for Text Classification - MLWhiz",
-        "isPartOf": {
-            "@id": "https://www.mlwhiz.com/#website"
-        },
-        "primaryImageOfPage": {
-            "@id": "https://mlwhiz.com/blog/2019/03/09/deeplearning_architectures_text_classification/#primaryimage"
-        },
-        "datePublished":"2019-03-09T00:00:00.00Z",
-        "dateModified": "2020-09-26T16:23:35.00Z",
-        "author": {
-            "@id": "https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca"
-        },
-        "description": "Recently, I started up with an NLP competition on Kaggle called Quora Question insincerity challenge. It is an NLP Challenge on text classification, and as the problem has become more clear after working through the competition as well as by going through the invaluable kernels put up by the kaggle experts, I thought of sharing the knowledge. In this post, I will try to take you through some basic conventional models like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and try to access their performance to create a baseline."
-    },
-
-
-    {
-        "@type": ["Person"],
-        "@id": "https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca",
-        "name": "Rahul Agarwal",
-        "image": {
-            "@type": "ImageObject",
-            "@id": "https://www.mlwhiz.com/#authorlogo",
-            "url": "https://mlwhiz.com/images/author.jpg",
-            "caption": "Rahul Agarwal"
-        },
-        "description": "Hi there, I\u2019m Rahul Agarwal. I\u2019m a data scientist consultant and big data engineer based in Bangalore. I see a lot of times  students and even professionals wasting their time and struggling to get started with Computer Vision, Deep Learning, and NLP. I Started this Site with a purpose to augment my own understanding about new things while helping others learn about them in the best possible way.",
-        "sameAs": ["https://www.linkedin.com/in/rahulagwl/",
-          "https://medium.com/@rahul_agarwal",
-          "https://twitter.com/MLWhiz","https://www.facebook.com/mlwhizblog","https://github.com/MLWhiz","https://www.instagram.com/itsmlwhiz"]
-    }]
-} </script>
-
-
-
-<script async data-uid="a0ebaf958d" src="https://mlwhiz.ck.page/a0ebaf958d/index.js"></script>
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-  MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [['$','$'], ['\\(','\\)']],
-    displayMath: [['$$','$$']],
-    processEscapes: true,
-    processEnvironments: true,
-    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-    TeX: { equationNumbers: { autoNumber: "AMS" },
-         extensions: ["AMSmath.js", "AMSsymbols.js"] }
-  }
-  });
-  MathJax.Hub.Queue(function() {
-    
-    
-    
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-
-  MathJax.Hub.Config({
-  
-  TeX: { equationNumbers: { autoNumber: "AMS" } }
-  });
-</script>
-
-
-
-<link href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
-<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
-
-
-</head>
-<body>
-      
-   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
-   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-   
-<!-- preloader start -->
-<div class="preloader">
-  
-</div>
-<!-- preloader end -->
-<!-- navigation -->
-<header class="navigation">
-  <div class="container">
-    
-    <nav class="navbar navbar-expand-lg navbar-white bg-transparent border-bottom pl-0">
-      <a class="navbar-brand mobile-view" href="https://mlwhiz.com/"><img class="img-fluid"
-          src="https://mlwhiz.com/images/logo.png" alt="MLWhiz: Helping You Learn Data Science!"></a>
-      <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navigation">
-        <i class="ti-menu h3"></i>
-      </button>
-
-      <div class="collapse navbar-collapse text-center" id="navigation">
-        <div class="desktop-view">
-          <ul class="navbar-nav mr-auto">
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://www.linkedin.com/in/rahulagwl/"><i class="ti-linkedin"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://medium.com/@rahul_agarwal"><i class="ti-book"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://twitter.com/MLWhiz"><i class="ti-twitter-alt"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://www.facebook.com/mlwhizblog"><i class="ti-facebook"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://github.com/MLWhiz"><i class="ti-github"></i></a>
-            </li>
-            
-          </ul>
-        </div>
-
-        <a class="navbar-brand mx-auto desktop-view" href="https://mlwhiz.com/"><img class="img-fluid-custom"
-            src="https://mlwhiz.com/images/logo.png" alt="MLWhiz: Helping You Learn Data Science!"></a>
-
-        <ul class="navbar-nav">
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="https://mlwhiz.com/about">About</a>
-          </li>
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="https://mlwhiz.com/blog">Blog</a>
-          </li>
-          
-          
-          
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">
-              Topics
-            </a>
-            <div class="dropdown-menu">
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/natural-language-processing">NLP</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/computer-vision">Computer Vision</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/deep-learning">Deep Learning</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/data-science">DS/ML</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/big-data">Big Data</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/awesome-guides">My Best Content</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/learning-resources">Learning Resources</a>
-              
-            </div>
-          </li>
-          
-          
-        </ul>
-
-        
-        <!-- search -->
-        <div class="search pl-lg-4">
-          <button id="searchOpen" class="search-btn"><i class="ti-search"></i></button>
-          <div class="search-wrapper">
-            <form action="https://mlwhiz.com//search" class="h-100">
-              <input class="search-box px-4" id="search-query" name="s" type="search" placeholder="Type & Hit Enter...">
-            </form>
-            <button id="searchClose" class="search-close"><i class="ti-close text-dark"></i></button>
-          </div>
-        </div>
-        
-
-        
-      </div>
-    </nav>
-  </div>
-</header>
-<!-- /navigation -->
-
-
-<section class="section-sm">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 mb-5 mb-lg-0">
-        
-        
-        <a href="/categories/natural-language-processing"
-          class="categoryStyle">Natural Language Processing</a>
-        
-        <a href="/categories/deep-learning"
-          class="categoryStyle">Deep Learning</a>
-        
-        <a href="/categories/awesome-guides"
-          class="categoryStyle">Awesome Guides</a>
-        
-        <h1>NLP  Learning Series: Part 3 - Attention, CNN and what not for Text Classification</h1>
-        <div class="mb-3 post-meta">
-          <span>By Rahul Agarwal</span>
-          
-          <svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"></path></svg>
-
-          <span>09 March 2019</span>
-          
-        </div>
-        
-        <img src="https://mlwhiz.com/images/birnn.png" class="img-fluid w-100 mb-4" alt="NLP  Learning Series: Part 3 - Attention, CNN and what not for Text Classification">
-        
-        <div class="content mb-5">
-          <p>This post is the third post of the NLP Text classification series. To give you a recap, I started up with an NLP text classification competition on Kaggle called Quora Question insincerity challenge. So I thought to share the knowledge via a series of blog posts on text classification. The 
-
-<a href="/blog/2019/01/17/deeplearning_nlp_preprocess/">first post</a>
- talked about the different <strong>preprocessing techniques that work with Deep learning models</strong> and <strong>increasing embeddings coverage</strong>. In the 
-
-<a href="/blog/2019/02/08/deeplearning_nlp_conventional_methods/">second post</a>
-, I talked through some <strong>basic conventional models</strong> like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and tried to access their performance to create a baseline. In this post, I delve deeper into <strong>Deep learning models and the various architectures</strong> we could use to solve the text Classification problem. To make this post platform generic, I am going to code in both Keras and Pytorch. I will use various other models which we were not able to use in this competition like <strong>ULMFit transfer learning</strong> approaches in the fourth post in the series.</p>
-<p><strong>As a side note</strong>: if you want to know more about NLP, I would like to <strong>recommend this excellent course</strong> on 
-
-<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target="_blank" rel="nofollow noopener">Natural Language Processing</a>
- in the 
-
-<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Advanced machine learning specialization</a>
-. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few. You can start for free with the 7-day Free Trial.</p>
-<p>So let me try to go through some of the models which people are using to perform text classification and try to provide a brief intuition for them — also, some code in Keras and Pytorch. So you can try them out for yourself.</p>
-<hr>
-<h2 id="1-textcnn">1. TextCNN</h2>
-<p>The idea of using a CNN to classify text was first presented in the paper 
-
-<a href="https://www.aclweb.org/anthology/D14-1181" target="_blank" rel="nofollow noopener">Convolutional Neural Networks for Sentence Classification</a>
- by Yoon Kim.</p>
-<p><strong>Representation:</strong> The central intuition about this idea is to <strong>see our documents as images</strong>. How? Let us say we have a sentence and we have maxlen = 70 and embedding size = 300. We can create a matrix of numbers with the shape 70x300 to represent this sentence. For images, we also have a matrix where individual elements are pixel values. Instead of image pixels, the input to the tasks is sentences or documents represented as a matrix. Each row of the matrix corresponds to one-word vector.</p>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/text_convolution.png"  height="400" width="700" ></center>
-</div>
-<p><strong>Convolution Idea:</strong> While for an image we move our conv filter horizontally as well as vertically, for text we fix kernel size to filter_size x embed_size, i.e. (3,300) we are just going to move vertically down for the convolution taking look at three words at once since our filter size is 3 in this case. This idea seems right since our convolution filter is not splitting word embedding. It gets to look at the full embedding of each word. Also one can think of filter sizes as unigrams, bigrams, trigrams, etc. Since we are looking at a context window of 1,2,3, and 5 words respectively.</p>
-<p>Here is the text classification network coded in Pytorch:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">import</span> torch
-<span style="color:#f92672">import</span> torch.nn <span style="color:#f92672">as</span> nn
-<span style="color:#f92672">import</span> torch.nn.functional <span style="color:#f92672">as</span> F
-<span style="color:#f92672">from</span> torch.autograd <span style="color:#f92672">import</span> Variable
-
-
-<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CNN_Text</span>(nn<span style="color:#f92672">.</span>Module):
-
-    <span style="color:#66d9ef">def</span> __init__(self):
-        super(CNN_Text, self)<span style="color:#f92672">.</span>__init__()
-        filter_sizes <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">5</span>]
-        num_filters <span style="color:#f92672">=</span> <span style="color:#ae81ff">36</span>
-        self<span style="color:#f92672">.</span>embedding <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Embedding(max_features, embed_size)
-        self<span style="color:#f92672">.</span>embedding<span style="color:#f92672">.</span>weight <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Parameter(torch<span style="color:#f92672">.</span>tensor(embedding_matrix, dtype<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>float32))
-        self<span style="color:#f92672">.</span>embedding<span style="color:#f92672">.</span>weight<span style="color:#f92672">.</span>requires_grad <span style="color:#f92672">=</span> False
-        self<span style="color:#f92672">.</span>convs1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>ModuleList([nn<span style="color:#f92672">.</span>Conv2d(<span style="color:#ae81ff">1</span>, num_filters, (K, embed_size)) <span style="color:#66d9ef">for</span> K <span style="color:#f92672">in</span> filter_sizes])
-        self<span style="color:#f92672">.</span>dropout <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Dropout(<span style="color:#ae81ff">0.1</span>)
-        self<span style="color:#f92672">.</span>fc1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(len(Ks)<span style="color:#f92672">*</span>num_filters, <span style="color:#ae81ff">1</span>)
-
-
-    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
-        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>embedding(x)  
-        x <span style="color:#f92672">=</span> x<span style="color:#f92672">.</span>unsqueeze(<span style="color:#ae81ff">1</span>)  
-        x <span style="color:#f92672">=</span> [F<span style="color:#f92672">.</span>relu(conv(x))<span style="color:#f92672">.</span>squeeze(<span style="color:#ae81ff">3</span>) <span style="color:#66d9ef">for</span> conv <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>convs1]
-        x <span style="color:#f92672">=</span> [F<span style="color:#f92672">.</span>max_pool1d(i, i<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">2</span>))<span style="color:#f92672">.</span>squeeze(<span style="color:#ae81ff">2</span>) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> x]  
-        x <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>cat(x, <span style="color:#ae81ff">1</span>)
-        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>dropout(x)  
-        logit <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>fc1(x)  
-        <span style="color:#66d9ef">return</span> logit
-</code></pre></div><p>And for the Keras enthusiasts:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># https://www.kaggle.com/yekenot/2dcnn-textclassifier</span>
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">model_cnn</span>(embedding_matrix):
-    filter_sizes <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">5</span>]
-    num_filters <span style="color:#f92672">=</span> <span style="color:#ae81ff">36</span>
-
-    inp <span style="color:#f92672">=</span> Input(shape<span style="color:#f92672">=</span>(maxlen,))
-    x <span style="color:#f92672">=</span> Embedding(max_features, embed_size, weights<span style="color:#f92672">=</span>[embedding_matrix])(inp)
-    x <span style="color:#f92672">=</span> Reshape((maxlen, embed_size, <span style="color:#ae81ff">1</span>))(x)
-
-    maxpool_pool <span style="color:#f92672">=</span> []
-    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(filter_sizes)):
-        conv <span style="color:#f92672">=</span> Conv2D(num_filters, kernel_size<span style="color:#f92672">=</span>(filter_sizes[i], embed_size),
-                                     kernel_initializer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;he_normal&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(x)
-        maxpool_pool<span style="color:#f92672">.</span>append(MaxPool2D(pool_size<span style="color:#f92672">=</span>(maxlen <span style="color:#f92672">-</span> filter_sizes[i] <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>))(conv))
-
-    z <span style="color:#f92672">=</span> Concatenate(axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)(maxpool_pool)   
-    z <span style="color:#f92672">=</span> Flatten()(z)
-    z <span style="color:#f92672">=</span> Dropout(<span style="color:#ae81ff">0.1</span>)(z)
-
-    outp <span style="color:#f92672">=</span> Dense(<span style="color:#ae81ff">1</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;sigmoid&#34;</span>)(z)
-
-    model <span style="color:#f92672">=</span> Model(inputs<span style="color:#f92672">=</span>inp, outputs<span style="color:#f92672">=</span>outp)
-    model<span style="color:#f92672">.</span>compile(loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;binary_crossentropy&#39;</span>, optimizer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;adam&#39;</span>, metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>])
-
-    <span style="color:#66d9ef">return</span> model
-</code></pre></div><p>I am a big fan of Kaggle Kernels. One could not have imagined having all that compute for free. You can find a running version of the above two code snippets in this 
-
-<a href="https://www.kaggle.com/mlwhiz/textcnn-pytorch-and-keras" target="_blank" rel="nofollow noopener">kaggle kernel</a>
-. Do try to experiment with it after forking and running the code. Also please upvote the kernel if you find it helpful.</p>
-<p>The Keras model and Pytorch model performed similarly with Pytorch model beating the keras model by a small margin. The Out-Of-Fold CV F1 score for the Pytorch model came out to be 0.6609 while for Keras model the same score came out to be 0.6559. I used the same preprocessing in both the models to be better able to compare the platforms.</p>
-<hr>
-<h2 id="2-bidirectional-rnnlstmgru">2. BiDirectional RNN(LSTM/GRU):</h2>
-<p>TextCNN works well for Text Classification. It takes care of words in close range. It can see &ldquo;new york&rdquo; together. However, it still can&rsquo;t take care of all the context provided in a particular text sequence. It still does not learn the sequential structure of the data, where every word is dependent on the previous word. Or a word in the previous sentence.</p>
-<p>RNN help us with that. <em>They can remember previous information using hidden states and connect it to the current task.</em></p>
-<p>Long Short Term Memory networks (LSTM) are a subclass of RNN, specialized in remembering information for an extended period. Moreover, the Bidirectional LSTM keeps the contextual information in both directions which is pretty useful in text classification task (But won&rsquo;t work for a time series prediction task as we don&rsquo;t have visibility into the future in this case).</p>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/birnn.png"  height="400" width="700" ></center>
-</div>
-<p>For a most simplistic explanation of Bidirectional RNN, think of RNN cell as a black box taking as input a hidden state(a vector) and a word vector and giving out an output vector and the next hidden state. This box has some weights which are to be tuned using Backpropagation of the losses. Also, the same cell is applied to all the words so that the weights are shared across the words in the sentence. This phenomenon is called weight-sharing.</p>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/singlernn.png"  height="30%" width="30%" ></center>
-</div>
-<pre><code>        Hidden state, Word vector -&gt;(RNN Cell) -&gt; Output Vector , Next Hidden state
-</code></pre>
-<p>For a sequence of length 4 like <strong>&ldquo;you will never believe&rdquo;</strong>, The RNN cell gives 4 output vectors, which can be concatenated and then used as part of a dense feedforward architecture.</p>
-<p>In the Bidirectional RNN, the only change is that we read the text in the usual fashion as well in reverse. So we stack two RNNs in parallel, and hence we get 8 output vectors to append.</p>
-<p>Once we get the output vectors, we send them through a series of dense layers and finally a softmax layer to build a text classifier.</p>
-<p>In most cases, you need to understand how to stack some layers in a neural network to get the best results. We can try out multiple bidirectional GRU/LSTM layers in the network if it performs better.</p>
-<p>Due to the limitations of RNNs like not remembering long term dependencies, in practice, we almost always use LSTM/GRU to model long term dependencies. In such a case you can think of the RNN cell being replaced by an LSTM cell or a GRU cell in the above figure. An example model is provided below. You can use CuDNNGRU interchangeably with CuDNNLSTM when you build models. (CuDNNGRU/LSTM are just implementations of LSTM/GRU that are created to run faster on GPUs. In most cases always use them instead of the vanilla LSTM/GRU implementations)</p>
-<p>So here is some code in Pytorch for this network.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BiLSTM</span>(nn<span style="color:#f92672">.</span>Module):
-
-    <span style="color:#66d9ef">def</span> __init__(self):
-        super(BiLSTM, self)<span style="color:#f92672">.</span>__init__()
-        self<span style="color:#f92672">.</span>hidden_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">64</span>
-        drp <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.1</span>
-        self<span style="color:#f92672">.</span>embedding <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Embedding(max_features, embed_size)
-        self<span style="color:#f92672">.</span>embedding<span style="color:#f92672">.</span>weight <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Parameter(torch<span style="color:#f92672">.</span>tensor(embedding_matrix, dtype<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>float32))
-        self<span style="color:#f92672">.</span>embedding<span style="color:#f92672">.</span>weight<span style="color:#f92672">.</span>requires_grad <span style="color:#f92672">=</span> False
-        self<span style="color:#f92672">.</span>lstm <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>LSTM(embed_size, self<span style="color:#f92672">.</span>hidden_size, bidirectional<span style="color:#f92672">=</span>True, batch_first<span style="color:#f92672">=</span>True)
-        self<span style="color:#f92672">.</span>linear <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(self<span style="color:#f92672">.</span>hidden_size<span style="color:#f92672">*</span><span style="color:#ae81ff">4</span> , <span style="color:#ae81ff">64</span>)
-        self<span style="color:#f92672">.</span>relu <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>ReLU()
-        self<span style="color:#f92672">.</span>dropout <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Dropout(drp)
-        self<span style="color:#f92672">.</span>out <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">1</span>)
-
-
-    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
-        h_embedding <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>embedding(x)
-        h_embedding <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>squeeze(torch<span style="color:#f92672">.</span>unsqueeze(h_embedding, <span style="color:#ae81ff">0</span>))
-
-        h_lstm, _ <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>lstm(h_embedding)
-        avg_pool <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>mean(h_lstm, <span style="color:#ae81ff">1</span>)
-        max_pool, _ <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>max(h_lstm, <span style="color:#ae81ff">1</span>)
-        conc <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>cat(( avg_pool, max_pool), <span style="color:#ae81ff">1</span>)
-        conc <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>linear(conc))
-        conc <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>dropout(conc)
-        out <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>out(conc)
-        <span style="color:#66d9ef">return</span> out
-</code></pre></div><p>Also, here is the same code in Keras.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># BiDirectional LSTM</span>
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">model_lstm_du</span>(embedding_matrix):
-    inp <span style="color:#f92672">=</span> Input(shape<span style="color:#f92672">=</span>(maxlen,))
-    x <span style="color:#f92672">=</span> Embedding(max_features, embed_size, weights<span style="color:#f92672">=</span>[embedding_matrix])(inp)
-    <span style="color:#e6db74">&#39;&#39;&#39;
-</span><span style="color:#e6db74">    Here 64 is the size(dim) of the hidden state vector as well as the output vector. Keeping return_sequence we want the output for the entire sequence. So what is the dimension of output for this layer?
-</span><span style="color:#e6db74">        64*70(maxlen)*2(bidirection concat)
-</span><span style="color:#e6db74">    CuDNNLSTM is fast implementation of LSTM layer in Keras which only runs on GPU
-</span><span style="color:#e6db74">    &#39;&#39;&#39;</span>
-    x <span style="color:#f92672">=</span> Bidirectional(CuDNNLSTM(<span style="color:#ae81ff">64</span>, return_sequences<span style="color:#f92672">=</span>True))(x)
-    avg_pool <span style="color:#f92672">=</span> GlobalAveragePooling1D()(x)
-    max_pool <span style="color:#f92672">=</span> GlobalMaxPooling1D()(x)
-    conc <span style="color:#f92672">=</span> concatenate([avg_pool, max_pool])
-    conc <span style="color:#f92672">=</span> Dense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;relu&#34;</span>)(conc)
-    conc <span style="color:#f92672">=</span> Dropout(<span style="color:#ae81ff">0.1</span>)(conc)
-    outp <span style="color:#f92672">=</span> Dense(<span style="color:#ae81ff">1</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;sigmoid&#34;</span>)(conc)
-    model <span style="color:#f92672">=</span> Model(inputs<span style="color:#f92672">=</span>inp, outputs<span style="color:#f92672">=</span>outp)
-    model<span style="color:#f92672">.</span>compile(loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;binary_crossentropy&#39;</span>, optimizer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;adam&#39;</span>, metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>])
-    <span style="color:#66d9ef">return</span> model
-</code></pre></div><p>You can run this code in my 
-
-<a href="https://www.kaggle.com/mlwhiz/bilstm-pytorch-and-keras" target="_blank" rel="nofollow noopener">BiLSTM with Pytorch and Keras kaggle kernel</a>
- for this competition. Please do upvote the kernel if you find it helpful.</p>
-<p>In the BiLSTM case also, Pytorch model beats the keras model by a small margin. The Out-Of-Fold CV F1 score for the Pytorch model came out to be 0.6741 while for Keras model the same score came out to be 0.6727. This score is around a 1-2% increase from the TextCNN performance which is pretty good. Also, note that it is around 6-7% better than conventional methods.</p>
-<hr>
-<h2 id="3-attention-models">3. Attention Models</h2>
-<p>Dzmitry Bahdanau et al first presented attention in their paper 
-
-<a href="https://arxiv.org/abs/1409.0473" target="_blank" rel="nofollow noopener">Neural Machine Translation by Jointly Learning to Align and Translate</a>
- but I find that the paper on 
-
-<a href="https://www.cs.cmu.edu/~diyiy/docs/naacl16.pdf" target="_blank" rel="nofollow noopener">Hierarchical Attention Networks for Document Classification</a>
- written jointly by CMU and Microsoft in 2016 is a much easier read and provides more intuition.</p>
-<p>So let us talk about the intuition first. In the past conventional methods like TFIDF/CountVectorizer etc. we used to find features from the text by doing a keyword extraction. Some word is more helpful in determining the category of a text than others. However, in this method we sort of lost the sequential structure of the text. With LSTM and deep learning methods, while we can take care of the sequence structure, we lose the ability to give higher weight to more important words.
-<strong>Can we have the best of both worlds?</strong></p>
-<p>The answer is Yes. Actually, <strong>Attention is all you need</strong>. In the author&rsquo;s words:</p>
-<blockquote>
-<p>Not all words contribute equally to the representation of the sentence meaning. Hence, we introduce attention mechanism to extract such words that are important to the meaning of the sentence and aggregate the representation of those informative words to form a sentence vector</p>
-</blockquote>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/birnn attention.png"  height="400" width="700" ></center>
-</div>
-<p>In essence, we want to create scores for every word in the text, which is the attention similarity score for a word.</p>
-<p>To do this, we start with a weight matrix(W), a bias vector(b) and a context vector u. The optimization algorithm learns all of these weights. On this note I would like to highlight something I like a lot about neural networks - If you don&rsquo;t know some params, let the network learn them. We only have to worry about creating architectures and params to tune.</p>
-<p>Then there are a series of mathematical operations. See the figure for more clarification. We can think of u1 as nonlinearity on RNN word output. After that v1 is a dot product of u1 with a context vector u raised to exponentiation. From an intuition viewpoint, the value of v1 will be high if u and u1 are similar. Since we want the sum of scores to be 1, we divide v by the sum of v’s to get the Final Scores,s</p>
-<p>These final scores are then multiplied by RNN output for words to weight them according to their importance. After which the outputs are summed and sent through dense layers and softmax for the task of text classification.</p>
-<p>Here is the code in Pytorch. <strong>Do try to read through the pytorch code for attention layer.</strong> It just does what I have explained above.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Attention</span>(nn<span style="color:#f92672">.</span>Module):
-    <span style="color:#66d9ef">def</span> __init__(self, feature_dim, step_dim, bias<span style="color:#f92672">=</span>True, <span style="color:#f92672">**</span>kwargs):
-        super(Attention, self)<span style="color:#f92672">.</span>__init__(<span style="color:#f92672">**</span>kwargs)
-
-        self<span style="color:#f92672">.</span>supports_masking <span style="color:#f92672">=</span> True
-
-        self<span style="color:#f92672">.</span>bias <span style="color:#f92672">=</span> bias
-        self<span style="color:#f92672">.</span>feature_dim <span style="color:#f92672">=</span> feature_dim
-        self<span style="color:#f92672">.</span>step_dim <span style="color:#f92672">=</span> step_dim
-        self<span style="color:#f92672">.</span>features_dim <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-
-        weight <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>zeros(feature_dim, <span style="color:#ae81ff">1</span>)
-        nn<span style="color:#f92672">.</span>init<span style="color:#f92672">.</span>kaiming_uniform_(weight)
-        self<span style="color:#f92672">.</span>weight <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Parameter(weight)
-
-        <span style="color:#66d9ef">if</span> bias:
-            self<span style="color:#f92672">.</span>b <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Parameter(torch<span style="color:#f92672">.</span>zeros(step_dim))
-
-    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x, mask<span style="color:#f92672">=</span>None):
-        feature_dim <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>feature_dim
-        step_dim <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>step_dim
-
-        eij <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>mm(
-            x<span style="color:#f92672">.</span>contiguous()<span style="color:#f92672">.</span>view(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, feature_dim),
-            self<span style="color:#f92672">.</span>weight
-        )<span style="color:#f92672">.</span>view(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, step_dim)
-
-        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>bias:
-            eij <span style="color:#f92672">=</span> eij <span style="color:#f92672">+</span> self<span style="color:#f92672">.</span>b
-
-        eij <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>tanh(eij)
-        a <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>exp(eij)
-
-        <span style="color:#66d9ef">if</span> mask <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None:
-            a <span style="color:#f92672">=</span> a <span style="color:#f92672">*</span> mask
-
-        a <span style="color:#f92672">=</span> a <span style="color:#f92672">/</span> (torch<span style="color:#f92672">.</span>sum(a, <span style="color:#ae81ff">1</span>, keepdim<span style="color:#f92672">=</span>True) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1e-10</span>)
-
-        weighted_input <span style="color:#f92672">=</span> x <span style="color:#f92672">*</span> torch<span style="color:#f92672">.</span>unsqueeze(a, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
-        <span style="color:#66d9ef">return</span> torch<span style="color:#f92672">.</span>sum(weighted_input, <span style="color:#ae81ff">1</span>)
-
-<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Attention_Net</span>(nn<span style="color:#f92672">.</span>Module):
-    <span style="color:#66d9ef">def</span> __init__(self):
-        super(Attention_Net, self)<span style="color:#f92672">.</span>__init__()
-        drp <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.1</span>
-        self<span style="color:#f92672">.</span>embedding <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Embedding(max_features, embed_size)
-        self<span style="color:#f92672">.</span>embedding<span style="color:#f92672">.</span>weight <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Parameter(torch<span style="color:#f92672">.</span>tensor(embedding_matrix, dtype<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>float32))
-        self<span style="color:#f92672">.</span>embedding<span style="color:#f92672">.</span>weight<span style="color:#f92672">.</span>requires_grad <span style="color:#f92672">=</span> False
-
-        self<span style="color:#f92672">.</span>embedding_dropout <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Dropout2d(<span style="color:#ae81ff">0.1</span>)
-        self<span style="color:#f92672">.</span>lstm <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>LSTM(embed_size, <span style="color:#ae81ff">128</span>, bidirectional<span style="color:#f92672">=</span>True, batch_first<span style="color:#f92672">=</span>True)
-        self<span style="color:#f92672">.</span>lstm2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>GRU(<span style="color:#ae81ff">128</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">64</span>, bidirectional<span style="color:#f92672">=</span>True, batch_first<span style="color:#f92672">=</span>True)
-
-        self<span style="color:#f92672">.</span>attention_layer <span style="color:#f92672">=</span> Attention(<span style="color:#ae81ff">128</span>, maxlen)
-
-        self<span style="color:#f92672">.</span>linear <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">64</span><span style="color:#f92672">*</span><span style="color:#ae81ff">2</span> , <span style="color:#ae81ff">64</span>)
-        self<span style="color:#f92672">.</span>relu <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>ReLU()
-        self<span style="color:#f92672">.</span>out <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">1</span>)
-
-    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
-        h_embedding <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>embedding(x)
-        h_embedding <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>squeeze(torch<span style="color:#f92672">.</span>unsqueeze(h_embedding, <span style="color:#ae81ff">0</span>))
-        h_lstm, _ <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>lstm(h_embedding)
-        h_lstm, _ <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>lstm2(h_lstm)
-        h_lstm_atten <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>attention_layer(h_lstm)
-        conc <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>linear(h_lstm_atten))
-        out <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>out(conc)
-        <span style="color:#66d9ef">return</span> out
-</code></pre></div><p>Same code for Keras.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">dot_product</span>(x, kernel):
-    <span style="color:#e6db74">&#34;&#34;&#34;
-</span><span style="color:#e6db74">    Wrapper for dot product operation, in order to be compatible with both
-</span><span style="color:#e6db74">    Theano and Tensorflow
-</span><span style="color:#e6db74">    Args:
-</span><span style="color:#e6db74">        x (): input
-</span><span style="color:#e6db74">        kernel (): weights
-</span><span style="color:#e6db74">    Returns:
-</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
-    <span style="color:#66d9ef">if</span> K<span style="color:#f92672">.</span>backend() <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;tensorflow&#39;</span>:
-        <span style="color:#66d9ef">return</span> K<span style="color:#f92672">.</span>squeeze(K<span style="color:#f92672">.</span>dot(x, K<span style="color:#f92672">.</span>expand_dims(kernel)), axis<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>)
-    <span style="color:#66d9ef">else</span>:
-        <span style="color:#66d9ef">return</span> K<span style="color:#f92672">.</span>dot(x, kernel)
-
-
-<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AttentionWithContext</span>(Layer):
-    <span style="color:#e6db74">&#34;&#34;&#34;
-</span><span style="color:#e6db74">    Attention operation, with a context/query vector, for temporal data.
-</span><span style="color:#e6db74">    Supports Masking.
-</span><span style="color:#e6db74">    Follows the work of Yang et al. [https://www.cs.cmu.edu/~diyiy/docs/naacl16.pdf]
-</span><span style="color:#e6db74">    &#34;Hierarchical Attention Networks for Document Classification&#34;
-</span><span style="color:#e6db74">    by using a context vector to assist the attention
-</span><span style="color:#e6db74">    # Input shape
-</span><span style="color:#e6db74">        3D tensor with shape: `(samples, steps, features)`.
-</span><span style="color:#e6db74">    # Output shape
-</span><span style="color:#e6db74">        2D tensor with shape: `(samples, features)`.
-</span><span style="color:#e6db74">    How to use:
-</span><span style="color:#e6db74">    Just put it on top of an RNN Layer (GRU/LSTM/SimpleRNN) with return_sequences=True.
-</span><span style="color:#e6db74">    The dimensions are inferred based on the output shape of the RNN.
-</span><span style="color:#e6db74">    Note: The layer has been tested with Keras 2.0.6
-</span><span style="color:#e6db74">    Example:
-</span><span style="color:#e6db74">        model.add(LSTM(64, return_sequences=True))
-</span><span style="color:#e6db74">        model.add(AttentionWithContext())
-</span><span style="color:#e6db74">        # next add a Dense layer (for classification/regression) or whatever...
-</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
-
-    <span style="color:#66d9ef">def</span> __init__(self,
-                 W_regularizer<span style="color:#f92672">=</span>None, u_regularizer<span style="color:#f92672">=</span>None, b_regularizer<span style="color:#f92672">=</span>None,
-                 W_constraint<span style="color:#f92672">=</span>None, u_constraint<span style="color:#f92672">=</span>None, b_constraint<span style="color:#f92672">=</span>None,
-                 bias<span style="color:#f92672">=</span>True, <span style="color:#f92672">**</span>kwargs):
-
-        self<span style="color:#f92672">.</span>supports_masking <span style="color:#f92672">=</span> True
-        self<span style="color:#f92672">.</span>init <span style="color:#f92672">=</span> initializers<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;glorot_uniform&#39;</span>)
-
-        self<span style="color:#f92672">.</span>W_regularizer <span style="color:#f92672">=</span> regularizers<span style="color:#f92672">.</span>get(W_regularizer)
-        self<span style="color:#f92672">.</span>u_regularizer <span style="color:#f92672">=</span> regularizers<span style="color:#f92672">.</span>get(u_regularizer)
-        self<span style="color:#f92672">.</span>b_regularizer <span style="color:#f92672">=</span> regularizers<span style="color:#f92672">.</span>get(b_regularizer)
-
-        self<span style="color:#f92672">.</span>W_constraint <span style="color:#f92672">=</span> constraints<span style="color:#f92672">.</span>get(W_constraint)
-        self<span style="color:#f92672">.</span>u_constraint <span style="color:#f92672">=</span> constraints<span style="color:#f92672">.</span>get(u_constraint)
-        self<span style="color:#f92672">.</span>b_constraint <span style="color:#f92672">=</span> constraints<span style="color:#f92672">.</span>get(b_constraint)
-
-        self<span style="color:#f92672">.</span>bias <span style="color:#f92672">=</span> bias
-        super(AttentionWithContext, self)<span style="color:#f92672">.</span>__init__(<span style="color:#f92672">**</span>kwargs)
-
-    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">build</span>(self, input_shape):
-        <span style="color:#66d9ef">assert</span> len(input_shape) <span style="color:#f92672">==</span> <span style="color:#ae81ff">3</span>
-
-        self<span style="color:#f92672">.</span>W <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>add_weight((input_shape[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], input_shape[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>],),
-                                 initializer<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>init,
-                                 name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;{}_W&#39;</span><span style="color:#f92672">.</span>format(self<span style="color:#f92672">.</span>name),
-                                 regularizer<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>W_regularizer,
-                                 constraint<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>W_constraint)
-        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>bias:
-            self<span style="color:#f92672">.</span>b <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>add_weight((input_shape[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>],),
-                                     initializer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;zero&#39;</span>,
-                                     name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;{}_b&#39;</span><span style="color:#f92672">.</span>format(self<span style="color:#f92672">.</span>name),
-                                     regularizer<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>b_regularizer,
-                                     constraint<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>b_constraint)
-
-        self<span style="color:#f92672">.</span>u <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>add_weight((input_shape[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>],),
-                                 initializer<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>init,
-                                 name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;{}_u&#39;</span><span style="color:#f92672">.</span>format(self<span style="color:#f92672">.</span>name),
-                                 regularizer<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>u_regularizer,
-                                 constraint<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>u_constraint)
-
-        super(AttentionWithContext, self)<span style="color:#f92672">.</span>build(input_shape)
-
-    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compute_mask</span>(self, input, input_mask<span style="color:#f92672">=</span>None):
-        <span style="color:#75715e"># do not pass the mask to the next layers</span>
-        <span style="color:#66d9ef">return</span> None
-
-    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">call</span>(self, x, mask<span style="color:#f92672">=</span>None):
-        uit <span style="color:#f92672">=</span> dot_product(x, self<span style="color:#f92672">.</span>W)
-
-        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>bias:
-            uit <span style="color:#f92672">+=</span> self<span style="color:#f92672">.</span>b
-
-        uit <span style="color:#f92672">=</span> K<span style="color:#f92672">.</span>tanh(uit)
-        ait <span style="color:#f92672">=</span> dot_product(uit, self<span style="color:#f92672">.</span>u)
-
-        a <span style="color:#f92672">=</span> K<span style="color:#f92672">.</span>exp(ait)
-
-        <span style="color:#75715e"># apply mask after the exp. will be re-normalized next</span>
-        <span style="color:#66d9ef">if</span> mask <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None:
-            <span style="color:#75715e"># Cast the mask to floatX to avoid float64 upcasting in theano</span>
-            a <span style="color:#f92672">*=</span> K<span style="color:#f92672">.</span>cast(mask, K<span style="color:#f92672">.</span>floatx())
-
-        <span style="color:#75715e"># in some cases especially in the early stages of training the sum may be almost zero</span>
-        <span style="color:#75715e"># and this results in NaN&#39;s. A workaround is to add a very small positive number ε to the sum.</span>
-        <span style="color:#75715e"># a /= K.cast(K.sum(a, axis=1, keepdims=True), K.floatx())</span>
-        a <span style="color:#f92672">/=</span> K<span style="color:#f92672">.</span>cast(K<span style="color:#f92672">.</span>sum(a, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, keepdims<span style="color:#f92672">=</span>True) <span style="color:#f92672">+</span> K<span style="color:#f92672">.</span>epsilon(), K<span style="color:#f92672">.</span>floatx())
-
-        a <span style="color:#f92672">=</span> K<span style="color:#f92672">.</span>expand_dims(a)
-        weighted_input <span style="color:#f92672">=</span> x <span style="color:#f92672">*</span> a
-        <span style="color:#66d9ef">return</span> K<span style="color:#f92672">.</span>sum(weighted_input, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
-
-    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compute_output_shape</span>(self, input_shape):
-        <span style="color:#66d9ef">return</span> input_shape[<span style="color:#ae81ff">0</span>], input_shape[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
-
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">model_lstm_atten</span>(embedding_matrix):
-    inp <span style="color:#f92672">=</span> Input(shape<span style="color:#f92672">=</span>(maxlen,))
-    x <span style="color:#f92672">=</span> Embedding(max_features, embed_size, weights<span style="color:#f92672">=</span>[embedding_matrix], trainable<span style="color:#f92672">=</span>False)(inp)
-    x <span style="color:#f92672">=</span> Bidirectional(CuDNNLSTM(<span style="color:#ae81ff">128</span>, return_sequences<span style="color:#f92672">=</span>True))(x)
-    x <span style="color:#f92672">=</span> Bidirectional(CuDNNLSTM(<span style="color:#ae81ff">64</span>, return_sequences<span style="color:#f92672">=</span>True))(x)
-    x <span style="color:#f92672">=</span> AttentionWithContext()(x)
-    x <span style="color:#f92672">=</span> Dense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;relu&#34;</span>)(x)
-    x <span style="color:#f92672">=</span> Dense(<span style="color:#ae81ff">1</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;sigmoid&#34;</span>)(x)
-    model <span style="color:#f92672">=</span> Model(inputs<span style="color:#f92672">=</span>inp, outputs<span style="color:#f92672">=</span>x)
-    model<span style="color:#f92672">.</span>compile(loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;binary_crossentropy&#39;</span>, optimizer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;adam&#39;</span>, metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>])
-    <span style="color:#66d9ef">return</span> model
-
-</code></pre></div><p>Again, my 
-
-<a href="https://www.kaggle.com/mlwhiz/attention-pytorch-and-keras" target="_blank" rel="nofollow noopener">Attention with Pytorch and Keras Kaggle kernel</a>
- contains the working versions for this code. Please do upvote the kernel if you find it useful.</p>
-<p>This method performed well with Pytorch CV scores reaching around 0.6758 and Keras CV scores reaching around 0.678. <strong>This score is more than what we were able to achieve with BiLSTM and TextCNN.</strong> However, please note that we didn&rsquo;t work on tuning any of the given methods yet and so the scores might be different.</p>
-<p>With this, I leave you to experiment with new architectures and playing around with stacking multiple GRU/LSTM layers to improve your network performance. You can also look at including more techniques in these network like Bucketing, handmade features, etc. Some of the tips and new techniques are mentioned here on my blog post: 
-
-<a href="/blog/2019/02/19/siver_medal_kaggle_learnings/">What my first Silver Medal taught me about Text Classification and Kaggle in general?</a>
-. Also, here is another Kaggle kernel which is 
-
-<a href="https://www.kaggle.com/mlwhiz/multimodel-ensemble-clean-kernel?scriptVersionId=10279838" target="_blank" rel="nofollow noopener">my silver-winning entry</a>
- for this competition.</p>
-<hr>
-<h2 id="results">Results</h2>
-<p>Here are the final results of all the different approaches I have tried on the Kaggle Dataset. I ran a 5 fold Stratified CV.</p>
-<h3 id="a-conventional-methods">a. Conventional Methods:</h3>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/results_conv.png"  style="height:40%;width:40%"></center>
-</div>
-<h3 id="b-deep-learning-methods">b. Deep Learning Methods:</h3>
-<div style="margin-top: 9px; margin-bottom: 10px;">
-<center><img src="/images/results_deep_learning.png"  style="height:50%;width:50%"></center>
-</div>
-<p><strong>PS:</strong> Note that I didn&rsquo;t work on tuning the above models, so these results are only cursory. You can try to squeeze more performance by performing hyperparams tuning 
-
-<a href="/blog/2017/12/28/hyperopt_tuning_ml_model/">using hyperopt</a>
- or just old fashioned Grid-search.</p>
-<hr>
-<h2 id="conclusion">Conclusion</h2>
-<p>In this post, I went through with the explanations of various deep learning architectures people are using for Text classification tasks. In the next post, we will delve further into the next new phenomenon in NLP space - Transfer Learning with BERT and ULMFit. Follow me up at 
-
-<a href="https://medium.com/@rahul_agarwal" target="_blank" rel="nofollow noopener">Medium</a>
- or Subscribe to my blog to be informed about my next post.</p>
-<p>Also if you want to 
-
-<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&amp;offerid=467035.11503135394&amp;type=2&amp;murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target="_blank" rel="nofollow noopener">&lt;strong&gt;learn more about NLP&lt;/strong&gt; here</a>
- is an excellent course. You can start for free with the 7-day Free Trial.</p>
-<p>Let me know if you think I can add something more to the post; I will try to incorporate it.</p>
-<p>Cheers!!!</p>
-
-
-        
-<script async data-uid="8d7942551b" src="https://mlwhiz.ck.page/8d7942551b/index.js"></script>
-
-
-<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088" style="margin-bottom: 1px;"></div>
-
-<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
-
-<div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-        </div>
-      </div>
-      <div class="col-lg-4">
-  
-
-  <div class="widget">
-    
-<script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#00aaa1', 'S6S3NPCD');kofiwidget2.draw();</script>
-
-</div>
-  <div class="widget">
-    
-    <h4 class="widget-title">About Me</h4>
-    
-    <img src="https://mlwhiz.com/images/author.jpg" alt=""
-      class="img-fluid author-thumb-sm d-block mx-auto rounded-circle mb-4">
-    
-    <p>I’m a data scientist consultant and big data engineer based in Bangalore, where I am currently working with WalmartLabs .</p>
-    <a href="https://mlwhiz.com/about/" class="btn btn-outline-primary">Know More</a>
-    
-  </div>
-
-
-  
-  <div class="widget">
-    <h4 class="widget-title">Topics</h4>
-    <ul class="list-unstyled">
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/awesome-guides">Awesome Guides</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/big-data">Big Data</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/computer-vision">Computer Vision</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/data-science">Data Science</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/deep-learning">Deep Learning</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/learning-resources">Learning Resources</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/natural-language-processing">Natural Language Processing</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/programming">Programming</a>
-      </li>
-    </ul>
-  </div>
-  
-  <div class="widget">
-    <h4 class="widget-title">Tags</h4>
-    <ul class="list-inline">
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/algorithms">Algorithms</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/artificial-intelligence">Artificial Intelligence</a></li>
-          
-
-
-          
-
-
-          
-
-
-          
-
-
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/dask">Dask</a></li>
-          
-
-
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/deployment">Deployment</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/ec2">Ec2</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/generative-adversarial-networks">Generative Adversarial Networks</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/graphs">Graphs</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/image-classification">Image Classification</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/instance-segmentation">Instance Segmentation</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/interpretability">Interpretability</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/jobs">Jobs</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/kaggle">Kaggle</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/language-modeling">Language Modeling</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/machine-learning">Machine Learning</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/math">Math</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/multiprocessing">Multiprocessing</a></li>
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/object-detection">Object Detection</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/opinion">Opinion</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/pandas">Pandas</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/production">Production</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/productivity">Productivity</a></li>
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/python">Python</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/pytorch">Pytorch</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/spark">Spark</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/sql">Sql</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/statistics">Statistics</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/streamlit">Streamlit</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/text-classification">Text Classification</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/timeseries">Timeseries</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/tools">Tools</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/translation">Translation</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/visualization">Visualization</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/xgboost">Xgboost</a></li>
-          
-    </ul>
-  </div>
-  
-  <div class="widget">
-    <h4 class="widget-title">Connect With Me</h4>
-    <ul class="list-inline social-links">
-      
-      <li class="list-inline-item"><a href="https://www.linkedin.com/in/rahulagwl/"><i class="ti-linkedin"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://medium.com/@rahul_agarwal"><i class="ti-book"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://twitter.com/MLWhiz"><i class="ti-twitter-alt"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://www.facebook.com/mlwhizblog"><i class="ti-facebook"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://github.com/MLWhiz"><i class="ti-github"></i></a></li>
-      
-    </ul>
-  </div>
-  
-  
-<script async data-uid="bfe9f82f10" src="https://mlwhiz.ck.page/bfe9f82f10/index.js"></script>
-
-<script async data-uid="3452d924e2" src="https://mlwhiz.ck.page/3452d924e2/index.js"></script>
-
-</div>
-
-    </div>
-
-
-  </div>
-</section>
-
-
-
-<footer>
-  <div class="container">
-    <div class="row">
-      <div class="col-12 text-center mb-5">
-        <a href="https://mlwhiz.com/"><img src="https://mlwhiz.com/images/logo.png" class="img-fluid-custom-bottom" alt="MLWhiz: Helping You Learn Data Science!"></a>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Contact Me</h6>
-        <ul class="list-unstyled">
-          <li class="mb-3"><i class="ti-location-pin mr-3 text-primary"></i>India, Bangalore</li>
-          <li class="mb-3"><a class="text-dark" href="mailto:rahul@mlwhiz.com"><i
-                class="ti-email mr-3 text-primary"></i>rahul@mlwhiz.com</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Social Contacts</h6>
-        <ul class="list-unstyled">
-          
-          <li class="mb-3"><a class="text-dark" href="https://www.linkedin.com/in/rahulagwl/">Linkedin</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://medium.com/@rahul_agarwal">Medium</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://twitter.com/MLWhiz">Twitter</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://www.facebook.com/mlwhizblog">Facebook</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://github.com/MLWhiz">Github</a></li>
-          
-        </ul>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Categories</h6>
-        <ul class="list-unstyled">
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/awesome-guides">Awesome Guides</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/big-data">Big Data</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/computer-vision">Computer Vision</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/data-science">Data Science</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/deep-learning">Deep Learning</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/learning-resources">Learning Resources</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/natural-language-processing">Natural Language Processing</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/programming">Programming</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Quick Links</h6>
-        <ul class="list-unstyled">
-          
-          <li class="mb-3"><a class="text-dark" href="https://mlwhiz.com/about">About</a></li>
-          
-          
-          <li class="mb-3"><a class="text-dark" href="https://mlwhiz.com/blog">Post</a></li>
-          
-          
-          
-        </ul>
-      </div>
-      <div class="col-12 border-top py-4 text-center">
-        Copyright © 2020 <a href="https://mlwhiz.com">MLWhiz</a> All Rights Reserved
-      </div>
-    </div>
-  </div>
-</footer>
-
-
-
-<script>
-  var indexURL = "https://mlwhiz.com/index.json"
-</script>
-
-<!-- JS Plugins -->
-
-<script src="https://mlwhiz.com/plugins/compressjscss/main.js"></script>
-
-<!-- Main Script -->
-
-<script src="https://mlwhiz.com/js/script.min.js"></script>
-<!-- google analitycs -->
-<script>
-  (function (i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r;
-    i[r] = i[r] || function () {
-      (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date();
-    a = s.createElement(o),
-      m = s.getElementsByTagName(o)[0];
-    a.async = 1;
-    a.src = g;
-    m.parentNode.insertBefore(a, m)
-  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-  ga('create', 'UA-54777926-1', 'auto');
-  ga('send', 'pageview');
-</script>
-</body>
-</html>
+<!doctype html><html lang=en-us><head><meta charset=utf-8><title>MLWhiz: Helping You Learn Data Science!</title><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta name=description content="Recently, I started up with an NLP competition on Kaggle called Quora Question insincerity challenge. It is an NLP Challenge on text classification, and as the problem has become more clear after working through the competition as well as by going through the invaluable kernels put up by the kaggle experts, I thought of sharing the knowledge. In this post, I will try to take you through some basic conventional models like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and try to access their performance to create a baseline."><meta name=author content="Rahul Agarwal"><meta name=generator content="Hugo 0.74.3"><link rel=stylesheet href=https://mlwhiz.com/plugins/compressjscss/main.css><meta property="og:title" content="NLP  Learning Series: Part 3 - Attention, CNN and what not for Text Classification"><meta property="og:description" content="Recently, I started up with an NLP competition on Kaggle called Quora Question insincerity challenge. It is an NLP Challenge on text classification, and as the problem has become more clear after working through the competition as well as by going through the invaluable kernels put up by the kaggle experts, I thought of sharing the knowledge. In this post, I will try to take you through some basic conventional models like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and try to access their performance to create a baseline."><meta property="og:type" content="article"><meta property="og:url" content="https://mlwhiz.com/blog/2019/03/09/deeplearning_architectures_text_classification/"><meta property="og:image" content="https://mlwhiz.com/images/birnn.png"><meta property="og:image:secure_url" content="https://mlwhiz.com/images/birnn.png"><meta property="article:published_time" content="2019-03-09T00:00:00+00:00"><meta property="article:modified_time" content="2020-09-26T16:23:35+05:30"><meta property="article:tag" content="Natural Language Processing"><meta property="article:tag" content="Deep Learning"><meta property="article:tag" content="Awesome Guides"><meta name=twitter:card content="summary"><meta name=twitter:image content="https://mlwhiz.com/images/birnn.png"><meta name=twitter:title content="NLP  Learning Series: Part 3 - Attention, CNN and what not for Text Classification"><meta name=twitter:description content="Recently, I started up with an NLP competition on Kaggle called Quora Question insincerity challenge. It is an NLP Challenge on text classification, and as the problem has become more clear after working through the competition as well as by going through the invaluable kernels put up by the kaggle experts, I thought of sharing the knowledge. In this post, I will try to take you through some basic conventional models like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and try to access their performance to create a baseline."><meta name=twitter:site content="@mlwhiz"><meta name=twitter:creator content="@mlwhiz"><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href=https://mlwhiz.com/scss/style.min.css media=screen><link rel=stylesheet href=/css/style.css><link rel=stylesheet type=text/css href=/css/font/flaticon.css><link rel="shortcut icon" href=https://mlwhiz.com/images/favicon-200x200.png type=image/x-icon><link rel=icon href=https://mlwhiz.com/images/favicon.png type=image/x-icon><link rel=canonical href=https://mlwhiz.com/blog/2019/03/09/deeplearning_architectures_text_classification/><script src=https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js></script><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.mlwhiz.com/#website","url":"https://www.mlwhiz.com/","name":"MLWhiz","description":"Want to Learn Computer Vision and NLP? - MLWhiz","potentialAction":{"@type":"SearchAction","target":"https://www.mlwhiz.com/search?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"ImageObject","@id":"https://mlwhiz.com/blog/2019/03/09/deeplearning_architectures_text_classification/#primaryimage","url":"https://mlwhiz.com/images/birnn.png","width":700,"height":450},{"@type":"WebPage","@id":"https://mlwhiz.com/blog/2019/03/09/deeplearning_architectures_text_classification/#webpage","url":"https://mlwhiz.com/blog/2019/03/09/deeplearning_architectures_text_classification/","inLanguage":"en-US","name":"NLP  Learning Series: Part 3 - Attention, CNN and what not for Text Classification - MLWhiz","isPartOf":{"@id":"https://www.mlwhiz.com/#website"},"primaryImageOfPage":{"@id":"https://mlwhiz.com/blog/2019/03/09/deeplearning_architectures_text_classification/#primaryimage"},"datePublished":"2019-03-09T00:00:00.00Z","dateModified":"2020-09-26T16:23:35.00Z","author":{"@id":"https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca"},"description":"Recently, I started up with an NLP competition on Kaggle called Quora Question insincerity challenge. It is an NLP Challenge on text classification, and as the problem has become more clear after working through the competition as well as by going through the invaluable kernels put up by the kaggle experts, I thought of sharing the knowledge. In this post, I will try to take you through some basic conventional models like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and try to access their performance to create a baseline."},{"@type":["Person"],"@id":"https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca","name":"Rahul Agarwal","image":{"@type":"ImageObject","@id":"https://www.mlwhiz.com/#authorlogo","url":"https://mlwhiz.com/images/author.jpg","caption":"Rahul Agarwal"},"description":"Hi there, I\u2019m Rahul Agarwal. I\u2019m a data scientist consultant and big data engineer based in Bangalore. I see a lot of times  students and even professionals wasting their time and struggling to get started with Computer Vision, Deep Learning, and NLP. I Started this Site with a purpose to augment my own understanding about new things while helping others learn about them in the best possible way.","sameAs":["https://www.linkedin.com/in/rahulagwl/","https://medium.com/@rahul_agarwal","https://twitter.com/MLWhiz","https://www.facebook.com/mlwhizblog","https://github.com/MLWhiz","https://www.instagram.com/itsmlwhiz"]}]}</script><script async data-uid=a0ebaf958d src=https://mlwhiz.ck.page/a0ebaf958d/index.js></script><script type=text/javascript async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">MathJax.Hub.Config({tex2jax:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$']],processEscapes:true,processEnvironments:true,skipTags:['script','noscript','style','textarea','pre'],TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["AMSmath.js","AMSsymbols.js"]}}});MathJax.Hub.Queue(function(){var all=MathJax.Hub.getAllJax(),i;for(i=0;i<all.length;i+=1){all[i].SourceElement().parentNode.className+=' has-jax';}});MathJax.Hub.Config({TeX:{equationNumbers:{autoNumber:"AMS"}}});</script><link href=//apps.shareaholic.com/assets/pub/shareaholic.js as=script><script type=text/javascript data-cfasync=false async src=//apps.shareaholic.com/assets/pub/shareaholic.js data-shr-siteid=fd1ffa7fd7152e4e20568fbe49a489d0></script></head><body><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T" height=0 width=0 style=display:none;visibility:hidden></iframe></noscript><div class=preloader></div><header class=navigation><div class=container><nav class="navbar navbar-expand-lg navbar-white bg-transparent border-bottom pl-0"><a class="navbar-brand mobile-view" href=https://mlwhiz.com/><img class=img-fluid src=https://mlwhiz.com/images/logo.png alt="MLWhiz: Helping You Learn Data Science!"></a>
+<button class="navbar-toggler border-0" type=button data-toggle=collapse data-target=#navigation>
+<i class="ti-menu h3"></i></button><div class="collapse navbar-collapse text-center" id=navigation><div class=desktop-view><ul class="navbar-nav mr-auto"><li class=nav-item><a class=nav-link href=https://www.linkedin.com/in/rahulagwl/><i class=ti-linkedin></i></a></li><li class=nav-item><a class=nav-link href=https://medium.com/@rahul_agarwal><i class=ti-book></i></a></li><li class=nav-item><a class=nav-link href=https://twitter.com/MLWhiz><i class=ti-twitter-alt></i></a></li><li class=nav-item><a class=nav-link href=https://www.facebook.com/mlwhizblog><i class=ti-facebook></i></a></li><li class=nav-item><a class=nav-link href=https://github.com/MLWhiz><i class=ti-github></i></a></li></ul></div><a class="navbar-brand mx-auto desktop-view" href=https://mlwhiz.com/><img class=img-fluid-custom src=https://mlwhiz.com/images/logo.png alt="MLWhiz: Helping You Learn Data Science!"></a><ul class=navbar-nav><li class=nav-item><a class=nav-link href=https://mlwhiz.com/about>About</a></li><li class=nav-item><a class=nav-link href=https://mlwhiz.com/blog>Blog</a></li><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href=# role=button data-toggle=dropdown aria-haspopup=true aria-expanded=false>Topics</a><div class=dropdown-menu><a class=dropdown-item href=https://mlwhiz.com/categories/natural-language-processing>NLP</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/computer-vision>Computer Vision</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/deep-learning>Deep Learning</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/data-science>DS/ML</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/big-data>Big Data</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/awesome-guides>My Best Content</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/learning-resources>Learning Resources</a></div></li></ul><div class="search pl-lg-4"><button id=searchOpen class=search-btn><i class=ti-search></i></button><div class=search-wrapper><form action=https://mlwhiz.com//search class=h-100><input class="search-box px-4" id=search-query name=s type=search placeholder="Type & Hit Enter..."></form><button id=searchClose class=search-close><i class="ti-close text-dark"></i></button></div></div></div></nav></div></header><section class=section-sm><div class=container><div class=row><div class="col-lg-8 mb-5 mb-lg-0"><a href=/categories/natural-language-processing class=categoryStyle>Natural Language Processing</a>
+<a href=/categories/deep-learning class=categoryStyle>Deep Learning</a>
+<a href=/categories/awesome-guides class=categoryStyle>Awesome Guides</a><h1>NLP Learning Series: Part 3 - Attention, CNN and what not for Text Classification</h1><div class="mb-3 post-meta"><span>By Rahul Agarwal</span><svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+<span>09 March 2019</span></div><img src=https://mlwhiz.com/images/birnn.png class="img-fluid w-100 mb-4" alt="NLP  Learning Series: Part 3 - Attention, CNN and what not for Text Classification"><div class="content mb-5"><p>This post is the third post of the NLP Text classification series. To give you a recap, I started up with an NLP text classification competition on Kaggle called Quora Question insincerity challenge. So I thought to share the knowledge via a series of blog posts on text classification. The
+<a href=/blog/2019/01/17/deeplearning_nlp_preprocess/>first post</a>
+talked about the different <strong>preprocessing techniques that work with Deep learning models</strong> and <strong>increasing embeddings coverage</strong>. In the
+<a href=/blog/2019/02/08/deeplearning_nlp_conventional_methods/>second post</a>
+, I talked through some <strong>basic conventional models</strong> like TFIDF, Count Vectorizer, Hashing, etc. that have been used in text classification and tried to access their performance to create a baseline. In this post, I delve deeper into <strong>Deep learning models and the various architectures</strong> we could use to solve the text Classification problem. To make this post platform generic, I am going to code in both Keras and Pytorch. I will use various other models which we were not able to use in this competition like <strong>ULMFit transfer learning</strong> approaches in the fourth post in the series.</p><p><strong>As a side note</strong>: if you want to know more about NLP, I would like to <strong>recommend this excellent course</strong> on
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&offerid=467035.11503135394&type=2&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target=_blank rel="nofollow noopener">Natural Language Processing</a>
+in the
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&utm_content=2&utm_medium=partners&utm_source=linkshare&utm_campaign=lVarvwc5BD0" target=_blank rel="nofollow noopener">Advanced machine learning specialization</a>
+. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few. You can start for free with the 7-day Free Trial.</p><p>So let me try to go through some of the models which people are using to perform text classification and try to provide a brief intuition for them — also, some code in Keras and Pytorch. So you can try them out for yourself.</p><hr><h2 id=1-textcnn>1. TextCNN</h2><p>The idea of using a CNN to classify text was first presented in the paper
+<a href=https://www.aclweb.org/anthology/D14-1181 target=_blank rel="nofollow noopener">Convolutional Neural Networks for Sentence Classification</a>
+by Yoon Kim.</p><p><strong>Representation:</strong> The central intuition about this idea is to <strong>see our documents as images</strong>. How? Let us say we have a sentence and we have maxlen = 70 and embedding size = 300. We can create a matrix of numbers with the shape 70x300 to represent this sentence. For images, we also have a matrix where individual elements are pixel values. Instead of image pixels, the input to the tasks is sentences or documents represented as a matrix. Each row of the matrix corresponds to one-word vector.</p><div style=margin-top:9px;margin-bottom:10px><center><img src=/images/text_convolution.png height=400 width=700></center></div><p><strong>Convolution Idea:</strong> While for an image we move our conv filter horizontally as well as vertically, for text we fix kernel size to filter_size x embed_size, i.e. (3,300) we are just going to move vertically down for the convolution taking look at three words at once since our filter size is 3 in this case. This idea seems right since our convolution filter is not splitting word embedding. It gets to look at the full embedding of each word. Also one can think of filter sizes as unigrams, bigrams, trigrams, etc. Since we are looking at a context window of 1,2,3, and 5 words respectively.</p><p>Here is the text classification network coded in Pytorch:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>import</span> torch
+<span style=color:#f92672>import</span> torch.nn <span style=color:#f92672>as</span> nn
+<span style=color:#f92672>import</span> torch.nn.functional <span style=color:#f92672>as</span> F
+<span style=color:#f92672>from</span> torch.autograd <span style=color:#f92672>import</span> Variable
+
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>CNN_Text</span>(nn<span style=color:#f92672>.</span>Module):
+
+    <span style=color:#66d9ef>def</span> __init__(self):
+        super(CNN_Text, self)<span style=color:#f92672>.</span>__init__()
+        filter_sizes <span style=color:#f92672>=</span> [<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>3</span>,<span style=color:#ae81ff>5</span>]
+        num_filters <span style=color:#f92672>=</span> <span style=color:#ae81ff>36</span>
+        self<span style=color:#f92672>.</span>embedding <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Embedding(max_features, embed_size)
+        self<span style=color:#f92672>.</span>embedding<span style=color:#f92672>.</span>weight <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Parameter(torch<span style=color:#f92672>.</span>tensor(embedding_matrix, dtype<span style=color:#f92672>=</span>torch<span style=color:#f92672>.</span>float32))
+        self<span style=color:#f92672>.</span>embedding<span style=color:#f92672>.</span>weight<span style=color:#f92672>.</span>requires_grad <span style=color:#f92672>=</span> False
+        self<span style=color:#f92672>.</span>convs1 <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>ModuleList([nn<span style=color:#f92672>.</span>Conv2d(<span style=color:#ae81ff>1</span>, num_filters, (K, embed_size)) <span style=color:#66d9ef>for</span> K <span style=color:#f92672>in</span> filter_sizes])
+        self<span style=color:#f92672>.</span>dropout <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Dropout(<span style=color:#ae81ff>0.1</span>)
+        self<span style=color:#f92672>.</span>fc1 <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Linear(len(Ks)<span style=color:#f92672>*</span>num_filters, <span style=color:#ae81ff>1</span>)
+
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>forward</span>(self, x):
+        x <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>embedding(x)  
+        x <span style=color:#f92672>=</span> x<span style=color:#f92672>.</span>unsqueeze(<span style=color:#ae81ff>1</span>)  
+        x <span style=color:#f92672>=</span> [F<span style=color:#f92672>.</span>relu(conv(x))<span style=color:#f92672>.</span>squeeze(<span style=color:#ae81ff>3</span>) <span style=color:#66d9ef>for</span> conv <span style=color:#f92672>in</span> self<span style=color:#f92672>.</span>convs1]
+        x <span style=color:#f92672>=</span> [F<span style=color:#f92672>.</span>max_pool1d(i, i<span style=color:#f92672>.</span>size(<span style=color:#ae81ff>2</span>))<span style=color:#f92672>.</span>squeeze(<span style=color:#ae81ff>2</span>) <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> x]  
+        x <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>cat(x, <span style=color:#ae81ff>1</span>)
+        x <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>dropout(x)  
+        logit <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>fc1(x)  
+        <span style=color:#66d9ef>return</span> logit
+</code></pre></div><p>And for the Keras enthusiasts:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#75715e># https://www.kaggle.com/yekenot/2dcnn-textclassifier</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>model_cnn</span>(embedding_matrix):
+    filter_sizes <span style=color:#f92672>=</span> [<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>3</span>,<span style=color:#ae81ff>5</span>]
+    num_filters <span style=color:#f92672>=</span> <span style=color:#ae81ff>36</span>
+
+    inp <span style=color:#f92672>=</span> Input(shape<span style=color:#f92672>=</span>(maxlen,))
+    x <span style=color:#f92672>=</span> Embedding(max_features, embed_size, weights<span style=color:#f92672>=</span>[embedding_matrix])(inp)
+    x <span style=color:#f92672>=</span> Reshape((maxlen, embed_size, <span style=color:#ae81ff>1</span>))(x)
+
+    maxpool_pool <span style=color:#f92672>=</span> []
+    <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(len(filter_sizes)):
+        conv <span style=color:#f92672>=</span> Conv2D(num_filters, kernel_size<span style=color:#f92672>=</span>(filter_sizes[i], embed_size),
+                                     kernel_initializer<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;he_normal&#39;</span>, activation<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;relu&#39;</span>)(x)
+        maxpool_pool<span style=color:#f92672>.</span>append(MaxPool2D(pool_size<span style=color:#f92672>=</span>(maxlen <span style=color:#f92672>-</span> filter_sizes[i] <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>1</span>))(conv))
+
+    z <span style=color:#f92672>=</span> Concatenate(axis<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>)(maxpool_pool)   
+    z <span style=color:#f92672>=</span> Flatten()(z)
+    z <span style=color:#f92672>=</span> Dropout(<span style=color:#ae81ff>0.1</span>)(z)
+
+    outp <span style=color:#f92672>=</span> Dense(<span style=color:#ae81ff>1</span>, activation<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;sigmoid&#34;</span>)(z)
+
+    model <span style=color:#f92672>=</span> Model(inputs<span style=color:#f92672>=</span>inp, outputs<span style=color:#f92672>=</span>outp)
+    model<span style=color:#f92672>.</span>compile(loss<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;binary_crossentropy&#39;</span>, optimizer<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;adam&#39;</span>, metrics<span style=color:#f92672>=</span>[<span style=color:#e6db74>&#39;accuracy&#39;</span>])
+
+    <span style=color:#66d9ef>return</span> model
+</code></pre></div><p>I am a big fan of Kaggle Kernels. One could not have imagined having all that compute for free. You can find a running version of the above two code snippets in this
+<a href=https://www.kaggle.com/mlwhiz/textcnn-pytorch-and-keras target=_blank rel="nofollow noopener">kaggle kernel</a>
+. Do try to experiment with it after forking and running the code. Also please upvote the kernel if you find it helpful.</p><p>The Keras model and Pytorch model performed similarly with Pytorch model beating the keras model by a small margin. The Out-Of-Fold CV F1 score for the Pytorch model came out to be 0.6609 while for Keras model the same score came out to be 0.6559. I used the same preprocessing in both the models to be better able to compare the platforms.</p><hr><h2 id=2-bidirectional-rnnlstmgru>2. BiDirectional RNN(LSTM/GRU):</h2><p>TextCNN works well for Text Classification. It takes care of words in close range. It can see &ldquo;new york&rdquo; together. However, it still can&rsquo;t take care of all the context provided in a particular text sequence. It still does not learn the sequential structure of the data, where every word is dependent on the previous word. Or a word in the previous sentence.</p><p>RNN help us with that. <em>They can remember previous information using hidden states and connect it to the current task.</em></p><p>Long Short Term Memory networks (LSTM) are a subclass of RNN, specialized in remembering information for an extended period. Moreover, the Bidirectional LSTM keeps the contextual information in both directions which is pretty useful in text classification task (But won&rsquo;t work for a time series prediction task as we don&rsquo;t have visibility into the future in this case).</p><div style=margin-top:9px;margin-bottom:10px><center><img src=/images/birnn.png height=400 width=700></center></div><p>For a most simplistic explanation of Bidirectional RNN, think of RNN cell as a black box taking as input a hidden state(a vector) and a word vector and giving out an output vector and the next hidden state. This box has some weights which are to be tuned using Backpropagation of the losses. Also, the same cell is applied to all the words so that the weights are shared across the words in the sentence. This phenomenon is called weight-sharing.</p><div style=margin-top:9px;margin-bottom:10px><center><img src=/images/singlernn.png height=30% width=30%></center></div><pre><code>        Hidden state, Word vector -&gt;(RNN Cell) -&gt; Output Vector , Next Hidden state
+</code></pre><p>For a sequence of length 4 like <strong>&ldquo;you will never believe&rdquo;</strong>, The RNN cell gives 4 output vectors, which can be concatenated and then used as part of a dense feedforward architecture.</p><p>In the Bidirectional RNN, the only change is that we read the text in the usual fashion as well in reverse. So we stack two RNNs in parallel, and hence we get 8 output vectors to append.</p><p>Once we get the output vectors, we send them through a series of dense layers and finally a softmax layer to build a text classifier.</p><p>In most cases, you need to understand how to stack some layers in a neural network to get the best results. We can try out multiple bidirectional GRU/LSTM layers in the network if it performs better.</p><p>Due to the limitations of RNNs like not remembering long term dependencies, in practice, we almost always use LSTM/GRU to model long term dependencies. In such a case you can think of the RNN cell being replaced by an LSTM cell or a GRU cell in the above figure. An example model is provided below. You can use CuDNNGRU interchangeably with CuDNNLSTM when you build models. (CuDNNGRU/LSTM are just implementations of LSTM/GRU that are created to run faster on GPUs. In most cases always use them instead of the vanilla LSTM/GRU implementations)</p><p>So here is some code in Pytorch for this network.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>BiLSTM</span>(nn<span style=color:#f92672>.</span>Module):
+
+    <span style=color:#66d9ef>def</span> __init__(self):
+        super(BiLSTM, self)<span style=color:#f92672>.</span>__init__()
+        self<span style=color:#f92672>.</span>hidden_size <span style=color:#f92672>=</span> <span style=color:#ae81ff>64</span>
+        drp <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.1</span>
+        self<span style=color:#f92672>.</span>embedding <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Embedding(max_features, embed_size)
+        self<span style=color:#f92672>.</span>embedding<span style=color:#f92672>.</span>weight <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Parameter(torch<span style=color:#f92672>.</span>tensor(embedding_matrix, dtype<span style=color:#f92672>=</span>torch<span style=color:#f92672>.</span>float32))
+        self<span style=color:#f92672>.</span>embedding<span style=color:#f92672>.</span>weight<span style=color:#f92672>.</span>requires_grad <span style=color:#f92672>=</span> False
+        self<span style=color:#f92672>.</span>lstm <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>LSTM(embed_size, self<span style=color:#f92672>.</span>hidden_size, bidirectional<span style=color:#f92672>=</span>True, batch_first<span style=color:#f92672>=</span>True)
+        self<span style=color:#f92672>.</span>linear <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Linear(self<span style=color:#f92672>.</span>hidden_size<span style=color:#f92672>*</span><span style=color:#ae81ff>4</span> , <span style=color:#ae81ff>64</span>)
+        self<span style=color:#f92672>.</span>relu <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>ReLU()
+        self<span style=color:#f92672>.</span>dropout <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Dropout(drp)
+        self<span style=color:#f92672>.</span>out <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Linear(<span style=color:#ae81ff>64</span>, <span style=color:#ae81ff>1</span>)
+
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>forward</span>(self, x):
+        h_embedding <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>embedding(x)
+        h_embedding <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>squeeze(torch<span style=color:#f92672>.</span>unsqueeze(h_embedding, <span style=color:#ae81ff>0</span>))
+
+        h_lstm, _ <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>lstm(h_embedding)
+        avg_pool <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>mean(h_lstm, <span style=color:#ae81ff>1</span>)
+        max_pool, _ <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>max(h_lstm, <span style=color:#ae81ff>1</span>)
+        conc <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>cat(( avg_pool, max_pool), <span style=color:#ae81ff>1</span>)
+        conc <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>relu(self<span style=color:#f92672>.</span>linear(conc))
+        conc <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>dropout(conc)
+        out <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>out(conc)
+        <span style=color:#66d9ef>return</span> out
+</code></pre></div><p>Also, here is the same code in Keras.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#75715e># BiDirectional LSTM</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>model_lstm_du</span>(embedding_matrix):
+    inp <span style=color:#f92672>=</span> Input(shape<span style=color:#f92672>=</span>(maxlen,))
+    x <span style=color:#f92672>=</span> Embedding(max_features, embed_size, weights<span style=color:#f92672>=</span>[embedding_matrix])(inp)
+    <span style=color:#e6db74>&#39;&#39;&#39;
+</span><span style=color:#e6db74>    Here 64 is the size(dim) of the hidden state vector as well as the output vector. Keeping return_sequence we want the output for the entire sequence. So what is the dimension of output for this layer?
+</span><span style=color:#e6db74>        64*70(maxlen)*2(bidirection concat)
+</span><span style=color:#e6db74>    CuDNNLSTM is fast implementation of LSTM layer in Keras which only runs on GPU
+</span><span style=color:#e6db74>    &#39;&#39;&#39;</span>
+    x <span style=color:#f92672>=</span> Bidirectional(CuDNNLSTM(<span style=color:#ae81ff>64</span>, return_sequences<span style=color:#f92672>=</span>True))(x)
+    avg_pool <span style=color:#f92672>=</span> GlobalAveragePooling1D()(x)
+    max_pool <span style=color:#f92672>=</span> GlobalMaxPooling1D()(x)
+    conc <span style=color:#f92672>=</span> concatenate([avg_pool, max_pool])
+    conc <span style=color:#f92672>=</span> Dense(<span style=color:#ae81ff>64</span>, activation<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;relu&#34;</span>)(conc)
+    conc <span style=color:#f92672>=</span> Dropout(<span style=color:#ae81ff>0.1</span>)(conc)
+    outp <span style=color:#f92672>=</span> Dense(<span style=color:#ae81ff>1</span>, activation<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;sigmoid&#34;</span>)(conc)
+    model <span style=color:#f92672>=</span> Model(inputs<span style=color:#f92672>=</span>inp, outputs<span style=color:#f92672>=</span>outp)
+    model<span style=color:#f92672>.</span>compile(loss<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;binary_crossentropy&#39;</span>, optimizer<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;adam&#39;</span>, metrics<span style=color:#f92672>=</span>[<span style=color:#e6db74>&#39;accuracy&#39;</span>])
+    <span style=color:#66d9ef>return</span> model
+</code></pre></div><p>You can run this code in my
+<a href=https://www.kaggle.com/mlwhiz/bilstm-pytorch-and-keras target=_blank rel="nofollow noopener">BiLSTM with Pytorch and Keras kaggle kernel</a>
+for this competition. Please do upvote the kernel if you find it helpful.</p><p>In the BiLSTM case also, Pytorch model beats the keras model by a small margin. The Out-Of-Fold CV F1 score for the Pytorch model came out to be 0.6741 while for Keras model the same score came out to be 0.6727. This score is around a 1-2% increase from the TextCNN performance which is pretty good. Also, note that it is around 6-7% better than conventional methods.</p><hr><h2 id=3-attention-models>3. Attention Models</h2><p>Dzmitry Bahdanau et al first presented attention in their paper
+<a href=https://arxiv.org/abs/1409.0473 target=_blank rel="nofollow noopener">Neural Machine Translation by Jointly Learning to Align and Translate</a>
+but I find that the paper on
+<a href=https://www.cs.cmu.edu/~diyiy/docs/naacl16.pdf target=_blank rel="nofollow noopener">Hierarchical Attention Networks for Document Classification</a>
+written jointly by CMU and Microsoft in 2016 is a much easier read and provides more intuition.</p><p>So let us talk about the intuition first. In the past conventional methods like TFIDF/CountVectorizer etc. we used to find features from the text by doing a keyword extraction. Some word is more helpful in determining the category of a text than others. However, in this method we sort of lost the sequential structure of the text. With LSTM and deep learning methods, while we can take care of the sequence structure, we lose the ability to give higher weight to more important words.
+<strong>Can we have the best of both worlds?</strong></p><p>The answer is Yes. Actually, <strong>Attention is all you need</strong>. In the author&rsquo;s words:</p><blockquote><p>Not all words contribute equally to the representation of the sentence meaning. Hence, we introduce attention mechanism to extract such words that are important to the meaning of the sentence and aggregate the representation of those informative words to form a sentence vector</p></blockquote><div style=margin-top:9px;margin-bottom:10px><center><img src="/images/birnn attention.png" height=400 width=700></center></div><p>In essence, we want to create scores for every word in the text, which is the attention similarity score for a word.</p><p>To do this, we start with a weight matrix(W), a bias vector(b) and a context vector u. The optimization algorithm learns all of these weights. On this note I would like to highlight something I like a lot about neural networks - If you don&rsquo;t know some params, let the network learn them. We only have to worry about creating architectures and params to tune.</p><p>Then there are a series of mathematical operations. See the figure for more clarification. We can think of u1 as nonlinearity on RNN word output. After that v1 is a dot product of u1 with a context vector u raised to exponentiation. From an intuition viewpoint, the value of v1 will be high if u and u1 are similar. Since we want the sum of scores to be 1, we divide v by the sum of v’s to get the Final Scores,s</p><p>These final scores are then multiplied by RNN output for words to weight them according to their importance. After which the outputs are summed and sent through dense layers and softmax for the task of text classification.</p><p>Here is the code in Pytorch. <strong>Do try to read through the pytorch code for attention layer.</strong> It just does what I have explained above.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Attention</span>(nn<span style=color:#f92672>.</span>Module):
+    <span style=color:#66d9ef>def</span> __init__(self, feature_dim, step_dim, bias<span style=color:#f92672>=</span>True, <span style=color:#f92672>**</span>kwargs):
+        super(Attention, self)<span style=color:#f92672>.</span>__init__(<span style=color:#f92672>**</span>kwargs)
+
+        self<span style=color:#f92672>.</span>supports_masking <span style=color:#f92672>=</span> True
+
+        self<span style=color:#f92672>.</span>bias <span style=color:#f92672>=</span> bias
+        self<span style=color:#f92672>.</span>feature_dim <span style=color:#f92672>=</span> feature_dim
+        self<span style=color:#f92672>.</span>step_dim <span style=color:#f92672>=</span> step_dim
+        self<span style=color:#f92672>.</span>features_dim <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+
+        weight <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>zeros(feature_dim, <span style=color:#ae81ff>1</span>)
+        nn<span style=color:#f92672>.</span>init<span style=color:#f92672>.</span>kaiming_uniform_(weight)
+        self<span style=color:#f92672>.</span>weight <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Parameter(weight)
+
+        <span style=color:#66d9ef>if</span> bias:
+            self<span style=color:#f92672>.</span>b <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Parameter(torch<span style=color:#f92672>.</span>zeros(step_dim))
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>forward</span>(self, x, mask<span style=color:#f92672>=</span>None):
+        feature_dim <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>feature_dim
+        step_dim <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>step_dim
+
+        eij <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>mm(
+            x<span style=color:#f92672>.</span>contiguous()<span style=color:#f92672>.</span>view(<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>, feature_dim),
+            self<span style=color:#f92672>.</span>weight
+        )<span style=color:#f92672>.</span>view(<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>, step_dim)
+
+        <span style=color:#66d9ef>if</span> self<span style=color:#f92672>.</span>bias:
+            eij <span style=color:#f92672>=</span> eij <span style=color:#f92672>+</span> self<span style=color:#f92672>.</span>b
+
+        eij <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>tanh(eij)
+        a <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>exp(eij)
+
+        <span style=color:#66d9ef>if</span> mask <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+            a <span style=color:#f92672>=</span> a <span style=color:#f92672>*</span> mask
+
+        a <span style=color:#f92672>=</span> a <span style=color:#f92672>/</span> (torch<span style=color:#f92672>.</span>sum(a, <span style=color:#ae81ff>1</span>, keepdim<span style=color:#f92672>=</span>True) <span style=color:#f92672>+</span> <span style=color:#ae81ff>1e-10</span>)
+
+        weighted_input <span style=color:#f92672>=</span> x <span style=color:#f92672>*</span> torch<span style=color:#f92672>.</span>unsqueeze(a, <span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>)
+        <span style=color:#66d9ef>return</span> torch<span style=color:#f92672>.</span>sum(weighted_input, <span style=color:#ae81ff>1</span>)
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Attention_Net</span>(nn<span style=color:#f92672>.</span>Module):
+    <span style=color:#66d9ef>def</span> __init__(self):
+        super(Attention_Net, self)<span style=color:#f92672>.</span>__init__()
+        drp <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.1</span>
+        self<span style=color:#f92672>.</span>embedding <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Embedding(max_features, embed_size)
+        self<span style=color:#f92672>.</span>embedding<span style=color:#f92672>.</span>weight <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Parameter(torch<span style=color:#f92672>.</span>tensor(embedding_matrix, dtype<span style=color:#f92672>=</span>torch<span style=color:#f92672>.</span>float32))
+        self<span style=color:#f92672>.</span>embedding<span style=color:#f92672>.</span>weight<span style=color:#f92672>.</span>requires_grad <span style=color:#f92672>=</span> False
+
+        self<span style=color:#f92672>.</span>embedding_dropout <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Dropout2d(<span style=color:#ae81ff>0.1</span>)
+        self<span style=color:#f92672>.</span>lstm <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>LSTM(embed_size, <span style=color:#ae81ff>128</span>, bidirectional<span style=color:#f92672>=</span>True, batch_first<span style=color:#f92672>=</span>True)
+        self<span style=color:#f92672>.</span>lstm2 <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>GRU(<span style=color:#ae81ff>128</span><span style=color:#f92672>*</span><span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>64</span>, bidirectional<span style=color:#f92672>=</span>True, batch_first<span style=color:#f92672>=</span>True)
+
+        self<span style=color:#f92672>.</span>attention_layer <span style=color:#f92672>=</span> Attention(<span style=color:#ae81ff>128</span>, maxlen)
+
+        self<span style=color:#f92672>.</span>linear <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Linear(<span style=color:#ae81ff>64</span><span style=color:#f92672>*</span><span style=color:#ae81ff>2</span> , <span style=color:#ae81ff>64</span>)
+        self<span style=color:#f92672>.</span>relu <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>ReLU()
+        self<span style=color:#f92672>.</span>out <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Linear(<span style=color:#ae81ff>64</span>, <span style=color:#ae81ff>1</span>)
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>forward</span>(self, x):
+        h_embedding <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>embedding(x)
+        h_embedding <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>squeeze(torch<span style=color:#f92672>.</span>unsqueeze(h_embedding, <span style=color:#ae81ff>0</span>))
+        h_lstm, _ <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>lstm(h_embedding)
+        h_lstm, _ <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>lstm2(h_lstm)
+        h_lstm_atten <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>attention_layer(h_lstm)
+        conc <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>relu(self<span style=color:#f92672>.</span>linear(h_lstm_atten))
+        out <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>out(conc)
+        <span style=color:#66d9ef>return</span> out
+</code></pre></div><p>Same code for Keras.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>dot_product</span>(x, kernel):
+    <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>    Wrapper for dot product operation, in order to be compatible with both
+</span><span style=color:#e6db74>    Theano and Tensorflow
+</span><span style=color:#e6db74>    Args:
+</span><span style=color:#e6db74>        x (): input
+</span><span style=color:#e6db74>        kernel (): weights
+</span><span style=color:#e6db74>    Returns:
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+    <span style=color:#66d9ef>if</span> K<span style=color:#f92672>.</span>backend() <span style=color:#f92672>==</span> <span style=color:#e6db74>&#39;tensorflow&#39;</span>:
+        <span style=color:#66d9ef>return</span> K<span style=color:#f92672>.</span>squeeze(K<span style=color:#f92672>.</span>dot(x, K<span style=color:#f92672>.</span>expand_dims(kernel)), axis<span style=color:#f92672>=-</span><span style=color:#ae81ff>1</span>)
+    <span style=color:#66d9ef>else</span>:
+        <span style=color:#66d9ef>return</span> K<span style=color:#f92672>.</span>dot(x, kernel)
+
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>AttentionWithContext</span>(Layer):
+    <span style=color:#e6db74>&#34;&#34;&#34;
+</span><span style=color:#e6db74>    Attention operation, with a context/query vector, for temporal data.
+</span><span style=color:#e6db74>    Supports Masking.
+</span><span style=color:#e6db74>    Follows the work of Yang et al. [https://www.cs.cmu.edu/~diyiy/docs/naacl16.pdf]
+</span><span style=color:#e6db74>    &#34;Hierarchical Attention Networks for Document Classification&#34;
+</span><span style=color:#e6db74>    by using a context vector to assist the attention
+</span><span style=color:#e6db74>    # Input shape
+</span><span style=color:#e6db74>        3D tensor with shape: `(samples, steps, features)`.
+</span><span style=color:#e6db74>    # Output shape
+</span><span style=color:#e6db74>        2D tensor with shape: `(samples, features)`.
+</span><span style=color:#e6db74>    How to use:
+</span><span style=color:#e6db74>    Just put it on top of an RNN Layer (GRU/LSTM/SimpleRNN) with return_sequences=True.
+</span><span style=color:#e6db74>    The dimensions are inferred based on the output shape of the RNN.
+</span><span style=color:#e6db74>    Note: The layer has been tested with Keras 2.0.6
+</span><span style=color:#e6db74>    Example:
+</span><span style=color:#e6db74>        model.add(LSTM(64, return_sequences=True))
+</span><span style=color:#e6db74>        model.add(AttentionWithContext())
+</span><span style=color:#e6db74>        # next add a Dense layer (for classification/regression) or whatever...
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+
+    <span style=color:#66d9ef>def</span> __init__(self,
+                 W_regularizer<span style=color:#f92672>=</span>None, u_regularizer<span style=color:#f92672>=</span>None, b_regularizer<span style=color:#f92672>=</span>None,
+                 W_constraint<span style=color:#f92672>=</span>None, u_constraint<span style=color:#f92672>=</span>None, b_constraint<span style=color:#f92672>=</span>None,
+                 bias<span style=color:#f92672>=</span>True, <span style=color:#f92672>**</span>kwargs):
+
+        self<span style=color:#f92672>.</span>supports_masking <span style=color:#f92672>=</span> True
+        self<span style=color:#f92672>.</span>init <span style=color:#f92672>=</span> initializers<span style=color:#f92672>.</span>get(<span style=color:#e6db74>&#39;glorot_uniform&#39;</span>)
+
+        self<span style=color:#f92672>.</span>W_regularizer <span style=color:#f92672>=</span> regularizers<span style=color:#f92672>.</span>get(W_regularizer)
+        self<span style=color:#f92672>.</span>u_regularizer <span style=color:#f92672>=</span> regularizers<span style=color:#f92672>.</span>get(u_regularizer)
+        self<span style=color:#f92672>.</span>b_regularizer <span style=color:#f92672>=</span> regularizers<span style=color:#f92672>.</span>get(b_regularizer)
+
+        self<span style=color:#f92672>.</span>W_constraint <span style=color:#f92672>=</span> constraints<span style=color:#f92672>.</span>get(W_constraint)
+        self<span style=color:#f92672>.</span>u_constraint <span style=color:#f92672>=</span> constraints<span style=color:#f92672>.</span>get(u_constraint)
+        self<span style=color:#f92672>.</span>b_constraint <span style=color:#f92672>=</span> constraints<span style=color:#f92672>.</span>get(b_constraint)
+
+        self<span style=color:#f92672>.</span>bias <span style=color:#f92672>=</span> bias
+        super(AttentionWithContext, self)<span style=color:#f92672>.</span>__init__(<span style=color:#f92672>**</span>kwargs)
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>build</span>(self, input_shape):
+        <span style=color:#66d9ef>assert</span> len(input_shape) <span style=color:#f92672>==</span> <span style=color:#ae81ff>3</span>
+
+        self<span style=color:#f92672>.</span>W <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>add_weight((input_shape[<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>], input_shape[<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>],),
+                                 initializer<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>init,
+                                 name<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;{}_W&#39;</span><span style=color:#f92672>.</span>format(self<span style=color:#f92672>.</span>name),
+                                 regularizer<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>W_regularizer,
+                                 constraint<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>W_constraint)
+        <span style=color:#66d9ef>if</span> self<span style=color:#f92672>.</span>bias:
+            self<span style=color:#f92672>.</span>b <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>add_weight((input_shape[<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>],),
+                                     initializer<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;zero&#39;</span>,
+                                     name<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;{}_b&#39;</span><span style=color:#f92672>.</span>format(self<span style=color:#f92672>.</span>name),
+                                     regularizer<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>b_regularizer,
+                                     constraint<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>b_constraint)
+
+        self<span style=color:#f92672>.</span>u <span style=color:#f92672>=</span> self<span style=color:#f92672>.</span>add_weight((input_shape[<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>],),
+                                 initializer<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>init,
+                                 name<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;{}_u&#39;</span><span style=color:#f92672>.</span>format(self<span style=color:#f92672>.</span>name),
+                                 regularizer<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>u_regularizer,
+                                 constraint<span style=color:#f92672>=</span>self<span style=color:#f92672>.</span>u_constraint)
+
+        super(AttentionWithContext, self)<span style=color:#f92672>.</span>build(input_shape)
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>compute_mask</span>(self, input, input_mask<span style=color:#f92672>=</span>None):
+        <span style=color:#75715e># do not pass the mask to the next layers</span>
+        <span style=color:#66d9ef>return</span> None
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>call</span>(self, x, mask<span style=color:#f92672>=</span>None):
+        uit <span style=color:#f92672>=</span> dot_product(x, self<span style=color:#f92672>.</span>W)
+
+        <span style=color:#66d9ef>if</span> self<span style=color:#f92672>.</span>bias:
+            uit <span style=color:#f92672>+=</span> self<span style=color:#f92672>.</span>b
+
+        uit <span style=color:#f92672>=</span> K<span style=color:#f92672>.</span>tanh(uit)
+        ait <span style=color:#f92672>=</span> dot_product(uit, self<span style=color:#f92672>.</span>u)
+
+        a <span style=color:#f92672>=</span> K<span style=color:#f92672>.</span>exp(ait)
+
+        <span style=color:#75715e># apply mask after the exp. will be re-normalized next</span>
+        <span style=color:#66d9ef>if</span> mask <span style=color:#f92672>is</span> <span style=color:#f92672>not</span> None:
+            <span style=color:#75715e># Cast the mask to floatX to avoid float64 upcasting in theano</span>
+            a <span style=color:#f92672>*=</span> K<span style=color:#f92672>.</span>cast(mask, K<span style=color:#f92672>.</span>floatx())
+
+        <span style=color:#75715e># in some cases especially in the early stages of training the sum may be almost zero</span>
+        <span style=color:#75715e># and this results in NaN&#39;s. A workaround is to add a very small positive number ε to the sum.</span>
+        <span style=color:#75715e># a /= K.cast(K.sum(a, axis=1, keepdims=True), K.floatx())</span>
+        a <span style=color:#f92672>/=</span> K<span style=color:#f92672>.</span>cast(K<span style=color:#f92672>.</span>sum(a, axis<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>, keepdims<span style=color:#f92672>=</span>True) <span style=color:#f92672>+</span> K<span style=color:#f92672>.</span>epsilon(), K<span style=color:#f92672>.</span>floatx())
+
+        a <span style=color:#f92672>=</span> K<span style=color:#f92672>.</span>expand_dims(a)
+        weighted_input <span style=color:#f92672>=</span> x <span style=color:#f92672>*</span> a
+        <span style=color:#66d9ef>return</span> K<span style=color:#f92672>.</span>sum(weighted_input, axis<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>)
+
+    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>compute_output_shape</span>(self, input_shape):
+        <span style=color:#66d9ef>return</span> input_shape[<span style=color:#ae81ff>0</span>], input_shape[<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>]
+
+
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>model_lstm_atten</span>(embedding_matrix):
+    inp <span style=color:#f92672>=</span> Input(shape<span style=color:#f92672>=</span>(maxlen,))
+    x <span style=color:#f92672>=</span> Embedding(max_features, embed_size, weights<span style=color:#f92672>=</span>[embedding_matrix], trainable<span style=color:#f92672>=</span>False)(inp)
+    x <span style=color:#f92672>=</span> Bidirectional(CuDNNLSTM(<span style=color:#ae81ff>128</span>, return_sequences<span style=color:#f92672>=</span>True))(x)
+    x <span style=color:#f92672>=</span> Bidirectional(CuDNNLSTM(<span style=color:#ae81ff>64</span>, return_sequences<span style=color:#f92672>=</span>True))(x)
+    x <span style=color:#f92672>=</span> AttentionWithContext()(x)
+    x <span style=color:#f92672>=</span> Dense(<span style=color:#ae81ff>64</span>, activation<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;relu&#34;</span>)(x)
+    x <span style=color:#f92672>=</span> Dense(<span style=color:#ae81ff>1</span>, activation<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;sigmoid&#34;</span>)(x)
+    model <span style=color:#f92672>=</span> Model(inputs<span style=color:#f92672>=</span>inp, outputs<span style=color:#f92672>=</span>x)
+    model<span style=color:#f92672>.</span>compile(loss<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;binary_crossentropy&#39;</span>, optimizer<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;adam&#39;</span>, metrics<span style=color:#f92672>=</span>[<span style=color:#e6db74>&#39;accuracy&#39;</span>])
+    <span style=color:#66d9ef>return</span> model
+
+</code></pre></div><p>Again, my
+<a href=https://www.kaggle.com/mlwhiz/attention-pytorch-and-keras target=_blank rel="nofollow noopener">Attention with Pytorch and Keras Kaggle kernel</a>
+contains the working versions for this code. Please do upvote the kernel if you find it useful.</p><p>This method performed well with Pytorch CV scores reaching around 0.6758 and Keras CV scores reaching around 0.678. <strong>This score is more than what we were able to achieve with BiLSTM and TextCNN.</strong> However, please note that we didn&rsquo;t work on tuning any of the given methods yet and so the scores might be different.</p><p>With this, I leave you to experiment with new architectures and playing around with stacking multiple GRU/LSTM layers to improve your network performance. You can also look at including more techniques in these network like Bucketing, handmade features, etc. Some of the tips and new techniques are mentioned here on my blog post:
+<a href=/blog/2019/02/19/siver_medal_kaggle_learnings/>What my first Silver Medal taught me about Text Classification and Kaggle in general?</a>
+. Also, here is another Kaggle kernel which is
+<a href="https://www.kaggle.com/mlwhiz/multimodel-ensemble-clean-kernel?scriptVersionId=10279838" target=_blank rel="nofollow noopener">my silver-winning entry</a>
+for this competition.</p><hr><h2 id=results>Results</h2><p>Here are the final results of all the different approaches I have tried on the Kaggle Dataset. I ran a 5 fold Stratified CV.</p><h3 id=a-conventional-methods>a. Conventional Methods:</h3><div style=margin-top:9px;margin-bottom:10px><center><img src=/images/results_conv.png style=height:40%;width:40%></center></div><h3 id=b-deep-learning-methods>b. Deep Learning Methods:</h3><div style=margin-top:9px;margin-bottom:10px><center><img src=/images/results_deep_learning.png style=height:50%;width:50%></center></div><p><strong>PS:</strong> Note that I didn&rsquo;t work on tuning the above models, so these results are only cursory. You can try to squeeze more performance by performing hyperparams tuning
+<a href=/blog/2017/12/28/hyperopt_tuning_ml_model/>using hyperopt</a>
+or just old fashioned Grid-search.</p><hr><h2 id=conclusion>Conclusion</h2><p>In this post, I went through with the explanations of various deep learning architectures people are using for Text classification tasks. In the next post, we will delve further into the next new phenomenon in NLP space - Transfer Learning with BERT and ULMFit. Follow me up at
+<a href=https://medium.com/@rahul_agarwal target=_blank rel="nofollow noopener">Medium</a>
+or Subscribe to my blog to be informed about my next post.</p><p>Also if you want to
+<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&offerid=467035.11503135394&type=2&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target=_blank rel="nofollow noopener">&lt;strong>learn more about NLP&lt;/strong> here</a>
+is an excellent course. You can start for free with the 7-day Free Trial.</p><p>Let me know if you think I can add something more to the post; I will try to incorporate it.</p><p>Cheers!!!</p><script async data-uid=8d7942551b src=https://mlwhiz.ck.page/8d7942551b/index.js></script><div class=shareaholic-canvas data-app=share_buttons data-app-id=28372088 style=margin-bottom:1px></div><a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel=nofollow><img border=0 alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a><div id=disqus_thread></div><script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return;}
+var d=document,s=d.createElement('script');s.async=true;s.src='//'+"mlwhiz"+'.disqus.com/embed.js';s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div></div><div class=col-lg-4><div class=widget><script type=text/javascript src=https://ko-fi.com/widgets/widget_2.js></script><script type=text/javascript>kofiwidget2.init('Support Me on Ko-fi','#00aaa1','S6S3NPCD');kofiwidget2.draw();</script></div><div class=widget><h4 class=widget-title>About Me</h4><img src=https://mlwhiz.com/images/author.jpg alt class="img-fluid author-thumb-sm d-block mx-auto rounded-circle mb-4"><p>I’m a data scientist consultant and big data engineer based in Bangalore, where I am currently working with WalmartLabs .</p><a href=https://mlwhiz.com/about/ class="btn btn-outline-primary">Know More</a></div><div class=widget><h4 class=widget-title>Topics</h4><ul class=list-unstyled><li><a class=categoryStyle style=color:#fff href=/categories/awesome-guides>Awesome Guides</a></li><li><a class=categoryStyle style=color:#fff href=/categories/big-data>Big Data</a></li><li><a class=categoryStyle style=color:#fff href=/categories/computer-vision>Computer Vision</a></li><li><a class=categoryStyle style=color:#fff href=/categories/data-science>Data Science</a></li><li><a class=categoryStyle style=color:#fff href=/categories/deep-learning>Deep Learning</a></li><li><a class=categoryStyle style=color:#fff href=/categories/learning-resources>Learning Resources</a></li><li><a class=categoryStyle style=color:#fff href=/categories/natural-language-processing>Natural Language Processing</a></li><li><a class=categoryStyle style=color:#fff href=/categories/programming>Programming</a></li></ul></div><div class=widget><h4 class=widget-title>Tags</h4><ul class=list-inline><li class=list-inline-item><a class="tagStyle text-white" href=/tags/algorithms>Algorithms</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/artificial-intelligence>Artificial Intelligence</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/dask>Dask</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/deployment>Deployment</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/ec2>Ec2</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/generative-adversarial-networks>Generative Adversarial Networks</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/graphs>Graphs</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/image-classification>Image Classification</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/instance-segmentation>Instance Segmentation</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/interpretability>Interpretability</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/jobs>Jobs</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/kaggle>Kaggle</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/language-modeling>Language Modeling</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/machine-learning>Machine Learning</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/math>Math</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/multiprocessing>Multiprocessing</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/object-detection>Object Detection</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/opinion>Opinion</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/pandas>Pandas</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/production>Production</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/productivity>Productivity</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/python>Python</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/pytorch>Pytorch</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/spark>Spark</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/sql>Sql</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/statistics>Statistics</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/streamlit>Streamlit</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/text-classification>Text Classification</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/timeseries>Timeseries</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/tools>Tools</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/translation>Translation</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/visualization>Visualization</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/xgboost>Xgboost</a></li></ul></div><div class=widget><h4 class=widget-title>Connect With Me</h4><ul class="list-inline social-links"><li class=list-inline-item><a href=https://www.linkedin.com/in/rahulagwl/><i class=ti-linkedin></i></a></li><li class=list-inline-item><a href=https://medium.com/@rahul_agarwal><i class=ti-book></i></a></li><li class=list-inline-item><a href=https://twitter.com/MLWhiz><i class=ti-twitter-alt></i></a></li><li class=list-inline-item><a href=https://www.facebook.com/mlwhizblog><i class=ti-facebook></i></a></li><li class=list-inline-item><a href=https://github.com/MLWhiz><i class=ti-github></i></a></li></ul></div><script async data-uid=bfe9f82f10 src=https://mlwhiz.ck.page/bfe9f82f10/index.js></script><script async data-uid=3452d924e2 src=https://mlwhiz.ck.page/3452d924e2/index.js></script></div></div></div></section><footer><div class=container><div class=row><div class="col-12 text-center mb-5"><a href=https://mlwhiz.com/><img src=https://mlwhiz.com/images/logo.png class=img-fluid-custom-bottom alt="MLWhiz: Helping You Learn Data Science!"></a></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Contact Me</h6><ul class=list-unstyled><li class=mb-3><i class="ti-location-pin mr-3 text-primary"></i>India, Bangalore</li><li class=mb-3><a class=text-dark href=mailto:rahul@mlwhiz.com><i class="ti-email mr-3 text-primary"></i>rahul@mlwhiz.com</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Social Contacts</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=https://www.linkedin.com/in/rahulagwl/>Linkedin</a></li><li class=mb-3><a class=text-dark href=https://medium.com/@rahul_agarwal>Medium</a></li><li class=mb-3><a class=text-dark href=https://twitter.com/MLWhiz>Twitter</a></li><li class=mb-3><a class=text-dark href=https://www.facebook.com/mlwhizblog>Facebook</a></li><li class=mb-3><a class=text-dark href=https://github.com/MLWhiz>Github</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Categories</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=/categories/awesome-guides>Awesome Guides</a></li><li class=mb-3><a class=text-dark href=/categories/big-data>Big Data</a></li><li class=mb-3><a class=text-dark href=/categories/computer-vision>Computer Vision</a></li><li class=mb-3><a class=text-dark href=/categories/data-science>Data Science</a></li><li class=mb-3><a class=text-dark href=/categories/deep-learning>Deep Learning</a></li><li class=mb-3><a class=text-dark href=/categories/learning-resources>Learning Resources</a></li><li class=mb-3><a class=text-dark href=/categories/natural-language-processing>Natural Language Processing</a></li><li class=mb-3><a class=text-dark href=/categories/programming>Programming</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Quick Links</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=https://mlwhiz.com/about>About</a></li><li class=mb-3><a class=text-dark href=https://mlwhiz.com/blog>Post</a></li></ul></div><div class="col-12 border-top py-4 text-center">Copyright © 2020 <a href=https://mlwhiz.com>MLWhiz</a> All Rights Reserved</div></div></div></footer><script>var indexURL="https://mlwhiz.com/index.json"</script><script src=https://mlwhiz.com/plugins/compressjscss/main.js></script><script src=https://mlwhiz.com/js/script.min.js></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-54777926-1','auto');ga('send','pageview');</script></body></html>

@@ -1,442 +1,59 @@
-<!DOCTYPE html>
-<html lang="en-us"><head>
-  <meta charset="utf-8">
-  <title>MLWhiz: Helping You Learn Data Science!</title>
-
-  <!-- mobile responsive meta -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="This post is about implementing and getting an object detector on our custom dataset of weapons">
-  <meta name="author" content="Rahul Agarwal">
-  <meta name="generator" content="Hugo 0.74.3" />
-  <!-- plugins -->
-  
-  <link rel="stylesheet" href="https://mlwhiz.com/plugins/compressjscss/main.css ">
-  
-
-	<meta property="og:title" content="Implementing Object Detection and Instance Segmentation for Data Scientists" />
-<meta property="og:description" content="This post is about implementing and getting an object detector on our custom dataset of weapons" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://mlwhiz.com/blog/2019/12/06/weapons/" />
-
-<meta property="og:image" content="https://mlwhiz.com/images/weapons/main.png" />
-<meta property="og:image:secure_url" content="https://mlwhiz.com/images/weapons/main.png" />
-<meta property="article:published_time" content="2019-12-06T00:00:00+00:00" />
-<meta property="article:modified_time" content="2020-09-26T16:23:35+05:30" />
-<meta property="article:tag" content="Deep Learning" />
-<meta property="article:tag" content="Computer Vision" />
-<meta property="article:tag" content="Awesome Guides" />
-
-	<meta name="twitter:card" content="summary"/>
-<meta name="twitter:image" content="https://mlwhiz.com/images/weapons/main.png"/>
-
-<meta name="twitter:title" content="Implementing Object Detection and Instance Segmentation for Data Scientists"/>
-<meta name="twitter:description" content="This post is about implementing and getting an object detector on our custom dataset of weapons"/>
-<meta name="twitter:site" content="@mlwhiz"/>
-<meta name="twitter:creator" content="@mlwhiz"/>
-
-
-
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-
-	<!-- Main Stylesheet -->
-  
-  <link rel="stylesheet" href="https://mlwhiz.com/scss/style.min.css" media="screen">
-  <link rel="stylesheet" href="/css/style.css">
-
-  <link rel="stylesheet" type="text/css" href="/css/font/flaticon.css" >
-
-  <!--Favicon-->
-  <link rel="shortcut icon" href="https://mlwhiz.com/images/favicon-200x200.png " type="image/x-icon">
-  <link rel="icon" href="https://mlwhiz.com/images/favicon.png " type="image/x-icon">
-
-
-    <link rel="canonical" href="https://mlwhiz.com/blog/2019/12/06/weapons/" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-
-
-<script type = 'application/ld+json'> {
-    "@context": "https://schema.org",
-    "@graph": [{
-        "@type": "WebSite",
-        "@id": "https://www.mlwhiz.com/#website",
-        "url": "https://www.mlwhiz.com/",
-        "name": "MLWhiz",
-        "description": "Want to Learn Computer Vision and NLP? - MLWhiz",
-        "potentialAction": {
-            "@type": "SearchAction",
-            "target": "https://www.mlwhiz.com/search?s={search_term_string}",
-            "query-input": "required name=search_term_string"
-        }
-    }, {
-        "@type": "ImageObject",
-        "@id": "https://mlwhiz.com/blog/2019/12/06/weapons/#primaryimage",
-        "url": "https://mlwhiz.com/images/weapons/main.png",
-        "width": 700,
-        "height": 450
-    }, {
-        "@type": "WebPage",
-        "@id": "https://mlwhiz.com/blog/2019/12/06/weapons/#webpage",
-        "url": "https://mlwhiz.com/blog/2019/12/06/weapons/",
-        "inLanguage": "en-US",
-        "name": "Implementing Object Detection and Instance Segmentation for Data Scientists - MLWhiz",
-        "isPartOf": {
-            "@id": "https://www.mlwhiz.com/#website"
-        },
-        "primaryImageOfPage": {
-            "@id": "https://mlwhiz.com/blog/2019/12/06/weapons/#primaryimage"
-        },
-        "datePublished":"2019-12-06T00:00:00.00Z",
-        "dateModified": "2020-09-26T16:23:35.00Z",
-        "author": {
-            "@id": "https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca"
-        },
-        "description": "This post is about implementing and getting an object detector on our custom dataset of weapons"
-    },
-
-
-    {
-        "@type": ["Person"],
-        "@id": "https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca",
-        "name": "Rahul Agarwal",
-        "image": {
-            "@type": "ImageObject",
-            "@id": "https://www.mlwhiz.com/#authorlogo",
-            "url": "https://mlwhiz.com/images/author.jpg",
-            "caption": "Rahul Agarwal"
-        },
-        "description": "Hi there, I\u2019m Rahul Agarwal. I\u2019m a data scientist consultant and big data engineer based in Bangalore. I see a lot of times  students and even professionals wasting their time and struggling to get started with Computer Vision, Deep Learning, and NLP. I Started this Site with a purpose to augment my own understanding about new things while helping others learn about them in the best possible way.",
-        "sameAs": ["https://www.linkedin.com/in/rahulagwl/",
-          "https://medium.com/@rahul_agarwal",
-          "https://twitter.com/MLWhiz","https://www.facebook.com/mlwhizblog","https://github.com/MLWhiz","https://www.instagram.com/itsmlwhiz"]
-    }]
-} </script>
-
-
-
-<script async data-uid="a0ebaf958d" src="https://mlwhiz.ck.page/a0ebaf958d/index.js"></script>
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-  MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [['$','$'], ['\\(','\\)']],
-    displayMath: [['$$','$$']],
-    processEscapes: true,
-    processEnvironments: true,
-    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-    TeX: { equationNumbers: { autoNumber: "AMS" },
-         extensions: ["AMSmath.js", "AMSsymbols.js"] }
-  }
-  });
-  MathJax.Hub.Queue(function() {
-    
-    
-    
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-
-  MathJax.Hub.Config({
-  
-  TeX: { equationNumbers: { autoNumber: "AMS" } }
-  });
-</script>
-
-
-
-<link href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
-<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
-
-
-</head>
-<body>
-      
-   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
-   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-   
-<!-- preloader start -->
-<div class="preloader">
-  
-</div>
-<!-- preloader end -->
-<!-- navigation -->
-<header class="navigation">
-  <div class="container">
-    
-    <nav class="navbar navbar-expand-lg navbar-white bg-transparent border-bottom pl-0">
-      <a class="navbar-brand mobile-view" href="https://mlwhiz.com/"><img class="img-fluid"
-          src="https://mlwhiz.com/images/logo.png" alt="MLWhiz: Helping You Learn Data Science!"></a>
-      <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navigation">
-        <i class="ti-menu h3"></i>
-      </button>
-
-      <div class="collapse navbar-collapse text-center" id="navigation">
-        <div class="desktop-view">
-          <ul class="navbar-nav mr-auto">
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://www.linkedin.com/in/rahulagwl/"><i class="ti-linkedin"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://medium.com/@rahul_agarwal"><i class="ti-book"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://twitter.com/MLWhiz"><i class="ti-twitter-alt"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://www.facebook.com/mlwhizblog"><i class="ti-facebook"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://github.com/MLWhiz"><i class="ti-github"></i></a>
-            </li>
-            
-          </ul>
-        </div>
-
-        <a class="navbar-brand mx-auto desktop-view" href="https://mlwhiz.com/"><img class="img-fluid-custom"
-            src="https://mlwhiz.com/images/logo.png" alt="MLWhiz: Helping You Learn Data Science!"></a>
-
-        <ul class="navbar-nav">
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="https://mlwhiz.com/about">About</a>
-          </li>
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="https://mlwhiz.com/blog">Blog</a>
-          </li>
-          
-          
-          
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">
-              Topics
-            </a>
-            <div class="dropdown-menu">
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/natural-language-processing">NLP</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/computer-vision">Computer Vision</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/deep-learning">Deep Learning</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/data-science">DS/ML</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/big-data">Big Data</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/awesome-guides">My Best Content</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/learning-resources">Learning Resources</a>
-              
-            </div>
-          </li>
-          
-          
-        </ul>
-
-        
-        <!-- search -->
-        <div class="search pl-lg-4">
-          <button id="searchOpen" class="search-btn"><i class="ti-search"></i></button>
-          <div class="search-wrapper">
-            <form action="https://mlwhiz.com//search" class="h-100">
-              <input class="search-box px-4" id="search-query" name="s" type="search" placeholder="Type & Hit Enter...">
-            </form>
-            <button id="searchClose" class="search-close"><i class="ti-close text-dark"></i></button>
-          </div>
-        </div>
-        
-
-        
-      </div>
-    </nav>
-  </div>
-</header>
-<!-- /navigation -->
-
-
-<section class="section-sm">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 mb-5 mb-lg-0">
-        
-        
-        <a href="/categories/deep-learning"
-          class="categoryStyle">Deep Learning</a>
-        
-        <a href="/categories/computer-vision"
-          class="categoryStyle">Computer Vision</a>
-        
-        <a href="/categories/awesome-guides"
-          class="categoryStyle">Awesome Guides</a>
-        
-        <h1>Implementing Object Detection and Instance Segmentation for Data Scientists</h1>
-        <div class="mb-3 post-meta">
-          <span>By Rahul Agarwal</span>
-          
-          <svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"></path></svg>
-
-          <span>06 December 2019</span>
-          
-        </div>
-        
-        <img src="https://mlwhiz.com/images/weapons/main.png" class="img-fluid w-100 mb-4" alt="Implementing Object Detection and Instance Segmentation for Data Scientists">
-        
-        <div class="content mb-5">
-          <p>Object Detection is a helpful tool to have in your coding repository.</p>
-<p>It forms the backbone of many fantastic industrial applications. Some of them being self-driving cars, medical imaging and face detection.</p>
-<p>In my last 
-
-<a href="https://towardsdatascience.com/a-hitchhikers-guide-to-object-detection-and-instance-segmentation-ac0146fe8e11" target="_blank" rel="nofollow noopener">post</a>
- on Object detection, I talked about how Object detection models evolved.</p>
-<p>But what good is theory, if we can’t implement it?</p>
-<p><em><strong>This post is about implementing and getting an object detector on our custom dataset of weapons.</strong></em></p>
-<p>The problem we will specifically solve today is that of Instance Segmentation using Mask-RCNN.</p>
-<hr>
-<h2 id="instance-segmentation">Instance Segmentation</h2>
-<p><em>Can we create</em> <em><strong>masks</strong></em> <em>for each object in the image? Specifically something like:</em></p>
-<p>
-  
-    <img src="/images/weapons/0.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
-    
-
-</p>
-<p>The most common way to solve this problem is by using Mask-RCNN. The architecture of Mask-RCNN looks like below:</p>
-<p>
-  
-      <img src="/images/weapons/1.png" alt="
-
-&lt;a href=&#34;https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Source&lt;/a&gt;
-">
-  
-
-<em>
-
-<a href="https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272" target="_blank" rel="nofollow noopener">Source</a>
-</em></p>
-<p>Essentially, it comprises of:</p>
-<ul>
-<li>
-<p>A backbone network like resnet50/resnet101</p>
-</li>
-<li>
-<p>A Region Proposal network</p>
-</li>
-<li>
-<p>ROI-Align layers</p>
-</li>
-<li>
-<p>Two output layers — one to predict masks and one to predict class and bounding box.</p>
-</li>
-</ul>
-<p>There is a lot more to it. If you want to learn more about the theory, read my last post&ndash;
-
-
-<a href="https://towardsdatascience.com/a-hitchhikers-guide-to-object-detection-and-instance-segmentation-ac0146fe8e11" target="_blank" rel="nofollow noopener">Demystifying Object Detection and Instance Segmentation for Data Scientists</a>
-</p>
-<p>This post is mostly going to be about the 
-
-<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/object_detection" target="_blank" rel="nofollow noopener">code</a>
-.</p>
-<hr>
-<h2 id="1-creating-your-custom-dataset-for-instance-segmentation">1. Creating your Custom Dataset for Instance Segmentation</h2>
-<p>
-  
-      <img src="/images/weapons/2.png" alt="Our Dataset">
-  
-
-</p>
-<p>The use case we will be working on is a weapon detector. A weapon detector is something that can be used in conjunction with street cameras as well as CCTV’s to fight crime. So it is pretty nifty.</p>
-<p>So, I started with downloading 40 images each of guns and swords from the 
-
-<a href="https://storage.googleapis.com/openimages/web/index.html" target="_blank" rel="nofollow noopener">open image dataset</a>
- and annotated them using the VIA tool. Now setting up the annotation project in VIA is petty important, so I will try to explain it step by step.</p>
-<h3 id="1-set-up-via">1. Set up VIA</h3>
-<p>VIA is an annotation tool, using which you can annotate images both bounding boxes as well as masks. I found it as one of the best tools to do annotation as it is online and runs in the browser itself.</p>
-<p>To use it, open 
-
-<a href="http://www.robots.ox.ac.uk/~vgg/software/via/via.html" target="_blank" rel="nofollow noopener">http://www.robots.ox.ac.uk/~vgg/software/via/via.html</a>
-</p>
-<p>You will see a page like:</p>
-<p>
-  
-    <img src="/images/weapons/3.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
-    
-
-</p>
-<p>The next thing we want to do is to add the different class names in the region_attributes. Here I have added ‘gun’ and ‘sword’ as per our use case as these are the two distinct targets I want to annotate.</p>
-<p>
-  
-    <img src="/images/weapons/4.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
-    
-
-</p>
-<h3 id="2-annotate-the-images">2. Annotate the Images</h3>
-<p>I have kept all the files in the folder data. Next step is to add the files we want to annotate. We can add files in the data folder using the “Add Files” button in the VIA tool. And start annotating along with labels as shown below after selecting the polyline tool.</p>
-<p>
-  
-      <img src="/images/weapons/5.png" alt="Click, Click, Enter, Escape, Select">
-  
-
-</p>
-<h3 id="3-download-the-annotation-file">3. Download the annotation file</h3>
-<p>Click on save project on the top menu of the VIA tool.</p>
-<p>
-  
-    <img src="/images/weapons/6.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
-    
-
-</p>
-<p>Save file as via_region_data.json by changing the project name field. This will save the annotations in COCO format.</p>
-<h3 id="4-set-up-the-data-directory-structure">4. Set up the data directory structure</h3>
-<p>We will need to set up the data directories first so that we can do object detection. In the code below, I am creating a directory structure that is required for the model that we are going to use.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#f92672">from</span> random <span style="color:#f92672">import</span> random
-<span style="color:#f92672">import</span> os
-<span style="color:#f92672">from</span> glob <span style="color:#f92672">import</span> glob
-<span style="color:#f92672">import</span> json
-<span style="color:#75715e"># Path to your images</span>
-image_paths <span style="color:#f92672">=</span> glob(<span style="color:#e6db74">&#34;data/*&#34;</span>)
-<span style="color:#75715e">#Path to your annotations from VIA tool</span>
-annotation_file <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;via_region_data.json&#39;</span>
-<span style="color:#75715e">#clean up the annotations a little</span>
-annotations <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>load(open(annotation_file))
-cleaned_annotations <span style="color:#f92672">=</span> {}
-<span style="color:#66d9ef">for</span> k,v <span style="color:#f92672">in</span> annotations[<span style="color:#e6db74">&#39;_via_img_metadata&#39;</span>]<span style="color:#f92672">.</span>items():
-    cleaned_annotations[v[<span style="color:#e6db74">&#39;filename&#39;</span>]] <span style="color:#f92672">=</span> v
-<span style="color:#75715e"># create train and validation directories</span>
-<span style="color:#960050;background-color:#1e0010">!</span> mkdir procdata
-<span style="color:#960050;background-color:#1e0010">!</span> mkdir procdata<span style="color:#f92672">/</span>val
-<span style="color:#960050;background-color:#1e0010">!</span> mkdir procdata<span style="color:#f92672">/</span>train
-train_annotations <span style="color:#f92672">=</span> {}
-valid_annotations <span style="color:#f92672">=</span> {}
-<span style="color:#75715e"># 20% of images in validation folder</span>
-<span style="color:#66d9ef">for</span> img <span style="color:#f92672">in</span> image_paths:
-    <span style="color:#75715e"># Image goes to Validation folder</span>
-    <span style="color:#66d9ef">if</span> random()<span style="color:#f92672">&lt;</span><span style="color:#ae81ff">0.2</span>:
-        os<span style="color:#f92672">.</span>system(<span style="color:#e6db74">&#34;cp &#34;</span><span style="color:#f92672">+</span> img <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; procdata/val/&#34;</span>)
-        img <span style="color:#f92672">=</span> img<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;/&#34;</span>)[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
-        valid_annotations[img] <span style="color:#f92672">=</span> cleaned_annotations[img]
-    <span style="color:#66d9ef">else</span>:
-        os<span style="color:#f92672">.</span>system(<span style="color:#e6db74">&#34;cp &#34;</span><span style="color:#f92672">+</span> img <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; procdata/train/&#34;</span>)
-        img <span style="color:#f92672">=</span> img<span style="color:#f92672">.</span>split(<span style="color:#e6db74">&#34;/&#34;</span>)[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
-        train_annotations[img] <span style="color:#f92672">=</span> cleaned_annotations[img]
-<span style="color:#75715e"># put different annotations in different folders</span>
-<span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;procdata/val/via_region_data.json&#39;</span>, <span style="color:#e6db74">&#39;w&#39;</span>) <span style="color:#66d9ef">as</span> fp:
-    json<span style="color:#f92672">.</span>dump(valid_annotations, fp)
-<span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#39;procdata/train/via_region_data.json&#39;</span>, <span style="color:#e6db74">&#39;w&#39;</span>) <span style="color:#66d9ef">as</span> fp:
-    json<span style="color:#f92672">.</span>dump(train_annotations, fp)
-</code></pre></div><p>After running the above code, we will get the data in the below folder structure:</p>
-<pre><code>- procdata
+<!doctype html><html lang=en-us><head><meta charset=utf-8><title>MLWhiz: Helping You Learn Data Science!</title><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta name=description content="This post is about implementing and getting an object detector on our custom dataset of weapons"><meta name=author content="Rahul Agarwal"><meta name=generator content="Hugo 0.74.3"><link rel=stylesheet href=https://mlwhiz.com/plugins/compressjscss/main.css><meta property="og:title" content="Implementing Object Detection and Instance Segmentation for Data Scientists"><meta property="og:description" content="This post is about implementing and getting an object detector on our custom dataset of weapons"><meta property="og:type" content="article"><meta property="og:url" content="https://mlwhiz.com/blog/2019/12/06/weapons/"><meta property="og:image" content="https://mlwhiz.com/images/weapons/main.png"><meta property="og:image:secure_url" content="https://mlwhiz.com/images/weapons/main.png"><meta property="article:published_time" content="2019-12-06T00:00:00+00:00"><meta property="article:modified_time" content="2020-09-26T16:23:35+05:30"><meta property="article:tag" content="Deep Learning"><meta property="article:tag" content="Computer Vision"><meta property="article:tag" content="Awesome Guides"><meta name=twitter:card content="summary"><meta name=twitter:image content="https://mlwhiz.com/images/weapons/main.png"><meta name=twitter:title content="Implementing Object Detection and Instance Segmentation for Data Scientists"><meta name=twitter:description content="This post is about implementing and getting an object detector on our custom dataset of weapons"><meta name=twitter:site content="@mlwhiz"><meta name=twitter:creator content="@mlwhiz"><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href=https://mlwhiz.com/scss/style.min.css media=screen><link rel=stylesheet href=/css/style.css><link rel=stylesheet type=text/css href=/css/font/flaticon.css><link rel="shortcut icon" href=https://mlwhiz.com/images/favicon-200x200.png type=image/x-icon><link rel=icon href=https://mlwhiz.com/images/favicon.png type=image/x-icon><link rel=canonical href=https://mlwhiz.com/blog/2019/12/06/weapons/><script src=https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js></script><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.mlwhiz.com/#website","url":"https://www.mlwhiz.com/","name":"MLWhiz","description":"Want to Learn Computer Vision and NLP? - MLWhiz","potentialAction":{"@type":"SearchAction","target":"https://www.mlwhiz.com/search?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"ImageObject","@id":"https://mlwhiz.com/blog/2019/12/06/weapons/#primaryimage","url":"https://mlwhiz.com/images/weapons/main.png","width":700,"height":450},{"@type":"WebPage","@id":"https://mlwhiz.com/blog/2019/12/06/weapons/#webpage","url":"https://mlwhiz.com/blog/2019/12/06/weapons/","inLanguage":"en-US","name":"Implementing Object Detection and Instance Segmentation for Data Scientists - MLWhiz","isPartOf":{"@id":"https://www.mlwhiz.com/#website"},"primaryImageOfPage":{"@id":"https://mlwhiz.com/blog/2019/12/06/weapons/#primaryimage"},"datePublished":"2019-12-06T00:00:00.00Z","dateModified":"2020-09-26T16:23:35.00Z","author":{"@id":"https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca"},"description":"This post is about implementing and getting an object detector on our custom dataset of weapons"},{"@type":["Person"],"@id":"https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca","name":"Rahul Agarwal","image":{"@type":"ImageObject","@id":"https://www.mlwhiz.com/#authorlogo","url":"https://mlwhiz.com/images/author.jpg","caption":"Rahul Agarwal"},"description":"Hi there, I\u2019m Rahul Agarwal. I\u2019m a data scientist consultant and big data engineer based in Bangalore. I see a lot of times  students and even professionals wasting their time and struggling to get started with Computer Vision, Deep Learning, and NLP. I Started this Site with a purpose to augment my own understanding about new things while helping others learn about them in the best possible way.","sameAs":["https://www.linkedin.com/in/rahulagwl/","https://medium.com/@rahul_agarwal","https://twitter.com/MLWhiz","https://www.facebook.com/mlwhizblog","https://github.com/MLWhiz","https://www.instagram.com/itsmlwhiz"]}]}</script><script async data-uid=a0ebaf958d src=https://mlwhiz.ck.page/a0ebaf958d/index.js></script><script type=text/javascript async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">MathJax.Hub.Config({tex2jax:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$']],processEscapes:true,processEnvironments:true,skipTags:['script','noscript','style','textarea','pre'],TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["AMSmath.js","AMSsymbols.js"]}}});MathJax.Hub.Queue(function(){var all=MathJax.Hub.getAllJax(),i;for(i=0;i<all.length;i+=1){all[i].SourceElement().parentNode.className+=' has-jax';}});MathJax.Hub.Config({TeX:{equationNumbers:{autoNumber:"AMS"}}});</script><link href=//apps.shareaholic.com/assets/pub/shareaholic.js as=script><script type=text/javascript data-cfasync=false async src=//apps.shareaholic.com/assets/pub/shareaholic.js data-shr-siteid=fd1ffa7fd7152e4e20568fbe49a489d0></script></head><body><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T" height=0 width=0 style=display:none;visibility:hidden></iframe></noscript><div class=preloader></div><header class=navigation><div class=container><nav class="navbar navbar-expand-lg navbar-white bg-transparent border-bottom pl-0"><a class="navbar-brand mobile-view" href=https://mlwhiz.com/><img class=img-fluid src=https://mlwhiz.com/images/logo.png alt="MLWhiz: Helping You Learn Data Science!"></a>
+<button class="navbar-toggler border-0" type=button data-toggle=collapse data-target=#navigation>
+<i class="ti-menu h3"></i></button><div class="collapse navbar-collapse text-center" id=navigation><div class=desktop-view><ul class="navbar-nav mr-auto"><li class=nav-item><a class=nav-link href=https://www.linkedin.com/in/rahulagwl/><i class=ti-linkedin></i></a></li><li class=nav-item><a class=nav-link href=https://medium.com/@rahul_agarwal><i class=ti-book></i></a></li><li class=nav-item><a class=nav-link href=https://twitter.com/MLWhiz><i class=ti-twitter-alt></i></a></li><li class=nav-item><a class=nav-link href=https://www.facebook.com/mlwhizblog><i class=ti-facebook></i></a></li><li class=nav-item><a class=nav-link href=https://github.com/MLWhiz><i class=ti-github></i></a></li></ul></div><a class="navbar-brand mx-auto desktop-view" href=https://mlwhiz.com/><img class=img-fluid-custom src=https://mlwhiz.com/images/logo.png alt="MLWhiz: Helping You Learn Data Science!"></a><ul class=navbar-nav><li class=nav-item><a class=nav-link href=https://mlwhiz.com/about>About</a></li><li class=nav-item><a class=nav-link href=https://mlwhiz.com/blog>Blog</a></li><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href=# role=button data-toggle=dropdown aria-haspopup=true aria-expanded=false>Topics</a><div class=dropdown-menu><a class=dropdown-item href=https://mlwhiz.com/categories/natural-language-processing>NLP</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/computer-vision>Computer Vision</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/deep-learning>Deep Learning</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/data-science>DS/ML</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/big-data>Big Data</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/awesome-guides>My Best Content</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/learning-resources>Learning Resources</a></div></li></ul><div class="search pl-lg-4"><button id=searchOpen class=search-btn><i class=ti-search></i></button><div class=search-wrapper><form action=https://mlwhiz.com//search class=h-100><input class="search-box px-4" id=search-query name=s type=search placeholder="Type & Hit Enter..."></form><button id=searchClose class=search-close><i class="ti-close text-dark"></i></button></div></div></div></nav></div></header><section class=section-sm><div class=container><div class=row><div class="col-lg-8 mb-5 mb-lg-0"><a href=/categories/deep-learning class=categoryStyle>Deep Learning</a>
+<a href=/categories/computer-vision class=categoryStyle>Computer Vision</a>
+<a href=/categories/awesome-guides class=categoryStyle>Awesome Guides</a><h1>Implementing Object Detection and Instance Segmentation for Data Scientists</h1><div class="mb-3 post-meta"><span>By Rahul Agarwal</span><svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+<span>06 December 2019</span></div><img src=https://mlwhiz.com/images/weapons/main.png class="img-fluid w-100 mb-4" alt="Implementing Object Detection and Instance Segmentation for Data Scientists"><div class="content mb-5"><p>Object Detection is a helpful tool to have in your coding repository.</p><p>It forms the backbone of many fantastic industrial applications. Some of them being self-driving cars, medical imaging and face detection.</p><p>In my last
+<a href=https://towardsdatascience.com/a-hitchhikers-guide-to-object-detection-and-instance-segmentation-ac0146fe8e11 target=_blank rel="nofollow noopener">post</a>
+on Object detection, I talked about how Object detection models evolved.</p><p>But what good is theory, if we can’t implement it?</p><p><em><strong>This post is about implementing and getting an object detector on our custom dataset of weapons.</strong></em></p><p>The problem we will specifically solve today is that of Instance Segmentation using Mask-RCNN.</p><hr><h2 id=instance-segmentation>Instance Segmentation</h2><p><em>Can we create</em> <em><strong>masks</strong></em> <em>for each object in the image? Specifically something like:</em></p><p><img src=/images/weapons/0.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><p>The most common way to solve this problem is by using Mask-RCNN. The architecture of Mask-RCNN looks like below:</p><p><img src=/images/weapons/1.png alt='<a href="https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272" target="_blank" rel="nofollow noopener">Source</a>'>
+<em><a href=https://medium.com/@jonathan_hui/image-segmentation-with-mask-r-cnn-ebe6d793272 target=_blank rel="nofollow noopener">Source</a></em></p><p>Essentially, it comprises of:</p><ul><li><p>A backbone network like resnet50/resnet101</p></li><li><p>A Region Proposal network</p></li><li><p>ROI-Align layers</p></li><li><p>Two output layers — one to predict masks and one to predict class and bounding box.</p></li></ul><p>There is a lot more to it. If you want to learn more about the theory, read my last post&ndash;
+<a href=https://towardsdatascience.com/a-hitchhikers-guide-to-object-detection-and-instance-segmentation-ac0146fe8e11 target=_blank rel="nofollow noopener">Demystifying Object Detection and Instance Segmentation for Data Scientists</a></p><p>This post is mostly going to be about the
+<a href=https://github.com/MLWhiz/data_science_blogs/tree/master/object_detection target=_blank rel="nofollow noopener">code</a>
+.</p><hr><h2 id=1-creating-your-custom-dataset-for-instance-segmentation>1. Creating your Custom Dataset for Instance Segmentation</h2><p><img src=/images/weapons/2.png alt="Our Dataset"></p><p>The use case we will be working on is a weapon detector. A weapon detector is something that can be used in conjunction with street cameras as well as CCTV’s to fight crime. So it is pretty nifty.</p><p>So, I started with downloading 40 images each of guns and swords from the
+<a href=https://storage.googleapis.com/openimages/web/index.html target=_blank rel="nofollow noopener">open image dataset</a>
+and annotated them using the VIA tool. Now setting up the annotation project in VIA is petty important, so I will try to explain it step by step.</p><h3 id=1-set-up-via>1. Set up VIA</h3><p>VIA is an annotation tool, using which you can annotate images both bounding boxes as well as masks. I found it as one of the best tools to do annotation as it is online and runs in the browser itself.</p><p>To use it, open
+<a href=http://www.robots.ox.ac.uk/~vgg/software/via/via.html target=_blank rel="nofollow noopener">http://www.robots.ox.ac.uk/~vgg/software/via/via.html</a></p><p>You will see a page like:</p><p><img src=/images/weapons/3.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><p>The next thing we want to do is to add the different class names in the region_attributes. Here I have added ‘gun’ and ‘sword’ as per our use case as these are the two distinct targets I want to annotate.</p><p><img src=/images/weapons/4.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><h3 id=2-annotate-the-images>2. Annotate the Images</h3><p>I have kept all the files in the folder data. Next step is to add the files we want to annotate. We can add files in the data folder using the “Add Files” button in the VIA tool. And start annotating along with labels as shown below after selecting the polyline tool.</p><p><img src=/images/weapons/5.png alt="Click, Click, Enter, Escape, Select"></p><h3 id=3-download-the-annotation-file>3. Download the annotation file</h3><p>Click on save project on the top menu of the VIA tool.</p><p><img src=/images/weapons/6.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><p>Save file as via_region_data.json by changing the project name field. This will save the annotations in COCO format.</p><h3 id=4-set-up-the-data-directory-structure>4. Set up the data directory structure</h3><p>We will need to set up the data directories first so that we can do object detection. In the code below, I am creating a directory structure that is required for the model that we are going to use.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#f92672>from</span> random <span style=color:#f92672>import</span> random
+<span style=color:#f92672>import</span> os
+<span style=color:#f92672>from</span> glob <span style=color:#f92672>import</span> glob
+<span style=color:#f92672>import</span> json
+<span style=color:#75715e># Path to your images</span>
+image_paths <span style=color:#f92672>=</span> glob(<span style=color:#e6db74>&#34;data/*&#34;</span>)
+<span style=color:#75715e>#Path to your annotations from VIA tool</span>
+annotation_file <span style=color:#f92672>=</span> <span style=color:#e6db74>&#39;via_region_data.json&#39;</span>
+<span style=color:#75715e>#clean up the annotations a little</span>
+annotations <span style=color:#f92672>=</span> json<span style=color:#f92672>.</span>load(open(annotation_file))
+cleaned_annotations <span style=color:#f92672>=</span> {}
+<span style=color:#66d9ef>for</span> k,v <span style=color:#f92672>in</span> annotations[<span style=color:#e6db74>&#39;_via_img_metadata&#39;</span>]<span style=color:#f92672>.</span>items():
+    cleaned_annotations[v[<span style=color:#e6db74>&#39;filename&#39;</span>]] <span style=color:#f92672>=</span> v
+<span style=color:#75715e># create train and validation directories</span>
+<span style=color:#960050;background-color:#1e0010>!</span> mkdir procdata
+<span style=color:#960050;background-color:#1e0010>!</span> mkdir procdata<span style=color:#f92672>/</span>val
+<span style=color:#960050;background-color:#1e0010>!</span> mkdir procdata<span style=color:#f92672>/</span>train
+train_annotations <span style=color:#f92672>=</span> {}
+valid_annotations <span style=color:#f92672>=</span> {}
+<span style=color:#75715e># 20% of images in validation folder</span>
+<span style=color:#66d9ef>for</span> img <span style=color:#f92672>in</span> image_paths:
+    <span style=color:#75715e># Image goes to Validation folder</span>
+    <span style=color:#66d9ef>if</span> random()<span style=color:#f92672>&lt;</span><span style=color:#ae81ff>0.2</span>:
+        os<span style=color:#f92672>.</span>system(<span style=color:#e6db74>&#34;cp &#34;</span><span style=color:#f92672>+</span> img <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; procdata/val/&#34;</span>)
+        img <span style=color:#f92672>=</span> img<span style=color:#f92672>.</span>split(<span style=color:#e6db74>&#34;/&#34;</span>)[<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>]
+        valid_annotations[img] <span style=color:#f92672>=</span> cleaned_annotations[img]
+    <span style=color:#66d9ef>else</span>:
+        os<span style=color:#f92672>.</span>system(<span style=color:#e6db74>&#34;cp &#34;</span><span style=color:#f92672>+</span> img <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; procdata/train/&#34;</span>)
+        img <span style=color:#f92672>=</span> img<span style=color:#f92672>.</span>split(<span style=color:#e6db74>&#34;/&#34;</span>)[<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>]
+        train_annotations[img] <span style=color:#f92672>=</span> cleaned_annotations[img]
+<span style=color:#75715e># put different annotations in different folders</span>
+<span style=color:#66d9ef>with</span> open(<span style=color:#e6db74>&#39;procdata/val/via_region_data.json&#39;</span>, <span style=color:#e6db74>&#39;w&#39;</span>) <span style=color:#66d9ef>as</span> fp:
+    json<span style=color:#f92672>.</span>dump(valid_annotations, fp)
+<span style=color:#66d9ef>with</span> open(<span style=color:#e6db74>&#39;procdata/train/via_region_data.json&#39;</span>, <span style=color:#e6db74>&#39;w&#39;</span>) <span style=color:#66d9ef>as</span> fp:
+    json<span style=color:#f92672>.</span>dump(train_annotations, fp)
+</code></pre></div><p>After running the above code, we will get the data in the below folder structure:</p><pre><code>- procdata
      - train
          - img1.jpg
          - img2.jpg
@@ -445,630 +62,80 @@ valid_annotations <span style="color:#f92672">=</span> {}
          - img3.jpg
          - img4.jpg
          - via_region_data.json
-</code></pre>
-<hr>
-<h2 id="2-setup-the-coding-environment">2. Setup the Coding Environment</h2>
-<p>We will use the code from the 
-
-<a href="https://github.com/matterport/Mask_RCNN" target="_blank" rel="nofollow noopener">matterport/Mask_RCNN</a>
- GitHub repository. You can start by cloning the repository and installing the required libraries.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git clone https://github.com/matterport/Mask_RCNN
+</code></pre><hr><h2 id=2-setup-the-coding-environment>2. Setup the Coding Environment</h2><p>We will use the code from the
+<a href=https://github.com/matterport/Mask_RCNN target=_blank rel="nofollow noopener">matterport/Mask_RCNN</a>
+GitHub repository. You can start by cloning the repository and installing the required libraries.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>git clone https://github.com/matterport/Mask_RCNN
 cd Mask_RCNN
 pip install -r requirements.txt
-</code></pre></div><p>Once we are done with installing the dependencies and cloning the repo, we can start with implementing our project.</p>
-<p>We make a copy of the samples/balloon directory in Mask_RCNN folder and create a <em><strong>samples/guns_and_swords</strong></em> directory where we will continue our work:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cp -r samples/balloon samples/guns_and_swords
-</code></pre></div><h3 id="setting-up-the-code">Setting up the Code</h3>
-<p>We start by renaming and changing balloon.py in the <code>samples/guns_and_swords</code> directory to <code>gns.py</code>. The <code>balloon.py</code> file right now trains for one target. I have extended it to use multiple targets. In this file, we change:</p>
-<ol>
-<li>
-<p><code>balloonconfig</code> to <code>gnsConfig</code></p>
-</li>
-<li>
-<p><code>BalloonDataset</code> to <code>gnsDataset</code> : We changed some code here to get the target names from our annotation data and also give multiple targets.</p>
-</li>
-<li>
-<p>And some changes in the train function</p>
-</li>
-</ol>
-<p>Showing only the changed <code>gnsConfig</code> here to get you an idea. You can take a look at the whole 
-
-<a href="https://github.com/MLWhiz/data_science_blogs/blob/master/object_detection/guns_and_swords/gns.py" target="_blank" rel="nofollow noopener">gns.py</a>
- code here.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">gnsConfig</span>(Config):
-    <span style="color:#e6db74">&#34;&#34;&#34;Configuration for training on the toy  dataset.
-</span><span style="color:#e6db74">    Derives from the base Config class and overrides some values.
-</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
-    <span style="color:#75715e"># Give the configuration a recognizable name</span>
-    NAME <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;gns&#34;</span>
-    <span style="color:#75715e"># We use a GPU with 16GB memory, which can fit three image.</span>
-    <span style="color:#75715e"># Adjust down if you use a smaller GPU.</span>
-    IMAGES_PER_GPU <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
-    <span style="color:#75715e"># Number of classes (including background)</span>
-    NUM_CLASSES <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span>  <span style="color:#75715e"># Background + sword + gun</span>
-    <span style="color:#75715e"># Number of training steps per epoch</span>
-</code></pre></div><hr>
-<h2 id="3-visualizing-images-and-masks">3. Visualizing Images and Masks</h2>
-<p>Once we are done with changing the <code>gns.py</code> file,we can visualize our masks and images. You can do simply by following this 
-
-<a href="hhttps://github.com/MLWhiz/data_science_blogs/blob/master/object_detection/guns_and_swords/1.%20Visualize%20Dataset.ipynb">Visualize Dataset.ipynb</a>
- notebook.</p>
-<p>
-  
-    <img src="/images/weapons/a.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
-    
-
-</p>
-<hr>
-<h2 id="4-train-the-maskrcnn-model-with-transfer-learning">4. Train the MaskRCNN Model with Transfer Learning</h2>
-<p>To train the maskRCNN model, on the Guns and Swords dataset, we need to run one of the following commands on the command line based on if we want to initialise our model with COCO weights or imagenet weights:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># Train a new model starting from pre-trained COCO weights</span>
- python3 gns.py train — dataset<span style="color:#f92672">=</span>/path/to/dataset — weights<span style="color:#f92672">=</span>coco
-
-<span style="color:#75715e"># Resume training a model that you had trained earlier</span>
- python3 gns.py train — dataset<span style="color:#f92672">=</span>/path/to/dataset — weights<span style="color:#f92672">=</span>last
-
-<span style="color:#75715e"># Train a new model starting from ImageNet weights</span>
- python3 gns.py train — dataset<span style="color:#f92672">=</span>/path/to/dataset — weights<span style="color:#f92672">=</span>imagenet
-</code></pre></div><p>The command with weights=last will resume training from the last epoch. The weights are going to be saved in the logs directory in the Mask_RCNN folder.</p>
-<p>This is how the loss looks after our final epoch.</p>
-<p>
-  
-    <img src="/images/weapons/12.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
-    
-
-</p>
-<h3 id="visualize-the-losses-using-tensorboard">Visualize the losses using Tensorboard</h3>
-<p>You can take advantage of tensorboard to visualise how your network is performing. Just run:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">tensorboard --logdir ~/objectDetection/Mask_RCNN/logs/gns20191010T1234
-</code></pre></div><p>You can get the tensorboard at</p>
-<pre><code>https://localhost:6006
-</code></pre>
-<p>Here is how our mask loss looks like:</p>
-<p>
-  
-    <img src="/images/weapons/13.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
-    
-
-</p>
-<p>We can see that the validation loss is performing pretty abruptly. This is expected as we only have kept 20 images in the validation set.</p>
-<hr>
-<h2 id="5-prediction-on-new-images">5. Prediction on New Images</h2>
-<p>Predicting a new image is also pretty easy. Just follow the 
-
-<a href="https://github.com/MLWhiz/data_science_blogs/blob/master/object_detection/guns_and_swords/2.%20predict.ipynb" target="_blank" rel="nofollow noopener">prediction.ipynb</a>
- notebook for a minimal example using our trained model. Below is the main part of the code.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># Function taken from utils.dataset</span>
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">load_image</span>(image_path):
-    <span style="color:#e6db74">&#34;&#34;&#34;Load the specified image and return a [H,W,3] Numpy array.
-</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
-    <span style="color:#75715e"># Load image</span>
-    image <span style="color:#f92672">=</span> skimage<span style="color:#f92672">.</span>io<span style="color:#f92672">.</span>imread(image_path)
-    <span style="color:#75715e"># If grayscale. Convert to RGB for consistency.</span>
-    <span style="color:#66d9ef">if</span> image<span style="color:#f92672">.</span>ndim <span style="color:#f92672">!=</span> <span style="color:#ae81ff">3</span>:
-        image <span style="color:#f92672">=</span> skimage<span style="color:#f92672">.</span>color<span style="color:#f92672">.</span>gray2rgb(image)
-    <span style="color:#75715e"># If has an alpha channel, remove it for consistency</span>
-    <span style="color:#66d9ef">if</span> image<span style="color:#f92672">.</span>shape[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> <span style="color:#ae81ff">4</span>:
-        image <span style="color:#f92672">=</span> image[<span style="color:#f92672">...</span>, :<span style="color:#ae81ff">3</span>]
-    <span style="color:#66d9ef">return</span> image
-<span style="color:#75715e"># path to image to be predicted</span>
-image <span style="color:#f92672">=</span> load_image(<span style="color:#e6db74">&#34;../../../data/2c8ce42709516c79.jpg&#34;</span>)
-<span style="color:#75715e"># Run object detection</span>
-results <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>detect([image], verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
-<span style="color:#75715e"># Display results</span>
-ax <span style="color:#f92672">=</span> get_ax(<span style="color:#ae81ff">1</span>)
-r <span style="color:#f92672">=</span> results[<span style="color:#ae81ff">0</span>]
-a <span style="color:#f92672">=</span> visualize<span style="color:#f92672">.</span>display_instances(image, r[<span style="color:#e6db74">&#39;rois&#39;</span>], r[<span style="color:#e6db74">&#39;masks&#39;</span>], r[<span style="color:#e6db74">&#39;class_ids&#39;</span>], dataset<span style="color:#f92672">.</span>class_names, r[<span style="color:#e6db74">&#39;scores&#39;</span>], ax<span style="color:#f92672">=</span>ax,
-                            title<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;Predictions&#34;</span>)
-</code></pre></div><p>This is how the result looks for some images in the validation set:</p>
-<p>
-  
-    <img src="/images/weapons/b.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
-    
-
-</p>
-<hr>
-<h2 id="improvements">Improvements</h2>
-<p>The results don’t look very promising and leave a lot to be desired, but that is to be expected because of very less training data(60 images). One can try to do the below things to improve the model performance for this weapon detector.</p>
-<ol>
-<li>
-<p>We just trained on 60 images due to time constraints. While we used transfer learning the data is still too less — Annotate more data.</p>
-</li>
-<li>
-<p>Train for more epochs and longer time. See how validation loss and training loss looks like.</p>
-</li>
-<li>
-<p>Change hyperparameters in the mrcnn/config file in the Mask_RCNN directory. For information on what these hyperparameters mean, take a look at my previous post. The main ones you can look at:</p>
-</li>
-</ol>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#75715e"># if you want to provide different weights to different losses</span>
-LOSS_WEIGHTS <span style="color:#f92672">=</span>{<span style="color:#e6db74">&#39;rpn_class_loss&#39;</span>: <span style="color:#ae81ff">1.0</span>, <span style="color:#e6db74">&#39;rpn_bbox_loss&#39;</span>: <span style="color:#ae81ff">1.0</span>, <span style="color:#e6db74">&#39;mrcnn_class_loss&#39;</span>: <span style="color:#ae81ff">1.0</span>, <span style="color:#e6db74">&#39;mrcnn_bbox_loss&#39;</span>: <span style="color:#ae81ff">1.0</span>, <span style="color:#e6db74">&#39;mrcnn_mask_loss&#39;</span>: <span style="color:#ae81ff">1.0</span>}
-
-<span style="color:#75715e"># Length of square anchor side in pixels</span>
-RPN_ANCHOR_SCALES <span style="color:#f92672">=</span> (<span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">512</span>)
-
-<span style="color:#75715e"># Ratios of anchors at each cell (width/height)</span>
-<span style="color:#75715e"># A value of 1 represents a square anchor, and 0.5 is a wide anchor</span>
-RPN_ANCHOR_RATIOS <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>]
-</code></pre></div><hr>
-<h2 id="conclusion">Conclusion</h2>
-<p><em><strong>In this post, I talked about how to implement Instance segmentation using Mask-RCNN for a custom dataset.</strong></em></p>
-<p>I tried to make the coding part as simple as possible and hope you find the code useful. In the next part of this post, I will deploy this model using a web app. So stay tuned.</p>
-<p>You can download the annotated weapons data as well as the code at 
-
-<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/object_detection" target="_blank" rel="nofollow noopener">Github</a>
-.</p>
-<p>If you want to know more about various <em><strong>Object Detection techniques, motion estimation, object tracking in video etc</strong></em>., I would like to recommend this awesome course on 
-
-<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Deep Learning in Computer Vision</a>
- in the 
-
-<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Advanced machine learning specialization</a>
-.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
-
-<a href="https://medium.com/@rahul_agarwal" target="_blank" rel="nofollow noopener">&lt;strong&gt;Medium&lt;/strong&gt;</a>
- or Subscribe to my 
-
-<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">&lt;strong&gt;blog&lt;/strong&gt;</a>
-.</p>
-<p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources as sharing knowledge is never a bad idea.</p>
-
-
-        
-<script async data-uid="8d7942551b" src="https://mlwhiz.ck.page/8d7942551b/index.js"></script>
-
-
-<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088" style="margin-bottom: 1px;"></div>
-
-<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
-
-<div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-        </div>
-      </div>
-      <div class="col-lg-4">
-  
-
-  <div class="widget">
-    
-<script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#00aaa1', 'S6S3NPCD');kofiwidget2.draw();</script>
-
-</div>
-  <div class="widget">
-    
-    <h4 class="widget-title">About Me</h4>
-    
-    <img src="https://mlwhiz.com/images/author.jpg" alt=""
-      class="img-fluid author-thumb-sm d-block mx-auto rounded-circle mb-4">
-    
-    <p>I’m a data scientist consultant and big data engineer based in Bangalore, where I am currently working with WalmartLabs .</p>
-    <a href="https://mlwhiz.com/about/" class="btn btn-outline-primary">Know More</a>
-    
-  </div>
-
-
-  
-  <div class="widget">
-    <h4 class="widget-title">Topics</h4>
-    <ul class="list-unstyled">
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/awesome-guides">Awesome Guides</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/big-data">Big Data</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/computer-vision">Computer Vision</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/data-science">Data Science</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/deep-learning">Deep Learning</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/learning-resources">Learning Resources</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/natural-language-processing">Natural Language Processing</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/programming">Programming</a>
-      </li>
-    </ul>
-  </div>
-  
-  <div class="widget">
-    <h4 class="widget-title">Tags</h4>
-    <ul class="list-inline">
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/algorithms">Algorithms</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/artificial-intelligence">Artificial Intelligence</a></li>
-          
-
-
-          
-
-
-          
-
-
-          
-
-
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/dask">Dask</a></li>
-          
-
-
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/deployment">Deployment</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/ec2">Ec2</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/generative-adversarial-networks">Generative Adversarial Networks</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/graphs">Graphs</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/image-classification">Image Classification</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/instance-segmentation">Instance Segmentation</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/interpretability">Interpretability</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/jobs">Jobs</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/kaggle">Kaggle</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/language-modeling">Language Modeling</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/machine-learning">Machine Learning</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/math">Math</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/multiprocessing">Multiprocessing</a></li>
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/object-detection">Object Detection</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/opinion">Opinion</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/pandas">Pandas</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/production">Production</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/productivity">Productivity</a></li>
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/python">Python</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/pytorch">Pytorch</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/spark">Spark</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/sql">Sql</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/statistics">Statistics</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/streamlit">Streamlit</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/text-classification">Text Classification</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/timeseries">Timeseries</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/tools">Tools</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/translation">Translation</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/visualization">Visualization</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/xgboost">Xgboost</a></li>
-          
-    </ul>
-  </div>
-  
-  <div class="widget">
-    <h4 class="widget-title">Connect With Me</h4>
-    <ul class="list-inline social-links">
-      
-      <li class="list-inline-item"><a href="https://www.linkedin.com/in/rahulagwl/"><i class="ti-linkedin"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://medium.com/@rahul_agarwal"><i class="ti-book"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://twitter.com/MLWhiz"><i class="ti-twitter-alt"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://www.facebook.com/mlwhizblog"><i class="ti-facebook"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://github.com/MLWhiz"><i class="ti-github"></i></a></li>
-      
-    </ul>
-  </div>
-  
-  
-<script async data-uid="bfe9f82f10" src="https://mlwhiz.ck.page/bfe9f82f10/index.js"></script>
-
-<script async data-uid="3452d924e2" src="https://mlwhiz.ck.page/3452d924e2/index.js"></script>
-
-</div>
-
-    </div>
-
-
-  </div>
-</section>
-
-
-
-<footer>
-  <div class="container">
-    <div class="row">
-      <div class="col-12 text-center mb-5">
-        <a href="https://mlwhiz.com/"><img src="https://mlwhiz.com/images/logo.png" class="img-fluid-custom-bottom" alt="MLWhiz: Helping You Learn Data Science!"></a>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Contact Me</h6>
-        <ul class="list-unstyled">
-          <li class="mb-3"><i class="ti-location-pin mr-3 text-primary"></i>India, Bangalore</li>
-          <li class="mb-3"><a class="text-dark" href="mailto:rahul@mlwhiz.com"><i
-                class="ti-email mr-3 text-primary"></i>rahul@mlwhiz.com</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Social Contacts</h6>
-        <ul class="list-unstyled">
-          
-          <li class="mb-3"><a class="text-dark" href="https://www.linkedin.com/in/rahulagwl/">Linkedin</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://medium.com/@rahul_agarwal">Medium</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://twitter.com/MLWhiz">Twitter</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://www.facebook.com/mlwhizblog">Facebook</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://github.com/MLWhiz">Github</a></li>
-          
-        </ul>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Categories</h6>
-        <ul class="list-unstyled">
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/awesome-guides">Awesome Guides</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/big-data">Big Data</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/computer-vision">Computer Vision</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/data-science">Data Science</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/deep-learning">Deep Learning</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/learning-resources">Learning Resources</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/natural-language-processing">Natural Language Processing</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/programming">Programming</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Quick Links</h6>
-        <ul class="list-unstyled">
-          
-          <li class="mb-3"><a class="text-dark" href="https://mlwhiz.com/about">About</a></li>
-          
-          
-          <li class="mb-3"><a class="text-dark" href="https://mlwhiz.com/blog">Post</a></li>
-          
-          
-          
-        </ul>
-      </div>
-      <div class="col-12 border-top py-4 text-center">
-        Copyright © 2020 <a href="https://mlwhiz.com">MLWhiz</a> All Rights Reserved
-      </div>
-    </div>
-  </div>
-</footer>
-
-
-
-<script>
-  var indexURL = "https://mlwhiz.com/index.json"
-</script>
-
-<!-- JS Plugins -->
-
-<script src="https://mlwhiz.com/plugins/compressjscss/main.js"></script>
-
-<!-- Main Script -->
-
-<script src="https://mlwhiz.com/js/script.min.js"></script>
-<!-- google analitycs -->
-<script>
-  (function (i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r;
-    i[r] = i[r] || function () {
-      (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date();
-    a = s.createElement(o),
-      m = s.getElementsByTagName(o)[0];
-    a.async = 1;
-    a.src = g;
-    m.parentNode.insertBefore(a, m)
-  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-  ga('create', 'UA-54777926-1', 'auto');
-  ga('send', 'pageview');
-</script>
-</body>
-</html>
+</code></pre></div><p>Once we are done with installing the dependencies and cloning the repo, we can start with implementing our project.</p><p>We make a copy of the samples/balloon directory in Mask_RCNN folder and create a <em><strong>samples/guns_and_swords</strong></em> directory where we will continue our work:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>cp -r samples/balloon samples/guns_and_swords
+</code></pre></div><h3 id=setting-up-the-code>Setting up the Code</h3><p>We start by renaming and changing balloon.py in the <code>samples/guns_and_swords</code> directory to <code>gns.py</code>. The <code>balloon.py</code> file right now trains for one target. I have extended it to use multiple targets. In this file, we change:</p><ol><li><p><code>balloonconfig</code> to <code>gnsConfig</code></p></li><li><p><code>BalloonDataset</code> to <code>gnsDataset</code> : We changed some code here to get the target names from our annotation data and also give multiple targets.</p></li><li><p>And some changes in the train function</p></li></ol><p>Showing only the changed <code>gnsConfig</code> here to get you an idea. You can take a look at the whole
+<a href=https://github.com/MLWhiz/data_science_blogs/blob/master/object_detection/guns_and_swords/gns.py target=_blank rel="nofollow noopener">gns.py</a>
+code here.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>gnsConfig</span>(Config):
+    <span style=color:#e6db74>&#34;&#34;&#34;Configuration for training on the toy  dataset.
+</span><span style=color:#e6db74>    Derives from the base Config class and overrides some values.
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+    <span style=color:#75715e># Give the configuration a recognizable name</span>
+    NAME <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;gns&#34;</span>
+    <span style=color:#75715e># We use a GPU with 16GB memory, which can fit three image.</span>
+    <span style=color:#75715e># Adjust down if you use a smaller GPU.</span>
+    IMAGES_PER_GPU <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span>
+    <span style=color:#75715e># Number of classes (including background)</span>
+    NUM_CLASSES <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span> <span style=color:#f92672>+</span> <span style=color:#ae81ff>2</span>  <span style=color:#75715e># Background + sword + gun</span>
+    <span style=color:#75715e># Number of training steps per epoch</span>
+</code></pre></div><hr><h2 id=3-visualizing-images-and-masks>3. Visualizing Images and Masks</h2><p>Once we are done with changing the <code>gns.py</code> file,we can visualize our masks and images. You can do simply by following this
+<a href=hhttps://github.com/MLWhiz/data_science_blogs/blob/master/object_detection/guns_and_swords/1.%20Visualize%20Dataset.ipynb>Visualize Dataset.ipynb</a>
+notebook.</p><p><img src=/images/weapons/a.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><hr><h2 id=4-train-the-maskrcnn-model-with-transfer-learning>4. Train the MaskRCNN Model with Transfer Learning</h2><p>To train the maskRCNN model, on the Guns and Swords dataset, we need to run one of the following commands on the command line based on if we want to initialise our model with COCO weights or imagenet weights:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#75715e># Train a new model starting from pre-trained COCO weights</span>
+ python3 gns.py train — dataset<span style=color:#f92672>=</span>/path/to/dataset — weights<span style=color:#f92672>=</span>coco
+
+<span style=color:#75715e># Resume training a model that you had trained earlier</span>
+ python3 gns.py train — dataset<span style=color:#f92672>=</span>/path/to/dataset — weights<span style=color:#f92672>=</span>last
+
+<span style=color:#75715e># Train a new model starting from ImageNet weights</span>
+ python3 gns.py train — dataset<span style=color:#f92672>=</span>/path/to/dataset — weights<span style=color:#f92672>=</span>imagenet
+</code></pre></div><p>The command with weights=last will resume training from the last epoch. The weights are going to be saved in the logs directory in the Mask_RCNN folder.</p><p>This is how the loss looks after our final epoch.</p><p><img src=/images/weapons/12.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><h3 id=visualize-the-losses-using-tensorboard>Visualize the losses using Tensorboard</h3><p>You can take advantage of tensorboard to visualise how your network is performing. Just run:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>tensorboard --logdir ~/objectDetection/Mask_RCNN/logs/gns20191010T1234
+</code></pre></div><p>You can get the tensorboard at</p><pre><code>https://localhost:6006
+</code></pre><p>Here is how our mask loss looks like:</p><p><img src=/images/weapons/13.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><p>We can see that the validation loss is performing pretty abruptly. This is expected as we only have kept 20 images in the validation set.</p><hr><h2 id=5-prediction-on-new-images>5. Prediction on New Images</h2><p>Predicting a new image is also pretty easy. Just follow the
+<a href=https://github.com/MLWhiz/data_science_blogs/blob/master/object_detection/guns_and_swords/2.%20predict.ipynb target=_blank rel="nofollow noopener">prediction.ipynb</a>
+notebook for a minimal example using our trained model. Below is the main part of the code.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#75715e># Function taken from utils.dataset</span>
+<span style=color:#66d9ef>def</span> <span style=color:#a6e22e>load_image</span>(image_path):
+    <span style=color:#e6db74>&#34;&#34;&#34;Load the specified image and return a [H,W,3] Numpy array.
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+    <span style=color:#75715e># Load image</span>
+    image <span style=color:#f92672>=</span> skimage<span style=color:#f92672>.</span>io<span style=color:#f92672>.</span>imread(image_path)
+    <span style=color:#75715e># If grayscale. Convert to RGB for consistency.</span>
+    <span style=color:#66d9ef>if</span> image<span style=color:#f92672>.</span>ndim <span style=color:#f92672>!=</span> <span style=color:#ae81ff>3</span>:
+        image <span style=color:#f92672>=</span> skimage<span style=color:#f92672>.</span>color<span style=color:#f92672>.</span>gray2rgb(image)
+    <span style=color:#75715e># If has an alpha channel, remove it for consistency</span>
+    <span style=color:#66d9ef>if</span> image<span style=color:#f92672>.</span>shape[<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>] <span style=color:#f92672>==</span> <span style=color:#ae81ff>4</span>:
+        image <span style=color:#f92672>=</span> image[<span style=color:#f92672>...</span>, :<span style=color:#ae81ff>3</span>]
+    <span style=color:#66d9ef>return</span> image
+<span style=color:#75715e># path to image to be predicted</span>
+image <span style=color:#f92672>=</span> load_image(<span style=color:#e6db74>&#34;../../../data/2c8ce42709516c79.jpg&#34;</span>)
+<span style=color:#75715e># Run object detection</span>
+results <span style=color:#f92672>=</span> model<span style=color:#f92672>.</span>detect([image], verbose<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>)
+<span style=color:#75715e># Display results</span>
+ax <span style=color:#f92672>=</span> get_ax(<span style=color:#ae81ff>1</span>)
+r <span style=color:#f92672>=</span> results[<span style=color:#ae81ff>0</span>]
+a <span style=color:#f92672>=</span> visualize<span style=color:#f92672>.</span>display_instances(image, r[<span style=color:#e6db74>&#39;rois&#39;</span>], r[<span style=color:#e6db74>&#39;masks&#39;</span>], r[<span style=color:#e6db74>&#39;class_ids&#39;</span>], dataset<span style=color:#f92672>.</span>class_names, r[<span style=color:#e6db74>&#39;scores&#39;</span>], ax<span style=color:#f92672>=</span>ax,
+                            title<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;Predictions&#34;</span>)
+</code></pre></div><p>This is how the result looks for some images in the validation set:</p><p><img src=/images/weapons/b.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><hr><h2 id=improvements>Improvements</h2><p>The results don’t look very promising and leave a lot to be desired, but that is to be expected because of very less training data(60 images). One can try to do the below things to improve the model performance for this weapon detector.</p><ol><li><p>We just trained on 60 images due to time constraints. While we used transfer learning the data is still too less — Annotate more data.</p></li><li><p>Train for more epochs and longer time. See how validation loss and training loss looks like.</p></li><li><p>Change hyperparameters in the mrcnn/config file in the Mask_RCNN directory. For information on what these hyperparameters mean, take a look at my previous post. The main ones you can look at:</p></li></ol><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#75715e># if you want to provide different weights to different losses</span>
+LOSS_WEIGHTS <span style=color:#f92672>=</span>{<span style=color:#e6db74>&#39;rpn_class_loss&#39;</span>: <span style=color:#ae81ff>1.0</span>, <span style=color:#e6db74>&#39;rpn_bbox_loss&#39;</span>: <span style=color:#ae81ff>1.0</span>, <span style=color:#e6db74>&#39;mrcnn_class_loss&#39;</span>: <span style=color:#ae81ff>1.0</span>, <span style=color:#e6db74>&#39;mrcnn_bbox_loss&#39;</span>: <span style=color:#ae81ff>1.0</span>, <span style=color:#e6db74>&#39;mrcnn_mask_loss&#39;</span>: <span style=color:#ae81ff>1.0</span>}
+
+<span style=color:#75715e># Length of square anchor side in pixels</span>
+RPN_ANCHOR_SCALES <span style=color:#f92672>=</span> (<span style=color:#ae81ff>32</span>, <span style=color:#ae81ff>64</span>, <span style=color:#ae81ff>128</span>, <span style=color:#ae81ff>256</span>, <span style=color:#ae81ff>512</span>)
+
+<span style=color:#75715e># Ratios of anchors at each cell (width/height)</span>
+<span style=color:#75715e># A value of 1 represents a square anchor, and 0.5 is a wide anchor</span>
+RPN_ANCHOR_RATIOS <span style=color:#f92672>=</span> [<span style=color:#ae81ff>0.5</span>, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>]
+</code></pre></div><hr><h2 id=conclusion>Conclusion</h2><p><em><strong>In this post, I talked about how to implement Instance segmentation using Mask-RCNN for a custom dataset.</strong></em></p><p>I tried to make the coding part as simple as possible and hope you find the code useful. In the next part of this post, I will deploy this model using a web app. So stay tuned.</p><p>You can download the annotated weapons data as well as the code at
+<a href=https://github.com/MLWhiz/data_science_blogs/tree/master/object_detection target=_blank rel="nofollow noopener">Github</a>
+.</p><p>If you want to know more about various <em><strong>Object Detection techniques, motion estimation, object tracking in video etc</strong></em>., I would like to recommend this awesome course on
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&utm_content=2&utm_medium=partners&utm_source=linkshare&utm_campaign=lVarvwc5BD0" target=_blank rel="nofollow noopener">Deep Learning in Computer Vision</a>
+in the
+<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&utm_content=2&utm_medium=partners&utm_source=linkshare&utm_campaign=lVarvwc5BD0" target=_blank rel="nofollow noopener">Advanced machine learning specialization</a>
+.</p><p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at
+<a href=https://medium.com/@rahul_agarwal target=_blank rel="nofollow noopener">&lt;strong>Medium&lt;/strong></a>
+or Subscribe to my
+<a href=https://mlwhiz.ck.page/a9b8bda70c target=_blank rel="nofollow noopener">&lt;strong>blog&lt;/strong></a>
+.</p><p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources as sharing knowledge is never a bad idea.</p><script async data-uid=8d7942551b src=https://mlwhiz.ck.page/8d7942551b/index.js></script><div class=shareaholic-canvas data-app=share_buttons data-app-id=28372088 style=margin-bottom:1px></div><a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel=nofollow><img border=0 alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a><div id=disqus_thread></div><script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return;}
+var d=document,s=d.createElement('script');s.async=true;s.src='//'+"mlwhiz"+'.disqus.com/embed.js';s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div></div><div class=col-lg-4><div class=widget><script type=text/javascript src=https://ko-fi.com/widgets/widget_2.js></script><script type=text/javascript>kofiwidget2.init('Support Me on Ko-fi','#00aaa1','S6S3NPCD');kofiwidget2.draw();</script></div><div class=widget><h4 class=widget-title>About Me</h4><img src=https://mlwhiz.com/images/author.jpg alt class="img-fluid author-thumb-sm d-block mx-auto rounded-circle mb-4"><p>I’m a data scientist consultant and big data engineer based in Bangalore, where I am currently working with WalmartLabs .</p><a href=https://mlwhiz.com/about/ class="btn btn-outline-primary">Know More</a></div><div class=widget><h4 class=widget-title>Topics</h4><ul class=list-unstyled><li><a class=categoryStyle style=color:#fff href=/categories/awesome-guides>Awesome Guides</a></li><li><a class=categoryStyle style=color:#fff href=/categories/big-data>Big Data</a></li><li><a class=categoryStyle style=color:#fff href=/categories/computer-vision>Computer Vision</a></li><li><a class=categoryStyle style=color:#fff href=/categories/data-science>Data Science</a></li><li><a class=categoryStyle style=color:#fff href=/categories/deep-learning>Deep Learning</a></li><li><a class=categoryStyle style=color:#fff href=/categories/learning-resources>Learning Resources</a></li><li><a class=categoryStyle style=color:#fff href=/categories/natural-language-processing>Natural Language Processing</a></li><li><a class=categoryStyle style=color:#fff href=/categories/programming>Programming</a></li></ul></div><div class=widget><h4 class=widget-title>Tags</h4><ul class=list-inline><li class=list-inline-item><a class="tagStyle text-white" href=/tags/algorithms>Algorithms</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/artificial-intelligence>Artificial Intelligence</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/dask>Dask</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/deployment>Deployment</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/ec2>Ec2</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/generative-adversarial-networks>Generative Adversarial Networks</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/graphs>Graphs</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/image-classification>Image Classification</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/instance-segmentation>Instance Segmentation</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/interpretability>Interpretability</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/jobs>Jobs</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/kaggle>Kaggle</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/language-modeling>Language Modeling</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/machine-learning>Machine Learning</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/math>Math</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/multiprocessing>Multiprocessing</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/object-detection>Object Detection</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/opinion>Opinion</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/pandas>Pandas</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/production>Production</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/productivity>Productivity</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/python>Python</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/pytorch>Pytorch</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/spark>Spark</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/sql>Sql</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/statistics>Statistics</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/streamlit>Streamlit</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/text-classification>Text Classification</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/timeseries>Timeseries</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/tools>Tools</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/translation>Translation</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/visualization>Visualization</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/xgboost>Xgboost</a></li></ul></div><div class=widget><h4 class=widget-title>Connect With Me</h4><ul class="list-inline social-links"><li class=list-inline-item><a href=https://www.linkedin.com/in/rahulagwl/><i class=ti-linkedin></i></a></li><li class=list-inline-item><a href=https://medium.com/@rahul_agarwal><i class=ti-book></i></a></li><li class=list-inline-item><a href=https://twitter.com/MLWhiz><i class=ti-twitter-alt></i></a></li><li class=list-inline-item><a href=https://www.facebook.com/mlwhizblog><i class=ti-facebook></i></a></li><li class=list-inline-item><a href=https://github.com/MLWhiz><i class=ti-github></i></a></li></ul></div><script async data-uid=bfe9f82f10 src=https://mlwhiz.ck.page/bfe9f82f10/index.js></script><script async data-uid=3452d924e2 src=https://mlwhiz.ck.page/3452d924e2/index.js></script></div></div></div></section><footer><div class=container><div class=row><div class="col-12 text-center mb-5"><a href=https://mlwhiz.com/><img src=https://mlwhiz.com/images/logo.png class=img-fluid-custom-bottom alt="MLWhiz: Helping You Learn Data Science!"></a></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Contact Me</h6><ul class=list-unstyled><li class=mb-3><i class="ti-location-pin mr-3 text-primary"></i>India, Bangalore</li><li class=mb-3><a class=text-dark href=mailto:rahul@mlwhiz.com><i class="ti-email mr-3 text-primary"></i>rahul@mlwhiz.com</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Social Contacts</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=https://www.linkedin.com/in/rahulagwl/>Linkedin</a></li><li class=mb-3><a class=text-dark href=https://medium.com/@rahul_agarwal>Medium</a></li><li class=mb-3><a class=text-dark href=https://twitter.com/MLWhiz>Twitter</a></li><li class=mb-3><a class=text-dark href=https://www.facebook.com/mlwhizblog>Facebook</a></li><li class=mb-3><a class=text-dark href=https://github.com/MLWhiz>Github</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Categories</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=/categories/awesome-guides>Awesome Guides</a></li><li class=mb-3><a class=text-dark href=/categories/big-data>Big Data</a></li><li class=mb-3><a class=text-dark href=/categories/computer-vision>Computer Vision</a></li><li class=mb-3><a class=text-dark href=/categories/data-science>Data Science</a></li><li class=mb-3><a class=text-dark href=/categories/deep-learning>Deep Learning</a></li><li class=mb-3><a class=text-dark href=/categories/learning-resources>Learning Resources</a></li><li class=mb-3><a class=text-dark href=/categories/natural-language-processing>Natural Language Processing</a></li><li class=mb-3><a class=text-dark href=/categories/programming>Programming</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Quick Links</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=https://mlwhiz.com/about>About</a></li><li class=mb-3><a class=text-dark href=https://mlwhiz.com/blog>Post</a></li></ul></div><div class="col-12 border-top py-4 text-center">Copyright © 2020 <a href=https://mlwhiz.com>MLWhiz</a> All Rights Reserved</div></div></div></footer><script>var indexURL="https://mlwhiz.com/index.json"</script><script src=https://mlwhiz.com/plugins/compressjscss/main.js></script><script src=https://mlwhiz.com/js/script.min.js></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-54777926-1','auto');ga('send','pageview');</script></body></html>

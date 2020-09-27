@@ -1,383 +1,37 @@
-<!DOCTYPE html>
-<html lang="en-us"><head>
-  <meta charset="utf-8">
-  <title>MLWhiz: Helping You Learn Data Science!</title>
-
-  <!-- mobile responsive meta -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="In this post, we’ll create an end to end pipeline for image multiclass classification using Pytorch.This will include training the model, putting the model’s results in a form that can be shown to business partners, and functions to help deploy the model easily. As an added feature we will look at Test Time Augmentation using Pytorch also.">
-  <meta name="author" content="Rahul Agarwal">
-  <meta name="generator" content="Hugo 0.74.3" />
-  <!-- plugins -->
-  
-  <link rel="stylesheet" href="https://mlwhiz.com/plugins/compressjscss/main.css ">
-  
-
-	<meta property="og:title" content="End to End Pipeline for setting up Multiclass Image Classification for Data Scientists" />
-<meta property="og:description" content="In this post, we’ll create an end to end pipeline for image multiclass classification using Pytorch.This will include training the model, putting the model’s results in a form that can be shown to business partners, and functions to help deploy the model easily. As an added feature we will look at Test Time Augmentation using Pytorch also." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://mlwhiz.com/blog/2020/06/06/multiclass_image_classification_pytorch/" />
-
-<meta property="og:image" content="https://mlwhiz.com/images/multiclass_image_classification_pytorch/main.png" />
-<meta property="og:image:secure_url" content="https://mlwhiz.com/images/multiclass_image_classification_pytorch/main.png" />
-<meta property="article:published_time" content="2020-06-24T00:00:00+00:00" />
-<meta property="article:modified_time" content="2020-09-26T16:23:35+05:30" />
-<meta property="article:tag" content="Deep Learning" />
-<meta property="article:tag" content="Computer Vision" />
-<meta property="article:tag" content="Awesome Guides" />
-
-	<meta name="twitter:card" content="summary"/>
-<meta name="twitter:image" content="https://mlwhiz.com/images/multiclass_image_classification_pytorch/main.png"/>
-
-<meta name="twitter:title" content="End to End Pipeline for setting up Multiclass Image Classification for Data Scientists"/>
-<meta name="twitter:description" content="In this post, we’ll create an end to end pipeline for image multiclass classification using Pytorch.This will include training the model, putting the model’s results in a form that can be shown to business partners, and functions to help deploy the model easily. As an added feature we will look at Test Time Augmentation using Pytorch also."/>
-<meta name="twitter:site" content="@mlwhiz"/>
-<meta name="twitter:creator" content="@mlwhiz"/>
-
-
-
-	<link rel="dns-prefetch" href="//fonts.googleapis.com">
-	<link rel="dns-prefetch" href="//fonts.gstatic.com">
-
-	<!-- Main Stylesheet -->
-  
-  <link rel="stylesheet" href="https://mlwhiz.com/scss/style.min.css" media="screen">
-  <link rel="stylesheet" href="/css/style.css">
-
-  <link rel="stylesheet" type="text/css" href="/css/font/flaticon.css" >
-
-  <!--Favicon-->
-  <link rel="shortcut icon" href="https://mlwhiz.com/images/favicon-200x200.png " type="image/x-icon">
-  <link rel="icon" href="https://mlwhiz.com/images/favicon.png " type="image/x-icon">
-
-
-    <link rel="canonical" href="https://mlwhiz.com/blog/2020/06/06/multiclass_image_classification_pytorch/" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-
-
-<script type = 'application/ld+json'> {
-    "@context": "https://schema.org",
-    "@graph": [{
-        "@type": "WebSite",
-        "@id": "https://www.mlwhiz.com/#website",
-        "url": "https://www.mlwhiz.com/",
-        "name": "MLWhiz",
-        "description": "Want to Learn Computer Vision and NLP? - MLWhiz",
-        "potentialAction": {
-            "@type": "SearchAction",
-            "target": "https://www.mlwhiz.com/search?s={search_term_string}",
-            "query-input": "required name=search_term_string"
-        }
-    }, {
-        "@type": "ImageObject",
-        "@id": "https://mlwhiz.com/blog/2020/06/06/multiclass_image_classification_pytorch/#primaryimage",
-        "url": "https://mlwhiz.com/images/multiclass_image_classification_pytorch/main.png",
-        "width": 700,
-        "height": 450
-    }, {
-        "@type": "WebPage",
-        "@id": "https://mlwhiz.com/blog/2020/06/06/multiclass_image_classification_pytorch/#webpage",
-        "url": "https://mlwhiz.com/blog/2020/06/06/multiclass_image_classification_pytorch/",
-        "inLanguage": "en-US",
-        "name": "End to End Pipeline for setting up Multiclass Image Classification for Data Scientists - MLWhiz",
-        "isPartOf": {
-            "@id": "https://www.mlwhiz.com/#website"
-        },
-        "primaryImageOfPage": {
-            "@id": "https://mlwhiz.com/blog/2020/06/06/multiclass_image_classification_pytorch/#primaryimage"
-        },
-        "datePublished":"2020-06-24T00:00:00.00Z",
-        "dateModified": "2020-09-26T16:23:35.00Z",
-        "author": {
-            "@id": "https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca"
-        },
-        "description": "In this post, we’ll create an end to end pipeline for image multiclass classification using Pytorch.This will include training the model, putting the model’s results in a form that can be shown to business partners, and functions to help deploy the model easily. As an added feature we will look at Test Time Augmentation using Pytorch also."
-    },
-
-
-    {
-        "@type": ["Person"],
-        "@id": "https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca",
-        "name": "Rahul Agarwal",
-        "image": {
-            "@type": "ImageObject",
-            "@id": "https://www.mlwhiz.com/#authorlogo",
-            "url": "https://mlwhiz.com/images/author.jpg",
-            "caption": "Rahul Agarwal"
-        },
-        "description": "Hi there, I\u2019m Rahul Agarwal. I\u2019m a data scientist consultant and big data engineer based in Bangalore. I see a lot of times  students and even professionals wasting their time and struggling to get started with Computer Vision, Deep Learning, and NLP. I Started this Site with a purpose to augment my own understanding about new things while helping others learn about them in the best possible way.",
-        "sameAs": ["https://www.linkedin.com/in/rahulagwl/",
-          "https://medium.com/@rahul_agarwal",
-          "https://twitter.com/MLWhiz","https://www.facebook.com/mlwhizblog","https://github.com/MLWhiz","https://www.instagram.com/itsmlwhiz"]
-    }]
-} </script>
-
-
-
-<script async data-uid="a0ebaf958d" src="https://mlwhiz.ck.page/a0ebaf958d/index.js"></script>
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-  MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [['$','$'], ['\\(','\\)']],
-    displayMath: [['$$','$$']],
-    processEscapes: true,
-    processEnvironments: true,
-    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-    TeX: { equationNumbers: { autoNumber: "AMS" },
-         extensions: ["AMSmath.js", "AMSsymbols.js"] }
-  }
-  });
-  MathJax.Hub.Queue(function() {
-    
-    
-    
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-
-  MathJax.Hub.Config({
-  
-  TeX: { equationNumbers: { autoNumber: "AMS" } }
-  });
-</script>
-
-
-
-<link href='//apps.shareaholic.com/assets/pub/shareaholic.js' as='script' />
-<script type="text/javascript" data-cfasync="false" async src="//apps.shareaholic.com/assets/pub/shareaholic.js" data-shr-siteid="fd1ffa7fd7152e4e20568fbe49a489d0"></script>
-
-
-</head>
-<body>
-      
-   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T"
-   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-   
-<!-- preloader start -->
-<div class="preloader">
-  
-</div>
-<!-- preloader end -->
-<!-- navigation -->
-<header class="navigation">
-  <div class="container">
-    
-    <nav class="navbar navbar-expand-lg navbar-white bg-transparent border-bottom pl-0">
-      <a class="navbar-brand mobile-view" href="https://mlwhiz.com/"><img class="img-fluid"
-          src="https://mlwhiz.com/images/logo.png" alt="MLWhiz: Helping You Learn Data Science!"></a>
-      <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navigation">
-        <i class="ti-menu h3"></i>
-      </button>
-
-      <div class="collapse navbar-collapse text-center" id="navigation">
-        <div class="desktop-view">
-          <ul class="navbar-nav mr-auto">
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://www.linkedin.com/in/rahulagwl/"><i class="ti-linkedin"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://medium.com/@rahul_agarwal"><i class="ti-book"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://twitter.com/MLWhiz"><i class="ti-twitter-alt"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://www.facebook.com/mlwhizblog"><i class="ti-facebook"></i></a>
-            </li>
-            
-            <li class="nav-item">
-              <a class="nav-link" href="https://github.com/MLWhiz"><i class="ti-github"></i></a>
-            </li>
-            
-          </ul>
-        </div>
-
-        <a class="navbar-brand mx-auto desktop-view" href="https://mlwhiz.com/"><img class="img-fluid-custom"
-            src="https://mlwhiz.com/images/logo.png" alt="MLWhiz: Helping You Learn Data Science!"></a>
-
-        <ul class="navbar-nav">
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="https://mlwhiz.com/about">About</a>
-          </li>
-          
-          
-          
-          <li class="nav-item">
-            <a class="nav-link" href="https://mlwhiz.com/blog">Blog</a>
-          </li>
-          
-          
-          
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false">
-              Topics
-            </a>
-            <div class="dropdown-menu">
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/natural-language-processing">NLP</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/computer-vision">Computer Vision</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/deep-learning">Deep Learning</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/data-science">DS/ML</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/big-data">Big Data</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/awesome-guides">My Best Content</a>
-              
-              <a class="dropdown-item" href="https://mlwhiz.com/categories/learning-resources">Learning Resources</a>
-              
-            </div>
-          </li>
-          
-          
-        </ul>
-
-        
-        <!-- search -->
-        <div class="search pl-lg-4">
-          <button id="searchOpen" class="search-btn"><i class="ti-search"></i></button>
-          <div class="search-wrapper">
-            <form action="https://mlwhiz.com//search" class="h-100">
-              <input class="search-box px-4" id="search-query" name="s" type="search" placeholder="Type & Hit Enter...">
-            </form>
-            <button id="searchClose" class="search-close"><i class="ti-close text-dark"></i></button>
-          </div>
-        </div>
-        
-
-        
-      </div>
-    </nav>
-  </div>
-</header>
-<!-- /navigation -->
-
-
-<section class="section-sm">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 mb-5 mb-lg-0">
-        
-        
-        <a href="/categories/deep-learning"
-          class="categoryStyle">Deep Learning</a>
-        
-        <a href="/categories/computer-vision"
-          class="categoryStyle">Computer Vision</a>
-        
-        <a href="/categories/awesome-guides"
-          class="categoryStyle">Awesome Guides</a>
-        
-        <h1>End to End Pipeline for setting up Multiclass Image Classification for Data Scientists</h1>
-        <div class="mb-3 post-meta">
-          <span>By Rahul Agarwal</span>
-          
-          <svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"></path></svg>
-
-          <span>24 June 2020</span>
-          
-        </div>
-        
-        <img src="https://mlwhiz.com/images/multiclass_image_classification_pytorch/main.png" class="img-fluid w-100 mb-4" alt="End to End Pipeline for setting up Multiclass Image Classification for Data Scientists">
-        
-        <div class="content mb-5">
-          <p><em>Have you ever wondered how Facebook takes care of the abusive and inappropriate images shared by some of its users? Or how Facebook’s tagging feature works? Or how Google Lens recognizes products through images?</em></p>
-<p>All of the above are examples of 
-
-<a href="https://lionbridge.ai/services/image-annotation/" target="_blank" rel="nofollow noopener">image classification</a>
- in different settings. Multiclass image classification is a common task in computer vision, where we categorize an image into three or more classes.</p>
-<p>In the past, I always used Keras for computer vision projects. However, recently when the opportunity to work on multiclass image classification presented itself, I decided to use PyTorch. I have already moved from Keras to PyTorch for all 
-
-<a href="https://mlwhiz.com/blog/2019/01/06/pytorch_keras_conversion/">NLP tasks</a>
-, so why not vision, too?</p>
-<blockquote>
-<p>
-
-<a href="https://redirect.viglink.com/?format=go&amp;jsonp=vglnk_159220215223010&amp;key=0d3176c012db018d69225ad1c36210fa&amp;libId=kbg41t7r0102t244000DAap2a6q0u&amp;subId=fd1ffa7fd7152e4e20568fbe49a489d0&amp;cuid=fd1ffa7fd7152e4e20568fbe49a489d0&amp;loc=https%3A%2F%2Fmlwhiz.com%2Fblog%2F2020%2F02%2F21%2Fds2020%2F&amp;v=1&amp;out=https%3A%2F%2Fclick.linksynergy.com%2Flink%3Fid%3DlVarvwc5BD0%26offerid%3D467035.14805039480%26type%3D2%26murl%3Dhttps%253A%252F%252Fwww.coursera.org%252Flearn%252Fdeep-neural-networks-with-pytorch&amp;ref=https%3A%2F%2Fwww.google.com%2F&amp;title=Become%20a%20Data%20Scientist%20in%202020%20with%20these%2010%20resources&amp;txt=Deep%20Neural%20Networks%20with%20Pytorch" target="_blank" rel="nofollow noopener">PyTorch</a>
- is powerful, and I also like its more pythonic structure.</p>
-</blockquote>
-<p><em><strong>In this post, we’ll create an end to end pipeline for image multiclass classification using Pytorch.</strong></em> This will include training the model, putting the model’s results in a form that can be shown to business partners, and functions to help deploy the model easily. As an added feature we will look at Test Time Augmentation using Pytorch also.</p>
-<p>But before we learn how to do image classification, let’s first look at transfer learning, the most common method for dealing with such problems.</p>
-<hr>
-<h2 id="what-is-transfer-learning">What is Transfer Learning?</h2>
-<p>Transfer learning is the process of repurposing knowledge from one task to another. From a modelling perspective, this means using a model trained on one dataset and fine-tuning it for use with another. But why does it work?</p>
-<p>Let’s start with some background. Every year the visual recognition community comes together for a very particular challenge: 
-
-<a href="http://image-net.org/explore" target="_blank" rel="nofollow noopener">The Imagenet Challenge</a>
-. The task in this challenge is to classify 1,000,000 images into 1,000 categories.</p>
-<p>This challenge has already resulted in researchers training big convolutional deep learning models. The results have included great models like Resnet50 and Inception.</p>
-<p>But, what does it mean to train a neural model? Essentially, it means the researchers have learned the weights for a neural network after training the model on a million images.</p>
-<p>So, what if we could get those weights? We could then use them and load them into our own neural networks model to predict on the test dataset, right? Actually, we can go even further than that; we can add an extra layer on top of the neural network these researchers have prepared to classify our own dataset.</p>
-<blockquote>
-<p>While the exact workings of these complex models is still a mystery, we do know that the lower convolutional layers capture low-level image features like edges and gradients. In comparison, higher convolutional layers capture more and more intricate details, such as body parts, faces, and other compositional features.</p>
-</blockquote>
-<p>Source: 
-  
-      <img src="/images/multiclass_image_classification_pytorch/0.png" alt="
-
-&lt;a href=&#34;https://arxiv.org/pdf/1311.2901.pdf&#34; target=&#34;_blank&#34; rel=&#34;nofollow noopener&#34;&gt;Visualizing and Understanding Convolutional Networks&lt;/a&gt;
-. You can see how the first few layers capture basic shapes, and the shapes become more and more complex in the later layers.">
-  
-
-<em>Source: 
-
-<a href="https://arxiv.org/pdf/1311.2901.pdf" target="_blank" rel="nofollow noopener">Visualizing and Understanding Convolutional Networks</a>
-. You can see how the first few layers capture basic shapes, and the shapes become more and more complex in the later layers.</em></p>
-<p>In the example above from ZFNet (a variant of Alexnet), one of the first convolutional neural networks to achieve success on the Imagenet task, you can see how the lower layers capture lines and edges, and the later layers capture more complex features. The final fully-connected layers are generally assumed to capture information that is relevant for solving the respective task, e.g. ZFNet’s fully-connected layers indicate which features are relevant for classifying an image into one of 1,000 object categories.</p>
-<p>For a new vision task, it is possible for us to simply use the off-the-shelf features of a state-of-the-art CNN pre-trained on ImageNet, and train a new model on these extracted features.</p>
-<p>The intuition behind this idea is that a model trained to recognize animals might also be used to recognize cats vs dogs. In our case,</p>
-<blockquote>
-<p>a model that has been trained on 1000 different categories has seen a lot of real-world information, and we can use this information to create our own custom classifier.</p>
-</blockquote>
-<p><em><strong>So that’s the theory and intuition. How do we get it to actually work? Let’s look at some code. You can find the complete code for this post on 
-
-<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/compvisblog" target="_blank" rel="nofollow noopener">Github</a>
-.</strong></em></p>
-<hr>
-<h2 id="data-exploration">Data Exploration</h2>
-<p>We will start with the 
-
-<a href="https://www.kaggle.com/clorichel/boat-types-recognition/version/1" target="_blank" rel="nofollow noopener">Boat Dataset</a>
- from Kaggle to understand the multiclass image classification problem. This dataset contains about 1,500 pictures of boats of different types: buoys, cruise ships, ferry boats, freight boats, gondolas, inflatable boats, kayaks, paper boats, and sailboats. Our goal is to create a model that looks at a boat image and classifies it into the correct category.</p>
-<p>Here’s a sample of images from the dataset:</p>
-<p>
-  
-    <img src="/images/multiclass_image_classification_pytorch/1.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
-    
-
-</p>
-<p>And here are the category counts:</p>
-<p>
-  
-    <img src="/images/multiclass_image_classification_pytorch/2.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
-    
-
-</p>
-<p>Since the categories <em>“freight boats”, “inflatable boats”
-, and “boats”</em> don’t have a lot of images; we will be removing these categories when we train our model.</p>
-<hr>
-<h2 id="creating-the-required-directory-structure">Creating the required Directory Structure</h2>
-<p>Before we can go through with training our deep learning models, we need to create the required directory structure for our images. Right now, our data directory structure looks like:</p>
-<pre><code>images
+<!doctype html><html lang=en-us><head><meta charset=utf-8><title>MLWhiz: Helping You Learn Data Science!</title><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta name=description content="In this post, we’ll create an end to end pipeline for image multiclass classification using Pytorch.This will include training the model, putting the model’s results in a form that can be shown to business partners, and functions to help deploy the model easily. As an added feature we will look at Test Time Augmentation using Pytorch also."><meta name=author content="Rahul Agarwal"><meta name=generator content="Hugo 0.74.3"><link rel=stylesheet href=https://mlwhiz.com/plugins/compressjscss/main.css><meta property="og:title" content="End to End Pipeline for setting up Multiclass Image Classification for Data Scientists"><meta property="og:description" content="In this post, we’ll create an end to end pipeline for image multiclass classification using Pytorch.This will include training the model, putting the model’s results in a form that can be shown to business partners, and functions to help deploy the model easily. As an added feature we will look at Test Time Augmentation using Pytorch also."><meta property="og:type" content="article"><meta property="og:url" content="https://mlwhiz.com/blog/2020/06/06/multiclass_image_classification_pytorch/"><meta property="og:image" content="https://mlwhiz.com/images/multiclass_image_classification_pytorch/main.png"><meta property="og:image:secure_url" content="https://mlwhiz.com/images/multiclass_image_classification_pytorch/main.png"><meta property="article:published_time" content="2020-06-24T00:00:00+00:00"><meta property="article:modified_time" content="2020-09-26T16:23:35+05:30"><meta property="article:tag" content="Deep Learning"><meta property="article:tag" content="Computer Vision"><meta property="article:tag" content="Awesome Guides"><meta name=twitter:card content="summary"><meta name=twitter:image content="https://mlwhiz.com/images/multiclass_image_classification_pytorch/main.png"><meta name=twitter:title content="End to End Pipeline for setting up Multiclass Image Classification for Data Scientists"><meta name=twitter:description content="In this post, we’ll create an end to end pipeline for image multiclass classification using Pytorch.This will include training the model, putting the model’s results in a form that can be shown to business partners, and functions to help deploy the model easily. As an added feature we will look at Test Time Augmentation using Pytorch also."><meta name=twitter:site content="@mlwhiz"><meta name=twitter:creator content="@mlwhiz"><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href=https://mlwhiz.com/scss/style.min.css media=screen><link rel=stylesheet href=/css/style.css><link rel=stylesheet type=text/css href=/css/font/flaticon.css><link rel="shortcut icon" href=https://mlwhiz.com/images/favicon-200x200.png type=image/x-icon><link rel=icon href=https://mlwhiz.com/images/favicon.png type=image/x-icon><link rel=canonical href=https://mlwhiz.com/blog/2020/06/06/multiclass_image_classification_pytorch/><script src=https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js></script><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.mlwhiz.com/#website","url":"https://www.mlwhiz.com/","name":"MLWhiz","description":"Want to Learn Computer Vision and NLP? - MLWhiz","potentialAction":{"@type":"SearchAction","target":"https://www.mlwhiz.com/search?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"ImageObject","@id":"https://mlwhiz.com/blog/2020/06/06/multiclass_image_classification_pytorch/#primaryimage","url":"https://mlwhiz.com/images/multiclass_image_classification_pytorch/main.png","width":700,"height":450},{"@type":"WebPage","@id":"https://mlwhiz.com/blog/2020/06/06/multiclass_image_classification_pytorch/#webpage","url":"https://mlwhiz.com/blog/2020/06/06/multiclass_image_classification_pytorch/","inLanguage":"en-US","name":"End to End Pipeline for setting up Multiclass Image Classification for Data Scientists - MLWhiz","isPartOf":{"@id":"https://www.mlwhiz.com/#website"},"primaryImageOfPage":{"@id":"https://mlwhiz.com/blog/2020/06/06/multiclass_image_classification_pytorch/#primaryimage"},"datePublished":"2020-06-24T00:00:00.00Z","dateModified":"2020-09-26T16:23:35.00Z","author":{"@id":"https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca"},"description":"In this post, we’ll create an end to end pipeline for image multiclass classification using Pytorch.This will include training the model, putting the model’s results in a form that can be shown to business partners, and functions to help deploy the model easily. As an added feature we will look at Test Time Augmentation using Pytorch also."},{"@type":["Person"],"@id":"https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca","name":"Rahul Agarwal","image":{"@type":"ImageObject","@id":"https://www.mlwhiz.com/#authorlogo","url":"https://mlwhiz.com/images/author.jpg","caption":"Rahul Agarwal"},"description":"Hi there, I\u2019m Rahul Agarwal. I\u2019m a data scientist consultant and big data engineer based in Bangalore. I see a lot of times  students and even professionals wasting their time and struggling to get started with Computer Vision, Deep Learning, and NLP. I Started this Site with a purpose to augment my own understanding about new things while helping others learn about them in the best possible way.","sameAs":["https://www.linkedin.com/in/rahulagwl/","https://medium.com/@rahul_agarwal","https://twitter.com/MLWhiz","https://www.facebook.com/mlwhizblog","https://github.com/MLWhiz","https://www.instagram.com/itsmlwhiz"]}]}</script><script async data-uid=a0ebaf958d src=https://mlwhiz.ck.page/a0ebaf958d/index.js></script><script type=text/javascript async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">MathJax.Hub.Config({tex2jax:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$']],processEscapes:true,processEnvironments:true,skipTags:['script','noscript','style','textarea','pre'],TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["AMSmath.js","AMSsymbols.js"]}}});MathJax.Hub.Queue(function(){var all=MathJax.Hub.getAllJax(),i;for(i=0;i<all.length;i+=1){all[i].SourceElement().parentNode.className+=' has-jax';}});MathJax.Hub.Config({TeX:{equationNumbers:{autoNumber:"AMS"}}});</script><link href=//apps.shareaholic.com/assets/pub/shareaholic.js as=script><script type=text/javascript data-cfasync=false async src=//apps.shareaholic.com/assets/pub/shareaholic.js data-shr-siteid=fd1ffa7fd7152e4e20568fbe49a489d0></script></head><body><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T" height=0 width=0 style=display:none;visibility:hidden></iframe></noscript><div class=preloader></div><header class=navigation><div class=container><nav class="navbar navbar-expand-lg navbar-white bg-transparent border-bottom pl-0"><a class="navbar-brand mobile-view" href=https://mlwhiz.com/><img class=img-fluid src=https://mlwhiz.com/images/logo.png alt="MLWhiz: Helping You Learn Data Science!"></a>
+<button class="navbar-toggler border-0" type=button data-toggle=collapse data-target=#navigation>
+<i class="ti-menu h3"></i></button><div class="collapse navbar-collapse text-center" id=navigation><div class=desktop-view><ul class="navbar-nav mr-auto"><li class=nav-item><a class=nav-link href=https://www.linkedin.com/in/rahulagwl/><i class=ti-linkedin></i></a></li><li class=nav-item><a class=nav-link href=https://medium.com/@rahul_agarwal><i class=ti-book></i></a></li><li class=nav-item><a class=nav-link href=https://twitter.com/MLWhiz><i class=ti-twitter-alt></i></a></li><li class=nav-item><a class=nav-link href=https://www.facebook.com/mlwhizblog><i class=ti-facebook></i></a></li><li class=nav-item><a class=nav-link href=https://github.com/MLWhiz><i class=ti-github></i></a></li></ul></div><a class="navbar-brand mx-auto desktop-view" href=https://mlwhiz.com/><img class=img-fluid-custom src=https://mlwhiz.com/images/logo.png alt="MLWhiz: Helping You Learn Data Science!"></a><ul class=navbar-nav><li class=nav-item><a class=nav-link href=https://mlwhiz.com/about>About</a></li><li class=nav-item><a class=nav-link href=https://mlwhiz.com/blog>Blog</a></li><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href=# role=button data-toggle=dropdown aria-haspopup=true aria-expanded=false>Topics</a><div class=dropdown-menu><a class=dropdown-item href=https://mlwhiz.com/categories/natural-language-processing>NLP</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/computer-vision>Computer Vision</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/deep-learning>Deep Learning</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/data-science>DS/ML</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/big-data>Big Data</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/awesome-guides>My Best Content</a>
+<a class=dropdown-item href=https://mlwhiz.com/categories/learning-resources>Learning Resources</a></div></li></ul><div class="search pl-lg-4"><button id=searchOpen class=search-btn><i class=ti-search></i></button><div class=search-wrapper><form action=https://mlwhiz.com//search class=h-100><input class="search-box px-4" id=search-query name=s type=search placeholder="Type & Hit Enter..."></form><button id=searchClose class=search-close><i class="ti-close text-dark"></i></button></div></div></div></nav></div></header><section class=section-sm><div class=container><div class=row><div class="col-lg-8 mb-5 mb-lg-0"><a href=/categories/deep-learning class=categoryStyle>Deep Learning</a>
+<a href=/categories/computer-vision class=categoryStyle>Computer Vision</a>
+<a href=/categories/awesome-guides class=categoryStyle>Awesome Guides</a><h1>End to End Pipeline for setting up Multiclass Image Classification for Data Scientists</h1><div class="mb-3 post-meta"><span>By Rahul Agarwal</span><svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
+<span>24 June 2020</span></div><img src=https://mlwhiz.com/images/multiclass_image_classification_pytorch/main.png class="img-fluid w-100 mb-4" alt="End to End Pipeline for setting up Multiclass Image Classification for Data Scientists"><div class="content mb-5"><p><em>Have you ever wondered how Facebook takes care of the abusive and inappropriate images shared by some of its users? Or how Facebook’s tagging feature works? Or how Google Lens recognizes products through images?</em></p><p>All of the above are examples of
+<a href=https://lionbridge.ai/services/image-annotation/ target=_blank rel="nofollow noopener">image classification</a>
+in different settings. Multiclass image classification is a common task in computer vision, where we categorize an image into three or more classes.</p><p>In the past, I always used Keras for computer vision projects. However, recently when the opportunity to work on multiclass image classification presented itself, I decided to use PyTorch. I have already moved from Keras to PyTorch for all
+<a href=https://mlwhiz.com/blog/2019/01/06/pytorch_keras_conversion/>NLP tasks</a>
+, so why not vision, too?</p><blockquote><p><a href="https://redirect.viglink.com/?format=go&jsonp=vglnk_159220215223010&key=0d3176c012db018d69225ad1c36210fa&libId=kbg41t7r0102t244000DAap2a6q0u&subId=fd1ffa7fd7152e4e20568fbe49a489d0&cuid=fd1ffa7fd7152e4e20568fbe49a489d0&loc=https%3A%2F%2Fmlwhiz.com%2Fblog%2F2020%2F02%2F21%2Fds2020%2F&v=1&out=https%3A%2F%2Fclick.linksynergy.com%2Flink%3Fid%3DlVarvwc5BD0%26offerid%3D467035.14805039480%26type%3D2%26murl%3Dhttps%253A%252F%252Fwww.coursera.org%252Flearn%252Fdeep-neural-networks-with-pytorch&ref=https%3A%2F%2Fwww.google.com%2F&title=Become%20a%20Data%20Scientist%20in%202020%20with%20these%2010%20resources&txt=Deep%20Neural%20Networks%20with%20Pytorch" target=_blank rel="nofollow noopener">PyTorch</a>
+is powerful, and I also like its more pythonic structure.</p></blockquote><p><em><strong>In this post, we’ll create an end to end pipeline for image multiclass classification using Pytorch.</strong></em> This will include training the model, putting the model’s results in a form that can be shown to business partners, and functions to help deploy the model easily. As an added feature we will look at Test Time Augmentation using Pytorch also.</p><p>But before we learn how to do image classification, let’s first look at transfer learning, the most common method for dealing with such problems.</p><hr><h2 id=what-is-transfer-learning>What is Transfer Learning?</h2><p>Transfer learning is the process of repurposing knowledge from one task to another. From a modelling perspective, this means using a model trained on one dataset and fine-tuning it for use with another. But why does it work?</p><p>Let’s start with some background. Every year the visual recognition community comes together for a very particular challenge:
+<a href=http://image-net.org/explore target=_blank rel="nofollow noopener">The Imagenet Challenge</a>
+. The task in this challenge is to classify 1,000,000 images into 1,000 categories.</p><p>This challenge has already resulted in researchers training big convolutional deep learning models. The results have included great models like Resnet50 and Inception.</p><p>But, what does it mean to train a neural model? Essentially, it means the researchers have learned the weights for a neural network after training the model on a million images.</p><p>So, what if we could get those weights? We could then use them and load them into our own neural networks model to predict on the test dataset, right? Actually, we can go even further than that; we can add an extra layer on top of the neural network these researchers have prepared to classify our own dataset.</p><blockquote><p>While the exact workings of these complex models is still a mystery, we do know that the lower convolutional layers capture low-level image features like edges and gradients. In comparison, higher convolutional layers capture more and more intricate details, such as body parts, faces, and other compositional features.</p></blockquote><p>Source:
+<img src=/images/multiclass_image_classification_pytorch/0.png alt='<a href="https://arxiv.org/pdf/1311.2901.pdf" target="_blank" rel="nofollow noopener">Visualizing and Understanding Convolutional Networks</a>
+. You can see how the first few layers capture basic shapes, and the shapes become more and more complex in the later layers.'>
+<em>Source:
+<a href=https://arxiv.org/pdf/1311.2901.pdf target=_blank rel="nofollow noopener">Visualizing and Understanding Convolutional Networks</a>
+. You can see how the first few layers capture basic shapes, and the shapes become more and more complex in the later layers.</em></p><p>In the example above from ZFNet (a variant of Alexnet), one of the first convolutional neural networks to achieve success on the Imagenet task, you can see how the lower layers capture lines and edges, and the later layers capture more complex features. The final fully-connected layers are generally assumed to capture information that is relevant for solving the respective task, e.g. ZFNet’s fully-connected layers indicate which features are relevant for classifying an image into one of 1,000 object categories.</p><p>For a new vision task, it is possible for us to simply use the off-the-shelf features of a state-of-the-art CNN pre-trained on ImageNet, and train a new model on these extracted features.</p><p>The intuition behind this idea is that a model trained to recognize animals might also be used to recognize cats vs dogs. In our case,</p><blockquote><p>a model that has been trained on 1000 different categories has seen a lot of real-world information, and we can use this information to create our own custom classifier.</p></blockquote><p><em><strong>So that’s the theory and intuition. How do we get it to actually work? Let’s look at some code. You can find the complete code for this post on
+<a href=https://github.com/MLWhiz/data_science_blogs/tree/master/compvisblog target=_blank rel="nofollow noopener">Github</a>
+.</strong></em></p><hr><h2 id=data-exploration>Data Exploration</h2><p>We will start with the
+<a href=https://www.kaggle.com/clorichel/boat-types-recognition/version/1 target=_blank rel="nofollow noopener">Boat Dataset</a>
+from Kaggle to understand the multiclass image classification problem. This dataset contains about 1,500 pictures of boats of different types: buoys, cruise ships, ferry boats, freight boats, gondolas, inflatable boats, kayaks, paper boats, and sailboats. Our goal is to create a model that looks at a boat image and classifies it into the correct category.</p><p>Here’s a sample of images from the dataset:</p><p><img src=/images/multiclass_image_classification_pytorch/1.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><p>And here are the category counts:</p><p><img src=/images/multiclass_image_classification_pytorch/2.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><p>Since the categories <em>“freight boats”, “inflatable boats”
+, and “boats”</em> don’t have a lot of images; we will be removing these categories when we train our model.</p><hr><h2 id=creating-the-required-directory-structure>Creating the required Directory Structure</h2><p>Before we can go through with training our deep learning models, we need to create the required directory structure for our images. Right now, our data directory structure looks like:</p><pre><code>images
     sailboat
     kayak
     .
     .
-</code></pre>
-<p>We need our images to be contained in 3 folders train, val and test. We will then train on the images in train dataset, validate on the ones in the val dataset and finally test them on images in the test dataset.</p>
-<pre><code>data
+</code></pre><p>We need our images to be contained in 3 folders train, val and test. We will then train on the images in train dataset, validate on the ones in the val dataset and finally test them on images in the test dataset.</p><pre><code>data
     train
         sailboat
         kayak
@@ -393,28 +47,18 @@
         kayak
         .
         .
-</code></pre>
-<p>You might have your data in a different format, but I have found that apart from the usual libraries, the glob.glob and os.system functions are very helpful. Here you can find the complete 
-
-<a href="https://github.com/MLWhiz/data_science_blogs/blob/master/compvisblog/Boats_DataExploration.ipynb" target="_blank" rel="nofollow noopener">data preparation code</a>
-. Now let’s take a quick look at some of the not-so-used libraries that I found useful while doing data prep.</p>
-<h3 id="what-is-globglob">What is glob.glob?</h3>
-<p>Simply, glob lets you get names of files or folders in a directory using a regex. For example, you can do something like:</p>
-<pre><code>from glob import glob
+</code></pre><p>You might have your data in a different format, but I have found that apart from the usual libraries, the glob.glob and os.system functions are very helpful. Here you can find the complete
+<a href=https://github.com/MLWhiz/data_science_blogs/blob/master/compvisblog/Boats_DataExploration.ipynb target=_blank rel="nofollow noopener">data preparation code</a>
+. Now let’s take a quick look at some of the not-so-used libraries that I found useful while doing data prep.</p><h3 id=what-is-globglob>What is glob.glob?</h3><p>Simply, glob lets you get names of files or folders in a directory using a regex. For example, you can do something like:</p><pre><code>from glob import glob
 categories = glob(“images/*”)
 print(categories)
 ------------------------------------------------------------------
 ['images/kayak', 'images/boats', 'images/gondola', 'images/sailboat', 'images/inflatable boat', 'images/paper boat', 'images/buoy', 'images/cruise ship', 'images/freight boat', 'images/ferry boat']
-</code></pre>
-<h3 id="what-is-ossystem">What is os.system?</h3>
-<p>os.system is a function in os library which lets you run any command-line function in python itself. I generally use it to run Linux functions, but it can also be used to run R scripts within python as shown 
-
-<a href="https://towardsdatascience.com/python-pro-tip-want-to-use-r-java-c-or-any-language-in-python-d304be3a0559" target="_blank" rel="nofollow noopener">here</a>
-. For example, I use it in my data preparation to copy files from one directory to another after getting the information from a pandas data frame. I also use 
-
-<a href="https://towardsdatascience.com/how-and-why-to-use-f-strings-in-python3-adbba724b251" target="_blank" rel="nofollow noopener">f string formatting</a>
-.</p>
-<pre><code>import os
+</code></pre><h3 id=what-is-ossystem>What is os.system?</h3><p>os.system is a function in os library which lets you run any command-line function in python itself. I generally use it to run Linux functions, but it can also be used to run R scripts within python as shown
+<a href=https://towardsdatascience.com/python-pro-tip-want-to-use-r-java-c-or-any-language-in-python-d304be3a0559 target=_blank rel="nofollow noopener">here</a>
+. For example, I use it in my data preparation to copy files from one directory to another after getting the information from a pandas data frame. I also use
+<a href=https://towardsdatascience.com/how-and-why-to-use-f-strings-in-python3-adbba724b251 target=_blank rel="nofollow noopener">f string formatting</a>
+.</p><pre><code>import os
 
 for i,row in fulldf.iterrows():
     # Boat category
@@ -427,33 +71,19 @@ for i,row in fulldf.iterrows():
     opath = ipath.replace(f&quot;images/&quot;,f&quot;data/{section}/&quot;)
     # running the cp command
     os.system(f&quot;cp '{ipath}' '{opath}'&quot;)
-</code></pre>
-<p>Now since we have our data in the required folder structure, we can move on to more exciting parts.</p>
-<hr>
-<h2 id="data-preprocessing">Data Preprocessing</h2>
-<h3 id="transforms">Transforms:</h3>
-<p><strong>1. Imagenet Preprocessing</strong></p>
-<p>In order to use our images with a network trained on the Imagenet dataset, we need to preprocess our images in the same way as the Imagenet network. For that, we need to rescale the images to 224×224 and normalize them as per Imagenet standards. We can use the torchvision transforms library to do that. Here we take a CenterCrop of 224×224 and normalize as per Imagenet standards. The operations defined below happen sequentially. You can find a list of all transforms provided by 
-
-<a href="https://pytorch.org/docs/stable/torchvision/transforms.html" target="_blank" rel="nofollow noopener">PyTorch here</a>
-.</p>
-<pre><code>transforms.Compose([
+</code></pre><p>Now since we have our data in the required folder structure, we can move on to more exciting parts.</p><hr><h2 id=data-preprocessing>Data Preprocessing</h2><h3 id=transforms>Transforms:</h3><p><strong>1. Imagenet Preprocessing</strong></p><p>In order to use our images with a network trained on the Imagenet dataset, we need to preprocess our images in the same way as the Imagenet network. For that, we need to rescale the images to 224×224 and normalize them as per Imagenet standards. We can use the torchvision transforms library to do that. Here we take a CenterCrop of 224×224 and normalize as per Imagenet standards. The operations defined below happen sequentially. You can find a list of all transforms provided by
+<a href=https://pytorch.org/docs/stable/torchvision/transforms.html target=_blank rel="nofollow noopener">PyTorch here</a>
+.</p><pre><code>transforms.Compose([
         transforms.CenterCrop(size=224),  
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406],
                              [0.229, 0.224, 0.225])  
     ])
-</code></pre>
-<p><strong>2. Data Augmentations</strong></p>
-<p>We can do a lot more preprocessing for data augmentations. Neural networks work better with a lot of data. 
-
-<a href="https://lionbridge.ai/articles/data-augmentation-with-machine-learning-an-overview/" target="_blank" rel="nofollow noopener">Data augmentation</a>
- is a strategy which we use at training time to increase the amount of data we have.</p>
-<p>For example, we can flip the image of a boat horizontally, and it will still be a boat. Or we can randomly crop images or add color jitters. Here is the image transforms dictionary I have used that applies to both the Imagenet preprocessing as well as augmentations. This dictionary contains the various transforms we have for the train, test and validation data as used in this 
-
-<a href="https://towardsdatascience.com/transfer-learning-with-convolutional-neural-networks-in-pytorch-dd09190245ce" target="_blank" rel="nofollow noopener">great post</a>
-. As you’d expect, we don’t apply the horizontal flips or other data augmentation transforms to the test data and validation data because we don’t want to get predictions on an augmented image.</p>
-<pre><code># Image transformations
+</code></pre><p><strong>2. Data Augmentations</strong></p><p>We can do a lot more preprocessing for data augmentations. Neural networks work better with a lot of data.
+<a href=https://lionbridge.ai/articles/data-augmentation-with-machine-learning-an-overview/ target=_blank rel="nofollow noopener">Data augmentation</a>
+is a strategy which we use at training time to increase the amount of data we have.</p><p>For example, we can flip the image of a boat horizontally, and it will still be a boat. Or we can randomly crop images or add color jitters. Here is the image transforms dictionary I have used that applies to both the Imagenet preprocessing as well as augmentations. This dictionary contains the various transforms we have for the train, test and validation data as used in this
+<a href=https://towardsdatascience.com/transfer-learning-with-convolutional-neural-networks-in-pytorch-dd09190245ce target=_blank rel="nofollow noopener">great post</a>
+. As you’d expect, we don’t apply the horizontal flips or other data augmentation transforms to the test data and validation data because we don’t want to get predictions on an augmented image.</p><pre><code># Image transformations
 image_transforms = {
     # Train uses data augmentation
     'train':
@@ -485,9 +115,7 @@ image_transforms = {
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ]),
 }
-</code></pre>
-<p>Here is an example of the train transforms applied to an image in the training dataset. Not only do we get a lot of different images from a single image, but it also helps our network become invariant to the object orientation.</p>
-<pre><code>ex_img = Image.open('/home/rahul/projects/compvisblog/data/train/cruise ship/cruise-ship-oasis-of-the-seas-boat-water-482183.jpg')
+</code></pre><p>Here is an example of the train transforms applied to an image in the training dataset. Not only do we get a lot of different images from a single image, but it also helps our network become invariant to the object orientation.</p><pre><code>ex_img = Image.open('/home/rahul/projects/compvisblog/data/train/cruise ship/cruise-ship-oasis-of-the-seas-boat-water-482183.jpg')
 
 t = image_transforms['train']
 plt.figure(figsize=(24, 24))
@@ -497,16 +125,7 @@ for i in range(16):
     _ = imshow_tensor(t(ex_img), ax=ax)
 
 plt.tight_layout()
-</code></pre>
-<p>
-  
-    <img src="/images/multiclass_image_classification_pytorch/3.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
-    
-
-</p>
-<h3 id="dataloaders">DataLoaders</h3>
-<p>The next step is to provide the training, validation, and test dataset locations to PyTorch. We can do this by using the PyTorch datasets and DataLoader class. This part of the code will mostly remain the same if we have our data in the required directory structures.</p>
-<pre><code># Datasets from folders
+</code></pre><p><img src=/images/multiclass_image_classification_pytorch/3.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><h3 id=dataloaders>DataLoaders</h3><p>The next step is to provide the training, validation, and test dataset locations to PyTorch. We can do this by using the PyTorch datasets and DataLoader class. This part of the code will mostly remain the same if we have our data in the required directory structures.</p><pre><code># Datasets from folders
 
 traindir = &quot;data/train&quot;
 validdir = &quot;data/val&quot;
@@ -527,100 +146,17 @@ dataloaders = {
     'val': DataLoader(data['valid'], batch_size=batch_size, shuffle=True,num_workers=10),
     'test': DataLoader(data['test'], batch_size=batch_size, shuffle=True,num_workers=10)
 }
-</code></pre>
-<p>These dataloaders help us to iterate through the dataset. For example, we will use the dataloader below in our model training. The data variable will contain data in the form (batch_size, color_channels, height, width) while the target is of shape (batch_size) and hold the label information.</p>
-<pre><code>train_loader = dataloaders['train']
+</code></pre><p>These dataloaders help us to iterate through the dataset. For example, we will use the dataloader below in our model training. The data variable will contain data in the form (batch_size, color_channels, height, width) while the target is of shape (batch_size) and hold the label information.</p><pre><code>train_loader = dataloaders['train']
 for ii, (data, target) in enumerate(train_loader):
-</code></pre>
-<hr>
-<h2 id="modeling">Modeling</h2>
-<h3 id="1-create-the-model-using-a-pre-trained-model">1. Create the model using a pre-trained model</h3>
-<p>Right now these following pre-trained models are available to use in the torchvision library:</p>
-<ul>
-<li>
-<p>
-
-<a href="https://arxiv.org/abs/1404.5997" target="_blank" rel="nofollow noopener">AlexNet</a>
-</p>
-</li>
-<li>
-<p>
-
-<a href="https://arxiv.org/abs/1409.1556" target="_blank" rel="nofollow noopener">VGG</a>
-</p>
-</li>
-<li>
-<p>
-
-<a href="https://arxiv.org/abs/1512.03385" target="_blank" rel="nofollow noopener">ResNet</a>
-</p>
-</li>
-<li>
-<p>
-
-<a href="https://arxiv.org/abs/1602.07360" target="_blank" rel="nofollow noopener">SqueezeNet</a>
-</p>
-</li>
-<li>
-<p>
-
-<a href="https://arxiv.org/abs/1608.06993" target="_blank" rel="nofollow noopener">DenseNet</a>
-</p>
-</li>
-<li>
-<p>
-
-<a href="https://arxiv.org/abs/1512.00567" target="_blank" rel="nofollow noopener">Inception</a>
- v3</p>
-</li>
-<li>
-<p>
-
-<a href="https://arxiv.org/abs/1409.4842" target="_blank" rel="nofollow noopener">GoogLeNet</a>
-</p>
-</li>
-<li>
-<p>
-
-<a href="https://arxiv.org/abs/1807.11164" target="_blank" rel="nofollow noopener">ShuffleNet</a>
- v2</p>
-</li>
-<li>
-<p>
-
-<a href="https://arxiv.org/abs/1801.04381" target="_blank" rel="nofollow noopener">MobileNet</a>
- v2</p>
-</li>
-<li>
-<p>
-
-<a href="https://arxiv.org/abs/1611.05431" target="_blank" rel="nofollow noopener">ResNeXt</a>
-</p>
-</li>
-<li>
-<p>
-
-<a href="https://pytorch.org/docs/stable/torchvision/models.html#wide-resnet" target="_blank" rel="nofollow noopener">Wide ResNet</a>
-</p>
-</li>
-<li>
-<p>
-
-<a href="https://arxiv.org/abs/1807.11626" target="_blank" rel="nofollow noopener">MNASNet</a>
-</p>
-</li>
-</ul>
-<p>Here I will be using resnet50 on our dataset, but you can effectively use any other model too as per your choice.</p>
-<pre><code>from torchvision import models
+</code></pre><hr><h2 id=modeling>Modeling</h2><h3 id=1-create-the-model-using-a-pre-trained-model>1. Create the model using a pre-trained model</h3><p>Right now these following pre-trained models are available to use in the torchvision library:</p><ul><li><p><a href=https://arxiv.org/abs/1404.5997 target=_blank rel="nofollow noopener">AlexNet</a></p></li><li><p><a href=https://arxiv.org/abs/1409.1556 target=_blank rel="nofollow noopener">VGG</a></p></li><li><p><a href=https://arxiv.org/abs/1512.03385 target=_blank rel="nofollow noopener">ResNet</a></p></li><li><p><a href=https://arxiv.org/abs/1602.07360 target=_blank rel="nofollow noopener">SqueezeNet</a></p></li><li><p><a href=https://arxiv.org/abs/1608.06993 target=_blank rel="nofollow noopener">DenseNet</a></p></li><li><p><a href=https://arxiv.org/abs/1512.00567 target=_blank rel="nofollow noopener">Inception</a>
+v3</p></li><li><p><a href=https://arxiv.org/abs/1409.4842 target=_blank rel="nofollow noopener">GoogLeNet</a></p></li><li><p><a href=https://arxiv.org/abs/1807.11164 target=_blank rel="nofollow noopener">ShuffleNet</a>
+v2</p></li><li><p><a href=https://arxiv.org/abs/1801.04381 target=_blank rel="nofollow noopener">MobileNet</a>
+v2</p></li><li><p><a href=https://arxiv.org/abs/1611.05431 target=_blank rel="nofollow noopener">ResNeXt</a></p></li><li><p><a href=https://pytorch.org/docs/stable/torchvision/models.html#wide-resnet target=_blank rel="nofollow noopener">Wide ResNet</a></p></li><li><p><a href=https://arxiv.org/abs/1807.11626 target=_blank rel="nofollow noopener">MNASNet</a></p></li></ul><p>Here I will be using resnet50 on our dataset, but you can effectively use any other model too as per your choice.</p><pre><code>from torchvision import models
 model = models.resnet50(pretrained=True)
-</code></pre>
-<p>We start by freezing our model weights since we don’t want to change the weights for the renet50 models.</p>
-<pre><code># Freeze model weights
+</code></pre><p>We start by freezing our model weights since we don’t want to change the weights for the renet50 models.</p><pre><code># Freeze model weights
 for param in model.parameters():
     param.requires_grad = False
-</code></pre>
-<p>The next thing we need to do is to replace the linear classification layer in the model by our custom classifier. I have found that to do this, it is better first to see the model structure to determine what is the final linear layer. We can do this simply by printing the model object:</p>
-<pre><code>print(model)
+</code></pre><p>The next thing we need to do is to replace the linear classification layer in the model by our custom classifier. I have found that to do this, it is better first to see the model structure to determine what is the final linear layer. We can do this simply by printing the model object:</p><pre><code>print(model)
 ------------------------------------------------------------------
 ResNet(
   (conv1): Conv2d(3, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
@@ -639,21 +175,14 @@ ResNet(
 (avgpool): AdaptiveAvgPool2d(output_size=(1, 1))
   **(fc): Linear(in_features=2048, out_features=1000, bias=True)**
 )
-</code></pre>
-<p>Here we find that the final linear layer that takes the input from the convolutional layers is named fc</p>
-<p>We can now simply replace the fc layer using our custom neural network. This neural network takes input from the previous layer to fc and gives the log softmax output of shape (batch_size x n_classes).</p>
-<pre><code>n_inputs = model.fc.in_features
+</code></pre><p>Here we find that the final linear layer that takes the input from the convolutional layers is named fc</p><p>We can now simply replace the fc layer using our custom neural network. This neural network takes input from the previous layer to fc and gives the log softmax output of shape (batch_size x n_classes).</p><pre><code>n_inputs = model.fc.in_features
 model.fc = nn.Sequential(
                       nn.Linear(n_inputs, 256),
                       nn.ReLU(),
                       nn.Dropout(0.4),
                       nn.Linear(256, n_classes),                   
                       nn.LogSoftmax(dim=1))
-</code></pre>
-<p>Please note that the new layers added now are fully trainable by default.</p>
-<h3 id="2-load-the-model-on-gpu">2. Load the model on GPU</h3>
-<p>We can use a single GPU or multiple GPU(if we have them) using DataParallel from PyTorch. Here is what we can use to detect the GPU as well as the number of GPUs to load the model on GPU. Right now I am training my models on dual NVIDIA Titan RTX GPUs.</p>
-<pre><code># Whether to train on a gpu
+</code></pre><p>Please note that the new layers added now are fully trainable by default.</p><h3 id=2-load-the-model-on-gpu>2. Load the model on GPU</h3><p>We can use a single GPU or multiple GPU(if we have them) using DataParallel from PyTorch. Here is what we can use to detect the GPU as well as the number of GPUs to load the model on GPU. Right now I am training my models on dual NVIDIA Titan RTX GPUs.</p><pre><code># Whether to train on a gpu
 train_on_gpu = cuda.is_available()
 print(f'Train on gpu: {train_on_gpu}')
 
@@ -671,332 +200,220 @@ if train_on_gpu:
 
 if multi_gpu:
     model = nn.DataParallel(model)
-</code></pre>
-<h3 id="3-define-criterion-and-optimizers">3. Define criterion and optimizers</h3>
-<p>One of the most important things to notice when you are training any model is the choice of loss-function and the optimizer used. Here we want to use categorical cross-entropy as we have got a multiclass classification problem and the 
-
-<a href="https://cs231n.github.io/neural-networks-3/#ada" target="_blank" rel="nofollow noopener">Adam</a>
- optimizer, which is the most commonly used optimizer. But since we are applying a LogSoftmax operation on the output of our model, we will be using the NLL loss.</p>
-<pre><code>from torch import optim
+</code></pre><h3 id=3-define-criterion-and-optimizers>3. Define criterion and optimizers</h3><p>One of the most important things to notice when you are training any model is the choice of loss-function and the optimizer used. Here we want to use categorical cross-entropy as we have got a multiclass classification problem and the
+<a href=https://cs231n.github.io/neural-networks-3/#ada target=_blank rel="nofollow noopener">Adam</a>
+optimizer, which is the most commonly used optimizer. But since we are applying a LogSoftmax operation on the output of our model, we will be using the NLL loss.</p><pre><code>from torch import optim
 
 criteration = nn.NLLLoss()
 optimizer = optim.Adam(model.parameters())
-</code></pre>
-<h3 id="4-training-the-model">4. Training the model</h3>
-<p>Given below is the full code used to train the model. It might look pretty big on its own, but essentially what we are doing is as follows:</p>
-<ul>
-<li>
-<p>Start running epochs. In each epoch-</p>
-</li>
-<li>
-<p>Set the model mode to train using model.train().</p>
-</li>
-<li>
-<p>Loop through the data using the train dataloader.</p>
-</li>
-<li>
-<p>Load your data to the GPU using the data, target = data.cuda(), target.cuda() command</p>
-</li>
-<li>
-<p>Set the existing gradients in the optimizer to zero using optimizer.zero_grad()</p>
-</li>
-<li>
-<p>Run the forward pass through the batch using output = model(data)</p>
-</li>
-<li>
-<p>Compute loss using loss = criterion(output, target)</p>
-</li>
-<li>
-<p>Backpropagate the losses through the network using loss.backward()</p>
-</li>
-<li>
-<p>Take an optimizer step to change the weights in the whole network using optimizer.step()</p>
-</li>
-<li>
-<p>All the other steps in the training loop are just to maintain the history and calculate accuracy.</p>
-</li>
-<li>
-<p>Set the model mode to eval using model.eval().</p>
-</li>
-<li>
-<p>Get predictions for the validation data using valid_loader and calculate valid_loss and valid_acc</p>
-</li>
-<li>
-<p>Print the validation loss and validation accuracy results every print_every epoch.</p>
-</li>
-<li>
-<p>Save the best model based on validation loss.</p>
-</li>
-<li>
-<p><strong>Early Stopping:</strong> If the cross-validation loss doesn’t improve for max_epochs_stop stop the training and load the best available model with the minimum validation loss.</p>
-</li>
-</ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">train</span>(model,
+</code></pre><h3 id=4-training-the-model>4. Training the model</h3><p>Given below is the full code used to train the model. It might look pretty big on its own, but essentially what we are doing is as follows:</p><ul><li><p>Start running epochs. In each epoch-</p></li><li><p>Set the model mode to train using model.train().</p></li><li><p>Loop through the data using the train dataloader.</p></li><li><p>Load your data to the GPU using the data, target = data.cuda(), target.cuda() command</p></li><li><p>Set the existing gradients in the optimizer to zero using optimizer.zero_grad()</p></li><li><p>Run the forward pass through the batch using output = model(data)</p></li><li><p>Compute loss using loss = criterion(output, target)</p></li><li><p>Backpropagate the losses through the network using loss.backward()</p></li><li><p>Take an optimizer step to change the weights in the whole network using optimizer.step()</p></li><li><p>All the other steps in the training loop are just to maintain the history and calculate accuracy.</p></li><li><p>Set the model mode to eval using model.eval().</p></li><li><p>Get predictions for the validation data using valid_loader and calculate valid_loss and valid_acc</p></li><li><p>Print the validation loss and validation accuracy results every print_every epoch.</p></li><li><p>Save the best model based on validation loss.</p></li><li><p><strong>Early Stopping:</strong> If the cross-validation loss doesn’t improve for max_epochs_stop stop the training and load the best available model with the minimum validation loss.</p></li></ul><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>train</span>(model,
           criterion,
           optimizer,
           train_loader,
           valid_loader,
           save_file_name,
-          max_epochs_stop<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>,
-          n_epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>,
-          print_every<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>):
-    <span style="color:#e6db74">&#34;&#34;&#34;Train a PyTorch Model
-</span><span style="color:#e6db74">    Params
-</span><span style="color:#e6db74">    --------
-</span><span style="color:#e6db74">        model (PyTorch model): cnn to train
-</span><span style="color:#e6db74">        criterion (PyTorch loss): objective to minimize
-</span><span style="color:#e6db74">        optimizer (PyTorch optimizier): optimizer to compute gradients of model parameters
-</span><span style="color:#e6db74">        train_loader (PyTorch dataloader): training dataloader to iterate through
-</span><span style="color:#e6db74">        valid_loader (PyTorch dataloader): validation dataloader used for early stopping
-</span><span style="color:#e6db74">        save_file_name (str ending in &#39;.pt&#39;): file path to save the model state dict
-</span><span style="color:#e6db74">        max_epochs_stop (int): maximum number of epochs with no improvement in validation loss for early stopping
-</span><span style="color:#e6db74">        n_epochs (int): maximum number of training epochs
-</span><span style="color:#e6db74">        print_every (int): frequency of epochs to print training stats
-</span><span style="color:#e6db74">    Returns
-</span><span style="color:#e6db74">    --------
-</span><span style="color:#e6db74">        model (PyTorch model): trained cnn with best weights
-</span><span style="color:#e6db74">        history (DataFrame): history of train and validation loss and accuracy
-</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+          max_epochs_stop<span style=color:#f92672>=</span><span style=color:#ae81ff>3</span>,
+          n_epochs<span style=color:#f92672>=</span><span style=color:#ae81ff>20</span>,
+          print_every<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>):
+    <span style=color:#e6db74>&#34;&#34;&#34;Train a PyTorch Model
+</span><span style=color:#e6db74>    Params
+</span><span style=color:#e6db74>    --------
+</span><span style=color:#e6db74>        model (PyTorch model): cnn to train
+</span><span style=color:#e6db74>        criterion (PyTorch loss): objective to minimize
+</span><span style=color:#e6db74>        optimizer (PyTorch optimizier): optimizer to compute gradients of model parameters
+</span><span style=color:#e6db74>        train_loader (PyTorch dataloader): training dataloader to iterate through
+</span><span style=color:#e6db74>        valid_loader (PyTorch dataloader): validation dataloader used for early stopping
+</span><span style=color:#e6db74>        save_file_name (str ending in &#39;.pt&#39;): file path to save the model state dict
+</span><span style=color:#e6db74>        max_epochs_stop (int): maximum number of epochs with no improvement in validation loss for early stopping
+</span><span style=color:#e6db74>        n_epochs (int): maximum number of training epochs
+</span><span style=color:#e6db74>        print_every (int): frequency of epochs to print training stats
+</span><span style=color:#e6db74>    Returns
+</span><span style=color:#e6db74>    --------
+</span><span style=color:#e6db74>        model (PyTorch model): trained cnn with best weights
+</span><span style=color:#e6db74>        history (DataFrame): history of train and validation loss and accuracy
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
 
-    <span style="color:#75715e"># Early stopping intialization</span>
-    epochs_no_improve <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-    valid_loss_min <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>Inf
+    <span style=color:#75715e># Early stopping intialization</span>
+    epochs_no_improve <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+    valid_loss_min <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>Inf
 
-    valid_max_acc <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-    history <span style="color:#f92672">=</span> []
+    valid_max_acc <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+    history <span style=color:#f92672>=</span> []
 
-    <span style="color:#75715e"># Number of epochs already trained (if using loaded in model weights)</span>
-    <span style="color:#66d9ef">try</span>:
-        <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Model has been trained for: {model.epochs} epochs.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>)
-    <span style="color:#66d9ef">except</span>:
-        model<span style="color:#f92672">.</span>epochs <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-        <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Starting Training from Scratch.</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#39;</span>)
+    <span style=color:#75715e># Number of epochs already trained (if using loaded in model weights)</span>
+    <span style=color:#66d9ef>try</span>:
+        <span style=color:#66d9ef>print</span>(f<span style=color:#e6db74>&#39;Model has been trained for: {model.epochs} epochs.</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#39;</span>)
+    <span style=color:#66d9ef>except</span>:
+        model<span style=color:#f92672>.</span>epochs <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+        <span style=color:#66d9ef>print</span>(f<span style=color:#e6db74>&#39;Starting Training from Scratch.</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>&#39;</span>)
 
-    overall_start <span style="color:#f92672">=</span> timer()
+    overall_start <span style=color:#f92672>=</span> timer()
 
-    <span style="color:#75715e"># Main loop</span>
-    <span style="color:#66d9ef">for</span> epoch <span style="color:#f92672">in</span> range(n_epochs):
+    <span style=color:#75715e># Main loop</span>
+    <span style=color:#66d9ef>for</span> epoch <span style=color:#f92672>in</span> range(n_epochs):
 
-        <span style="color:#75715e"># keep track of training and validation loss each epoch</span>
-        train_loss <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
-        valid_loss <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0</span>
+        <span style=color:#75715e># keep track of training and validation loss each epoch</span>
+        train_loss <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.0</span>
+        valid_loss <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.0</span>
 
-        train_acc <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-        valid_acc <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+        train_acc <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+        valid_acc <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
 
-        <span style="color:#75715e"># Set to training</span>
-        model<span style="color:#f92672">.</span>train()
-        start <span style="color:#f92672">=</span> timer()
+        <span style=color:#75715e># Set to training</span>
+        model<span style=color:#f92672>.</span>train()
+        start <span style=color:#f92672>=</span> timer()
 
-        <span style="color:#75715e"># Training loop</span>
-        <span style="color:#66d9ef">for</span> ii, (data, target) <span style="color:#f92672">in</span> enumerate(train_loader):
-            <span style="color:#75715e"># Tensors to gpu</span>
-            <span style="color:#66d9ef">if</span> train_on_gpu:
-                data, target <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>cuda(), target<span style="color:#f92672">.</span>cuda()
+        <span style=color:#75715e># Training loop</span>
+        <span style=color:#66d9ef>for</span> ii, (data, target) <span style=color:#f92672>in</span> enumerate(train_loader):
+            <span style=color:#75715e># Tensors to gpu</span>
+            <span style=color:#66d9ef>if</span> train_on_gpu:
+                data, target <span style=color:#f92672>=</span> data<span style=color:#f92672>.</span>cuda(), target<span style=color:#f92672>.</span>cuda()
 
-            <span style="color:#75715e"># Clear gradients</span>
-            optimizer<span style="color:#f92672">.</span>zero_grad()
-            <span style="color:#75715e"># Predicted outputs are log probabilities</span>
-            output <span style="color:#f92672">=</span> model(data)
+            <span style=color:#75715e># Clear gradients</span>
+            optimizer<span style=color:#f92672>.</span>zero_grad()
+            <span style=color:#75715e># Predicted outputs are log probabilities</span>
+            output <span style=color:#f92672>=</span> model(data)
 
-            <span style="color:#75715e"># Loss and backpropagation of gradients</span>
-            loss <span style="color:#f92672">=</span> criterion(output, target)
-            loss<span style="color:#f92672">.</span>backward()
+            <span style=color:#75715e># Loss and backpropagation of gradients</span>
+            loss <span style=color:#f92672>=</span> criterion(output, target)
+            loss<span style=color:#f92672>.</span>backward()
 
-            <span style="color:#75715e"># Update the parameters</span>
-            optimizer<span style="color:#f92672">.</span>step()
+            <span style=color:#75715e># Update the parameters</span>
+            optimizer<span style=color:#f92672>.</span>step()
 
-            <span style="color:#75715e"># Track train loss by multiplying average loss by number of examples in batch</span>
-            train_loss <span style="color:#f92672">+=</span> loss<span style="color:#f92672">.</span>item() <span style="color:#f92672">*</span> data<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>)
+            <span style=color:#75715e># Track train loss by multiplying average loss by number of examples in batch</span>
+            train_loss <span style=color:#f92672>+=</span> loss<span style=color:#f92672>.</span>item() <span style=color:#f92672>*</span> data<span style=color:#f92672>.</span>size(<span style=color:#ae81ff>0</span>)
 
-            <span style="color:#75715e"># Calculate accuracy by finding max log probability</span>
-            _, pred <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>max(output, dim<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
-            correct_tensor <span style="color:#f92672">=</span> pred<span style="color:#f92672">.</span>eq(target<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>view_as(pred))
-            <span style="color:#75715e"># Need to convert correct tensor from int to float to average</span>
-            accuracy <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>mean(correct_tensor<span style="color:#f92672">.</span>type(torch<span style="color:#f92672">.</span>FloatTensor))
-            <span style="color:#75715e"># Multiply average accuracy times the number of examples in batch</span>
-            train_acc <span style="color:#f92672">+=</span> accuracy<span style="color:#f92672">.</span>item() <span style="color:#f92672">*</span> data<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>)
+            <span style=color:#75715e># Calculate accuracy by finding max log probability</span>
+            _, pred <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>max(output, dim<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>)
+            correct_tensor <span style=color:#f92672>=</span> pred<span style=color:#f92672>.</span>eq(target<span style=color:#f92672>.</span>data<span style=color:#f92672>.</span>view_as(pred))
+            <span style=color:#75715e># Need to convert correct tensor from int to float to average</span>
+            accuracy <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>mean(correct_tensor<span style=color:#f92672>.</span>type(torch<span style=color:#f92672>.</span>FloatTensor))
+            <span style=color:#75715e># Multiply average accuracy times the number of examples in batch</span>
+            train_acc <span style=color:#f92672>+=</span> accuracy<span style=color:#f92672>.</span>item() <span style=color:#f92672>*</span> data<span style=color:#f92672>.</span>size(<span style=color:#ae81ff>0</span>)
 
-            <span style="color:#75715e"># Track training progress</span>
-            <span style="color:#66d9ef">print</span>(
-                f<span style="color:#e6db74">&#39;Epoch: {epoch}</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">{100 * (ii + 1) / len(train_loader):.2f}</span><span style="color:#e6db74">% c</span><span style="color:#e6db74">omplete. {timer() - start:.2f} seconds elapsed in epoch.&#39;</span>,
-                end<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\r</span><span style="color:#e6db74">&#39;</span>)
+            <span style=color:#75715e># Track training progress</span>
+            <span style=color:#66d9ef>print</span>(
+                f<span style=color:#e6db74>&#39;Epoch: {epoch}</span><span style=color:#ae81ff>\t</span><span style=color:#e6db74>{100 * (ii + 1) / len(train_loader):.2f}</span><span style=color:#e6db74>% c</span><span style=color:#e6db74>omplete. {timer() - start:.2f} seconds elapsed in epoch.&#39;</span>,
+                end<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;</span><span style=color:#ae81ff>\r</span><span style=color:#e6db74>&#39;</span>)
 
-        <span style="color:#75715e"># After training loops ends, start validation</span>
-        <span style="color:#66d9ef">else</span>:
-            model<span style="color:#f92672">.</span>epochs <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+        <span style=color:#75715e># After training loops ends, start validation</span>
+        <span style=color:#66d9ef>else</span>:
+            model<span style=color:#f92672>.</span>epochs <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
 
-            <span style="color:#75715e"># Don&#39;t need to keep track of gradients</span>
-            <span style="color:#66d9ef">with</span> torch<span style="color:#f92672">.</span>no_grad():
-                <span style="color:#75715e"># Set to evaluation mode</span>
-                model<span style="color:#f92672">.</span>eval()
+            <span style=color:#75715e># Don&#39;t need to keep track of gradients</span>
+            <span style=color:#66d9ef>with</span> torch<span style=color:#f92672>.</span>no_grad():
+                <span style=color:#75715e># Set to evaluation mode</span>
+                model<span style=color:#f92672>.</span>eval()
 
-                <span style="color:#75715e"># Validation loop</span>
-                <span style="color:#66d9ef">for</span> data, target <span style="color:#f92672">in</span> valid_loader:
-                    <span style="color:#75715e"># Tensors to gpu</span>
-                    <span style="color:#66d9ef">if</span> train_on_gpu:
-                        data, target <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>cuda(), target<span style="color:#f92672">.</span>cuda()
+                <span style=color:#75715e># Validation loop</span>
+                <span style=color:#66d9ef>for</span> data, target <span style=color:#f92672>in</span> valid_loader:
+                    <span style=color:#75715e># Tensors to gpu</span>
+                    <span style=color:#66d9ef>if</span> train_on_gpu:
+                        data, target <span style=color:#f92672>=</span> data<span style=color:#f92672>.</span>cuda(), target<span style=color:#f92672>.</span>cuda()
 
-                    <span style="color:#75715e"># Forward pass</span>
-                    output <span style="color:#f92672">=</span> model(data)
+                    <span style=color:#75715e># Forward pass</span>
+                    output <span style=color:#f92672>=</span> model(data)
 
-                    <span style="color:#75715e"># Validation loss</span>
-                    loss <span style="color:#f92672">=</span> criterion(output, target)
-                    <span style="color:#75715e"># Multiply average loss times the number of examples in batch</span>
-                    valid_loss <span style="color:#f92672">+=</span> loss<span style="color:#f92672">.</span>item() <span style="color:#f92672">*</span> data<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>)
+                    <span style=color:#75715e># Validation loss</span>
+                    loss <span style=color:#f92672>=</span> criterion(output, target)
+                    <span style=color:#75715e># Multiply average loss times the number of examples in batch</span>
+                    valid_loss <span style=color:#f92672>+=</span> loss<span style=color:#f92672>.</span>item() <span style=color:#f92672>*</span> data<span style=color:#f92672>.</span>size(<span style=color:#ae81ff>0</span>)
 
-                    <span style="color:#75715e"># Calculate validation accuracy</span>
-                    _, pred <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>max(output, dim<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
-                    correct_tensor <span style="color:#f92672">=</span> pred<span style="color:#f92672">.</span>eq(target<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>view_as(pred))
-                    accuracy <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>mean(
-                        correct_tensor<span style="color:#f92672">.</span>type(torch<span style="color:#f92672">.</span>FloatTensor))
-                    <span style="color:#75715e"># Multiply average accuracy times the number of examples</span>
-                    valid_acc <span style="color:#f92672">+=</span> accuracy<span style="color:#f92672">.</span>item() <span style="color:#f92672">*</span> data<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>)
+                    <span style=color:#75715e># Calculate validation accuracy</span>
+                    _, pred <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>max(output, dim<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>)
+                    correct_tensor <span style=color:#f92672>=</span> pred<span style=color:#f92672>.</span>eq(target<span style=color:#f92672>.</span>data<span style=color:#f92672>.</span>view_as(pred))
+                    accuracy <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>mean(
+                        correct_tensor<span style=color:#f92672>.</span>type(torch<span style=color:#f92672>.</span>FloatTensor))
+                    <span style=color:#75715e># Multiply average accuracy times the number of examples</span>
+                    valid_acc <span style=color:#f92672>+=</span> accuracy<span style=color:#f92672>.</span>item() <span style=color:#f92672>*</span> data<span style=color:#f92672>.</span>size(<span style=color:#ae81ff>0</span>)
 
-                <span style="color:#75715e"># Calculate average losses</span>
-                train_loss <span style="color:#f92672">=</span> train_loss <span style="color:#f92672">/</span> len(train_loader<span style="color:#f92672">.</span>dataset)
-                valid_loss <span style="color:#f92672">=</span> valid_loss <span style="color:#f92672">/</span> len(valid_loader<span style="color:#f92672">.</span>dataset)
+                <span style=color:#75715e># Calculate average losses</span>
+                train_loss <span style=color:#f92672>=</span> train_loss <span style=color:#f92672>/</span> len(train_loader<span style=color:#f92672>.</span>dataset)
+                valid_loss <span style=color:#f92672>=</span> valid_loss <span style=color:#f92672>/</span> len(valid_loader<span style=color:#f92672>.</span>dataset)
 
-                <span style="color:#75715e"># Calculate average accuracy</span>
-                train_acc <span style="color:#f92672">=</span> train_acc <span style="color:#f92672">/</span> len(train_loader<span style="color:#f92672">.</span>dataset)
-                valid_acc <span style="color:#f92672">=</span> valid_acc <span style="color:#f92672">/</span> len(valid_loader<span style="color:#f92672">.</span>dataset)
+                <span style=color:#75715e># Calculate average accuracy</span>
+                train_acc <span style=color:#f92672>=</span> train_acc <span style=color:#f92672>/</span> len(train_loader<span style=color:#f92672>.</span>dataset)
+                valid_acc <span style=color:#f92672>=</span> valid_acc <span style=color:#f92672>/</span> len(valid_loader<span style=color:#f92672>.</span>dataset)
 
-                history<span style="color:#f92672">.</span>append([train_loss, valid_loss, train_acc, valid_acc])
+                history<span style=color:#f92672>.</span>append([train_loss, valid_loss, train_acc, valid_acc])
 
-                <span style="color:#75715e"># Print training and validation results</span>
-                <span style="color:#66d9ef">if</span> (epoch <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">%</span> print_every <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
-                    <span style="color:#66d9ef">print</span>(
-                        f<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Epoch: {epoch} </span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">Training Loss: {train_loss:.4f} </span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">Validation Loss: {valid_loss:.4f}&#39;</span>
+                <span style=color:#75715e># Print training and validation results</span>
+                <span style=color:#66d9ef>if</span> (epoch <span style=color:#f92672>+</span> <span style=color:#ae81ff>1</span>) <span style=color:#f92672>%</span> print_every <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span>:
+                    <span style=color:#66d9ef>print</span>(
+                        f<span style=color:#e6db74>&#39;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>Epoch: {epoch} </span><span style=color:#ae81ff>\t</span><span style=color:#e6db74>Training Loss: {train_loss:.4f} </span><span style=color:#ae81ff>\t</span><span style=color:#e6db74>Validation Loss: {valid_loss:.4f}&#39;</span>
                     )
-                    <span style="color:#66d9ef">print</span>(
-                        f<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\t\t</span><span style="color:#e6db74">Training Accuracy: {100 * train_acc:.2f}%</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74"> Validation Accuracy: {100 * valid_acc:.2f}%&#39;</span>
+                    <span style=color:#66d9ef>print</span>(
+                        f<span style=color:#e6db74>&#39;</span><span style=color:#ae81ff>\t\t</span><span style=color:#e6db74>Training Accuracy: {100 * train_acc:.2f}%</span><span style=color:#ae81ff>\t</span><span style=color:#e6db74> Validation Accuracy: {100 * valid_acc:.2f}%&#39;</span>
                     )
 
-                <span style="color:#75715e"># Save the model if validation loss decreases</span>
-                <span style="color:#66d9ef">if</span> valid_loss <span style="color:#f92672">&lt;</span> valid_loss_min:
-                    <span style="color:#75715e"># Save model</span>
-                    torch<span style="color:#f92672">.</span>save(model<span style="color:#f92672">.</span>state_dict(), save_file_name)
-                    <span style="color:#75715e"># Track improvement</span>
-                    epochs_no_improve <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-                    valid_loss_min <span style="color:#f92672">=</span> valid_loss
-                    valid_best_acc <span style="color:#f92672">=</span> valid_acc
-                    best_epoch <span style="color:#f92672">=</span> epoch
+                <span style=color:#75715e># Save the model if validation loss decreases</span>
+                <span style=color:#66d9ef>if</span> valid_loss <span style=color:#f92672>&lt;</span> valid_loss_min:
+                    <span style=color:#75715e># Save model</span>
+                    torch<span style=color:#f92672>.</span>save(model<span style=color:#f92672>.</span>state_dict(), save_file_name)
+                    <span style=color:#75715e># Track improvement</span>
+                    epochs_no_improve <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
+                    valid_loss_min <span style=color:#f92672>=</span> valid_loss
+                    valid_best_acc <span style=color:#f92672>=</span> valid_acc
+                    best_epoch <span style=color:#f92672>=</span> epoch
 
-                <span style="color:#75715e"># Otherwise increment count of epochs with no improvement</span>
-                <span style="color:#66d9ef">else</span>:
-                    epochs_no_improve <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
-                    <span style="color:#75715e"># Trigger early stopping</span>
-                    <span style="color:#66d9ef">if</span> epochs_no_improve <span style="color:#f92672">&gt;=</span> max_epochs_stop:
-                        <span style="color:#66d9ef">print</span>(
-                            f<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Early Stopping! Total epochs: {epoch}. Best epoch: {best_epoch} with loss: {valid_loss_min:.2f} and acc: {100 * valid_acc:.2f}%&#39;</span>
+                <span style=color:#75715e># Otherwise increment count of epochs with no improvement</span>
+                <span style=color:#66d9ef>else</span>:
+                    epochs_no_improve <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
+                    <span style=color:#75715e># Trigger early stopping</span>
+                    <span style=color:#66d9ef>if</span> epochs_no_improve <span style=color:#f92672>&gt;=</span> max_epochs_stop:
+                        <span style=color:#66d9ef>print</span>(
+                            f<span style=color:#e6db74>&#39;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>Early Stopping! Total epochs: {epoch}. Best epoch: {best_epoch} with loss: {valid_loss_min:.2f} and acc: {100 * valid_acc:.2f}%&#39;</span>
                         )
-                        total_time <span style="color:#f92672">=</span> timer() <span style="color:#f92672">-</span> overall_start
-                        <span style="color:#66d9ef">print</span>(
-                            f<span style="color:#e6db74">&#39;{total_time:.2f} total seconds elapsed. {total_time / (epoch+1):.2f} seconds per epoch.&#39;</span>
+                        total_time <span style=color:#f92672>=</span> timer() <span style=color:#f92672>-</span> overall_start
+                        <span style=color:#66d9ef>print</span>(
+                            f<span style=color:#e6db74>&#39;{total_time:.2f} total seconds elapsed. {total_time / (epoch+1):.2f} seconds per epoch.&#39;</span>
                         )
 
-                        <span style="color:#75715e"># Load the best state dict</span>
-                        model<span style="color:#f92672">.</span>load_state_dict(torch<span style="color:#f92672">.</span>load(save_file_name))
-                        <span style="color:#75715e"># Attach the optimizer</span>
-                        model<span style="color:#f92672">.</span>optimizer <span style="color:#f92672">=</span> optimizer
+                        <span style=color:#75715e># Load the best state dict</span>
+                        model<span style=color:#f92672>.</span>load_state_dict(torch<span style=color:#f92672>.</span>load(save_file_name))
+                        <span style=color:#75715e># Attach the optimizer</span>
+                        model<span style=color:#f92672>.</span>optimizer <span style=color:#f92672>=</span> optimizer
 
-                        <span style="color:#75715e"># Format history</span>
-                        history <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame(
+                        <span style=color:#75715e># Format history</span>
+                        history <span style=color:#f92672>=</span> pd<span style=color:#f92672>.</span>DataFrame(
                             history,
-                            columns<span style="color:#f92672">=</span>[
-                                <span style="color:#e6db74">&#39;train_loss&#39;</span>, <span style="color:#e6db74">&#39;valid_loss&#39;</span>, <span style="color:#e6db74">&#39;train_acc&#39;</span>,
-                                <span style="color:#e6db74">&#39;valid_acc&#39;</span>
+                            columns<span style=color:#f92672>=</span>[
+                                <span style=color:#e6db74>&#39;train_loss&#39;</span>, <span style=color:#e6db74>&#39;valid_loss&#39;</span>, <span style=color:#e6db74>&#39;train_acc&#39;</span>,
+                                <span style=color:#e6db74>&#39;valid_acc&#39;</span>
                             ])
-                        <span style="color:#66d9ef">return</span> model, history
+                        <span style=color:#66d9ef>return</span> model, history
 
-    <span style="color:#75715e"># Attach the optimizer</span>
-    model<span style="color:#f92672">.</span>optimizer <span style="color:#f92672">=</span> optimizer
-    <span style="color:#75715e"># Record overall time and print out stats</span>
-    total_time <span style="color:#f92672">=</span> timer() <span style="color:#f92672">-</span> overall_start
-    <span style="color:#66d9ef">print</span>(
-        f<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">Best epoch: {best_epoch} with loss: {valid_loss_min:.2f} and acc: {100 * valid_acc:.2f}%&#39;</span>
+    <span style=color:#75715e># Attach the optimizer</span>
+    model<span style=color:#f92672>.</span>optimizer <span style=color:#f92672>=</span> optimizer
+    <span style=color:#75715e># Record overall time and print out stats</span>
+    total_time <span style=color:#f92672>=</span> timer() <span style=color:#f92672>-</span> overall_start
+    <span style=color:#66d9ef>print</span>(
+        f<span style=color:#e6db74>&#39;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>Best epoch: {best_epoch} with loss: {valid_loss_min:.2f} and acc: {100 * valid_acc:.2f}%&#39;</span>
     )
-    <span style="color:#66d9ef">print</span>(
-        f<span style="color:#e6db74">&#39;{total_time:.2f} total seconds elapsed. {total_time / (epoch):.2f} seconds per epoch.&#39;</span>
+    <span style=color:#66d9ef>print</span>(
+        f<span style=color:#e6db74>&#39;{total_time:.2f} total seconds elapsed. {total_time / (epoch):.2f} seconds per epoch.&#39;</span>
     )
-    <span style="color:#75715e"># Format history</span>
-    history <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame(
+    <span style=color:#75715e># Format history</span>
+    history <span style=color:#f92672>=</span> pd<span style=color:#f92672>.</span>DataFrame(
         history,
-        columns<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;train_loss&#39;</span>, <span style="color:#e6db74">&#39;valid_loss&#39;</span>, <span style="color:#e6db74">&#39;train_acc&#39;</span>, <span style="color:#e6db74">&#39;valid_acc&#39;</span>])
-    <span style="color:#66d9ef">return</span> model, history
+        columns<span style=color:#f92672>=</span>[<span style=color:#e6db74>&#39;train_loss&#39;</span>, <span style=color:#e6db74>&#39;valid_loss&#39;</span>, <span style=color:#e6db74>&#39;train_acc&#39;</span>, <span style=color:#e6db74>&#39;valid_acc&#39;</span>])
+    <span style=color:#66d9ef>return</span> model, history
 
-<span style="color:#75715e"># Running the model</span>
-model, history <span style="color:#f92672">=</span> train(
+<span style=color:#75715e># Running the model</span>
+model, history <span style=color:#f92672>=</span> train(
     model,
     criterion,
     optimizer,
-    dataloaders[<span style="color:#e6db74">&#39;train&#39;</span>],
-    dataloaders[<span style="color:#e6db74">&#39;val&#39;</span>],
-    save_file_name<span style="color:#f92672">=</span>save_file_name,
-    max_epochs_stop<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>,
-    n_epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>,
-    print_every<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+    dataloaders[<span style=color:#e6db74>&#39;train&#39;</span>],
+    dataloaders[<span style=color:#e6db74>&#39;val&#39;</span>],
+    save_file_name<span style=color:#f92672>=</span>save_file_name,
+    max_epochs_stop<span style=color:#f92672>=</span><span style=color:#ae81ff>3</span>,
+    n_epochs<span style=color:#f92672>=</span><span style=color:#ae81ff>100</span>,
+    print_every<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>)
 
-</code></pre></div><p>Here is the output from running the above code. Just showing the last few epochs. The validation accuracy started at ~55% in the first epoch, and we ended up with a validation accuracy of ~90%.</p>
-<p>
-  
-    <img src="/images/multiclass_image_classification_pytorch/4.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
-    
-
-</p>
-<p>And here are the training curves showing the loss and accuracy metrics:</p>
-<p>
-  
-    <img src="/images/multiclass_image_classification_pytorch/5.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
-    
-
-</p>
-<p>
-  
-      <img src="/images/multiclass_image_classification_pytorch/6.png" alt="Training curves">
-  
-
-</p>
-<hr>
-<h2 id="inference-and-model-results">Inference and Model Results</h2>
-<p>We want our results in different ways to use our model. For one, we require test accuracies and confusion matrices. All of the code for creating these results is in the code notebook.</p>
-<h3 id="1-test-results">1. Test Results</h3>
-<p>The overall accuracy of the test model is:</p>
-<pre><code>Overall Accuracy: 88.65 %
-</code></pre>
-<p>Here is the confusion matrix for results on the test dataset.</p>
-<p>
-  
-    <img src="/images/multiclass_image_classification_pytorch/7.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
-    
-
-</p>
-<p>We can also look at the category wise accuracies. I have also added the train counts to see the results from a new perspective.</p>
-<p>
-  
-    <img src="/images/multiclass_image_classification_pytorch/8.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
-    
-
-</p>
-<h3 id="2-visualizing-predictions-for-single-image">2. Visualizing Predictions for Single Image</h3>
-<p>For deployment purposes, it helps to be able to get predictions for a single image. You can get the code from the notebook.</p>
-<p>
-  
-    <img src="/images/multiclass_image_classification_pytorch/9.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
-    
-
-</p>
-<h3 id="3-visualizing-predictions-for-a-category">3. Visualizing Predictions for a Category</h3>
-<p>We can also see the category wise results for debugging purposes and presentations.</p>
-<p>
-  
-    <img src="/images/multiclass_image_classification_pytorch/10.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
-    
-
-</p>
-<h3 id="4-test-results-with-test-time-augmentation">4. Test results with Test Time Augmentation</h3>
-<p>We can also do test time augmentation to increase our test accuracy. Here I am using a new test data loader and transforms:</p>
-<pre><code># Image transformations
+</code></pre></div><p>Here is the output from running the above code. Just showing the last few epochs. The validation accuracy started at ~55% in the first epoch, and we ended up with a validation accuracy of ~90%.</p><p><img src=/images/multiclass_image_classification_pytorch/4.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><p>And here are the training curves showing the loss and accuracy metrics:</p><p><img src=/images/multiclass_image_classification_pytorch/5.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><p><img src=/images/multiclass_image_classification_pytorch/6.png alt="Training curves"></p><hr><h2 id=inference-and-model-results>Inference and Model Results</h2><p>We want our results in different ways to use our model. For one, we require test accuracies and confusion matrices. All of the code for creating these results is in the code notebook.</p><h3 id=1-test-results>1. Test Results</h3><p>The overall accuracy of the test model is:</p><pre><code>Overall Accuracy: 88.65 %
+</code></pre><p>Here is the confusion matrix for results on the test dataset.</p><p><img src=/images/multiclass_image_classification_pytorch/7.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><p>We can also look at the category wise accuracies. I have also added the train counts to see the results from a new perspective.</p><p><img src=/images/multiclass_image_classification_pytorch/8.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><h3 id=2-visualizing-predictions-for-single-image>2. Visualizing Predictions for Single Image</h3><p>For deployment purposes, it helps to be able to get predictions for a single image. You can get the code from the notebook.</p><p><img src=/images/multiclass_image_classification_pytorch/9.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><h3 id=3-visualizing-predictions-for-a-category>3. Visualizing Predictions for a Category</h3><p>We can also see the category wise results for debugging purposes and presentations.</p><p><img src=/images/multiclass_image_classification_pytorch/10.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><h3 id=4-test-results-with-test-time-augmentation>4. Test results with Test Time Augmentation</h3><p>We can also do test time augmentation to increase our test accuracy. Here I am using a new test data loader and transforms:</p><pre><code># Image transformations
 tta_random_image_transforms = transforms.Compose([
         transforms.RandomResizedCrop(size=256, scale=(0.8, 1.0)),
         transforms.RandomRotation(degrees=15),
@@ -1018,536 +435,52 @@ ttadata = {
 ttadataloader = {
     'test': DataLoader(ttadata['test'], batch_size=512, shuffle=False,num_workers=10)
 }
-</code></pre>
-<p>We can then get the predictions on the test set using the below function:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">tta_preds_n_averaged</span>(model, test_loader,n<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>):
-    <span style="color:#e6db74">&#34;&#34;&#34;Returns the TTA preds from a trained PyTorch model
-</span><span style="color:#e6db74">    Params
-</span><span style="color:#e6db74">    --------
-</span><span style="color:#e6db74">        model (PyTorch model): trained cnn for inference
-</span><span style="color:#e6db74">        test_loader (PyTorch DataLoader): test dataloader
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">    Returns
-</span><span style="color:#e6db74">    --------
-</span><span style="color:#e6db74">        results (array): results for each category
-</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
-    <span style="color:#75715e"># Hold results</span>
-    results <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros((len(test_loader<span style="color:#f92672">.</span>dataset), n_classes))
-    bs <span style="color:#f92672">=</span> test_loader<span style="color:#f92672">.</span>batch_size
-    model<span style="color:#f92672">.</span>eval()
-    <span style="color:#66d9ef">with</span> torch<span style="color:#f92672">.</span>no_grad():
-        <span style="color:#75715e">#aug loop:</span>
-        <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(n):
-            <span style="color:#75715e"># Testing loop</span>
-            tmp_pred <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros((len(test_loader<span style="color:#f92672">.</span>dataset), n_classes))
-            <span style="color:#66d9ef">for</span> i,(data, targets) <span style="color:#f92672">in</span> enumerate(tqdm<span style="color:#f92672">.</span>tqdm(test_loader)):
-
-                <span style="color:#75715e"># Tensors to gpu</span>
-                <span style="color:#66d9ef">if</span> train_on_gpu:
-                    data, targets <span style="color:#f92672">=</span> data<span style="color:#f92672">.</span>to(<span style="color:#e6db74">&#39;cuda&#39;</span>), targets<span style="color:#f92672">.</span>to(<span style="color:#e6db74">&#39;cuda&#39;</span>)
-
-                <span style="color:#75715e"># Raw model output</span>
-                out <span style="color:#f92672">=</span> model(data)
-                tmp_pred[i<span style="color:#f92672">*</span>bs:(i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">*</span>bs] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array(out<span style="color:#f92672">.</span>cpu())
-
-            results<span style="color:#f92672">+=</span>tmp_pred
-    <span style="color:#66d9ef">return</span> results<span style="color:#f92672">/</span>n
-</code></pre></div><p>In the function above, I am applying the tta_random_image_transforms to each image 5 times before getting its prediction. The final prediction is the average of all five predictions. When we use TTA over the whole test dataset, we noticed that the accuracy increased by around 1%</p>
-<pre><code>TTA Accuracy: 89.71%
-</code></pre>
-<p>Also, here is the results for TTA compared to normal results category wise:</p>
-<p>
-  
-    <img src="/images/multiclass_image_classification_pytorch/11.png" alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence">
-    
-
-</p>
-<p>In this small dataset, the TTA might not seem to add much value, but I have noticed that it adds value with big datasets.</p>
-<hr>
-<h2 id="conclusion">Conclusion</h2>
-<p>In this post, I talked about the end to end pipeline for working on a multiclass image classification project using PyTorch. We worked on creating some readymade code to train a model using transfer learning, visualize the results, use Test time augmentation, and got predictions for a single image so that we can deploy our model when needed using any tool like 
-
-<a href="https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582" target="_blank" rel="nofollow noopener">Streamlit</a>
-.</p>
-<p>You can find the complete code for this post on 
-
-<a href="https://github.com/MLWhiz/data_science_blogs/tree/master/compvisblog" target="_blank" rel="nofollow noopener">Github</a>
-.</p>
-<p>If you would like to learn more about Image Classification and Convolutional Neural Networks take a look at the 
-
-<a href="https://www.coursera.org/specializations/deep-learning?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-qdJc22ApgTq6oWNEbD8fdw&amp;siteID=lVarvwc5BD0-qdJc22ApgTq6oWNEbD8fdw&amp;utm_content=10&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Deep Learning Specialization</a>
- from Andrew Ng. Also, to learn more about PyTorch and start from the basics, you can take a look at the 
-
-<a href="https://www.coursera.org/learn/deep-neural-networks-with-pytorch?ranMID=40328&amp;ranEAID=lVarvwc5BD0&amp;ranSiteID=lVarvwc5BD0-qRrseBA2NWUg_WxbnxmDwQ&amp;siteID=lVarvwc5BD0-qRrseBA2NWUg_WxbnxmDwQ&amp;utm_content=2&amp;utm_medium=partners&amp;utm_source=linkshare&amp;utm_campaign=lVarvwc5BD0" target="_blank" rel="nofollow noopener">Deep Neural Networks with PyTorch</a>
- course offered by IBM.</p>
-<p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at 
-
-<a href="https://medium.com/@rahul_agarwal" target="_blank" rel="nofollow noopener">Medium</a>
- or Subscribe to my 
-
-<a href="https://mlwhiz.ck.page/a9b8bda70c" target="_blank" rel="nofollow noopener">blog</a>
-.</p>
-<p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p>
-<p><em>This post was first published 
-
-<a href="https://lionbridge.ai/articles/end-to-end-multiclass-image-classification-using-pytorch-and-transfer-learning/" target="_blank" rel="nofollow noopener">here</a>
-.</em></p>
-
-
-        
-<script async data-uid="8d7942551b" src="https://mlwhiz.ck.page/8d7942551b/index.js"></script>
-
-
-<div class="shareaholic-canvas" data-app="share_buttons" data-app-id="28372088" style="margin-bottom: 1px;"></div>
-
-<a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel="nofollow"><IMG border="0"   alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a>
-
-<div id="disqus_thread"></div>
-<script type="application/javascript">
-    var disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "mlwhiz" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-        </div>
-      </div>
-      <div class="col-lg-4">
-  
-
-  <div class="widget">
-    
-<script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#00aaa1', 'S6S3NPCD');kofiwidget2.draw();</script>
-
-</div>
-  <div class="widget">
-    
-    <h4 class="widget-title">About Me</h4>
-    
-    <img src="https://mlwhiz.com/images/author.jpg" alt=""
-      class="img-fluid author-thumb-sm d-block mx-auto rounded-circle mb-4">
-    
-    <p>I’m a data scientist consultant and big data engineer based in Bangalore, where I am currently working with WalmartLabs .</p>
-    <a href="https://mlwhiz.com/about/" class="btn btn-outline-primary">Know More</a>
-    
-  </div>
-
-
-  
-  <div class="widget">
-    <h4 class="widget-title">Topics</h4>
-    <ul class="list-unstyled">
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/awesome-guides">Awesome Guides</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/big-data">Big Data</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/computer-vision">Computer Vision</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/data-science">Data Science</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/deep-learning">Deep Learning</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/learning-resources">Learning Resources</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/natural-language-processing">Natural Language Processing</a>
-      </li>
-      <li><a class="categoryStyle" style="color:#fff"
-          href="/categories/programming">Programming</a>
-      </li>
-    </ul>
-  </div>
-  
-  <div class="widget">
-    <h4 class="widget-title">Tags</h4>
-    <ul class="list-inline">
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/algorithms">Algorithms</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/artificial-intelligence">Artificial Intelligence</a></li>
-          
-
-
-          
-
-
-          
-
-
-          
-
-
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/dask">Dask</a></li>
-          
-
-
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/deployment">Deployment</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/ec2">Ec2</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/generative-adversarial-networks">Generative Adversarial Networks</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/graphs">Graphs</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/image-classification">Image Classification</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/instance-segmentation">Instance Segmentation</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/interpretability">Interpretability</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/jobs">Jobs</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/kaggle">Kaggle</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/language-modeling">Language Modeling</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/machine-learning">Machine Learning</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/math">Math</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/multiprocessing">Multiprocessing</a></li>
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/object-detection">Object Detection</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/opinion">Opinion</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/pandas">Pandas</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/production">Production</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/productivity">Productivity</a></li>
-          
-
-
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/python">Python</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/pytorch">Pytorch</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/spark">Spark</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/sql">Sql</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/statistics">Statistics</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/streamlit">Streamlit</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/text-classification">Text Classification</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/timeseries">Timeseries</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/tools">Tools</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/translation">Translation</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/visualization">Visualization</a></li>
-          
-
-
-          
-          <li class="list-inline-item"><a class="tagStyle text-white"
-              href="/tags/xgboost">Xgboost</a></li>
-          
-    </ul>
-  </div>
-  
-  <div class="widget">
-    <h4 class="widget-title">Connect With Me</h4>
-    <ul class="list-inline social-links">
-      
-      <li class="list-inline-item"><a href="https://www.linkedin.com/in/rahulagwl/"><i class="ti-linkedin"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://medium.com/@rahul_agarwal"><i class="ti-book"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://twitter.com/MLWhiz"><i class="ti-twitter-alt"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://www.facebook.com/mlwhizblog"><i class="ti-facebook"></i></a></li>
-      
-      <li class="list-inline-item"><a href="https://github.com/MLWhiz"><i class="ti-github"></i></a></li>
-      
-    </ul>
-  </div>
-  
-  
-<script async data-uid="bfe9f82f10" src="https://mlwhiz.ck.page/bfe9f82f10/index.js"></script>
-
-<script async data-uid="3452d924e2" src="https://mlwhiz.ck.page/3452d924e2/index.js"></script>
-
-</div>
-
-    </div>
-
-
-  </div>
-</section>
-
-
-
-<footer>
-  <div class="container">
-    <div class="row">
-      <div class="col-12 text-center mb-5">
-        <a href="https://mlwhiz.com/"><img src="https://mlwhiz.com/images/logo.png" class="img-fluid-custom-bottom" alt="MLWhiz: Helping You Learn Data Science!"></a>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Contact Me</h6>
-        <ul class="list-unstyled">
-          <li class="mb-3"><i class="ti-location-pin mr-3 text-primary"></i>India, Bangalore</li>
-          <li class="mb-3"><a class="text-dark" href="mailto:rahul@mlwhiz.com"><i
-                class="ti-email mr-3 text-primary"></i>rahul@mlwhiz.com</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Social Contacts</h6>
-        <ul class="list-unstyled">
-          
-          <li class="mb-3"><a class="text-dark" href="https://www.linkedin.com/in/rahulagwl/">Linkedin</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://medium.com/@rahul_agarwal">Medium</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://twitter.com/MLWhiz">Twitter</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://www.facebook.com/mlwhizblog">Facebook</a></li>
-          
-          <li class="mb-3"><a class="text-dark" href="https://github.com/MLWhiz">Github</a></li>
-          
-        </ul>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Categories</h6>
-        <ul class="list-unstyled">
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/awesome-guides">Awesome Guides</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/big-data">Big Data</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/computer-vision">Computer Vision</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/data-science">Data Science</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/deep-learning">Deep Learning</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/learning-resources">Learning Resources</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/natural-language-processing">Natural Language Processing</a>
-          </li>
-          <li class="mb-3"><a class="text-dark"
-              href="/categories/programming">Programming</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-lg-3 col-sm-6 mb-5">
-        <h6 class="mb-4">Quick Links</h6>
-        <ul class="list-unstyled">
-          
-          <li class="mb-3"><a class="text-dark" href="https://mlwhiz.com/about">About</a></li>
-          
-          
-          <li class="mb-3"><a class="text-dark" href="https://mlwhiz.com/blog">Post</a></li>
-          
-          
-          
-        </ul>
-      </div>
-      <div class="col-12 border-top py-4 text-center">
-        Copyright © 2020 <a href="https://mlwhiz.com">MLWhiz</a> All Rights Reserved
-      </div>
-    </div>
-  </div>
-</footer>
-
-
-
-<script>
-  var indexURL = "https://mlwhiz.com/index.json"
-</script>
-
-<!-- JS Plugins -->
-
-<script src="https://mlwhiz.com/plugins/compressjscss/main.js"></script>
-
-<!-- Main Script -->
-
-<script src="https://mlwhiz.com/js/script.min.js"></script>
-<!-- google analitycs -->
-<script>
-  (function (i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r;
-    i[r] = i[r] || function () {
-      (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date();
-    a = s.createElement(o),
-      m = s.getElementsByTagName(o)[0];
-    a.async = 1;
-    a.src = g;
-    m.parentNode.insertBefore(a, m)
-  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-  ga('create', 'UA-54777926-1', 'auto');
-  ga('send', 'pageview');
-</script>
-</body>
-</html>
+</code></pre><p>We can then get the predictions on the test set using the below function:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>tta_preds_n_averaged</span>(model, test_loader,n<span style=color:#f92672>=</span><span style=color:#ae81ff>5</span>):
+    <span style=color:#e6db74>&#34;&#34;&#34;Returns the TTA preds from a trained PyTorch model
+</span><span style=color:#e6db74>    Params
+</span><span style=color:#e6db74>    --------
+</span><span style=color:#e6db74>        model (PyTorch model): trained cnn for inference
+</span><span style=color:#e6db74>        test_loader (PyTorch DataLoader): test dataloader
+</span><span style=color:#e6db74>
+</span><span style=color:#e6db74>    Returns
+</span><span style=color:#e6db74>    --------
+</span><span style=color:#e6db74>        results (array): results for each category
+</span><span style=color:#e6db74>    &#34;&#34;&#34;</span>
+    <span style=color:#75715e># Hold results</span>
+    results <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>zeros((len(test_loader<span style=color:#f92672>.</span>dataset), n_classes))
+    bs <span style=color:#f92672>=</span> test_loader<span style=color:#f92672>.</span>batch_size
+    model<span style=color:#f92672>.</span>eval()
+    <span style=color:#66d9ef>with</span> torch<span style=color:#f92672>.</span>no_grad():
+        <span style=color:#75715e>#aug loop:</span>
+        <span style=color:#66d9ef>for</span> _ <span style=color:#f92672>in</span> range(n):
+            <span style=color:#75715e># Testing loop</span>
+            tmp_pred <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>zeros((len(test_loader<span style=color:#f92672>.</span>dataset), n_classes))
+            <span style=color:#66d9ef>for</span> i,(data, targets) <span style=color:#f92672>in</span> enumerate(tqdm<span style=color:#f92672>.</span>tqdm(test_loader)):
+
+                <span style=color:#75715e># Tensors to gpu</span>
+                <span style=color:#66d9ef>if</span> train_on_gpu:
+                    data, targets <span style=color:#f92672>=</span> data<span style=color:#f92672>.</span>to(<span style=color:#e6db74>&#39;cuda&#39;</span>), targets<span style=color:#f92672>.</span>to(<span style=color:#e6db74>&#39;cuda&#39;</span>)
+
+                <span style=color:#75715e># Raw model output</span>
+                out <span style=color:#f92672>=</span> model(data)
+                tmp_pred[i<span style=color:#f92672>*</span>bs:(i<span style=color:#f92672>+</span><span style=color:#ae81ff>1</span>)<span style=color:#f92672>*</span>bs] <span style=color:#f92672>=</span> np<span style=color:#f92672>.</span>array(out<span style=color:#f92672>.</span>cpu())
+
+            results<span style=color:#f92672>+=</span>tmp_pred
+    <span style=color:#66d9ef>return</span> results<span style=color:#f92672>/</span>n
+</code></pre></div><p>In the function above, I am applying the tta_random_image_transforms to each image 5 times before getting its prediction. The final prediction is the average of all five predictions. When we use TTA over the whole test dataset, we noticed that the accuracy increased by around 1%</p><pre><code>TTA Accuracy: 89.71%
+</code></pre><p>Also, here is the results for TTA compared to normal results category wise:</p><p><img src=/images/multiclass_image_classification_pytorch/11.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><p>In this small dataset, the TTA might not seem to add much value, but I have noticed that it adds value with big datasets.</p><hr><h2 id=conclusion>Conclusion</h2><p>In this post, I talked about the end to end pipeline for working on a multiclass image classification project using PyTorch. We worked on creating some readymade code to train a model using transfer learning, visualize the results, use Test time augmentation, and got predictions for a single image so that we can deploy our model when needed using any tool like
+<a href=https://towardsdatascience.com/how-to-write-web-apps-using-simple-python-for-data-scientists-a227a1a01582 target=_blank rel="nofollow noopener">Streamlit</a>
+.</p><p>You can find the complete code for this post on
+<a href=https://github.com/MLWhiz/data_science_blogs/tree/master/compvisblog target=_blank rel="nofollow noopener">Github</a>
+.</p><p>If you would like to learn more about Image Classification and Convolutional Neural Networks take a look at the
+<a href="https://www.coursera.org/specializations/deep-learning?ranMID=40328&ranEAID=lVarvwc5BD0&ranSiteID=lVarvwc5BD0-qdJc22ApgTq6oWNEbD8fdw&siteID=lVarvwc5BD0-qdJc22ApgTq6oWNEbD8fdw&utm_content=10&utm_medium=partners&utm_source=linkshare&utm_campaign=lVarvwc5BD0" target=_blank rel="nofollow noopener">Deep Learning Specialization</a>
+from Andrew Ng. Also, to learn more about PyTorch and start from the basics, you can take a look at the
+<a href="https://www.coursera.org/learn/deep-neural-networks-with-pytorch?ranMID=40328&ranEAID=lVarvwc5BD0&ranSiteID=lVarvwc5BD0-qRrseBA2NWUg_WxbnxmDwQ&siteID=lVarvwc5BD0-qRrseBA2NWUg_WxbnxmDwQ&utm_content=2&utm_medium=partners&utm_source=linkshare&utm_campaign=lVarvwc5BD0" target=_blank rel="nofollow noopener">Deep Neural Networks with PyTorch</a>
+course offered by IBM.</p><p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at
+<a href=https://medium.com/@rahul_agarwal target=_blank rel="nofollow noopener">Medium</a>
+or Subscribe to my
+<a href=https://mlwhiz.ck.page/a9b8bda70c target=_blank rel="nofollow noopener">blog</a>
+.</p><p>Also, a small disclaimer — There might be some affiliate links in this post to relevant resources, as sharing knowledge is never a bad idea.</p><p><em>This post was first published
+<a href=https://lionbridge.ai/articles/end-to-end-multiclass-image-classification-using-pytorch-and-transfer-learning/ target=_blank rel="nofollow noopener">here</a>
+.</em></p><script async data-uid=8d7942551b src=https://mlwhiz.ck.page/8d7942551b/index.js></script><div class=shareaholic-canvas data-app=share_buttons data-app-id=28372088 style=margin-bottom:1px></div><a href="https://click.linksynergy.com/fs-bin/click?id=lVarvwc5BD0&offerid=467035.372&subid=0&type=4" rel=nofollow><img border=0 alt="Start your future with a Data Science Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=467035.372&subid=0&type=4&gridnum=16"></a><div id=disqus_thread></div><script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return;}
+var d=document,s=d.createElement('script');s.async=true;s.src='//'+"mlwhiz"+'.disqus.com/embed.js';s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div></div><div class=col-lg-4><div class=widget><script type=text/javascript src=https://ko-fi.com/widgets/widget_2.js></script><script type=text/javascript>kofiwidget2.init('Support Me on Ko-fi','#00aaa1','S6S3NPCD');kofiwidget2.draw();</script></div><div class=widget><h4 class=widget-title>About Me</h4><img src=https://mlwhiz.com/images/author.jpg alt class="img-fluid author-thumb-sm d-block mx-auto rounded-circle mb-4"><p>I’m a data scientist consultant and big data engineer based in Bangalore, where I am currently working with WalmartLabs .</p><a href=https://mlwhiz.com/about/ class="btn btn-outline-primary">Know More</a></div><div class=widget><h4 class=widget-title>Topics</h4><ul class=list-unstyled><li><a class=categoryStyle style=color:#fff href=/categories/awesome-guides>Awesome Guides</a></li><li><a class=categoryStyle style=color:#fff href=/categories/big-data>Big Data</a></li><li><a class=categoryStyle style=color:#fff href=/categories/computer-vision>Computer Vision</a></li><li><a class=categoryStyle style=color:#fff href=/categories/data-science>Data Science</a></li><li><a class=categoryStyle style=color:#fff href=/categories/deep-learning>Deep Learning</a></li><li><a class=categoryStyle style=color:#fff href=/categories/learning-resources>Learning Resources</a></li><li><a class=categoryStyle style=color:#fff href=/categories/natural-language-processing>Natural Language Processing</a></li><li><a class=categoryStyle style=color:#fff href=/categories/programming>Programming</a></li></ul></div><div class=widget><h4 class=widget-title>Tags</h4><ul class=list-inline><li class=list-inline-item><a class="tagStyle text-white" href=/tags/algorithms>Algorithms</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/artificial-intelligence>Artificial Intelligence</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/dask>Dask</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/deployment>Deployment</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/ec2>Ec2</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/generative-adversarial-networks>Generative Adversarial Networks</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/graphs>Graphs</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/image-classification>Image Classification</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/instance-segmentation>Instance Segmentation</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/interpretability>Interpretability</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/jobs>Jobs</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/kaggle>Kaggle</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/language-modeling>Language Modeling</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/machine-learning>Machine Learning</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/math>Math</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/multiprocessing>Multiprocessing</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/object-detection>Object Detection</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/opinion>Opinion</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/pandas>Pandas</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/production>Production</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/productivity>Productivity</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/python>Python</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/pytorch>Pytorch</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/spark>Spark</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/sql>Sql</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/statistics>Statistics</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/streamlit>Streamlit</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/text-classification>Text Classification</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/timeseries>Timeseries</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/tools>Tools</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/translation>Translation</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/visualization>Visualization</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/xgboost>Xgboost</a></li></ul></div><div class=widget><h4 class=widget-title>Connect With Me</h4><ul class="list-inline social-links"><li class=list-inline-item><a href=https://www.linkedin.com/in/rahulagwl/><i class=ti-linkedin></i></a></li><li class=list-inline-item><a href=https://medium.com/@rahul_agarwal><i class=ti-book></i></a></li><li class=list-inline-item><a href=https://twitter.com/MLWhiz><i class=ti-twitter-alt></i></a></li><li class=list-inline-item><a href=https://www.facebook.com/mlwhizblog><i class=ti-facebook></i></a></li><li class=list-inline-item><a href=https://github.com/MLWhiz><i class=ti-github></i></a></li></ul></div><script async data-uid=bfe9f82f10 src=https://mlwhiz.ck.page/bfe9f82f10/index.js></script><script async data-uid=3452d924e2 src=https://mlwhiz.ck.page/3452d924e2/index.js></script></div></div></div></section><footer><div class=container><div class=row><div class="col-12 text-center mb-5"><a href=https://mlwhiz.com/><img src=https://mlwhiz.com/images/logo.png class=img-fluid-custom-bottom alt="MLWhiz: Helping You Learn Data Science!"></a></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Contact Me</h6><ul class=list-unstyled><li class=mb-3><i class="ti-location-pin mr-3 text-primary"></i>India, Bangalore</li><li class=mb-3><a class=text-dark href=mailto:rahul@mlwhiz.com><i class="ti-email mr-3 text-primary"></i>rahul@mlwhiz.com</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Social Contacts</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=https://www.linkedin.com/in/rahulagwl/>Linkedin</a></li><li class=mb-3><a class=text-dark href=https://medium.com/@rahul_agarwal>Medium</a></li><li class=mb-3><a class=text-dark href=https://twitter.com/MLWhiz>Twitter</a></li><li class=mb-3><a class=text-dark href=https://www.facebook.com/mlwhizblog>Facebook</a></li><li class=mb-3><a class=text-dark href=https://github.com/MLWhiz>Github</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Categories</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=/categories/awesome-guides>Awesome Guides</a></li><li class=mb-3><a class=text-dark href=/categories/big-data>Big Data</a></li><li class=mb-3><a class=text-dark href=/categories/computer-vision>Computer Vision</a></li><li class=mb-3><a class=text-dark href=/categories/data-science>Data Science</a></li><li class=mb-3><a class=text-dark href=/categories/deep-learning>Deep Learning</a></li><li class=mb-3><a class=text-dark href=/categories/learning-resources>Learning Resources</a></li><li class=mb-3><a class=text-dark href=/categories/natural-language-processing>Natural Language Processing</a></li><li class=mb-3><a class=text-dark href=/categories/programming>Programming</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Quick Links</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=https://mlwhiz.com/about>About</a></li><li class=mb-3><a class=text-dark href=https://mlwhiz.com/blog>Post</a></li></ul></div><div class="col-12 border-top py-4 text-center">Copyright © 2020 <a href=https://mlwhiz.com>MLWhiz</a> All Rights Reserved</div></div></div></footer><script>var indexURL="https://mlwhiz.com/index.json"</script><script src=https://mlwhiz.com/plugins/compressjscss/main.js></script><script src=https://mlwhiz.com/js/script.min.js></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-54777926-1','auto');ga('send','pageview');</script></body></html>
