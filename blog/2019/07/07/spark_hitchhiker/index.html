@@ -19,14 +19,14 @@ online with the community edition. Don’t worry it is free.</p><div style=margi
 lines <span style=color:#f92672>=</span> sc<span style=color:#f92672>.</span>textFile(<span style=color:#e6db74>&#34;/FileStore/tables/shakespeare.txt&#34;</span>)
 
 <span style=color:#75715e># Create a list with all words, Create tuple (word,1), reduce by key i.e. the word</span>
-counts <span style=color:#f92672>=</span> (lines<span style=color:#f92672>.</span>flatMap(<span style=color:#66d9ef>lambda</span> x: x<span style=color:#f92672>.</span>split(<span style=color:#e6db74>&#39; &#39;</span>))          
-                  <span style=color:#f92672>.</span>map(<span style=color:#66d9ef>lambda</span> x: (x, <span style=color:#ae81ff>1</span>))                 
+counts <span style=color:#f92672>=</span> (lines<span style=color:#f92672>.</span>flatMap(<span style=color:#66d9ef>lambda</span> x: x<span style=color:#f92672>.</span>split(<span style=color:#e6db74>&#39; &#39;</span>))
+                  <span style=color:#f92672>.</span>map(<span style=color:#66d9ef>lambda</span> x: (x, <span style=color:#ae81ff>1</span>))
                   <span style=color:#f92672>.</span>reduceByKey(<span style=color:#66d9ef>lambda</span> x,y : x <span style=color:#f92672>+</span> y))
 
 <span style=color:#75715e># get the output on local</span>
-output <span style=color:#f92672>=</span> counts<span style=color:#f92672>.</span>take(<span style=color:#ae81ff>10</span>)                                 
+output <span style=color:#f92672>=</span> counts<span style=color:#f92672>.</span>take(<span style=color:#ae81ff>10</span>)
 <span style=color:#75715e># print output</span>
-<span style=color:#66d9ef>for</span> (word, count) <span style=color:#f92672>in</span> output:                             
+<span style=color:#66d9ef>for</span> (word, count) <span style=color:#f92672>in</span> output:
     <span style=color:#66d9ef>print</span>(<span style=color:#e6db74>&#34;</span><span style=color:#e6db74>%s</span><span style=color:#e6db74>: </span><span style=color:#e6db74>%i</span><span style=color:#e6db74>&#34;</span> <span style=color:#f92672>%</span> (word, count))
 </code></pre></div><div style=margin-top:9px;margin-bottom:10px><center><img src=/images/spark/res1.png "></center></div><p>So that is a small example which counts the number of words in the document and prints 10 of them.</p><p>And most of the work gets done in the second command.</p><p>Don’t worry if you are not able to follow this yet as I still need to tell you about the things that make Spark work.</p><p>But before we get into Spark basics, Let us refresh some of our Python Basics. Understanding Spark becomes a lot easier if you have used functional programming with Python.</p><p>For those of you who haven’t used it, below is a brief intro.</p><hr><h2 id=a-functional-approach-to-programming-in-python>A functional approach to programming in Python</h2><div style=margin-top:9px;margin-bottom:10px><center><img src=/images/spark/func.png "></center></div><h3 id=1-map>1. Map</h3><p>map is used to map a function to an array or a list. Say you want to apply some function to every element in a list.</p><p>You can do this by simply using a for loop but python lambda functions let you do this in a single line in Python.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py>my_list <span style=color:#f92672>=</span> [<span style=color:#ae81ff>1</span>,<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>3</span>,<span style=color:#ae81ff>4</span>,<span style=color:#ae81ff>5</span>,<span style=color:#ae81ff>6</span>,<span style=color:#ae81ff>7</span>,<span style=color:#ae81ff>8</span>,<span style=color:#ae81ff>9</span>,<span style=color:#ae81ff>10</span>]
 <span style=color:#75715e># Lets say I want to square each term in my_list.</span>
@@ -141,14 +141,14 @@ rdd<span style=color:#f92672>.</span>takeOrdered(<span style=color:#ae81ff>3</sp
 --------------------------------------------
 ['The Project Gutenberg EBook of The Complete Works of William Shakespeare, by ',  'William Shakespeare',  '',  'This eBook is for the use of anyone anywhere at no cost and with',  'almost no restrictions whatsoever.  You may copy it, give it away or']
 </code></pre><p>This RDD is of the form:</p><pre><code>['word1 word2 word3','word4 word3 word2']
-</code></pre><p>This next line is actually the workhorse function in the whole script.</p><pre><code>counts = (lines.flatMap(lambda x: x.split(' '))          
-                  .map(lambda x: (x, 1))                 
+</code></pre><p>This next line is actually the workhorse function in the whole script.</p><pre><code>counts = (lines.flatMap(lambda x: x.split(' '))
+                  .map(lambda x: (x, 1))
                   .reduceByKey(lambda x,y : x + y))
 </code></pre><p>It contains a series of transformations that we do to the lines RDD. First of all, we do a <code>flatmap</code> transformation.</p><p>The <code>flatmap</code> transformation takes as input the lines and gives words as output. So after the flatmap transformation, the RDD is of the form:</p><pre><code>['word1','word2','word3','word4','word3','word2']
 </code></pre><p>Next, we do a <code>map</code> transformation on the <code>flatmap</code> output which converts the RDD to :</p><pre><code>[('word1',1),('word2',1),('word3',1),('word4',1),('word3',1),('word2',1)]
 </code></pre><p>Finally, we do a <code>reduceByKey</code> transformation which counts the number of time each word appeared.</p><p>After which the RDD approaches the final desirable form.</p><pre><code>[('word1',1),('word2',2),('word3',2),('word4',1)]
 </code></pre><p>This next line is an action that takes the first 10 elements of the resulting RDD locally.</p><pre><code>output = counts.take(10)
-</code></pre><p>This line just prints the output</p><pre><code>for (word, count) in output:                 
+</code></pre><p>This line just prints the output</p><pre><code>for (word, count) in output:
     print(&quot;%s: %i&quot; % (word, count))
 </code></pre><p>And that is it for the wordcount program. Hope you understand it now.</p><hr><p>So till now, we talked about the Wordcount example and the basic transformations and actions that you could use in Spark. But we don’t do wordcount in real life.</p><p>We have to work on bigger problems which are much more complex. Worry not! Whatever we have learned till now will let us do that and more.</p><hr><h2 id=spark-in-action-with-example>Spark in Action with Example</h2><div style=margin-top:9px;margin-bottom:10px><center><img src=/images/spark/action.jpeg "></center></div><p>Let us work with a concrete example which takes care of some usual transformations.</p><p>We will work on Movielens
 <a href=https://github.com/MLWhiz/data_science_blogs/tree/master/spark_post target=_blank rel="nofollow noopener">ml-100k.zip</a>
@@ -289,10 +289,8 @@ display(rdd_as_df)
 </code></pre></div><div style=margin-top:9px;margin-bottom:10px><center><img src=/images/spark/res_18.png "></center></div><p>RDD provides you with <em><strong>more control</strong></em> at the cost of time and coding effort. While Dataframes provide you with <em><strong>familiar coding</strong></em> platform. And now you can move back and forth between these two.</p><h2 id=conclusion>Conclusion</h2><div style=margin-top:9px;margin-bottom:10px><center><img src=/images/spark/convo_1.jpeg "></center></div><p>This was a big post and congratulations if you reached the end.</p><p>Spark has provided us with an interface where we could use transformations and actions on our data. Spark also has the Dataframe API to ease the transition of Data scientists to Big Data.</p><p>Hopefully, I’ve covered the basics well enough to pique your interest and help you get started with Spark.</p><p><em><strong>You can find all the code at the
 <a href=https://github.com/MLWhiz/data_science_blogs/tree/master/spark_post target=_blank rel="nofollow noopener">GitHub</a>
 repository.</strong></em></p><p>Also, if you want to learn more about Spark and Spark DataFrames, I would like to call out an excellent course on
-<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&offerid=467035.11468293556&type=2&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Fbig-data-essentials" target=_blank rel="nofollow noopener">Big Data Essentials</a>
-which is part of the
-<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&offerid=467035.11468293466&type=2&murl=https%3A%2F%2Fwww.coursera.org%2Fspecializations%2Fbig-data-engineering" target=_blank rel="nofollow noopener">Big Data Specialization</a>
-provided by Yandex.</p><p>I am going to be writing more of such posts in the future too. Let me know what you think about the series. Follow me up at
+<a href=https://coursera.pxf.io/4exq73 target=_blank rel="nofollow noopener">Big Data Essentials: HDFS, MapReduce and Spark RDD</a>
+on Coursera.</p><p>I am going to be writing more of such posts in the future too. Let me know what you think about the series. Follow me up at
 <a href=https://mlwhiz.medium.com/ target=_blank rel="nofollow noopener">&lt;strong>Medium&lt;/strong></a>
 or Subscribe to my
 <a href=https://mlwhiz.ck.page/a9b8bda70c target=_blank rel="nofollow noopener">&lt;strong>blog&lt;/strong></a>

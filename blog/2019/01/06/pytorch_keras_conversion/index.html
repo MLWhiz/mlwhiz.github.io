@@ -11,8 +11,9 @@
 <a href=/categories/deep-learning class=categoryStyle>Deep Learning</a>
 <a href=/categories/computer-vision class=categoryStyle>Computer Vision</a>
 <a href=/categories/awesome-guides class=categoryStyle>Awesome Guides</a><h1>A Layman guide to moving from Keras to Pytorch</h1><div class="mb-3 post-meta"><span>By Rahul Agarwal</span><svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
-<span>06 January 2019</span></div><img src=https://mlwhiz.com/images/artificial-neural-network.png class="img-fluid w-100 mb-4" alt="A Layman guide to moving from Keras to Pytorch"><div class="content mb-5"><div style=margin-top:9px;margin-bottom:10px><center><img src=/images/artificial-neural-network.png height=350 width=700></center></div><p>Recently I started up with a competition on kaggle on text classification, and as a part of the competition, I had to somehow move to Pytorch to get deterministic results. Now I have always worked with Keras in the past and it has given me pretty good results, but somehow I got to know that the <strong>CuDNNGRU/CuDNNLSTM layers in keras are not deterministic</strong>, even after setting the seeds. So Pytorch did come to rescue. And am I glad that I moved.</p><p>As a <strong>side note</strong>: if you want to know more about <strong>NLP</strong>, I would like to recommend this awesome course on <strong><a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&utm_content=2&utm_medium=partners&utm_source=linkshare&utm_campaign=lVarvwc5BD0" target=_blank rel="nofollow noopener">Natural Language Processing</a></strong> in the <strong><a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&utm_content=2&utm_medium=partners&utm_source=linkshare&utm_campaign=lVarvwc5BD0" target=_blank rel="nofollow noopener">Advanced machine learning specialization</a>
-</strong>. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: Sentiment Analysis, summarization, dialogue state tracking, to name a few.</p><p>Also take a look at my other post:
+<span>06 January 2019</span></div><img src=https://mlwhiz.com/images/artificial-neural-network.png class="img-fluid w-100 mb-4" alt="A Layman guide to moving from Keras to Pytorch"><div class="content mb-5"><div style=margin-top:9px;margin-bottom:10px><center><img src=/images/artificial-neural-network.png height=350 width=700></center></div><p>Recently I started up with a competition on kaggle on text classification, and as a part of the competition, I had to somehow move to Pytorch to get deterministic results. Now I have always worked with Keras in the past and it has given me pretty good results, but somehow I got to know that the <strong>CuDNNGRU/CuDNNLSTM layers in keras are not deterministic</strong>, even after setting the seeds. So Pytorch did come to rescue. And am I glad that I moved.</p><p><strong>As a side note</strong>: If you want to know more about NLP, I would like to recommend this awesome
+<a href=https://coursera.pxf.io/9WjZo0 target=_blank rel="nofollow noopener">Natural Language Processing Specialization</a>
+. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few.</p><p>Also take a look at my other post:
 <a href=/blog/2019/01/17/deeplearning_nlp_preprocess/>Text Preprocessing Methods for Deep Learning</a>
 , which talks about different preprocessing techniques you can use for your NLP task and
 <a href=/blog/2018/12/17/text_classification/>What Kagglers are using for Text Classification</a>
@@ -32,7 +33,7 @@
     x <span style=color:#f92672>=</span> Bidirectional(LSTM(num_filters, return_sequences<span style=color:#f92672>=</span>True))(x)
 
     <span style=color:#75715e># Layer 4: Bidirectional CuDNNGRU</span>
-    x, x_h, x_c <span style=color:#f92672>=</span> Bidirectional(GRU(num_filters, return_sequences<span style=color:#f92672>=</span>True, return_state <span style=color:#f92672>=</span> True))(x)  
+    x, x_h, x_c <span style=color:#f92672>=</span> Bidirectional(GRU(num_filters, return_sequences<span style=color:#f92672>=</span>True, return_state <span style=color:#f92672>=</span> True))(x)
 
     <span style=color:#75715e># Layer 5: some pooling operations</span>
     avg_pool <span style=color:#f92672>=</span> GlobalAveragePooling1D()(x)
@@ -181,7 +182,7 @@
         loss_fn <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>nn<span style=color:#f92672>.</span>BCEWithLogitsLoss(reduction<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;sum&#39;</span>)
 
         step_size <span style=color:#f92672>=</span> <span style=color:#ae81ff>300</span>
-        base_lr, max_lr <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.001</span>, <span style=color:#ae81ff>0.003</span>   
+        base_lr, max_lr <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.001</span>, <span style=color:#ae81ff>0.003</span>
         optimizer <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>optim<span style=color:#f92672>.</span>Adam(filter(<span style=color:#66d9ef>lambda</span> p: p<span style=color:#f92672>.</span>requires_grad, model<span style=color:#f92672>.</span>parameters()),
                                  lr<span style=color:#f92672>=</span>max_lr)
 
@@ -202,9 +203,9 @@
             start_time <span style=color:#f92672>=</span> time<span style=color:#f92672>.</span>time()
             model<span style=color:#f92672>.</span>train()
 
-            avg_loss <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.</span>  
+            avg_loss <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.</span>
             <span style=color:#66d9ef>for</span> i, (x_batch, y_batch, index) <span style=color:#f92672>in</span> enumerate(train_loader):
-                <span style=color:#66d9ef>if</span> feats:       
+                <span style=color:#66d9ef>if</span> feats:
                     f <span style=color:#f92672>=</span> kfold_X_features[index]
                     y_pred <span style=color:#f92672>=</span> model([x_batch,f])
                 <span style=color:#66d9ef>else</span>:
@@ -230,7 +231,7 @@
             avg_val_loss <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.</span>
             <span style=color:#66d9ef>for</span> i, (x_batch, y_batch,index) <span style=color:#f92672>in</span> enumerate(valid_loader):
                 <span style=color:#66d9ef>if</span> feats:
-                    f <span style=color:#f92672>=</span> kfold_X_valid_features[index]            
+                    f <span style=color:#f92672>=</span> kfold_X_valid_features[index]
                     y_pred <span style=color:#f92672>=</span> model([x_batch,f])<span style=color:#f92672>.</span>detach()
                 <span style=color:#66d9ef>else</span>:
                     y_pred <span style=color:#f92672>=</span> model(x_batch)<span style=color:#f92672>.</span>detach()

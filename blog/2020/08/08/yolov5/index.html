@@ -37,7 +37,7 @@ for img in images:
 , /images/yolov5/6_hud3d2d5e16088babd4bad3c9066c9c138_181973_800x0_resize_box_2.png 800w
 , /images/yolov5/6_hud3d2d5e16088babd4bad3c9066c9c138_181973_1200x0_resize_box_2.png 1200w
 , /images/yolov5/6_hud3d2d5e16088babd4bad3c9066c9c138_181973_1500x0_resize_box_2.png 1500w" src=/images/yolov5/6.png alt="5. Export"></p><p>Exporting in Yolo format essentially creates a .txt file for each of our images, which contains the class_id, x_center, y_center, width, and the height of the image. It also creates a file named obj.names , which helps map the class_id to the class name. For example:</p><table><tr><td><img src=/images/yolov5/7.png></td><td><img src=/images/yolov5/8.png></td><td><img src=/images/yolov5/9.png></td></tr></table><p>Notice that the coordinates are scaled from 0 to 1 in the annotation file. Also, note that the class_id is 0 for Cricketball and 1 for football as per obj.names file, which starts from 0. There are a few other files we create using this, but we won’t be using them in this example.</p><p>Once we have done this, we are mostly set up with our custom dataset and would only need to rearrange some of these files for subsequent training and validation splits later when we train our model. The dataset currently will be a single folder like below containing both the images as well as annotations:</p><pre><code>dataset
-    - 0027773a6d54b960.jpg  
+    - 0027773a6d54b960.jpg
     - 0027773a6d54b960.txt
     - 2bded1f9cb587843.jpg
     - 2bded1f9cb587843.txt
@@ -67,7 +67,7 @@ percentage_test = 20
 
 # Populate the folders
 p = percentage_test/100
-for pathAndFilename in glob.iglob(os.path.join(dataset_path, &quot;*.jpg&quot;)):  
+for pathAndFilename in glob.iglob(os.path.join(dataset_path, &quot;*.jpg&quot;)):
     title, ext = os.path.splitext(os.path.basename(pathAndFilename))
     if random.random() &lt;=p :
         os.system(f&quot;cp {dataset_path}/{title}.jpg data/images/valid&quot;)
@@ -106,11 +106,9 @@ $ python train.py --img 640 --batch 16 --epochs 300--data training/dataset.yaml 
 <a href=https://www.kaggle.com/mlwhiz/detection-footballvscricketball target=_blank rel="nofollow noopener">Kaggle</a>
 and the code at
 <a href=https://github.com/MLWhiz/data_science_blogs/tree/master/yolov5CustomData target=_blank rel="nofollow noopener">Github</a>
-.</p><p>If you want to know more about various <em><strong>Object Detection techniques, motion estimation, object tracking in video, etc</strong></em>., I would like to recommend this excellent course on
-<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&utm_content=2&utm_medium=partners&utm_source=linkshare&utm_campaign=lVarvwc5BD0" target=_blank rel="nofollow noopener">Deep Learning in Computer Vision</a>
-in the
-<a href="https://www.coursera.org/specializations/aml?siteID=lVarvwc5BD0-AqkGMb7JzoCMW0Np1uLfCA&utm_content=2&utm_medium=partners&utm_source=linkshare&utm_campaign=lVarvwc5BD0" target=_blank rel="nofollow noopener">Advanced machine learning specialization</a>
-. If you wish to know more about how the object detection field has evolved over the years, you can also take a look at my last
+.</p><p>If you want to learn more about Deep Learning, I would like to recommend this awesome
+<a href=https://coursera.pxf.io/7mKnnY target=_blank rel="nofollow noopener">Deep Learning Specialization</a>
+. You can start for free with the 7-day Free Trial. This specialization talks about various CNN architetures and covers a wide variety of problems in the image domain including detection and segmentation.</p><p>If you wish to know more about how the object detection field has evolved over the years, you can also take a look at my last
 <a href=https://towardsdatascience.com/a-hitchhikers-guide-to-object-detection-and-instance-segmentation-ac0146fe8e11 target=_blank rel="nofollow noopener">post</a>
 on Object detection.</p><p>Thanks for the read. I am going to be writing more beginner-friendly posts in the future too. Follow me up at
 <a href=https://mlwhiz.medium.com/ target=_blank rel="nofollow noopener">Medium</a>

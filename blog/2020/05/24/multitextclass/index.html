@@ -103,7 +103,7 @@ by Yoon Kim.</p><p>Representation: The central concept of this idea is to see ou
 , /images/multitextclass/7_hu2f21e1cf1a24b34411d1892945b6862e_153160_1200x0_resize_box_2.png 1200w
 , /images/multitextclass/7_hu2f21e1cf1a24b34411d1892945b6862e_153160_1500x0_resize_box_2.png 1500w" src=/images/multitextclass/7.png alt="MLWhiz: Data Science, Machine Learning, Artificial Intelligence"></p><p>Convolution Idea: For images, we move our conv. filter both horizontally as well as vertically, but for text we fix kernel size to filter_size x embed_size, i.e. (3,300) we are just going to move vertically down the convolution looking at three words at once, since our filter size in this case is 3. This idea seems right since our convolution filter is not splitting word embedding; it gets to look at the full embedding of each word. Also, one can think of filter sizes as unigrams, bigrams, trigrams, etc. Since we are looking at a context window of 1, 2, 3, and 5 words respectively.</p><p>Here is the text classification CNN network coded in
 <a href=https://towardsdatascience.com/moving-from-keras-to-pytorch-f0d4fff4ce79%EF%BF%BD target=_blank rel="nofollow noopener">Pytorch</a>
-.</p><pre><code>class CNN_Text(nn.Module):    
+.</p><pre><code>class CNN_Text(nn.Module):
     def __init__(self):
         super(CNN_Text, self).__init__()
         filter_sizes = [1,2,3,5]
@@ -117,12 +117,12 @@ by Yoon Kim.</p><p>Representation: The central concept of this idea is to see ou
         self.fc1 = nn.Linear(len(filter_sizes)*num_filters, n_classes)
 
 def forward(self, x):
-        x = self.embedding(x)  
-        x = x.unsqueeze(1)  
+        x = self.embedding(x)
+        x = x.unsqueeze(1)
         x = [F.relu(conv(x)).squeeze(3) for conv in self.convs1]
-        x = [F.max_pool1d(i, i.size(2)).squeeze(2) for i in x]  
+        x = [F.max_pool1d(i, i.size(2)).squeeze(2) for i in x]
         x = torch.cat(x, 1)
-        x = self.dropout(x)  
+        x = self.dropout(x)
         logit = self.fc1(x)
         return logit
 </code></pre><h3 id=2-bidirectional-rnn-lstmgru>2. BiDirectional RNN (LSTM/GRU)</h3><p>TextCNN works well for text classification because it takes care of words in close range. For example, it can see “new york” together. However, it still can’t take care of all the context provided in a particular text sequence. It still does not learn the sequential structure of the data, where each word is dependent on the previous word, or a word in the previous sentence.</p><p>RNNs can help us with that. They can remember previous information using hidden states and connect it to the current task.</p><p>Long Short Term Memory networks (LSTM) are a subclass of RNN, specialized in remembering information for extended periods. Moreover, a bidirectional LSTM keeps the contextual information in both directions, which is pretty useful in text classification tasks (However, it won’t work for a time series prediction task as we don’t have visibility into the future in this case).</p><p><img sizes="(min-width: 35em) 1200px, 100vw" srcset="/images/multitextclass/8_huadfc092569131983de0713ea135a8cb3_74261_500x0_resize_box_2.png 500w
@@ -183,7 +183,7 @@ for epoch in range(n_epochs):
     start_time = time.time()
     # Set model to train configuration
     model.train()
-    avg_loss = 0.  
+    avg_loss = 0.
     for i, (x_batch, y_batch) in enumerate(train_loader):
         # Predict/Forward Pass
         y_pred = model(x_batch)
@@ -195,7 +195,7 @@ for epoch in range(n_epochs):
         avg_loss += loss.item() / len(train_loader)
 
     # Set model to validation configuration -Doesn't get trained here
-    model.eval()        
+    model.eval()
     avg_val_loss = 0.
     val_preds = np.zeros((len(x_cv),len(le.classes_)))
 
@@ -228,10 +228,10 @@ skplt.metrics.plot_confusion_matrix(
 , or this
 <a href="https://www.kaggle.com/mlwhiz/multiclass-text-classification-pytorch?scriptVersionId=30273958" target=_blank rel="nofollow noopener">Kaggle Kernel</a>
 .</p><p>Also, if you want to learn more about NLP,
-<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&offerid=467035.11503135394&type=2&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target=_blank rel="nofollow noopener">here</a>
-is an excellent course.</p><p>If you want to learn more about NLP, I would like to call out an excellent course on
-<a href="https://click.linksynergy.com/link?id=lVarvwc5BD0&offerid=467035.11503135394&type=2&murl=https%3A%2F%2Fwww.coursera.org%2Flearn%2Flanguage-processing" target=_blank rel="nofollow noopener">Natural Language Processing</a>
-from the Advanced Machine Learning Specialization. Do check it out.</p><p>I am going to be writing more of such posts in the future too. Let me know what you think about the series. Follow me up at
+<a href=https://coursera.pxf.io/yRPoZB target=_blank rel="nofollow noopener">here</a>
+is an excellent course.</p><p>If you want to know more about NLP, I would like to recommend this awesome
+<a href=https://coursera.pxf.io/9WjZo0 target=_blank rel="nofollow noopener">Natural Language Processing Specialization</a>
+. You can start for free with the 7-day Free Trial. This course covers a wide range of tasks in Natural Language Processing from basic to advanced: sentiment analysis, summarization, dialogue state tracking, to name a few.</p><p>I am going to be writing more of such posts in the future too. Let me know what you think about the series. Follow me up at
 <a href=https://mlwhiz.medium.com/ target=_blank rel="nofollow noopener">Medium</a>
 or Subscribe to my
 <a href=https://mlwhiz.ck.page/a9b8bda70c target=_blank rel="nofollow noopener">blog</a>
