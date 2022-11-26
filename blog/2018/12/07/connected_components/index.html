@@ -1,7 +1,4 @@
-<!doctype html><html lang=en-us><head><meta charset=utf-8><title>To all Data Scientists - The one Graph Algorithm you need to know - MLWhiz</title><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta name=description content="Connected components implementation in Python and pyspark"><meta name=author content="Rahul Agarwal"><meta name=generator content="Hugo 0.101.0"><link rel=stylesheet href=https://mlwhiz.com/plugins/compressjscss/main.css><meta property="og:title" content="To all Data Scientists - The one Graph Algorithm you need to know - MLWhiz"><meta property="og:description" content="Connected components implementation in Python and pyspark"><meta property="og:type" content="article"><meta property="og:url" content="https://mlwhiz.com/blog/2018/12/07/connected_components/"><meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/8/85/Pseudoforest.svg"><meta property="og:image:secure_url" content="https://upload.wikimedia.org/wikipedia/commons/8/85/Pseudoforest.svg"><meta property="article:published_time" content="2018-12-07T00:00:00+00:00"><meta property="article:modified_time" content="2022-04-13T13:34:49+01:00"><meta property="article:tag" content="Data Science"><meta property="article:tag" content="Big Data"><meta name=twitter:card content="summary"><meta name=twitter:image content="https://upload.wikimedia.org/wikipedia/commons/8/85/Pseudoforest.svg"><meta name=twitter:title content="To all Data Scientists - The one Graph Algorithm you need to know - MLWhiz"><meta name=twitter:description content="Connected components implementation in Python and pyspark"><meta name=twitter:site content="@mlwhiz"><meta name=twitter:creator content="@mlwhiz"><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href=https://mlwhiz.com/scss/style.min.css media=screen><link rel=stylesheet href=/css/style.css><link rel=stylesheet type=text/css href=/css/font/flaticon.css><link rel="shortcut icon" href=https://mlwhiz.com/images/favicon-200x200.png type=image/x-icon><link rel=icon href=https://mlwhiz.com/images/favicon.png type=image/x-icon><link rel=canonical href=https://mlwhiz.com/blog/2018/12/07/connected_components/><script src=https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js></script>
-<script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.mlwhiz.com/#website","url":"https://www.mlwhiz.com/","name":"MLWhiz","description":"Want to Learn Computer Vision and NLP? - MLWhiz","potentialAction":{"@type":"SearchAction","target":"https://www.mlwhiz.com/search?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"ImageObject","@id":"https://mlwhiz.com/blog/2018/12/07/connected_components/#primaryimage","url":"https://upload.wikimedia.org/wikipedia/commons/8/85/Pseudoforest.svg","width":700,"height":450},{"@type":"WebPage","@id":"https://mlwhiz.com/blog/2018/12/07/connected_components/#webpage","url":"https://mlwhiz.com/blog/2018/12/07/connected_components/","inLanguage":"en-US","name":"To all Data Scientists - The one Graph Algorithm you need to know - MLWhiz","isPartOf":{"@id":"https://www.mlwhiz.com/#website"},"primaryImageOfPage":{"@id":"https://mlwhiz.com/blog/2018/12/07/connected_components/#primaryimage"},"datePublished":"2018-12-07T00:00:00.00Z","dateModified":"2022-04-13T13:34:49.00Z","author":{"@id":"https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca"},"description":"Connected components implementation in Python and pyspark"},{"@type":["Person"],"@id":"https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca","name":"Rahul Agarwal","image":{"@type":"ImageObject","@id":"https://www.mlwhiz.com/#authorlogo","url":"https://mlwhiz.com/images/author.jpg","caption":"Rahul Agarwal"},"description":"Hi there, I\u2019m Rahul Agarwal. I\u2019m a data scientist consultant and big data engineer based in Bangalore. I see a lot of times  students and even professionals wasting their time and struggling to get started with Computer Vision, Deep Learning, and NLP. I Started this Site with a purpose to augment my own understanding about new things while helping others learn about them in the best possible way.","sameAs":["https://www.linkedin.com/in/rahulagwl/","https://medium.com/@rahul_agarwal","https://twitter.com/MLWhiz","https://www.facebook.com/mlwhizblog","https://github.com/MLWhiz","https://www.instagram.com/itsmlwhiz"]}]}</script><script async data-uid=a0ebaf958d src=https://mlwhiz.ck.page/a0ebaf958d/index.js></script>
-<script type=text/javascript async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">MathJax.Hub.Config({tex2jax:{inlineMath:[["$","$"],["\\(","\\)"]],displayMath:[["$$","$$"]],processEscapes:!0,processEnvironments:!0,skipTags:["script","noscript","style","textarea","pre"],TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["AMSmath.js","AMSsymbols.js"]}}}),MathJax.Hub.Queue(function(){var e,t=MathJax.Hub.getAllJax();for(e=0;e<t.length;e+=1)t[e].SourceElement().parentNode.className+=" has-jax"}),MathJax.Hub.Config({TeX:{equationNumbers:{autoNumber:"AMS"}}})</script><link href=//apps.shareaholic.com/assets/pub/shareaholic.js as=script><script type=text/javascript data-cfasync=false async src=//apps.shareaholic.com/assets/pub/shareaholic.js data-shr-siteid=fd1ffa7fd7152e4e20568fbe49a489d0></script>
-<script>!function(e,t,n,s,o,i,a){if(e.fbq)return;o=e.fbq=function(){o.callMethod?o.callMethod.apply(o,arguments):o.queue.push(arguments)},e._fbq||(e._fbq=o),o.push=o,o.loaded=!0,o.version="2.0",o.queue=[],i=t.createElement(n),i.async=!0,i.src=s,a=t.getElementsByTagName(n)[0],a.parentNode.insertBefore(i,a)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js"),fbq("init","402633927768628"),fbq("track","PageView")</script><noscript><img height=1 width=1 style=display:none src="https://www.facebook.com/tr?id=402633927768628&ev=PageView&noscript=1"></noscript><meta property="fb:pages" content="213104036293742"><meta name=facebook-domain-verification content="qciidcy7mm137sewruizlvh8zbfnv4"></head><body><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T" height=0 width=0 style=display:none;visibility:hidden></iframe></noscript><div class=preloader></div><header class=navigation><div class=container><nav class="navbar navbar-expand-lg navbar-white bg-transparent border-bottom pl-0"><a class="navbar-brand mobile-view" href=https://mlwhiz.com/><img class=img-fluid src=https://mlwhiz.com/images/logo.png alt="Helping You Learn Data Science!"></a>
+<!doctype html><html lang=en-us><head><meta charset=utf-8><title>To all Data Scientists - The one Graph Algorithm you need to know - MLWhiz</title><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><meta name=description content="Connected components implementation in Python and pyspark"><meta name=author content="Rahul Agarwal"><meta name=generator content="Hugo 0.82.0"><link rel=stylesheet href=https://mlwhiz.com/plugins/compressjscss/main.css><meta property="og:title" content="To all Data Scientists - The one Graph Algorithm you need to know - MLWhiz"><meta property="og:description" content="Connected components implementation in Python and pyspark"><meta property="og:type" content="article"><meta property="og:url" content="https://mlwhiz.com/blog/2018/12/07/connected_components/"><meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/8/85/Pseudoforest.svg"><meta property="og:image:secure_url" content="https://upload.wikimedia.org/wikipedia/commons/8/85/Pseudoforest.svg"><meta property="article:published_time" content="2018-12-07T00:00:00+00:00"><meta property="article:modified_time" content="2022-04-13T13:34:49+01:00"><meta property="article:tag" content="Data Science"><meta property="article:tag" content="Big Data"><meta name=twitter:card content="summary"><meta name=twitter:image content="https://upload.wikimedia.org/wikipedia/commons/8/85/Pseudoforest.svg"><meta name=twitter:title content="To all Data Scientists - The one Graph Algorithm you need to know - MLWhiz"><meta name=twitter:description content="Connected components implementation in Python and pyspark"><meta name=twitter:site content="@mlwhiz"><meta name=twitter:creator content="@mlwhiz"><link rel=dns-prefetch href=//fonts.googleapis.com><link rel=dns-prefetch href=//fonts.gstatic.com><link rel=stylesheet href=https://mlwhiz.com/scss/style.min.css media=screen><link rel=stylesheet href=/css/style.css><link rel=stylesheet type=text/css href=/css/font/flaticon.css><link rel="shortcut icon" href=https://mlwhiz.com/images/favicon-200x200.png type=image/x-icon><link rel=icon href=https://mlwhiz.com/images/favicon.png type=image/x-icon><link rel=canonical href=https://mlwhiz.com/blog/2018/12/07/connected_components/><script src=https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js></script><script type=application/ld+json>{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://www.mlwhiz.com/#website","url":"https://www.mlwhiz.com/","name":"MLWhiz","description":"Want to Learn Computer Vision and NLP? - MLWhiz","potentialAction":{"@type":"SearchAction","target":"https://www.mlwhiz.com/search?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"ImageObject","@id":"https://mlwhiz.com/blog/2018/12/07/connected_components/#primaryimage","url":"https://upload.wikimedia.org/wikipedia/commons/8/85/Pseudoforest.svg","width":700,"height":450},{"@type":"WebPage","@id":"https://mlwhiz.com/blog/2018/12/07/connected_components/#webpage","url":"https://mlwhiz.com/blog/2018/12/07/connected_components/","inLanguage":"en-US","name":"To all Data Scientists - The one Graph Algorithm you need to know - MLWhiz","isPartOf":{"@id":"https://www.mlwhiz.com/#website"},"primaryImageOfPage":{"@id":"https://mlwhiz.com/blog/2018/12/07/connected_components/#primaryimage"},"datePublished":"2018-12-07T00:00:00.00Z","dateModified":"2022-04-13T13:34:49.00Z","author":{"@id":"https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca"},"description":"Connected components implementation in Python and pyspark"},{"@type":["Person"],"@id":"https://mlwhiz.com/about/#/schema/person/76376876bchxkzbchjsdjcca","name":"Rahul Agarwal","image":{"@type":"ImageObject","@id":"https://www.mlwhiz.com/#authorlogo","url":"https://mlwhiz.com/images/author.jpg","caption":"Rahul Agarwal"},"description":"Hi there, I\u2019m Rahul Agarwal. I\u2019m a data scientist consultant and big data engineer based in Bangalore. I see a lot of times  students and even professionals wasting their time and struggling to get started with Computer Vision, Deep Learning, and NLP. I Started this Site with a purpose to augment my own understanding about new things while helping others learn about them in the best possible way.","sameAs":["https://www.linkedin.com/in/rahulagwl/","https://medium.com/@rahul_agarwal","https://twitter.com/MLWhiz","https://www.facebook.com/mlwhizblog","https://github.com/MLWhiz","https://www.instagram.com/itsmlwhiz"]}]}</script><script async data-uid=a0ebaf958d src=https://mlwhiz.ck.page/a0ebaf958d/index.js></script><script type=text/javascript async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">MathJax.Hub.Config({tex2jax:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$']],processEscapes:!0,processEnvironments:!0,skipTags:['script','noscript','style','textarea','pre'],TeX:{equationNumbers:{autoNumber:"AMS"},extensions:["AMSmath.js","AMSsymbols.js"]}}}),MathJax.Hub.Queue(function(){var b=MathJax.Hub.getAllJax(),a;for(a=0;a<b.length;a+=1)b[a].SourceElement().parentNode.className+=' has-jax'}),MathJax.Hub.Config({TeX:{equationNumbers:{autoNumber:"AMS"}}})</script><link href=//apps.shareaholic.com/assets/pub/shareaholic.js as=script><script type=text/javascript data-cfasync=false async src=//apps.shareaholic.com/assets/pub/shareaholic.js data-shr-siteid=fd1ffa7fd7152e4e20568fbe49a489d0></script><script>!function(b,e,f,g,a,c,d){if(b.fbq)return;a=b.fbq=function(){a.callMethod?a.callMethod.apply(a,arguments):a.queue.push(arguments)},b._fbq||(b._fbq=a),a.push=a,a.loaded=!0,a.version='2.0',a.queue=[],c=e.createElement(f),c.async=!0,c.src=g,d=e.getElementsByTagName(f)[0],d.parentNode.insertBefore(c,d)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js'),fbq('init','402633927768628'),fbq('track','PageView')</script><noscript><img height=1 width=1 style=display:none src="https://www.facebook.com/tr?id=402633927768628&ev=PageView&noscript=1"></noscript><meta property="fb:pages" content="213104036293742"><meta name=facebook-domain-verification content="qciidcy7mm137sewruizlvh8zbfnv4"></head><body><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NMQD44T" height=0 width=0 style=display:none;visibility:hidden></iframe></noscript><div class=preloader></div><header class=navigation><div class=container><nav class="navbar navbar-expand-lg navbar-white bg-transparent border-bottom pl-0"><a class="navbar-brand mobile-view" href=https://mlwhiz.com/><img class=img-fluid src=https://mlwhiz.com/images/logo.png alt="Helping You Learn Data Science!"></a>
 <button class="navbar-toggler border-0" type=button data-toggle=collapse data-target=#navigation>
 <i class="ti-menu h3"></i></button><div class="collapse navbar-collapse text-center" id=navigation><div class=desktop-view><ul class="navbar-nav mr-auto"><li class=nav-item><a class=nav-link href=https://www.linkedin.com/in/rahulagwl/><i class=ti-linkedin></i></a></li><li class=nav-item><a class=nav-link href=https://mlwhiz.medium.com/><i class=ti-book></i></a></li><li class=nav-item><a class=nav-link href=https://twitter.com/MLWhiz><i class=ti-twitter-alt></i></a></li><li class=nav-item><a class=nav-link href=https://www.facebook.com/mlwhizblog><i class=ti-facebook></i></a></li><li class=nav-item><a class=nav-link href=https://github.com/MLWhiz><i class=ti-github></i></a></li></ul></div><a class="navbar-brand mx-auto desktop-view" href=https://mlwhiz.com/><img class=img-fluid-custom src=https://mlwhiz.com/images/logo.png alt="Helping You Learn Data Science!"></a><ul class=navbar-nav><li class=nav-item><a class=nav-link href=https://mlwhiz.com/about>About</a></li><li class=nav-item><a class=nav-link href=https://mlwhiz.com/blog>Blog</a></li><li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href=# role=button data-toggle=dropdown aria-haspopup=true aria-expanded=false>Topics</a><div class=dropdown-menu><a class=dropdown-item href=https://mlwhiz.com/categories/natural-language-processing>NLP</a>
 <a class=dropdown-item href=https://mlwhiz.com/categories/computer-vision>Computer Vision</a>
@@ -13,106 +10,106 @@
 <a href=/categories/big-data class=categoryStyle>Big Data</a><h1>To all Data Scientists - The one Graph Algorithm you need to know</h1><div class="mb-3 post-meta"><span>By Rahul Agarwal</span><svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg>
 <span>07 December 2018</span></div><img src=https://upload.wikimedia.org/wikipedia/commons/8/85/Pseudoforest.svg class="img-fluid w-100 mb-4" alt="To all Data Scientists - The one Graph Algorithm you need to know"><div class="content mb-5"><p>Graphs provide us with a very useful data structure. They can help us to find structure within our data. With the advent of Machine learning and big data we need to get as much information as possible about our data. Learning a little bit of graph theory can certainly help us with that.</p><p>Here is a
 <a href=https://coursera.pxf.io/YgKbbe target=_blank rel="nofollow noopener">Graph Analytics for Big Data course on Coursera by UCSanDiego</a>
-which I highly recommend to learn the basics of graph theory. You can start for free with the 7-day Free Trial.</p><p>One of the algorithms I am going to focus in the current post is called <strong>Connected Components</strong>. Why it is important. We all know clustering.</p><p><em>You can think of Connected Components in very layman&rsquo;s terms as sort of a hard clustering algorithm which finds clusters/islands in related/connected data. As a concrete example: Say you have data about roads joining any two cities in the world. And you need to find out all the continents in the world and which city they contain.</em></p><p>How will you achieve that? Come on give some thought.</p><p>To put a <strong>Retail Perspective</strong>: Lets say, we have a lot of customers using a lot of accounts. One way in which we can use the Connected components algorithm is to find out distinct families in our dataset. We can assume edges(roads) between CustomerIDs based on same credit card usage, or same address or same mobile number etc. Once we have those connections, we can then run the connected component algorithm on the same to create individual clusters to which we can then assign a family ID. We can use these family IDs to provide personalized recommendations based on a family needs. We can also use this family ID to fuel our classification algorithms by creating grouped features based on family.</p><p>In <strong>Finance Perspective</strong>: Another use case would be to capture fraud using these family IDs. If an account has done fraud in past, it is highly probable that the connected accounts are also susceptible to fraud.</p><p>So enough of use cases. Lets start with a simple graph class written in Python to start up our exploits with code.</p><p>This post will revolve more around code from here onwards.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=display:flex><span><span style=color:#e6db74>&#34;&#34;&#34; A Python Class
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>A simple Python graph class, demonstrating the essential
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>facts and functionalities of graphs.
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>Taken from https://www.python-course.eu/graphs_python.php
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>Changed the implementation a little bit to include weighted edges
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>&#34;&#34;&#34;</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Graph</span>(object):
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> __init__(self, graph_dict<span style=color:#f92672>=</span><span style=color:#66d9ef>None</span>):
-</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;&#34;&#34; initializes a graph object
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>            If no dictionary or None is given,
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>            an empty dictionary will be used
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#34;&#34;&#34;</span>
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> graph_dict <span style=color:#f92672>==</span> <span style=color:#66d9ef>None</span>:
-</span></span><span style=display:flex><span>            graph_dict <span style=color:#f92672>=</span> {}
-</span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>__graph_dict <span style=color:#f92672>=</span> graph_dict
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>vertices</span>(self):
-</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;&#34;&#34; returns the vertices of a graph &#34;&#34;&#34;</span>
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> list(self<span style=color:#f92672>.</span>__graph_dict<span style=color:#f92672>.</span>keys())
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>edges</span>(self):
-</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;&#34;&#34; returns the edges of a graph &#34;&#34;&#34;</span>
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>__generate_edges()
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>add_vertex</span>(self, vertex):
-</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;&#34;&#34; If the vertex &#34;vertex&#34; is not in
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>            self.__graph_dict, a key &#34;vertex&#34; with an empty
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>            dict as a value is added to the dictionary.
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>            Otherwise nothing has to be done.
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#34;&#34;&#34;</span>
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> vertex <span style=color:#f92672>not</span> <span style=color:#f92672>in</span> self<span style=color:#f92672>.</span>__graph_dict:
-</span></span><span style=display:flex><span>            self<span style=color:#f92672>.</span>__graph_dict[vertex] <span style=color:#f92672>=</span> {}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>add_edge</span>(self, edge,weight<span style=color:#f92672>=</span><span style=color:#ae81ff>1</span>):
-</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;&#34;&#34; assumes that edge is of type set, tuple or list
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#34;&#34;&#34;</span>
-</span></span><span style=display:flex><span>        edge <span style=color:#f92672>=</span> set(edge)
-</span></span><span style=display:flex><span>        (vertex1, vertex2) <span style=color:#f92672>=</span> tuple(edge)
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> vertex1 <span style=color:#f92672>in</span> self<span style=color:#f92672>.</span>__graph_dict:
-</span></span><span style=display:flex><span>            self<span style=color:#f92672>.</span>__graph_dict[vertex1][vertex2] <span style=color:#f92672>=</span> weight
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>else</span>:
-</span></span><span style=display:flex><span>            self<span style=color:#f92672>.</span>__graph_dict[vertex1] <span style=color:#f92672>=</span> {vertex2:weight}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> vertex2 <span style=color:#f92672>in</span> self<span style=color:#f92672>.</span>__graph_dict:
-</span></span><span style=display:flex><span>            self<span style=color:#f92672>.</span>__graph_dict[vertex2][vertex1] <span style=color:#f92672>=</span> weight
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>else</span>:
-</span></span><span style=display:flex><span>            self<span style=color:#f92672>.</span>__graph_dict[vertex2] <span style=color:#f92672>=</span> {vertex1:weight}
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__generate_edges</span>(self):
-</span></span><span style=display:flex><span>        <span style=color:#e6db74>&#34;&#34;&#34; A static method generating the edges of the
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>            graph &#34;graph&#34;. Edges are represented as sets
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>            with one (a loop back to the vertex) or two
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>            vertices
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>        &#34;&#34;&#34;</span>
-</span></span><span style=display:flex><span>        edges <span style=color:#f92672>=</span> []
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> vertex <span style=color:#f92672>in</span> self<span style=color:#f92672>.</span>__graph_dict:
-</span></span><span style=display:flex><span>            <span style=color:#66d9ef>for</span> neighbour,weight <span style=color:#f92672>in</span> self<span style=color:#f92672>.</span>__graph_dict[vertex]<span style=color:#f92672>.</span>iteritems():
-</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> (neighbour, vertex, weight) <span style=color:#f92672>not</span> <span style=color:#f92672>in</span> edges:
-</span></span><span style=display:flex><span>                    edges<span style=color:#f92672>.</span>append([vertex, neighbour, weight])
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> edges
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> __str__(self):
-</span></span><span style=display:flex><span>        res <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;vertices: &#34;</span>
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> k <span style=color:#f92672>in</span> self<span style=color:#f92672>.</span>__graph_dict:
-</span></span><span style=display:flex><span>            res <span style=color:#f92672>+=</span> str(k) <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; &#34;</span>
-</span></span><span style=display:flex><span>        res <span style=color:#f92672>+=</span> <span style=color:#e6db74>&#34;</span><span style=color:#ae81ff>\n</span><span style=color:#e6db74>edges: &#34;</span>
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> edge <span style=color:#f92672>in</span> self<span style=color:#f92672>.</span>__generate_edges():
-</span></span><span style=display:flex><span>            res <span style=color:#f92672>+=</span> str(edge) <span style=color:#f92672>+</span> <span style=color:#e6db74>&#34; &#34;</span>
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> res
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>adj_mat</span>(self):
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>__graph_dict
-</span></span></code></pre></div><p>You can certainly play with our new graph class.Here we try to build some graphs.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=display:flex><span>g <span style=color:#f92672>=</span> { <span style=color:#e6db74>&#34;a&#34;</span> : {<span style=color:#e6db74>&#34;d&#34;</span>:<span style=color:#ae81ff>2</span>},
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#34;b&#34;</span> : {<span style=color:#e6db74>&#34;c&#34;</span>:<span style=color:#ae81ff>2</span>},
-</span></span><span style=display:flex><span>      <span style=color:#e6db74>&#34;c&#34;</span> : {<span style=color:#e6db74>&#34;b&#34;</span>:<span style=color:#ae81ff>5</span>,  <span style=color:#e6db74>&#34;d&#34;</span>:<span style=color:#ae81ff>3</span>, <span style=color:#e6db74>&#34;e&#34;</span>:<span style=color:#ae81ff>5</span>}
-</span></span><span style=display:flex><span>    }
-</span></span><span style=display:flex><span>graph <span style=color:#f92672>=</span> Graph(g)
-</span></span><span style=display:flex><span>print(<span style=color:#e6db74>&#34;Vertices of graph:&#34;</span>)
-</span></span><span style=display:flex><span>print(graph<span style=color:#f92672>.</span>vertices())
-</span></span><span style=display:flex><span>print(<span style=color:#e6db74>&#34;Edges of graph:&#34;</span>)
-</span></span><span style=display:flex><span>print(graph<span style=color:#f92672>.</span>edges())
-</span></span><span style=display:flex><span>print(<span style=color:#e6db74>&#34;Add vertex:&#34;</span>)
-</span></span><span style=display:flex><span>graph<span style=color:#f92672>.</span>add_vertex(<span style=color:#e6db74>&#34;z&#34;</span>)
-</span></span><span style=display:flex><span>print(<span style=color:#e6db74>&#34;Vertices of graph:&#34;</span>)
-</span></span><span style=display:flex><span>print(graph<span style=color:#f92672>.</span>vertices())
-</span></span><span style=display:flex><span>print(<span style=color:#e6db74>&#34;Add an edge:&#34;</span>)
-</span></span><span style=display:flex><span>graph<span style=color:#f92672>.</span>add_edge({<span style=color:#e6db74>&#34;a&#34;</span>,<span style=color:#e6db74>&#34;z&#34;</span>})    
-</span></span><span style=display:flex><span>print(<span style=color:#e6db74>&#34;Vertices of graph:&#34;</span>)
-</span></span><span style=display:flex><span>print(graph<span style=color:#f92672>.</span>vertices())
-</span></span><span style=display:flex><span>print(<span style=color:#e6db74>&#34;Edges of graph:&#34;</span>)
-</span></span><span style=display:flex><span>print(graph<span style=color:#f92672>.</span>edges())
-</span></span><span style=display:flex><span>print(<span style=color:#e6db74>&#39;Adding an edge {&#34;x&#34;,&#34;y&#34;} with new vertices:&#39;</span>)
-</span></span><span style=display:flex><span>graph<span style=color:#f92672>.</span>add_edge({<span style=color:#e6db74>&#34;x&#34;</span>,<span style=color:#e6db74>&#34;y&#34;</span>})
-</span></span><span style=display:flex><span>print(<span style=color:#e6db74>&#34;Vertices of graph:&#34;</span>)
-</span></span><span style=display:flex><span>print(graph<span style=color:#f92672>.</span>vertices())
-</span></span><span style=display:flex><span>print(<span style=color:#e6db74>&#34;Edges of graph:&#34;</span>)
-</span></span><span style=display:flex><span>print(graph<span style=color:#f92672>.</span>edges())
-</span></span></code></pre></div><pre style="font-family:courier new,monospace;background-color:#f6c6529c;color:#000">Vertices of graph:
+which I highly recommend to learn the basics of graph theory. You can start for free with the 7-day Free Trial.</p><p>One of the algorithms I am going to focus in the current post is called <strong>Connected Components</strong>. Why it is important. We all know clustering.</p><p><em>You can think of Connected Components in very layman&rsquo;s terms as sort of a hard clustering algorithm which finds clusters/islands in related/connected data. As a concrete example: Say you have data about roads joining any two cities in the world. And you need to find out all the continents in the world and which city they contain.</em></p><p>How will you achieve that? Come on give some thought.</p><p>To put a <strong>Retail Perspective</strong>: Lets say, we have a lot of customers using a lot of accounts. One way in which we can use the Connected components algorithm is to find out distinct families in our dataset. We can assume edges(roads) between CustomerIDs based on same credit card usage, or same address or same mobile number etc. Once we have those connections, we can then run the connected component algorithm on the same to create individual clusters to which we can then assign a family ID. We can use these family IDs to provide personalized recommendations based on a family needs. We can also use this family ID to fuel our classification algorithms by creating grouped features based on family.</p><p>In <strong>Finance Perspective</strong>: Another use case would be to capture fraud using these family IDs. If an account has done fraud in past, it is highly probable that the connected accounts are also susceptible to fraud.</p><p>So enough of use cases. Lets start with a simple graph class written in Python to start up our exploits with code.</p><p>This post will revolve more around code from here onwards.</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#ed9d13>&#34;&#34;&#34; A Python Class
+</span><span style=color:#ed9d13>A simple Python graph class, demonstrating the essential
+</span><span style=color:#ed9d13>facts and functionalities of graphs.
+</span><span style=color:#ed9d13>Taken from https://www.python-course.eu/graphs_python.php
+</span><span style=color:#ed9d13>Changed the implementation a little bit to include weighted edges
+</span><span style=color:#ed9d13>&#34;&#34;&#34;</span>
+
+<span style=color:#6ab825;font-weight:700>class</span> <span style=color:#447fcf;text-decoration:underline>Graph</span>(<span style=color:#24909d>object</span>):
+    <span style=color:#6ab825;font-weight:700>def</span> __init__(self, graph_dict=None):
+        <span style=color:#ed9d13>&#34;&#34;&#34; initializes a graph object
+</span><span style=color:#ed9d13>            If no dictionary or None is given,
+</span><span style=color:#ed9d13>            an empty dictionary will be used
+</span><span style=color:#ed9d13>        &#34;&#34;&#34;</span>
+        <span style=color:#6ab825;font-weight:700>if</span> graph_dict == None:
+            graph_dict = {}
+        self.__graph_dict = graph_dict
+
+    <span style=color:#6ab825;font-weight:700>def</span> <span style=color:#447fcf>vertices</span>(self):
+        <span style=color:#ed9d13>&#34;&#34;&#34; returns the vertices of a graph &#34;&#34;&#34;</span>
+        <span style=color:#6ab825;font-weight:700>return</span> <span style=color:#24909d>list</span>(self.__graph_dict.keys())
+
+    <span style=color:#6ab825;font-weight:700>def</span> <span style=color:#447fcf>edges</span>(self):
+        <span style=color:#ed9d13>&#34;&#34;&#34; returns the edges of a graph &#34;&#34;&#34;</span>
+        <span style=color:#6ab825;font-weight:700>return</span> self.__generate_edges()
+
+    <span style=color:#6ab825;font-weight:700>def</span> <span style=color:#447fcf>add_vertex</span>(self, vertex):
+        <span style=color:#ed9d13>&#34;&#34;&#34; If the vertex &#34;vertex&#34; is not in
+</span><span style=color:#ed9d13>            self.__graph_dict, a key &#34;vertex&#34; with an empty
+</span><span style=color:#ed9d13>            dict as a value is added to the dictionary.
+</span><span style=color:#ed9d13>            Otherwise nothing has to be done.
+</span><span style=color:#ed9d13>        &#34;&#34;&#34;</span>
+        <span style=color:#6ab825;font-weight:700>if</span> vertex <span style=color:#6ab825;font-weight:700>not</span> <span style=color:#6ab825;font-weight:700>in</span> self.__graph_dict:
+            self.__graph_dict[vertex] = {}
+
+    <span style=color:#6ab825;font-weight:700>def</span> <span style=color:#447fcf>add_edge</span>(self, edge,weight=<span style=color:#3677a9>1</span>):
+        <span style=color:#ed9d13>&#34;&#34;&#34; assumes that edge is of type set, tuple or list
+</span><span style=color:#ed9d13>        &#34;&#34;&#34;</span>
+        edge = <span style=color:#24909d>set</span>(edge)
+        (vertex1, vertex2) = <span style=color:#24909d>tuple</span>(edge)
+        <span style=color:#6ab825;font-weight:700>if</span> vertex1 <span style=color:#6ab825;font-weight:700>in</span> self.__graph_dict:
+            self.__graph_dict[vertex1][vertex2] = weight
+        <span style=color:#6ab825;font-weight:700>else</span>:
+            self.__graph_dict[vertex1] = {vertex2:weight}
+
+        <span style=color:#6ab825;font-weight:700>if</span> vertex2 <span style=color:#6ab825;font-weight:700>in</span> self.__graph_dict:
+            self.__graph_dict[vertex2][vertex1] = weight
+        <span style=color:#6ab825;font-weight:700>else</span>:
+            self.__graph_dict[vertex2] = {vertex1:weight}
+
+
+    <span style=color:#6ab825;font-weight:700>def</span> <span style=color:#447fcf>__generate_edges</span>(self):
+        <span style=color:#ed9d13>&#34;&#34;&#34; A static method generating the edges of the
+</span><span style=color:#ed9d13>            graph &#34;graph&#34;. Edges are represented as sets
+</span><span style=color:#ed9d13>            with one (a loop back to the vertex) or two
+</span><span style=color:#ed9d13>            vertices
+</span><span style=color:#ed9d13>        &#34;&#34;&#34;</span>
+        edges = []
+        <span style=color:#6ab825;font-weight:700>for</span> vertex <span style=color:#6ab825;font-weight:700>in</span> self.__graph_dict:
+            <span style=color:#6ab825;font-weight:700>for</span> neighbour,weight <span style=color:#6ab825;font-weight:700>in</span> self.__graph_dict[vertex].iteritems():
+                <span style=color:#6ab825;font-weight:700>if</span> (neighbour, vertex, weight) <span style=color:#6ab825;font-weight:700>not</span> <span style=color:#6ab825;font-weight:700>in</span> edges:
+                    edges.append([vertex, neighbour, weight])
+        <span style=color:#6ab825;font-weight:700>return</span> edges
+
+    <span style=color:#6ab825;font-weight:700>def</span> __str__(self):
+        res = <span style=color:#ed9d13>&#34;vertices: &#34;</span>
+        <span style=color:#6ab825;font-weight:700>for</span> k <span style=color:#6ab825;font-weight:700>in</span> self.__graph_dict:
+            res += <span style=color:#24909d>str</span>(k) + <span style=color:#ed9d13>&#34; &#34;</span>
+        res += <span style=color:#ed9d13>&#34;</span><span style=color:#ed9d13>\n</span><span style=color:#ed9d13>edges: &#34;</span>
+        <span style=color:#6ab825;font-weight:700>for</span> edge <span style=color:#6ab825;font-weight:700>in</span> self.__generate_edges():
+            res += <span style=color:#24909d>str</span>(edge) + <span style=color:#ed9d13>&#34; &#34;</span>
+        <span style=color:#6ab825;font-weight:700>return</span> res
+
+    <span style=color:#6ab825;font-weight:700>def</span> <span style=color:#447fcf>adj_mat</span>(self):
+        <span style=color:#6ab825;font-weight:700>return</span> self.__graph_dict
+</code></pre></div><p>You can certainly play with our new graph class.Here we try to build some graphs.</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py>g = { <span style=color:#ed9d13>&#34;a&#34;</span> : {<span style=color:#ed9d13>&#34;d&#34;</span>:<span style=color:#3677a9>2</span>},
+      <span style=color:#ed9d13>&#34;b&#34;</span> : {<span style=color:#ed9d13>&#34;c&#34;</span>:<span style=color:#3677a9>2</span>},
+      <span style=color:#ed9d13>&#34;c&#34;</span> : {<span style=color:#ed9d13>&#34;b&#34;</span>:<span style=color:#3677a9>5</span>,  <span style=color:#ed9d13>&#34;d&#34;</span>:<span style=color:#3677a9>3</span>, <span style=color:#ed9d13>&#34;e&#34;</span>:<span style=color:#3677a9>5</span>}
+    }
+graph = Graph(g)
+<span style=color:#6ab825;font-weight:700>print</span>(<span style=color:#ed9d13>&#34;Vertices of graph:&#34;</span>)
+<span style=color:#6ab825;font-weight:700>print</span>(graph.vertices())
+<span style=color:#6ab825;font-weight:700>print</span>(<span style=color:#ed9d13>&#34;Edges of graph:&#34;</span>)
+<span style=color:#6ab825;font-weight:700>print</span>(graph.edges())
+<span style=color:#6ab825;font-weight:700>print</span>(<span style=color:#ed9d13>&#34;Add vertex:&#34;</span>)
+graph.add_vertex(<span style=color:#ed9d13>&#34;z&#34;</span>)
+<span style=color:#6ab825;font-weight:700>print</span>(<span style=color:#ed9d13>&#34;Vertices of graph:&#34;</span>)
+<span style=color:#6ab825;font-weight:700>print</span>(graph.vertices())
+<span style=color:#6ab825;font-weight:700>print</span>(<span style=color:#ed9d13>&#34;Add an edge:&#34;</span>)
+graph.add_edge({<span style=color:#ed9d13>&#34;a&#34;</span>,<span style=color:#ed9d13>&#34;z&#34;</span>})    
+<span style=color:#6ab825;font-weight:700>print</span>(<span style=color:#ed9d13>&#34;Vertices of graph:&#34;</span>)
+<span style=color:#6ab825;font-weight:700>print</span>(graph.vertices())
+<span style=color:#6ab825;font-weight:700>print</span>(<span style=color:#ed9d13>&#34;Edges of graph:&#34;</span>)
+<span style=color:#6ab825;font-weight:700>print</span>(graph.edges())
+<span style=color:#6ab825;font-weight:700>print</span>(<span style=color:#ed9d13>&#39;Adding an edge {&#34;x&#34;,&#34;y&#34;} with new vertices:&#39;</span>)
+graph.add_edge({<span style=color:#ed9d13>&#34;x&#34;</span>,<span style=color:#ed9d13>&#34;y&#34;</span>})
+<span style=color:#6ab825;font-weight:700>print</span>(<span style=color:#ed9d13>&#34;Vertices of graph:&#34;</span>)
+<span style=color:#6ab825;font-weight:700>print</span>(graph.vertices())
+<span style=color:#6ab825;font-weight:700>print</span>(<span style=color:#ed9d13>&#34;Edges of graph:&#34;</span>)
+<span style=color:#6ab825;font-weight:700>print</span>(graph.edges())
+</code></pre></div><pre style="font-family:courier new,monospace;background-color:#f6c6529c;color:#000">Vertices of graph:
 ['a', 'c', 'b']
 Edges of graph:
 [['a', 'd', 2], ['c', 'b', 5], ['c', 'e', 5], ['c', 'd', 3], ['b', 'c', 2]]
@@ -130,55 +127,55 @@ Vertices of graph:
 Edges of graph:
 [['a', 'z', 1], ['a', 'd', 2], ['c', 'b', 5], ['c', 'e', 5], ['c', 'd', 3], ['b', 'c', 2], ['y', 'x', 1], ['x', 'y', 1], ['z', 'a', 1]]
 </pre><p>Lets do something interesting now.</p><p>We will use the above graph class for our understanding purpose. There are many Modules in python which we can use to do whatever I am going to do next,but to understand the methods we will write everything from scratch.
-Lets start with an example graph which we can use for our purpose.</p><div style=margin-top:9px;margin-bottom:10px><center><img src=https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/MapGermanyGraph.svg/1200px-MapGermanyGraph.svg.png height=400 width=700></center></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=display:flex><span>g <span style=color:#f92672>=</span> {<span style=color:#e6db74>&#39;Frankfurt&#39;</span>: {<span style=color:#e6db74>&#39;Mannheim&#39;</span>:<span style=color:#ae81ff>85</span>, <span style=color:#e6db74>&#39;Wurzburg&#39;</span>:<span style=color:#ae81ff>217</span>, <span style=color:#e6db74>&#39;Kassel&#39;</span>:<span style=color:#ae81ff>173</span>},
-</span></span><span style=display:flex><span>     <span style=color:#e6db74>&#39;Mannheim&#39;</span>: {<span style=color:#e6db74>&#39;Frankfurt&#39;</span>:<span style=color:#ae81ff>85</span>, <span style=color:#e6db74>&#39;Karlsruhe&#39;</span>:<span style=color:#ae81ff>80</span>},
-</span></span><span style=display:flex><span>     <span style=color:#e6db74>&#39;Karlsruhe&#39;</span>: {<span style=color:#e6db74>&#39;Augsburg&#39;</span>:<span style=color:#ae81ff>250</span>, <span style=color:#e6db74>&#39;Mannheim&#39;</span>:<span style=color:#ae81ff>80</span>},
-</span></span><span style=display:flex><span>     <span style=color:#e6db74>&#39;Augsburg&#39;</span>: {<span style=color:#e6db74>&#39;Karlsruhe&#39;</span>:<span style=color:#ae81ff>250</span>, <span style=color:#e6db74>&#39;Munchen&#39;</span>:<span style=color:#ae81ff>84</span>},
-</span></span><span style=display:flex><span>     <span style=color:#e6db74>&#39;Wurzburg&#39;</span>: {<span style=color:#e6db74>&#39;Erfurt&#39;</span>:<span style=color:#ae81ff>186</span>, <span style=color:#e6db74>&#39;Numberg&#39;</span>:<span style=color:#ae81ff>103</span>,<span style=color:#e6db74>&#39;Frankfurt&#39;</span>:<span style=color:#ae81ff>217</span>},
-</span></span><span style=display:flex><span>     <span style=color:#e6db74>&#39;Erfurt&#39;</span>: {<span style=color:#e6db74>&#39;Wurzburg&#39;</span>:<span style=color:#ae81ff>186</span>},
-</span></span><span style=display:flex><span>     <span style=color:#e6db74>&#39;Numberg&#39;</span>: {<span style=color:#e6db74>&#39;Wurzburg&#39;</span>:<span style=color:#ae81ff>103</span>, <span style=color:#e6db74>&#39;Stuttgart&#39;</span>:<span style=color:#ae81ff>183</span>,<span style=color:#e6db74>&#39;Munchen&#39;</span>:<span style=color:#ae81ff>167</span>},
-</span></span><span style=display:flex><span>     <span style=color:#e6db74>&#39;Munchen&#39;</span>: {<span style=color:#e6db74>&#39;Numberg&#39;</span>:<span style=color:#ae81ff>167</span>, <span style=color:#e6db74>&#39;Augsburg&#39;</span>:<span style=color:#ae81ff>84</span>,<span style=color:#e6db74>&#39;Kassel&#39;</span>:<span style=color:#ae81ff>502</span>},
-</span></span><span style=display:flex><span>     <span style=color:#e6db74>&#39;Kassel&#39;</span>: {<span style=color:#e6db74>&#39;Frankfurt&#39;</span>:<span style=color:#ae81ff>173</span>, <span style=color:#e6db74>&#39;Munchen&#39;</span>:<span style=color:#ae81ff>502</span>},
-</span></span><span style=display:flex><span>     <span style=color:#e6db74>&#39;Stuttgart&#39;</span>: {<span style=color:#e6db74>&#39;Numberg&#39;</span>:<span style=color:#ae81ff>183</span>}
-</span></span><span style=display:flex><span>     }
-</span></span><span style=display:flex><span>graph <span style=color:#f92672>=</span> Graph(g)
-</span></span><span style=display:flex><span>print(<span style=color:#e6db74>&#34;Vertices of graph:&#34;</span>)
-</span></span><span style=display:flex><span>print(graph<span style=color:#f92672>.</span>vertices())
-</span></span><span style=display:flex><span>print(<span style=color:#e6db74>&#34;Edges of graph:&#34;</span>)
-</span></span><span style=display:flex><span>print(graph<span style=color:#f92672>.</span>edges())
-</span></span></code></pre></div><pre style="font-family:courier new,monospace;background-color:#f6c6529c;color:#000">
+Lets start with an example graph which we can use for our purpose.</p><div style=margin-top:9px;margin-bottom:10px><center><img src=https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/MapGermanyGraph.svg/1200px-MapGermanyGraph.svg.png height=400 width=700></center></div><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py>g = {<span style=color:#ed9d13>&#39;Frankfurt&#39;</span>: {<span style=color:#ed9d13>&#39;Mannheim&#39;</span>:<span style=color:#3677a9>85</span>, <span style=color:#ed9d13>&#39;Wurzburg&#39;</span>:<span style=color:#3677a9>217</span>, <span style=color:#ed9d13>&#39;Kassel&#39;</span>:<span style=color:#3677a9>173</span>},
+     <span style=color:#ed9d13>&#39;Mannheim&#39;</span>: {<span style=color:#ed9d13>&#39;Frankfurt&#39;</span>:<span style=color:#3677a9>85</span>, <span style=color:#ed9d13>&#39;Karlsruhe&#39;</span>:<span style=color:#3677a9>80</span>},
+     <span style=color:#ed9d13>&#39;Karlsruhe&#39;</span>: {<span style=color:#ed9d13>&#39;Augsburg&#39;</span>:<span style=color:#3677a9>250</span>, <span style=color:#ed9d13>&#39;Mannheim&#39;</span>:<span style=color:#3677a9>80</span>},
+     <span style=color:#ed9d13>&#39;Augsburg&#39;</span>: {<span style=color:#ed9d13>&#39;Karlsruhe&#39;</span>:<span style=color:#3677a9>250</span>, <span style=color:#ed9d13>&#39;Munchen&#39;</span>:<span style=color:#3677a9>84</span>},
+     <span style=color:#ed9d13>&#39;Wurzburg&#39;</span>: {<span style=color:#ed9d13>&#39;Erfurt&#39;</span>:<span style=color:#3677a9>186</span>, <span style=color:#ed9d13>&#39;Numberg&#39;</span>:<span style=color:#3677a9>103</span>,<span style=color:#ed9d13>&#39;Frankfurt&#39;</span>:<span style=color:#3677a9>217</span>},
+     <span style=color:#ed9d13>&#39;Erfurt&#39;</span>: {<span style=color:#ed9d13>&#39;Wurzburg&#39;</span>:<span style=color:#3677a9>186</span>},
+     <span style=color:#ed9d13>&#39;Numberg&#39;</span>: {<span style=color:#ed9d13>&#39;Wurzburg&#39;</span>:<span style=color:#3677a9>103</span>, <span style=color:#ed9d13>&#39;Stuttgart&#39;</span>:<span style=color:#3677a9>183</span>,<span style=color:#ed9d13>&#39;Munchen&#39;</span>:<span style=color:#3677a9>167</span>},
+     <span style=color:#ed9d13>&#39;Munchen&#39;</span>: {<span style=color:#ed9d13>&#39;Numberg&#39;</span>:<span style=color:#3677a9>167</span>, <span style=color:#ed9d13>&#39;Augsburg&#39;</span>:<span style=color:#3677a9>84</span>,<span style=color:#ed9d13>&#39;Kassel&#39;</span>:<span style=color:#3677a9>502</span>},
+     <span style=color:#ed9d13>&#39;Kassel&#39;</span>: {<span style=color:#ed9d13>&#39;Frankfurt&#39;</span>:<span style=color:#3677a9>173</span>, <span style=color:#ed9d13>&#39;Munchen&#39;</span>:<span style=color:#3677a9>502</span>},
+     <span style=color:#ed9d13>&#39;Stuttgart&#39;</span>: {<span style=color:#ed9d13>&#39;Numberg&#39;</span>:<span style=color:#3677a9>183</span>}
+     }
+graph = Graph(g)
+<span style=color:#6ab825;font-weight:700>print</span>(<span style=color:#ed9d13>&#34;Vertices of graph:&#34;</span>)
+<span style=color:#6ab825;font-weight:700>print</span>(graph.vertices())
+<span style=color:#6ab825;font-weight:700>print</span>(<span style=color:#ed9d13>&#34;Edges of graph:&#34;</span>)
+<span style=color:#6ab825;font-weight:700>print</span>(graph.edges())
+</code></pre></div><pre style="font-family:courier new,monospace;background-color:#f6c6529c;color:#000">
 Vertices of graph:
 ['Mannheim', 'Erfurt', 'Munchen', 'Numberg', 'Stuttgart', 'Augsburg', 'Kassel', 'Frankfurt', 'Wurzburg', 'Karlsruhe']
 Edges of graph:
 [['Mannheim', 'Frankfurt', 85], ['Mannheim', 'Karlsruhe', 80], ['Erfurt', 'Wurzburg', 186], ['Munchen', 'Numberg', 167], ['Munchen', 'Augsburg', 84], ['Munchen', 'Kassel', 502], ['Numberg', 'Stuttgart', 183], ['Numberg', 'Wurzburg', 103], ['Numberg', 'Munchen', 167], ['Stuttgart', 'Numberg', 183], ['Augsburg', 'Munchen', 84], ['Augsburg', 'Karlsruhe', 250], ['Kassel', 'Munchen', 502], ['Kassel', 'Frankfurt', 173], ['Frankfurt', 'Mannheim', 85], ['Frankfurt', 'Wurzburg', 217], ['Frankfurt', 'Kassel', 173], ['Wurzburg', 'Numberg', 103], ['Wurzburg', 'Erfurt', 186], ['Wurzburg', 'Frankfurt', 217], ['Karlsruhe', 'Mannheim', 80], ['Karlsruhe', 'Augsburg', 250]]
 </pre><p>Lets say we are given a graph with the cities of Germany and respective distance between them. <strong>You want to find out how to go from Frankfurt (The starting node) to Munchen</strong>. There might be many ways in which you can traverse the graph but you need to find how many cities you will need to visit on a minimum to go from frankfurt to Munchen)
-This problem is analogous to finding out distance between nodes in an unweighted graph.</p><p>The algorithm that we use here is called as <strong>Breadth First Search</strong>.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>min_num_edges_between_nodes</span>(graph,start_node):
-</span></span><span style=display:flex><span>    distance <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
-</span></span><span style=display:flex><span>    shortest_path <span style=color:#f92672>=</span> []
-</span></span><span style=display:flex><span>    queue <span style=color:#f92672>=</span> [start_node] <span style=color:#75715e>#FIFO</span>
-</span></span><span style=display:flex><span>    levels <span style=color:#f92672>=</span> {}
-</span></span><span style=display:flex><span>    levels[start_node] <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
-</span></span><span style=display:flex><span>    shortest_paths <span style=color:#f92672>=</span> {}
-</span></span><span style=display:flex><span>    shortest_paths[start_node] <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;:&#34;</span>
-</span></span><span style=display:flex><span>    visited <span style=color:#f92672>=</span> [start_node]
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>while</span> len(queue)<span style=color:#f92672>!=</span><span style=color:#ae81ff>0</span>:
-</span></span><span style=display:flex><span>        start <span style=color:#f92672>=</span> queue<span style=color:#f92672>.</span>pop(<span style=color:#ae81ff>0</span>)
-</span></span><span style=display:flex><span>        neighbours <span style=color:#f92672>=</span> graph[start]
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> neighbour,_ <span style=color:#f92672>in</span> neighbours<span style=color:#f92672>.</span>iteritems():
-</span></span><span style=display:flex><span>            <span style=color:#66d9ef>if</span> neighbour <span style=color:#f92672>not</span> <span style=color:#f92672>in</span> visited:
-</span></span><span style=display:flex><span>                queue<span style=color:#f92672>.</span>append(neighbour)
-</span></span><span style=display:flex><span>                visited<span style=color:#f92672>.</span>append(neighbour)
-</span></span><span style=display:flex><span>                levels[neighbour] <span style=color:#f92672>=</span> levels[start]<span style=color:#f92672>+</span><span style=color:#ae81ff>1</span>
-</span></span><span style=display:flex><span>                shortest_paths[neighbour] <span style=color:#f92672>=</span> shortest_paths[start] <span style=color:#f92672>+</span><span style=color:#e6db74>&#34;-&gt;&#34;</span><span style=color:#f92672>+</span> start
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> levels, shortest_paths
-</span></span></code></pre></div><p>What we do in the above piece of code is create a queue and traverse it based on levels.
+This problem is analogous to finding out distance between nodes in an unweighted graph.</p><p>The algorithm that we use here is called as <strong>Breadth First Search</strong>.</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#6ab825;font-weight:700>def</span> <span style=color:#447fcf>min_num_edges_between_nodes</span>(graph,start_node):
+    distance = <span style=color:#3677a9>0</span>
+    shortest_path = []
+    queue = [start_node] <span style=color:#999;font-style:italic>#FIFO</span>
+    levels = {}
+    levels[start_node] = <span style=color:#3677a9>0</span>
+    shortest_paths = {}
+    shortest_paths[start_node] = <span style=color:#ed9d13>&#34;:&#34;</span>
+    visited = [start_node]
+    <span style=color:#6ab825;font-weight:700>while</span> <span style=color:#24909d>len</span>(queue)!=<span style=color:#3677a9>0</span>:
+        start = queue.pop(<span style=color:#3677a9>0</span>)
+        neighbours = graph[start]
+        <span style=color:#6ab825;font-weight:700>for</span> neighbour,_ <span style=color:#6ab825;font-weight:700>in</span> neighbours.iteritems():
+            <span style=color:#6ab825;font-weight:700>if</span> neighbour <span style=color:#6ab825;font-weight:700>not</span> <span style=color:#6ab825;font-weight:700>in</span> visited:
+                queue.append(neighbour)
+                visited.append(neighbour)
+                levels[neighbour] = levels[start]+<span style=color:#3677a9>1</span>
+                shortest_paths[neighbour] = shortest_paths[start] +<span style=color:#ed9d13>&#34;-&gt;&#34;</span>+ start
+    <span style=color:#6ab825;font-weight:700>return</span> levels, shortest_paths
+</code></pre></div><p>What we do in the above piece of code is create a queue and traverse it based on levels.
 We start with Frankfurt as starting node.
 We loop through its neighbouring cities(Menheim, Wurzburg and Kassel) and push them into the queue.
 We keep track of what level they are at and also the path through which we reached them.
 Since we are popping a first element of a queue we are sure we will visit cities in the order of their level.</p><p>Checkout this good
 <a href=https://medium.com/basecs/breaking-down-breadth-first-search-cebe696709d9 target=_blank rel="nofollow noopener">post</a>
-about BFS to understand more about queues and BFS.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=display:flex><span>min_num_edges_between_nodes(g,<span style=color:#e6db74>&#39;Frankfurt&#39;</span>)
-</span></span></code></pre></div><pre style="font-family:courier new,monospace;background-color:#f6c6529c;color:#000">
+about BFS to understand more about queues and BFS.</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py>min_num_edges_between_nodes(g,<span style=color:#ed9d13>&#39;Frankfurt&#39;</span>)
+</code></pre></div><pre style="font-family:courier new,monospace;background-color:#f6c6529c;color:#000">
   ({'Augsburg': 3,
   'Erfurt': 2,
   'Frankfurt': 0,
@@ -201,39 +198,39 @@ about BFS to understand more about queues and BFS.</p><div class=highlight><pre 
   'Wurzburg': ':->Frankfurt'})
 </pre><p>I did this example to show how BFS algorithm works.
 We can extend this algorithm to find out connected components in an unconnected graph.
-Lets say we need to find groups of unconnected vertices in the graph.</p><p>For example: the below graph has 3 unconnected sub-graphs. Can we find what nodes belong to a particular subgraph?</p><div style=margin-top:9px;margin-bottom:10px><center><img src=https://upload.wikimedia.org/wikipedia/commons/8/85/Pseudoforest.svg height=400 width=700></center></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=display:flex><span><span style=color:#75715e>#We add another countries in the loop</span>
-</span></span><span style=display:flex><span>graph <span style=color:#f92672>=</span> Graph(g)
-</span></span><span style=display:flex><span>graph<span style=color:#f92672>.</span>add_edge((<span style=color:#e6db74>&#34;Mumbai&#34;</span>, <span style=color:#e6db74>&#34;Delhi&#34;</span>),<span style=color:#ae81ff>400</span>)
-</span></span><span style=display:flex><span>graph<span style=color:#f92672>.</span>add_edge((<span style=color:#e6db74>&#34;Delhi&#34;</span>, <span style=color:#e6db74>&#34;Kolkata&#34;</span>),<span style=color:#ae81ff>500</span>)
-</span></span><span style=display:flex><span>graph<span style=color:#f92672>.</span>add_edge((<span style=color:#e6db74>&#34;Kolkata&#34;</span>, <span style=color:#e6db74>&#34;Bangalore&#34;</span>),<span style=color:#ae81ff>600</span>)
-</span></span><span style=display:flex><span>graph<span style=color:#f92672>.</span>add_edge((<span style=color:#e6db74>&#34;TX&#34;</span>, <span style=color:#e6db74>&#34;NY&#34;</span>),<span style=color:#ae81ff>1200</span>)
-</span></span><span style=display:flex><span>graph<span style=color:#f92672>.</span>add_edge((<span style=color:#e6db74>&#34;ALB&#34;</span>, <span style=color:#e6db74>&#34;NY&#34;</span>),<span style=color:#ae81ff>800</span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>g <span style=color:#f92672>=</span> graph<span style=color:#f92672>.</span>adj_mat()
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>bfs_connected_components</span>(graph):
-</span></span><span style=display:flex><span>    connected_components <span style=color:#f92672>=</span> []
-</span></span><span style=display:flex><span>    nodes <span style=color:#f92672>=</span> graph<span style=color:#f92672>.</span>keys()
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>while</span> len(nodes)<span style=color:#f92672>!=</span><span style=color:#ae81ff>0</span>:
-</span></span><span style=display:flex><span>        start_node <span style=color:#f92672>=</span> nodes<span style=color:#f92672>.</span>pop()
-</span></span><span style=display:flex><span>        queue <span style=color:#f92672>=</span> [start_node] <span style=color:#75715e>#FIFO</span>
-</span></span><span style=display:flex><span>        visited <span style=color:#f92672>=</span> [start_node]
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>while</span> len(queue)<span style=color:#f92672>!=</span><span style=color:#ae81ff>0</span>:
-</span></span><span style=display:flex><span>            start <span style=color:#f92672>=</span> queue[<span style=color:#ae81ff>0</span>]
-</span></span><span style=display:flex><span>            queue<span style=color:#f92672>.</span>remove(start)
-</span></span><span style=display:flex><span>            neighbours <span style=color:#f92672>=</span> graph[start]
-</span></span><span style=display:flex><span>            <span style=color:#66d9ef>for</span> neighbour,_ <span style=color:#f92672>in</span> neighbours<span style=color:#f92672>.</span>iteritems():
-</span></span><span style=display:flex><span>                <span style=color:#66d9ef>if</span> neighbour <span style=color:#f92672>not</span> <span style=color:#f92672>in</span> visited:
-</span></span><span style=display:flex><span>                    queue<span style=color:#f92672>.</span>append(neighbour)
-</span></span><span style=display:flex><span>                    visited<span style=color:#f92672>.</span>append(neighbour)
-</span></span><span style=display:flex><span>                    nodes<span style=color:#f92672>.</span>remove(neighbour)
-</span></span><span style=display:flex><span>        connected_components<span style=color:#f92672>.</span>append(visited)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> connected_components
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>print bfs_connected_components(g)
-</span></span></code></pre></div><p>The above code is similar to the previous BFS code. We keep all the vertices of the graph in the nodes list. We take a node from the nodes list and start BFS on it. as we visit a node we remove that node from the nodes list. Whenever the BFS completes we start again with another node in the nodes list until the nodes list is empty.</p><pre style="font-family:courier new,monospace;background-color:#f6c6529c;color:#000">[['Kassel',
+Lets say we need to find groups of unconnected vertices in the graph.</p><p>For example: the below graph has 3 unconnected sub-graphs. Can we find what nodes belong to a particular subgraph?</p><div style=margin-top:9px;margin-bottom:10px><center><img src=https://upload.wikimedia.org/wikipedia/commons/8/85/Pseudoforest.svg height=400 width=700></center></div><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#999;font-style:italic>#We add another countries in the loop</span>
+graph = Graph(g)
+graph.add_edge((<span style=color:#ed9d13>&#34;Mumbai&#34;</span>, <span style=color:#ed9d13>&#34;Delhi&#34;</span>),<span style=color:#3677a9>400</span>)
+graph.add_edge((<span style=color:#ed9d13>&#34;Delhi&#34;</span>, <span style=color:#ed9d13>&#34;Kolkata&#34;</span>),<span style=color:#3677a9>500</span>)
+graph.add_edge((<span style=color:#ed9d13>&#34;Kolkata&#34;</span>, <span style=color:#ed9d13>&#34;Bangalore&#34;</span>),<span style=color:#3677a9>600</span>)
+graph.add_edge((<span style=color:#ed9d13>&#34;TX&#34;</span>, <span style=color:#ed9d13>&#34;NY&#34;</span>),<span style=color:#3677a9>1200</span>)
+graph.add_edge((<span style=color:#ed9d13>&#34;ALB&#34;</span>, <span style=color:#ed9d13>&#34;NY&#34;</span>),<span style=color:#3677a9>800</span>)
+
+g = graph.adj_mat()
+
+<span style=color:#6ab825;font-weight:700>def</span> <span style=color:#447fcf>bfs_connected_components</span>(graph):
+    connected_components = []
+    nodes = graph.keys()
+
+    <span style=color:#6ab825;font-weight:700>while</span> <span style=color:#24909d>len</span>(nodes)!=<span style=color:#3677a9>0</span>:
+        start_node = nodes.pop()
+        queue = [start_node] <span style=color:#999;font-style:italic>#FIFO</span>
+        visited = [start_node]
+        <span style=color:#6ab825;font-weight:700>while</span> <span style=color:#24909d>len</span>(queue)!=<span style=color:#3677a9>0</span>:
+            start = queue[<span style=color:#3677a9>0</span>]
+            queue.remove(start)
+            neighbours = graph[start]
+            <span style=color:#6ab825;font-weight:700>for</span> neighbour,_ <span style=color:#6ab825;font-weight:700>in</span> neighbours.iteritems():
+                <span style=color:#6ab825;font-weight:700>if</span> neighbour <span style=color:#6ab825;font-weight:700>not</span> <span style=color:#6ab825;font-weight:700>in</span> visited:
+                    queue.append(neighbour)
+                    visited.append(neighbour)
+                    nodes.remove(neighbour)
+        connected_components.append(visited)
+
+    <span style=color:#6ab825;font-weight:700>return</span> connected_components
+
+<span style=color:#6ab825;font-weight:700>print</span> bfs_connected_components(g)
+</code></pre></div><p>The above code is similar to the previous BFS code. We keep all the vertices of the graph in the nodes list. We take a node from the nodes list and start BFS on it. as we visit a node we remove that node from the nodes list. Whenever the BFS completes we start again with another node in the nodes list until the nodes list is empty.</p><pre style="font-family:courier new,monospace;background-color:#f6c6529c;color:#000">[['Kassel',
   'Munchen',
   'Frankfurt',
   'Numberg',
@@ -249,118 +246,113 @@ Lets say we need to find groups of unconnected vertices in the graph.</p><p>For 
 <a href=https://ai.google/research/pubs/pub43122 target=_blank rel="nofollow noopener">Connected Components in
 MapReduce and Beyond</a>
 from Google Research. Read the PPT to understand the implementation better.
-Some ready to use code for you.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>create_edges</span>(line):
-</span></span><span style=display:flex><span>    a <span style=color:#f92672>=</span> [int(x) <span style=color:#66d9ef>for</span> x <span style=color:#f92672>in</span> line<span style=color:#f92672>.</span>split(<span style=color:#e6db74>&#34; &#34;</span>)]
-</span></span><span style=display:flex><span>    edges_list<span style=color:#f92672>=</span>[]
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(<span style=color:#ae81ff>0</span>, len(a)<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>):
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> j <span style=color:#f92672>in</span> range(i<span style=color:#f92672>+</span><span style=color:#ae81ff>1</span> ,len(a)):
-</span></span><span style=display:flex><span>            edges_list<span style=color:#f92672>.</span>append((a[i],a[j]))
-</span></span><span style=display:flex><span>            edges_list<span style=color:#f92672>.</span>append((a[j],a[i]))
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> edges_list
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e># adj_list.txt is a txt file containing adjacency list of the graph.</span>
-</span></span><span style=display:flex><span>adjacency_list <span style=color:#f92672>=</span> sc<span style=color:#f92672>.</span>textFile(<span style=color:#e6db74>&#34;adj_list.txt&#34;</span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>edges_rdd <span style=color:#f92672>=</span> adjacency_list<span style=color:#f92672>.</span>flatMap(<span style=color:#66d9ef>lambda</span> line : create_edges(line))<span style=color:#f92672>.</span>distinct()
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>largeStarInit</span>(record):
-</span></span><span style=display:flex><span>    a, b <span style=color:#f92672>=</span> record
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>yield</span> (a,b)
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>yield</span> (b,a)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>largeStar</span>(record):
-</span></span><span style=display:flex><span>    a, b <span style=color:#f92672>=</span> record
-</span></span><span style=display:flex><span>    t_list <span style=color:#f92672>=</span> list(b)
-</span></span><span style=display:flex><span>    t_list<span style=color:#f92672>.</span>append(a)
-</span></span><span style=display:flex><span>    list_min <span style=color:#f92672>=</span> min(t_list)
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> x <span style=color:#f92672>in</span> b:
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> a <span style=color:#f92672>&lt;</span> x:
-</span></span><span style=display:flex><span>            <span style=color:#66d9ef>yield</span> (x,list_min)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>smallStarInit</span>(record):
-</span></span><span style=display:flex><span>    a, b <span style=color:#f92672>=</span> record
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> b<span style=color:#f92672>&lt;=</span>a:
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>yield</span> (a,b)
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>else</span>:
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>yield</span> (b,a)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>smallStar</span>(record):
-</span></span><span style=display:flex><span>    a, b <span style=color:#f92672>=</span> record
-</span></span><span style=display:flex><span>    t_list <span style=color:#f92672>=</span> list(b)
-</span></span><span style=display:flex><span>    t_list<span style=color:#f92672>.</span>append(a)
-</span></span><span style=display:flex><span>    list_min <span style=color:#f92672>=</span> min(t_list)
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> x <span style=color:#f92672>in</span> t_list:
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> x<span style=color:#f92672>!=</span>list_min:
-</span></span><span style=display:flex><span>            <span style=color:#66d9ef>yield</span> (x,list_min)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>#Handle case for single nodes</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>single_vertex</span>(line):
-</span></span><span style=display:flex><span>    a <span style=color:#f92672>=</span> [int(x) <span style=color:#66d9ef>for</span> x <span style=color:#f92672>in</span> line<span style=color:#f92672>.</span>split(<span style=color:#e6db74>&#34; &#34;</span>)]
-</span></span><span style=display:flex><span>    edges_list<span style=color:#f92672>=</span>[]
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> len(a)<span style=color:#f92672>==</span><span style=color:#ae81ff>1</span>:
-</span></span><span style=display:flex><span>        edges_list<span style=color:#f92672>.</span>append((a[<span style=color:#ae81ff>0</span>],a[<span style=color:#ae81ff>0</span>]))
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> edges_list
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>iteration_num <span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>while</span> <span style=color:#ae81ff>1</span><span style=color:#f92672>==</span><span style=color:#ae81ff>1</span>:
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> iteration_num<span style=color:#f92672>==</span><span style=color:#ae81ff>0</span>:
-</span></span><span style=display:flex><span>        print <span style=color:#e6db74>&#34;iter&#34;</span>, iteration_num
-</span></span><span style=display:flex><span>        large_star_rdd <span style=color:#f92672>=</span> edges_rdd<span style=color:#f92672>.</span>groupByKey()<span style=color:#f92672>.</span>flatMap(<span style=color:#66d9ef>lambda</span> x : largeStar(x))
-</span></span><span style=display:flex><span>        small_star_rdd <span style=color:#f92672>=</span> large_star_rdd<span style=color:#f92672>.</span>flatMap(<span style=color:#66d9ef>lambda</span> x : smallStarInit(x))<span style=color:#f92672>.</span>groupByKey()<span style=color:#f92672>.</span>flatMap(<span style=color:#66d9ef>lambda</span> x : smallStar(x))<span style=color:#f92672>.</span>distinct()
-</span></span><span style=display:flex><span>        iteration_num <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>else</span>:
-</span></span><span style=display:flex><span>        print <span style=color:#e6db74>&#34;iter&#34;</span>, iteration_num
-</span></span><span style=display:flex><span>        large_star_rdd <span style=color:#f92672>=</span> small_star_rdd<span style=color:#f92672>.</span>flatMap(<span style=color:#66d9ef>lambda</span> x: largeStarInit(x))<span style=color:#f92672>.</span>groupByKey()<span style=color:#f92672>.</span>flatMap(<span style=color:#66d9ef>lambda</span> x : largeStar(x))<span style=color:#f92672>.</span>distinct()
-</span></span><span style=display:flex><span>        small_star_rdd <span style=color:#f92672>=</span> large_star_rdd<span style=color:#f92672>.</span>flatMap(<span style=color:#66d9ef>lambda</span> x : smallStarInit(x))<span style=color:#f92672>.</span>groupByKey()<span style=color:#f92672>.</span>flatMap(<span style=color:#66d9ef>lambda</span> x : smallStar(x))<span style=color:#f92672>.</span>distinct()
-</span></span><span style=display:flex><span>        iteration_num <span style=color:#f92672>+=</span> <span style=color:#ae81ff>1</span>
-</span></span><span style=display:flex><span>    <span style=color:#75715e>#check Convergence</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    changes <span style=color:#f92672>=</span> (large_star_rdd<span style=color:#f92672>.</span>subtract(small_star_rdd)<span style=color:#f92672>.</span>union(small_star_rdd<span style=color:#f92672>.</span>subtract(large_star_rdd)))<span style=color:#f92672>.</span>collect()
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> len(changes) <span style=color:#f92672>==</span> <span style=color:#ae81ff>0</span> :
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>break</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>single_vertex_rdd <span style=color:#f92672>=</span> adjacency_list<span style=color:#f92672>.</span>flatMap(<span style=color:#66d9ef>lambda</span> line : single_vertex(line))<span style=color:#f92672>.</span>distinct()
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>answer <span style=color:#f92672>=</span> single_vertex_rdd<span style=color:#f92672>.</span>collect() <span style=color:#f92672>+</span> large_star_rdd<span style=color:#f92672>.</span>collect()
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>print answer[:<span style=color:#ae81ff>10</span>]
-</span></span></code></pre></div><h2 id=or-use-graphframes-in-pyspark>Or Use GraphFrames in PySpark</h2><p>To Install graphframes:</p><p>I ran on command line: pyspark &ndash;packages graphframes:graphframes:0.5.0-spark2.1-s_2.11 which opened up my notebook and installed graphframes after i try to import in my notebook.</p><p>The string to be formatted as : graphframes:(latest version)-spark(your spark version)-s_(your scala version).</p><p><em>Checkout</em>
+Some ready to use code for you.</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#6ab825;font-weight:700>def</span> <span style=color:#447fcf>create_edges</span>(line):
+    a = [<span style=color:#24909d>int</span>(x) <span style=color:#6ab825;font-weight:700>for</span> x <span style=color:#6ab825;font-weight:700>in</span> line.split(<span style=color:#ed9d13>&#34; &#34;</span>)]
+    edges_list=[]
+
+    <span style=color:#6ab825;font-weight:700>for</span> i <span style=color:#6ab825;font-weight:700>in</span> <span style=color:#24909d>range</span>(<span style=color:#3677a9>0</span>, <span style=color:#24909d>len</span>(a)-<span style=color:#3677a9>1</span>):
+        <span style=color:#6ab825;font-weight:700>for</span> j <span style=color:#6ab825;font-weight:700>in</span> <span style=color:#24909d>range</span>(i+<span style=color:#3677a9>1</span> ,<span style=color:#24909d>len</span>(a)):
+            edges_list.append((a[i],a[j]))
+            edges_list.append((a[j],a[i]))
+    <span style=color:#6ab825;font-weight:700>return</span> edges_list
+
+<span style=color:#999;font-style:italic># adj_list.txt is a txt file containing adjacency list of the graph.</span>
+adjacency_list = sc.textFile(<span style=color:#ed9d13>&#34;adj_list.txt&#34;</span>)
+
+edges_rdd = adjacency_list.flatMap(<span style=color:#6ab825;font-weight:700>lambda</span> line : create_edges(line)).distinct()
+
+<span style=color:#6ab825;font-weight:700>def</span> <span style=color:#447fcf>largeStarInit</span>(record):
+    a, b = record
+    <span style=color:#6ab825;font-weight:700>yield</span> (a,b)
+    <span style=color:#6ab825;font-weight:700>yield</span> (b,a)
+
+<span style=color:#6ab825;font-weight:700>def</span> <span style=color:#447fcf>largeStar</span>(record):
+    a, b = record
+    t_list = <span style=color:#24909d>list</span>(b)
+    t_list.append(a)
+    list_min = <span style=color:#24909d>min</span>(t_list)
+    <span style=color:#6ab825;font-weight:700>for</span> x <span style=color:#6ab825;font-weight:700>in</span> b:
+        <span style=color:#6ab825;font-weight:700>if</span> a &lt; x:
+            <span style=color:#6ab825;font-weight:700>yield</span> (x,list_min)
+
+<span style=color:#6ab825;font-weight:700>def</span> <span style=color:#447fcf>smallStarInit</span>(record):
+    a, b = record
+    <span style=color:#6ab825;font-weight:700>if</span> b&lt;=a:
+        <span style=color:#6ab825;font-weight:700>yield</span> (a,b)
+    <span style=color:#6ab825;font-weight:700>else</span>:
+        <span style=color:#6ab825;font-weight:700>yield</span> (b,a)
+
+<span style=color:#6ab825;font-weight:700>def</span> <span style=color:#447fcf>smallStar</span>(record):
+    a, b = record
+    t_list = <span style=color:#24909d>list</span>(b)
+    t_list.append(a)
+    list_min = <span style=color:#24909d>min</span>(t_list)
+    <span style=color:#6ab825;font-weight:700>for</span> x <span style=color:#6ab825;font-weight:700>in</span> t_list:
+        <span style=color:#6ab825;font-weight:700>if</span> x!=list_min:
+            <span style=color:#6ab825;font-weight:700>yield</span> (x,list_min)
+
+<span style=color:#999;font-style:italic>#Handle case for single nodes</span>
+<span style=color:#6ab825;font-weight:700>def</span> <span style=color:#447fcf>single_vertex</span>(line):
+    a = [<span style=color:#24909d>int</span>(x) <span style=color:#6ab825;font-weight:700>for</span> x <span style=color:#6ab825;font-weight:700>in</span> line.split(<span style=color:#ed9d13>&#34; &#34;</span>)]
+    edges_list=[]
+    <span style=color:#6ab825;font-weight:700>if</span> <span style=color:#24909d>len</span>(a)==<span style=color:#3677a9>1</span>:
+        edges_list.append((a[<span style=color:#3677a9>0</span>],a[<span style=color:#3677a9>0</span>]))
+    <span style=color:#6ab825;font-weight:700>return</span> edges_list
+
+iteration_num =<span style=color:#3677a9>0</span>
+<span style=color:#6ab825;font-weight:700>while</span> <span style=color:#3677a9>1</span>==<span style=color:#3677a9>1</span>:
+    <span style=color:#6ab825;font-weight:700>if</span> iteration_num==<span style=color:#3677a9>0</span>:
+        <span style=color:#6ab825;font-weight:700>print</span> <span style=color:#ed9d13>&#34;iter&#34;</span>, iteration_num
+        large_star_rdd = edges_rdd.groupByKey().flatMap(<span style=color:#6ab825;font-weight:700>lambda</span> x : largeStar(x))
+        small_star_rdd = large_star_rdd.flatMap(<span style=color:#6ab825;font-weight:700>lambda</span> x : smallStarInit(x)).groupByKey().flatMap(<span style=color:#6ab825;font-weight:700>lambda</span> x : smallStar(x)).distinct()
+        iteration_num += <span style=color:#3677a9>1</span>
+
+    <span style=color:#6ab825;font-weight:700>else</span>:
+        <span style=color:#6ab825;font-weight:700>print</span> <span style=color:#ed9d13>&#34;iter&#34;</span>, iteration_num
+        large_star_rdd = small_star_rdd.flatMap(<span style=color:#6ab825;font-weight:700>lambda</span> x: largeStarInit(x)).groupByKey().flatMap(<span style=color:#6ab825;font-weight:700>lambda</span> x : largeStar(x)).distinct()
+        small_star_rdd = large_star_rdd.flatMap(<span style=color:#6ab825;font-weight:700>lambda</span> x : smallStarInit(x)).groupByKey().flatMap(<span style=color:#6ab825;font-weight:700>lambda</span> x : smallStar(x)).distinct()
+        iteration_num += <span style=color:#3677a9>1</span>
+    <span style=color:#999;font-style:italic>#check Convergence</span>
+
+    changes = (large_star_rdd.subtract(small_star_rdd).union(small_star_rdd.subtract(large_star_rdd))).collect()
+    <span style=color:#6ab825;font-weight:700>if</span> <span style=color:#24909d>len</span>(changes) == <span style=color:#3677a9>0</span> :
+        <span style=color:#6ab825;font-weight:700>break</span>
+
+single_vertex_rdd = adjacency_list.flatMap(<span style=color:#6ab825;font-weight:700>lambda</span> line : single_vertex(line)).distinct()
+
+answer = single_vertex_rdd.collect() + large_star_rdd.collect()
+
+<span style=color:#6ab825;font-weight:700>print</span> answer[:<span style=color:#3677a9>10</span>]
+</code></pre></div><h2 id=or-use-graphframes-in-pyspark>Or Use GraphFrames in PySpark</h2><p>To Install graphframes:</p><p>I ran on command line: pyspark &ndash;packages graphframes:graphframes:0.5.0-spark2.1-s_2.11 which opened up my notebook and installed graphframes after i try to import in my notebook.</p><p>The string to be formatted as : graphframes:(latest version)-spark(your spark version)-s_(your scala version).</p><p><em>Checkout</em>
 <a href=http://go.databricks.com/hubfs/notebooks/3-GraphFrames-User-Guide-python.html target=_blank rel="nofollow noopener">this guide on how to use GraphFrames</a>
-for more information.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=display:flex><span><span style=color:#f92672>from</span> graphframes <span style=color:#f92672>import</span> <span style=color:#f92672>*</span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>vertices</span>(line):
-</span></span><span style=display:flex><span>    vert <span style=color:#f92672>=</span> [int(x) <span style=color:#66d9ef>for</span> x <span style=color:#f92672>in</span> line<span style=color:#f92672>.</span>split(<span style=color:#e6db74>&#34; &#34;</span>)]
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> vert
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>vertices <span style=color:#f92672>=</span> adjacency_list<span style=color:#f92672>.</span>flatMap(<span style=color:#66d9ef>lambda</span> x: vertices(x))<span style=color:#f92672>.</span>distinct()<span style=color:#f92672>.</span>collect()
-</span></span><span style=display:flex><span>vertices <span style=color:#f92672>=</span> sqlContext<span style=color:#f92672>.</span>createDataFrame([[x] <span style=color:#66d9ef>for</span> x <span style=color:#f92672>in</span> vertices], [<span style=color:#e6db74>&#34;id&#34;</span>])
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>create_edges</span>(line):
-</span></span><span style=display:flex><span>    a <span style=color:#f92672>=</span> [int(x) <span style=color:#66d9ef>for</span> x <span style=color:#f92672>in</span> line<span style=color:#f92672>.</span>split(<span style=color:#e6db74>&#34; &#34;</span>)]
-</span></span><span style=display:flex><span>    edges_list<span style=color:#f92672>=</span>[]
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> len(a)<span style=color:#f92672>==</span><span style=color:#ae81ff>1</span>:
-</span></span><span style=display:flex><span>        edges_list<span style=color:#f92672>.</span>append((a[<span style=color:#ae81ff>0</span>],a[<span style=color:#ae81ff>0</span>]))
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> i <span style=color:#f92672>in</span> range(<span style=color:#ae81ff>0</span>, len(a)<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>):
-</span></span><span style=display:flex><span>        <span style=color:#66d9ef>for</span> j <span style=color:#f92672>in</span> range(i<span style=color:#f92672>+</span><span style=color:#ae81ff>1</span> ,len(a)):
-</span></span><span style=display:flex><span>            edges_list<span style=color:#f92672>.</span>append((a[i],a[j]))
-</span></span><span style=display:flex><span>            edges_list<span style=color:#f92672>.</span>append((a[j],a[i]))
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> edges_list
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>edges <span style=color:#f92672>=</span> adjacency_list<span style=color:#f92672>.</span>flatMap(<span style=color:#66d9ef>lambda</span> x: create_edges(x))<span style=color:#f92672>.</span>distinct()<span style=color:#f92672>.</span>collect()
-</span></span><span style=display:flex><span>edges <span style=color:#f92672>=</span> sqlContext<span style=color:#f92672>.</span>createDataFrame(edges, [<span style=color:#e6db74>&#34;src&#34;</span>, <span style=color:#e6db74>&#34;dst&#34;</span>])
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>g <span style=color:#f92672>=</span> GraphFrame(vertices, edges)
-</span></span><span style=display:flex><span>sc<span style=color:#f92672>.</span>setCheckpointDir(<span style=color:#e6db74>&#34;.&#34;</span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e># graphframes uses the same paper we referenced apparently</span>
-</span></span><span style=display:flex><span>cc <span style=color:#f92672>=</span> g<span style=color:#f92672>.</span>connectedComponents()
-</span></span><span style=display:flex><span>print cc<span style=color:#f92672>.</span>show()
-</span></span></code></pre></div><p>The GraphFrames library implements the CC algorithm as well as a variety of other graph algorithms.</p><p>The above post was a lot of code but hope it was helpful. It took me a lot of time to implement the algorithm so wanted to make it easy for the folks.</p><p>If you want to read up more on Graph Algorithms here is an
+for more information.</p><div class=highlight><pre style=color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-py data-lang=py><span style=color:#6ab825;font-weight:700>from</span> <span style=color:#447fcf;text-decoration:underline>graphframes</span> <span style=color:#6ab825;font-weight:700>import</span> *
+<span style=color:#6ab825;font-weight:700>def</span> <span style=color:#447fcf>vertices</span>(line):
+    vert = [<span style=color:#24909d>int</span>(x) <span style=color:#6ab825;font-weight:700>for</span> x <span style=color:#6ab825;font-weight:700>in</span> line.split(<span style=color:#ed9d13>&#34; &#34;</span>)]
+    <span style=color:#6ab825;font-weight:700>return</span> vert
+
+vertices = adjacency_list.flatMap(<span style=color:#6ab825;font-weight:700>lambda</span> x: vertices(x)).distinct().collect()
+vertices = sqlContext.createDataFrame([[x] <span style=color:#6ab825;font-weight:700>for</span> x <span style=color:#6ab825;font-weight:700>in</span> vertices], [<span style=color:#ed9d13>&#34;id&#34;</span>])
+
+<span style=color:#6ab825;font-weight:700>def</span> <span style=color:#447fcf>create_edges</span>(line):
+    a = [<span style=color:#24909d>int</span>(x) <span style=color:#6ab825;font-weight:700>for</span> x <span style=color:#6ab825;font-weight:700>in</span> line.split(<span style=color:#ed9d13>&#34; &#34;</span>)]
+    edges_list=[]
+    <span style=color:#6ab825;font-weight:700>if</span> <span style=color:#24909d>len</span>(a)==<span style=color:#3677a9>1</span>:
+        edges_list.append((a[<span style=color:#3677a9>0</span>],a[<span style=color:#3677a9>0</span>]))
+    <span style=color:#6ab825;font-weight:700>for</span> i <span style=color:#6ab825;font-weight:700>in</span> <span style=color:#24909d>range</span>(<span style=color:#3677a9>0</span>, <span style=color:#24909d>len</span>(a)-<span style=color:#3677a9>1</span>):
+        <span style=color:#6ab825;font-weight:700>for</span> j <span style=color:#6ab825;font-weight:700>in</span> <span style=color:#24909d>range</span>(i+<span style=color:#3677a9>1</span> ,<span style=color:#24909d>len</span>(a)):
+            edges_list.append((a[i],a[j]))
+            edges_list.append((a[j],a[i]))
+    <span style=color:#6ab825;font-weight:700>return</span> edges_list
+
+edges = adjacency_list.flatMap(<span style=color:#6ab825;font-weight:700>lambda</span> x: create_edges(x)).distinct().collect()
+edges = sqlContext.createDataFrame(edges, [<span style=color:#ed9d13>&#34;src&#34;</span>, <span style=color:#ed9d13>&#34;dst&#34;</span>])
+
+g = GraphFrame(vertices, edges)
+sc.setCheckpointDir(<span style=color:#ed9d13>&#34;.&#34;</span>)
+
+<span style=color:#999;font-style:italic># graphframes uses the same paper we referenced apparently</span>
+cc = g.connectedComponents()
+<span style=color:#6ab825;font-weight:700>print</span> cc.show()
+</code></pre></div><p>The GraphFrames library implements the CC algorithm as well as a variety of other graph algorithms.</p><p>The above post was a lot of code but hope it was helpful. It took me a lot of time to implement the algorithm so wanted to make it easy for the folks.</p><p>If you want to read up more on Graph Algorithms here is an
 <a href=https://coursera.pxf.io/YgKbbe target=_blank rel="nofollow noopener">Graph Analytics for Big Data course on Coursera by UCSanDiego</a>
-which I highly recommend to learn the basics of graph theory.</p><h2 id=references>References</h2><ol><li><a href=https://www.python-course.eu/graphs_python.php target=_blank rel="nofollow noopener">Graphs in Python</a></li><li><a href=https://medium.com/basecs/a-gentle-introduction-to-graph-theory-77969829ead8 target=_blank rel="nofollow noopener">A Gentle Intoduction to Graph Theory Blog</a></li><li><a href=https://coursera.pxf.io/YgKbbe target=_blank rel="nofollow noopener">Graph Analytics for Big Data course on Coursera by UCSanDiego</a></li></ol><script async data-uid=8d7942551b src=https://mlwhiz.ck.page/8d7942551b/index.js></script><div class=shareaholic-canvas data-app=share_buttons data-app-id=28372088 style=margin-bottom:1px></div><a href=https://coursera.pxf.io/coursera rel=nofollow><img border=0 alt="Start your future with a Data Analysis Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=759505.377&subid=0&type=4&gridnum=16"></a><div id=disqus_thread></div><script type=application/javascript>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//mlwhiz.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div></div><div class=col-lg-4><div class=widget><script type=text/javascript src=https://ko-fi.com/widgets/widget_2.js></script><script type=text/javascript>kofiwidget2.init("Support Me on Ko-fi","#00aaa1","S6S3NPCD"),kofiwidget2.draw()</script></div><div class=widget><h4 class=widget-title>About Me</h4><img src=https://mlwhiz.com/images/author.jpg alt class="img-fluid author-thumb-sm d-block mx-auto rounded-circle mb-4"><p>I’m a data scientist consultant and big data engineer based in London, where I am currently working with Facebook .</p><a href=https://mlwhiz.com/about/ class="btn btn-outline-primary">Know More</a></div><div class=widget><h4 class=widget-title>Topics</h4><ul class=list-unstyled><li><a class=categoryStyle style=color:#fff href=/categories/awesome-guides>Awesome Guides</a></li><li><a class=categoryStyle style=color:#fff href=/categories/big-data>Big Data</a></li><li><a class=categoryStyle style=color:#fff href=/categories/computer-vision>Computer Vision</a></li><li><a class=categoryStyle style=color:#fff href=/categories/data-science>Data Science</a></li><li><a class=categoryStyle style=color:#fff href=/categories/deep-learning>Deep Learning</a></li><li><a class=categoryStyle style=color:#fff href=/categories/learning-resources>Learning Resources</a></li><li><a class=categoryStyle style=color:#fff href=/categories/natural-language-processing>Natural Language Processing</a></li><li><a class=categoryStyle style=color:#fff href=/categories/programming>Programming</a></li></ul></div><div class=widget><h4 class=widget-title>Tags</h4><ul class=list-inline><li class=list-inline-item><a class="tagStyle text-white" href=/tags/algorithms>Algorithms</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/artificial-intelligence>Artificial Intelligence</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/dask>Dask</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/deployment>Deployment</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/ec2>Ec2</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/generative-adversarial-networks>Generative Adversarial Networks</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/graphs>Graphs</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/image-classification>Image Classification</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/instance-segmentation>Instance Segmentation</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/interpretability>Interpretability</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/jobs>Jobs</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/kaggle>Kaggle</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/language-modeling>Language Modeling</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/machine-learning>Machine Learning</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/math>Math</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/multiprocessing>Multiprocessing</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/object-detection>Object Detection</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/oop>Oop</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/opinion>Opinion</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/pandas>Pandas</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/production>Production</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/productivity>Productivity</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/python>Python</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/pytorch>Pytorch</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/spark>Spark</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/sql>SQL</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/statistics>Statistics</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/streamlit>Streamlit</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/text-classification>Text Classification</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/timeseries>Timeseries</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/tools>Tools</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/transformers>Transformers</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/translation>Translation</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/visualization>Visualization</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/xgboost>Xgboost</a></li></ul></div><div class=widget><h4 class=widget-title>Connect With Me</h4><ul class="list-inline social-links"><li class=list-inline-item><a href=https://www.linkedin.com/in/rahulagwl/><i class=ti-linkedin></i></a></li><li class=list-inline-item><a href=https://mlwhiz.medium.com/><i class=ti-book></i></a></li><li class=list-inline-item><a href=https://twitter.com/MLWhiz><i class=ti-twitter-alt></i></a></li><li class=list-inline-item><a href=https://www.facebook.com/mlwhizblog><i class=ti-facebook></i></a></li><li class=list-inline-item><a href=https://github.com/MLWhiz><i class=ti-github></i></a></li></ul></div><script async data-uid=bfe9f82f10 src=https://mlwhiz.ck.page/bfe9f82f10/index.js></script>
-<script async data-uid=3452d924e2 src=https://mlwhiz.ck.page/3452d924e2/index.js></script></div></div></div></section><footer><div class=container><div class=row><div class="col-12 text-center mb-5"><a href=https://mlwhiz.com/><img src=https://mlwhiz.com/images/logo.png class=img-fluid-custom-bottom alt="Helping You Learn Data Science!"></a></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Contact Me</h6><ul class=list-unstyled><li class=mb-3><i class="ti-location-pin mr-3 text-primary"></i>India, Bangalore</li><li class=mb-3><a class=text-dark href=mailto:rahul@mlwhiz.com><i class="ti-email mr-3 text-primary"></i>rahul@mlwhiz.com</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Social Contacts</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=https://www.linkedin.com/in/rahulagwl/>Linkedin</a></li><li class=mb-3><a class=text-dark href=https://mlwhiz.medium.com/>Medium</a></li><li class=mb-3><a class=text-dark href=https://twitter.com/MLWhiz>Twitter</a></li><li class=mb-3><a class=text-dark href=https://www.facebook.com/mlwhizblog>Facebook</a></li><li class=mb-3><a class=text-dark href=https://github.com/MLWhiz>Github</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Categories</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=/categories/awesome-guides>Awesome Guides</a></li><li class=mb-3><a class=text-dark href=/categories/big-data>Big Data</a></li><li class=mb-3><a class=text-dark href=/categories/computer-vision>Computer Vision</a></li><li class=mb-3><a class=text-dark href=/categories/data-science>Data Science</a></li><li class=mb-3><a class=text-dark href=/categories/deep-learning>Deep Learning</a></li><li class=mb-3><a class=text-dark href=/categories/learning-resources>Learning Resources</a></li><li class=mb-3><a class=text-dark href=/categories/natural-language-processing>Natural Language Processing</a></li><li class=mb-3><a class=text-dark href=/categories/programming>Programming</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Quick Links</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=https://mlwhiz.com/about>About</a></li><li class=mb-3><a class=text-dark href=https://mlwhiz.com/blog>Post</a></li></ul></div><div class="col-12 border-top py-4 text-center">Copyright © 2020
-<a href=https://mlwhiz.com>MLWhiz</a>
-All Rights Reserved</div></div></div></footer><script>var indexURL="https://mlwhiz.com/index.json"</script><script src=https://mlwhiz.com/plugins/compressjscss/main.js></script>
-<script src=https://mlwhiz.com/js/script.min.js></script>
-<script>(function(e,t,n,s,o,i,a){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,i=t.createElement(n),a=t.getElementsByTagName(n)[0],i.async=1,i.src=s,a.parentNode.insertBefore(i,a)})(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-54777926-1","auto"),ga("send","pageview")</script></body></html>
+which I highly recommend to learn the basics of graph theory.</p><h2 id=references>References</h2><ol><li><a href=https://www.python-course.eu/graphs_python.php target=_blank rel="nofollow noopener">Graphs in Python</a></li><li><a href=https://medium.com/basecs/a-gentle-introduction-to-graph-theory-77969829ead8 target=_blank rel="nofollow noopener">A Gentle Intoduction to Graph Theory Blog</a></li><li><a href=https://coursera.pxf.io/YgKbbe target=_blank rel="nofollow noopener">Graph Analytics for Big Data course on Coursera by UCSanDiego</a></li></ol><script async data-uid=8d7942551b src=https://mlwhiz.ck.page/8d7942551b/index.js></script><div class=shareaholic-canvas data-app=share_buttons data-app-id=28372088 style=margin-bottom:1px></div><a href=https://coursera.pxf.io/coursera rel=nofollow><img border=0 alt="Start your future with a Data Analysis Certificate." src="https://ad.linksynergy.com/fs-bin/show?id=lVarvwc5BD0&bids=759505.377&subid=0&type=4&gridnum=16"></a><div id=disqus_thread></div><script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return}var b=document,a=b.createElement('script');a.async=!0,a.src='//mlwhiz.disqus.com/embed.js',a.setAttribute('data-timestamp',+new Date),(b.head||b.body).appendChild(a)})()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div></div><div class=col-lg-4><div class=widget><script type=text/javascript src=https://ko-fi.com/widgets/widget_2.js></script><script type=text/javascript>kofiwidget2.init('Support Me on Ko-fi','#00aaa1','S6S3NPCD'),kofiwidget2.draw()</script></div><div class=widget><h4 class=widget-title>About Me</h4><img src=https://mlwhiz.com/images/author.jpg alt class="img-fluid author-thumb-sm d-block mx-auto rounded-circle mb-4"><p>I’m a data scientist consultant and big data engineer based in London, where I am currently working with Facebook .</p><a href=https://mlwhiz.com/about/ class="btn btn-outline-primary">Know More</a></div><div class=widget><h4 class=widget-title>Topics</h4><ul class=list-unstyled><li><a class=categoryStyle style=color:#fff href=/categories/awesome-guides>Awesome Guides</a></li><li><a class=categoryStyle style=color:#fff href=/categories/big-data>Big Data</a></li><li><a class=categoryStyle style=color:#fff href=/categories/computer-vision>Computer Vision</a></li><li><a class=categoryStyle style=color:#fff href=/categories/data-science>Data Science</a></li><li><a class=categoryStyle style=color:#fff href=/categories/deep-learning>Deep Learning</a></li><li><a class=categoryStyle style=color:#fff href=/categories/learning-resources>Learning Resources</a></li><li><a class=categoryStyle style=color:#fff href=/categories/natural-language-processing>Natural Language Processing</a></li><li><a class=categoryStyle style=color:#fff href=/categories/programming>Programming</a></li></ul></div><div class=widget><h4 class=widget-title>Tags</h4><ul class=list-inline><li class=list-inline-item><a class="tagStyle text-white" href=/tags/algorithms>Algorithms</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/artificial-intelligence>Artificial Intelligence</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/dask>Dask</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/deployment>Deployment</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/ec2>Ec2</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/generative-adversarial-networks>Generative Adversarial Networks</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/graphs>Graphs</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/image-classification>Image Classification</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/instance-segmentation>Instance Segmentation</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/interpretability>Interpretability</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/jobs>Jobs</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/kaggle>Kaggle</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/language-modeling>Language Modeling</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/machine-learning>Machine Learning</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/math>Math</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/multiprocessing>Multiprocessing</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/object-detection>Object Detection</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/oop>Oop</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/opinion>Opinion</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/pandas>Pandas</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/production>Production</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/productivity>Productivity</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/python>Python</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/pytorch>Pytorch</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/spark>Spark</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/sql>SQL</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/statistics>Statistics</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/streamlit>Streamlit</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/text-classification>Text Classification</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/timeseries>Timeseries</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/tools>Tools</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/transformers>Transformers</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/translation>Translation</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/visualization>Visualization</a></li><li class=list-inline-item><a class="tagStyle text-white" href=/tags/xgboost>Xgboost</a></li></ul></div><div class=widget><h4 class=widget-title>Connect With Me</h4><ul class="list-inline social-links"><li class=list-inline-item><a href=https://www.linkedin.com/in/rahulagwl/><i class=ti-linkedin></i></a></li><li class=list-inline-item><a href=https://mlwhiz.medium.com/><i class=ti-book></i></a></li><li class=list-inline-item><a href=https://twitter.com/MLWhiz><i class=ti-twitter-alt></i></a></li><li class=list-inline-item><a href=https://www.facebook.com/mlwhizblog><i class=ti-facebook></i></a></li><li class=list-inline-item><a href=https://github.com/MLWhiz><i class=ti-github></i></a></li></ul></div><script async data-uid=bfe9f82f10 src=https://mlwhiz.ck.page/bfe9f82f10/index.js></script><script async data-uid=3452d924e2 src=https://mlwhiz.ck.page/3452d924e2/index.js></script></div></div></div></section><footer><div class=container><div class=row><div class="col-12 text-center mb-5"><a href=https://mlwhiz.com/><img src=https://mlwhiz.com/images/logo.png class=img-fluid-custom-bottom alt="Helping You Learn Data Science!"></a></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Contact Me</h6><ul class=list-unstyled><li class=mb-3><i class="ti-location-pin mr-3 text-primary"></i>India, Bangalore</li><li class=mb-3><a class=text-dark href=mailto:rahul@mlwhiz.com><i class="ti-email mr-3 text-primary"></i>rahul@mlwhiz.com</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Social Contacts</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=https://www.linkedin.com/in/rahulagwl/>Linkedin</a></li><li class=mb-3><a class=text-dark href=https://mlwhiz.medium.com/>Medium</a></li><li class=mb-3><a class=text-dark href=https://twitter.com/MLWhiz>Twitter</a></li><li class=mb-3><a class=text-dark href=https://www.facebook.com/mlwhizblog>Facebook</a></li><li class=mb-3><a class=text-dark href=https://github.com/MLWhiz>Github</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Categories</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=/categories/awesome-guides>Awesome Guides</a></li><li class=mb-3><a class=text-dark href=/categories/big-data>Big Data</a></li><li class=mb-3><a class=text-dark href=/categories/computer-vision>Computer Vision</a></li><li class=mb-3><a class=text-dark href=/categories/data-science>Data Science</a></li><li class=mb-3><a class=text-dark href=/categories/deep-learning>Deep Learning</a></li><li class=mb-3><a class=text-dark href=/categories/learning-resources>Learning Resources</a></li><li class=mb-3><a class=text-dark href=/categories/natural-language-processing>Natural Language Processing</a></li><li class=mb-3><a class=text-dark href=/categories/programming>Programming</a></li></ul></div><div class="col-lg-3 col-sm-6 mb-5"><h6 class=mb-4>Quick Links</h6><ul class=list-unstyled><li class=mb-3><a class=text-dark href=https://mlwhiz.com/about>About</a></li><li class=mb-3><a class=text-dark href=https://mlwhiz.com/blog>Post</a></li></ul></div><div class="col-12 border-top py-4 text-center">Copyright © 2020 <a href=https://mlwhiz.com>MLWhiz</a> All Rights Reserved</div></div></div></footer><script>var indexURL="https://mlwhiz.com/index.json"</script><script src=https://mlwhiz.com/plugins/compressjscss/main.js></script><script src=https://mlwhiz.com/js/script.min.js></script><script>(function(a,e,f,g,b,c,d){a.GoogleAnalyticsObject=b,a[b]=a[b]||function(){(a[b].q=a[b].q||[]).push(arguments)},a[b].l=1*new Date,c=e.createElement(f),d=e.getElementsByTagName(f)[0],c.async=1,c.src=g,d.parentNode.insertBefore(c,d)})(window,document,'script','//www.google-analytics.com/analytics.js','ga'),ga('create','UA-54777926-1','auto'),ga('send','pageview')</script></body></html>
